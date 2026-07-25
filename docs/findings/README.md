@@ -7,6 +7,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-25 | [increment-step-id](2026-07-25-increment-step-id.md) | increment_step_id @ ~0x8000B9C8; lui 0x800a addressing | confirmed |
 | 2026-07-25 | [field-dec-addr-search](2026-07-25-field-dec-addr-search.md) | .dec: RNG @ 0x40638; no abs StepID ptr; 3× 0xC540 | confirmed |
 | 2026-07-25 | [search-ran-on-compressed-field-bin](2026-07-25-search-ran-on-compressed-field-bin.md) | Search used FIELD.BIN not .dec → 0 hits | confirmed |
 | 2026-07-25 | [ghidra-no-stepid-scalars](2026-07-25-ghidra-no-stepid-scalars.md) | Scalars 0x9c540 / 0xc540: no hits | confirmed |
@@ -24,6 +25,8 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 - [2026-07-25-patch-target-field-load-reseed](2026-07-25-patch-target-field-load-reseed.md)
 - [2026-07-25-ghidra-zero-xrefs-rng-table](2026-07-25-ghidra-zero-xrefs-rng-table.md)
 - [2026-07-25-ghidra-no-stepid-scalars](2026-07-25-ghidra-no-stepid-scalars.md)
+- [2026-07-25-field-dec-addr-search](2026-07-25-field-dec-addr-search.md)
+- [2026-07-25-increment-step-id](2026-07-25-increment-step-id.md)
 
 ### Tools & environment
 - [2026-07-25-duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md)
