@@ -59,24 +59,25 @@ if (threshold_roll < f(g_danger, ...))
 
 Also hook **field enter** → `g_danger = 0`.
 
+## Acceptance (product)
+
+- **N trash fights before/after** a preemptable boss (Aps, etc.) are **fine**.
+- Must **not** start a random battle in a way that **overlaps** a scripted boss transition (vanilla already has crash / duplicating-boss pathologies when field→battle transitions collide or when encounters are menu-skipped into scripted fights).
+- Boss preempt via StepID/Offset routing must remain possible.
+
 ## Tradeoffs / watchouts
 
-- **Boss preempt on hostile fields:** long StepID walks can still roll MAX and insert a trash fight. Tune `FORCE_RATE` low; optionally reduce/disable force on known preempt-boss maps later.
+- **Boss preempt on hostile fields:** long StepID walks can still roll MAX and insert trash fights — **accepted**. Only care about avoiding **simultaneous** trash + boss battle starts.
 - **Walk vs run:** no longer changes Danger slope; walking still burns more checks (and StepID) per distance — still useful for preempt routing, and also more MAX rolls per distance.
 - **Formation** stays vanilla-routable unless we add a separate change later.
 - **WORLD.BIN** still separate.
 
-## Ghidra hooks
-
-- Field enter / map init → clear `g_danger` (`0x8007173C`)
-- `encounter_check` @ `0x800ABA70` — replace Danger `+=` block (`~0x800ABB7C`–`0x800ABBD0`) with MAX-or-skip RNG
-- Keep dual `jal increment_step_id` and formation path
-
 ## Follow-ups
 
 - [ ] Confirm field-enter hook site
-- [ ] Pick `FORCE_RATE` and `DANGER_MAX` (playtest sparsity + Aps-style walks)
-- [ ] Choose entropy source
+- [ ] Pick `FORCE_RATE` and `DANGER_MAX` (playtest sparsity)
+- [ ] Choose entropy source (not StepID/Offset)
+- [ ] Verify no dual battle start if scripted boss fires while Danger was MAX / mid encounter transition
 - [ ] Optional: formation entropy later
 - [ ] WORLD.BIN later
 
