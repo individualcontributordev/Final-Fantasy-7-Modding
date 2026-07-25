@@ -1,13 +1,10 @@
-# Ghidra / DuckStation base align — fill answers only
+# Ghidra re-import @ 0x800A0000 — fill answers only
 
-Ghidra_base: 0x800A0000
+Ghidra_project_base: 0x800A0000
 Ghidra_0x800AB9C8_lui_lbu: 
 Ghidra_0x800E0638_rng_table: 
-DuckStation_0x800AB9C8_bytes_match: 
-DuckStation_0x800E0638_bytes_match: 
+Labeled_increment_step_id: 
+Labeled_g_field_rng_table: 
 Notes: 
 
-
-duckstation
-0x800AB9C8  3C02800A  lui v0, 0x800a
-0x800E0638  6CEECAB1  UNKNOWN
+# Use: yes / no / skip
