@@ -10,3 +10,144 @@ xref_6:
 Notes: 
 
 # Addresses only (e.g. 0x800Axxxx). Leave unused xref_N blank.
+
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined encounter_check()
+             undefined         <UNASSIGNED>   <RETURN>
+                             encounter_check
+        800abbd4 72 ae 02 0c     jal        increment_step_id                                undefined increment_step_id()
+        800abbd8 00 00 00 00     _nop
+        800abbdc 06 80 03 3c     lui        v1,0x8006
+        800abbe0 1b 2f 63 90     lbu        v1,offset DAT_80062f1b(v1)
+        800abbe4 ff 00 42 30     andi       v0,v0,0xff
+        800abbe8 7f 00 63 30     andi       v1,v1,0x7f
+        800abbec 2b 10 43 00     sltu       v0,v0,v1
+        800abbf0 05 00 40 10     beq        v0,zero,LAB_800abc08
+        800abbf4 04 00 02 34     _ori       v0,zero,0x4
+        800abbf8 07 80 01 3c     lui        at,0x8007
+        800abbfc d0 16 22 a0     sb         v0,offset DAT_800716d0(at)
+        800abc00 04 af 02 08     j          LAB_800abc10
+        800abc04 00 00 00 00     _nop
+                             LAB_800abc08                                    XREF[1]:     800abbf0(j)  
+        800abc08 07 80 01 3c     lui        at,0x8007
+        800abc0c d0 16 20 a0     sb         zero,offset DAT_800716d0(at)
+                             LAB_800abc10                                    XREF[1]:     800abc00(j)  
+        800abc10 72 ae 02 0c     jal        increment_step_id                                undefined increment_step_id()
+        800abc14 00 00 00 00     _nop
+        800abc18 07 80 04 3c     lui        a0,0x8007
+        800abc1c 3c 17 84 94     lhu        a0,offset DAT_8007173c(a0)
+        800abc20 06 80 03 3c     lui        v1,0x8006
+
+
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void encounter_check(void)
+
+{
+  ushort *puVar1;
+  ushort uVar2;
+  byte bVar3;
+  uint uVar4;
+  int iVar5;
+  int iVar6;
+  uint uVar7;
+  int unaff_s1;
+  
+  bVar3 = increment_step_id();
+  if (bVar3 < (DAT_80062f1b & 0x7f)) {
+    DAT_800716d0 = 4;
+  }
+  else {
+    DAT_800716d0 = 0;
+  }
+  uVar4 = increment_step_id();
+  uVar2 = _DAT_8009abf6;
+  if ((uVar4 & 0xff) < (uint)_DAT_8007173c * (uint)DAT_80062f19 >> 0xc) {
+    FUN_800a1498();
+    DAT_8009abf5 = 2;
+    DAT_8007ebc8 = 1;
+    uVar4 = FUN_800aba34();
+    uVar4 = (uVar4 & 0xff) >> 2;
+    if ((DAT_80062f1b & 0x80) == 0) {
+      uVar7 = (int)((uint)*(ushort *)(unaff_s1 + 0xe) << 0x10) >> 0x1a;
+    }
+    else {
+      uVar7 = (int)((uint)*(ushort *)(unaff_s1 + 0xe) << 0x10) >> 0x1b;
+    }
+    if (uVar4 < (uVar7 & 0xff)) {
+      DAT_800716d0 = 0;
+      uVar2 = *(ushort *)(unaff_s1 + 0xe) & 0x3ff;
+    }
+    else {
+      if ((DAT_80062f1b & 0x80) == 0) {
+        iVar5 = (int)((uint)*(ushort *)(unaff_s1 + 0x10) << 0x10) >> 0x1a;
+      }
+      else {
+        iVar5 = (int)((uint)*(ushort *)(unaff_s1 + 0x10) << 0x10) >> 0x1b;
+      }
+      if (uVar4 < (uVar7 + iVar5 & 0xff)) {
+        DAT_800716d0 = 0;
+        uVar2 = *(ushort *)(unaff_s1 + 0x10) & 0x3ff;
+      }
+      else {
+        uVar7 = uVar7 + iVar5 + ((int)((uint)*(ushort *)(unaff_s1 + 0x12) << 0x10) >> 0x1a);
+        uVar2 = *(ushort *)(unaff_s1 + 0x12) & 0x3ff;
+        if ((uVar7 & 0xff) <= uVar4) {
+          if ((DAT_80062f1b & 0x80) == 0) {
+            iVar5 = (int)((uint)*(ushort *)(unaff_s1 + 0x14) << 0x10) >> 0x1a;
+          }
+          else {
+            iVar5 = (int)((uint)*(ushort *)(unaff_s1 + 0x14) << 0x10) >> 0x1b;
+          }
+          if (uVar4 < (uVar7 + iVar5 & 0xff)) {
+            uVar2 = *(ushort *)(unaff_s1 + 0x14) & 0x3ff;
+          }
+          else {
+            uVar7 = 0;
+            uVar4 = FUN_800aba34();
+            iVar6 = 0;
+            iVar5 = unaff_s1;
+            do {
+              _DAT_8009abf6 = *(ushort *)(iVar5 + 2);
+              uVar7 = uVar7 + ((int)((uint)_DAT_8009abf6 << 0x10) >> 0x1a);
+              if ((uVar4 & 0xff) >> 2 < (uVar7 & 0xff)) break;
+              iVar6 = iVar6 + 1;
+              iVar5 = iVar5 + 2;
+              _DAT_8009abf6 = *(ushort *)(unaff_s1 + 0xc);
+            } while (iVar6 < 5);
+            _DAT_8009abf6 = _DAT_8009abf6 & 0x3ff;
+            if (_DAT_8009abf6 == _DAT_8007e774) {
+              uVar7 = 0;
+              uVar4 = FUN_800aba34();
+              iVar5 = 0;
+              puVar1 = (ushort *)(unaff_s1 + 0xc);
+              do {
+                uVar7 = uVar7 + ((int)((uint)*(ushort *)(unaff_s1 + 2) << 0x10) >> 0x1a);
+                iVar5 = iVar5 + 1;
+                if ((uVar4 & 0xff) >> 2 < (uVar7 & 0xff)) {
+                  _DAT_8007e774 = *(ushort *)(unaff_s1 + 2) & 0x3ff;
+                  _DAT_8009abf6 = _DAT_8007e774;
+                  return;
+                }
+                unaff_s1 = unaff_s1 + 2;
+                uVar2 = *puVar1 & 0x3ff;
+              } while (iVar5 < 5);
+            }
+            else {
+              _DAT_8007e774 = _DAT_8009abf6;
+              uVar2 = _DAT_8009abf6;
+            }
+          }
+        }
+      }
+    }
+  }
+  _DAT_8009abf6 = uVar2;
+  return;
+}
+
+cannot find danger
