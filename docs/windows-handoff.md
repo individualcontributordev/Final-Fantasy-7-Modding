@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Map-setup block near `0x800A1ED8` + inspect `FUN_800ba534`.
+**Current task:** Rename `FUN_800ba534` → `field_map_init`.
