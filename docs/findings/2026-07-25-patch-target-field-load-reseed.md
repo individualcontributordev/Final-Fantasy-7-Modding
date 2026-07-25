@@ -35,9 +35,9 @@ Danger is **not** cleared on field entry in vanilla.
 
 ## Critical implementation detail
 
-The “set Danger to MAX?” roll must use **independent entropy** (PS1 root counter / VBlank / kernel PRNG — Bone Village–style), **not** `increment_step_id` / StepID/Offset.
+The “set Danger to MAX?” roll must use **independent entropy**, **not** StepID/Offset.
 
-If that roll also comes from StepID/Offset, then *when* trash fights appear is as routable as preempt — back to a fully deterministic encounter tape.
+**Chosen entropy:** COP0 **`Count`** via `mfc0` in our new stub (FIELD need not already use it). Scale FORCE chance by **`g_enemy_lure`**.
 
 StepID must still **advance** every check (call `increment_step_id` twice as today) so boss preempt routing stays aligned with vanilla tables (e.g. Aps StepID 48 / Offset 26).
 
@@ -86,10 +86,10 @@ Tune `force_chance_from_lure` so default lure ≈ desired sparsity; Lure materia
 
 ## Follow-ups
 
-- [ ] Confirm field-enter hook site
-- [ ] Pick base force chance and how it scales with `DAT_80062f19` (lure)
-- [ ] Pick `DANGER_MAX` (playtest; confirm vs min lure)
-- [x] Entropy: COP0 Count via `mfc0` (introduce in stub)
+- [x] Field-enter: replace DAT_8009fe8c clear in field_map_init @ 0x800BA574
+- [x] FORCE if `(Count&0xff) < g_enemy_lure` (tune with shift if needed)
+- [x] DANGER_MAX = 0xFFFF (sticky until battle)
+- [ ] Choose entropy source (not StepID/Offset)
 - [ ] Verify no dual battle start if scripted boss fires while Danger was MAX / mid encounter transition
 - [ ] Optional: formation entropy later
 - [ ] WORLD.BIN later
