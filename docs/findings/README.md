@@ -27,6 +27,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md) | FIELD.BIN owns encounter RNG; Makou edits DAT only | confirmed |
 | 2026-07-25 | [makou-iso-save-path](2026-07-25-makou-iso-save-path.md) | Makou → ff7tk pack/updateFieldBin flow | confirmed |
 | 2026-07-25 | [duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md) | Safe Mode + testing profile for hardware-like behavior | confirmed |
+| 2026-07-25 | [field-map-init-renamed](2026-07-25-field-map-init-renamed.md) | FUN_800ba534 → field_map_init @ 0x800BA534 | confirmed |
 | 2026-07-25 | [field-map-setup](2026-07-25-field-map-setup.md) | LAB_800a1dc8 setup; FUN_800ba534 init candidate | likely |
 | 2026-07-25 | [fun-800a2d5c](2026-07-25-fun-800a2d5c.md) | Texture/VRAM upload from buffer; not map enter | confirmed |
 | 2026-07-25 | [fun-800aa870](2026-07-25-fun-800aa870.md) | Entity setup loop; not map load | confirmed |

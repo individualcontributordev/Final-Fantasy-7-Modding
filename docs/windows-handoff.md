@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Rename `FUN_800ba534` → `field_map_init`.
+**Current task:** Find code cave near encounter_check for MAX-Danger RNG stub.
