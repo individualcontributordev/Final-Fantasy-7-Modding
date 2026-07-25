@@ -1,9 +1,10 @@
-# Task: restore pristine test ISO; import FIELD/FIELD.BIN
+# Task: pad-Yes import FIELD.BIN.new; save; boot DuckStation smoke test
 
 # COPY-PASTE (do not edit these lines)
-restore_cmd: cp workspace/iso-extract/ff7_disc1_pristine.bin workspace/iso-extract/ff7_disc1_test.bin
 import_source: workspace/iso-extract/FIELD.BIN.new
 import_target_path: FIELD/FIELD.BIN
-do_not_accept: Import file is longer than file in the image
+pad_dialog: Yes
+test_cue: workspace/iso-extract/ff7_disc1_test.cue
+duckstation_open: workspace/iso-extract/ff7_disc1_test.cue
 
-# EVIDENCE (1) paste restore_cmd + ls -l of pristine/test bins; (2) after import with NO truncate: one line "import OK FIELD/FIELD.BIN"; if truncate still appears: Cancel and paste CDmage size of FIELD/FIELD.BIN; then save)
+# EVIDENCE (after pad-Yes + save + DuckStation: paste short notes — boot OK/fail, reached field Y/N, walk OK/crash, any battle Y/N; then save)
