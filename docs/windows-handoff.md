@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Inspect FUN_800a14d8 for timer IO offsets.
+**Current task:** Paste field_map_init entry for Danger=0 patch.
