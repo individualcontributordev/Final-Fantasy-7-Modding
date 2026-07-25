@@ -70,7 +70,7 @@ Access pattern (`increment_step_id`):
 
 `encounter_check` highlights:
 
-- Step fraction: `DAT_8009c6d8 += 0x20` (wiki Step fraction += 32)
+- Step fraction: **`g_step_fraction`** (`0x8009C6D8`) `+= 0x20` (wiki += 32)
 - Danger **increment**: `0x800ABB7C`–`0x800ABBD0` — `div` / `mflo` then `lhu`/`addu`/`sh` on **`g_danger`**
 - Danger threshold load: `lhu` **`g_danger`** at `0x800ABC1C`
 - Preempt: roll1 `< (DAT_80062f1b & 0x7f)` → `DAT_800716d0 = 4` else `0`
