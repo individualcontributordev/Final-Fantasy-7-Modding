@@ -1,27 +1,8 @@
-# Task: rename FUN_800aba70 to encounter_check
+# Task: rename step fraction via code xref
 
 # COPY-PASTE (do not edit these lines)
-goto_function_start: 0x800ABA70
-rename_to: encounter_check
-optional_delete_bad_split_at: 0x800ABBD4
+goto_lbu_address: 0x800ABAB4
+rename_to: g_step_fraction
+ram_note_do_not_goto: 0x8009C6D8
 
 # EVIDENCE (paste Listing / Decompiler below, then save)
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined encounter_check()
-             undefined         <UNASSIGNED>   <RETURN>
-             undefined4        Stack[-0x4]:4  local_4                                 XREF[1]:     800aba7c(W)  
-             undefined4        Stack[-0x8]:4  local_8                                 XREF[1]:     800aba80(W)  
-             undefined4        Stack[-0xc]:4  local_c                                 XREF[1]:     800aba84(W)  
-             undefined4        Stack[-0x10]:4 local_10                                XREF[1]:     800aba8c(W)  
-                             encounter_check                                 XREF[1]:     FUN_800a65a4:800a6ec0(c)  
-        800aba70 0a 80 02 3c     lui        v0,0x800a
-        800aba74 30 ac 42 90     lbu        v0,-0x53d0(v0)=>DAT_8009ac30
-        800aba78 d8 ff bd 27     addiu      sp,sp,-0x28
-        800aba7c 24 00 bf af     sw         ra,local_4(sp)
-        800aba80 20 00 b2 af     sw         s2,local_8(sp)
-        800aba84 1c 00 b1 af     sw         s1,local_c(sp)
-        800aba88 05 00 40 14     bne        v0,zero,LAB_800abaa0
-        800aba8c 18 00 b0 af     _sw        s0,local_10(sp)
-        800aba90 07 80 11 3c     lui        s1,0x8007
