@@ -27,6 +27,8 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md) | FIELD.BIN owns encounter RNG; Makou edits DAT only | confirmed |
 | 2026-07-25 | [makou-iso-save-path](2026-07-25-makou-iso-save-path.md) | Makou → ff7tk pack/updateFieldBin flow | confirmed |
 | 2026-07-25 | [duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md) | Safe Mode + testing profile for hardware-like behavior | confirmed |
+| 2026-07-25 | [force-stub-dual-jal-ok](2026-07-25-force-stub-dual-jal-ok.md) | Delay nop + second jal intact | confirmed |
+| 2026-07-25 | [patch-log-force-stub](2026-07-25-patch-log-force-stub.md) | FORCE stub patch log (VA/file offset) | confirmed |
 | 2026-07-25 | [force-stub-complete-ghidra](2026-07-25-force-stub-complete-ghidra.md) | FORCE stub + jal restore verified in Ghidra | confirmed |
 | 2026-07-25 | [force-stub-patched-jal-clobber](2026-07-25-force-stub-patched-jal-clobber.md) | Stub OK; restore jal @ 0x800ABBD4 | confirmed |
 | 2026-07-25 | [danger-max-stub-draft](2026-07-25-danger-max-stub-draft.md) | Assembled branchless FORCE stub (88 bytes) | likely |

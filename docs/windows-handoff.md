@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Disassemble ABBD8; confirm jal @ ABC10 intact.
+**Current task:** Export Raw Bytes to FIELD.BIN.dec.patched; xxd verify stub.

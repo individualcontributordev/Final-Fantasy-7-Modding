@@ -20,6 +20,6 @@ Ghidra FIELD image now has the full in-place FORCE stub and restored first `jal 
 
 ## Follow-ups
 
-- [ ] Disassemble `0x800ABBD8` as `nop`
-- [ ] Confirm second `jal` @ `0x800ABC10` intact
+- [x] Disassemble `0x800ABBD8` as `nop`
+- [x] Confirm second `jal` @ `0x800ABC10` intact
 - [ ] Export patched `FIELD.BIN.dec` → rebuild ISO → DuckStation
