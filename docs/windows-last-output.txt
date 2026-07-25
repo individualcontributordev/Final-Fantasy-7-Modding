@@ -9,3 +9,5 @@ danger_ram_address: 0x8007173C
 renamed_g_danger: 
 symbol_shown_after_rename: 
 Notes: 
+
+        800abc1c 3c 17 84 94     lhu        a0,offset g_danger(a0)
