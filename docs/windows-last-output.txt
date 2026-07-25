@@ -1,13 +1,13 @@
-# Task: rename Danger (via code reference)
+# Task: find true encounter_check function start
 
 # COPY-PASTE (do not edit these lines)
-goto_lhu_address: 0x800ABC1C
-rename_to: g_danger
-danger_ram_address: 0x8007173C
+start_scroll_from: 0x800ABBD4
+current_wrong_entry: 0x800ABBD4
+label_name: encounter_check
 
 # ANSWERS (fill these)
-renamed_g_danger: 
-symbol_shown_after_rename: 
+true_function_start: 
+recreated_function: 
+unaff_s1_gone: 
+first_instruction_at_start: 
 Notes: 
-
-        800abc1c 3c 17 84 94     lhu        a0,offset g_danger(a0)
