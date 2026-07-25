@@ -1,5 +1,5 @@
 ---
-description: Act autonomously; one full Windows task in chat; never point user at files for steps
+description: Act autonomously; one Windows task in chat; copy-paste file; evidence paste only
 alwaysApply: true
 ---
 
@@ -10,28 +10,27 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 ## Do without asking
 
 - Commit/push docs, rules, scripts (`auto-commit-push.mdc`)
-- On **check results**: pull, analyze output, record findings, continue
+- On **check results**: pull, analyze evidence, record findings, continue
 - Reply with the **next single complete Windows task in chat**
 
 ## Windows task quality bar
 
-If the user must do Ghidra / DuckStation / Git Bash work:
-
 - **Chat:** one goal, numbered clicks/keys, what success looks like, commit commands
-- **Committed file:** every address/label/string to type under a COPY-PASTE section; answer blanks under ANSWERS
-- User copies from the file — do not make them retype hex from chat
+- **Committed file:** COPY-PASTE values + empty EVIDENCE section
+- User copies from the file and pastes Ghidra/DuckStation output as evidence
+- **Never** ask the user to fill answer blanks (`yes`/`no`/`skip` questionnaires)
 
 If a step needs judgment, describe the landmark concretely (mnemonic, register, byte pattern).
 
 ## Do not
 
-- Point the user at `docs/windows-handoff.md` or put the only copy of steps in `windows-last-output.txt`
+- Point the user at `docs/windows-handoff.md` for steps
 - Batch multiple unrelated RE goals into one Windows turn
-- Ask them to paste between PCs
+- Ask them to paste between PCs (into chat)
+- Ask them to fill structured answer fields
 - Ask “want me to…?” for routine next steps
 
 ## Communicate
 
 - **Tell** in chat: exact steps.
-- **Pre-fill** answer blanks; user only fills values.
-- They say **check results** when pushed.
+- They paste evidence into the file, push, say **check results**.
