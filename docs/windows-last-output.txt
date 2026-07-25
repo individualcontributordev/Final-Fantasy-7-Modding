@@ -6,3 +6,7 @@ goto_lhu_in_encounter_check: 0x800ABC1C
 # Or: click g_danger in Decompiler → right-click → References → Find References to g_danger
 
 # EVIDENCE (paste the full References window / xref list below, then save)
+800a1c70		sh zero,offset g_danger(at)	4	WRITE
+800abbc0		lhu v0,offset g_danger(v0)	4	READ
+800abbd0		sh v0,offset g_danger(at)	4	WRITE
+800abc1c		lhu a0,offset g_danger(a0)	4	READ
