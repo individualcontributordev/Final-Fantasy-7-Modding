@@ -75,13 +75,36 @@ python scripts/decompress_field_bin.py workspace/iso-extract/FIELD.BIN
 - [ ] Script prints sizes and writes `workspace/iso-extract/FIELD.BIN.dec`
 - [ ] Script prints `RNG table found at file offset 0x…` (US disc expected)
 
-## Paste back to Mac session
+## Report results (git pipe — do not paste to Mac)
 
-```text
-FIELD.BIN size:
-FIELD.BIN.dec size:
-RNG table offset line (full):
-Any errors:
+Overwrite `docs/windows-results.md` with:
+
+```markdown
+# Windows → Mac results
+
+**Status:** complete
+**Task:** extract and decompress FIELD.BIN
+
+## Output
+
+FIELD.BIN size (bytes):
+FIELD.BIN.dec size (bytes):
+RNG table line (full script line):
+Errors (or none):
+
+## Notes
+
+(anything else)
 ```
 
-Then Mac agent will reset this handoff to idle.
+Then in Git Bash:
+
+```bash
+cd "$(git rev-parse --show-toplevel)"
+git add docs/windows-results.md
+git commit -m "Windows handoff results: FIELD.BIN decompress"
+git push
+```
+
+Tell the user: on the Mac chat, say **“check results”**.
+
