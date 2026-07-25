@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Restore jal increment_step_id at 0x800ABBD4 (4 bytes only).
+**Current task:** Disassemble ABBD8; confirm jal @ ABC10 intact.
