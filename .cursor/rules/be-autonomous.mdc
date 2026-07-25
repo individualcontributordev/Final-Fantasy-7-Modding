@@ -22,5 +22,7 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 ## Communicate
 
 - **Tell** in chat: exact Git Bash / Ghidra / DuckStation steps, self-contained.
-- File redirect + push when you need output; then they say **check results**.
+- For answers: **pre-fill** `docs/windows-last-output.txt` with keys/blanks, push; user only fills values — never make them type the template.
+- They say **check results** when pushed.
 - Handoff markdown is optional agent-side mirror only — never the user-facing instruction channel.
+- Never ask to paste between PCs or retype field names.
