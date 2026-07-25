@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Xrefs to `g_danger` — find Danger writes (field enter / battle reset / +=).
+**Current task:** Identify function at Danger clear `0x800A1C70` (`sh zero, g_danger`).
