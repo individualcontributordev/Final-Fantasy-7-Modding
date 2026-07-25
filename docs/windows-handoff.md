@@ -2,8 +2,7 @@
 
 **Status:** active
 
-**Shell:** Git Bash  
-Report in the **Mac Cursor chat**.
+Report output in the **Mac Cursor chat**.
 
 ```bash
 git pull --ff-only
@@ -13,27 +12,27 @@ git pull --ff-only
 
 ## Goal
 
-Find encounter RNG **code** via StepID scalar search (table xrefs were 0 — expected).
+Find how StepID / RNG addresses appear in `FIELD.BIN.dec` (Ghidra scalar search found nothing).
 
-## Steps (Ghidra)
+## A. Byte search (Git Bash) — do this first
 
-1. **Search → For Scalars…**
-2. Value: `0x9c540` (hex) — this is the low part of StepID `0x8009C540`
-3. Search — open hits that look like:
-   - `lui …, 0x8009` then `lbu`/`sb` with offset `0xc540`, or similar
-4. Go to that instruction → press **F** if needed to make a function
-5. In Listing / Decompiler, look for:
-   - byte++ (StepID)
-   - add `0xd` / `13` (Offset bump on wrap)
-   - load from something near `0x80040638` / indexed byte load
-6. If you find it, label the function `increment_step_id` (`L` on function name)
+```bash
+cd "$(git rev-parse --show-toplevel)"
+python scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec
+# or: python3 scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec
+```
 
-If `0x9c540` finds nothing, try scalar `0x9ad2c` (Offset) or `0x7173c` (Danger).
+Copy the full script output into the Mac chat.
+
+## B. Optional — Ghidra Memory search (not Scalars)
+
+1. **Search → Memory…**
+2. Hex: `40 C5 09 80`  (StepID pointer `0x8009C540` little-endian)
+3. Search All
+4. If no hits, try `B1 CA EE 6C` (confirm table only)
+
+Do **not** spend time on Search → For Scalars for now.
 
 ## Tell the Mac chat
 
-- Scalar searched
-- Number of hits
-- Address of the best hit (and function name if any)
-- Whether decompiler shows step/offset/`0xd`
-- Or “no hits”
+Paste the Python script output (or say it failed + error text).
