@@ -16,5 +16,5 @@ Cannot replace `DAT_8009fe8c = 0` @ `0x800BA574`–`0x800BA578` with `g_danger =
 
 ## Follow-ups
 
-- [ ] Paste Listing `0x800A1DC8` → `jal field_map_init`
+- [x] Map-setup Listing captured; candidates DAT_80071e38 / DAT_80071e3c
 - [ ] Pick exact 2-ins Danger=0 patch
