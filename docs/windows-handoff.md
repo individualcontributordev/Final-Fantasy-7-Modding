@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Pad-Yes import; DuckStation smoke test.
+**Current task:** Finish CDmage save OK; DuckStation notes in EVIDENCE.
