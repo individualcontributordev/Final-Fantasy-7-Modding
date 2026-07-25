@@ -46,18 +46,23 @@ StepID must still **advance** every check (call `increment_step_id` twice as tod
 ```
 // existing gates: hostile, encounters on, step fraction wrapped, etc.
 
-if (independent_rng() < FORCE_RATE):   // tune FORCE_RATE for sparsity
-    g_danger = DANGER_MAX
+// FORCE chance scales with Enemy Lure (DAT_80062f19), same knob vanilla uses
+// in: roll < (Danger * lure) >> 12
+// Higher lure → more likely to set MAX; Enemy Away → less likely.
+if (independent_rng() < force_chance_from_lure(DAT_80062f19)):
+    g_danger = DANGER_MAX   // high enough that threshold almost always passes
 // else: leave g_danger as-is (0 after field enter / after battle)
 
 // vanilla:
 preempt = increment_step_id() ...
 threshold_roll = increment_step_id() ...
-if (threshold_roll < f(g_danger, ...))
+if (threshold_roll < f(g_danger, lure))
     start_battle()  // then Danger = 0 as vanilla
 ```
 
 Also hook **field enter** → `g_danger = 0`.
+
+Tune `force_chance_from_lure` so default lure ≈ desired sparsity; Lure materia denser, Away sparser.
 
 ## Acceptance (product)
 
@@ -82,7 +87,8 @@ Also hook **field enter** → `g_danger = 0`.
 ## Follow-ups
 
 - [ ] Confirm field-enter hook site
-- [ ] Pick `FORCE_RATE` and `DANGER_MAX` (playtest sparsity)
+- [ ] Pick base force chance and how it scales with `DAT_80062f19` (lure)
+- [ ] Pick `DANGER_MAX` (playtest; confirm vs min lure)
 - [ ] Choose entropy source (not StepID/Offset)
 - [ ] Verify no dual battle start if scripted boss fires while Danger was MAX / mid encounter transition
 - [ ] Optional: formation entropy later
