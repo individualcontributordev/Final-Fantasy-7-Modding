@@ -1,4 +1,4 @@
-File: D:\projects\ff7-modding\workspace\iso-extract\FIELD.BIN (85435 bytes)
+File: D:\projects\ff7-modding\workspace\iso-extract\FIELD.BIN.dec (264008 bytes)
 
 StepID ptr u32 LE  [40c50980]  hits=0
 
@@ -10,11 +10,35 @@ Formation ptr u32 LE  [20c10780]  hits=0
 
 RNG table ptr u32 LE  [38060480]  hits=0
 
-StepID low u16 LE  [40c5]  hits=0
+StepID low u16 LE  [40c5]  hits=3
+  file 0xB9CC  va 0x8000B9CC
+  file 0xB9DC  va 0x8000B9DC
+  file 0xB9E4  va 0x8000B9E4
 
 StepID mid u16 LE  [c509]  hits=0
 
-lui imm 0x8009 LE half  [0980]  hits=0
+lui imm 0x8009 LE half  [0980]  hits=20 (truncated at 20)
+  file 0x1368  va 0x80001368
+  file 0x149C  va 0x8000149C
+  file 0x14C0  va 0x800014C0
+  file 0x1590  va 0x80001590
+  file 0x15F8  va 0x800015F8
+  file 0x1648  va 0x80001648
+  file 0x16B0  va 0x800016B0
+  file 0x1A44  va 0x80001A44
+  file 0x1A60  va 0x80001A60
+  file 0x1A7C  va 0x80001A7C
+  file 0x1A98  va 0x80001A98
+  file 0x1AB4  va 0x80001AB4
+  file 0x1B00  va 0x80001B00
+  file 0x1B10  va 0x80001B10
+  file 0x1B28  va 0x80001B28
+  file 0x1B74  va 0x80001B74
+  file 0x1B7C  va 0x80001B7C
+  file 0x1B98  va 0x80001B98
+  file 0x1C28  va 0x80001C28
+  file 0x1C78  va 0x80001C78
 
-RNG table head  [b1caee6c5a712e55]  hits=0
+RNG table head  [b1caee6c5a712e55]  hits=1
+  file 0x40638  va 0x80040638
 
