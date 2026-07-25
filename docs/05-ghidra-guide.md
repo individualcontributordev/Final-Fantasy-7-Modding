@@ -14,7 +14,9 @@ Start here after [03-environment-setup.md](03-environment-setup.md) phase 1 chec
 |---------|-------|
 | Format | Raw Binary |
 | Language | MIPS: R3000 32bit little endian |
-| Base address | `0x80000000` |
+| Base address | **`0x800A0000`** (US FIELD.BIN module; was wrongly documented as `0x80000000`) |
+
+If an existing project used `0x80000000`, real code/data VAs are **Ghidra_VA + `0xA0000`**. Table file `0x40638` → real **`0x800E0638`**. Prefer a fresh import at `0x800A0000` before matching DuckStation PCs.
 
 Click Analyze → yes to defaults (MIPS analysis).
 

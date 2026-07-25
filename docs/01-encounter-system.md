@@ -53,15 +53,16 @@ Emulator "address" column is often offset from 0x80000000.
 
 ### Confirmed in FIELD.BIN.dec (US) — Ghidra
 
-`increment_step_id` body starts near **`0x8000B9C8`**. Access pattern:
+`increment_step_id` at Ghidra **`0x8000B9C8`** (import base `0x80000000`; likely real VA **`0x800AB9C8`** if module base is `0x800A0000`).
+
+Access pattern:
 
 - StepID: `lui …, 0x800a` + `lbu/sb …, -0x3ac0(…)` → `0x8009C540`
 - Offset: `lui …, 0x800a` + `lbu/sb …, -0x52d4(…)` → `0x8009AD2C`
 - On StepID wrap to 0: Offset += `0xd` (13)
+- Table: `lui …, 0x800e` + `0x638` → **`0x800E0638`** (file `0x40638` at module base `0x800A0000`), index by StepID, subtract Offset, `& 0xff`
 
-RNG table in this binary: file `0x40638` / va **`0x80040638`** (`g_field_rng_table`).
-
-See [findings/2026-07-25-increment-step-id.md](findings/2026-07-25-increment-step-id.md).
+See [findings/2026-07-25-increment-step-id-complete.md](findings/2026-07-25-increment-step-id-complete.md).
 
 ## Per-map data (editable in Makou, not sufficient alone)
 
