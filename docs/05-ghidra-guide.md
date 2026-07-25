@@ -30,17 +30,15 @@ If not found:
 - Wrong binary (not decompressed FIELD.BIN?)
 - Wrong region rip (table should be identical across US/EU/JP)
 
-## Second win: find code that reads the table
+## Second win: find code that uses the table
 
-1. Click `g_field_rng_table`
-2. **References → Show References to Address**
-3. Open each xref → you want a function that:
-   - Increments a byte (StepID)
-   - Compares/wraps and adds `0x0D` (13) to another byte (Offset)
-   - Loads from table indexed by StepID
-   - Subtracts Offset
+**Do not rely on xrefs to the table** — often **0** after default analysis (MIPS `lui`/`addiu`).
 
-Label that function `increment_step_id`.
+Instead: **Search → For Scalars** (see below) for StepID / Offset / Danger, then read those functions for table loads.
+
+If xrefs *do* appear: open them and look for StepID++ / Offset+=13 / `table[stepid] - offset`.
+
+Label the StepID RNG helper `increment_step_id`.
 
 ## Third win: find RAM address references
 
