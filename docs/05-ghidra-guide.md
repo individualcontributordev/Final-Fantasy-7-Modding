@@ -75,7 +75,7 @@ If PC doesn't match Ghidra address: adjust import base address and re-analyze.
 - [x] `increment_step_id` — returns table[stepid] - offset @ `0x800AB9C8`
 - [ ] `increment_formation` — similar, uses formation counter (`FUN_800aba34`?)
 - [~] `encounter_check` — body found (dual jal + Danger); **fix function start**
-- [ ] `g_danger` — rename `DAT_8007173c`
+- [x] `g_danger` — renamed via `lhu` @ `0x800ABC1C` (RAM `0x8007173C`)
 - [ ] `field_map_init` — runs on map load (hook target for reseed patch)
 
 ## Decompiler tips
