@@ -1,9 +1,9 @@
-# Task: rename Danger
+# Task: rename Danger (via code reference)
 
 # COPY-PASTE (do not edit these lines)
-goto_address: 0x8007173C
+goto_lhu_address: 0x800ABC1C
 rename_to: g_danger
-verify_lhu_address: 0x800ABC1C
+danger_ram_address: 0x8007173C
 
 # ANSWERS (fill these)
 renamed_g_danger: 
