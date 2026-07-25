@@ -1,14 +1,6 @@
-# Task: find entropy for FORCE roll (not StepID)
+# Task: broader entropy search — scalar 0x1f80
 
 # COPY-PASTE (do not edit these lines)
-goto_encounter_check: 0x800ABA70
-# Options to try in Ghidra Search:
-# 1) Search → For Scalars → 0x1f801110 or 0x1f801120 (root counters) — paste hits
-# 2) Search → Memory for instruction mfc0 (COP0 Count) — paste hits
-# 3) If none: paste "no hits" and we will use an alternate entropy plan
+search_scalar: 0x1f80
 
-# EVIDENCE (paste search results or "no hits", then save)
-0x1f801110 none
-0x1f801120 none
-mfc0 none
-no hints
+# EVIDENCE (Search → For Scalars → 0x1f80; paste all hits, or "no hits", then save)

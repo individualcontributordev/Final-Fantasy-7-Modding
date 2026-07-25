@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Find entropy source (root counter / mfc0) in FIELD.BIN.
+**Current task:** Search scalar 0x1f80 for IO/timer entropy.
