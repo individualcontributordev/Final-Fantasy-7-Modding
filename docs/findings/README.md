@@ -27,8 +27,9 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md) | FIELD.BIN owns encounter RNG; Makou edits DAT only | confirmed |
 | 2026-07-25 | [makou-iso-save-path](2026-07-25-makou-iso-save-path.md) | Makou → ff7tk pack/updateFieldBin flow | confirmed |
 | 2026-07-25 | [duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md) | Safe Mode + testing profile for hardware-like behavior | confirmed |
-| 2026-07-25 | [danger-max-stub-draft](2026-07-25-danger-max-stub-draft.md) | In-place mfc0+lure FORCE stub for 88-byte slot | likely |
-| 2026-07-25 | [map-setup-danger0-candidates](2026-07-25-map-setup-danger0-candidates.md) | Retarget 71e38/71e3c sh-zero to g_danger | likely |
+| 2026-07-25 | [danger-max-stub-draft](2026-07-25-danger-max-stub-draft.md) | Assembled branchless FORCE stub (88 bytes) | likely |
+| 2026-07-25 | [dat-71e38-71e3c-xrefs](2026-07-25-dat-71e38-71e3c-xrefs.md) | 71e38/71e3c live; no Danger=0 retarget | confirmed |
+| 2026-07-25 | [map-setup-danger0-candidates](2026-07-25-map-setup-danger0-candidates.md) | Retarget rejected; stub always writes Danger | confirmed |
 | 2026-07-25 | [dat-8009fe8c-xrefs](2026-07-25-dat-8009fe8c-xrefs.md) | fe8c heavily read; cannot steal clear for Danger=0 | confirmed |
 | 2026-07-25 | [field-map-init-danger0-hook](2026-07-25-field-map-init-danger0-hook.md) | fe8c steal rejected; need map-setup slot | confirmed |
 | 2026-07-25 | [fun-800a14d8-scratchpad](2026-07-25-fun-800a14d8-scratchpad.md) | 0x1F800000 scratchpad; use mfc0 Count for entropy | confirmed |

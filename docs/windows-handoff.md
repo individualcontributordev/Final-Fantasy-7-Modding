@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Xrefs DAT_80071e38 and DAT_80071e3c to pick Danger=0 retarget.
+**Current task:** Patch 88-byte FORCE stub at 0x800ABB7C; paste Listing evidence.
