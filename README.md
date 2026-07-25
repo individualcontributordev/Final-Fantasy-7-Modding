@@ -37,7 +37,6 @@ ff7-modding/
 │   ├── 04-workflow.md        Edit → rebuild → test loop
 │   ├── 05-ghidra-guide.md    RE workflow for FIELD.BIN
 │   ├── windows-handoff.md    Human Windows checklist
-│   ├── windows-results.md    Human → Mac results (git)
 │   └── findings/             Dated lab notebook
 ├── scripts/                  FIELD.BIN decompress/recompress
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
@@ -49,7 +48,7 @@ Discoveries are recorded in [docs/findings/](docs/findings/README.md). The Mac C
 [record-findings](.cursor/skills/record-findings/SKILL.md) and
 [capture-research-findings](.cursor/rules/capture-research-findings.mdc).
 
-Human Windows steps: [docs/windows-handoff.md](docs/windows-handoff.md). Results via git: [docs/windows-results.md](docs/windows-results.md).
+Human Windows steps: [docs/windows-handoff.md](docs/windows-handoff.md). Report results in the Mac chat.
 
 ## GitHub
 

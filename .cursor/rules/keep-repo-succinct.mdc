@@ -19,7 +19,7 @@ Only add or keep material that helps **other engineers** understand and mod FF7 
 - FF7 disc format, file layout, addresses, patch workflow, verified RE results
 - Scripts and commands that are part of the modding workflow
 - Findings with **project-specific** facts (offsets, behaviors, test results) — not trivia
-- Active **`docs/windows-handoff.md`** / **`docs/windows-results.md`** (one current task + latest results only)
+- Active **`docs/windows-handoff.md`** (one current task; replace when done)
 
 ## Writing style
 
