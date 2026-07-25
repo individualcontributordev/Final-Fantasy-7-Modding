@@ -102,3 +102,7 @@ RNG table head  [b1caee6c5a712e55]  hits=1
         8000ba35 80              ??         80h
         8000ba36 02              ??         02h
 
+
+
+0x800AB9C8  3C02800A  lui v0, 0x800a
+0x800E0638  6CEECAB1  UNKNOWN
