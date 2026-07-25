@@ -89,7 +89,7 @@ Tune `force_chance_from_lure` so default lure ≈ desired sparsity; Lure materia
 - [ ] Confirm field-enter hook site
 - [ ] Pick base force chance and how it scales with `DAT_80062f19` (lure)
 - [ ] Pick `DANGER_MAX` (playtest; confirm vs min lure)
-- [ ] Choose entropy source (not StepID/Offset)
+- [x] Entropy: COP0 Count via `mfc0` (introduce in stub)
 - [ ] Verify no dual battle start if scripted boss fires while Danger was MAX / mid encounter transition
 - [ ] Optional: formation entropy later
 - [ ] WORLD.BIN later
