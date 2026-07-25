@@ -4,3 +4,139 @@
 goto_field_map_init: 0x800BA534
 
 # EVIDENCE (paste first ~25 Listing lines of field_map_init from entry through a few stores, then save)
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined field_map_init()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x4]:4  local_4                                 XREF[2]:     800ba540(W), 
+                                                                                                   800ba648(R)  
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800ba538(W), 
+                                                                                                   800ba64c(R)  
+                             field_map_init                                  XREF[1]:     field_main_loop:800a1e40(c)  
+        800ba534 e8 ff bd 27     addiu      sp,sp,-0x18
+        800ba538 10 00 b0 af     sw         s0,local_8(sp)
+        800ba53c 21 80 c0 00     move       s0,a2
+        800ba540 14 00 bf af     sw         ra,local_4(sp)
+        800ba544 6a 00 82 84     lh         v0,0x6a(a0)
+        800ba548 01 00 03 34     ori        v1,zero,0x1
+        800ba54c 0a 80 01 3c     lui        at,0x800a
+        800ba550 e0 c6 24 ac     sw         a0,-0x3920(at)=>DAT_8009c6e0
+        800ba554 0a 80 01 3c     lui        at,0x800a
+        800ba558 44 c5 25 ac     sw         a1,-0x3abc(at)=>DAT_8009c544
+        800ba55c 0a 80 01 3c     lui        at,0x800a
+        800ba560 dc c6 30 ac     sw         s0,-0x3924(at)=>DAT_8009c6dc
+        800ba564 09 80 01 3c     lui        at,0x8009
+        800ba568 cc 5d 20 a0     sb         zero,offset DAT_80095dcc(at)
+        800ba56c 08 80 01 3c     lui        at,0x8008
+        800ba570 e0 eb 23 a0     sb         v1,-0x1420(at)=>DAT_8007ebe0
+        800ba574 0a 80 01 3c     lui        at,0x800a
+        800ba578 8c fe 20 a0     sb         zero,-0x174(at)=>DAT_8009fe8c
+        800ba57c 00 01 42 30     andi       v0,v0,0x100
+        800ba580 05 00 40 10     beq        v0,zero,LAB_800ba598
+        800ba584 04 00 02 34     _ori       v0,zero,0x4
+        800ba588 09 80 01 3c     lui        at,0x8009
+        800ba58c cc 5d 23 a0     sb         v1,offset DAT_80095dcc(at)
+        800ba590 0a 80 01 3c     lui        at,0x800a
+        800ba594 fc 9f 22 a0     sb         v0,-0x6004(at)=>DAT_80099ffc
+                             LAB_800ba598                                    XREF[1]:     800ba580(j)  
+        800ba598 00 00 02 92     lbu        v0,0x0(s0)
+        800ba59c 00 00 00 00     nop
+        800ba5a0 02 00 42 2c     sltiu      v0,v0,0x2
+        800ba5a4 03 00 40 10     beq        v0,zero,LAB_800ba5b4
+        800ba5a8 4b 00 04 34     _ori       a0,zero,0x4b
+        800ba5ac 78 0a 01 0c     jal        SUB_800429e0
+        800ba5b0 0a 00 05 34     _ori       a1,zero,0xa
+                             LAB_800ba5b4                                    XREF[1]:     800ba5a4(j)  
+        800ba5b4 00 00 02 92     lbu        v0,0x0(s0)
+        800ba5b8 00 00 00 00     nop
+        800ba5bc 03 00 42 2c     sltiu      v0,v0,0x3
+        800ba5c0 06 00 40 10     beq        v0,zero,LAB_800ba5dc
+        800ba5c4 4b 00 04 34     _ori       a0,zero,0x4b
+        800ba5c8 01 00 02 92     lbu        v0,0x1(s0)
+        800ba5cc 00 00 00 00     nop
+        800ba5d0 06 00 42 2c     sltiu      v0,v0,0x6
+        800ba5d4 03 00 40 14     bne        v0,zero,LAB_800ba5e4
+        800ba5d8 00 00 00 00     _nop
+                             LAB_800ba5dc                                    XREF[1]:     800ba5c0(j)  
+        800ba5dc 78 0a 01 0c     jal        SUB_800429e0
+        800ba5e0 0c 00 05 34     _ori       a1,zero,0xc
+                             LAB_800ba5e4                                    XREF[1]:     800ba5d4(j)  
+        800ba5e4 01 00 02 92     lbu        v0,0x1(s0)
+        800ba5e8 00 00 00 00     nop
+        800ba5ec 05 00 42 2c     sltiu      v0,v0,0x5
+        800ba5f0 03 00 40 10     beq        v0,zero,LAB_800ba600
+        800ba5f4 4b 00 04 34     _ori       a0,zero,0x4b
+        800ba5f8 78 0a 01 0c     jal        SUB_800429e0
+        800ba5fc 0b 00 05 34     _ori       a1,zero,0xb
+                             LAB_800ba600                                    XREF[1]:     800ba5f0(j)  
+        800ba600 30 52 03 0c     jal        FUN_800d48c0                                     undefined FUN_800d48c0()
+        800ba604 00 00 00 00     _nop
+        800ba608 f1 e9 02 0c     jal        FUN_800ba7c4                                     undefined FUN_800ba7c4()
+        800ba60c 00 00 00 00     _nop
+        800ba610 d5 eb 02 0c     jal        FUN_800baf54                                     undefined FUN_800baf54()
+        800ba614 00 00 00 00     _nop
+        800ba618 07 80 02 3c     lui        v0,0x8007
+        800ba61c d4 16 42 90     lbu        v0,offset DAT_800716d4(v0)
+        800ba620 00 00 00 00     nop
+        800ba624 08 00 40 14     bne        v0,zero,LAB_800ba648
+        800ba628 00 00 00 00     _nop
+        800ba62c a9 11 03 0c     jal        FUN_800c46a4                                     undefined FUN_800c46a4()
+        800ba630 00 00 00 00     _nop
+        800ba634 f2 00 02 34     ori        v0,zero,0xf2
+        800ba638 0a 80 01 3c     lui        at,0x800a
+        800ba63c 00 a0 22 a4     sh         v0,-0x6000(at)=>DAT_8009a000
+        800ba640 9f b6 00 0c     jal        SUB_8002da7c
+        800ba644 00 00 00 00     _nop
+                             LAB_800ba648                                    XREF[1]:     800ba624(j)  
+        800ba648 14 00 bf 8f     lw         ra,local_4(sp)
+        800ba64c 10 00 b0 8f     lw         s0,local_8(sp)
+        800ba650 18 00 bd 27     addiu      sp,sp,0x18
+        800ba654 08 00 e0 03     jr         ra
+        800ba658 00 00 00 00     _nop
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined FUN_800ba65c()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x4]:4  local_4                                 XREF[2]:     800ba674(W), 
+                                                                                                   800ba7b0(R)  
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800ba668(W), 
+                                                                                                   800ba7b4(R)  
+                             FUN_800ba65c                                    XREF[1]:     FUN_800a2314:800a26b4(c)  
+        800ba65c 08 80 02 3c     lui        v0,0x8008
+
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_800ba65c(undefined4 param_1)
+
+{
+  if (DAT_8007ebe0 != '\0') {
+    FUN_800d4bfc();
+    FUN_800bc338();
+    FUN_800d7d6c();
+    FUN_800d7f9c();
+    DAT_80095dcc = 0;
+    DAT_8009fe8c = 0;
+    DAT_8007ebe0 = '\0';
+    if (_DAT_8009c6dc[1] < 5) {
+      func_0x800429e0(0x4b,0xb);
+    }
+    if (*_DAT_8009c6dc < 2) {
+      func_0x800429e0(0x4b,10);
+    }
+    if ((2 < *_DAT_8009c6dc) || (5 < _DAT_8009c6dc[1])) {
+      func_0x800429e0(0x4b,0xc);
+    }
+  }
+  if ((DAT_80099ffc != '\x04') && ((DAT_80099ffc != '\x05' || (DAT_80070788 != '\0')))) {
+    FUN_800bb3a8();
+  }
+  if (DAT_80071e2c != '\0') {
+    func_0x8001f1bc(0x80083274,4,param_1,*_DAT_8009c6e0 ^ 1);
+  }
+  FUN_800bc438(param_1);
+  return;
+}
