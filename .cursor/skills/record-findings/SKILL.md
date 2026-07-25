@@ -31,6 +31,9 @@ Record a finding when any of these are true:
 - Tool setting that affects accuracy or testing
 - Contradiction with prior docs (note both sides)
 - User says "remember this" or "document this"
+- After **check results**: useful content appeared in `docs/windows-last-output.txt`
+
+User-facing next steps always go **in chat** (full commands) — not “see the handoff file.” See `.cursor/rules/mac-human-workflow.mdc`.
 
 ## Create a finding file
 
