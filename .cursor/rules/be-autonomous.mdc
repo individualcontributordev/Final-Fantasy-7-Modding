@@ -15,15 +15,13 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 
 ## Windows task quality bar
 
-If the user must do Ghidra / DuckStation / Git Bash work, the chat reply must be self-contained:
+If the user must do Ghidra / DuckStation / Git Bash work:
 
-- One goal
-- Exact addresses and keypresses
-- What success looks like
-- Answer blanks already pushed
-- Commit commands
+- **Chat:** one goal, numbered clicks/keys, what success looks like, commit commands
+- **Committed file:** every address/label/string to type under a COPY-PASTE section; answer blanks under ANSWERS
+- User copies from the file — do not make them retype hex from chat
 
-If a step needs judgment (e.g. “scroll until you see X”), describe **X** concretely (instruction mnemonic, register, byte pattern).
+If a step needs judgment, describe the landmark concretely (mnemonic, register, byte pattern).
 
 ## Do not
 

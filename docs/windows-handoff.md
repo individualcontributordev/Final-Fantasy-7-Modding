@@ -1,5 +1,5 @@
 # Windows handoff (agent-internal optional mirror)
 
-**Not user-facing.** Instructions live in Mac chat only.
+**Not user-facing.** Chat has steps; `windows-last-output.txt` has COPY-PASTE values.
 
-**Current task:** Rename `DAT_8007173c` → `g_danger` at `0x8007173C`.
+**Current task:** Rename Danger — goto `0x8007173C`, rename to `g_danger`.

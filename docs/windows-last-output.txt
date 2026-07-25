@@ -1,8 +1,11 @@
-# Task: rename Danger — fill answers only
+# Task: rename Danger
 
+# COPY-PASTE (do not edit these lines)
+goto_address: 0x8007173C
+rename_to: g_danger
+verify_lhu_address: 0x800ABC1C
+
+# ANSWERS (fill these)
 renamed_g_danger: 
 symbol_shown_after_rename: 
 Notes: 
-
-# Allowed: yes / no / skip
-# symbol_shown_after_rename: exact name Ghidra shows (expect g_danger)
