@@ -28,5 +28,6 @@ User confirmed re-import / checks at base **`0x800A0000`**: `0x800AB9C8` lui/lbu
 | `field_map_init` | `0x800BA534` |
 | `field_main_loop` | `0x800A16CC` |
 | Formation (`g_formation`) | `0x80071C20` |
+| Enemy Lure (`g_enemy_lure`) | `0x80062F19` |
 | StepID | `0x8009C540` |
 | Offset | `0x8009AD2C` |
