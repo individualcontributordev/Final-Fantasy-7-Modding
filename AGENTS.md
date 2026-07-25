@@ -9,6 +9,7 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 - **Always** `git pull --ff-only` before reading or acting (`.cursor/rules/pull-and-handoff.mdc`).
 - Active Windows work goes in **`docs/windows-handoff.md`**; Windows replies via **`docs/windows-results.md`** (git push) — no cross-PC paste.
 - On Windows, user can ask **“what's next?”** — agent pulls, reads handoff, runs, writes results, pushes.
+- If Windows Cursor is **blocked / rate-limited**, skip the agent: open `docs/windows-handoff.md` and follow it manually, then push `docs/windows-results.md` yourself.
 - On Mac, user can ask **“check results”** — agent pulls and reads `docs/windows-results.md`.
 - **Be autonomous:** write/push handoffs and next steps without asking; tell the user what to run on Windows.
 
