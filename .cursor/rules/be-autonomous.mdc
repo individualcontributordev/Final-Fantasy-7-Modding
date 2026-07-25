@@ -1,5 +1,5 @@
 ---
-description: Act autonomously — write checklists, commit, push; tell the user what to do
+description: Act autonomously; full instructions in chat; never point user at handoff file
 alwaysApply: true
 ---
 
@@ -9,21 +9,18 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 
 ## Do without asking
 
-- Write / update `docs/windows-handoff.md` when Windows work is next
-- Commit and push (see `auto-commit-push.mdc`)
-- On **check results**: pull, read `docs/windows-last-output.txt` (or named file), update findings/handoff
-- Tell the user **what to do next** in chat
+- Commit/push docs and scripts as needed (`auto-commit-push.mdc`)
+- On **check results**: pull, analyze output file, record findings, continue
+- Reply with the **next complete instructions in chat** (commands + GUI clicks)
 
-## Do not ask
+## Do not
 
-- “Want me to write the handoff?”
-- “Should I push?”
-- “Paste the output here” / “copy the log into chat” / any cross-PC paste
+- Tell the user to read `docs/windows-handoff.md` or any checklist file for what to do
+- Ask them to paste between PCs
+- Ask “want me to…?” for routine next steps
 
 ## Communicate
 
-- **Tell**, don’t ask: commands to run + when to say **check results**.
-- Long or structured output → **file + git push** only (see `mac-human-workflow.mdc`).
-- Chat is for short typed status, not dumped terminal text.
-
-Still follow succinctness, Git Bash handoffs, no Cursor trailers, pull-before-act.
+- **Tell** in chat: exact Git Bash / Ghidra / DuckStation steps, self-contained.
+- File redirect + push when you need output; then they say **check results**.
+- Handoff markdown is optional agent-side mirror only — never the user-facing instruction channel.

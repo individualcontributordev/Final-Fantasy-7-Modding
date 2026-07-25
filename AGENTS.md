@@ -4,52 +4,43 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
 ## Workflow
 
-- **Mac Cursor (this chat):** only agent — docs, scripts, planning, analysis.
-- **Windows:** human only — disc, Ghidra, DuckStation, Git Bash. No Windows Cursor agent.
-- User talks **only in this chat**. Agent tells them what to do; durable steps in `docs/windows-handoff.md`.
-- **Never ask to paste** between PCs. Script/tool output → `docs/windows-last-output.txt` + push; user says **check results**.
+- **Mac Cursor (this chat):** only agent. Gives **full instructions in chat**.
+- **Windows:** human only — disc, Ghidra, DuckStation, Git Bash.
+- **Never** tell the user to open/read `docs/windows-handoff.md` for steps.
+- **Never** ask to paste across PCs. Outputs → `docs/windows-last-output.txt` + push → user says **check results**.
 - Mac may install helper tools; **not** DuckStation or Ghidra.
 - Always `git pull --ff-only` before acting (`.cursor/rules/mac-human-workflow.mdc`).
 
-## Start here
+## Start here (agent)
 
-1. `docs/windows-handoff.md` — current human checklist (if active)
-2. `docs/00-goals.md` — project scope
-3. `docs/03-environment-setup.md` — tool checklist
-4. `docs/findings/README.md` — lab notebook index
+1. `docs/00-goals.md` — project scope
+2. `docs/03-environment-setup.md` — tool checklist
+3. `docs/findings/README.md` — lab notebook index
+4. `docs/05-ghidra-guide.md` — RE reference
 
 ## Rules
 
-- **Mac/human workflow** (`.cursor/rules/mac-human-workflow.mdc`)
+- **Mac/human workflow** (`.cursor/rules/mac-human-workflow.mdc`) — instruct in chat
 - **Be autonomous** (`.cursor/rules/be-autonomous.mdc`)
 - **Keep repo succinct** (`.cursor/rules/keep-repo-succinct.mdc`)
 - **Auto commit and push** (`.cursor/rules/auto-commit-push.mdc`)
 - **Capture findings** (`.cursor/rules/capture-research-findings.mdc`)
 - **No Cursor commit trailers** (`.cursor/rules/no-cursor-commit-trailers.mdc`)
 - Never commit ISO/binary files
-- Patch logs go in `workspace/patches/`
 
 ## Repo layout
 
 | Path | Purpose |
 |------|---------|
-| `docs/windows-handoff.md` | Current checklist for the human on Windows |
 | `docs/windows-last-output.txt` | Latest Windows command output (git pipe) |
 | `docs/0N-*.md` | Curated reference by topic |
 | `docs/findings/` | Dated journal entries |
-| `scripts/` | Shared tooling (e.g. FIELD.BIN GZIPPS) |
-| `workspace/iso-extract/` | Disc files (gitignored) |
-| `workspace/ghidra/` | Ghidra projects (local) |
-| `workspace/patches/` | Patch attempt logs |
+| `scripts/` | Shared tooling |
+| `workspace/` | Local disc/Ghidra/patches (gitignored binaries) |
 
-## External source repos
+## Topic docs
 
-- `~/makoureactor` — field editor, ISO save
-- `~/ff7tk` — ISO / FIELD.BIN library
-
-## Topic docs today
-
-- `01-encounter-system.md` — field encounter RNG (one active research thread)
+- `01-encounter-system.md` — field encounter RNG
 - `02-disc-format.md` — ISO, FIELD.BIN, Makou/ff7tk
 - `04-workflow.md` — edit → rebuild → test
-- `05-ghidra-guide.md` — RE workflow (FIELD.BIN-focused; pattern applies elsewhere)
+- `05-ghidra-guide.md` — RE workflow
