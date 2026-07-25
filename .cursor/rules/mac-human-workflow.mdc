@@ -1,5 +1,5 @@
 ---
-description: Mac agent instructs in chat only; one atomic Windows task; answer file is blanks only
+description: Mac agent instructs in chat; commit copy-paste values + answer blanks for Windows
 alwaysApply: true
 ---
 
@@ -14,49 +14,51 @@ alwaysApply: true
 
 Each Mac reply that needs Windows work is **exactly one task**.
 
-Do **not** batch “fix entry + rename Danger + find Danger add + label FUN_…” into one turn.
+## Instruct in chat + commit copy-paste values
 
-## Instruct in chat — never defer to a file
+Chat has the numbered GUI walkthrough (clicks, keys, what success looks like).
 
-Put **complete, copyable commands and GUI steps in this chat**. The user reads you here only.
+**Every address, label name, search string, and other typed value must also be in the committed file** so the user can copy-paste on Windows without retyping from chat.
 
-Every Windows task reply must include all of:
+### `docs/windows-last-output.txt` layout
 
-1. **Goal** — one sentence
-2. **Prerequisites** — Ghidra project / base address / open program
-3. **Numbered steps** — every click, key, and address (e.g. `G` → `0x800ABBD4`)
-4. **What you should see** — expected instruction bytes / decompiler clues / pass-fail
-5. **Fill-in fields** — exact keys and allowed values
-6. **Commit commands** — copy-paste Git Bash block
-7. **Done signal** — say **check results**
+```
+# COPY-PASTE (do not edit these lines)
+goto_address: 0x8007173C
+rename_to: g_danger
 
-**Do not** say: “see the handoff”, “follow the checklist”, “steps are in the txt file”, or “do the Ghidra steps as before”.
+# ANSWERS (fill these)
+renamed_g_danger: 
+symbol_shown_after_rename: 
+Notes: 
+```
 
-Optional: mirror the same steps into `docs/windows-handoff.md` for repo history — never direct the user there.
+- **COPY-PASTE** section: agent writes exact values; user copies from Notepad into Ghidra.
+- **ANSWERS** section: blanks only; user fills `yes`/`no`/`skip` or short results.
 
-## Answer file = blanks only
+Never put the *only* copy of an address in chat. Chat may repeat it; the file is the copy-paste source.
 
-`docs/windows-last-output.txt` holds **answers only** (keys + empty values). No procedure comments.
+Chat must still include: Goal, Prerequisites, Numbered steps, What you should see, Commit commands, **check results**.
 
-| Need | How |
-|------|-----|
-| Short status | They type a few words (“done”, **check results**) |
-| Structured answers | You pre-write blanks, commit/push; user only fills values |
-| Long listing/decompiler dump | User may paste dump **into the Notes field of the file** (not into chat) |
+**Do not** say “see the handoff” or “steps are only in the txt.” Chat = how; file = what to type + answers.
 
-Never ask them to paste Windows output into chat, or to type field names by hand.
+Optional: mirror into `docs/windows-handoff.md` for history — never direct the user there.
 
-### Fill-in template pattern
+## No paste into chat
 
-1. Write `docs/windows-last-output.txt` with short keys and empty values only
+Never ask to paste Windows output into chat. Long dumps go in the file `Notes:` field.
+
+## Fill-in + commit pattern
+
+1. Write `docs/windows-last-output.txt` (COPY-PASTE values + ANSWER blanks)
 2. Commit and push
-3. In chat: full steps + this block:
+3. In chat: full steps, telling them to copy from the file, then:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 notepad docs/windows-last-output.txt
-# fill answers only, save
+# copy values from COPY-PASTE; fill ANSWERS; save
 git add docs/windows-last-output.txt
 git commit -m "Windows output: <task>"
 git push
@@ -76,4 +78,4 @@ Stop if pull fails.
 
 ## On “check results”
 
-Pull → read `docs/windows-last-output.txt` → update findings → reply with the **next single task** (full chat instructions + new blanks file if needed).
+Pull → read answer file → update findings → next **single** task (chat steps + new file with COPY-PASTE + blanks).
