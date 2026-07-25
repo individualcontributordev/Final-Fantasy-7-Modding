@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Compress FIELD.BIN.dec.patched → FIELD.BIN.new; paste sizes.
+**Current task:** Import FIELD.BIN.new into ff7_disc1_test.bin via CDImage.
