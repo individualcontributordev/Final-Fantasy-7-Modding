@@ -6,8 +6,10 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
 - **Mac Cursor (this chat):** only agent — docs, scripts, planning, analysis.
 - **Windows:** human only — disc, Ghidra, DuckStation, Git Bash. No Windows Cursor agent.
-- User talks **only in this chat**. Agent tells them what to do; durable steps live in `docs/windows-handoff.md`.
-- Cross-PC data via git (`docs/windows-results.md` or a path the agent names) — user pushes, then says **check results** here.
+- User talks **only in this chat**. Agent tells them what to do; durable steps in `docs/windows-handoff.md`.
+- **Default:** user reports results in chat; agent updates the repo.
+- **Git push from Windows:** only when the agent needs a specific file to analyze (not routine checklists).
+- Mac may install helper tools; **not** DuckStation or Ghidra.
 - Always `git pull --ff-only` before acting (`.cursor/rules/mac-human-workflow.mdc`).
 
 ## Start here
@@ -33,12 +35,11 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 | Path | Purpose |
 |------|---------|
 | `docs/windows-handoff.md` | Current checklist for the human on Windows |
-| `docs/windows-results.md` | Human → Mac outputs (git pipe) |
 | `docs/0N-*.md` | Curated reference by topic |
 | `docs/findings/` | Dated journal entries |
 | `scripts/` | Shared tooling (e.g. FIELD.BIN GZIPPS) |
 | `workspace/iso-extract/` | Disc files (gitignored) |
-| `workspace/ghidra/` | Ghidra projects |
+| `workspace/ghidra/` | Ghidra projects (local) |
 | `workspace/patches/` | Patch attempt logs |
 
 ## External source repos
