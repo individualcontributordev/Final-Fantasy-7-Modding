@@ -1,10 +1,10 @@
-# ISO and extracted disc files go here.
+# ISO and extracted disc files go here (gitignored except this README).
 #
-# Expected files (you provide):
-#   ff7_disc1.bin          — source disc image
-#   ff7_disc1.cue           — optional cue sheet
-#   FIELD.BIN              — extracted from FIELD\ on disc
-#   FIELD.BIN.dec          — decompressed (from scripts/decompress_field_bin.py)
+# Expected files (you provide on Windows):
+#   ff7_disc1.bin / .cue     — source disc image
+#   FIELD.BIN                — extracted from FIELD\ on disc
+#   FIELD.BIN.dec            — from scripts/decompress_field_bin.py
 #
 # Keep ff7_disc1_pristine.bin as an untouched backup.
 # Test against ff7_disc1_test.bin (working copy).
+# Never commit these files — see repo root .gitignore.
