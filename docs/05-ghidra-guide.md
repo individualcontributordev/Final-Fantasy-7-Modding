@@ -42,22 +42,20 @@ Label the StepID RNG helper `increment_step_id`.
 
 ## Third win: find RAM address references
 
-**Search → For Scalars** (one at a time):
+**US FIELD.BIN note:** StepID is **not** encoded as `lui 0x8009` + `0xc540`. Use:
+
+`lui …, 0x800a` then offset **`-0x3ac0`** → `0x8009C540`.
+
+Confirmed site: ~`0x8000B9C8` (`increment_step_id`). See `01-encounter-system.md`.
+
+**Search → For Scalars** (still useful for other vars):
 
 | Value to search | Finds |
 |-----------------|-------|
-| `0x9c540` | StepID access |
-| `0x9ad2c` | Offset access |
+| `0x800a` | many; filter near StepID code |
+| `0x9ad2c` / Offset via `-0x52d4` with `0x800a` | Offset access |
 | `0x7173c` | Danger access |
 | `0x71c20` | Formation access |
-
-MIPS pattern for `0x8009C540`:
-
-```mips
-lui   $reg, 0x8009
-lbu   $reg, 0xc540($reg)    ; load StepID
-```
-
 ## Fourth win: emulator correlation
 
 1. DuckStation → load test ISO
