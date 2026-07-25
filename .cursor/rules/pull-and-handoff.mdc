@@ -1,0 +1,37 @@
+---
+description: Pull latest git before acting; put cross-machine instructions in the repo
+alwaysApply: true
+---
+
+# Pull latest, write handoff in-repo
+
+## Before reading or acting
+
+At the start of a task (and before relying on local docs/scripts), update from remote:
+
+```bash
+git pull --ff-only
+```
+
+If pull fails (diverged history, conflicts), stop and tell the user — do not force-pull or rebase unless asked.
+
+Then read current files. Do not act on a stale clone.
+
+## Cross-machine / Windows instructions
+
+Do **not** leave test steps only in chat. When the user (or the other machine’s agent) must run something:
+
+1. Write or replace **`docs/windows-handoff.md`** with a self-contained checklist:
+   - Goal (one line)
+   - Prerequisites (paths, files that must already exist)
+   - Numbered steps (exact commands / clicks)
+   - Expected output / pass criteria
+   - What to paste back to the Mac session
+2. Commit and push (see `auto-commit-push.mdc`)
+3. In chat, point at that file — short pointer is enough; the checklist lives in the repo
+
+The Windows agent (Composer / Free) should: `git pull --ff-only` → open `docs/windows-handoff.md` → follow it only. Do not invent RE steps.
+
+## Idle handoff
+
+When there is no active Windows task, set `docs/windows-handoff.md` to a short “no active task” stub so the file still exists as the single handoff path.
