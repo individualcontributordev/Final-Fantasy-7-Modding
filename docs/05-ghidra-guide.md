@@ -77,7 +77,8 @@ If PC doesn't match Ghidra address: adjust import base address and re-analyze.
 - [x] `encounter_check` — **`0x800ABA70`** (Danger +=, dual RNG, formation pick)
 - [x] `g_danger` — renamed via `lhu` @ `0x800ABC1C` (RAM `0x8007173C`)
 - [x] `g_step_fraction` — renamed via lbu @ `0x800ABAB4` (RAM `0x8009C6D8`)
-- [ ] `field_map_init` — runs on map load (hook target for reseed patch)
+- [x] `field_main_loop` — `FUN_800a16cc` @ `0x800A16CC` (post-battle Danger clear)
+- [ ] `field_map_init` / map load — hook for Danger=0 on field enter
 
 ## Decompiler tips
 
