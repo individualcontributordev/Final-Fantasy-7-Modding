@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Import FIELD.BIN.new into ff7_disc1_test.bin via CDImage.
+**Current task:** Re-import FIELD.BIN.new over engine FIELD.BIN; cancel any truncate dialog.

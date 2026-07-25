@@ -1,10 +1,10 @@
-# Task: import FIELD.BIN.new into ff7_disc1_test.bin
+# Task: re-import FIELD.BIN.new over disc FIELD.BIN (no truncate)
 
 # COPY-PASTE (do not edit these lines)
-copy_test_iso_cmd: cp -n workspace/iso-extract/ff7_disc1_pristine.bin workspace/iso-extract/ff7_disc1_test.bin
+size_check_cmd: ls -l workspace/iso-extract/FIELD.BIN.new workspace/iso-extract/FIELD.BIN
 import_source: workspace/iso-extract/FIELD.BIN.new
-import_target_name: FIELD.BIN
-test_iso: workspace/iso-extract/ff7_disc1_test.bin
+import_target: FIELD.BIN
+cue_ok: yes
+do_not_accept: Import file is longer than file in the image
 
-# EVIDENCE (after CDImage import succeeds: paste ls -l of test iso + FIELD.BIN.new, and one line noting import OK; then save)
-# ls_cmd: ls -l workspace/iso-extract/ff7_disc1_test.bin workspace/iso-extract/FIELD.BIN.new
+# EVIDENCE (1) paste ls -l size_check output; (2) after successful import WITHOUT truncate warning, paste ls -l of ff7_disc1_test.bin and one line "import OK no truncate"; then save)
