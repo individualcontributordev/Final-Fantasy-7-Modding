@@ -1,72 +1,87 @@
-# Patch target: random encounters, routable boss preempt
+# Patch target: Danger 0 on field entry; RNG may set Danger MAX per check
 
 **Date:** 2026-07-25  
 **Confidence:** likely  
 **Status:** open  
-**Related:** [encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md), [encounter-check-entry](2026-07-25-encounter-check-entry.md)
+**Related:** [encounter-check-entry](2026-07-25-encounter-check-entry.md), [encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md)
 
 ## Summary
 
-Goal (updated): **normal field encounters feel random / not routable**, while **preemptive scripted boss fights stay possible and routable** (same StepID/Offset manip as vanilla). Also keep encounter *rate* feeling reasonable (separate from RNG — tune rate/scale if needed).
+Mod delta from vanilla (agreed direction):
 
-## How boss preempt actually works
+1. **`g_danger = 0` on field map enter** (vanilla does *not* do this — Danger normally carries across fields until a battle).
+2. **Each encounter check** (movement / step-fraction wrap — **not** a wall-clock timer): instead of vanilla `Danger += formula`, make an **RNG call**; with some probability set **`g_danger = MAX`** (or a high constant that always beats the threshold compare).
+3. Leave the rest of the check **vanilla**: preempt roll + threshold roll via **StepID/Offset**, formation via **`g_formation`**, battle if Danger meets threshold, Danger → 0 after battle.
 
-From [Preemptive Boss Battles](https://ff7speedruns.com/index.php/Preemptive_Boss_Battles):
+## Goals this serves
 
-Some **scripted** bosses (Aps, Jenova•BIRTH, Turks, etc.) become preemptive if you start them while the **Preemptive Flag** is already set.
+| Goal | How |
+|------|-----|
+| Sparse / “may cross several fields with no fight” | Danger stays 0 until a MAX hit; no carry between fields |
+| Per-step checks, no timer | Same movement-driven `encounter_check` cadence as vanilla |
+| Routable boss preempt | StepID/Offset timeline unchanged; preempt flag still set on the stock tape |
+| Less gradual Danger manip | No walk/run Danger slope — only 0 vs MAX |
 
-That flag is set by the normal `encounter_check` preempt roll (`increment_step_id` #1 → `DAT_800716d0`), which is a pure function of **StepID + Offset**. Example: Aps often on StepID 48, Offset 26.
+## Vanilla baseline (for contrast)
 
-So boss preempt routing **requires a predictable StepID/Offset timeline**. A full field-load reseed of StepID/Offset makes preempt bosses *possible by luck*, but **not routable**.
+On each encounter check today:
 
-## Design constraint
+1. `Danger +=` deterministic amount (scale / rate / walk vs run)  
+2. `increment_step_id` → preempt flag  
+3. `increment_step_id` → threshold  
+4. If Danger ≥ threshold → battle → Danger = 0  
 
-| Want | Needs |
-|------|--------|
-| Routable boss preempt | Keep **StepID / Offset** vanilla (deterministic table) |
-| Non-routable normal encounters | Break **when** fights happen and/or **which** formation — without destroying that timeline |
+Danger is **not** cleared on field entry in vanilla.
 
-Naive Option A (reseed StepID+Offset on field load) **fails** the boss-preempt goal.
+## Critical implementation detail
 
-## Preferred approach — Option D (split RNG)
+The “set Danger to MAX?” roll must use **independent entropy** (PS1 root counter / VBlank / kernel PRNG — Bone Village–style), **not** `increment_step_id` / StepID/Offset.
 
-Do **not** reseed StepID/Offset.
+If that roll also comes from StepID/Offset, then *when* trash fights appear is as routable as preempt — back to a fully deterministic encounter tape.
 
-In `encounter_check` (and formation path):
+StepID must still **advance** every check (call `increment_step_id` twice as today) so boss preempt routing stays aligned with vanilla tables (e.g. Aps StepID 48 / Offset 26).
 
-1. **Preempt roll** — leave vanilla (`increment_step_id` #1 → flag). Boss routing preserved.
-2. **Danger threshold roll** — after vanilla `increment_step_id` #2 (so StepID still advances correctly), **mix entropy into the value used for the Danger compare only** (or into the compare). Timing of random battles becomes unpredictable.
-3. **Formation** — mix entropy in `increment_formation` return (or reseed `g_formation` occasionally). Which enemies become unpredictable.
-4. **Optional:** reset `g_danger = 0` on field load (pacing only; does not break preempt routing).
+## Sketch inside `encounter_check`
 
-Entropy: PS1 root counter / VBlank and/or kernel PRNG (Bone Village precedent).
+```
+// existing gates: hostile, encounters on, step fraction wrapped, etc.
 
-### Rejected / deferred for this goal
+if (independent_rng() < FORCE_RATE):   // tune FORCE_RATE for sparsity
+    g_danger = DANGER_MAX
+// else: leave g_danger as-is (0 after field enter / after battle)
 
-| Option | Why not (for this goal) |
-|--------|-------------------------|
-| A — Reseed StepID+Offset on field load | Breaks routable boss preempt |
-| B — Boot-only reseed | Same issue + weak vs saves |
-| C — Replace all `increment_step_id` with PRNG | Breaks preempt routing entirely |
+// vanilla:
+preempt = increment_step_id() ...
+threshold_roll = increment_step_id() ...
+if (threshold_roll < f(g_danger, ...))
+    start_battle()  // then Danger = 0 as vanilla
+```
 
-## Ghidra hooks (implementation sketch)
+Also hook **field enter** → `g_danger = 0`.
 
-- Preempt path already labeled in `encounter_check` @ `0x800ABA70`
-- Danger compare uses second roll vs `g_danger` — patch site near dual `jal increment_step_id`
-- Formation: `increment_formation` @ `0x800ABA34`
-- Still need field-load site only if we reset Danger (optional)
+## Tradeoffs / watchouts
+
+- **Boss preempt on hostile fields:** long StepID walks can still roll MAX and insert a trash fight. Tune `FORCE_RATE` low; optionally reduce/disable force on known preempt-boss maps later.
+- **Walk vs run:** no longer changes Danger slope; walking still burns more checks (and StepID) per distance — still useful for preempt routing, and also more MAX rolls per distance.
+- **Formation** stays vanilla-routable unless we add a separate change later.
+- **WORLD.BIN** still separate.
+
+## Ghidra hooks
+
+- Field enter / map init → clear `g_danger` (`0x8007173C`)
+- `encounter_check` @ `0x800ABA70` — replace Danger `+=` block (`~0x800ABB7C`–`0x800ABBD0`) with MAX-or-skip RNG
+- Keep dual `jal increment_step_id` and formation path
 
 ## Follow-ups
 
-- [ ] Confirm preempt flag (`DAT_800716d0`) is what scripted bosses read
-- [ ] Choose exact entropy mix (XOR vs replace compare)
-- [ ] Implement danger-roll mix + formation mix caves
-- [ ] Playtest: Aps-style preempt still hittable by StepID route; random packs feel unplanned
+- [ ] Confirm field-enter hook site
+- [ ] Pick `FORCE_RATE` and `DANGER_MAX` (playtest sparsity + Aps-style walks)
+- [ ] Choose entropy source
+- [ ] Optional: formation entropy later
 - [ ] WORLD.BIN later
-- [ ] Encounter frequency: separate rate/scale pass if fights feel too dense
 
 ## Sources
 
-- Session design discussion 2026-07-25
-- [Preemptive Boss Battles](https://ff7speedruns.com/index.php/Preemptive_Boss_Battles)
+- Design reset 2026-07-25
 - [Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics)
+- [Preemptive Boss Battles](https://ff7speedruns.com/index.php/Preemptive_Boss_Battles)

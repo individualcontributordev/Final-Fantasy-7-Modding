@@ -31,10 +31,10 @@ New topics: add `docs/0N-topic.md` + findings; update this table and the README.
 
 ### Encounter RNG (current research thread)
 
-One candidate mod: make **normal** field encounters non-routable, while keeping
-**preemptive scripted bosses** routable via StepID/Offset. See
-[findings/2026-07-25-patch-target-field-load-reseed.md](findings/2026-07-25-patch-target-field-load-reseed.md)
-(Option D — do not reseed StepID/Offset).
+One candidate mod: **Danger = 0 on field enter**; each movement encounter check
+may RNG-set Danger to MAX (independent entropy), while **StepID/Offset stay vanilla**
+so boss preempt stays routable. See
+[findings/2026-07-25-patch-target-field-load-reseed.md](findings/2026-07-25-patch-target-field-load-reseed.md).
 
 That idea requires patching `FIELD.BIN` (and eventually `WORLD.BIN`), not just Makou
 field edits.
