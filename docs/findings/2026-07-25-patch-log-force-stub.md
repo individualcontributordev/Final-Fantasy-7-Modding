@@ -6,7 +6,7 @@
 
 ## Change
 
-Replace vanilla Danger `+=` at `0x800ABB7C`–`0x800ABBD3` (88 bytes) with lure-scaled FORCE stub using COP0 Count. Keep dual `jal increment_step_id`.
+Replace vanilla Danger `+=` at `0x800ABB7C`–`0x800ABBD3` (88 bytes) with lure-scaled FORCE stub using RCnt2 (0x1F801120). Keep dual `jal increment_step_id`.
 
 | VA | File offset | Notes |
 |----|-------------|-------|
@@ -27,3 +27,7 @@ Replace vanilla Danger `+=` at `0x800ABB7C`–`0x800ABBD3` (88 bytes) with lure-
 ## Behavior
 
 `g_danger = ((Count & 0xff) < g_enemy_lure) ? 0xFFFF : 0` each encounter check.
+
+## Rev 2
+
+Replaced invalid `mfc0 Count` with `lw` RCnt2 after playtest always-FORCE.
