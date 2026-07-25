@@ -1,8 +1,8 @@
 # increment_step_id xrefs — fill answers only
 
-xref_count: 
-xref_1: 
-xref_2: 
+xref_count: 2
+xref_1: 800abbd4		jal increment_step_id	UNCONDITIONAL_CALL	4
+xref_2: 800abc10	LAB_800abc10	jal increment_step_id	UNCONDITIONAL_CALL	4
 xref_3: 
 xref_4: 
 xref_5: 
