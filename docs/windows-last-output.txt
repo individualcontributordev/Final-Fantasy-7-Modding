@@ -1,34 +1,7 @@
-# Task: rename step fraction via code xref
+# Task: rename FUN_800aba34 to increment_formation
 
 # COPY-PASTE (do not edit these lines)
-goto_lbu_address: 0x800ABAB4
-rename_to: g_step_fraction
-ram_note_do_not_goto: 0x8009C6D8
+goto_function: 0x800ABA34
+rename_to: increment_formation
 
 # EVIDENCE (paste Listing / Decompiler below, then save)
-        800aba8c 18 00 b0 af     _sw        s0,local_10(sp)
-        800aba90 07 80 11 3c     lui        s1,0x8007
-        800aba94 54 1a 31 8e     lw         s1,offset DAT_80071a54(s1)
-        800aba98 ac ae 02 08     j          LAB_800abab0
-        800aba9c 00 00 00 00     _nop
-                             LAB_800abaa0                                    XREF[1]:     800aba88(j)  
-        800abaa0 07 80 02 3c     lui        v0,0x8007
-        800abaa4 54 1a 42 8c     lw         v0,offset DAT_80071a54(v0)
-        800abaa8 00 00 00 00     nop
-        800abaac 18 00 51 24     addiu      s1,v0,0x18
-                             LAB_800abab0                                    XREF[1]:     800aba98(j)  
-        800abab0 0a 80 02 3c     lui        v0,0x800a
-        800abab4 d8 c6 42 90     lbu        v0,-0x3928(v0)=>g_step_fraction
-        800abab8 00 00 00 00     nop
-        800ababc 20 00 42 24     addiu      v0,v0,0x20
-        800abac0 0a 80 01 3c     lui        at,0x800a
-        800abac4 d8 c6 22 a0     sb         v0,-0x3928(at)=>g_step_fraction
-        800abac8 0a 80 02 3c     lui        v0,0x800a
-        800abacc d8 c6 42 90     lbu        v0,-0x3928(v0)=>g_step_fraction
-        800abad0 00 00 00 00     nop
-        800abad4 06 01 40 14     bne        v0,zero,LAB_800abef0
-        800abad8 00 00 00 00     _nop
-        800abadc b6 98 00 0c     jal        SUB_800262d8
-        800abae0 00 00 00 00     _nop
-        800abae4 0a 80 02 3c     lui        v0,0x800a
-        800abae8 8e d5 42 24     addiu      v0,v0,-0x2a72
