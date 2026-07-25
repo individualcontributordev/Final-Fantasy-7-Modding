@@ -4,3 +4,4 @@
 goto_lure_lbu: 0x800ABC24
 
 # EVIDENCE (click g_enemy_lure → References → Show References to Address; paste full xref list, then save)
+800abc24		lbu v1,offset g_enemy_lure(v1)	4	READ
