@@ -23,6 +23,8 @@ User confirmed re-import / checks at base **`0x800A0000`**: `0x800AB9C8` lui/lbu
 | `g_field_rng_table` | `0x800E0638` |
 | `encounter_check` | `0x800ABA70` |
 | Danger / `g_danger` | `0x8007173C` |
-| Step fraction (`DAT_8009c6d8`) | `0x8009C6D8` |
+| Step fraction (`g_step_fraction`) | `0x8009C6D8` |
+| `increment_formation` | `0x800ABA34` |
+| Formation (`DAT_80071c20`) | `0x80071C20` |
 | StepID | `0x8009C540` |
 | Offset | `0x8009AD2C` |

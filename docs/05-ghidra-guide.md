@@ -73,7 +73,7 @@ If PC doesn't match Ghidra address: adjust import base address and re-analyze.
 
 - [x] `g_field_rng_table` — data, 256 bytes @ `0x800E0638`
 - [x] `increment_step_id` — returns table[stepid] - offset @ `0x800AB9C8`
-- [ ] `increment_formation` — similar, uses formation counter (`FUN_800aba34`?)
+- [x] `increment_formation` — @ `0x800ABA34`; uses `DAT_80071c20` + `g_field_rng_table`
 - [x] `encounter_check` — **`0x800ABA70`** (Danger +=, dual RNG, formation pick)
 - [x] `g_danger` — renamed via `lhu` @ `0x800ABC1C` (RAM `0x8007173C`)
 - [x] `g_step_fraction` — renamed via lbu @ `0x800ABAB4` (RAM `0x8009C6D8`)
