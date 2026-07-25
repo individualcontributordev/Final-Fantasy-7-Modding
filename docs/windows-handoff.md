@@ -1,6 +1,5 @@
 # Windows handoff (agent-internal optional mirror)
 
-**Not user-facing.** The Mac agent instructs in chat only. This file may mirror
-the current task for repo history; do not tell the user to read it.
+**Not user-facing.** Instructions live in Mac chat only.
 
-**Status:** active — byte search (see Mac chat for commands)
+**Current task:** Rename `DAT_8007173c` → `g_danger` at `0x8007173C`.

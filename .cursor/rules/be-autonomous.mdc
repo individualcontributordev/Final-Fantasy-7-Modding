@@ -1,5 +1,5 @@
 ---
-description: Act autonomously; full instructions in chat; never point user at handoff file
+description: Act autonomously; one full Windows task in chat; never point user at files for steps
 alwaysApply: true
 ---
 
@@ -9,20 +9,31 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 
 ## Do without asking
 
-- Commit/push docs and scripts as needed (`auto-commit-push.mdc`)
-- On **check results**: pull, analyze output file, record findings, continue
-- Reply with the **next complete instructions in chat** (commands + GUI clicks)
+- Commit/push docs, rules, scripts (`auto-commit-push.mdc`)
+- On **check results**: pull, analyze output, record findings, continue
+- Reply with the **next single complete Windows task in chat**
+
+## Windows task quality bar
+
+If the user must do Ghidra / DuckStation / Git Bash work, the chat reply must be self-contained:
+
+- One goal
+- Exact addresses and keypresses
+- What success looks like
+- Answer blanks already pushed
+- Commit commands
+
+If a step needs judgment (e.g. “scroll until you see X”), describe **X** concretely (instruction mnemonic, register, byte pattern).
 
 ## Do not
 
-- Tell the user to read `docs/windows-handoff.md` or any checklist file for what to do
+- Point the user at `docs/windows-handoff.md` or put the only copy of steps in `windows-last-output.txt`
+- Batch multiple unrelated RE goals into one Windows turn
 - Ask them to paste between PCs
 - Ask “want me to…?” for routine next steps
 
 ## Communicate
 
-- **Tell** in chat: exact Git Bash / Ghidra / DuckStation steps, self-contained.
-- For answers: **pre-fill** `docs/windows-last-output.txt` with keys/blanks, push; user only fills values — never make them type the template.
+- **Tell** in chat: exact steps.
+- **Pre-fill** answer blanks; user only fills values.
 - They say **check results** when pushed.
-- Handoff markdown is optional agent-side mirror only — never the user-facing instruction channel.
-- Never ask to paste between PCs or retype field names.

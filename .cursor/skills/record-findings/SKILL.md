@@ -33,7 +33,7 @@ Record a finding when any of these are true:
 - User says "remember this" or "document this"
 - After **check results**: useful content appeared in `docs/windows-last-output.txt`
 
-User-facing next steps always go **in chat** (full commands) — not “see the handoff file.” See `.cursor/rules/mac-human-workflow.mdc`.
+User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). Never “see the handoff/txt for steps.” Answer file is blanks only. See `.cursor/rules/mac-human-workflow.mdc`.
 
 ## Create a finding file
 
