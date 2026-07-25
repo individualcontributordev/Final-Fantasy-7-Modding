@@ -1,0 +1,16 @@
+# Git ignore — ISO and large binaries stay local
+
+workspace/iso-extract/*.bin
+workspace/iso-extract/*.cue
+workspace/iso-extract/*.img
+workspace/iso-extract/*.iso
+workspace/iso-extract/FIELD.BIN
+workspace/iso-extract/FIELD.BIN.*
+workspace/iso-extract/*.dec
+workspace/iso-extract/*.dec.*
+
+workspace/ghidra/*.gpr
+workspace/ghidra/*.rep/
+workspace/ghidra/*.lock
+
+.DS_Store
