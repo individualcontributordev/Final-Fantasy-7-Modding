@@ -23,7 +23,7 @@ Work is organized by topic. Each gets reference docs and findings as we learn.
 | Topic | Docs | Notes |
 |-------|------|-------|
 | Disc & ISO | `02-disc-format.md`, `04-workflow.md` | Makou/ff7tk save path, GZIPPS |
-| Tooling | `03-environment-setup.md`, `git-setup.md` | DuckStation, Ghidra, scripts |
+| Tooling | `03-environment-setup.md` | DuckStation, Ghidra, scripts |
 | Field encounter RNG | `01-encounter-system.md` | **First research thread** — not the whole project |
 | *(future)* | TBD | Kernel, battle, world map, scripts, etc. |
 

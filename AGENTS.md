@@ -11,6 +11,7 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
 ## Rules
 
+- **Keep repo succinct** — only material useful to other engineers (`.cursor/rules/keep-repo-succinct.mdc`)
 - **Auto commit and push** when a task changes tracked files (`.cursor/rules/auto-commit-push.mdc`)
 - **Capture findings** in `docs/findings/` (`.cursor/rules/capture-research-findings.mdc`)
 - **No Cursor commit trailers** (`.cursor/rules/no-cursor-commit-trailers.mdc`)
