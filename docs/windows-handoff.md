@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Confirm `FUN_800a16cc` @ `0x800A16CC` contains Danger clear; rename `after_battle_cleanup`.
+**Current task:** Rename `field_main_loop`; inspect `FUN_800aa870` as map-load candidate.
