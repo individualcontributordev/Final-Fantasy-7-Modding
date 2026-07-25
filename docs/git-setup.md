@@ -56,3 +56,21 @@ user.name  = individualcontributordev
 ```
 
 Set via `git config` without `--global` — does not affect other repos.
+
+## Git hooks (strip Cursor trailers)
+
+After clone, enable project hooks once:
+
+```bash
+cd ~/ff7-modding
+git config core.hooksPath .githooks
+chmod +x .githooks/prepare-commit-msg
+```
+
+`.githooks/prepare-commit-msg` removes `Made-with: Cursor`, `Co-authored-by: Cursor`, and related lines before a commit is finalized.
+
+Cursor agents are also instructed via `.cursor/rules/no-cursor-commit-trailers.mdc` not to add trailers.
+
+### Optional: disable in Cursor IDE
+
+**Cursor Settings → Agent → Attribution** — turn off commit attribution (IDE/CLI may still need the hook as backup).
