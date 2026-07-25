@@ -4,12 +4,15 @@
 
 **Shell:** Git Bash (not PowerShell / cmd)
 
-## If the user asks “what's next?”
+**How to run:** Follow this file yourself (Ghidra GUI + Git Bash). Windows Cursor Agent is optional —
+if that account is rate-limited or blocked, ignore Composer and do the steps manually.
+
+## Start
 
 1. Run `git pull --ff-only` in the repo root (Git Bash)
 2. Re-read this file
-3. If status is still **no active task** — tell the user there is nothing to run; stop
-4. If status is **active** — follow the checklist below exactly; do not invent steps
+3. If status is **no active task** — stop
+4. If status is **active** — follow the checklist below exactly
 
 Use Git Bash for all commands: forward slashes, `ls`/`cp`/`python`, bash `\` line continuation.
 
@@ -65,9 +68,14 @@ In Ghidra, note:
 - [ ] Label `g_field_rng_table` created
 - [ ] One search hit for `B1 CA EE 6C 5A 71 2E 55`
 
-## Report results (git pipe)
+## Report results (git pipe — no Windows agent required)
 
-Overwrite `docs/windows-results.md` with:
+```bash
+cd "$(git rev-parse --show-toplevel)"
+notepad docs/windows-results.md   # or: code docs/windows-results.md
+```
+
+Put this content in `docs/windows-results.md` (fill in real values):
 
 ```markdown
 # Windows → Mac results
@@ -92,10 +100,9 @@ Errors (or none):
 Then:
 
 ```bash
-cd "$(git rev-parse --show-toplevel)"
 git add docs/windows-results.md
 git commit -m "Windows handoff results: Ghidra RNG table"
 git push
 ```
 
-Tell the user: on the Mac chat, say **“check results”**.
+On the Mac chat, say **“check results”**.
