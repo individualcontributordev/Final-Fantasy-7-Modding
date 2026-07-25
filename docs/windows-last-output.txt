@@ -1,9 +1,31 @@
-# Task: patch FORCE stub bytes at Danger+= slot
+# Task: patch FORCE stub (Edit Bytes bulk, or Patch Instruction ×22)
 
 # COPY-PASTE (do not edit these lines)
 goto_patch: 0x800ABB7C
 patch_length_bytes: 88
 bytes_le:
 00 48 02 40 06 80 01 3c 19 2f 23 90 ff 00 42 30 2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+patch_asm_0: mfc0 v0,Count
+patch_asm_1: lui at,0x8006
+patch_asm_2: lbu v1,0x2f19(at)
+patch_asm_3: andi v0,v0,0xff
+patch_asm_4: sltu v0,v0,v1
+patch_asm_5: subu v0,zero,v0
+patch_asm_6: lui at,0x8007
+patch_asm_7: sh v0,0x173c(at)
+patch_asm_8: nop
+patch_asm_9: nop
+patch_asm_10: nop
+patch_asm_11: nop
+patch_asm_12: nop
+patch_asm_13: nop
+patch_asm_14: nop
+patch_asm_15: nop
+patch_asm_16: nop
+patch_asm_17: nop
+patch_asm_18: nop
+patch_asm_19: nop
+patch_asm_20: nop
+patch_asm_21: nop
 
-# EVIDENCE (after patch: Listing 0x800ABB7C–0x800ABBD8 showing mfc0…sh…nops then jal increment_step_id; paste then save)
+# EVIDENCE (Listing 0x800ABB7C–0x800ABBD8 after patch; paste then save)
