@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Unlock/save test ISO; text DuckStation notes only.
+**Current task:** Re-patch ABB7C stub with RCnt2 entropy (not mfc0).

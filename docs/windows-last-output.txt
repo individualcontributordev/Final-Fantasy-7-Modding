@@ -1,14 +1,35 @@
-# Task: unlock test.bin; CDmage Save; DuckStation notes (TEXT)
+# Task: re-patch FORCE stub with RCnt2 entropy
 
 # COPY-PASTE (do not edit these lines)
-clear_readonly_cmd: attrib -R workspace/iso-extract/ff7_disc1_test.bin
-save_as_fallback: workspace/iso-extract/ff7_disc1_test_patched.bin
-cue_template: FILE "ff7_disc1_test_patched.bin" BINARY
+goto_patch: 0x800ABB7C
+patch_length_bytes: 88
+bytes_le:
+80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c 19 2f 23 90 ff 00 42 30 2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+patch_asm_0: lui at,0x1f80
+patch_asm_1: lw v0,0x1120(at)
+patch_asm_2: nop
+patch_asm_3: lui at,0x8006
+patch_asm_4: lbu v1,0x2f19(at)
+patch_asm_5: andi v0,v0,0xff
+patch_asm_6: sltu v0,v0,v1
+patch_asm_7: subu v0,zero,v0
+patch_asm_8: lui at,0x8007
+patch_asm_9: sh v0,0x173c(at)
+patch_asm_10: nop
+patch_asm_11: nop
+patch_asm_12: nop
+patch_asm_13: nop
+patch_asm_14: nop
+patch_asm_15: nop
+patch_asm_16: nop
+patch_asm_17: nop
+patch_asm_18: nop
+patch_asm_19: nop
+patch_asm_20: nop
+patch_asm_21: nop
+keep_jal: 0x800ABBD4
 
-# EVIDENCE (fill these lines with text — do not commit screenshots)
-cdmage_save:
-boot:
-field:
-walk:
-battle:
-notes:
+# EVIDENCE (Listing 0x800ABB7C–0x800ABBD8 after patch; must show lw 0x1120 then jal increment_step_id; paste then save)
+
+# playtest_notes (from chat):
+# boot OK, field OK, danger 0 on load, every stepid+2 danger=65535 then battle clear
