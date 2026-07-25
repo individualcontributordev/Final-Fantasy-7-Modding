@@ -53,7 +53,9 @@ Emulator "address" column is often offset from 0x80000000.
 
 ### Confirmed in FIELD.BIN.dec (US) — Ghidra
 
-`increment_step_id` at Ghidra **`0x8000B9C8`** (import base `0x80000000`; likely real VA **`0x800AB9C8`** if module base is `0x800A0000`).
+`increment_step_id` at Ghidra **`0x800AB9C8`** (FIELD base `0x800A0000`).
+
+Callers (both `jal`): **`0x800ABBD4`**, **`0x800ABC10`** — likely `encounter_check`.
 
 Access pattern:
 

@@ -1,12 +1,10 @@
-# increment_step_id xrefs — fill answers only
+# encounter_check around dual jals — fill answers only
 
-xref_count: 2
-xref_1: 800abbd4		jal increment_step_id	UNCONDITIONAL_CALL	4
-xref_2: 800abc10	LAB_800abc10	jal increment_step_id	UNCONDITIONAL_CALL	4
-xref_3: 
-xref_4: 
-xref_5: 
-xref_6: 
+function_start: 
+labeled_encounter_check: 
+both_jals_same_function: 
+danger_0x8007173C_seen: 
+decompiler_mentions_step_or_danger: 
 Notes: 
 
 # Addresses only (e.g. 0x800Axxxx). Leave unused xref_N blank.
@@ -151,3 +149,5 @@ void encounter_check(void)
 }
 
 cannot find danger
+# Use: yes / no / skip
+# function_start: address like 0x800ABxxx

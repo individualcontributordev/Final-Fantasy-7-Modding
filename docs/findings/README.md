@@ -7,6 +7,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-25 | [increment-step-id-xrefs](2026-07-25-increment-step-id-xrefs.md) | 2 jal callers @ 0x800ABBD4, 0x800ABC10 | confirmed |
 | 2026-07-25 | [align-ghidra-duckstation-base](2026-07-25-align-ghidra-duckstation-base.md) | Ghidra+DuckStation aligned; FIELD @ 0x800A0000 | confirmed |
 | 2026-07-25 | [increment-step-id-complete](2026-07-25-increment-step-id-complete.md) | Full fn; table via 0x800E0638; load base likely 0x800A0000 | confirmed |
 | 2026-07-25 | [increment-step-id](2026-07-25-increment-step-id.md) | increment_step_id @ ~0x8000B9C8; lui 0x800a addressing | confirmed |
