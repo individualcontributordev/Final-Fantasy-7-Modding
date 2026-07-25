@@ -1,29 +1,9 @@
-# Task: rename FUN_800ba534 to field_map_init
+# Task: find code cave near encounter_check for MAX-Danger stub
 
 # COPY-PASTE (do not edit these lines)
-goto_function: 0x800BA534
-rename_to: field_map_init
+goto_encounter_check: 0x800ABA70
+goto_danger_add_block: 0x800ABB7C
+# Scroll Listing toward end of FIELD module / search for long runs of 00 00 00 00 (nops) or unallocated padding
+# Prefer a cave within FIELD.BIN image (base 0x800A0000)
 
-# EVIDENCE (paste renamed function header, then save)
-        800ba530 00 00 00 00     _nop
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined field_map_init()
-             undefined         <UNASSIGNED>   <RETURN>
-             undefined4        Stack[-0x4]:4  local_4                                 XREF[2]:     800ba540(W), 
-                                                                                                   800ba648(R)  
-             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800ba538(W), 
-                                                                                                   800ba64c(R)  
-                             field_map_init                                  XREF[1]:     field_main_loop:800a1e40(c)  
-        800ba534 e8 ff bd 27     addiu      sp,sp,-0x18
-        800ba538 10 00 b0 af     sw         s0,local_8(sp)
-        800ba53c 21 80 c0 00     move       s0,a2
-        800ba540 14 00 bf af     sw         ra,local_4(sp)
-        800ba544 6a 00 82 84     lh         v0,0x6a(a0)
-        800ba548 01 00 03 34     ori        v1,zero,0x1
-        800ba54c 0a 80 01 3c     lui        at,0x800a
-        800ba550 e0 c6 24 ac     sw         a0,-0x3920(at)=>DAT_8009c6e0
-        800ba554 0a 80 01 3c     lui        at,0x800a
-        800ba558 44 c5 25 ac     sw         a1,-0x3abc(at)=>DAT_8009c544
-        800ba55c 0a 80 01 3c     lui        at,0x800a
+# EVIDENCE (paste: cave start address + ~16 lines of zeros/nops showing free space, then save)
