@@ -7,6 +7,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-25 | [encounter-check](2026-07-25-encounter-check.md) | Dual jal + Danger compare; entry likely wrong | confirmed |
 | 2026-07-25 | [increment-step-id-xrefs](2026-07-25-increment-step-id-xrefs.md) | 2 jal callers @ 0x800ABBD4, 0x800ABC10 | confirmed |
 | 2026-07-25 | [align-ghidra-duckstation-base](2026-07-25-align-ghidra-duckstation-base.md) | Ghidra+DuckStation aligned; FIELD @ 0x800A0000 | confirmed |
 | 2026-07-25 | [increment-step-id-complete](2026-07-25-increment-step-id-complete.md) | Full fn; table via 0x800E0638; load base likely 0x800A0000 | confirmed |
@@ -31,6 +32,8 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 - [2026-07-25-field-dec-addr-search](2026-07-25-field-dec-addr-search.md)
 - [2026-07-25-increment-step-id](2026-07-25-increment-step-id.md)
 - [2026-07-25-increment-step-id-complete](2026-07-25-increment-step-id-complete.md)
+- [2026-07-25-increment-step-id-xrefs](2026-07-25-increment-step-id-xrefs.md)
+- [2026-07-25-encounter-check](2026-07-25-encounter-check.md)
 
 ### Tools & environment
 - [2026-07-25-duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md)

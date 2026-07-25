@@ -55,16 +55,25 @@ Emulator "address" column is often offset from 0x80000000.
 
 `increment_step_id` at Ghidra **`0x800AB9C8`** (FIELD base `0x800A0000`).
 
-Callers (both `jal`): **`0x800ABBD4`**, **`0x800ABC10`** — likely `encounter_check`.
+`encounter_check` body around dual `jal`s: **`0x800ABBD4`**, **`0x800ABC10`**.
+Ghidra currently starts the function at the first `jal` — likely **too late** (`unaff_s1` in decompiler). True entry TBD above `0x800ABBD4`.
 
-Access pattern:
+Access pattern (`increment_step_id`):
 
 - StepID: `lui …, 0x800a` + `lbu/sb …, -0x3ac0(…)` → `0x8009C540`
 - Offset: `lui …, 0x800a` + `lbu/sb …, -0x52d4(…)` → `0x8009AD2C`
 - On StepID wrap to 0: Offset += `0xd` (13)
 - Table: `lui …, 0x800e` + `0x638` → **`0x800E0638`** (file `0x40638` at module base `0x800A0000`), index by StepID, subtract Offset, `& 0xff`
 
-See [findings/2026-07-25-increment-step-id-complete.md](findings/2026-07-25-increment-step-id-complete.md).
+`encounter_check` highlights:
+
+- Danger load: `lhu` **`DAT_8007173c`** (= wiki Danger) — rename to `g_danger`
+- Preempt: roll1 `< (DAT_80062f1b & 0x7f)` → `DAT_800716d0 = 4` else `0`
+- Threshold: roll2 `< (Danger * DAT_80062f19) >> 12` → battle / formation pick
+- Formation helper candidate: `FUN_800aba34`
+
+See [findings/2026-07-25-increment-step-id-complete.md](findings/2026-07-25-increment-step-id-complete.md),
+[findings/2026-07-25-encounter-check.md](findings/2026-07-25-encounter-check.md).
 
 ## Per-map data (editable in Makou, not sufficient alone)
 
