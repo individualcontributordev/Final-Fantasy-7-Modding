@@ -40,6 +40,12 @@ Discoveries are recorded in [docs/findings/](docs/findings/README.md) as we work
 Cursor agents auto-capture via `.cursor/rules/capture-research-findings.mdc` and
 the [record-findings](.cursor/skills/record-findings/SKILL.md) skill.
 
+## GitHub
+
+Repo: [individualcontributordev/ff7-modding](https://github.com/individualcontributordev/ff7-modding)
+
+SSH and push setup: [docs/git-setup.md](docs/git-setup.md)
+
 ## Where to start
 
 1. Read [docs/03-environment-setup.md](docs/03-environment-setup.md) and work through the checklist.
