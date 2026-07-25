@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Restore pristine test ISO; import FIELD.BIN.new → FIELD/FIELD.BIN.
+**Current task:** Pad-Yes import; DuckStation smoke test.
