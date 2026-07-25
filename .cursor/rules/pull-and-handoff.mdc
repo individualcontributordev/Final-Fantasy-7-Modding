@@ -17,11 +17,23 @@ If pull fails (diverged history, conflicts), stop and tell the user — do not f
 
 Then read current files. Do not act on a stale clone.
 
-## Cross-machine / Windows instructions
+## “What's next?” (Windows agent)
+
+If the user asks **what's next**, **what should I do**, or similar:
+
+1. `git pull --ff-only`
+2. Read **`docs/windows-handoff.md`**
+3. If **Status: no active task** — say so and stop (do not invent work)
+4. If a checklist is present — follow it exactly, step by step; report results as the file asks
+
+Do not invent RE, Ghidra, or DuckStation steps beyond that file.
+
+## Cross-machine / Windows instructions (Mac agent)
 
 Do **not** leave test steps only in chat. When the user (or the other machine’s agent) must run something:
 
 1. Write or replace **`docs/windows-handoff.md`** with a self-contained checklist:
+   - Status line (`active` / `no active task`)
    - Goal (one line)
    - Prerequisites (paths, files that must already exist)
    - Numbered steps (exact commands / clicks)
@@ -29,8 +41,6 @@ Do **not** leave test steps only in chat. When the user (or the other machine’
    - What to paste back to the Mac session
 2. Commit and push (see `auto-commit-push.mdc`)
 3. In chat, point at that file — short pointer is enough; the checklist lives in the repo
-
-The Windows agent (Composer / Free) should: `git pull --ff-only` → open `docs/windows-handoff.md` → follow it only. Do not invent RE steps.
 
 ## Idle handoff
 
