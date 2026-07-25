@@ -80,7 +80,7 @@ Tune `force_chance_from_lure` so default lure ≈ desired sparsity; Lure materia
 ## Ghidra hooks
 
 - Field enter Danger = 0: start of map-setup `LAB_800a1dc8` (`0x800A1DC8`) and/or `FUN_800ba534` (`0x800BA534`)
-- `encounter_check` @ `0x800ABA70` — replace Danger `+=` block (`~0x800ABB7C`–`0x800ABBD0`) with MAX-or-skip RNG
+- `encounter_check` @ `0x800ABA70` — **in-place** replace Danger `+=` block `0x800ABB7C`–`0x800ABBD4` (**88 bytes**) with MAX-or-skip RNG; keep `jal increment_step_id`
 - Keep dual `jal increment_step_id` and formation path
 - Post-battle Danger = 0 already in `field_main_loop` (leave vanilla)
 
