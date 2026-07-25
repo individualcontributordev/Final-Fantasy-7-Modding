@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Listing LAB_800a1dc8 through jal field_map_init for Danger=0 slot.
+**Current task:** Xrefs DAT_80071e38 and DAT_80071e3c to pick Danger=0 retarget.
