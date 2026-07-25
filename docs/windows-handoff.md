@@ -1,5 +1,5 @@
 # Windows handoff (agent-internal optional mirror)
 
-**Not user-facing.** Chat has steps; file has COPY-PASTE + EVIDENCE only.
+**Not user-facing.**
 
-**Current task:** Rename `DAT_80071c20` → `g_formation` via `lbu` @ `0x800ABA38`.
+**Current task:** Identify `FUN_800a65a4` (caller of `encounter_check`).

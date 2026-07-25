@@ -75,7 +75,7 @@ Access pattern (`increment_step_id`):
 - Danger threshold load: `lhu` **`g_danger`** at `0x800ABC1C`
 - Preempt: roll1 `< (DAT_80062f1b & 0x7f)` → `DAT_800716d0 = 4` else `0`
 - Threshold: roll2 `< (Danger * DAT_80062f19) >> 12` → battle / formation pick
-- Formation: **`increment_formation`** @ `0x800ABA34` — `DAT_80071c20++` then `g_field_rng_table[formation]`
+- Formation: **`increment_formation`** @ `0x800ABA34` — **`g_formation`**++ then `g_field_rng_table[g_formation]`
 
 See [findings/2026-07-25-encounter-check-entry.md](findings/2026-07-25-encounter-check-entry.md),
 [findings/2026-07-25-danger-increment.md](findings/2026-07-25-danger-increment.md).

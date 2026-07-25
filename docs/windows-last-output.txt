@@ -1,36 +1,7 @@
-# Task: rename Formation counter via code xref
+# Task: identify caller of encounter_check
 
 # COPY-PASTE (do not edit these lines)
-goto_lbu_address: 0x800ABA38
-rename_to: g_formation
-ram_note_do_not_goto: 0x80071C20
+goto_caller_function: 0x800A65A4
+goto_jal_site: 0x800A6EC0
 
 # EVIDENCE (paste Listing / Decompiler below, then save)
-        800aba2c 08 00 e0 03     jr         ra
-        800aba30 ff 00 42 30     _andi      v0,v0,0xff
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined increment_formation()
-             undefined         <UNASSIGNED>   <RETURN>
-                             increment_formation                             XREF[3]:     800abc68(c), 800abdf4(c), 
-                                                                                          800abe9c(c)  
-        800aba34 07 80 02 3c     lui        v0,0x8007
-        800aba38 20 1c 42 90     lbu        v0,offset g_formation(v0)
-        800aba3c 00 00 00 00     nop
-        800aba40 01 00 42 24     addiu      v0,v0,0x1
-        800aba44 07 80 01 3c     lui        at,0x8007
-        800aba48 20 1c 22 a0     sb         v0,offset g_formation(at)
-        800aba4c 07 80 02 3c     lui        v0,0x8007
-        800aba50 20 1c 42 90     lbu        v0,offset g_formation(v0)
-        800aba54 00 00 00 00     nop
-        800aba58 0e 80 01 3c     lui        at,0x800e
-        800aba5c 38 06 21 24     addiu      at,at,0x638
-
-
-undefined1 increment_formation(void)
-
-{
-  g_formation = g_formation + 1;
-  return (&g_field_rng_table)[g_formation];
-}
