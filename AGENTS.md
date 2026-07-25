@@ -6,17 +6,20 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
 - **This Mac (Cursor):** docs, scripts, git, planning, patch design — no disc/Ghidra/DuckStation here.
 - **Windows PC:** disc images, Ghidra, DuckStation, hardware-accurate tests. Free Cursor / Composer 2.5 Fast — do not rely on that agent to invent RE steps.
-- When a change needs testing, give the user a **self-contained checklist**: exact `git pull` / paths, numbered clicks or commands, expected output, and what to paste back. Prefer “do this / report that” over open-ended investigation for the Windows side.
+- **Always** `git pull --ff-only` before reading or acting (`.cursor/rules/pull-and-handoff.mdc`).
+- Active Windows work goes in **`docs/windows-handoff.md`** (checklist + pass criteria), then commit/push — not chat-only.
 
 ## Start here
 
-1. `docs/00-goals.md` — project scope
-2. `docs/03-environment-setup.md` — tool checklist
-3. `docs/findings/README.md` — lab notebook index
-4. `.cursor/skills/record-findings/SKILL.md` — how to document discoveries
+1. `git pull --ff-only` then `docs/windows-handoff.md` if on Windows
+2. `docs/00-goals.md` — project scope
+3. `docs/03-environment-setup.md` — tool checklist
+4. `docs/findings/README.md` — lab notebook index
+5. `.cursor/skills/record-findings/SKILL.md` — how to document discoveries
 
 ## Rules
 
+- **Pull + handoff** — pull before acting; Windows steps in `docs/windows-handoff.md` (`.cursor/rules/pull-and-handoff.mdc`)
 - **Keep repo succinct** — only material useful to other engineers (`.cursor/rules/keep-repo-succinct.mdc`)
 - **Auto commit and push** when a task changes tracked files (`.cursor/rules/auto-commit-push.mdc`)
 - **Capture findings** in `docs/findings/` (`.cursor/rules/capture-research-findings.mdc`)
@@ -28,6 +31,7 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
 | Path | Purpose |
 |------|---------|
+| `docs/windows-handoff.md` | Current Windows checklist (overwrite per task) |
 | `docs/0N-*.md` | Curated reference by topic |
 | `docs/findings/` | Dated journal entries |
 | `scripts/` | Shared tooling (e.g. FIELD.BIN GZIPPS) |
