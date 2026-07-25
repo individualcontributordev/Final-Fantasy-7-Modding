@@ -36,7 +36,6 @@ ff7-modding/
 │   ├── 03-environment-setup.md Tool checklist — start here
 │   ├── 04-workflow.md        Edit → rebuild → test loop
 │   ├── 05-ghidra-guide.md    RE workflow for FIELD.BIN
-│   ├── windows-handoff.md    Human Windows checklist
 │   ├── windows-last-output.txt  Latest Windows cmd output
 │   └── findings/             Dated lab notebook
 ├── scripts/                  FIELD.BIN decompress/recompress
@@ -49,7 +48,8 @@ Discoveries are recorded in [docs/findings/](docs/findings/README.md). The Mac C
 [record-findings](.cursor/skills/record-findings/SKILL.md) and
 [capture-research-findings](.cursor/rules/capture-research-findings.mdc).
 
-Human Windows steps: [docs/windows-handoff.md](docs/windows-handoff.md). Outputs via git: [docs/windows-last-output.txt](docs/windows-last-output.txt) — never paste between PCs.
+The Mac Cursor agent instructs in chat. Windows outputs via git:
+[docs/windows-last-output.txt](docs/windows-last-output.txt) — never paste between PCs.
 
 ## GitHub
 

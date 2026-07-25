@@ -1,5 +1,5 @@
 ---
-description: Mac agent + human on Windows; never ask to paste; use git for outputs to analyze
+description: Mac agent instructs in chat only; git for file outputs; no “read the handoff”
 alwaysApply: true
 ---
 
@@ -7,42 +7,46 @@ alwaysApply: true
 
 ## Roles
 
-- **Mac (this Cursor chat):** only agent. Plan, docs, scripts, analyze pushed files.
-- **Windows:** human only. Ghidra, DuckStation, disc images, Git Bash. No Windows Cursor agent.
-- **Mac may install tools** (Python, etc.). **Not** DuckStation or Ghidra on Mac.
+- **Mac (this Cursor chat):** only agent. Instruct the user here with full steps.
+- **Windows:** human only. Ghidra, DuckStation, disc, Git Bash. No Windows Cursor agent.
+- Mac may install tools (not DuckStation/Ghidra).
+
+## Instruct in chat — never defer to a file
+
+Put **complete, copyable commands and GUI steps in this chat**. The user reads you here only.
+
+**Do not** say:
+
+- “see `docs/windows-handoff.md`”
+- “follow the handoff”
+- “git pull and open the checklist”
+- “read the file for steps”
+
+Optional: you may mirror the same steps into `docs/windows-handoff.md` for repo history — that is **not** how the user is directed.
 
 ## No paste between PCs
 
-User cannot paste from Windows to Mac. **Never** ask them to paste, copy output into chat, or “send the full log here.”
+Never ask to paste Windows output into chat.
 
 | Need | How |
 |------|-----|
-| Short status | They type a few words in chat (“done”, “0 hits”, **check results**) |
-| Anything you must read (script output, addresses list, errors) | They redirect to a **repo file**, commit, push; then say **check results** |
+| Short status | They type a few words (“done”, **check results**) |
+| Output you must read | Redirect to **`docs/windows-last-output.txt`**, commit, push; they say **check results** |
 
-## When you need output — always use a file
-
-Tell them exact Git Bash commands, e.g.:
+Example you give them **in chat**:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
-python scripts/whatever.py … > docs/windows-last-output.txt 2>&1
+git pull --ff-only
+python scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec > docs/windows-last-output.txt 2>&1
 git add docs/windows-last-output.txt
-git commit -m "Windows output: <task>"
+git commit -m "Windows output: search encounter addrs"
 git push
 ```
 
-Default output path: **`docs/windows-last-output.txt`** (overwrite each time).  
-Then: user says **check results** → you `git pull --ff-only` → read that file → update findings/handoff → commit/push.
+Then: say **check results** here.
 
-Never ask for game binaries (`.bin`, `.dec`, ISO, Ghidra DBs) in git.
-
-## How you talk to the user
-
-- Interact **only through this chat**.
-- **Tell** them what to do (imperative). No permission-asking for routine handoffs.
-- Durable steps in **`docs/windows-handoff.md`** + short chat summary.
-- Windows shell: **Git Bash** (forward slashes, bash — not PowerShell/cmd).
+Never commit game binaries (`.bin`, `.dec`, ISO, Ghidra DBs).
 
 ## Before reading or acting
 
@@ -50,9 +54,8 @@ Never ask for game binaries (`.bin`, `.dec`, ISO, Ghidra DBs) in git.
 git pull --ff-only
 ```
 
-Stop and tell the user if pull fails.
+Stop if pull fails.
 
-## Handoff file
+## On “check results”
 
-- Active: steps + **file redirect / push** instructions when output is needed (never “paste into chat”).
-- Idle: short **Status: no active task** stub.
+Pull → read `docs/windows-last-output.txt` (or named file) → update findings → give **next full instructions in chat**.
