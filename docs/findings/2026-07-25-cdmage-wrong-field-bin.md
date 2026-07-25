@@ -6,7 +6,7 @@
 
 ## Summary
 
-Truncate warning persists because import targeted **`FIELD/FIELD.BIN`** (map-folder file), not the **disc-root engine** `FIELD.BIN`.
+Earlier guess that root held engine `FIELD.BIN` was **wrong** — see [cdmage-field-bin-path](2026-07-25-cdmage-field-bin-path.md). Root has only `SCUS_941.63` + `SYSTEM.CNF`.
 
 ## Evidence
 
@@ -14,8 +14,6 @@ Truncate warning persists because import targeted **`FIELD/FIELD.BIN`** (map-fol
 - CDmage: `FIELD` folder selected; `FIELD.BIN` highlighted among `.DAT`/`.BSX` map files
 - Same truncate dialog → that in-folder `FIELD.BIN` is **smaller** than our `.new`
 
-## Correct target
+## Correction
 
-ISO root (Track 1), sibling of folders `FIELD`, `BATTLE`, `WORLD`, … — file named **`FIELD.BIN`**.
-
-Do **not** import into anything under the `FIELD/` directory.
+Target **is** `FIELD/FIELD.BIN`. Truncate ⇒ restore pristine test ISO, then retry import.

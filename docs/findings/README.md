@@ -28,6 +28,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [makou-iso-save-path](2026-07-25-makou-iso-save-path.md) | Makou → ff7tk pack/updateFieldBin flow | confirmed |
 | 2026-07-25 | [duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md) | Safe Mode + testing profile for hardware-like behavior | confirmed |
 | 2026-07-25 | [force-stub-dual-jal-ok](2026-07-25-force-stub-dual-jal-ok.md) | Delay nop + second jal intact | confirmed |
+| 2026-07-25 | [cdmage-field-bin-path](2026-07-25-cdmage-field-bin-path.md) | Engine FIELD.BIN is FIELD/FIELD.BIN; restore pristine | confirmed |
 | 2026-07-25 | [cdmage-wrong-field-bin](2026-07-25-cdmage-wrong-field-bin.md) | Truncate = FIELD/FIELD.BIN not root engine | confirmed |
 | 2026-07-25 | [cdmage-import-truncate-warning](2026-07-25-cdmage-import-truncate-warning.md) | Truncate warning = wrong file/target; do not OK | confirmed |
 | 2026-07-25 | [force-stub-compressed](2026-07-25-force-stub-compressed.md) | FIELD.BIN.new 85355 (−80 vs stock) | confirmed |

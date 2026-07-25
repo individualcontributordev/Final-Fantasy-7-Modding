@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Import over disc-root FIELD.BIN (not FIELD/FIELD.BIN).
+**Current task:** Restore pristine test ISO; import FIELD.BIN.new → FIELD/FIELD.BIN.
