@@ -1,10 +1,12 @@
-# Ghidra re-import @ 0x800A0000 — fill answers only
+# increment_step_id xrefs — fill answers only
 
-Ghidra_project_base: 0x800A0000
-Ghidra_0x800AB9C8_lui_lbu: 
-Ghidra_0x800E0638_rng_table: 
-Labeled_increment_step_id: 
-Labeled_g_field_rng_table: 
+xref_count: 
+xref_1: 
+xref_2: 
+xref_3: 
+xref_4: 
+xref_5: 
+xref_6: 
 Notes: 
 
-# Use: yes / no / skip
+# Addresses only (e.g. 0x800Axxxx). Leave unused xref_N blank.
