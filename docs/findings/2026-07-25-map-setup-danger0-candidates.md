@@ -27,5 +27,5 @@ sh  zero, 0x173c(at)    ; g_danger @ 0x8007173C
 
 ## Follow-ups
 
-- [ ] Xrefs `DAT_80071e38` and `DAT_80071e3c` — steal the lighter one
+- [x] Both heavily used — **rejected**; use always-write stub instead
 - [ ] Apply + keep FORCE stub as separate patch

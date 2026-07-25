@@ -51,7 +51,7 @@ StepID must still **advance** every check (call `increment_step_id` twice as tod
 // Higher lure → more likely to set MAX; Enemy Away → less likely.
 if (independent_rng() < force_chance_from_lure(DAT_80062f19)):
     g_danger = DANGER_MAX   // high enough that threshold almost always passes
-// else: leave g_danger as-is (0 after field enter / after battle)
+// else: g_danger = 0  (each check overwrites; field-enter clear unnecessary)
 
 // vanilla:
 preempt = increment_step_id() ...
@@ -60,7 +60,7 @@ if (threshold_roll < f(g_danger, lure))
     start_battle()  // then Danger = 0 as vanilla
 ```
 
-Also hook **field enter** → `g_danger = 0`.
+Field-enter Danger=0 **not required** if stub always writes 0 or MAX (71e38/71e3c/fe8c steals rejected).
 
 Tune `force_chance_from_lure` so default lure ≈ desired sparsity; Lure materia denser, Away sparser.
 
@@ -86,7 +86,7 @@ Tune `force_chance_from_lure` so default lure ≈ desired sparsity; Lure materia
 
 ## Follow-ups
 
-- [x] Field-enter: replace DAT_8009fe8c clear in field_map_init @ 0x800BA574
+- [x] Field-enter steal rejected (fe8c, 71e38, 71e3c); stub always writes Danger
 - [x] FORCE if `(Count&0xff) < g_enemy_lure` (tune with shift if needed)
 - [x] DANGER_MAX = 0xFFFF (sticky until battle)
 - [ ] Choose entropy source (not StepID/Offset)
