@@ -67,13 +67,16 @@ Access pattern (`increment_step_id`):
 
 `encounter_check` highlights:
 
-- Danger load: `lhu` **`DAT_8007173c`** (= wiki Danger) — rename to `g_danger`
+- Danger **increment** (above dual jals): `0x800ABB7C`–`0x800ABBD0` — `div` / `mflo` then `lhu`/`addu`/`sh` on **`g_danger`**
+- Danger load in threshold path: `lhu` **`g_danger`** at `0x800ABC1C`
 - Preempt: roll1 `< (DAT_80062f1b & 0x7f)` → `DAT_800716d0 = 4` else `0`
 - Threshold: roll2 `< (Danger * DAT_80062f19) >> 12` → battle / formation pick
 - Formation helper candidate: `FUN_800aba34`
+- Ghidra still starts `encounter_check` at first `jal` (`0x800ABBD4`) — **too late**; true entry above Danger add
 
 See [findings/2026-07-25-increment-step-id-complete.md](findings/2026-07-25-increment-step-id-complete.md),
-[findings/2026-07-25-encounter-check.md](findings/2026-07-25-encounter-check.md).
+[findings/2026-07-25-encounter-check.md](findings/2026-07-25-encounter-check.md),
+[findings/2026-07-25-danger-increment.md](findings/2026-07-25-danger-increment.md).
 
 ## Per-map data (editable in Makou, not sufficient alone)
 

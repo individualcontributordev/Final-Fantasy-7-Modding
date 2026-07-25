@@ -2,4 +2,4 @@
 
 **Not user-facing.** Chat has steps; `windows-last-output.txt` has COPY-PASTE values.
 
-**Current task:** Find true `encounter_check` entry above `0x800ABBD4`.
+**Current task:** Recreate `encounter_check` starting above Danger add (`0x800ABB7C` region).

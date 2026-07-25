@@ -7,6 +7,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-25 | [danger-increment](2026-07-25-danger-increment.md) | g_danger += via div/mflo @ 0x800ABB7C–ABBD0 | confirmed |
 | 2026-07-25 | [g-danger-rename](2026-07-25-g-danger-rename.md) | DAT_8007173c → g_danger via lhu @ 0x800ABC1C | confirmed |
 | 2026-07-25 | [encounter-check](2026-07-25-encounter-check.md) | Dual jal + Danger compare; entry likely wrong | confirmed |
 | 2026-07-25 | [increment-step-id-xrefs](2026-07-25-increment-step-id-xrefs.md) | 2 jal callers @ 0x800ABBD4, 0x800ABC10 | confirmed |
@@ -36,6 +37,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 - [2026-07-25-increment-step-id-xrefs](2026-07-25-increment-step-id-xrefs.md)
 - [2026-07-25-encounter-check](2026-07-25-encounter-check.md)
 - [2026-07-25-g-danger-rename](2026-07-25-g-danger-rename.md)
+- [2026-07-25-danger-increment](2026-07-25-danger-increment.md)
 
 ### Tools & environment
 - [2026-07-25-duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md)

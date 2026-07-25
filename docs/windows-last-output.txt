@@ -1,8 +1,9 @@
-# Task: find true encounter_check function start
+# Task: recreate encounter_check to include Danger add
 
 # COPY-PASTE (do not edit these lines)
-start_scroll_from: 0x800ABBD4
-current_wrong_entry: 0x800ABBD4
+delete_old_function_at: 0x800ABBD4
+scroll_up_from: 0x800ABB7C
+danger_add_landmark: 0x800ABBC8
 label_name: encounter_check
 
 # ANSWERS (fill these)
@@ -11,39 +12,3 @@ recreated_function:
 unaff_s1_gone: 
 first_instruction_at_start: 
 Notes: 
-
-        800abb7c 07 80 01 3c     lui        at,0x8007
-        800abb80 14 4f 21 24     addiu      at,at,0x4f14
-        800abb84 21 08 22 00     addu       at,at,v0
-        800abb88 00 00 23 94     lhu        v1,0x0(at)
-        800abb8c 02 12 04 00     srl        v0,a0,0x8
-        800abb90 1a 00 62 00     div        v1,v0
-        800abb94 02 00 40 14     bne        v0,zero,LAB_800abba0
-        800abb98 00 00 00 00     _nop
-        800abb9c 0d 00 07 00     break      0x1c00
-                             LAB_800abba0                                    XREF[1]:     800abb94(j)  
-        800abba0 ff ff 01 24     li         at,-0x1
-        800abba4 04 00 41 14     bne        v0,at,LAB_800abbb8
-        800abba8 00 80 01 3c     _lui       at,0x8000
-        800abbac 02 00 61 14     bne        v1,at,LAB_800abbb8
-        800abbb0 00 00 00 00     _nop
-        800abbb4 0d 00 06 00     break      0x1800
-                             LAB_800abbb8                                    XREF[2]:     800abba4(j), 800abbac(j)  
-        800abbb8 12 18 00 00     mflo       v1
-        800abbbc 07 80 02 3c     lui        v0,0x8007
-        800abbc0 3c 17 42 94     lhu        v0,offset g_danger(v0)
-        800abbc4 00 00 00 00     nop
-        800abbc8 21 10 43 00     addu       v0,v0,v1
-        800abbcc 07 80 01 3c     lui        at,0x8007
-        800abbd0 3c 17 22 a4     sh         v0,offset g_danger(at)
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined encounter_check()
-             undefined         <UNASSIGNED>   <RETURN>
-                             encounter_check
-        800abbd4 72 ae 02 0c     jal        increment_step_id                                undefined increment_step_id()
-        800abbd8 00 00 00 00     _nop
-        800abbdc 06 80 03 3c     lui        v1,0x8006
-        800abbe0 1b 2f 63 90     lbu        v1,offset DAT_80062f1b(v1)
-        800abbe4 ff 00 42 30     andi       v0,v0,0xff
