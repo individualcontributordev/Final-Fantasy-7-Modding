@@ -1,7 +1,8 @@
-# Task: identify caller of encounter_check
+# Task: list all xrefs to g_danger (writes and reads)
 
 # COPY-PASTE (do not edit these lines)
-goto_caller_function: 0x800A65A4
-goto_jal_site: 0x800A6EC0
+goto_lhu_in_encounter_check: 0x800ABC1C
+# In Listing: click g_danger operand → right-click → References → Show References to Address
+# Or: click g_danger in Decompiler → right-click → References → Find References to g_danger
 
-# EVIDENCE (paste Listing / Decompiler below, then save)
+# EVIDENCE (paste the full References window / xref list below, then save)

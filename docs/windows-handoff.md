@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Identify `FUN_800a65a4` (caller of `encounter_check`).
+**Current task:** Xrefs to `g_danger` — find Danger writes (field enter / battle reset / +=).
