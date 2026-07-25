@@ -1,6 +1,5 @@
 # Windows → Mac results
 
-**Status:** consumed by Mac
-**Last task:** extract and decompress FIELD.BIN (pass)
+**Status:** waiting
 
-See `docs/findings/2026-07-25-field-bin-extract.md` for recorded sizes/offset.
+Human on Windows overwrites this file after finishing `docs/windows-handoff.md`, then commits and pushes. On Mac chat, say **check results**.

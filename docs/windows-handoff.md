@@ -1,20 +1,18 @@
-# Windows handoff
+# Windows checklist (human)
 
 **Status:** active
 
-**Shell:** Git Bash (not PowerShell / cmd)
-
-**How to run:** Follow this file yourself (Ghidra GUI + Git Bash). Windows Cursor Agent is optional —
-if that account is rate-limited or blocked, ignore Composer and do the steps manually.
+**Shell:** Git Bash  
+**Agent:** none on Windows — follow this file yourself; talk to the Mac chat only.
 
 ## Start
 
-1. Run `git pull --ff-only` in the repo root (Git Bash)
-2. Re-read this file
-3. If status is **no active task** — stop
-4. If status is **active** — follow the checklist below exactly
+```bash
+cd "$(git rev-parse --show-toplevel)"
+git pull --ff-only
+```
 
-Use Git Bash for all commands: forward slashes, `ls`/`cp`/`python`, bash `\` line continuation.
+Then do the steps below.
 
 ---
 
@@ -24,9 +22,8 @@ Create a Ghidra project for `FIELD.BIN.dec`, import it, find the encounter RNG t
 
 ## Prerequisites
 
-- [ ] `workspace/iso-extract/FIELD.BIN.dec` exists (from prior handoff)
-- [ ] Ghidra installed (needs Java 21+)
-- [ ] Can launch Ghidra
+- [ ] `workspace/iso-extract/FIELD.BIN.dec` exists
+- [ ] Ghidra installed (Java 21+)
 
 ## Steps
 
@@ -34,48 +31,35 @@ Create a Ghidra project for `FIELD.BIN.dec`, import it, find the encounter RNG t
 
 1. Start Ghidra
 2. **File → New Project…** → **Non-Shared Project** → Next
-3. Project directory: the repo’s `workspace/ghidra/` folder (create if needed)
+3. Project directory: repo `workspace/ghidra/` (create if needed)
 4. Project name: `ff7-field-bin` → Finish
 
 ### B. Import FIELD.BIN.dec
 
-1. **File → Import File…** → select `workspace/iso-extract/FIELD.BIN.dec`
+1. **File → Import File…** → `workspace/iso-extract/FIELD.BIN.dec`
 2. Format: **Raw Binary**
-3. Language: **MIPS** → **R3000** → **32-bit** → **little-endian** (exact labels may vary slightly by Ghidra version)
-4. Options / base address: **`0x80000000`**
-5. OK → open the file when prompted
-6. When asked to analyze: **Yes** → accept default analyzers → Analyze
+3. Language: **MIPS** → **R3000** → **32-bit** → **little-endian**
+4. Base address: **`0x80000000`**
+5. Open when prompted; analyze with defaults when asked
 
 ### C. Find and label the RNG table
 
-1. **Search → Memory…** (or Memory Search)
-2. Search for hex: `B1 CA EE 6C 5A 71 2E 55`
+1. **Search → Memory…**
+2. Hex: `B1 CA EE 6C 5A 71 2E 55`
 3. Search All — expect **one** hit
-4. Go to that address
-5. Right-click → **Add Label…** (or press `L`) → name: `g_field_rng_table` → OK
+4. Go there → label (`L`): `g_field_rng_table`
 
-### D. Record addresses
-
-In Ghidra, note:
-
-- Address of `g_field_rng_table` (should be near `0x80040638` if file offset `0x40638` + base `0x80000000`)
-- File offset shown (if available) or confirm it matches prior `0x40638`
+Expected address ≈ `0x80040638` (file offset `0x40638` + base).
 
 ## Pass criteria
 
-- [ ] Project `ff7-field-bin` exists under `workspace/ghidra/`
-- [ ] Binary imported at base `0x80000000` and analyzed
-- [ ] Label `g_field_rng_table` created
-- [ ] One search hit for `B1 CA EE 6C 5A 71 2E 55`
+- [ ] Project under `workspace/ghidra/`
+- [ ] Imported at `0x80000000`, analyzed
+- [ ] `g_field_rng_table` labeled; one search hit
 
-## Report results (git pipe — no Windows agent required)
+## Send results to Mac (git)
 
-```bash
-cd "$(git rev-parse --show-toplevel)"
-notepad docs/windows-results.md   # or: code docs/windows-results.md
-```
-
-Put this content in `docs/windows-results.md` (fill in real values):
+Edit `docs/windows-results.md` (Notepad/`vim`/etc.) to:
 
 ```markdown
 # Windows → Mac results
@@ -101,8 +85,8 @@ Then:
 
 ```bash
 git add docs/windows-results.md
-git commit -m "Windows handoff results: Ghidra RNG table"
+git commit -m "Windows results: Ghidra RNG table"
 git push
 ```
 
-On the Mac chat, say **“check results”**.
+In the **Mac** Cursor chat, say: **check results**

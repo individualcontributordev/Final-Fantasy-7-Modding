@@ -1,0 +1,43 @@
+---
+description: Mac agent + human on Windows; chat is the only interface; git for files/results
+alwaysApply: true
+---
+
+# Mac agent / human Windows workflow
+
+## Roles
+
+- **Mac (this Cursor chat):** only agent. Plan, docs, scripts, analyze pushed files, write checklists, commit/push.
+- **Windows:** human only. Ghidra, DuckStation, disc files, Git Bash. **No Windows Cursor agent** — do not write instructions for Composer or “what's next?” agent triggers.
+
+## How you talk to the user
+
+- Interact **only through this chat**.
+- **Tell** them what to do (imperative). Do not ask whether to write a checklist or push.
+- Put durable steps in **`docs/windows-handoff.md`**, commit/push, and also summarize the next action in chat.
+- Shell on Windows is **Git Bash** (forward slashes, bash syntax — not PowerShell/cmd).
+
+## When Windows must send you data
+
+There is no shared clipboard. Tell the user exactly:
+
+1. What file to create/edit (usually overwrite **`docs/windows-results.md`**, or another path you name)
+2. What to put in it
+3. `git add` / `git commit` / `git push` commands (Git Bash)
+4. To say **“check results”** (or similar) in this chat when pushed
+
+Then on **“check results”**: `git pull --ff-only` → read that file → analyze → update findings / next handoff → commit/push.
+
+## Before reading or acting
+
+```bash
+git pull --ff-only
+```
+
+Stop and tell the user if pull fails. Do not force-pull.
+
+## Handoff file
+
+- Active work: replace `docs/windows-handoff.md` with goal, prerequisites, numbered steps, pass criteria, and how to report via git.
+- Idle: short **Status: no active task** stub.
+- Never leave Windows-only steps only in chat without updating the handoff file.
