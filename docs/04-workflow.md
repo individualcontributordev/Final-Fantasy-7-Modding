@@ -1,6 +1,8 @@
 # Edit → Rebuild → Test Workflow
 
-Use this loop for every change once patching begins.
+General loop for **PSX disc patches** (engine binaries, reinserted files, full ISO saves).
+
+Use this for every hardware-impacting change.
 
 ## Overview
 

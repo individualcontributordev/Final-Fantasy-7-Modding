@@ -13,7 +13,7 @@ To make encounters unpredictable, patch **FIELD.BIN** to reseed StepID, Offset, 
 
 Current behavior: all RNG state starts at 0 on new game; StepID/Offset persist in save files. Speedrunners exploit the fixed 256-byte table + deterministic counters.
 
-User goal: unknown encounters after hard reset; preferably reseed on every field entry.
+This finding is one **topic-area** mod idea within the broader FF7 PSX modding project — not the project's sole purpose. Goal for this thread: unknown encounters after hard reset; preferably reseed on every field entry.
 
 ## Proposed approach (not yet implemented)
 

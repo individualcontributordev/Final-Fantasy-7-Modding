@@ -1,6 +1,8 @@
 # Environment Setup
 
-Work through this checklist in order. Check items off as you complete them.
+Tooling checklist for **FF7 PSX disc modding** (any topic — field, engine binaries, ISO workflow).
+
+Work through this list in order.
 
 ## 1. Project directory
 
