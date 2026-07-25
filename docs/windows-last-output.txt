@@ -1,12 +1,14 @@
-# Task: OK CDmage Save options; DuckStation smoke test (text notes)
+# Task: unlock test.bin; CDmage Save; DuckStation notes (TEXT)
 
 # COPY-PASTE (do not edit these lines)
-save_dialog: OK
-test_cue: workspace/iso-extract/ff7_disc1_test.cue
+clear_readonly_cmd: attrib -R workspace/iso-extract/ff7_disc1_test.bin
+save_as_fallback: workspace/iso-extract/ff7_disc1_test_patched.bin
+cue_template: FILE "ff7_disc1_test_patched.bin" BINARY
 
-# EVIDENCE (type notes below — no screenshots — then save)
-# cdmage_save:
-# boot:
-# field:
-# walk:
-# battle:
+# EVIDENCE (fill these lines with text — do not commit screenshots)
+cdmage_save:
+boot:
+field:
+walk:
+battle:
+notes:

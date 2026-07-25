@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Finish CDmage save OK; DuckStation notes in EVIDENCE.
+**Current task:** Unlock/save test ISO; text DuckStation notes only.
