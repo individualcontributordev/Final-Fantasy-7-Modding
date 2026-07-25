@@ -7,6 +7,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-25 | [field-dec-addr-search](2026-07-25-field-dec-addr-search.md) | .dec: RNG @ 0x40638; no abs StepID ptr; 3× 0xC540 | confirmed |
 | 2026-07-25 | [search-ran-on-compressed-field-bin](2026-07-25-search-ran-on-compressed-field-bin.md) | Search used FIELD.BIN not .dec → 0 hits | confirmed |
 | 2026-07-25 | [ghidra-no-stepid-scalars](2026-07-25-ghidra-no-stepid-scalars.md) | Scalars 0x9c540 / 0xc540: no hits | confirmed |
 | 2026-07-25 | [ghidra-zero-xrefs-rng-table](2026-07-25-ghidra-zero-xrefs-rng-table.md) | RNG table @ 0x80040638 has 0 xrefs; use scalar search | confirmed |
@@ -30,3 +31,4 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 ### Disc / ISO
 - [2026-07-25-makou-iso-save-path](2026-07-25-makou-iso-save-path.md)
 - [2026-07-25-field-bin-extract](2026-07-25-field-bin-extract.md)
+- [2026-07-25-search-ran-on-compressed-field-bin](2026-07-25-search-ran-on-compressed-field-bin.md)
