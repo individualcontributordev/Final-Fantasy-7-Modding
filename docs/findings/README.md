@@ -28,7 +28,8 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [makou-iso-save-path](2026-07-25-makou-iso-save-path.md) | Makou → ff7tk pack/updateFieldBin flow | confirmed |
 | 2026-07-25 | [duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md) | Safe Mode + testing profile for hardware-like behavior | confirmed |
 | 2026-07-25 | [danger-max-stub-draft](2026-07-25-danger-max-stub-draft.md) | In-place mfc0+lure FORCE stub for 88-byte slot | likely |
-| 2026-07-25 | [field-map-init-danger0-hook](2026-07-25-field-map-init-danger0-hook.md) | Steal DAT_8009fe8c clear for g_danger=0 | likely |
+| 2026-07-25 | [dat-8009fe8c-xrefs](2026-07-25-dat-8009fe8c-xrefs.md) | fe8c heavily read; cannot steal clear for Danger=0 | confirmed |
+| 2026-07-25 | [field-map-init-danger0-hook](2026-07-25-field-map-init-danger0-hook.md) | fe8c steal rejected; need map-setup slot | confirmed |
 | 2026-07-25 | [fun-800a14d8-scratchpad](2026-07-25-fun-800a14d8-scratchpad.md) | 0x1F800000 scratchpad; use mfc0 Count for entropy | confirmed |
 | 2026-07-25 | [entropy-1f80-hits](2026-07-25-entropy-1f80-hits.md) | Many lui 0x1f80; check FUN_800a14d8 for RCnt | confirmed |
 | 2026-07-25 | [entropy-search-empty](2026-07-25-entropy-search-empty.md) | No 0x1f801110/120 or mfc0 in FIELD | confirmed |
