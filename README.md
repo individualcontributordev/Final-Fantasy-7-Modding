@@ -45,9 +45,11 @@ ff7-modding/
 
 ## Research journal
 
-Discoveries are recorded in [docs/findings/](docs/findings/README.md). Cursor agents use
+Discoveries are recorded in [docs/findings/](docs/findings/README.md). The Mac Cursor agent uses
 [record-findings](.cursor/skills/record-findings/SKILL.md) and
 [capture-research-findings](.cursor/rules/capture-research-findings.mdc).
+
+Human Windows steps: [docs/windows-handoff.md](docs/windows-handoff.md). Results via git: [docs/windows-results.md](docs/windows-results.md).
 
 ## GitHub
 
