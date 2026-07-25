@@ -32,7 +32,7 @@ Formation path calls `FUN_800a1498`, sets `DAT_8009abf5 = 2`, `DAT_8007ebc8 = 1`
 
 ## Important corrections
 
-1. **Danger is present.** User note said “cannot find danger”, but `DAT_8007173c` / `_DAT_8007173c` **is** Danger. Rename in Ghidra: `L` → `g_danger`.
+1. **Danger is present.** User note said “cannot find danger”, but `DAT_8007173c` / `_DAT_8007173c` **is** Danger. Rename in Ghidra via the `lhu` at `0x800ABC1C` (not Go To `0x8007173C` — that RAM is outside FIELD.BIN’s memory map). Label: `g_danger`.
 2. **Function start is probably wrong.** Ghidra entry is at the **first `jal`** (`0x800ABBD4`). Decompiler has `unaff_s1` (s1 used, never set) → real prologue / map-table pointer load is **above** this address. Re-find entry, then re-create the function (`F`).
 
 ## Why it matters
