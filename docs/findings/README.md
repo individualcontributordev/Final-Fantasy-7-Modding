@@ -24,3 +24,4 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 ### Disc / ISO
 - [2026-07-25-makou-iso-save-path](2026-07-25-makou-iso-save-path.md)
+- [2026-07-25-field-bin-extract](2026-07-25-field-bin-extract.md)
