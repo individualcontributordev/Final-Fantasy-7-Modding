@@ -1,10 +1,12 @@
-# Task: pad-Yes import FIELD.BIN.new; save; boot DuckStation smoke test
+# Task: OK CDmage Save options; DuckStation smoke test (text notes)
 
 # COPY-PASTE (do not edit these lines)
-import_source: workspace/iso-extract/FIELD.BIN.new
-import_target_path: FIELD/FIELD.BIN
-pad_dialog: Yes
+save_dialog: OK
 test_cue: workspace/iso-extract/ff7_disc1_test.cue
-duckstation_open: workspace/iso-extract/ff7_disc1_test.cue
 
-# EVIDENCE (after pad-Yes + save + DuckStation: paste short notes — boot OK/fail, reached field Y/N, walk OK/crash, any battle Y/N; then save)
+# EVIDENCE (type notes below — no screenshots — then save)
+# cdmage_save:
+# boot:
+# field:
+# walk:
+# battle:
