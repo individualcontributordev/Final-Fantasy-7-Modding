@@ -31,11 +31,9 @@ Record a finding when any of these are true:
 - Tool setting that affects accuracy or testing
 - Contradiction with prior docs (note both sides)
 - User says "remember this" or "document this"
-- After **check results**: useful content appeared in `docs/windows-last-output.txt`
+- After **check results**: useful content appeared in `docs/windows-last-output.txt` (pasted listing/decompiler)
 
-User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). Answer file has COPY-PASTE values + EVIDENCE paste only — **never** yes/no answer blanks. See `.cursor/rules/mac-human-workflow.mdc`.
-
-After **check results**: useful content appeared in `docs/windows-last-output.txt` (pasted listing/decompiler).
+User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). File has COPY-PASTE values + EVIDENCE paste only — **never** yes/no answer blanks. See `.cursor/rules/mac-human-workflow.mdc`.
 
 ## Create a finding file
 

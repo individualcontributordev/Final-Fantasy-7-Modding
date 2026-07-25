@@ -7,6 +7,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-25 | [encounter-check-renamed](2026-07-25-encounter-check-renamed.md) | FUN_800aba70 → encounter_check @ 0x800ABA70 | confirmed |
 | 2026-07-25 | [encounter-check-entry](2026-07-25-encounter-check-entry.md) | True entry FUN_800aba70 @ 0x800ABA70 | confirmed |
 | 2026-07-25 | [danger-increment](2026-07-25-danger-increment.md) | g_danger += via div/mflo @ 0x800ABB7C–ABBD0 | confirmed |
 | 2026-07-25 | [g-danger-rename](2026-07-25-g-danger-rename.md) | DAT_8007173c → g_danger via lhu @ 0x800ABC1C | confirmed |
