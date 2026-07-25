@@ -8,3 +8,7 @@ goto_encounter_check: 0x800ABA70
 # 3) If none: paste "no hits" and we will use an alternate entropy plan
 
 # EVIDENCE (paste search results or "no hits", then save)
+0x1f801110 none
+0x1f801120 none
+mfc0 none
+no hints
