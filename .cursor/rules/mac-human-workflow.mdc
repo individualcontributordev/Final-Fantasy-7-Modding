@@ -1,5 +1,5 @@
 ---
-description: Mac agent instructs in chat only; git for file outputs; no “read the handoff”
+description: Mac agent instructs in chat only; git for file outputs; pre-filled answer templates
 alwaysApply: true
 ---
 
@@ -31,20 +31,28 @@ Never ask to paste Windows output into chat.
 | Need | How |
 |------|-----|
 | Short status | They type a few words (“done”, **check results**) |
-| Output you must read | Redirect to **`docs/windows-last-output.txt`**, commit, push; they say **check results** |
+| Structured answers | You **pre-write** `docs/windows-last-output.txt` with field names + blank values, commit/push; user only fills answers |
+| Script stdout | Redirect into `docs/windows-last-output.txt`, then push |
 
-Example you give them **in chat**:
+**Do not** ask the user to type field names or long templates by hand.
+
+### Fill-in template pattern
+
+1. Write `docs/windows-last-output.txt` with short keys and empty values (or `yes/no/skip` hints)
+2. Commit and push
+3. In chat: tell them the Ghidra/DuckStation steps, then:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-python scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec > docs/windows-last-output.txt 2>&1
+notepad docs/windows-last-output.txt
+# fill answers only, save
 git add docs/windows-last-output.txt
-git commit -m "Windows output: search encounter addrs"
+git commit -m "Windows output: <task>"
 git push
 ```
 
-Then: say **check results** here.
+4. They say **check results**
 
 Never commit game binaries (`.bin`, `.dec`, ISO, Ghidra DBs).
 
@@ -58,4 +66,4 @@ Stop if pull fails.
 
 ## On “check results”
 
-Pull → read `docs/windows-last-output.txt` (or named file) → update findings → give **next full instructions in chat**.
+Pull → read `docs/windows-last-output.txt` → update findings → next **full** instructions in chat (+ new pre-filled template if more answers needed).
