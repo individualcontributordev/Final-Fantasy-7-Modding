@@ -5,8 +5,4 @@ goto_function_start: 0x800ABA70
 rename_to: encounter_check
 optional_delete_bad_split_at: 0x800ABBD4
 
-# ANSWERS (fill these)
-renamed_encounter_check: 
-symbol_at_0x800ABA70: 
-deleted_bad_split: 
-Notes: 
+# EVIDENCE (paste Listing / Decompiler below, then save)

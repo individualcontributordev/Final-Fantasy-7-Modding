@@ -1,5 +1,5 @@
 ---
-description: Mac agent instructs in chat; commit copy-paste values + answer blanks for Windows
+description: Mac agent instructs in chat; commit copy-paste values; user pastes evidence only
 alwaysApply: true
 ---
 
@@ -23,48 +23,48 @@ Chat has the numbered GUI walkthrough (clicks, keys, what success looks like).
 ### `docs/windows-last-output.txt` layout
 
 ```
-# COPY-PASTE (do not edit these lines)
-goto_address: 0x8007173C
-rename_to: g_danger
+# Task: short name
 
-# ANSWERS (fill these)
-renamed_g_danger: 
-symbol_shown_after_rename: 
-Notes: 
+# COPY-PASTE (do not edit these lines)
+goto_address: 0x800ABA70
+rename_to: encounter_check
+
+# EVIDENCE (paste Listing / Decompiler below, then save)
 ```
 
-- **COPY-PASTE** section: agent writes exact values; user copies from Notepad into Ghidra.
-- **ANSWERS** section: blanks only; user fills `yes`/`no`/`skip` or short results.
+- **COPY-PASTE:** agent writes exact values; user copies into Ghidra.
+- **EVIDENCE:** user pastes raw Ghidra output (listing lines, decompiler, errors). **No answer blanks. Never ask the user to fill `yes`/`no`/`skip` fields.**
+
+Agent infers success/failure from the pasted evidence on **check results**.
 
 Never put the *only* copy of an address in chat. Chat may repeat it; the file is the copy-paste source.
 
-Chat must still include: Goal, Prerequisites, Numbered steps, What you should see, Commit commands, **check results**.
+Chat must include: Goal, Numbered steps, What you should see, Commit commands, **check results**.
 
-**Do not** say “see the handoff” or “steps are only in the txt.” Chat = how; file = what to type + answers.
+**Do not** say “see the handoff” or “fill the answers.” Chat = how; file = what to type + evidence paste area.
 
 Optional: mirror into `docs/windows-handoff.md` for history — never direct the user there.
 
 ## No paste into chat
 
-Never ask to paste Windows output into chat. Long dumps go in the file `Notes:` field.
+Never ask to paste Windows output into chat. Evidence goes only in `docs/windows-last-output.txt`.
 
-## Fill-in + commit pattern
+## Commit pattern (Windows)
 
-1. Write `docs/windows-last-output.txt` (COPY-PASTE values + ANSWER blanks)
-2. Commit and push
-3. In chat: full steps, telling them to copy from the file, then:
+1. Agent writes `docs/windows-last-output.txt` (COPY-PASTE + empty EVIDENCE section), commits, pushes
+2. Chat: full steps + this block:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 notepad docs/windows-last-output.txt
-# copy values from COPY-PASTE; fill ANSWERS; save
+# copy from COPY-PASTE; paste evidence under EVIDENCE; save
 git add docs/windows-last-output.txt
 git commit -m "Windows output: <task>"
 git push
 ```
 
-4. They say **check results**
+3. They say **check results**
 
 Never commit game binaries (`.bin`, `.dec`, ISO, Ghidra DBs).
 
@@ -78,4 +78,4 @@ Stop if pull fails.
 
 ## On “check results”
 
-Pull → read answer file → update findings → next **single** task (chat steps + new file with COPY-PASTE + blanks).
+Pull → read evidence → update findings → next **single** task (chat steps + new COPY-PASTE file, no answer blanks).
