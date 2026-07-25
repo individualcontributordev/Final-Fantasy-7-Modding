@@ -21,7 +21,8 @@ User confirmed re-import / checks at base **`0x800A0000`**: `0x800AB9C8` lui/lbu
 | FIELD.BIN base | `0x800A0000` |
 | `increment_step_id` | `0x800AB9C8` |
 | `g_field_rng_table` | `0x800E0638` |
-| `encounter_check` (body; entry TBD) | dual jal @ `0x800ABBD4`, `0x800ABC10` |
+| `encounter_check` | `0x800ABA70` |
 | Danger / `g_danger` | `0x8007173C` |
+| Step fraction (`DAT_8009c6d8`) | `0x8009C6D8` |
 | StepID | `0x8009C540` |
 | Offset | `0x8009AD2C` |
