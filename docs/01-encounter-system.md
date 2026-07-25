@@ -55,8 +55,11 @@ Emulator "address" column is often offset from 0x80000000.
 
 `increment_step_id` at Ghidra **`0x800AB9C8`** (FIELD base `0x800A0000`).
 
-`encounter_check` body around dual `jal`s: **`0x800ABBD4`**, **`0x800ABC10`**.
-Ghidra currently starts the function at the first `jal` — likely **too late** (`unaff_s1` in decompiler). True entry TBD above `0x800ABBD4`.
+`encounter_check` at Ghidra **`0x800ABA70`** (was mis-labeled `FUN_800aba70`).
+Body includes Danger += and dual `jal`s at **`0x800ABBD4`**, **`0x800ABC10`**.
+Caller: `FUN_800a65a4` @ **`0x800A6EC0`**.
+
+Do **not** treat `0x800ABBD4` as the function start (bad nested split).
 
 Access pattern (`increment_step_id`):
 
@@ -67,15 +70,14 @@ Access pattern (`increment_step_id`):
 
 `encounter_check` highlights:
 
-- Danger **increment** (above dual jals): `0x800ABB7C`–`0x800ABBD0` — `div` / `mflo` then `lhu`/`addu`/`sh` on **`g_danger`**
-- Danger load in threshold path: `lhu` **`g_danger`** at `0x800ABC1C`
+- Step fraction: `DAT_8009c6d8 += 0x20` (wiki Step fraction += 32)
+- Danger **increment**: `0x800ABB7C`–`0x800ABBD0` — `div` / `mflo` then `lhu`/`addu`/`sh` on **`g_danger`**
+- Danger threshold load: `lhu` **`g_danger`** at `0x800ABC1C`
 - Preempt: roll1 `< (DAT_80062f1b & 0x7f)` → `DAT_800716d0 = 4` else `0`
 - Threshold: roll2 `< (Danger * DAT_80062f19) >> 12` → battle / formation pick
 - Formation helper candidate: `FUN_800aba34`
-- Ghidra still starts `encounter_check` at first `jal` (`0x800ABBD4`) — **too late**; true entry above Danger add
 
-See [findings/2026-07-25-increment-step-id-complete.md](findings/2026-07-25-increment-step-id-complete.md),
-[findings/2026-07-25-encounter-check.md](findings/2026-07-25-encounter-check.md),
+See [findings/2026-07-25-encounter-check-entry.md](findings/2026-07-25-encounter-check-entry.md),
 [findings/2026-07-25-danger-increment.md](findings/2026-07-25-danger-increment.md).
 
 ## Per-map data (editable in Makou, not sufficient alone)
