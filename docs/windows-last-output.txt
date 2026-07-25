@@ -1,18 +1,8 @@
-# Fix encounter_check entry + rename Danger — fill answers only
+# Task: rename Danger — fill answers only
 
-true_function_start: 
 renamed_g_danger: 
-unaff_s1_gone_after_recreate: 
-danger_add_seen_in_function: 
+symbol_shown_after_rename: 
 Notes: 
 
-# Use: yes / no / skip
-# true_function_start: address like 0x800ABxxx (NOT 0x800ABBD4 if prologue is above)
-
-# Ghidra steps:
-# 1. G → 0x800ABBD4
-# 2. Scroll UP in Listing until previous function's jr ra / end, or stack setup (addiu sp / sw ra)
-# 3. Put cursor on real entry → F (create/repair function) → L → encounter_check
-# 4. G → 0x8007173C (or click DAT_8007173c) → L → g_danger
-# 5. Decompiler: unaff_s1 should disappear if entry is correct
-# 6. Look for Danger += ... (add/addu to g_danger), or note if only compare is here
+# Allowed: yes / no / skip
+# symbol_shown_after_rename: exact name Ghidra shows (expect g_danger)
