@@ -1,52 +1,8 @@
-# Task: rename FUN_800aba34 to increment_formation
+# Task: rename Formation counter via code xref
 
 # COPY-PASTE (do not edit these lines)
-goto_function: 0x800ABA34
-rename_to: increment_formation
+goto_lbu_address: 0x800ABA38
+rename_to: g_formation
+ram_note_do_not_goto: 0x80071C20
 
 # EVIDENCE (paste Listing / Decompiler below, then save)
-
-        800aba2c 08 00 e0 03     jr         ra
-        800aba30 ff 00 42 30     _andi      v0,v0,0xff
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined increment_formation()
-             undefined         <UNASSIGNED>   <RETURN>
-                             increment_formation                             XREF[3]:     800abc68(c), 800abdf4(c), 
-                                                                                          800abe9c(c)  
-        800aba34 07 80 02 3c     lui        v0,0x8007
-        800aba38 20 1c 42 90     lbu        v0,offset DAT_80071c20(v0)
-        800aba3c 00 00 00 00     nop
-        800aba40 01 00 42 24     addiu      v0,v0,0x1
-        800aba44 07 80 01 3c     lui        at,0x8007
-        800aba48 20 1c 22 a0     sb         v0,offset DAT_80071c20(at)
-        800aba4c 07 80 02 3c     lui        v0,0x8007
-        800aba50 20 1c 42 90     lbu        v0,offset DAT_80071c20(v0)
-        800aba54 00 00 00 00     nop
-        800aba58 0e 80 01 3c     lui        at,0x800e
-        800aba5c 38 06 21 24     addiu      at,at,0x638
-        800aba60 21 08 22 00     addu       at,at,v0
-        800aba64 00 00 22 90     lbu        v0,0x0(at)=>g_field_rng_table                    = B1h
-        800aba68 08 00 e0 03     jr         ra
-        800aba6c 00 00 00 00     _nop
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined encounter_check()
-             undefined         <UNASSIGNED>   <RETURN>
-             undefined4        Stack[-0x4]:4  local_4                                 XREF[1]:     800aba7c(W)  
-             undefined4        Stack[-0x8]:4  local_8                                 XREF[1]:     800aba80(W)  
-             undefined4        Stack[-0xc]:4  local_c                                 XREF[1]:     800aba84(W)  
-             undefined4        Stack[-0x10]:4 local_10                                XREF[1]:     800aba8c(W)  
-                             encounter_check                                 XREF[1]:     FUN_800a65a4:800a6ec0(c)  
-        800aba70 0a 80 02 3c     lui        v0,0x800a
-
-
-
-undefined1 increment_formation(void)
-
-{
-  DAT_80071c20 = DAT_80071c20 + 1;
-  return (&g_field_rng_table)[DAT_80071c20];
-}
