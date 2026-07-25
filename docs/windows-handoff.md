@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Find code cave near encounter_check for MAX-Danger RNG stub.
+**Current task:** Paste Danger += block 0x800ABB7C–0x800ABBD4 for in-place patch.
