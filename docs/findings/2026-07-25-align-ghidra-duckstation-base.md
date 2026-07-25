@@ -25,6 +25,6 @@ User confirmed re-import / checks at base **`0x800A0000`**: `0x800AB9C8` lui/lbu
 | Danger / `g_danger` | `0x8007173C` |
 | Step fraction (`g_step_fraction`) | `0x8009C6D8` |
 | `increment_formation` | `0x800ABA34` |
-| Formation (`DAT_80071c20`) | `0x80071C20` |
+| Formation (`g_formation`) | `0x80071C20` |
 | StepID | `0x8009C540` |
 | Offset | `0x8009AD2C` |
