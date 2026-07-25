@@ -1,13 +1,9 @@
-# Task: re-import FIELD.BIN.new over disc FIELD.BIN (no truncate)
+# Task: import FIELD.BIN.new over ROOT FIELD.BIN only
 
 # COPY-PASTE (do not edit these lines)
-size_check_cmd: ls -l workspace/iso-extract/FIELD.BIN.new workspace/iso-extract/FIELD.BIN
 import_source: workspace/iso-extract/FIELD.BIN.new
-import_target: FIELD.BIN
-cue_ok: yes
-do_not_accept: Import file is longer than file in the image
+import_target_path: /FIELD.BIN
+not_this_path: /FIELD/FIELD.BIN
+expected_stock_size: 85435
 
-# EVIDENCE (1) paste ls -l size_check output; (2) after successful import WITHOUT truncate warning, paste ls -l of ff7_disc1_test.bin and one line "import OK no truncate"; then save)
-ls -l workspace/iso-extract/FIELD.BIN.new workspace/iso-extract/FIELD.BIN
--rw-r--r-- 1 David 197121 85435 Aug  4  1997 workspace/iso-extract/FIELD.BIN
--rw-r--r-- 1 David 197121 85355 Jul 26 00:05 workspace/iso-extract/FIELD.BIN.new
+# EVIDENCE (after import with NO truncate dialog: paste CDmage size/properties of root FIELD.BIN if shown, plus ls -l ff7_disc1_test.bin, plus line "import OK root FIELD.BIN"; then save)

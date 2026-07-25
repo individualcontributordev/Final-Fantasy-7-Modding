@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Re-import FIELD.BIN.new over engine FIELD.BIN; cancel any truncate dialog.
+**Current task:** Import over disc-root FIELD.BIN (not FIELD/FIELD.BIN).
