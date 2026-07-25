@@ -1,50 +1,59 @@
 # Goals
 
-## Problem
+## Project scope
 
-FF7 PS1 field encounters look random but are fully deterministic:
+**FF7 PSX disc modding** — understand, change, and rebuild PlayStation disc images so
+mods remain playable on console hardware (and test accurately in emulators).
 
-- A fixed 256-byte RNG table
-- Predictable state: StepID, Offset, Danger, Formation
-- New game / hard reset starts all counters at 0
-- Save files store StepID and Offset, preserving the sequence
+This includes:
 
-Speedrunners exploit this with stutter-step, encounter table routing, and formation
-manipulation to avoid or force specific battles.
+- ISO / sector layout and Square’s custom indexes (`FIELD.BIN`, `WORLD.BIN`, etc.)
+- Per-map field data (`.DAT` and related files) via tools like Makou Reactor
+- Engine binaries in gzip blobs on the disc (RE in Ghidra, MIPS patches)
+- Workflow: extract → edit → recompress → reinsert → verify
 
-## Desired outcome
+**Platform:** PS1 (PSX) disc images only for now — not PC / 7th Heaven.
 
-Encounters should be **unknown** to the player:
+**Out of scope (unless we explicitly add them):** PPF distribution, piracy, sharing disc images.
 
-| Priority | Behavior |
-|----------|----------|
-| Must have | Different encounter sequence after hard reset (power cycle) |
-| Should have | Reseed RNG state each time a field map loads |
-| Nice to have | Same treatment for world-map encounters (`WORLD.BIN`) |
-| Out of scope (for now) | Changing which enemies appear per map (that's Makou encounter tables) |
+## Topic areas
 
-## Proposed fix (high level)
+Work is organized by topic. Each gets reference docs and findings as we learn.
 
-Patch `FIELD.BIN` to reseed encounter RNG state on field load:
+| Topic | Docs | Notes |
+|-------|------|-------|
+| Disc & ISO | `02-disc-format.md`, `04-workflow.md` | Makou/ff7tk save path, GZIPPS |
+| Tooling | `03-environment-setup.md`, `git-setup.md` | DuckStation, Ghidra, scripts |
+| Field encounter RNG | `01-encounter-system.md` | **First research thread** — not the whole project |
+| *(future)* | TBD | Kernel, battle, world map, scripts, etc. |
 
-- StepID ← random
-- Offset ← random
-- Formation ← random
-- Danger ← 0
+New topics: add `docs/0N-topic.md` + findings; update this table and the README.
 
-Entropy source: PS1 hardware timer or FF7 kernel PRNG (same idea Bone Village uses
-for field script RNG).
+### Encounter RNG (current research thread)
 
-## Success criteria for "environment ready"
+One candidate mod: make field encounters less deterministic (speedrun routing today
+relies on predictable StepID/Offset/Danger). See
+[findings/2026-07-25-patch-target-field-load-reseed.md](findings/2026-07-25-patch-target-field-load-reseed.md).
 
-- [ ] Own a clean FF7 PS1 disc image (`.bin` + `.cue`) in `workspace/iso-extract/`
-- [ ] Can extract and decompress `FIELD.BIN` with project scripts
-- [ ] Ghidra opens `FIELD.BIN.dec` and finds the RNG table (`B1 CA EE 6C…`)
-- [ ] Emulator runs the disc image and can show RAM at known addresses
-- [ ] Can recompress `FIELD.BIN`, reinsert into ISO, and boot the game
+That idea requires patching `FIELD.BIN` (and eventually `WORLD.BIN`), not just Makou
+field edits.
 
-## Non-goals
+## Success criteria — “environment ready”
 
-- Breaking encounter *rates* (how often battles happen in general) — unless needed as a side effect
-- PC version / 7th Heaven (PS1 only for now)
-- PPF patch distribution (direct ISO edit first, packaging later)
+Applies to any mod work in this repo:
+
+- [ ] Clean FF7 PS1 disc image (`.bin` + `.cue`) in `workspace/iso-extract/`
+- [ ] Can extract key files (`FIELD.BIN`, etc.) from the image
+- [ ] `scripts/decompress_field_bin.py` runs successfully
+- [ ] Emulator boots the image (DuckStation Safe Mode — see findings)
+- [ ] Ghidra project created under `workspace/ghidra/`
+- [ ] Can recompress, reinsert into ISO, and boot again
+
+Topic-specific milestones (e.g. find RNG table in Ghidra) live in findings and topic docs.
+
+## Principles
+
+1. **Console-first** — if it doesn’t work on hardware, it’s not done (emulator is for dev).
+2. **Document as we go** — findings journal + reference docs, not chat-only knowledge.
+3. **Pristine backups** — never edit the only copy of a source ISO.
+4. **Minimal patches** — smallest change that achieves the goal; avoid unrelated edits.
