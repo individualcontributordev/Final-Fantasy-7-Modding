@@ -1,71 +1,7 @@
-# Task: find code cave for MAX-Danger stub
+# Task: paste full Danger += block for in-place patch sizing
 
 # COPY-PASTE (do not edit these lines)
-goto_near_image_end: 0x800E0700
-goto_danger_add_block: 0x800ABB7C
-min_cave_bytes_needed: 64
+goto_block_start: 0x800ABB7C
+goto_block_end_exclusive: 0x800ABBD4
 
-# EVIDENCE (paste cave_start address + Listing of the empty region, then save)
-        800e0700 30              ??         30h    0
-        800e0701 1b              ??         1Bh
-        800e0702 e7              ??         E7h
-        800e0703 c5              ??         C5h
-        800e0704 22              ??         22h    "
-        800e0705 9c              ??         9Ch
-        800e0706 e8              ??         E8h
-        800e0707 96              ??         96h
-        800e0708 3a              ??         3Ah    :
-        800e0709 e4              ??         E4h
-        800e070a 7c              ??         7Ch    |
-        800e070b e0              ??         E0h
-        800e070c 69              ??         69h    i
-        800e070d a1              ??         A1h
-        800e070e b7              ??         B7h
-        800e070f 05              ??         05h
-        800e0710 39              ??         39h    9
-        800e0711 74              ??         74h    t
-        800e0712 01              ??         01h
-        800e0713 9f              ??         9Fh
-        800e0714 bd              ??         BDh
-        800e0715 c3              ??         C3h
-        800e0716 84              ??         84h
-        800e0717 fc              ??         FCh
-        800e0718 77              ??         77h    w
-        800e0719 86              ??         86h
-        800e071a 13              ??         13h
-        800e071b 4e              ??         4Eh    N
-        800e071c bf              ??         BFh
-        800e071d f2              ??         F2h
-        800e071e 53              ??         53h    S
-        800e071f 5b              ??         5Bh    [
-        800e0720 ed              ??         EDh
-        800e0721 21              ??         21h    !
-        800e0722 8b              ??         8Bh
-        800e0723 6d              ??         6Dh    m
-        800e0724 c2              ??         C2h
-        800e0725 41              ??         41h    A
-        800e0726 b6              ??         B6h
-        800e0727 db              ??         DBh
-        800e0728 3c              ??         3Ch    <
-        800e0729 d3              ??         D3h
-        800e072a 28              ??         28h    (
-        800e072b ec              ??         ECh
-        800e072c 2d              ??         2Dh    -
-        800e072d e2              ??         E2h
-        800e072e 9b              ??         9Bh
-        800e072f a6              ??         A6h
-        800e0730 42              ??         42h    B
-        800e0731 52              ??         52h    R
-        800e0732 57              ??         57h    W
-        800e0733 5f              ??         5Fh    _
-        800e0734 e5              ??         E5h
-        800e0735 ab              ??         ABh
-        800e0736 b0              ??         B0h
-        800e0737 0c              ??         0Ch
-                             DAT_800e0738                                    XREF[6]:     FUN_800d775c:800d77e4(*), 
-                                                                                          FUN_800d775c:800d7848(*), 
-                                                                                          FUN_800d785c:800d78e4(*), 
-                                                                                          FUN_800d785c:800d795c(*), 
-                                                                                          FUN_800d7970:800d79ec(*), 
-                                                                                          FUN_800d7970:800d7a44(*)  
-        800e0738 10              ??         10h
+# EVIDENCE (paste Listing from block_start through the instruction BEFORE jal increment_step_id at 0x800ABBD4, then save)
