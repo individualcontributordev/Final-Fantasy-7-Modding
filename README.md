@@ -37,6 +37,7 @@ ff7-modding/
 │   ├── 04-workflow.md        Edit → rebuild → test loop
 │   ├── 05-ghidra-guide.md    RE workflow for FIELD.BIN
 │   ├── windows-handoff.md    Current Windows checklist
+│   ├── windows-results.md    Windows → Mac results (git pipe)
 │   └── findings/             Dated lab notebook
 ├── scripts/                  FIELD.BIN decompress/recompress
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
