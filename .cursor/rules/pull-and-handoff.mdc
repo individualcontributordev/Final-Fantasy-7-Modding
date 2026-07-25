@@ -48,6 +48,8 @@ git push
 
 Do not invent RE, Ghidra, or DuckStation steps beyond the handoff file.
 
+If Cursor Agent is unavailable on Windows, the **human** follows `docs/windows-handoff.md` the same way and pushes `docs/windows-results.md` manually.
+
 ## “Check results” (Mac agent)
 
 If the user asks **check results**, **pull results**, or says Windows finished:
