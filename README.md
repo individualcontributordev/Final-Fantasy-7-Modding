@@ -36,7 +36,6 @@ ff7-modding/
 │   ├── 03-environment-setup.md Tool checklist — start here
 │   ├── 04-workflow.md        Edit → rebuild → test loop
 │   ├── 05-ghidra-guide.md    RE workflow for FIELD.BIN
-│   ├── git-setup.md          SSH and GitHub
 │   └── findings/             Dated lab notebook
 ├── scripts/                  FIELD.BIN decompress/recompress
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
@@ -52,7 +51,7 @@ Discoveries are recorded in [docs/findings/](docs/findings/README.md). Cursor ag
 
 Repo: [individualcontributordev/ff7-modding](https://github.com/individualcontributordev/ff7-modding)
 
-SSH setup: [docs/git-setup.md](docs/git-setup.md)
+After clone: `git config core.hooksPath .githooks` (strips Cursor commit trailers; see `.cursor/rules/no-cursor-commit-trailers.mdc`).
 
 ## Where to start
 
