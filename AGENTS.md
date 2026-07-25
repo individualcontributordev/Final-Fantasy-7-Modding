@@ -5,8 +5,8 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 ## Machine split
 
 - **This Mac (Cursor):** docs, scripts, git, planning, patch design — no disc/Ghidra/DuckStation here.
-- **Windows PC:** disc images, Ghidra, DuckStation, hardware-accurate tests.
-- When a change needs testing, tell the user what to `git pull`, which files/commands to run, and what success looks like. Do not assume local access to Windows tools.
+- **Windows PC:** disc images, Ghidra, DuckStation, hardware-accurate tests. Free Cursor / Composer 2.5 Fast — do not rely on that agent to invent RE steps.
+- When a change needs testing, give the user a **self-contained checklist**: exact `git pull` / paths, numbered clicks or commands, expected output, and what to paste back. Prefer “do this / report that” over open-ended investigation for the Windows side.
 
 ## Start here
 
