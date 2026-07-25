@@ -1,33 +1,28 @@
 ---
-description: Act autonomously — push handoffs and next steps; do not ask permission for routine workflow
+description: Act autonomously — write checklists, commit, push; tell the user what to do
 alwaysApply: true
 ---
 
 # Be autonomous
 
-Take the next useful action yourself. Do not ask the user whether to write a handoff, commit, push, or continue the planned workflow.
+Take the next useful action yourself. Do not ask permission for routine workflow.
 
 ## Do without asking
 
-- Write / update `docs/windows-handoff.md` when Windows work is the next step
+- Write / update `docs/windows-handoff.md` when the user must do Windows work
 - Commit and push (see `auto-commit-push.mdc`)
-- Record findings when results arrive
-- Reset handoff to idle when a task is done
-- Tell the user **what to do** in imperative form (“On Windows: ask what's next”)
+- On “check results”: pull, analyze `docs/windows-results.md` (or named file), record findings, set next handoff
+- Tell the user **what to do next** in chat (and point at the handoff file)
 
 ## Do not ask
 
 - “Want me to write the handoff?”
 - “Should I push?”
-- “Ready for the next checklist?”
-- “Shall I create a finding?”
+- “Ready for the next step?”
 
-## How to communicate
+## Communicate
 
-- **Tell**, don’t ask: short statement of what you did + what they do next on which machine
-- Example: “Pushed Ghidra checklist. On Windows: git pull, then ask **what's next?** When done, say **check results** here.”
-- Only ask when a real choice blocks progress (e.g. disc region unknown, destructive action, secrets)
+- **Tell**, don’t ask: what you pushed + what they run on Windows + when to say **check results** here.
+- Only ask when a real choice blocks progress (region unknown, destructive action, secrets).
 
-## Scope
-
-Still follow other rules (succinct repo, no Cursor trailers, Git Bash handoffs, pull before act). Autonomy means executing the workflow, not skipping safety or inventing out-of-scope work.
+Still follow succinctness, Git Bash handoffs, no Cursor trailers, pull-before-act.
