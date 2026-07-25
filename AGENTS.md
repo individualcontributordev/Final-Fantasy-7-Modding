@@ -2,6 +2,12 @@
 
 Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
+## Machine split
+
+- **This Mac (Cursor):** docs, scripts, git, planning, patch design — no disc/Ghidra/DuckStation here.
+- **Windows PC:** disc images, Ghidra, DuckStation, hardware-accurate tests.
+- When a change needs testing, tell the user what to `git pull`, which files/commands to run, and what success looks like. Do not assume local access to Windows tools.
+
 ## Start here
 
 1. `docs/00-goals.md` — project scope
