@@ -11,19 +11,19 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 
 - Write / update `docs/windows-handoff.md` when Windows work is next
 - Commit and push (see `auto-commit-push.mdc`)
-- When the user reports results in chat: record findings, advance the plan, update handoff
+- On **check results**: pull, read `docs/windows-last-output.txt` (or named file), update findings/handoff
 - Tell the user **what to do next** in chat
 
 ## Do not ask
 
 - “Want me to write the handoff?”
 - “Should I push?”
-- “Please fill windows-results.md” (unless you need a file to analyze)
+- “Paste the output here” / “copy the log into chat” / any cross-PC paste
 
 ## Communicate
 
-- **Tell**, don’t ask: what you did + what they do on Windows + that they can reply here with results.
-- Only ask them to **commit/push a file** when you must analyze that file on Mac.
-- Only ask questions when a real choice blocks progress.
+- **Tell**, don’t ask: commands to run + when to say **check results**.
+- Long or structured output → **file + git push** only (see `mac-human-workflow.mdc`).
+- Chat is for short typed status, not dumped terminal text.
 
 Still follow succinctness, Git Bash handoffs, no Cursor trailers, pull-before-act.

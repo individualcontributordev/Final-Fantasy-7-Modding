@@ -1,5 +1,5 @@
 ---
-description: Mac agent + human on Windows; chat reports; git only for files to analyze
+description: Mac agent + human on Windows; never ask to paste; use git for outputs to analyze
 alwaysApply: true
 ---
 
@@ -7,33 +7,42 @@ alwaysApply: true
 
 ## Roles
 
-- **Mac (this Cursor chat):** only agent. Plan, docs, scripts, record what the user reports, analyze files they push when asked.
+- **Mac (this Cursor chat):** only agent. Plan, docs, scripts, analyze pushed files.
 - **Windows:** human only. Ghidra, DuckStation, disc images, Git Bash. No Windows Cursor agent.
-- **Mac may install tools** the agent needs (Python, etc.). **Do not** install or require DuckStation or Ghidra on Mac — those stay on Windows.
+- **Mac may install tools** (Python, etc.). **Not** DuckStation or Ghidra on Mac.
+
+## No paste between PCs
+
+User cannot paste from Windows to Mac. **Never** ask them to paste, copy output into chat, or “send the full log here.”
+
+| Need | How |
+|------|-----|
+| Short status | They type a few words in chat (“done”, “0 hits”, **check results**) |
+| Anything you must read (script output, addresses list, errors) | They redirect to a **repo file**, commit, push; then say **check results** |
+
+## When you need output — always use a file
+
+Tell them exact Git Bash commands, e.g.:
+
+```bash
+cd "$(git rev-parse --show-toplevel)"
+python scripts/whatever.py … > docs/windows-last-output.txt 2>&1
+git add docs/windows-last-output.txt
+git commit -m "Windows output: <task>"
+git push
+```
+
+Default output path: **`docs/windows-last-output.txt`** (overwrite each time).  
+Then: user says **check results** → you `git pull --ff-only` → read that file → update findings/handoff → commit/push.
+
+Never ask for game binaries (`.bin`, `.dec`, ISO, Ghidra DBs) in git.
 
 ## How you talk to the user
 
 - Interact **only through this chat**.
-- **Tell** them what to do. Do not ask permission for routine handoffs/commits.
-- Put durable Windows steps in **`docs/windows-handoff.md`**, commit/push, and summarize in chat.
-- Windows shell steps: **Git Bash** (forward slashes, bash — not PowerShell/cmd).
-
-## Reporting (default = chat)
-
-User reports outcomes **in this chat** (addresses, pass/fail, errors, notes).  
-You update findings / docs / next handoff yourself from that. **Do not** make them edit `docs/windows-results.md` for routine verification.
-
-## When to ask for a git push
-
-Only when you need a **file’s contents** on Mac to analyze (script output artifact, small dump, patch log, exported text — not ISOs/binaries). Then tell them:
-
-1. Exact path to add under the repo (prefer text under `docs/` or `workspace/patches/`)
-2. `git add` / `commit` / `push` (Git Bash)
-3. Say **check results** here when pushed
-
-Then: `git pull --ff-only` → read/analyze → update docs → commit/push.
-
-Never ask them to commit game binaries (`.bin`, `.dec`, ISO, Ghidra project DBs).
+- **Tell** them what to do (imperative). No permission-asking for routine handoffs.
+- Durable steps in **`docs/windows-handoff.md`** + short chat summary.
+- Windows shell: **Git Bash** (forward slashes, bash — not PowerShell/cmd).
 
 ## Before reading or acting
 
@@ -45,5 +54,5 @@ Stop and tell the user if pull fails.
 
 ## Handoff file
 
-- Active: goal, prerequisites, numbered steps, pass criteria — **report in Mac chat**, not a results-file ritual.
+- Active: steps + **file redirect / push** instructions when output is needed (never “paste into chat”).
 - Idle: short **Status: no active task** stub.

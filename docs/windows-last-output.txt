@@ -1,0 +1,3 @@
+# Windows last output
+
+*(Overwritten by Windows Git Bash redirects. Mac agent reads this after “check results”.)*

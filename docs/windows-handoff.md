@@ -2,7 +2,7 @@
 
 **Status:** active
 
-Report output in the **Mac Cursor chat**.
+Do **not** paste into the Mac chat. Push output via git, then say **check results** there.
 
 ```bash
 git pull --ff-only
@@ -12,27 +12,21 @@ git pull --ff-only
 
 ## Goal
 
-Find how StepID / RNG addresses appear in `FIELD.BIN.dec` (Ghidra scalar search found nothing).
+Run encounter address byte search; save output for the Mac agent.
 
-## A. Byte search (Git Bash) — do this first
+## Steps (Git Bash)
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
-python scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec
-# or: python3 scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec
+python scripts/search_encounter_addrs.py workspace/iso-extract/FIELD.BIN.dec \
+  > docs/windows-last-output.txt 2>&1
+# if python fails, try: python3 … (same redirect)
+
+git add docs/windows-last-output.txt
+git commit -m "Windows output: search encounter addrs"
+git push
 ```
 
-Copy the full script output into the Mac chat.
+## Then
 
-## B. Optional — Ghidra Memory search (not Scalars)
-
-1. **Search → Memory…**
-2. Hex: `40 C5 09 80`  (StepID pointer `0x8009C540` little-endian)
-3. Search All
-4. If no hits, try `B1 CA EE 6C` (confirm table only)
-
-Do **not** spend time on Search → For Scalars for now.
-
-## Tell the Mac chat
-
-Paste the Python script output (or say it failed + error text).
+In the Mac Cursor chat, type only: **check results**
