@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Xrefs to g_enemy_lure (find writers / default).
+**Current task:** Find entropy source (root counter / mfc0) in FIELD.BIN.
