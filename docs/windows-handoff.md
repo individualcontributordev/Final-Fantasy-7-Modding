@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Identify function at Danger clear `0x800A1C70` (`sh zero, g_danger`).
+**Current task:** Confirm `FUN_800a16cc` @ `0x800A16CC` contains Danger clear; rename `after_battle_cleanup`.
