@@ -1,9 +1,8 @@
-# Task: find code cave near encounter_check for MAX-Danger stub
+# Task: find code cave for MAX-Danger stub
 
 # COPY-PASTE (do not edit these lines)
-goto_encounter_check: 0x800ABA70
+goto_near_image_end: 0x800E0700
 goto_danger_add_block: 0x800ABB7C
-# Scroll Listing toward end of FIELD module / search for long runs of 00 00 00 00 (nops) or unallocated padding
-# Prefer a cave within FIELD.BIN image (base 0x800A0000)
+min_cave_bytes_needed: 64
 
-# EVIDENCE (paste: cave start address + ~16 lines of zeros/nops showing free space, then save)
+# EVIDENCE (paste cave_start address + Listing of the empty region, then save)
