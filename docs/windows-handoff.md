@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Patch 88-byte FORCE stub at 0x800ABB7C; paste Listing evidence.
+**Current task:** Patch FORCE stub via Edit Bytes (not single Patch Instruction selection).
