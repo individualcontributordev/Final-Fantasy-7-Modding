@@ -31,9 +31,10 @@ New topics: add `docs/0N-topic.md` + findings; update this table and the README.
 
 ### Encounter RNG (current research thread)
 
-One candidate mod: make field encounters less deterministic (speedrun routing today
-relies on predictable StepID/Offset/Danger). See
-[findings/2026-07-25-patch-target-field-load-reseed.md](findings/2026-07-25-patch-target-field-load-reseed.md).
+One candidate mod: make **normal** field encounters non-routable, while keeping
+**preemptive scripted bosses** routable via StepID/Offset. See
+[findings/2026-07-25-patch-target-field-load-reseed.md](findings/2026-07-25-patch-target-field-load-reseed.md)
+(Option D — do not reseed StepID/Offset).
 
 That idea requires patching `FIELD.BIN` (and eventually `WORLD.BIN`), not just Makou
 field edits.

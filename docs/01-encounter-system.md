@@ -94,9 +94,9 @@ Field **scale** (default 512) is in section 1 of the `.DAT` and affects Danger g
 
 | Component | File | Change |
 |-----------|------|--------|
-| Encounter timing + formation RNG | `FIELD.BIN` | Reseed on field load |
+| Encounter timing (danger check) + formation pick | `FIELD.BIN` | Entropy mix (keep StepID/Offset) |
 | World map encounters | `WORLD.BIN` | Same idea (later) |
-| Per-map battle tables | `*.DAT` | No change needed |
+| Per-map battle tables / rate | `*.DAT` | Optional: fewer fights via rate/scale |
 
 ## Separate RNG systems (do not confuse)
 
