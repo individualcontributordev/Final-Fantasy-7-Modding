@@ -6,3 +6,33 @@ bytes_le: 72 ae 02 0c
 patch_asm: jal 0x800AB9C8
 
 # EVIDENCE (Listing 0x800ABB98–0x800ABBE4 showing sh, nops, jal increment_step_id, nop, lui/lbu; paste then save)
+        800abb7c 00 48 02 40     mfc0       v0,Count
+        800abb80 06 80 01 3c     lui        at,0x8006
+        800abb84 19 2f 23 90     lbu        v1,0x2f19(at)
+        800abb88 ff 00 42 30     andi       v0,v0,0xff
+        800abb8c 2b 10 43 00     sltu       v0,v0,v1
+        800abb90 23 10 02 00     subu       v0,zero,v0
+        800abb94 07 80 01 3c     lui        at,0x8007
+        800abb98 3c 17 22 a4     sh         v0,0x173c(at)
+        800abb9c 00 00 00 00     nop
+        800abba0 00 00 00 00     nop
+        800abba4 00 00 00 00     nop
+        800abba8 00 00 00 00     nop
+        800abbac 00 00 00 00     nop
+        800abbb0 00 00 00 00     nop
+        800abbb4 00 00 00 00     nop
+        800abbb8 00 00 00 00     nop
+        800abbbc 00 00 00 00     nop
+        800abbc0 00 00 00 00     nop
+        800abbc4 00 00 00 00     nop
+        800abbc8 00 00 00 00     nop
+        800abbcc 00 00 00 00     nop
+        800abbd0 00 00 00 00     nop
+        800abbd4 72 ae 02 0c     jal        increment_step_id                                undefined increment_step_id()
+        800abbd8 00              ??         00h
+        800abbd9 00              ??         00h
+        800abbda 00              ??         00h
+        800abbdb 00              ??         00h
+        800abbdc 06 80 03 3c     lui        v1,0x8006
+        800abbe0 1b 2f 63 90     lbu        v1,offset DAT_80062f1b(v1)
+        800abbe4 ff 00 42 30     andi       v0,v0,0xff
