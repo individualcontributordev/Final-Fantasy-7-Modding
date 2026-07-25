@@ -10,6 +10,7 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 - Active Windows work goes in **`docs/windows-handoff.md`**; Windows replies via **`docs/windows-results.md`** (git push) — no cross-PC paste.
 - On Windows, user can ask **“what's next?”** — agent pulls, reads handoff, runs, writes results, pushes.
 - On Mac, user can ask **“check results”** — agent pulls and reads `docs/windows-results.md`.
+- **Be autonomous:** write/push handoffs and next steps without asking; tell the user what to run on Windows.
 
 ## Start here
 
@@ -21,6 +22,7 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 
 ## Rules
 
+- **Be autonomous** — act and push handoffs; tell the user what to do, don’t ask permission (`.cursor/rules/be-autonomous.mdc`)
 - **Pull + handoff** — pull before acting; Windows steps in `docs/windows-handoff.md` (`.cursor/rules/pull-and-handoff.mdc`)
 - **Keep repo succinct** — only material useful to other engineers (`.cursor/rules/keep-repo-succinct.mdc`)
 - **Auto commit and push** when a task changes tracked files (`.cursor/rules/auto-commit-push.mdc`)
