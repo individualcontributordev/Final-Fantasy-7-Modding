@@ -8,6 +8,7 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 - **Windows PC:** disc images, Ghidra, DuckStation, hardware-accurate tests. Free Cursor / Composer 2.5 Fast — do not rely on that agent to invent RE steps.
 - **Always** `git pull --ff-only` before reading or acting (`.cursor/rules/pull-and-handoff.mdc`).
 - Active Windows work goes in **`docs/windows-handoff.md`** (checklist + pass criteria), then commit/push — not chat-only.
+- On Windows, user can ask **“what's next?”** — agent pulls, reads that file, follows or reports idle.
 
 ## Start here
 
