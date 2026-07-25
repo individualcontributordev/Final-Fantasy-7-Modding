@@ -74,9 +74,10 @@ Also hook **field enter** → `g_danger = 0`.
 
 ## Ghidra hooks
 
-- Field enter / map init → clear `g_danger` (`0x8007173C`)
+- Field enter Danger = 0: start of map-setup `LAB_800a1dc8` (`0x800A1DC8`) and/or `FUN_800ba534` (`0x800BA534`)
 - `encounter_check` @ `0x800ABA70` — replace Danger `+=` block (`~0x800ABB7C`–`0x800ABBD0`) with MAX-or-skip RNG
 - Keep dual `jal increment_step_id` and formation path
+- Post-battle Danger = 0 already in `field_main_loop` (leave vanilla)
 
 ## Follow-ups
 
