@@ -1,7 +1,10 @@
-# Task: xrefs to g_enemy_lure (who writes it)
+# Task: find entropy for FORCE roll (not StepID)
 
 # COPY-PASTE (do not edit these lines)
-goto_lure_lbu: 0x800ABC24
+goto_encounter_check: 0x800ABA70
+# Options to try in Ghidra Search:
+# 1) Search → For Scalars → 0x1f801110 or 0x1f801120 (root counters) — paste hits
+# 2) Search → Memory for instruction mfc0 (COP0 Count) — paste hits
+# 3) If none: paste "no hits" and we will use an alternate entropy plan
 
-# EVIDENCE (click g_enemy_lure → References → Show References to Address; paste full xref list, then save)
-800abc24		lbu v1,offset g_enemy_lure(v1)	4	READ
+# EVIDENCE (paste search results or "no hits", then save)

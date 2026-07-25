@@ -22,9 +22,9 @@
 ## MAX Danger note
 
 Need `(Danger * lure) >> 12 ≥ 256` to always beat the roll.  
-With `Danger = 0xFFFF`: requires **`lure ≥ 16`**. If lure can be lower, `0xFFFF` alone is not enough — force the battle branch or clamp lure in the stub.
+With `Danger = 0xFFFF`: **`lure ≥ 17`** guarantees same-check trigger. Lower lure may need extra checks, but MAX **persists** until battle/field-enter clear — still OK.
 
 ## Follow-ups
 
-- [ ] Xrefs to `g_enemy_lure` (who writes default / materia)
+- [x] Xrefs — only READ in FIELD; writers elsewhere
 - [ ] Entropy source + assemble in-place stub
