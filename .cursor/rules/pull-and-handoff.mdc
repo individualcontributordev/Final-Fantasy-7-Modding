@@ -42,6 +42,17 @@ Do **not** leave test steps only in chat. When the user (or the other machine’
 2. Commit and push (see `auto-commit-push.mdc`)
 3. In chat, point at that file — short pointer is enough; the checklist lives in the repo
 
+### Shell on Windows = Git Bash
+
+The Windows box uses **Git Bash**, not PowerShell or cmd. All shell steps must be Git Bash–safe:
+
+- Forward slashes: `workspace/iso-extract/FIELD.BIN` (not `workspace\...`)
+- Unix-style commands: `ls`, `cp`, `mv`, `rm`, `mkdir -p`, `pwd`, `cd`
+- Prefer `python` or `python3` as noted in the checklist (whichever the handoff verifies)
+- No `Get-ChildItem`, `Copy-Item`, backticks for line continuation, or `dir`/`copy` cmd syntax
+- Line continuation: `\` at end of line (bash), not `` ` ``
+- Paths with spaces: quote them (`"My Documents/..."`)
+
 ## Idle handoff
 
 When there is no active Windows task, set `docs/windows-handoff.md` to a short “no active task” stub so the file still exists as the single handoff path.
