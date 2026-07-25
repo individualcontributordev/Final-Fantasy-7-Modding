@@ -5,3 +5,42 @@ goto_71e38: 0x80071E38
 goto_71e3c: 0x80071E3C
 
 # EVIDENCE (for each: click symbol in Listing at 800a1e20 / 800a1e28 → References → Show References; paste both lists, then save)
+800a1e20		sh zero,offset DAT_80071e38(at)	4	WRITE
+800a4488		sh zero,offset DAT_80071e38(at)	4	WRITE
+800a44d0		lhu a0,offset DAT_80071e38(a0)	4	READ
+800a4548		sh v1,offset DAT_80071e38(at)	4	WRITE
+800a4568		lhu a0,offset DAT_80071e38(a0)	4	READ
+800a49dc		sh v0,offset DAT_80071e38(at)	4	WRITE
+800a4a44		sh v0,offset DAT_80071e38(at)	4	WRITE
+800a4ad4		sh v0,offset DAT_80071e38(at)	4	WRITE
+800a4b34		sh v0,offset DAT_80071e38(at)	4	WRITE
+800a4b8c		sh v0,offset DAT_80071e38(at)	4	WRITE
+800a5618		sh v1,offset DAT_80071e38(at)	4	WRITE
+800a56c4		lh t1,offset DAT_80071e38(t1)	4	READ
+800a590c		lhu t0,offset DAT_80071e38(t0)	4	READ
+800a598c		lhu t0,offset DAT_80071e38(t0)	4	READ
+800a5b78		lhu t0,offset DAT_80071e38(t0)	4	READ
+800a5bfc		lhu t0,offset DAT_80071e38(t0)	4	READ
+800a5d58		lhu v1,offset DAT_80071e38(v1)	4	READ
+800a5e5c		lhu a2,offset DAT_80071e38(a2)	4	READ
+800a5eac		lhu a2,offset DAT_80071e38(a2)	4	READ
+800bdac4		lh a0,offset DAT_80071e38(a0)	4	READ
+
+800a1e28		sh zero,offset DAT_80071e3c(at)	4	WRITE
+800a4490		sh zero,offset DAT_80071e3c(at)	4	WRITE
+800a44d8		lhu a1,offset DAT_80071e3c(a1)	4	READ
+800a4550		sh a0,offset DAT_80071e3c(at)	4	WRITE
+800a4570		lhu a1,offset DAT_80071e3c(a1)	4	READ
+800a49e4		sh v1,offset DAT_80071e3c(at)	4	WRITE
+800a4a60		sh v0,offset DAT_80071e3c(at)	4	WRITE
+800a4ba4		sh v0,offset DAT_80071e3c(at)	4	WRITE
+800a5654		sh v1,offset DAT_80071e3c(at)	4	WRITE
+800a56d8		lh t0,offset DAT_80071e3c(t0)	4	READ
+800a5940		lhu a3,offset DAT_80071e3c(a3)	4	READ
+800a59c0		lhu a3,offset DAT_80071e3c(a3)	4	READ
+800a5bac		lhu a3,offset DAT_80071e3c(a3)	4	READ
+800a5c30		lhu a3,offset DAT_80071e3c(a3)	4	READ
+800a5da4		lhu v1,offset DAT_80071e3c(v1)	4	READ
+800a5e6c		lhu a3,offset DAT_80071e3c(a3)	4	READ
+800a5ebc		lhu a3,offset DAT_80071e3c(a3)	4	READ
+800bdaf0		lh a0,offset DAT_80071e3c(a0)	4	READ
