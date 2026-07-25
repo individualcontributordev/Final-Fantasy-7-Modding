@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Rename `field_main_loop`; inspect `FUN_800aa870` as map-load candidate.
+**Current task:** Inspect `FUN_800a2d5c` @ `0x800A2D5C` as field map load candidate.

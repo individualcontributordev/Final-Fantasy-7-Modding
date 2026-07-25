@@ -30,5 +30,5 @@ Mode `2` + battle flag → clear Danger / step fraction (return-from-battle). Fu
 
 ## Follow-ups
 
-- [ ] Rename `FUN_800a16cc` → `field_main_loop`
+- [x] Rename `FUN_800a16cc` → `field_main_loop`
 - [ ] Identify field map load / enter hook for Danger = 0
