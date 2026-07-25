@@ -6,3 +6,296 @@ goto_suspected_fn_start: 0x800A16CC
 rename_to: after_battle_cleanup
 
 # EVIDENCE (paste function header at the real start + the clear lines showing same function name, then save)
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+void FUN_800a16cc(void)
+
+{
+  int iVar1;
+  undefined1 *puVar2;
+  undefined4 local_30;
+  undefined4 local_2c;
+  
+  local_30 = DAT_800a0000;
+  local_2c = DAT_800a0004;
+  func_0x80044244(&DAT_800e8f7c,1);
+  func_0x80044244(&DAT_80100818,1);
+  func_0x80044ac0(&DAT_800e8f84,0x8007eaac);
+  func_0x80044ac0(&DAT_80100820,0x8007eb08);
+  _DAT_800e8f84 = _DAT_800e8f84 & 0xff000000 | _DAT_800e8f7c & 0xffffff;
+  _DAT_800e8f7c = _DAT_800e8f7c & 0xff000000 | 0xe8f84;
+  _DAT_80100820 = _DAT_80100820 & 0xff000000 | _DAT_80100818 & 0xffffff;
+  _DAT_80100818 = _DAT_80100818 & 0xff000000 | 0x100820;
+  func_0x80043814(0x80113f2c,0,8,0x140,0xe0);
+  func_0x80043814(0x80113f88,0,0xf0,0x140,0xe0);
+  func_0x80043814(0x80114154,0,8,0x140,0xe0);
+  func_0x80043814(0x801141b0,0,0xf0,0x140,0xe0);
+  func_0x80043814(0x8011420c,0,8,0x140,0xe0);
+  func_0x80043814(0x80114268,0,0xf0,0x140,0xe0);
+  DAT_80113f42 = 1;
+  DAT_80113f9e = 1;
+  DAT_8011416a = 1;
+  DAT_801141c6 = 1;
+  DAT_80114222 = 1;
+  DAT_8011427e = 1;
+  DAT_80113f44 = 0;
+  DAT_80113fa0 = 0;
+  DAT_8011416c = 0;
+  DAT_801141c8 = 0;
+  DAT_80114224 = 0;
+  DAT_80114280 = 0;
+  func_0x80044244(&DAT_800e8f80,1);
+  func_0x80044244(&DAT_8010081c,1);
+  func_0x80044ac0(&DAT_800e8fc4,0x80113f2c);
+  func_0x80044ac0(&DAT_80100860,0x80113f88);
+  _DAT_800e8fc4 = _DAT_800e8fc4 & 0xff000000 | _DAT_800e8f80 & 0xffffff;
+  _DAT_800e8f80 = _DAT_800e8f80 & 0xff000000 | 0xe8fc4;
+  _DAT_80100860 = _DAT_80100860 & 0xff000000 | _DAT_8010081c & 0xffffff;
+  _DAT_8010081c = _DAT_8010081c & 0xff000000 | 0x100860;
+  func_0x80043814(0x80113fe4,0,8,0x140,0xe0);
+  func_0x80043814(0x80114040,0,0xf0,0x140,0xe0);
+  DAT_80113ffc = 0;
+  DAT_80114058 = 0;
+  DAT_80113ffa = 1;
+  DAT_80114056 = 1;
+  func_0x80043814(0x8011409c,0,8,0x140,0xe0);
+  func_0x80043814(0x801140f8,0,0xf0,0x140,0xe0);
+  DAT_801140b4 = 0;
+  DAT_80114110 = 0;
+  DAT_801140b2 = 1;
+  DAT_8011410e = 1;
+  func_0x800128b8();
+  _DAT_8009ac40 = 0;
+  if ((((_DAT_800965ec != 1) && (_DAT_800965ec != 2)) && (_DAT_800965ec != 3)) &&
+     ((_DAT_800965ec != 5 && (_DAT_800965ec != 0xd)))) {
+    func_0x80043f6c(&local_30,0,0,0);
+  }
+  while( true ) {
+    FUN_800ab2ac();
+    _DAT_80071a5c = 0;
+    _DAT_80095dd0 = 0;
+    if (((_DAT_800965ec == 1) || (_DAT_800965ec == 3)) && (_DAT_8009ac40 == 0)) {
+      func_0x800129d0();
+      _DAT_8009ac40 = 3;
+      DAT_80071a58 = 3;
+      _DAT_8009ac42 = 0;
+      _DAT_8007e768 = 0;
+      _DAT_80095dd4 = 1;
+    }
+    if ((_DAT_800965ec != 5) && (_DAT_800965ec != 0xd)) {
+      _DAT_8007eb64 = (undefined4 *)&DAT_80114fe4;
+      _DAT_8009a044 = 0x80114fe8;
+      _DAT_8009d848 = 0x80114fec;
+      _DAT_80083578 = 0x80114ff0;
+      _DAT_8009ad28 = 0x80114ff4;
+      _DAT_8009c55c = 0x80114ff8;
+      _DAT_80070784 = 0x80114ffc;
+      FUN_800a1368();
+    }
+    if ((_DAT_800965ec == 2) && (DAT_8007ebe0 = 1, DAT_8007ebc8 == '\x01')) {
+      DAT_8007ebc8 = '\0';
+      g_step_fraction = 0;
+      _g_danger = 0;
+      DAT_8009abf5 = '\0';
+    }
+    do {
+    } while (_DAT_80095dd4 != 0);
+    do {
+      iVar1 = func_0x80043dd8(1);
+    } while (iVar1 != 0);
+    if (_DAT_800965ec != 0xd) {
+      _DAT_8009ac40 = 1;
+      _DAT_8009ac44 = 0x10;
+      _DAT_8009ac42 = 0x100;
+      _DAT_8009ac46 = 0;
+      _DAT_8009ac48 = 0;
+      _DAT_8009ac4a = 0;
+    }
+    if (((((_DAT_800965ec == 0) || (_DAT_800965ec == 1)) || (_DAT_800965ec == 3)) ||
+        (((_DAT_800965ec == 6 || (_DAT_800965ec == 8)) ||
+         ((_DAT_800965ec == 7 || ((_DAT_800965ec == 9 || (_DAT_800965ec == 0xb)))))))) ||
+       (_DAT_800965ec == 10)) {
+      _DAT_8009ac9a = 0;
+      _DAT_8009ac9c = 0;
+      _DAT_8009ac9e = 0;
+      _DAT_8009aca0 = 0;
+      _DAT_8009aca2 = 1;
+      _DAT_8009aca4 = 0xfff;
+      _DAT_8009ac0a = *(undefined2 *)(_DAT_800716c4 + 10);
+      _DAT_8009a100 = 0;
+      _DAT_80071e38 = 0;
+      _DAT_80071e3c = 0;
+      FUN_800ba534(&DAT_8009abf4,0x80074ea4,*_DAT_8007eb64);
+      *(char *)(_DAT_8009ac1e * 0x84 + -0x7ff8b124) = (char)_DAT_8009ac18;
+      if ((DAT_8009d70b & 0x80) == 0) {
+        DAT_800e48d8 = 0;
+      }
+      else {
+        DAT_800e48d8 = 0xff;
+      }
+      iVar1 = 0xf;
+      puVar2 = &DAT_8009a057;
+      do {
+        *puVar2 = 0xff;
+        iVar1 = iVar1 + -1;
+        puVar2 = puVar2 + -1;
+      } while (-1 < iVar1);
+      FUN_800aa870(_DAT_800716c4 + 0x158);
+    }
+    else {
+      _DAT_8009ac1a = 2;
+    }
+    FUN_800bb1b4();
+    FUN_800aa32c(0x8007e7ac);
+    DAT_800716d0 = 0;
+    FUN_800abf0c(0x800e8df0,0x800e8f70);
+    FUN_800abf0c(0x8010068c,0x8010080c);
+    if ((_DAT_800965ec != 5) && (_DAT_800965ec != 0xd)) {
+      FUN_800a2d5c(0,0x80128000);
+    }
+    if (_DAT_800965ec == 2) {
+      _DAT_8009a000 = 0xf5;
+      func_0x8002da7c();
+      _DAT_8009a000 = 0x18;
+      _DAT_8009a008 = 4;
+      _DAT_8009a004 = _DAT_8009ac3c;
+      func_0x8002da7c();
+    }
+    FUN_800a2314();
+    do {
+      iVar1 = func_0x80043dd8(1);
+    } while (iVar1 != 0);
+    func_0x8003cedc(1);
+    DAT_8007eb79 = 0;
+    DAT_8007eb8d = 0;
+    func_0x800444ac(_DAT_80075dec * 0x14 + -0x7ff81498);
+    func_0x800443b0(_DAT_80075dec * 0x5c + -0x7ff81554);
+    _DAT_800965ec = 1;
+    if (((DAT_8009abf5 == '\n') || (DAT_8009abf5 == '\x1a')) || (DAT_8009abf5 == '\x05'))
+    goto switchD_800a219c_default;
+    if (DAT_8009abf5 == '\x01') break;
+LAB_800a2140:
+    if (DAT_8009abf5 == '\f') {
+      _DAT_8009ac58 = _DAT_8009a05c;
+      _DAT_8009a05c = _DAT_8009abf6;
+      switch(DAT_8009ace6) {
+      case 0:
+        _DAT_8009c560 = 6;
+        break;
+      case 1:
+        _DAT_8009c560 = 7;
+        break;
+      case 2:
+        _DAT_8009c560 = 8;
+        break;
+      case 3:
+        _DAT_8009c560 = 9;
+        break;
+      case 4:
+        _DAT_8009c560 = 10;
+        break;
+      case 5:
+        _DAT_8009c560 = 0xb;
+        break;
+      case 6:
+        _DAT_8009c560 = 0xe;
+      }
+      goto switchD_800a219c_default;
+    }
+    if ((DAT_8009abf5 == '\x02') || (DAT_8009abf5 == '\r')) goto switchD_800a219c_default;
+    if (_DAT_8009c560 == 5) {
+      func_0x800129d0();
+      _DAT_8009ac40 = 0xd;
+      DAT_80071a58 = 0xd;
+      goto LAB_800a2284;
+    }
+    if ((_DAT_8009c560 == 0xd) || (_DAT_8009c560 == 0x10)) goto switchD_800a219c_default;
+  }
+  _DAT_8009ac58 = _DAT_8009a05c;
+  _DAT_8009a05c = _DAT_8009abf6;
+  if (_DAT_8009abf6 != _DAT_80071a5c) {
+    FUN_800a1498();
+  }
+  if (0x3f < _DAT_8009a05c - 1) goto LAB_800a2140;
+  _DAT_8009c560 = 3;
+  func_0x800129d0();
+  _DAT_8009ac40 = 3;
+  DAT_80071a58 = 3;
+LAB_800a2284:
+  _DAT_8009ac42 = 0;
+  _DAT_8007e768 = 0;
+  _DAT_80095dd4 = 1;
+switchD_800a219c_default:
+  func_0x8003cedc(0);
+  return;
+}
+
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined FUN_800a16cc()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x4]:4  local_4                                 XREF[2]:     800a16d0(W), 
+                                                                                                   800a22e0(R)  
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800a16d4(W), 
+                                                                                                   800a22e4(R)  
+             undefined4        Stack[-0xc]:4  local_c                                 XREF[2]:     800a16d8(W), 
+                                                                                                   800a22e8(R)  
+             undefined4        Stack[-0x10]:4 local_10                                XREF[2]:     800a16dc(W), 
+                                                                                                   800a22ec(R)  
+             undefined4        Stack[-0x14]:4 local_14                                XREF[2]:     800a16e0(W), 
+                                                                                                   800a22f0(R)  
+             undefined4        Stack[-0x18]:4 local_18                                XREF[2]:     800a16e4(W), 
+                                                                                                   800a22f4(R)  
+             undefined4        Stack[-0x1c]:4 local_1c                                XREF[2]:     800a16e8(W), 
+                                                                                                   800a22f8(R)  
+             undefined4        Stack[-0x20]:4 local_20                                XREF[2]:     800a16ec(W), 
+                                                                                                   800a22fc(R)  
+             undefined4        Stack[-0x24]:4 local_24                                XREF[2]:     800a16f0(W), 
+                                                                                                   800a2300(R)  
+             undefined4        Stack[-0x28]:4 local_28                                XREF[2]:     800a16f4(W), 
+                                                                                                   800a2304(R)  
+             undefined4        Stack[-0x2c]:4 local_2c                                XREF[1]:     800a171c(W)  
+             undefined4        Stack[-0x30]:4 local_30                                XREF[1]:     800a1714(W)  
+             undefined4        Stack[-0x38]:4 local_38                                XREF[10]:    800a17a0(W), 
+                                                                                                   800a180c(W), 
+                                                                                                   800a182c(W), 
+                                                                                                   800a1844(W), 
+                                                                                                   800a1864(W), 
+                                                                                                   800a187c(W), 
+                                                                                                   800a1948(W), 
+                                                                                                   800a19b0(W), 
+                                                                                                   800a19f0(W), 
+                                                                                                   800a1a08(W)  
+                             FUN_800a16cc
+        800a16cc b8 ff bd 27     addiu      sp,sp,-0x48
+        800a16d0 44 00 bf af     sw         ra,local_4(sp)
+        800a16d4 40 00 be af     sw         s8,local_8(sp)
+        800a16d8 3c 00 b7 af     sw         s7,local_c(sp)
+        800a16dc 38 00 b6 af     sw         s6,local_10(sp)
+        800a16e0 34 00 b5 af     sw         s5,local_14(sp)
+        800a16e4 30 00 b4 af     sw         s4,local_18(sp)
+        800a16e8 2c 00 b3 af     sw         s3,local_1c(sp)
+        800a16ec 28 00 b2 af     sw         s2,local_20(sp)
+        800a16f0 24 00 b1 af     sw         s1,local_24(sp)
+        800a16f4 20 00 b0 af     sw         s0,local_28(sp)
+        800a16f8 0a 80 05 3c     lui        a1,0x800a
+        800a16fc 00 00 a5 24     addiu      a1,a1,0x0
+        800a1700 03 00 a2 88     lwl        v0,0x3(a1)
+        800a1704 00 00 a2 98     lwr        v0,0x0(a1)=>DAT_800a0000
+        800a1708 07 00 a3 88     lwl        v1,0x7(a1)
+        800a170c 04 00 a3 98     lwr        v1,offset DAT_800a0004(a1)                       = 01D801E0h
+        800a1710 1b 00 a2 ab     swl        v0,0x1b(sp)
+        800a1714 18 00 a2 bb     swr        v0,local_30(sp)
+        800a1718 1f 00 a3 ab     swl        v1,0x1f(sp)
+        800a171c 1c 00 a3 bb     swr        v1,local_2c(sp)
+        800a1720 0f 80 14 3c     lui        s4,0x800f
+        800a1724 7c 8f 94 26     addiu      s4,s4,-0x7084
+        800a1728 21 20 80 02     move       a0,s4
+        800a172c 91 10 01 0c     jal        SUB_80044244
+        800a1730 01 00 05 34     _ori       a1,zero,0x1
+        800a1734 10 80 17 3c     lui        s7,0x8010
+        800a1738 18 08 f7 26     addiu      s7,s7,0x818
+        800a173c 21 20 e0 02     move       a0,s7
+        800a1740 91 10 01 0c     jal        SUB_80044244
