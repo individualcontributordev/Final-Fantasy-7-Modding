@@ -2,9 +2,13 @@
 
 **Status:** no active task
 
-Mac agent writes the next checklist here when something must run on Windows
-(Ghidra, DuckStation, disc extract, scripts). After `git pull --ff-only`, follow
-only this file — do not invent steps.
+## If the user asks “what's next?”
 
-When a task is active, replace this stub with: goal, prerequisites, numbered
-steps, pass criteria, and what to paste back.
+1. Run `git pull --ff-only` in the repo root
+2. Re-read this file
+3. If status is still **no active task** — tell the user there is nothing to run; stop
+4. If status is **active** — follow the checklist below exactly; do not invent steps
+
+---
+
+*(Mac agent replaces everything below this line when a task is ready.)*
