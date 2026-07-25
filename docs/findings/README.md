@@ -27,6 +27,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md) | FIELD.BIN owns encounter RNG; Makou edits DAT only | confirmed |
 | 2026-07-25 | [makou-iso-save-path](2026-07-25-makou-iso-save-path.md) | Makou → ff7tk pack/updateFieldBin flow | confirmed |
 | 2026-07-25 | [duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md) | Safe Mode + testing profile for hardware-like behavior | confirmed |
+| 2026-07-25 | [entropy-1f80-hits](2026-07-25-entropy-1f80-hits.md) | Many lui 0x1f80; check FUN_800a14d8 for RCnt | confirmed |
 | 2026-07-25 | [entropy-search-empty](2026-07-25-entropy-search-empty.md) | No 0x1f801110/120 or mfc0 in FIELD | confirmed |
 | 2026-07-25 | [g-enemy-lure-xrefs](2026-07-25-g-enemy-lure-xrefs.md) | Only READ in FIELD; writers elsewhere | confirmed |
 | 2026-07-25 | [g-enemy-lure](2026-07-25-g-enemy-lure.md) | DAT_80062f19 → g_enemy_lure (byte); mult/srl12 compare | confirmed |

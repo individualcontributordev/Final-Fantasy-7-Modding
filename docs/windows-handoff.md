@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Search scalar 0x1f80 for IO/timer entropy.
+**Current task:** Inspect FUN_800a14d8 for timer IO offsets.
