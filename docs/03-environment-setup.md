@@ -29,17 +29,24 @@ Place files in `~/ff7-modding/workspace/iso-extract/`:
 
 **Do not** commit or share ISO files.
 
-### Extract FIELD.BIN
+### Extract FIELD.BIN (engine binary)
 
-Option A — **Makou Reactor** (once built): File → Open ISO → export FIELD.BIN
+`FIELD.BIN` on the disc is the **field engine** (gzipped MIPS code), not a field map.
+Makou Reactor does **not** export it — Makou only rewrites it when you save ISO field edits.
 
-Option B — **CDmage** (Windows/Wine) or similar: extract `FIELD\FIELD.BIN`
+**Use CDmage (Windows)** — classic ISO browser for FF7 PSX:
 
-Option C — **Python + ff7tk** (later, if you build ff7tk tools)
+1. Install [CDmage](https://www.romhacking.net/utilities/1435/) (or any PSX ISO tool that extracts files)
+2. File → Open → your `ff7_disc1.bin` / `.cue`
+3. Browse to folder `FIELD`
+4. Right-click `FIELD.BIN` → Extract (or Extract As…)
+5. Save as `workspace/iso-extract/FIELD.BIN` in the `ff7-modding` clone
 
-For now, any ISO browser that extracts a single file works.
+Option B — other ISO tools that can extract a single file from Mode 2 / 2352 images.
 
 - [ ] `workspace/iso-extract/FIELD.BIN` exists
+
+Makou is for later: editing `.DAT` fields and reinserting into the ISO after engine patches.
 
 ### Verify decompression
 
