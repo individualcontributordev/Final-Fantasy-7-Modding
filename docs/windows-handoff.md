@@ -3,10 +3,9 @@
 **Status:** active
 
 **Shell:** Git Bash  
-Report outcomes in the **Mac Cursor chat** (not a results file).
+Report in the **Mac Cursor chat**.
 
 ```bash
-cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
@@ -14,28 +13,27 @@ git pull --ff-only
 
 ## Goal
 
-Ghidra: import `FIELD.BIN.dec`, go to RNG table, label it, list xrefs.
+Find encounter RNG **code** via StepID scalar search (table xrefs were 0 — expected).
 
-## Steps
+## Steps (Ghidra)
 
-### A. Project + import (if not done)
+1. **Search → For Scalars…**
+2. Value: `0x9c540` (hex) — this is the low part of StepID `0x8009C540`
+3. Search — open hits that look like:
+   - `lui …, 0x8009` then `lbu`/`sb` with offset `0xc540`, or similar
+4. Go to that instruction → press **F** if needed to make a function
+5. In Listing / Decompiler, look for:
+   - byte++ (StepID)
+   - add `0xd` / `13` (Offset bump on wrap)
+   - load from something near `0x80040638` / indexed byte load
+6. If you find it, label the function `increment_step_id` (`L` on function name)
 
-1. Ghidra → **New Project** → Non-Shared → `workspace/ghidra/` → name `ff7-field-bin`
-2. **Import** `workspace/iso-extract/FIELD.BIN.dec`
-3. Raw Binary · MIPS R3000 32-bit LE · base **`0x80000000`**
-4. Analyze with defaults
-
-### B. RNG table
-
-1. Press **G** → `0x80040638` (or Search Memory hex `B1 CA EE 6C 5A 71 2E 55`)
-2. Label (`L`): `g_field_rng_table`
-3. Right-click address → **References → Show References to Address**
-4. Note how many xrefs and 1–2 function names/addresses if shown
+If `0x9c540` finds nothing, try scalar `0x9ad2c` (Offset) or `0x7173c` (Danger).
 
 ## Tell the Mac chat
 
-- Base address used
-- `g_field_rng_table` address
-- Search hit count
-- Xref count (and any function names/addresses)
-- Errors, if any
+- Scalar searched
+- Number of hits
+- Address of the best hit (and function name if any)
+- Whether decompiler shows step/offset/`0xd`
+- Or “no hits”
