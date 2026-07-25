@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Xrefs to DAT_8009fe8c before stealing clear for g_danger=0.
+**Current task:** Listing LAB_800a1dc8 through jal field_map_init for Danger=0 slot.

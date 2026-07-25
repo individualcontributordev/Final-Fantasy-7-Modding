@@ -1,36 +1,6 @@
-# Task: xrefs to DAT_8009fe8c (safe to steal clear?)
+# Task: paste LAB_800a1dc8 through jal field_map_init
 
 # COPY-PASTE (do not edit these lines)
-goto_fe8c_clear: 0x800BA578
+goto_map_setup: 0x800A1DC8
 
-# EVIDENCE (click DAT_8009fe8c → References → Show References; paste full list, then save)
-800ba578		sb zero,-0x174(at)=>DAT_8009fe8c	4	WRITE
-800ba6ac		sb zero,-0x174(at)=>DAT_8009fe8c	4	WRITE
-800bcb2c		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bcca4		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bcd58		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bce28		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bcef0		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bcf24		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd060		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd170		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd2e8		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd548		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd640		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd77c		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd820		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd918		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bd9bc		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bda18		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bdb14		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bdbe0		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bdd14		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bddc8		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bdeec		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bdfa0		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800be0cc		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800be178		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800be27c		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800be440		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800be53c		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
-800bea40		lbu v1,-0x174(v1)=>DAT_8009fe8c	4	READ
+# EVIDENCE (Listing from 0x800A1DC8 through jal field_map_init / ~0x800A1E50; paste then save)
