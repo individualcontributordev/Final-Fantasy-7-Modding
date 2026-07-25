@@ -72,6 +72,12 @@ Also hook **field enter** → `g_danger = 0`.
 - **Formation** stays vanilla-routable unless we add a separate change later.
 - **WORLD.BIN** still separate.
 
+## Ghidra hooks
+
+- Field enter / map init → clear `g_danger` (`0x8007173C`)
+- `encounter_check` @ `0x800ABA70` — replace Danger `+=` block (`~0x800ABB7C`–`0x800ABBD0`) with MAX-or-skip RNG
+- Keep dual `jal increment_step_id` and formation path
+
 ## Follow-ups
 
 - [ ] Confirm field-enter hook site
