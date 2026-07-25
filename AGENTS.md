@@ -11,6 +11,7 @@ Research/mod project to make FF7 PS1 field encounters unpredictable.
 ## Rules
 
 - **Always capture findings** in `docs/findings/` (see `.cursor/rules/capture-research-findings.mdc`)
+- **No Cursor commit trailers** (see `.cursor/rules/no-cursor-commit-trailers.mdc`)
 - Never commit ISO/binary files
 - Patch logs go in `workspace/patches/`
 
