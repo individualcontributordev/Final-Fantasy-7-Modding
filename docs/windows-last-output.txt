@@ -1,3 +1,20 @@
-# Windows last output
+File: D:\projects\ff7-modding\workspace\iso-extract\FIELD.BIN (85435 bytes)
 
-*(Overwritten by Windows Git Bash redirects. Mac agent reads this after “check results”.)*
+StepID ptr u32 LE  [40c50980]  hits=0
+
+Offset ptr u32 LE  [2cad0980]  hits=0
+
+Danger ptr u32 LE  [3c170880]  hits=0
+
+Formation ptr u32 LE  [20c10780]  hits=0
+
+RNG table ptr u32 LE  [38060480]  hits=0
+
+StepID low u16 LE  [40c5]  hits=0
+
+StepID mid u16 LE  [c509]  hits=0
+
+lui imm 0x8009 LE half  [0980]  hits=0
+
+RNG table head  [b1caee6c5a712e55]  hits=0
+
