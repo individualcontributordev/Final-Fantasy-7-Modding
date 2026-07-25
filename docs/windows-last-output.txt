@@ -1,13 +1,7 @@
-# Task: export patched FIELD.BIN.dec from Ghidra
+# Task: compress patched FIELD.BIN.dec → FIELD.BIN.new
 
 # COPY-PASTE (do not edit these lines)
-export_format: Raw Bytes
-export_path: workspace/iso-extract/FIELD.BIN.dec.patched
-verify_offset: 0xBB7C
-verify_bytes_le: 00 48 02 40
+compress_cmd: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.new
+size_cmd: ls -l workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.new
 
-# EVIDENCE (after export: from Git Bash run the verify command below; paste full terminal output under EVIDENCE)
-# verify_cmd: xxd -g1 -s 0xBB7C -l 32 workspace/iso-extract/FIELD.BIN.dec.patched
-xxd -g1 -s 0xBB7C -l 32 workspace/iso-extract/FIELD.BIN.dec.patched
-0000bb7c: 00 48 02 40 06 80 01 3c 19 2f 23 90 ff 00 42 30  .H.@...<./#...B0
-0000bb8c: 2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4  +.C.#......<<.".
+# EVIDENCE (run both commands from repo root in Git Bash; paste full terminal output, then save)

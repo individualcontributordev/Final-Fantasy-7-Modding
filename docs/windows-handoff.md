@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Export Raw Bytes to FIELD.BIN.dec.patched; xxd verify stub.
+**Current task:** Compress FIELD.BIN.dec.patched → FIELD.BIN.new; paste sizes.
