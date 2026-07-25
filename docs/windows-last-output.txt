@@ -1,12 +1,6 @@
-# Task: list all xrefs to g_danger (writes and reads)
+# Task: identify function that clears g_danger (sh zero)
 
 # COPY-PASTE (do not edit these lines)
-goto_lhu_in_encounter_check: 0x800ABC1C
-# In Listing: click g_danger operand → right-click → References → Show References to Address
-# Or: click g_danger in Decompiler → right-click → References → Find References to g_danger
+goto_danger_clear: 0x800A1C70
 
-# EVIDENCE (paste the full References window / xref list below, then save)
-800a1c70		sh zero,offset g_danger(at)	4	WRITE
-800abbc0		lhu v0,offset g_danger(v0)	4	READ
-800abbd0		sh v0,offset g_danger(at)	4	WRITE
-800abc1c		lhu a0,offset g_danger(a0)	4	READ
+# EVIDENCE (paste Listing function header + ~20 lines around the clear, and Decompiler if short, then save)
