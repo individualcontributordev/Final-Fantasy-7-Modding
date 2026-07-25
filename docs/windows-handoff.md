@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Patch FORCE stub via Edit Bytes (not single Patch Instruction selection).
+**Current task:** Restore jal increment_step_id at 0x800ABBD4 (4 bytes only).

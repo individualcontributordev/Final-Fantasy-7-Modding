@@ -1,58 +1,8 @@
-# Task: patch FORCE stub (Edit Bytes bulk, or Patch Instruction ×22)
+# Task: restore jal increment_step_id at 0x800ABBD4
 
 # COPY-PASTE (do not edit these lines)
-goto_patch: 0x800ABB7C
-patch_length_bytes: 88
-bytes_le:
-00 48 02 40 06 80 01 3c 19 2f 23 90 ff 00 42 30 2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-patch_asm_0: mfc0 v0,Count
-patch_asm_1: lui at,0x8006
-patch_asm_2: lbu v1,0x2f19(at)
-patch_asm_3: andi v0,v0,0xff
-patch_asm_4: sltu v0,v0,v1
-patch_asm_5: subu v0,zero,v0
-patch_asm_6: lui at,0x8007
-patch_asm_7: sh v0,0x173c(at)
-patch_asm_8: nop
-patch_asm_9: nop
-patch_asm_10: nop
-patch_asm_11: nop
-patch_asm_12: nop
-patch_asm_13: nop
-patch_asm_14: nop
-patch_asm_15: nop
-patch_asm_16: nop
-patch_asm_17: nop
-patch_asm_18: nop
-patch_asm_19: nop
-patch_asm_20: nop
-patch_asm_21: nop
+goto_restore: 0x800ABBD4
+bytes_le: 72 ae 02 0c
+patch_asm: jal 0x800AB9C8
 
-# EVIDENCE (Listing 0x800ABB7C–0x800ABBD8 after patch; paste then save)
-        800abb78 80 10 02 00     sll        v0,v0,0x2
-        800abb7c 00 48 02 40     mfc0       v0,Count
-        800abb80 06 80 01 3c     lui        at,0x8006
-        800abb84 19 2f 23 90     lbu        v1,0x2f19(at)
-        800abb88 ff 00 42 30     andi       v0,v0,0xff
-        800abb8c 2b 10 43 00     sltu       v0,v0,v1
-        800abb90 23 10 02 00     subu       v0,zero,v0
-        800abb94 07 80 01 3c     lui        at,0x8007
-        800abb98 3c 17 22 a4     sh         v0,0x173c(at)
-        800abb9c 00 00 00 00     nop
-        800abba0 00 00 00 00     nop
-        800abba4 00 00 00 00     nop
-        800abba8 00 00 00 00     nop
-        800abbac 00 00 00 00     nop
-        800abbb0 00 00 00 00     nop
-        800abbb4 00 00 00 00     nop
-        800abbb8 00 00 00 00     nop
-        800abbbc 00 00 00 00     nop
-        800abbc0 00 00 00 00     nop
-        800abbc4 00 00 00 00     nop
-        800abbc8 00 00 00 00     nop
-        800abbcc 00 00 00 00     nop
-        800abbd0 00 00 00 00     nop
-        800abbd4 00 00 00 00     nop
-        800abbd8 00 00 00 00     nop
-        800abbdc 06 80 03 3c     lui        v1,0x8006
-        800abbe0 1b 2f 63 90     lbu        v1,offset DAT_80062f1b(v1)
+# EVIDENCE (Listing 0x800ABB98–0x800ABBE4 showing sh, nops, jal increment_step_id, nop, lui/lbu; paste then save)
