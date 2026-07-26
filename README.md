@@ -47,12 +47,13 @@ python scripts/build_site_docs.py
 ## Research journal (private)
 
 Dated discoveries stay in [docs/findings/](docs/findings/README.md). Public write-ups live in
-[articles/](articles/README.md). The Mac Cursor agent uses
-[record-findings](.cursor/skills/record-findings/SKILL.md) and
-[capture-research-findings](.cursor/rules/capture-research-findings.mdc).
+[articles/](articles/README.md).
 
-The Mac Cursor agent instructs in chat. Windows outputs via git:
-[docs/windows-last-output.txt](docs/windows-last-output.txt) — never paste between PCs.
+## Disc builder layers
+
+Windows handoff to export stackable layers for the main-site builder:
+
+[builder/WINDOWS-INSTRUCTIONS.md](builder/WINDOWS-INSTRUCTIONS.md)
 
 ## GitHub
 

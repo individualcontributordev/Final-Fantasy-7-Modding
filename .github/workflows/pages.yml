@@ -29,6 +29,10 @@ jobs:
         run: |
           pip install markdown
           python scripts/build_site_docs.py
+      - name: Publish builder packs on Pages
+        run: |
+          rm -rf site/builder
+          cp -R builder site/builder
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
