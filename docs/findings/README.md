@@ -39,6 +39,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [patch-log-force-stub](2026-07-25-patch-log-force-stub.md) | FORCE stub patch log (VA/file offset) | confirmed |
 | 2026-07-25 | [force-stub-complete-ghidra](2026-07-25-force-stub-complete-ghidra.md) | FORCE stub + jal restore verified in Ghidra | confirmed |
 | 2026-07-25 | [force-stub-patched-jal-clobber](2026-07-25-force-stub-patched-jal-clobber.md) | Stub OK; restore jal @ 0x800ABBD4 | confirmed |
+| 2026-07-25 | [rcnt2-stub-patched-ghidra](2026-07-25-rcnt2-stub-patched-ghidra.md) | RCnt2 stub + jal verified in Listing | confirmed |
 | 2026-07-25 | [playtest-always-force](2026-07-25-playtest-always-force.md) | mfc0 Count invalid on PSX; always FORCE | confirmed |
 | 2026-07-25 | [danger-max-stub-draft](2026-07-25-danger-max-stub-draft.md) | RCnt2 FORCE stub (fix always-FORCE) | likely |
 | 2026-07-25 | [dat-71e38-71e3c-xrefs](2026-07-25-dat-71e38-71e3c-xrefs.md) | 71e38/71e3c live; no Danger=0 retarget | confirmed |

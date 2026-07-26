@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Re-patch ABB7C stub with RCnt2 entropy (not mfc0).
+**Current task:** Rebuild ISO with RCnt2 stub; DuckStation playtest notes.

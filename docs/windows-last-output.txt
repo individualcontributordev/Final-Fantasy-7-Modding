@@ -1,59 +1,19 @@
-# Task: re-patch FORCE stub with RCnt2 entropy
+# Task: export+compress+import RCnt2 stub; DuckStation notes
 
 # COPY-PASTE (do not edit these lines)
-goto_patch: 0x800ABB7C
-patch_length_bytes: 88
-bytes_le:
-80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c 19 2f 23 90 ff 00 42 30 2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-patch_asm_0: lui at,0x1f80
-patch_asm_1: lw v0,0x1120(at)
-patch_asm_2: nop
-patch_asm_3: lui at,0x8006
-patch_asm_4: lbu v1,0x2f19(at)
-patch_asm_5: andi v0,v0,0xff
-patch_asm_6: sltu v0,v0,v1
-patch_asm_7: subu v0,zero,v0
-patch_asm_8: lui at,0x8007
-patch_asm_9: sh v0,0x173c(at)
-patch_asm_10: nop
-patch_asm_11: nop
-patch_asm_12: nop
-patch_asm_13: nop
-patch_asm_14: nop
-patch_asm_15: nop
-patch_asm_16: nop
-patch_asm_17: nop
-patch_asm_18: nop
-patch_asm_19: nop
-patch_asm_20: nop
-patch_asm_21: nop
-keep_jal: 0x800ABBD4
+export_path: workspace/iso-extract/FIELD.BIN.dec.patched
+verify_cmd: xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
+expect_bytes: 80 1f 01 3c 20 11 22 8c
+compress_cmd: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.new
+import_target_path: FIELD/FIELD.BIN
+pad_dialog: Yes
+test_cue: workspace/iso-extract/ff7_disc1_test.cue
 
-# EVIDENCE (Listing 0x800ABB7C–0x800ABBD8 after patch; must show lw 0x1120 then jal increment_step_id; paste then save)
-
-# playtest_notes (from chat):
-# boot OK, field OK, danger 0 on load, every stepid+2 danger=65535 then battle clear
-        800abb7c 80 1f 01 3c     lui        at,0x1f80
-        800abb80 20 11 22 8c     lw         v0,0x1120(at)
-        800abb84 00 00 00 00     nop
-        800abb88 06 80 01 3c     lui        at,0x8006
-        800abb8c 19 2f 23 90     lbu        v1,0x2f19(at)
-        800abb90 ff 00 42 30     andi       v0,v0,0xff
-        800abb94 2b 10 43 00     sltu       v0,v0,v1
-        800abb98 23 10 02 00     subu       v0,zero,v0
-        800abb9c 07 80 01 3c     lui        at,0x8007
-        800abba0 3c 17 22 a4     sh         v0,0x173c(at)
-        800abba4 00 00 00 00     nop
-        800abba8 00 00 00 00     nop
-        800abbac 00 00 00 00     nop
-        800abbb0 00 00 00 00     nop
-        800abbb4 00 00 00 00     nop
-        800abbb8 00 00 00 00     nop
-        800abbbc 00 00 00 00     nop
-        800abbc0 00 00 00 00     nop
-        800abbc4 00 00 00 00     nop
-        800abbc8 00 00 00 00     nop
-        800abbcc 00 00 00 00     nop
-        800abbd0 00 00 00 00     nop
-        800abbd4 72 ae 02 0c     jal        increment_step_id                                undefined increment_step_id()
-        800abbd8 00 00 00 00     nop
+# EVIDENCE (paste xxd line + compress sizes + playtest notes; text only)
+xxd:
+compress:
+cdmage_save:
+boot:
+field:
+walk:
+danger_behavior:
