@@ -1,7 +1,7 @@
 ---
 title: Remaking field encounters
 date: 2026-07-26
-summary: Vanilla Danger / StepID behavior, and the RCnt2 FORCE stub that replaces Danger growth in FIELD.BIN.
+summary: Vanilla Danger / StepID behavior, and the RCnt2 FORCE stub scaled by Enemy Lure / Away.
 order: 2
 ---
 
@@ -15,7 +15,7 @@ On a hostile field, roughly every eight movement frames the engine adds 32 to **
 
 1. **Danger** increases from field scale, walk/run, and map encounter rate (lower rate → more battles).
 2. **`increment_step_id`** runs twice — preempt roll, then danger-threshold roll.
-3. If Danger clears the lure-scaled threshold, a battle starts, Danger resets, and **formation** picks the enemy set.
+3. If Danger clears the Enemy Lure / Away threshold, a battle starts, Danger resets, and **formation** picks the enemy set.
 
 `increment_step_id`: StepID += 1; on wrap, Offset += 13; return `RNG_TABLE[stepid] - offset` (byte math). Formation uses the same 256-byte table with its own counter.
 
@@ -25,7 +25,7 @@ On a hostile field, roughly every eight movement frames the engine adds 32 to **
 | Formation | `0x80071C20` | enemy set index |
 | StepID / Offset | `0x8009C540` / `0x8009AD2C` | encounter RNG state |
 | Step fraction | `0x8009C6D8` | triggers a check on wrap |
-| Enemy lure | `0x80062F19` | threshold scale (`(Danger * lure) >> 12`) |
+| Enemy Lure / Away | `0x80062F19` | shared density byte (`(Danger * value) >> 12`); Lure raises it, Away lowers it |
 
 ## Locating the code
 
@@ -39,7 +39,7 @@ On a hostile field, roughly every eight movement frames the engine adds 32 to **
 
 Danger accumulation is **`0x800ABB7C`–`0x800ABBD0`** (88 bytes), then `jal increment_step_id` at **`0x800ABBD4`**. The stub replaces that window in place and must not overwrite the `jal`. `0x800E0700` is RNG table data, not free space.
 
-`g_enemy_lure` is read in FIELD; other modules write it. FORCE still multiplies against lure on the threshold path.
+`0x80062F19` (`g_enemy_lure`) is read in FIELD; other modules write it for both Enemy Lure and Enemy Away. FORCE still uses that byte on the threshold path.
 
 ## The stub
 
@@ -49,14 +49,14 @@ An early version used `mfc0` Count. On PS1 R3000A, COP0 r9 is **BDAM**, usually 
 
 ### RCnt2 (shipped logic)
 
-Entropy from root counter **RCnt2** (`0x1F801120`). Compare the low byte to a lure-derived threshold; store `0` or `0xFFFF` to Danger. Both `jal increment_step_id` calls remain.
+Entropy from root counter **RCnt2** (`0x1F801120`). Compare the low byte to a threshold from `g_enemy_lure`; store `0` or `0xFFFF` to Danger. Both `jal increment_step_id` calls remain.
 
 ```
 thresh   = (g_enemy_lure * 3) / 4
 g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
 ```
 
-Raw `lure/256` was dense at default lure; `* 3/4` eases that. Observed with lure poked in RAM: `1` ≈ none, `16` ≈ normal, `64` ≈ high. Checks are sparse; Offset still advances when StepID wraps; preempt flag `0x800716D0` still moves 4↔0.
+Raw `g_enemy_lure/256` was dense at the default value; `* 3/4` eases that. RAM pokes of the shared byte: `1` ≈ none, `16` ≈ normal, `64` ≈ high (same knob Enemy Lure raises and Enemy Away lowers). Checks are sparse; Offset still advances when StepID wraps; preempt flag `0x800716D0` still moves 4↔0.
 
 Stub file offset in decompressed `FIELD.BIN`: **`0xBB7C`**.
 
