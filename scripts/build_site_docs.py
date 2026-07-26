@@ -54,7 +54,7 @@ def page_shell(
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title} — FF7 Modding Research</title>
+  <title>{title} — Final Fantasy VII Modding Research</title>
   <link rel="icon" href="{asset}assets/meteor.png" type="image/png" />
   <link rel="stylesheet" href="{asset}site.css" />
 </head>
@@ -69,9 +69,11 @@ def page_shell(
   <div class="page">
     <div class="header-bar">
       <div class="nav-links">
-        <a href="{asset}">Home</a>
+        <a href="https://individualcontributor.dev/">Home</a>
+        <a href="{asset}">Modding</a>
         <a href="{asset}encounter/">Encounter</a>
         <a href="{asset}research/">Research</a>
+        <a href="https://individualcontributor.dev/Final-Fantasy-7-CSR/">CSR</a>
         <a href="https://github.com/individualcontributordev/Final-Fantasy-7-Modding">GitHub</a>
       </div>
       <img src="{asset}assets/meteor.png" alt="" class="site-logo" />
@@ -150,7 +152,7 @@ def main() -> None:
     )
 
     index_body = f"""      <h1>Research</h1>
-      <p>Reference docs and the dated findings journal for FF7 PSX modding.</p>
+      <p>Reference docs and the dated findings journal for Final Fantasy VII PlayStation modding.</p>
       <h2>Topics</h2>
       <ul>
 {topics_html}

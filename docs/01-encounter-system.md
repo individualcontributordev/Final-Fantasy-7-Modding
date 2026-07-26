@@ -1,6 +1,6 @@
-# FF7 PS1 Field Encounter System
+# Final Fantasy VII PS1 Field Encounter System
 
-Reference for reverse engineering in Ghidra. Sources: FF7 speedrun wiki, TASVideos
+Reference for reverse engineering in Ghidra. Sources: Final Fantasy VII speedrun wiki, TASVideos
 writeups, Qhimm forums, ff7tk source.
 
 ## Encounter check loop (every ~8 movement frames)
@@ -37,7 +37,7 @@ Formation value is divided by 4 to get a 0–63 roll for standard/special slot s
 
 First bytes: `B1 CA EE 6C 5A 71 2E 55 D6 00 CC 99 90 6B 7D EB 4F A0 …`
 
-Full table in [FF7 speedrun wiki — Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics).
+Full table in [Final Fantasy VII speedrun wiki — Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics).
 
 ## RAM addresses (PS1, base 0x80000000)
 

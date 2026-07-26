@@ -1,4 +1,4 @@
-# FF7 PSX Modding
+# Final Fantasy VII PSX Modding
 
 Research, tools, and patches for modifying **Final Fantasy VII on PlayStation** disc images — in a way that still plays on real hardware.
 

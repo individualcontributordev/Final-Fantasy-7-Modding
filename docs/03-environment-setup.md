@@ -1,6 +1,6 @@
 # Environment Setup
 
-Tooling checklist for **FF7 PSX disc modding** (any topic — field, engine binaries, ISO workflow).
+Tooling checklist for **Final Fantasy VII PSX disc modding** (any topic — field, engine binaries, ISO workflow).
 
 Work through this list in order.
 
@@ -34,7 +34,7 @@ Place files in `~/Final-Fantasy-7-Modding/workspace/iso-extract/`:
 `FIELD.BIN` on the disc is the **field engine** (gzipped MIPS code), not a field map.
 Makou Reactor does **not** export it — Makou only rewrites it when you save ISO field edits.
 
-**Use CDmage (Windows)** — classic ISO browser for FF7 PSX:
+**Use CDmage (Windows)** — classic ISO browser for Final Fantasy VII PSX:
 
 1. Install [CDmage](https://www.romhacking.net/utilities/1435/) (or any PSX ISO tool that extracts files)
 2. File → Open → your `ff7_disc1.bin` / `.cue`
@@ -77,7 +77,7 @@ brew install --cask duckstation
 ```
 
 - [ ] Emulator installed
-- [ ] Can boot your FF7 disc 1 image
+- [ ] Can boot your Final Fantasy VII disc 1 image
 - [ ] Know how to open memory viewer (for Danger at `0x8007173C`)
 
 ### Emulator settings for modding

@@ -1,6 +1,6 @@
 # Disc Format and Save Path
 
-## FF7 PS1 disc layout (relevant parts)
+## Final Fantasy VII PS1 disc layout (relevant parts)
 
 ```
 disc.bin (Mode 2 / 2352-byte sectors)
