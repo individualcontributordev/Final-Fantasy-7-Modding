@@ -355,6 +355,27 @@ a:hover { color: var(--ff7-text); }
   font-size: 0.85rem;
   color: #c8d0e0;
 }
+.tool-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.tool-list li {
+  margin: 0 0 12px;
+}
+.tool-list li:last-child {
+  margin-bottom: 0;
+}
+.tool-list a {
+  font-family: "DogicaPixelBold", Arial, sans-serif;
+  letter-spacing: 1.2px;
+}
+.tool-blurb {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #c8d0e0;
+}
 .doc-body {
   font-size: 0.9rem;
   line-height: 2;
