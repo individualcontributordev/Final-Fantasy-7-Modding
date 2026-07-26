@@ -8,7 +8,7 @@ poke_mid: 16
 poke_high: 64
 
 # EVIDENCE (same field walk each time; set byte at 0x80062F19 then walk; paste fight count / feel per poke)
-lure_1:
-lure_16:
-lure_64:
+lure_1: none
+lure_16: normal
+lure_64: alot
 notes:
