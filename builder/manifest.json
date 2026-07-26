@@ -4,14 +4,17 @@
   "addons": [
     {
       "id": "encounter-v0.1.0",
-      "name": "Encounter rate",
+      "name": "Encounter rate v0.1.0",
       "kind": "addon",
-      "blurb": "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U Disc 1.",
+      "blurb": "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U field encounters.",
       "format": "ic-layer-v1",
-      "disc": 1,
-      "url": "./encounter-v0.1.0/layers/disc1.layer.json",
+      "discs": {
+        "1": "./encounter-v0.1.0/layers/disc1.layer.json",
+        "2": "./encounter-v0.1.0/layers/disc2.layer.json",
+        "3": "./encounter-v0.1.0/layers/disc3.layer.json"
+      },
       "enabled": false,
-      "note": "Set enabled true after disc1.layer.json is generated on Windows and committed."
+      "note": "Enable after disc1–3 layers are generated and verified on Windows."
     }
   ],
   "bases": []
