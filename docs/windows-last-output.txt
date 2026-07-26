@@ -10,7 +10,8 @@ pad_dialog: Yes
 test_cue: workspace/iso-extract/ff7_disc1_test.cue
 
 # EVIDENCE (paste xxd line + compress sizes + playtest notes; text only)
-xxd:
+xxd: xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
+0000bb7c: 00 48 02 40 06 80 01 3c 19 2f 23 90 ff 00 42 30  .H.@...<./#...B0
 compress:
 cdmage_save:
 boot:
