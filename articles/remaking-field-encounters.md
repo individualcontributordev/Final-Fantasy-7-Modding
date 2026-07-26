@@ -7,9 +7,7 @@ order: 2
 
 # Remaking field encounters
 
-Goal: field encounters that feel less deterministic, while keeping preempt routing and Enemy Lure / Away.
-
-Makou can edit per-map encounter tables in `.DAT`. Danger growth is in `FIELD.BIN`. That is what this mod patches.
+This mod changes how field encounters trigger on NTSC-U Final Fantasy VII. Per-map battle tables can stay vanilla; the change is in the field engine’s Danger accumulation inside `FIELD.BIN`. Preempt routing and Enemy Lure / Away still apply.
 
 ## Vanilla behavior
 
@@ -29,9 +27,9 @@ On a hostile field, roughly every eight movement frames the engine adds 32 to **
 | Step fraction | `0x8009C6D8` | triggers a check on wrap |
 | Enemy lure | `0x80062F19` | threshold scale (`(Danger * lure) >> 12`) |
 
-## Locating the patch
+## Locating the code
 
-`FIELD.BIN` on disc is GZIPPS-compressed. Decompress before searching (`scripts/decompress_field_bin.py`). US disc 1 ≈ **85435 → 264008** bytes. Module load base: **`0x800A0000`** (Ghidra / DuckStation aligned). RNG table at file `0x40638` → VA **`0x800E0638`**.
+`FIELD.BIN` on disc is GZIPPS-compressed; search the decompressed image. US disc 1 ≈ **85435 → 264008** bytes. Module load base: **`0x800A0000`**. RNG table at file `0x40638` → VA **`0x800E0638`**.
 
 | Symbol | VA |
 |--------|-----|
@@ -39,53 +37,36 @@ On a hostile field, roughly every eight movement frames the engine adds 32 to **
 | `increment_formation` | `0x800ABA34` |
 | `encounter_check` | `0x800ABA70` |
 
-Danger accumulation is **`0x800ABB7C`–`0x800ABBD0`** (88 bytes), then `jal increment_step_id` at **`0x800ABBD4`**. Patch in place; do not overwrite that `jal`. `0x800E0700` is RNG table data, not a code cave.
+Danger accumulation is **`0x800ABB7C`–`0x800ABBD0`** (88 bytes), then `jal increment_step_id` at **`0x800ABBD4`**. The stub replaces that window in place and must not overwrite the `jal`. `0x800E0700` is RNG table data, not free space.
 
-`g_enemy_lure` is read in FIELD; writers live elsewhere. FORCE + lure still interact with Away / Lure.
+`g_enemy_lure` is read in FIELD; other modules write it. FORCE still multiplies against lure on the threshold path.
 
-## Stub design
+## The stub
 
-### Failed: COP0 Count
+### COP0 Count (rejected)
 
-First stub used `mfc0` Count. PS1 R3000A COP0 r9 is **BDAM**, usually 0 → every check FORCEd Danger to `0xFFFF`. Unusable.
+An early version used `mfc0` Count. On PS1 R3000A, COP0 r9 is **BDAM**, usually 0, so every check FORCEd Danger to `0xFFFF`.
 
-### Shipped: RCnt2
+### RCnt2 (shipped logic)
 
-Entropy from root counter **RCnt2** (`0x1F801120`). Low byte vs lure-derived threshold; store `0` or `0xFFFF` to Danger. Keep both `jal increment_step_id` calls.
+Entropy from root counter **RCnt2** (`0x1F801120`). Compare the low byte to a lure-derived threshold; store `0` or `0xFFFF` to Danger. Both `jal increment_step_id` calls remain.
 
 ```
 thresh   = (g_enemy_lure * 3) / 4
 g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
 ```
 
-`* 3/4` after raw `lure/256` felt too dense at default lure. RAM pokes: lure `1` ≈ none, `16` ≈ normal, `64` ≈ high. Playtests: sparse checks, Offset still advances on StepID wrap, preempt flag `0x800716D0` still 4↔0.
+Raw `lure/256` was dense at default lure; `* 3/4` eases that. Observed with lure poked in RAM: `1` ≈ none, `16` ≈ normal, `64` ≈ high. Checks are sparse; Offset still advances when StepID wraps; preempt flag `0x800716D0` still moves 4↔0.
 
-File offset for the stub: **`0xBB7C`**.
+Stub file offset in decompressed `FIELD.BIN`: **`0xBB7C`**.
 
-## Packaging
+## Disc packaging
 
-1. Pristine NTSC-U disc (or Makou-saved disc if map edits are included).
-2. Extract `FIELD/FIELD.BIN` from that image.
-3. `python scripts/build_field_encounter_patch.py …` → `FIELD.BIN.new`.
-4. Import over `FIELD/FIELD.BIN` (pad if shorter; never truncate).
-5. DuckStation smoke test.
-6. `scripts/make_ppf.py` pristine → final.
+Extract `FIELD/FIELD.BIN` from the working image (after any Makou pass), decompress, apply the stub, recompress, reimport over the same path, then diff pristine vs final into one Disc 1 PPF. See [Publishing Final Fantasy VII PlayStation mods](./publishing-psx-mods.html).
 
-Drop the `.ppf` into `site/encounter/patches/` and wire `PATCHES`. Until then the patcher page is an empty scaffold. Full author steps: `docs/06-packaging-combined-ppf.md`.
+## Unchanged
 
-## Out of scope
-
-- Per-map battle IDs / weights (unless a later Makou pass)
+- Per-map battle IDs / weights (unless a separate Makou edit)
 - `WORLD.BIN` encounters
 - Field script RNG (separate from encounter RNG)
-- Changing preempt logic (StepID calls must still run)
-
-## Status
-
-| Item | State |
-|------|--------|
-| RCnt2 FORCE stub | Playtested |
-| Packaging docs | Written |
-| Public Disc 1 `.ppf` | Not published yet |
-| In-story boss preempt check | Open |
-| `WORLD.BIN` | Later |
+- Preempt logic itself (StepID calls still run)

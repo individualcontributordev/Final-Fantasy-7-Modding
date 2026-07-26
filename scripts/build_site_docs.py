@@ -158,8 +158,7 @@ def render_index(articles: list[Article]) -> None:
     cards_html = "\n".join(cards)
     body = f"""      <h1>Research</h1>
       <p class="lede">
-        Public notes on how Final Fantasy VII PlayStation mods are researched, built, and shipped.
-        Lab scratch stays in the repo; this page is the readable series.
+        How Final Fantasy VII PlayStation mods on this site work — engine notes and packaging.
       </p>
       <ol class="article-list">
 {cards_html}
