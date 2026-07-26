@@ -1,24 +1,24 @@
-# Windows: build Encounter layer for the disc builder
+# Windows (Git Bash): build Encounter layer for the disc builder
 
-Do this on the PC that has your pristine discs, CDmage, DuckStation, and this repo.
+Use **Git Bash** on the PC that has your pristine discs, CDmage, DuckStation, and this repo.
 
 Goal: publish `builder/encounter-v0.1.0/layers/disc1.layer.json` (no game `.bin` in git).
 
-Scripts take whatever paths you pass; keep names **consistent** in every step below.
+Scripts take whatever paths you pass. Prefer **forward slashes**. Keep names **consistent** in every step.
 
 ---
 
 ## 0. Setup
 
-```bat
-cd C:\path\to\Final-Fantasy-7-Modding
+```bash
+cd /c/path/to/Final-Fantasy-7-Modding   # e.g. cd ~/Final-Fantasy-7-Modding
 git pull
 ```
 
-Python 3 on PATH. Game images stay under `workspace\` (gitignored).
+`python` (or `py`) on PATH. Game images stay under `workspace/` (gitignored).
 
 ```
-workspace\iso-extract\
+workspace/iso-extract/
   FINALFANTASY7_D1.bin              — untouched retail
   FINALFANTASY7_D1.cue
   FINALFANTASY7_D1_encounter.bin    — working copy (create in step 1c)
@@ -31,25 +31,25 @@ workspace\iso-extract\
 
 Never overwrite `FINALFANTASY7_D1.bin`.
 
-### 1a. Extract `FIELD\FIELD.BIN` (CDmage)
+### 1a. Extract `FIELD/FIELD.BIN` (CDmage)
 
 1. Open `FINALFANTASY7_D1.cue` in CDmage  
-2. Extract `FIELD\FIELD.BIN` → `workspace\iso-extract\FIELD.BIN`
+2. Extract `FIELD/FIELD.BIN` → `workspace/iso-extract/FIELD.BIN`
 
 ### 1b. Patch + recompress
 
-```bat
-cd C:\path\to\Final-Fantasy-7-Modding
-python scripts\build_field_encounter_patch.py workspace\iso-extract\FIELD.BIN
+```bash
+cd /c/path/to/Final-Fantasy-7-Modding
+python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
 ```
 
-Expect `workspace\iso-extract\FIELD.BIN.new` (script default output next to the input).
+Expect `workspace/iso-extract/FIELD.BIN.new` (script default output next to the input).
 
 ### 1c. Reimport (CDmage)
 
 1. Copy pristine → `FINALFANTASY7_D1_encounter.bin` + matching `.cue` (point the cue at the new bin name)  
 2. Open that working `.cue` in CDmage  
-3. Import `FIELD.BIN.new` over **`FIELD\FIELD.BIN`**  
+3. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`**  
 4. If shorter → pad zeros = Yes. If truncate → Cancel and fix.  
 5. Save.
 
@@ -61,12 +61,12 @@ Boot `FINALFANTASY7_D1_encounter` — field loads, encounters still happen.
 
 ## 2. Diff → layer JSON
 
-```bat
-python scripts\bin_diff_to_layer.py ^
-  workspace\iso-extract\FINALFANTASY7_D1.bin ^
-  workspace\iso-extract\FINALFANTASY7_D1_encounter.bin ^
-  -o builder\encounter-v0.1.0\layers\disc1.layer.json ^
-  --id encounter-disc1-v0.1.0 ^
+```bash
+python scripts/bin_diff_to_layer.py \
+  workspace/iso-extract/FINALFANTASY7_D1.bin \
+  workspace/iso-extract/FINALFANTASY7_D1_encounter.bin \
+  -o builder/encounter-v0.1.0/layers/disc1.layer.json \
+  --id encounter-disc1-v0.1.0 \
   --description "Encounter RCnt2 FORCE stub — NTSC-U Disc 1"
 ```
 
@@ -74,11 +74,11 @@ python scripts\bin_diff_to_layer.py ^
 
 Use the **same** pristine path as the diff:
 
-```bat
-python scripts\apply_layer.py ^
-  workspace\iso-extract\FINALFANTASY7_D1.bin ^
-  builder\encounter-v0.1.0\layers\disc1.layer.json ^
-  --expect workspace\iso-extract\FINALFANTASY7_D1_encounter.bin
+```bash
+python scripts/apply_layer.py \
+  workspace/iso-extract/FINALFANTASY7_D1.bin \
+  builder/encounter-v0.1.0/layers/disc1.layer.json \
+  --expect workspace/iso-extract/FINALFANTASY7_D1_encounter.bin
 ```
 
 Must print `OK — layer apply matches --expect`.
@@ -87,7 +87,7 @@ Must print `OK — layer apply matches --expect`.
 
 ## 3. Pack metadata
 
-Edit `builder\manifest.json` and set the Encounter entry:
+Edit `builder/manifest.json` and set the Encounter entry:
 
 ```json
 "enabled": true
@@ -97,16 +97,18 @@ Edit `builder\manifest.json` and set the Encounter entry:
 
 Templates:
 
-- `builder\encounter-v0.1.0\pack.json`  
-- `builder\manifest.json`  
+- `builder/encounter-v0.1.0/pack.json`  
+- `builder/manifest.json`  
 
 ---
 
 ## 4. Commit and push (JSON only)
 
-```bat
+```bash
 git status
-git add builder\encounter-v0.1.0\layers\disc1.layer.json builder\encounter-v0.1.0\pack.json builder\manifest.json
+git add builder/encounter-v0.1.0/layers/disc1.layer.json \
+        builder/encounter-v0.1.0/pack.json \
+        builder/manifest.json
 git commit -m "Add Encounter Disc 1 builder layer."
 git push
 ```
@@ -129,4 +131,15 @@ After Pages deploys, the main site can load:
 
 Cutscene packs are built in the **Final-Fantasy-7-CSR** repo. See:
 
-`Final-Fantasy-7-CSR\builder\WINDOWS-INSTRUCTIONS.md`
+`Final-Fantasy-7-CSR/builder/WINDOWS-INSTRUCTIONS.md`
+
+---
+
+## Git Bash notes
+
+| Avoid (cmd) | Use (Git Bash) |
+|-------------|----------------|
+| `scripts\foo.py` | `scripts/foo.py` |
+| `^` line continue | `\` at end of line |
+| `C:\path\to\repo` | `/c/path/to/repo` or `~/…` |
+| Unquoted spaces | Always quote: `"…(patched).bin"` |
