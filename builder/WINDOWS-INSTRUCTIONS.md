@@ -70,6 +70,14 @@ python scripts/build_encounter_layers.py --version 0.1.0 --discs 1,2,3
 
 This writes layers, updates `pack.json`, and sets `builder/manifest.json` `"enabled": true` with a **discs** map for 1/2/3.
 
+**Must see `changedBytes` > 0** for each disc. If pristine and encounter `.bin` match, the script exits with an error — usually CDmage import of `FIELD.BIN.new` did not stick. Re-do 1c, then re-run.
+
+Quick check before commit:
+
+```bash
+python -c "import json; d=json.load(open('builder/encounter-v0.1.0/layers/disc1.layer.json')); print(d['stats'])"
+```
+
 ---
 
 ## 3. Commit and push (JSON only)
@@ -82,6 +90,7 @@ git push
 ```
 
 Then message: **Encounter layers pushed — wire builder.**
+(Builder already loads the Modding manifest; a non-empty enabled layer shows up as an add-on.)
 
 ---
 
