@@ -35,3 +35,11 @@ Replaced invalid `mfc0 Count` with `lw` RCnt2 after playtest always-FORCE.
 ## Playtest (RCnt2)
 
 Sparse encounters across StepID samples; Offset wrap 0→13 observed. Always-FORCE bug fixed.
+
+## Acceptance (FIELD.BIN stub)
+
+- [x] Sparse FORCE (RCnt2)
+- [x] Lure poke scales density
+- [x] Preempt flag 4↔0
+- [ ] Boss preempt in-game when story allows
+- [ ] WORLD.BIN later
