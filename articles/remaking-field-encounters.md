@@ -1,7 +1,7 @@
 ---
 title: Remaking field encounters
 date: 2026-07-26
-summary: Vanilla Danger / StepID behavior, and the RCnt2 FORCE stub scaled by Enemy Lure / Away.
+summary: Vanilla Danger / StepID path, and the RCnt2 FORCE stub at half Enemy Lure density.
 order: 2
 ---
 
@@ -9,11 +9,21 @@ order: 2
 
 This mod changes how field encounters trigger on NTSC-U Final Fantasy VII. Per-map battle tables can stay vanilla; the change is in the field engine’s Danger accumulation inside `FIELD.BIN`. Preempt routing and Enemy Lure / Away still apply.
 
-## Vanilla behavior
+## Vanilla path (unchanged structure)
 
-On a hostile field, roughly every eight movement frames the engine adds 32 to **step fraction**. On wrap:
+On a hostile field, roughly every eight movement frames the engine adds 32 to **step fraction**. On wrap, `encounter_check` runs:
 
-1. **Danger** increases from field scale, walk/run, and map encounter rate (lower rate → more battles).
+```mermaid
+flowchart TD
+  A[Step fraction wraps] --> B[Danger += vanilla formula]
+  B --> C["increment_step_id — preempt roll"]
+  C --> D["increment_step_id — threshold roll"]
+  D --> E{"Danger vs Enemy Lure / Away threshold?"}
+  E -->|pass| F[Start battle · Danger = 0 · pick formation]
+  E -->|fail| G[Continue walking]
+```
+
+1. **Danger** increases from field scale, walk/run, and map encounter rate (lower map rate → more battles).
 2. **`increment_step_id`** runs twice — preempt roll, then danger-threshold roll.
 3. If Danger clears the Enemy Lure / Away threshold, a battle starts, Danger resets, and **formation** picks the enemy set.
 
@@ -39,30 +49,58 @@ On a hostile field, roughly every eight movement frames the engine adds 32 to **
 
 Danger accumulation is **`0x800ABB7C`–`0x800ABBD0`** (88 bytes), then `jal increment_step_id` at **`0x800ABBD4`**. The stub replaces that window in place and must not overwrite the `jal`. `0x800E0700` is RNG table data, not free space.
 
-`0x80062F19` (`g_enemy_lure`) is read in FIELD; other modules write it for both Enemy Lure and Enemy Away. FORCE still uses that byte on the threshold path.
+`0x80062F19` (`g_enemy_lure`) is read in FIELD; other modules write it for both Enemy Lure and Enemy Away.
 
-## The stub
+## Modded path (shipped stub)
 
-### COP0 Count (rejected)
+Only the **Danger +=** block is replaced. Dual `increment_step_id` and the Lure/Away threshold compare stay vanilla.
+
+```mermaid
+flowchart TD
+  A[Step fraction wraps] --> B["Stub: read RCnt2 @ 0x1F801120"]
+  B --> C["thresh = g_enemy_lure / 2"]
+  C --> D{"(RCnt2 & 0xFF) < thresh?"}
+  D -->|yes| E["g_danger = 0xFFFF  FORCE"]
+  D -->|no| F["g_danger = 0"]
+  E --> G["increment_step_id — preempt"]
+  F --> G
+  G --> H["increment_step_id — threshold"]
+  H --> I{"Danger vs Lure/Away threshold?"}
+  I -->|FORCE almost always passes| J[Battle]
+  I -->|Danger was 0| K[No battle this check]
+```
+
+### Shipped formula
+
+```
+entropy = *(u32*)0x1F801120          # PSX root counter RCnt2
+thresh  = g_enemy_lure / 2           # integer divide
+g_danger = ((entropy & 0xff) < thresh) ? 0xFFFF : 0
+```
+
+Per encounter check (assuming a uniform low byte), **P(FORCE) ≈ thresh / 256 = g_enemy_lure / 512**.
+
+### Rate history (default lure ≈ 16)
+
+| Revision | Threshold | P(FORCE) per check | vs raw lure/256 |
+|----------|-----------|--------------------|-----------------|
+| Raw lure | `lure` | ~6.25% | 100% |
+| First cut | `(lure * 3) / 4` | ~4.69% | **75%** of raw |
+| **Shipped** | `lure / 2` | **~3.13%** | **50%** of raw |
+
+At default lure 16: thresh 8 → about **3.1%** of checks FORCE Danger high. Enemy Lure / Away still move `g_enemy_lure`, so materia still scales density. RAM pokes: `1` ≈ none, `16` ≈ current normal, `64` ≈ high.
+
+Preempt / StepID routing is unchanged (Offset still advances on wrap; preempt flag `0x800716D0` still moves 4↔0).
+
+### Rejected: COP0 Count
 
 An early version used `mfc0` Count. On PS1 R3000A, COP0 r9 is **BDAM**, usually 0, so every check FORCEd Danger to `0xFFFF`.
-
-### RCnt2 (shipped logic)
-
-Entropy from root counter **RCnt2** (`0x1F801120`). Compare the low byte to a threshold from `g_enemy_lure`; store `0` or `0xFFFF` to Danger. Both `jal increment_step_id` calls remain.
-
-```
-thresh   = g_enemy_lure / 2
-g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
-```
-
-Raw `g_enemy_lure/256` was dense at the default value; `/ 2` eases that (after an earlier `* 3/4` pass). RAM pokes of the shared byte: `1` ≈ none, `16` ≈ normal, `64` ≈ high (same knob Enemy Lure raises and Enemy Away lowers). Checks are sparse; Offset still advances when StepID wraps; preempt flag `0x800716D0` still moves 4↔0.
 
 Stub file offset in decompressed `FIELD.BIN`: **`0xBB7C`**.
 
 ## Disc packaging
 
-Extract `FIELD/FIELD.BIN` from the working image (after any Makou pass), decompress, apply the stub, recompress, reimport over the same path, then diff pristine vs final into one Disc 1 PPF. See [Publishing Final Fantasy VII PlayStation mods](./publishing-psx-mods.html).
+Prefer `scripts/build_encounter_on_base.py` (per builder base). Manual path: extract `FIELD/FIELD.BIN`, decompress, apply stub, recompress, reimport, diff. See [Publishing Final Fantasy VII PlayStation mods](./publishing-psx-mods.html) and `builder/WINDOWS-INSTRUCTIONS.md`.
 
 ## Unchanged
 

@@ -90,13 +90,28 @@ Stored in each field `.DAT` encounter section (48 bytes, two tables):
 
 Field **scale** (default 512) is in section 1 of the `.DAT` and affects Danger growth.
 
-## What we will patch
+## What we patch (shipped Encounter mod)
+
+Replace the vanilla **Danger +=** block in `encounter_check` (`0x800ABB7C`, 88 bytes) with an RCnt2 FORCE stub. Dual `increment_step_id` and the Lure/Away threshold path stay.
+
+```
+thresh   = g_enemy_lure / 2
+g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
+```
+
+| At default lure (16) | P(FORCE) / check | vs raw `lure/256` |
+|----------------------|------------------|-------------------|
+| Raw lure | ~6.25% | 100% |
+| Earlier `* 3/4` | ~4.69% | 75% |
+| **Shipped `/ 2`** | **~3.13%** | **50%** |
+
+Public write-up: [articles/remaking-field-encounters.md](../articles/remaking-field-encounters.md). Patch bytes: [workspace/patches/2026-07-25-force-stub-rcnt2/](../workspace/patches/2026-07-25-force-stub-rcnt2/).
 
 | Component | File | Change |
 |-----------|------|--------|
-| Danger growth → optional MAX | `FIELD.BIN` | Clear Danger on field enter; per-check RNG may set MAX |
+| Danger growth → RCnt2 FORCE | `FIELD.BIN` | Shipped stub above |
 | World map encounters | `WORLD.BIN` | Same idea (later) |
-| Per-map battle tables / rate | `*.DAT` | Unchanged (FORCE_RATE replaces much of rate feel) |
+| Per-map battle tables / rate | `*.DAT` | Unchanged |
 
 ## Separate RNG systems (do not confuse)
 
