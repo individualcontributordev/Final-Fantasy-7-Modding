@@ -1,31 +1,10 @@
-# Task: apply RCnt2 stub on disk; verify xxd; then rebuild notes
+# Task: note Enemy Lure vs Away encounter density
 
 # COPY-PASTE (do not edit these lines)
-apply_cmd: python scripts/apply_force_stub_rcnt2.py workspace/iso-extract/FIELD.BIN.dec.patched
-verify_cmd: xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
-expect_bytes: 80 1f 01 3c 20 11 22 8c
-compress_cmd: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.new
+watch_lure_ram: 0x80062F19
+watch_danger_ram: 0x8007173C
 
-# EVIDENCE (paste apply output + xxd; if xxd matches, continue compress/import/DS and add playtest notes)
-apply: no, used ghidra and it worked
-xxd:  xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
-0000bb7c: 80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c  ...< ."........<
-compress: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.new
-Source (dec):     D:\projects\ff7-modding\workspace\iso-extract\FIELD.BIN.dec.patched (264008 bytes)
-Original (bin):   D:\projects\ff7-modding\workspace\iso-extract\FIELD.BIN (85435 bytes)
-Output:           D:\projects\ff7-modding\workspace\iso-extract\FIELD.BIN.new (85358 bytes)
-Size delta:       -77 bytes
-cdmage_save:
-danger_behavior:
-
-encounters on:
-step_id offset
-46  0
-94  0
-122 0
-128 0
-148 0
-200 0
-8   13
-12  13
-22  13
+# EVIDENCE (same hostile field walk ~similar distance; paste short notes for default / Lure / Away if available — StepID span + fight count is enough)
+default:
+lure:
+away:

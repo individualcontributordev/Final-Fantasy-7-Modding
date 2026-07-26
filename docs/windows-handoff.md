@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** apply_force_stub_rcnt2.py on .dec.patched; verify xxd; rebuild.
+**Current task:** Compare encounter density default vs Lure vs Away.
