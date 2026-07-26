@@ -58,7 +58,7 @@ python scripts/compress_field_bin.py \
   workspace/iso-extract/FIELD.BIN.new
 ```
 
-`compress_field_bin.py` keeps the 8-byte GZIPPS header from the **Makou** `FIELD.BIN` (second argument).
+`compress_field_bin.py` keeps the 8-byte GZIPPS header from the **Makou** `FIELD.BIN` (second argument). It tries gzip levels and prefers a result **≤ original size** (Python gzip can be a few bytes larger than the game’s compressor — e.g. +4). If still larger, do **not** truncate in CDmage.
 
 ### 4. Reimport into the Makou disc
 
