@@ -34,7 +34,11 @@ from bin_diff_to_layer import build_layer  # noqa: E402
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 ISO = _ROOT / "workspace" / "iso-extract"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
-BLURB = "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U field encounters."
+BLURB = (
+    "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U field encounters. "
+    "Unmodified base only (CSR stacks need a CSR-built Encounter layer)."
+)
+COMPATIBLE_BASES = ["clean"]
 
 
 def disc_paths(disc: int) -> tuple[Path, Path]:
@@ -96,6 +100,7 @@ def write_pack_json(pack_dir: Path, version: str, discs: list[int]) -> None:
         "version": version,
         "blurb": BLURB,
         "format": "ic-layer-v1",
+        "compatibleBases": COMPATIBLE_BASES,
         "discs": {str(d): f"./layers/disc{d}.layer.json" for d in discs},
     }
     pack_dir.mkdir(parents=True, exist_ok=True)
@@ -113,6 +118,7 @@ def update_manifest(version: str, discs: list[int]) -> None:
         "kind": "addon",
         "blurb": BLURB,
         "format": "ic-layer-v1",
+        "compatibleBases": COMPATIBLE_BASES,
         "discs": {
             str(d): f"./{pack_id}/layers/disc{d}.layer.json" for d in discs
         },
