@@ -67,12 +67,23 @@ Do **not** accept CDmage truncate if still larger.
 
 ### 5. Make one PPF
 
-| MakePPF role | File |
-|--------------|------|
-| **Original** | Untouched retail `.bin` (same dump family you always use) |
-| **Modified** | Final image after steps 1–4 (Makou **+** stub) |
+| Role | File |
+|------|------|
+| **Original** | Untouched retail `.bin` |
+| **Modified** | Final image after steps 1–4 |
 
-Output e.g. `yourmod-disc1.ppf`. Do **not** create separate Makou-only and encounter-only PPFs for end users.
+```bash
+python scripts/make_ppf.py \
+  workspace/iso-extract/ff7_disc1_pristine.bin \
+  workspace/iso-extract/ff7_disc1_final.bin \
+  -o workspace/iso-extract/yourmod-disc1.ppf \
+  -d "Your mod name here" \
+  --verify
+```
+
+Same PPF format as [RomPatcher.js](https://github.com/marcrobledo/RomPatcher.js) creator mode. Full disc images take a few minutes to diff.
+
+Do **not** create separate Makou-only and encounter-only PPFs for end users.
 
 ### 6. Sanity-check the PPF
 
