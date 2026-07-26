@@ -285,12 +285,18 @@ def main() -> int:
 
     pack_id = f"{meta['pack_prefix']}-v{version}"
     pack_dir = _ROOT / "builder" / pack_id
-    # Merge discs already on disk into pack/manifest (re-run safe)
-    existing = sorted(
-        int(p.stem.replace("disc", ""))
-        for p in (pack_dir / "layers").glob("disc*.layer.json")
-        if p.stem.startswith("disc")
-    )
+    # Merge discs already on disk into pack/manifest (re-run safe).
+    # Path.stem of disc1.layer.json is "disc1.layer" — parse the filename instead.
+    existing: list[int] = []
+    layers_dir = pack_dir / "layers"
+    if layers_dir.is_dir():
+        for p in layers_dir.glob("disc*.layer.json"):
+            mid = p.name.removeprefix("disc").removesuffix(".layer.json")
+            if mid.isdigit():
+                existing.append(int(mid))
+    existing = sorted(set(existing))
+    if not existing:
+        raise SystemExit(f"No disc*.layer.json under {layers_dir}")
     write_pack_json(
         pack_dir,
         pack_id=pack_id,
