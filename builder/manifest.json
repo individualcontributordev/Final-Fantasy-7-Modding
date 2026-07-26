@@ -11,7 +11,8 @@
       "discs": {
         "1": "./encounter-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": false,
+      "note": "Disabled: disc1.layer.json has 0 records (pristine == patched). Re-diff after stub is in the encounter .bin, then set enabled true."
     }
   ],
   "bases": []
