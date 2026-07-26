@@ -19,6 +19,7 @@ PPF does **not** stack. Always: pristine dump → final combined image → one `
 |------|------|
 | [workspace/patches/2026-07-25-force-stub-rcnt2/](../workspace/patches/2026-07-25-force-stub-rcnt2/) | Stub bytes + log |
 | [scripts/build_field_encounter_patch.py](../scripts/build_field_encounter_patch.py) | **One-shot:** decompress → stub → compress |
+| [scripts/make_ppf.py](../scripts/make_ppf.py) | Create RomPatcher.js-compatible **PPF 3.0** from two `.bin`s |
 | [scripts/apply_force_stub_rcnt2.py](../scripts/apply_force_stub_rcnt2.py) | Stub only (into a `.dec`) |
 | [scripts/decompress_field_bin.py](../scripts/decompress_field_bin.py) | GZIPPS → `.dec` |
 | [scripts/compress_field_bin.py](../scripts/compress_field_bin.py) | `.dec` → GZIPPS `.new` |
