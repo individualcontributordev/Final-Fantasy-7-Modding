@@ -3,9 +3,9 @@
 Research, tools, and patches for modifying **Final Fantasy VII on PlayStation** disc images — in a way that still plays on real hardware.
 
 **Site:** https://individualcontributor.dev/Final-Fantasy-7-Modding/  
-(browser patchers, research docs, findings journal)
+(browser patchers + public research articles)
 
-This repo holds reference docs, scripts, Ghidra notes, and a findings journal. Work spans field data, engine binaries (`FIELD.BIN`, `WORLD.BIN`, etc.), ISO layout, and emulator/hardware testing.
+This repo holds private lab docs, scripts, Ghidra notes, a findings journal, and the polished `articles/` that GitHub Pages publishes. Work spans field data, engine binaries (`FIELD.BIN`, `WORLD.BIN`, etc.), ISO layout, and emulator/hardware testing.
 
 ## Status
 
@@ -30,9 +30,10 @@ Add new topic areas as reference docs (`docs/0N-*.md`) and findings as work expa
 Final-Fantasy-7-Modding/
 ├── AGENTS.md                 Cursor agent guide
 ├── README.md                 ← you are here
+├── articles/                 public research posts (CI → site/research)
 ├── site/                     GitHub Pages (hub, encounter patcher, assets)
 ├── scripts/                  build_site_docs, make_ppf, field patch tools
-├── docs/                     research source (published to site/research via CI)
+├── docs/                     private guides + findings journal (not published)
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
 ```
 
@@ -43,9 +44,10 @@ pip install markdown
 python scripts/build_site_docs.py
 ```
 
-## Research journal
+## Research journal (private)
 
-Discoveries are recorded in [docs/findings/](docs/findings/README.md). The Mac Cursor agent uses
+Dated discoveries stay in [docs/findings/](docs/findings/README.md). Public write-ups live in
+[articles/](articles/README.md). The Mac Cursor agent uses
 [record-findings](.cursor/skills/record-findings/SKILL.md) and
 [capture-research-findings](.cursor/rules/capture-research-findings.mdc).
 
