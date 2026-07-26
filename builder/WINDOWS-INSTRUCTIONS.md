@@ -1,145 +1,104 @@
-# Windows (Git Bash): build Encounter layers for all discs
+# Windows (Git Bash): build Encounter layers
 
-Use **Git Bash**. Mods ship **one layer per disc** (Disc 1 / 2 / 3). Absolute `.bin` offsets differ per disc, so do not reuse a Disc 1 layer on Disc 2/3.
+Use **Git Bash**. One Encounter pack per builder base (Unmodified / CSR / CSR+ / CSR++).
 
-**Why two folders:** CDmage auto-saves on `FIELD.BIN` import into the open file. Keep masters outside `iso-extract/` and only open working copies there. No Save As needed.
+| Builder base | `--against` | Output pack |
+|--------------|-------------|-------------|
+| Unmodified | `clean` | `encounter-v…` |
+| CSR | `csr` | `encounter-on-csr-v…` |
+| CSR+ | `csr-plus` | `encounter-on-csr-plus-v…` |
+| CSR++ | `csr-plusplus` | `encounter-on-csr-plusplus-v…` |
 
-There are **four** Encounter packs (separate add-ons in the builder):
-
-| Builder base | `--against` | Diff left side (stack base) | Output pack |
-|--------------|-------------|-----------------------------|-------------|
-| Unmodified | `clean` (default) | `workspace/pristine/` | `encounter-v…` |
-| CSR | `csr` | CSR repo `workspace/csr/` | `encounter-on-csr-v…` |
-| CSR+ | `csr-plus` | CSR repo `workspace/csr-plus/` | `encounter-on-csr-plus-v…` |
-| CSR++ | `csr-plusplus` | CSR repo `workspace/csr-plusplus/` | `encounter-on-csr-plusplus-v…` |
-
-Retail Encounter **cannot** stack on CSR — it overwrites CSR’s `FIELD.BIN` and breaks New Game. Each CSR stack needs its **own** Encounter layer built from that base’s image.
+Retail Encounter **cannot** stack on CSR. Each CSR base needs its own Encounter pack.
 
 ---
 
 ## 0. Setup
 
 ```bash
-cd /c/path/to/Final-Fantasy-7-Modding   # or ~/Final-Fantasy-7-Modding
+cd /c/path/to/Final-Fantasy-7-Modding
 git pull
 ```
 
-`python` on PATH.
+`python` on PATH + network (to download published CSR layers).
 
 ```
-workspace/pristine/                 — retail masters (never open in CDmage)
-  FINALFANTASY7_D1.bin / .cue …
-workspace/iso-extract/              — disposable working copies only
-  FINALFANTASY7_DN.bin / .cue
-  FIELD.BIN / FIELD.BIN.new
+workspace/pristine/
+  FINALFANTASY7_D1.bin / .cue
+  FINALFANTASY7_D2.bin / .cue
+  FINALFANTASY7_D3.bin / .cue
 ```
 
-CSR patched images stay in the **CSR** repo (do not move them into Modding pristine):
+You only need **local pristine** discs. CSR base layers are pulled from:
 
-```
-/c/path/to/Final-Fantasy-7-CSR/workspace/csr/FINALFANTASY7_DN (patched).bin
-/c/path/to/Final-Fantasy-7-CSR/workspace/csr-plus/…
-/c/path/to/Final-Fantasy-7-CSR/workspace/csr-plusplus/…
-```
-
-Set a shortcut once per shell (edit the path):
-
-```bash
-CSR_WS=/c/path/to/Final-Fantasy-7-CSR/workspace
-```
+`https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json`
 
 ---
 
-## A. Unmodified + Encounter (retail)
+## Recommended: one command per base (no CDmage)
 
-### A1. Working copy from retail vault
-
-```bash
-python scripts/prepare_encounter_workspace.py --discs 1
-# replace existing working copy:
-python scripts/prepare_encounter_workspace.py --discs 1 --force
-```
-
-### A2–A4. Extract → stub → import
-
-1. Open **`workspace/iso-extract/FINALFANTASY7_D1.cue`** in CDmage  
-2. Extract `FIELD/FIELD.BIN` → `workspace/iso-extract/FIELD.BIN`  
-3. Stub:
+Downloads the published CSR layer (unless `--against clean`), applies it onto pristine, extracts `FIELD/FIELD.BIN`, applies the stub, pad-injects, diffs, updates `builder/manifest.json`.
 
 ```bash
-python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
+# Unmodified
+python scripts/build_encounter_on_base.py --against clean --discs 1 --version 0.1.0
+
+# CSR / CSR+ / CSR++ (Disc 1 examples)
+python scripts/build_encounter_on_base.py --against csr --discs 1 --version 0.1.0
+python scripts/build_encounter_on_base.py --against csr-plus --discs 1 --version 0.1.0
+python scripts/build_encounter_on_base.py --against csr-plusplus --discs 1 --version 0.1.0
 ```
 
-4. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`** (pad if shorter; never truncate). Auto-save is fine.
+Optional:
 
-### A5. Diff
+| Flag | Meaning |
+|------|---------|
+| `--discs 1,2,3` | Multiple discs in one run |
+| `--base-layer PATH_OR_URL` | Skip manifest lookup (single disc only) |
+| `--csr-manifest URL` | Alternate CSR manifest |
+| `--keep-work` | Keep temps under `workspace/iso-extract/_on_base/` |
 
-```bash
-python scripts/build_encounter_layers.py --version 0.1.0 --discs 1
-# same as: --against clean
-```
+Needs disk for a ~700MB temp image per disc (deleted unless `--keep-work`). First CSR layer download is large (~10MB+ JSON).
 
-Must show `changedBytes` > 0. Then commit `builder/` JSON only.
-
----
-
-## B. CSR / CSR+ / CSR++ + Encounter (one pack per base)
-
-Repeat the whole block for each base you want (`csr`, `csr-plus`, `csr-plusplus`). Example = **CSR+ Disc 1**.
-
-### B1. Working copy from that CSR base (not retail)
-
-```bash
-python scripts/prepare_encounter_workspace.py --discs 1 --force \
-  --from-dir "$CSR_WS/csr-plus"
-```
-
-This copies `FINALFANTASY7_D1 (patched).bin` → `iso-extract/FINALFANTASY7_D1.bin`.  
-**Do not** open files under the CSR workspace in CDmage for import.
-
-### B2–B4. Extract → stub → import
-
-Same as A2–A4 on the **iso-extract** working image. The stub must be applied to **CSR+’s** `FIELD.BIN`, not retail’s.
-
-### B5. Diff against that CSR base
-
-```bash
-python scripts/build_encounter_layers.py --version 0.1.0 --discs 1 \
-  --against csr-plus \
-  --base-dir "$CSR_WS/csr-plus"
-```
-
-| Base | `--against` | `--base-dir` |
-|------|-------------|--------------|
-| CSR | `csr` | `$CSR_WS/csr` |
-| CSR+ | `csr-plus` | `$CSR_WS/csr-plus` |
-| CSR++ | `csr-plusplus` | `$CSR_WS/csr-plusplus` |
-
-Writes e.g. `builder/encounter-on-csr-plus-v0.1.0/` and appends that add-on to `builder/manifest.json` with `compatibleBases: ["csr-plus-v0.1.0"]`. Retail `encounter-v0.1.0` is left alone.
-
-### B6. Smoke test
-
-Boot the **iso-extract** working image in DuckStation — New Game must load (this image is CSR+ with Encounter already applied).
-
----
-
-## C. Commit and push (JSON only)
+Must print `changedBytes` > 0. Then:
 
 ```bash
 git add builder/
-git status   # no .bin / .cue / FIELD.BIN*
-git commit -m "Add Encounter builder layers."
+git status   # no .bin / .cue
+git commit -m "Add Encounter-on-base builder layers."
 git push
 ```
 
-Then message: **Encounter layers pushed — wire builder.**
+Message: **Encounter layers pushed — wire builder.**
+
+Smoke-test in the site builder: pick matching base + Encounter add-on → DuckStation → **New Game**.
+
+---
+
+## Manual CDmage path (fallback)
+
+Only if the automated inject fails. Same as before: copy base → `iso-extract`, CDmage import `FIELD.BIN.new`, then:
+
+```bash
+python scripts/build_encounter_layers.py --version 0.1.0 --discs 1 --against csr-plus \
+  --base-dir /c/path/to/Final-Fantasy-7-CSR/workspace/csr-plus
+```
+
+Or retail:
+
+```bash
+python scripts/prepare_encounter_workspace.py --discs 1 --force
+# … CDmage extract / stub / import …
+python scripts/build_encounter_layers.py --version 0.1.0 --discs 1
+```
+
+Full manual steps are unchanged in spirit: never open `workspace/pristine/` in CDmage; only edit copies under `iso-extract/`.
 
 ---
 
 ## Builder behaviour
 
-- Each Encounter pack lists `compatibleBases`. The site builder greys out add-ons that do not match the selected base.
-- Pick **CSR+** + **Encounter rate (on CSR+)**, not the retail Encounter add-on.
+Each pack sets `compatibleBases`. The site greys out add-ons that do not match the selected base (e.g. retail Encounter stays disabled on CSR+).
 
 ---
 
@@ -148,6 +107,5 @@ Then message: **Encounter layers pushed — wire builder.**
 | Avoid (cmd) | Use (Git Bash) |
 |-------------|----------------|
 | `scripts\foo.py` | `scripts/foo.py` |
-| `^` | `\` |
-| `C:\…` | `/c/…` or `~/…` |
-| paths with spaces | quote them: `"$CSR_WS/csr-plus"` |
+| `C:\…` | `/c/…` |
+| paths with spaces | quote them |
