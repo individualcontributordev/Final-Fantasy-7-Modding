@@ -7,7 +7,7 @@ Canonical bytes live in:
 
 Packaging (Makou + stub → one PPF): docs/06-packaging-combined-ppf.md
 
-Rate: P(FORCE) ≈ (g_enemy_lure * 3/4) / 256  (slightly under raw lure/256)
+Rate: P(FORCE) ≈ (g_enemy_lure / 2) / 256  (half of raw lure/256)
 """
 import sys
 from pathlib import Path
@@ -20,7 +20,7 @@ _PATCH_DIR = _REPO / "workspace" / "patches" / "2026-07-25-force-stub-rcnt2"
 
 _FALLBACK_STUB = (
     "80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c"
-    "19 2f 23 90 ff 00 42 30 82 08 03 00 23 18 61 00"
+    "19 2f 23 90 ff 00 42 30 42 18 03 00 00 00 00 00"
     "2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4"
     + (" 00 00 00 00" * 10)
 )
