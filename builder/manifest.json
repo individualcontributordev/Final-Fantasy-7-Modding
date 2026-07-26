@@ -6,27 +6,27 @@
       "id": "encounter-v0.1.0",
       "name": "Encounter rate v0.1.0",
       "kind": "addon",
-      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check default; 50% of raw). Unmodified base only.",
+      "blurb": "Superseded by v0.1.1.",
       "format": "ic-layer-v1",
       "compatibleBases": ["clean"],
       "discs": {
         "1": "./encounter-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true,
-      "note": "Stub bytes updated to lure/2 — rebuild with build_encounter_on_base.py --version 0.1.1 to ship the new rate in the layer."
+      "enabled": false,
+      "note": "Rebuild: python scripts/build_encounter_on_base.py --against clean --discs 1"
     },
     {
       "id": "encounter-on-csr-plus-v0.1.0",
       "name": "Encounter rate (on CSR+) v0.1.0",
       "kind": "addon",
-      "blurb": "RCnt2 FORCE at lure/2 on CSR+ (~3.1%/check default). Use with CSR+ base only.",
+      "blurb": "Superseded by v0.1.1 against csr-plus-v0.1.1.",
       "format": "ic-layer-v1",
-      "compatibleBases": ["csr-plus-v0.1.0"],
+      "compatibleBases": ["csr-plus-v0.1.1"],
       "discs": {
         "1": "./encounter-on-csr-plus-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true,
-      "note": "Layer may still be lure*3/4 until rebuilt with the lure/2 stub."
+      "enabled": false,
+      "note": "Rebuild after CSR+ 0.1.1 is on Pages."
     }
   ],
   "bases": []
