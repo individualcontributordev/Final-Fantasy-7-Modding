@@ -2,7 +2,7 @@
 
 ## Project scope
 
-**FF7 PSX disc modding** — understand, change, and rebuild PlayStation disc images so
+**Final Fantasy VII PSX disc modding** — understand, change, and rebuild PlayStation disc images so
 mods remain playable on console hardware (and test accurately in emulators).
 
 This includes:
@@ -44,7 +44,7 @@ field edits.
 
 Applies to any mod work in this repo:
 
-- [ ] Clean FF7 PS1 disc image (`.bin` + `.cue`) in `workspace/iso-extract/`
+- [ ] Clean Final Fantasy VII PS1 disc image (`.bin` + `.cue`) in `workspace/iso-extract/`
 - [ ] Can extract key files (`FIELD.BIN`, etc.) from the image
 - [ ] `scripts/decompress_field_bin.py` runs successfully
 - [ ] Emulator boots the image (DuckStation Safe Mode — see findings)

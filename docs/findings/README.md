@@ -1,6 +1,6 @@
 # Findings journal
 
-Dated research notes for **FF7 PSX disc modding**. Stable guides live in
+Dated research notes for **Final Fantasy VII PSX disc modding**. Stable guides live in
 `docs/0N-*.md`; this folder is the lab notebook.
 
 **How to add an entry:** copy `_template.md` → `YYYY-MM-DD-slug.md` → update the index below.

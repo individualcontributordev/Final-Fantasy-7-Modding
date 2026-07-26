@@ -84,7 +84,7 @@ If PC doesn't match Ghidra address: adjust import base address and re-analyze.
 
 - Encounter check will reference Danger add, encounter rate division, two RNG calls
 - Field load init will set up map state; look for calls near DAT section loading
-- Many addresses are absolute `0x800xxxxx` — normal for PS1 FF7 modules
+- Many addresses are absolute `0x800xxxxx` — normal for PS1 Final Fantasy VII modules
 
 ## When ready to patch (later)
 

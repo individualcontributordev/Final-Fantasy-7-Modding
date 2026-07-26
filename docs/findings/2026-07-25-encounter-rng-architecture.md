@@ -46,6 +46,6 @@ Makou cannot make encounters unpredictable. Patch target is **FIELD.BIN** (and l
 
 ## Sources
 
-- [FF7 speedrun wiki — Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics)
-- TASVideos FF7 PSX submissions (StepID/Danger addresses)
+- [Final Fantasy VII speedrun wiki — Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics)
+- TASVideos Final Fantasy VII PSX submissions (StepID/Danger addresses)
 - Qhimm forums topic 6431
