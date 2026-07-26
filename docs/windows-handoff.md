@@ -2,4 +2,5 @@
 
 **Not user-facing.**
 
-**Current:** FIELD FORCE stub accepted. Optional later: Aps preempt, WORLD.BIN, rate tune.
+**Current task:** Re-apply *3/4 FORCE rate stub; playtest density.
+
