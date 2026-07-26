@@ -27,6 +27,6 @@ Not every StepID+2. Offset **0→13** after StepID wrap matches vanilla tape adv
 
 ## Follow-ups
 
-- [ ] Confirm Enemy Lure denser / Away sparser  
+- [x] Lure scaling via RAM poke (1/16/64)  
 - [ ] Optional FORCE rate tune (`lure` vs `lure>>n`)  
 - [ ] Scripted preempt boss smoke (Aps etc.)

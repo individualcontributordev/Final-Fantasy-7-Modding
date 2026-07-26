@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Poke g_enemy_lure 1/16/64; compare encounter density.
+**Current task:** Confirm preempt flag path still runs (watch 0x800716D0).

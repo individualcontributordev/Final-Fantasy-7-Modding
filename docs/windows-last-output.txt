@@ -1,14 +1,11 @@
-# Task: poke g_enemy_lure in DuckStation; compare density
+# Task: preempt flag smoke (any hostile field)
 
 # COPY-PASTE (do not edit these lines)
-watch_lure_ram: 0x80062F19
-watch_danger_ram: 0x8007173C
-poke_low: 1
-poke_mid: 16
-poke_high: 64
+watch_preempt_flag: 0x800716D0
+watch_step_id: 0x8009C540
+watch_offset: 0x8009AD2C
 
-# EVIDENCE (same field walk each time; set byte at 0x80062F19 then walk; paste fight count / feel per poke)
-lure_1: none
-lure_16: normal
-lure_64: alot
+# EVIDENCE (walk until you see DAT_800716d0 / preempt-related flag go non-zero if visible; or note "preempt roll still runs — saw flag 4 then 0"; paste notes)
+preempt_flag_seen:
+step_id_advances:
 notes:
