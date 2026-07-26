@@ -45,12 +45,18 @@ python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
 
 Expect `workspace/iso-extract/FIELD.BIN.new`.
 
-### 1c. Reimport (CDmage)
+### 1c. Reimport (CDmage) — prefer Save As
 
-1. Copy pristine → `FINALFANTASY7_DN_encounter.bin` + matching `.cue`  
-2. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`**  
-3. Pad if shorter; **never** accept truncate  
-4. Save  
+Pristine stays untouched if you **Save As** before changing anything:
+
+1. Open pristine `FINALFANTASY7_DN.cue`  
+2. **File → Save As** → `FINALFANTASY7_DN_encounter` (bin + cue)  
+   Do this *before* import. You’re now editing the encounter copy; pristine is unchanged.  
+3. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`**  
+4. Pad if shorter; **never** accept truncate  
+5. **Save** (still on the `_encounter` files)
+
+(File-copy of bin+cue also works; Save As is preferred when CDmage won’t overwrite an open image.)
 
 ### 1d. Smoke test (DuckStation)
 
