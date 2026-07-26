@@ -19,8 +19,8 @@ Put files here (names can vary — adjust commands):
 
 ```
 workspace\iso-extract\
-  ff7_disc1_pristine.bin
-  ff7_disc1_pristine.cue
+  FINALFANTASY7_D1.bin
+  FINALFANTASY7_D1.cue
 ```
 
 ---
@@ -31,7 +31,7 @@ Use a **copy** of pristine (never overwrite the only pristine).
 
 ### 1a. Extract `FIELD\FIELD.BIN` (CDmage)
 
-1. Open `ff7_disc1_pristine.cue` in CDmage  
+1. Open `FINALFANTASY7_D1.cue` in CDmage  
 2. Extract `FIELD\FIELD.BIN` → `workspace\iso-extract\FIELD.BIN`
 
 ### 1b. Patch + recompress
@@ -45,7 +45,7 @@ Expect `workspace\iso-extract\FIELD.BIN.new`.
 
 ### 1c. Reimport (CDmage)
 
-1. Copy pristine → `workspace\iso-extract\ff7_disc1_encounter.bin` (+ matching `.cue`)  
+1. Copy pristine → `workspace\iso-extract\FINALFANTASY7_D1_encounter.bin` (+ matching `.cue`)  
 2. Open that working `.cue` in CDmage  
 3. Import `FIELD.BIN.new` over **`FIELD\FIELD.BIN`**  
 4. If shorter → pad zeros = Yes. If truncate → Cancel and fix.  
@@ -53,7 +53,7 @@ Expect `workspace\iso-extract\FIELD.BIN.new`.
 
 ### 1d. Smoke test (DuckStation)
 
-Boot `ff7_disc1_encounter` — field loads, encounters still happen.
+Boot `FINALFANTASY7_D1_encounter` — field loads, encounters still happen.
 
 ---
 
@@ -61,8 +61,8 @@ Boot `ff7_disc1_encounter` — field loads, encounters still happen.
 
 ```bat
 python scripts\bin_diff_to_layer.py ^
-  workspace\iso-extract\ff7_disc1_pristine.bin ^
-  workspace\iso-extract\ff7_disc1_encounter.bin ^
+  workspace\iso-extract\FINALFANTASY7_D1.bin ^
+  workspace\iso-extract\FINALFANTASY7_D1_encounter.bin ^
   -o builder\encounter-v0.1.0\layers\disc1.layer.json ^
   --id encounter-disc1-v0.1.0 ^
   --description "Encounter RCnt2 FORCE stub — NTSC-U Disc 1"
@@ -72,9 +72,9 @@ python scripts\bin_diff_to_layer.py ^
 
 ```bat
 python scripts\apply_layer.py ^
-  workspace\iso-extract\ff7_disc1_pristine.bin ^
+  workspace\iso-extract\FINALFANTASY7_D1_pristine.bin ^
   builder\encounter-v0.1.0\layers\disc1.layer.json ^
-  --expect workspace\iso-extract\ff7_disc1_encounter.bin
+  --expect workspace\iso-extract\FINALFANTASY7_D1_encounter.bin
 ```
 
 Must print `OK — layer apply matches --expect`.
