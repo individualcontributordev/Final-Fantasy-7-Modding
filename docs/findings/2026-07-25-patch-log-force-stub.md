@@ -31,3 +31,7 @@ Replace vanilla Danger `+=` at `0x800ABB7C`–`0x800ABBD3` (88 bytes) with lure-
 ## Rev 2
 
 Replaced invalid `mfc0 Count` with `lw` RCnt2 after playtest always-FORCE.
+
+## Playtest (RCnt2)
+
+Sparse encounters across StepID samples; Offset wrap 0→13 observed. Always-FORCE bug fixed.
