@@ -4,6 +4,8 @@ Do this on the PC that has your pristine discs, CDmage, DuckStation, and this re
 
 Goal: publish `builder/encounter-v0.1.0/layers/disc1.layer.json` (no game `.bin` in git).
 
+Scripts take whatever paths you pass; keep names **consistent** in every step below.
+
 ---
 
 ## 0. Setup
@@ -15,19 +17,19 @@ git pull
 
 Python 3 on PATH. Game images stay under `workspace\` (gitignored).
 
-Put files here (names can vary — adjust commands):
-
 ```
 workspace\iso-extract\
-  FINALFANTASY7_D1.bin
+  FINALFANTASY7_D1.bin              — untouched retail
   FINALFANTASY7_D1.cue
+  FINALFANTASY7_D1_encounter.bin    — working copy (create in step 1c)
+  FINALFANTASY7_D1_encounter.cue
 ```
 
 ---
 
 ## 1. Build a Disc 1 image with the Encounter stub only
 
-Use a **copy** of pristine (never overwrite the only pristine).
+Never overwrite `FINALFANTASY7_D1.bin`.
 
 ### 1a. Extract `FIELD\FIELD.BIN` (CDmage)
 
@@ -41,11 +43,11 @@ cd C:\path\to\Final-Fantasy-7-Modding
 python scripts\build_field_encounter_patch.py workspace\iso-extract\FIELD.BIN
 ```
 
-Expect `workspace\iso-extract\FIELD.BIN.new`.
+Expect `workspace\iso-extract\FIELD.BIN.new` (script default output next to the input).
 
 ### 1c. Reimport (CDmage)
 
-1. Copy pristine → `workspace\iso-extract\FINALFANTASY7_D1_encounter.bin` (+ matching `.cue`)  
+1. Copy pristine → `FINALFANTASY7_D1_encounter.bin` + matching `.cue` (point the cue at the new bin name)  
 2. Open that working `.cue` in CDmage  
 3. Import `FIELD.BIN.new` over **`FIELD\FIELD.BIN`**  
 4. If shorter → pad zeros = Yes. If truncate → Cancel and fix.  
@@ -70,9 +72,11 @@ python scripts\bin_diff_to_layer.py ^
 
 ### Verify (required)
 
+Use the **same** pristine path as the diff:
+
 ```bat
 python scripts\apply_layer.py ^
-  workspace\iso-extract\FINALFANTASY7_D1_pristine.bin ^
+  workspace\iso-extract\FINALFANTASY7_D1.bin ^
   builder\encounter-v0.1.0\layers\disc1.layer.json ^
   --expect workspace\iso-extract\FINALFANTASY7_D1_encounter.bin
 ```
@@ -96,7 +100,6 @@ Templates:
 - `builder\encounter-v0.1.0\pack.json`  
 - `builder\manifest.json`  
 
-
 ---
 
 ## 4. Commit and push (JSON only)
@@ -108,7 +111,7 @@ git commit -m "Add Encounter Disc 1 builder layer."
 git push
 ```
 
-Do **not** `git add` any `.bin` / `.cue`.
+Do **not** `git add` any `.bin` / `.cue` / `FIELD.BIN*`.
 
 ---
 
@@ -124,6 +127,6 @@ After Pages deploys, the main site can load:
 
 ## CSR bases
 
-Cutscene packs are built in the **CSR** repo. See:
+Cutscene packs are built in the **Final-Fantasy-7-CSR** repo. See:
 
 `Final-Fantasy-7-CSR\builder\WINDOWS-INSTRUCTIONS.md`
