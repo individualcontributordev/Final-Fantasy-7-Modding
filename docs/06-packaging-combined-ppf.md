@@ -93,11 +93,14 @@ Apply `yourmod-disc1.ppf` to a **second** fresh retail `.bin` and boot once.
 
 ## End users
 
-```
-fresh retail .bin  +  yourmod-disc1.ppf  →  play
+```bash
+python scripts/apply_ppf.py path/to/fresh_retail.bin path/to/yourmod-disc1.ppf \
+  -o path/to/ff7_disc1_patched.bin
 ```
 
-No Makou, no CDmage, no Python.
+Or use [RomPatcher.js](https://www.marcrobledo.com/RomPatcher.js/) / PPF-O-Matic in a browser — same `.ppf`.
+
+No Makou, no CDmage required for players.
 
 ### Dev-only: stub on stock FIELD.BIN
 
