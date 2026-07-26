@@ -33,3 +33,27 @@ keep_jal: 0x800ABBD4
 
 # playtest_notes (from chat):
 # boot OK, field OK, danger 0 on load, every stepid+2 danger=65535 then battle clear
+        800abb7c 80 1f 01 3c     lui        at,0x1f80
+        800abb80 20 11 22 8c     lw         v0,0x1120(at)
+        800abb84 00 00 00 00     nop
+        800abb88 06 80 01 3c     lui        at,0x8006
+        800abb8c 19 2f 23 90     lbu        v1,0x2f19(at)
+        800abb90 ff 00 42 30     andi       v0,v0,0xff
+        800abb94 2b 10 43 00     sltu       v0,v0,v1
+        800abb98 23 10 02 00     subu       v0,zero,v0
+        800abb9c 07 80 01 3c     lui        at,0x8007
+        800abba0 3c 17 22 a4     sh         v0,0x173c(at)
+        800abba4 00 00 00 00     nop
+        800abba8 00 00 00 00     nop
+        800abbac 00 00 00 00     nop
+        800abbb0 00 00 00 00     nop
+        800abbb4 00 00 00 00     nop
+        800abbb8 00 00 00 00     nop
+        800abbbc 00 00 00 00     nop
+        800abbc0 00 00 00 00     nop
+        800abbc4 00 00 00 00     nop
+        800abbc8 00 00 00 00     nop
+        800abbcc 00 00 00 00     nop
+        800abbd0 00 00 00 00     nop
+        800abbd4 72 ae 02 0c     jal        increment_step_id                                undefined increment_step_id()
+        800abbd8 00 00 00 00     nop
