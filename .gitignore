@@ -8,10 +8,11 @@ workspace/iso-extract/*
 workspace/ghidra/*
 !workspace/ghidra/.gitkeep
 
-# Binary patch outputs (keep markdown logs)
+# Patch outputs: keep docs + small hex stubs; ignore rebuilt game blobs
 workspace/patches/**
 !workspace/patches/**/
 !workspace/patches/**/*.md
+!workspace/patches/**/*.hex
 !workspace/patches/README.md
 
 # Common disc / dump companions (anywhere under workspace)

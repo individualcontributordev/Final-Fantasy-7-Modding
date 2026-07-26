@@ -6,7 +6,7 @@ This repo holds reference docs, scripts, Ghidra notes, and a findings journal. W
 
 ## Status
 
-**Active — environment setup and early research.** First topic area: field encounter RNG (see below).
+**Active — FIELD encounter FORCE stub playtested; packaging documented.** Optional next: boss preempt in-game, `WORLD.BIN`.
 
 ## Topic areas
 
@@ -16,7 +16,8 @@ This repo holds reference docs, scripts, Ghidra notes, and a findings journal. W
 | Tooling & emulator setup | [docs/03-environment-setup.md](docs/03-environment-setup.md) | in progress |
 | Patch workflow | [docs/04-workflow.md](docs/04-workflow.md) | documented |
 | Ghidra / RE | [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | in progress |
-| Field encounter RNG | [docs/01-encounter-system.md](docs/01-encounter-system.md) | research (one mod idea, not project scope) |
+| Field encounter RNG | [docs/01-encounter-system.md](docs/01-encounter-system.md) | FIELD stub playtested |
+| Combined Makou + stub PPF | [docs/06-packaging-combined-ppf.md](docs/06-packaging-combined-ppf.md) | documented |
 
 Add new topic areas as reference docs (`docs/0N-*.md`) and findings as work expands.
 
@@ -36,9 +37,10 @@ ff7-modding/
 │   ├── 03-environment-setup.md Tool checklist — start here
 │   ├── 04-workflow.md        Edit → rebuild → test loop
 │   ├── 05-ghidra-guide.md    RE workflow for FIELD.BIN
+│   ├── 06-packaging-combined-ppf.md  Makou + stub → one PPF
 │   ├── windows-last-output.txt  Latest Windows cmd output
 │   └── findings/             Dated lab notebook
-├── scripts/                  FIELD.BIN decompress/recompress
+├── scripts/                  decompress / compress / apply_force_stub_rcnt2
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
 ```
 

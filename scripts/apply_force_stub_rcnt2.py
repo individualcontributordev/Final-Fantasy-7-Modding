@@ -1,17 +1,36 @@
 #!/usr/bin/env python3
-"""Apply RCnt2 FORCE stub at FIELD.BIN.dec offset 0xBB7C."""
+"""Apply RCnt2 FORCE stub at FIELD.BIN.dec offset 0xBB7C.
+
+Canonical bytes live in:
+  workspace/patches/2026-07-25-force-stub-rcnt2/stub-bb7c.hex
+  workspace/patches/2026-07-25-force-stub-rcnt2/jal-bbd4.hex
+
+Packaging (Makou + stub → one PPF): docs/06-packaging-combined-ppf.md
+"""
 import sys
 from pathlib import Path
 
 OFFSET = 0xBB7C
 JAL_OFFSET = 0xBBD4
-STUB = bytes.fromhex(
+
+_REPO = Path(__file__).resolve().parents[1]
+_PATCH_DIR = _REPO / "workspace" / "patches" / "2026-07-25-force-stub-rcnt2"
+
+
+def _load_hex(name: str, fallback: str) -> bytes:
+    path = _PATCH_DIR / name
+    text = path.read_text() if path.is_file() else fallback
+    return bytes.fromhex(text.replace("\n", " "))
+
+
+STUB = _load_hex(
+    "stub-bb7c.hex",
     "80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c"
     "19 2f 23 90 ff 00 42 30 2b 10 43 00 23 10 02 00"
     "07 80 01 3c 3c 17 22 a4"
-    + (" 00 00 00 00" * 12)
+    + (" 00 00 00 00" * 12),
 )
-JAL = bytes.fromhex("72 ae 02 0c")
+JAL = _load_hex("jal-bbd4.hex", "72 ae 02 0c")
 
 def main() -> None:
     if len(sys.argv) < 2:

@@ -93,6 +93,13 @@ In emulator memory viewer while walking on a hostile field:
 2. If yes: patch is the problem; bisect in Ghidra
 3. If no: ISO import corrupted; re-copy pristine disc image
 
+## Combined Makou + encounter PPF
+
+To ship Makou field edits **and** the encounter stub as **one PPF** (Makou first, patch that ISO’s `FIELD.BIN`, then MakePPF from pristine → final):
+
+→ **[06-packaging-combined-ppf.md](06-packaging-combined-ppf.md)**  
+→ Patch bytes: `workspace/patches/2026-07-25-force-stub-rcnt2/`
+
 ## Patch log template
 
 Create `workspace/patches/YYYY-MM-DD-short-name.md`:
