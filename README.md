@@ -2,11 +2,14 @@
 
 Research, tools, and patches for modifying **Final Fantasy VII on PlayStation** disc images — in a way that still plays on real hardware.
 
+**Site:** https://individualcontributor.dev/Final-Fantasy-7-Modding/  
+(browser patchers, research docs, findings journal)
+
 This repo holds reference docs, scripts, Ghidra notes, and a findings journal. Work spans field data, engine binaries (`FIELD.BIN`, `WORLD.BIN`, etc.), ISO layout, and emulator/hardware testing.
 
 ## Status
 
-**Active — FIELD encounter FORCE stub playtested; packaging documented.** Optional next: boss preempt in-game, `WORLD.BIN`.
+**Active — FIELD encounter FORCE stub playtested; packaging documented; public site scaffolded.** Optional next: ship encounter `.ppf`, boss preempt in-game, `WORLD.BIN`.
 
 ## Topic areas
 
@@ -24,24 +27,20 @@ Add new topic areas as reference docs (`docs/0N-*.md`) and findings as work expa
 ## Project layout
 
 ```
-ff7-modding/
+Final-Fantasy-7-Modding/
 ├── AGENTS.md                 Cursor agent guide
 ├── README.md                 ← you are here
-├── .cursor/
-│   ├── rules/                Always-on project rules
-│   └── skills/record-findings/
-├── docs/
-│   ├── 00-goals.md           Project scope and success criteria
-│   ├── 01-encounter-system.md   (topic) Field encounter RNG
-│   ├── 02-disc-format.md     ISO, FIELD.BIN, Makou save path
-│   ├── 03-environment-setup.md Tool checklist — start here
-│   ├── 04-workflow.md        Edit → rebuild → test loop
-│   ├── 05-ghidra-guide.md    RE workflow for FIELD.BIN
-│   ├── 06-packaging-combined-ppf.md  Makou + stub → one PPF
-│   ├── windows-last-output.txt  Latest Windows cmd output
-│   └── findings/             Dated lab notebook
-├── scripts/                  build_field_encounter_patch, make_ppf, compress/decompress
+├── site/                     GitHub Pages (hub, encounter patcher, assets)
+├── scripts/                  build_site_docs, make_ppf, field patch tools
+├── docs/                     research source (published to site/research via CI)
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
+```
+
+Rebuild research HTML locally:
+
+```bash
+pip install markdown
+python scripts/build_site_docs.py
 ```
 
 ## Research journal
@@ -55,27 +54,6 @@ The Mac Cursor agent instructs in chat. Windows outputs via git:
 
 ## GitHub
 
-Repo: [individualcontributordev/ff7-modding](https://github.com/individualcontributordev/ff7-modding)
+Repo: [individualcontributordev/Final-Fantasy-7-Modding](https://github.com/individualcontributordev/Final-Fantasy-7-Modding)
 
 After clone: `git config core.hooksPath .githooks` (strips Cursor commit trailers; see `.cursor/rules/no-cursor-commit-trailers.mdc`).
-
-## Where to start
-
-1. [docs/00-goals.md](docs/00-goals.md) — scope and what “done” looks like for tooling
-2. [docs/03-environment-setup.md](docs/03-environment-setup.md) — install checklist
-3. Extract files from a disc you own into `workspace/iso-extract/`
-4. [docs/02-disc-format.md](docs/02-disc-format.md) — how the disc and save path work
-
-## Related source repos
-
-| Repo | Path | Role |
-|------|------|------|
-| Makou Reactor | `~/makoureactor` | Field editor, ISO save/rebuild |
-| ff7tk | `~/ff7tk` | ISO / FIELD.BIN library (used by Makou) |
-
-## Core idea (disc modding)
-
-PS1 FF7 does not use the ISO directory alone for large folders like `FIELD`. Engine
-binaries (`FIELD.BIN`) and per-map files (`.DAT`, `.MIM`, `.BSX`) must stay consistent
-— LBAs, gzip indexes, and sector layout — for console-compatible images. Makou handles
-much of that for field edits; deeper changes need `FIELD.BIN` / `WORLD.BIN` RE and patches.

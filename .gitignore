@@ -47,6 +47,9 @@ workspace/**/*.dst
 **/duckstation*/
 **/*.duckstation*
 
+# Generated research HTML (built in CI / scripts/build_site_docs.py)
+site/research/
+
 # Python
 __pycache__/
 *.py[cod]
