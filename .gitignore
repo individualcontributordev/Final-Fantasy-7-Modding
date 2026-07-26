@@ -1,8 +1,9 @@
 # Local disc / RE artifacts — never commit game data or large binaries
 
-# ISO extract: ignore everything except the folder README
-workspace/iso-extract/*
-!workspace/iso-extract/README.md
+# workspace: ignore everything except folder READMEs
+workspace/*
+!workspace/**/
+!workspace/**/README.md
 
 # Ghidra projects (local)
 workspace/ghidra/*
