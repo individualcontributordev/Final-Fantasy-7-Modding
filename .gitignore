@@ -38,6 +38,9 @@ workspace/**/*.new
 workspace/**/*.pristine
 workspace/**/*.gz
 workspace/**/*.gzip
+workspace/**/FIELD.BIN
+workspace/**/FIELD.BIN.*
+workspace/**/*.makou
 
 # Emulator / save junk if dropped in the repo
 workspace/**/*.mcd
