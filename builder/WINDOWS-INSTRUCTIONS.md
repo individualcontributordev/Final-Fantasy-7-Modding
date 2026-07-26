@@ -1,111 +1,110 @@
-# Windows (Git Bash): build Encounter layers
+# Windows (Git Bash): Encounter layers + version naming
 
-Use **Git Bash**. One Encounter pack per builder base (Unmodified / CSR / CSR+ / CSR++).
+## Version rule
 
-| Builder base | `--against` | Output pack |
-|--------------|-------------|-------------|
-| Unmodified | `clean` | `encounter-v…` |
-| CSR | `csr` | `encounter-on-csr-v…` |
-| CSR+ | `csr-plus` | `encounter-on-csr-plus-v…` |
-| CSR++ | `csr-plusplus` | `encounter-on-csr-plusplus-v…` |
+| Thing | Version file / flag | Bumps when |
+|-------|---------------------|------------|
+| Encounter stub | `builder/ENCOUNTER_VERSION` | FORCE stub / rate changes |
+| CSR / CSR+ / CSR++ | `--version` on CSR layer build | That cutscene pack changes |
 
-Retail Encounter **cannot** stack on CSR. Each CSR base needs its own Encounter pack.
+They do **not** need to match. Example this release:
+
+| Pack | Version | Notes |
+|------|---------|--------|
+| CSR | `0.14.1` | bump from `0.14.0` |
+| CSR+ | `0.1.0` | unchanged |
+| CSR++ | `0.1.0` | unchanged |
+| Encounter | `0.1.1` | lure/2 stub (from `0.1.0`) |
+
+### PPF short names (CSR site `patcher/`)
+
+Match what’s already on the site (no hyphen inside `csrplus` / `csrplusplus`):
+
+```
+csr-disc1-v0.14.1.ppf
+csr-disc2-v0.14.1.ppf
+csr-disc3-v0.14.1.ppf
+
+csrplus-disc1-v0.1.0.ppf
+csrplus-disc2-v0.1.0.ppf
+csrplus-disc3-v0.1.0.ppf
+
+csrplusplus-disc1-v0.1.0.ppf
+…
+```
+
+Encounter PPF (optional; builder is preferred for stacks):
+
+```
+encounter-disc1-v0.1.1.ppf
+```
+
+Builder pack ids keep hyphens: `csr-plus-v0.1.0`, `encounter-on-csr-plus-v0.1.1`.
 
 ---
 
-## 0. Setup
+## Setup
 
 ```bash
 cd /c/path/to/Final-Fantasy-7-Modding
 git pull
 ```
 
-`python` on PATH + network (to download published CSR layers).
+`python` on PATH + network. Pristine discs in `workspace/pristine/FINALFANTASY7_DN.bin`.
 
-```
-workspace/pristine/
-  FINALFANTASY7_D1.bin / .cue
-  FINALFANTASY7_D2.bin / .cue
-  FINALFANTASY7_D3.bin / .cue
-```
-
-You only need **local pristine** discs. CSR base layers are pulled from:
-
-`https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json`
+Current stub version is in `builder/ENCOUNTER_VERSION` (no need to pass `--version` unless overriding).
 
 ---
 
-## Recommended: one command per base (no CDmage)
-
-Downloads the published CSR layer (unless `--against clean`), applies it onto pristine, extracts `FIELD/FIELD.BIN`, applies the stub, pad-injects, diffs, updates `builder/manifest.json`.
+## Build Encounter layers (recommended)
 
 ```bash
-# Unmodified
-python scripts/build_encounter_on_base.py --against clean --discs 1 --version 0.1.0
+# reads version from builder/ENCOUNTER_VERSION (0.1.1)
+# pulls CSR base id from live CSR manifest when needed
 
-# CSR / CSR+ / CSR++ (Disc 1 examples)
-python scripts/build_encounter_on_base.py --against csr --discs 1 --version 0.1.0
-python scripts/build_encounter_on_base.py --against csr-plus --discs 1 --version 0.1.0
-python scripts/build_encounter_on_base.py --against csr-plusplus --discs 1 --version 0.1.0
+python scripts/build_encounter_on_base.py --against clean --discs 1
+python scripts/build_encounter_on_base.py --against csr-plus --discs 1
+# optional:
+python scripts/build_encounter_on_base.py --against csr --discs 1
+python scripts/build_encounter_on_base.py --against csr-plusplus --discs 1
 ```
 
-Optional:
-
-| Flag | Meaning |
-|------|---------|
-| `--discs 1,2,3` | Multiple discs in one run |
-| `--base-layer PATH_OR_URL` | Skip manifest lookup (single disc only) |
-| `--csr-manifest URL` | Alternate CSR manifest |
-| `--keep-work` | Keep temps under `workspace/iso-extract/_on_base/` |
-
-Needs disk for a ~700MB temp image per disc (deleted unless `--keep-work`). First CSR layer download is large (~10MB+ JSON).
-
-Must print `changedBytes` > 0. Then:
+Then:
 
 ```bash
 git add builder/
-git status   # no .bin / .cue
-git commit -m "Add Encounter-on-base builder layers."
+git status   # JSON only
+git commit -m "Encounter v0.1.1 (lure/2)."
 git push
 ```
 
-Message: **Encounter layers pushed — wire builder.**
-
-Smoke-test in the site builder: pick matching base + Encounter add-on → DuckStation → **New Game**.
+Older `encounter-*-v0.1.0` addons are auto-disabled in the manifest when the new pack is written.
 
 ---
 
-## Manual CDmage path (fallback)
+## CSR base bump (only if releasing CSR 0.14.1)
 
-Only if the automated inject fails. Same as before: copy base → `iso-extract`, CDmage import `FIELD.BIN.new`, then:
+In **Final-Fantasy-7-CSR**:
 
 ```bash
-python scripts/build_encounter_layers.py --version 0.1.0 --discs 1 --against csr-plus \
-  --base-dir /c/path/to/Final-Fantasy-7-CSR/workspace/csr-plus
+python scripts/build_csr_base_layers.py workspace/csr --version 0.14.1
+# copy PPFs → patcher/csr-discN-v0.14.1.ppf
+# update index.html PATCHES entries
+# commit builder/ + patcher/ + index.html · push
 ```
 
-Or retail:
+CSR+ / CSR++ stay on `0.1.0` — no rebuild unless those packs change.
+
+After CSR `0.14.1` is live, rebuild Encounter against it:
 
 ```bash
-python scripts/prepare_encounter_workspace.py --discs 1 --force
-# … CDmage extract / stub / import …
-python scripts/build_encounter_layers.py --version 0.1.0 --discs 1
+python scripts/build_encounter_on_base.py --against csr --discs 1
 ```
 
-Full manual steps are unchanged in spirit: never open `workspace/pristine/` in CDmage; only edit copies under `iso-extract/`.
+(`compatibleBases` becomes `csr-v0.14.1` automatically.)
 
 ---
 
-## Builder behaviour
+## Manual CDmage fallback
 
-Each pack sets `compatibleBases`. The site greys out add-ons that do not match the selected base (e.g. retail Encounter stays disabled on CSR+).
-
----
-
-## Git Bash notes
-
-| Avoid (cmd) | Use (Git Bash) |
-|-------------|----------------|
-| `scripts\foo.py` | `scripts/foo.py` |
-| `C:\…` | `/c/…` |
-| paths with spaces | quote them |
+See git history or ask — prefer `build_encounter_on_base.py`.

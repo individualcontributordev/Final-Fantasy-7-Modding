@@ -5,19 +5,18 @@ Pulls the published CSR base layer from the remote builder manifest (or a local
 JSON), applies it onto your local pristine disc, stubs FIELD.BIN, pad-injects,
 diffs, and updates builder/manifest.json.
 
+Version comes from builder/ENCOUNTER_VERSION unless you pass --version.
+CSR base id is inferred from the live CSR manifest for --against csr|csr-plus|….
+
 Examples (Git Bash):
 
-  # CSR+ Disc 1 — downloads csr-plus disc1.layer.json from Pages
-  python scripts/build_encounter_on_base.py --against csr-plus --discs 1 --version 0.1.0
-
-  # CSR Disc 1
-  python scripts/build_encounter_on_base.py --against csr --discs 1 --version 0.1.0
-
-  # Unmodified (no remote layer — stub retail FIELD.BIN directly)
-  python scripts/build_encounter_on_base.py --against clean --discs 1 --version 0.1.0
+  python scripts/build_encounter_on_base.py --against csr-plus --discs 1
+  python scripts/build_encounter_on_base.py --against clean --discs 1
+  python scripts/build_encounter_on_base.py --against csr --discs 1 --version 0.1.2
 
 Requires workspace/pristine/FINALFANTASY7_DN.bin. Needs network unless you pass
---base-layer. Temp images go under workspace/iso-extract/_on_base/ (gitignored).
+--base-layer (and --base-id if not clean). Temp images under
+workspace/iso-extract/_on_base/ (gitignored).
 """
 
 from __future__ import annotations
@@ -49,6 +48,7 @@ from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: 
 
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_on_base"
+VERSION_FILE = _ROOT / "builder" / "ENCOUNTER_VERSION"
 DEFAULT_CSR_MANIFEST = (
     "https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
 )
@@ -70,6 +70,17 @@ def parse_discs(spec: str) -> list[int]:
     return discs
 
 
+def read_default_version() -> str:
+    if not VERSION_FILE.is_file():
+        raise SystemExit(
+            f"Missing {VERSION_FILE.relative_to(_ROOT)} — create it or pass --version"
+        )
+    version = VERSION_FILE.read_text(encoding="utf-8").strip().splitlines()[0].strip()
+    if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
+        raise SystemExit(f"Bad version in {VERSION_FILE.name}: {version!r}")
+    return version
+
+
 def fetch_json(url: str) -> dict:
     print(f"  GET {url}")
     try:
@@ -79,17 +90,42 @@ def fetch_json(url: str) -> dict:
         raise SystemExit(f"Download failed: {url}\n{err}") from err
 
 
-def resolve_remote_layer_url(manifest_url: str, base_id: str, disc: int) -> str:
-    manifest = fetch_json(manifest_url)
+def resolve_base_id(against: str, manifest: dict) -> str:
+    """Pick the enabled CSR base id for this --against from the remote manifest."""
+    if against == "clean":
+        return "clean"
+
+    bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
+    ids = [str(b.get("id", "")) for b in bases]
+
+    if against == "csr-plusplus":
+        cands = [i for i in ids if i.startswith("csr-plusplus-v")]
+    elif against == "csr-plus":
+        cands = [i for i in ids if i.startswith("csr-plus-v")]
+    elif against == "csr":
+        cands = [i for i in ids if re.fullmatch(r"csr-v[0-9.]+", i)]
+    else:
+        raise SystemExit(f"Unknown against: {against}")
+
+    if not cands:
+        raise SystemExit(
+            f"No enabled base for --against {against} in CSR manifest. Saw: {ids}"
+        )
+    # Prefer the fallback id from AGAINST if still published; else the only/newest-looking
+    preferred = AGAINST[against]["base_id"]
+    if preferred in cands:
+        return preferred
+    cands.sort()
+    return cands[-1]
+
+
+def resolve_remote_layer_url(manifest_url: str, base_id: str, disc: int, manifest: dict) -> str:
     entry = next(
         (b for b in manifest.get("bases") or [] if b.get("id") == base_id),
         None,
     )
     if not entry:
-        raise SystemExit(
-            f"Base id {base_id!r} not found in {manifest_url}. "
-            f"Saw: {[b.get('id') for b in manifest.get('bases') or []]}"
-        )
+        raise SystemExit(f"Base id {base_id!r} not found in CSR manifest")
     if entry.get("enabled") is False:
         raise SystemExit(f"Base {base_id} is disabled in remote manifest")
     discs = entry.get("discs") or {}
@@ -152,12 +188,14 @@ def build_one(
     against: str,
     disc: int,
     version: str,
+    base_id: str,
+    meta: dict,
     pristine_dir: Path,
     manifest_url: str,
+    csr_manifest: dict | None,
     base_layer_arg: str | None,
     keep_work: bool,
 ) -> Path:
-    meta = AGAINST[against]
     pack_id = f"{meta['pack_prefix']}-v{version}"
     pristine = pristine_dir / f"FINALFANTASY7_D{disc}.bin"
     if not pristine.is_file():
@@ -173,7 +211,8 @@ def build_one(
         if base_layer_arg:
             layer = load_layer(base_layer_arg)
         else:
-            url = resolve_remote_layer_url(manifest_url, meta["base_id"], disc)
+            assert csr_manifest is not None
+            url = resolve_remote_layer_url(manifest_url, base_id, disc, csr_manifest)
             layer = load_layer(url)
         if layer.get("format") != "ic-layer-v1":
             raise SystemExit("base layer must be ic-layer-v1")
@@ -188,8 +227,7 @@ def build_one(
     out_path = out_dir / f"disc{disc}.layer.json"
     layer_id = f"{meta['pack_prefix']}-disc{disc}-v{version}"
     description = (
-        f"Encounter RCnt2 FORCE stub — NTSC-U Disc {disc} "
-        f"(against {meta['base_id']})"
+        f"Encounter RCnt2 FORCE stub — NTSC-U Disc {disc} (against {base_id})"
     )
     built = build_layer(
         base_bin,
@@ -206,7 +244,6 @@ def build_one(
     if stats["records"] == 0 or stats["changedBytes"] == 0:
         raise SystemExit("Empty layer — stub/inject produced no disc changes")
 
-    # Verify: base + layer == patched
     print("=== verify ===")
     check = bytearray(base_bin.read_bytes())
     apply_layer(check, built)
@@ -225,13 +262,22 @@ def main() -> int:
     ap = argparse.ArgumentParser(
         description="Build Encounter-on-base layers from remote CSR layers + local pristine."
     )
-    ap.add_argument("--version", required=True, help="e.g. 0.1.0")
+    ap.add_argument(
+        "--version",
+        default=None,
+        help=f"Encounter stub version (default: {VERSION_FILE.relative_to(_ROOT)})",
+    )
     ap.add_argument("--discs", required=True, help="e.g. 1 or 1,2,3")
     ap.add_argument(
         "--against",
         required=True,
         choices=sorted(AGAINST.keys()),
         help="Builder base this Encounter pack stacks on",
+    )
+    ap.add_argument(
+        "--base-id",
+        default=None,
+        help="Override CSR base id (default: infer from remote CSR manifest)",
     )
     ap.add_argument(
         "--pristine-dir",
@@ -247,7 +293,7 @@ def main() -> int:
     ap.add_argument(
         "--base-layer",
         default=None,
-        help="Local path or URL to one disc's base layer JSON (skips manifest lookup)",
+        help="Local path or URL to one disc's base layer JSON (skips layer URL lookup)",
     )
     ap.add_argument(
         "--keep-work",
@@ -256,18 +302,29 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    version = args.version.strip()
+    version = (args.version or read_default_version()).strip()
     if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
         raise SystemExit(f"Weird version '{version}'")
 
     against = args.against
-    meta = AGAINST[against]
+    meta = dict(AGAINST[against])
     discs = parse_discs(args.discs)
     if args.base_layer and len(discs) != 1:
         raise SystemExit("--base-layer only works with a single --discs value")
 
-    print(f"Against:  {against} ({meta['base_id']})")
-    print(f"Version:  {version}")
+    csr_manifest = None
+    if against == "clean":
+        base_id = "clean"
+    elif args.base_id:
+        base_id = args.base_id.strip()
+    else:
+        csr_manifest = fetch_json(args.csr_manifest)
+        base_id = resolve_base_id(against, csr_manifest)
+    meta["base_id"] = base_id
+
+    print(f"Against:  {against}")
+    print(f"Base id:  {base_id}")
+    print(f"Version:  {version}  (encounter stub)")
     print(f"Discs:    {discs}")
     print(f"Pristine: {args.pristine_dir}")
 
@@ -277,16 +334,17 @@ def main() -> int:
             against=against,
             disc=disc,
             version=version,
+            base_id=base_id,
+            meta=meta,
             pristine_dir=args.pristine_dir.expanduser().resolve(),
             manifest_url=args.csr_manifest,
+            csr_manifest=csr_manifest,
             base_layer_arg=args.base_layer,
             keep_work=args.keep_work,
         )
 
     pack_id = f"{meta['pack_prefix']}-v{version}"
     pack_dir = _ROOT / "builder" / pack_id
-    # Merge discs already on disk into pack/manifest (re-run safe).
-    # Path.stem of disc1.layer.json is "disc1.layer" — parse the filename instead.
     existing: list[int] = []
     layers_dir = pack_dir / "layers"
     if layers_dir.is_dir():
@@ -297,24 +355,27 @@ def main() -> int:
     existing = sorted(set(existing))
     if not existing:
         raise SystemExit(f"No disc*.layer.json under {layers_dir}")
+
     write_pack_json(
         pack_dir,
         pack_id=pack_id,
         version=version,
         display=meta["display"],
         blurb=meta["blurb"],
-        compatible_bases=[meta["base_id"]],
+        compatible_bases=[base_id],
         discs=existing,
     )
     update_manifest(
         pack_id=pack_id,
+        pack_prefix=meta["pack_prefix"],
         version=version,
         display=meta["display"],
         blurb=meta["blurb"],
-        compatible_bases=[meta["base_id"]],
+        compatible_bases=[base_id],
         discs=existing,
     )
     print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
+    print(f"compatibleBases={base_id!r}; older {meta['pack_prefix']}-v* addons disabled.")
     print("Commit JSON under builder/ only. Smoke-test DuckStation New Game on a builder stack.")
     return 0
 
