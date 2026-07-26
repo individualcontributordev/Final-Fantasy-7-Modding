@@ -155,6 +155,11 @@ def build_one_disc(*, version: str, disc: int, skip_verify: bool) -> Path:
         f"  wrote {out_path.relative_to(_ROOT)}  "
         f"records={stats['records']} changedBytes={stats['changedBytes']}"
     )
+    if stats["records"] == 0 or stats["changedBytes"] == 0:
+        raise SystemExit(
+            f"Disc {disc}: pristine and patched images are identical — "
+            "no stub in the encounter .bin. Reimport FIELD.BIN.new and re-diff."
+        )
 
     if not skip_verify:
         print(f"=== Disc {disc}: verify ===")
