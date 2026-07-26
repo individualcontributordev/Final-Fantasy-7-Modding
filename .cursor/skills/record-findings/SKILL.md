@@ -2,7 +2,7 @@
 name: record-findings
 description: >-
   Records RE discoveries, Ghidra addresses, emulator settings, patch notes, and
-  test results for FF7 PSX disc modding. Use when working in ff7-modding, after
+  test results for FF7 PSX disc modding. Use when working in Final-Fantasy-7-Modding, after
   Ghidra/emulator sessions, when the user learns something useful, or when asked
   to document findings.
 ---
@@ -77,7 +77,7 @@ Avoid duplicating entire reference docs inside findings — link instead.
 ## Related project paths
 
 ```
-~/ff7-modding/
+~/Final-Fantasy-7-Modding/
 ├── docs/findings/
 ├── workspace/iso-extract/
 ├── workspace/ghidra/
