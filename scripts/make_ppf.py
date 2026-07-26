@@ -130,38 +130,84 @@ def create_ppf3(
     }
 
 
-def apply_ppf3(rom: Path, ppf: Path, output: Path) -> None:
-    """Apply a PPF3 (no undo / simple) to rom → output. For --verify."""
+def apply_ppf3(rom: Path, ppf: Path, output: Path) -> dict:
+    """Apply PPF 2.0/3.0 to rom → output. Returns summary stats."""
     data = bytearray(rom.read_bytes())
     patch = ppf.read_bytes()
-    if patch[:5] != b"PPF30":
-        raise SystemExit(f"not PPF30: {ppf}")
-    pos = 5 + 1 + 50  # magic, ver-1, description
-    image_type, block_check, undo, _dummy = patch[pos : pos + 4]
-    pos += 4
+    magic = patch[:3]
+    if magic != b"PPF":
+        raise SystemExit(f"not a PPF file: {ppf}")
+
+    ver_str = patch[3:5].decode("ascii", errors="replace")
+    ver_byte = patch[5] + 1
+    try:
+        ver_from_str = int(ver_str) // 10
+    except ValueError as e:
+        raise SystemExit(f"bad PPF version string: {ver_str!r}") from e
+    if ver_from_str != ver_byte or ver_from_str not in (1, 2, 3):
+        raise SystemExit(f"unsupported/invalid PPF version ({ver_from_str})")
+    version = ver_from_str
+
+    pos = 6
+    description = patch[pos : pos + 50].decode("ascii", errors="replace").rstrip()
+    pos += 50
+
+    block_check = False
+    undo = False
+    if version == 3:
+        _image_type = patch[pos]
+        block_check = patch[pos + 1] != 0
+        undo = patch[pos + 2] != 0
+        pos += 4
+    elif version == 2:
+        block_check = True
+        pos += 4  # input file size u32
+
     if block_check:
         pos += 1024
-    if undo:
-        raise SystemExit("undo-data PPF not supported by this verifier")
 
+    records = 0
+    changed = 0
     while pos < len(patch):
         if patch[pos : pos + 4] == b"@BEG":
             break
-        if pos + 9 > len(patch):
+        need = 4 + 1 if version < 3 else 8 + 1
+        if pos + need > len(patch):
             break
-        lo, hi = struct.unpack_from("<II", patch, pos)
-        pos += 8
-        offset = lo + (hi << 32)
+
+        if version == 3:
+            lo, hi = struct.unpack_from("<II", patch, pos)
+            pos += 8
+            offset = lo + (hi << 32)
+        else:
+            (offset,) = struct.unpack_from("<I", patch, pos)
+            pos += 4
+
         length = patch[pos]
         pos += 1
         chunk = patch[pos : pos + length]
         pos += length
+        if undo:
+            # skip undo bytes (apply forward patch only)
+            pos += length
+
         end = offset + length
         if end > len(data):
             data.extend(b"\x00" * (end - len(data)))
         data[offset:end] = chunk
+        records += 1
+        changed += length
 
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_bytes(data)
+    return {
+        "version": version,
+        "description": description,
+        "records": records,
+        "changed_bytes": changed,
+        "output_size": len(data),
+        "output": str(output),
+    }
 
 
 def verify_ppf(original: Path, modified: Path, ppf: Path, tmp_dir: Path) -> None:
