@@ -52,11 +52,11 @@ An early version used `mfc0` Count. On PS1 R3000A, COP0 r9 is **BDAM**, usually 
 Entropy from root counter **RCnt2** (`0x1F801120`). Compare the low byte to a threshold from `g_enemy_lure`; store `0` or `0xFFFF` to Danger. Both `jal increment_step_id` calls remain.
 
 ```
-thresh   = (g_enemy_lure * 3) / 4
+thresh   = g_enemy_lure / 2
 g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
 ```
 
-Raw `g_enemy_lure/256` was dense at the default value; `* 3/4` eases that. RAM pokes of the shared byte: `1` ≈ none, `16` ≈ normal, `64` ≈ high (same knob Enemy Lure raises and Enemy Away lowers). Checks are sparse; Offset still advances when StepID wraps; preempt flag `0x800716D0` still moves 4↔0.
+Raw `g_enemy_lure/256` was dense at the default value; `/ 2` eases that (after an earlier `* 3/4` pass). RAM pokes of the shared byte: `1` ≈ none, `16` ≈ normal, `64` ≈ high (same knob Enemy Lure raises and Enemy Away lowers). Checks are sparse; Offset still advances when StepID wraps; preempt flag `0x800716D0` still moves 4↔0.
 
 Stub file offset in decompressed `FIELD.BIN`: **`0xBB7C`**.
 
