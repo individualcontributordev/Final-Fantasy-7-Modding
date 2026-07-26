@@ -14,7 +14,8 @@ This includes:
 
 **Platform:** PS1 (PSX) disc images only for now — not PC / 7th Heaven.
 
-**Out of scope (unless we explicitly add them):** PPF distribution, piracy, sharing disc images.
+**Out of scope:** piracy / sharing disc images.  
+**In scope for authors:** documenting how to build a **combined PPF** from a disc you own ([docs/06-packaging-combined-ppf.md](06-packaging-combined-ppf.md)) — the repo does not ship game data or `.ppf` binaries.
 
 ## Topic areas
 
