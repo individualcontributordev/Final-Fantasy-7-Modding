@@ -1,7 +1,7 @@
 # Pristine retail discs (gitignored binaries)
 
-**Never open these in CDmage for import.** CDmage can auto-save on import and
-overwrite the file you opened — that is what produced empty Encounter layers.
+**Never open these in CDmage.** Import auto-saves the open file — that is what
+wiped earlier “pristine” dumps and produced empty Encounter layers.
 
 ```
 workspace/pristine/
@@ -10,7 +10,7 @@ workspace/pristine/
   FINALFANTASY7_D3.bin  (+ .cue)
 ```
 
-Working copies live under `workspace/iso-extract/` — create them with:
+Working copies (same filenames) live under `workspace/iso-extract/`:
 
 ```bash
 python scripts/prepare_encounter_workspace.py --discs 1

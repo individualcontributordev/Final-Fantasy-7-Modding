@@ -4,7 +4,7 @@ Use **Git Bash**. Mods ship **one layer per disc** (Disc 1 / 2 / 3). Absolute `.
 
 Goal: `builder/encounter-v0.1.0/layers/disc{1,2,3}.layer.json`
 
-**Why two folders:** CDmage can auto-save when you import `FIELD.BIN.new`. If that file was your only “pristine”, the layer diff is 0 bytes. Keep masters in `workspace/pristine/` and only open copies under `workspace/iso-extract/`.
+**Why two folders:** CDmage can auto-save when you import `FIELD.BIN.new`. The open image is what gets updated — so keep retail masters in `workspace/pristine/` and only open copies under `workspace/iso-extract/`. No Save As needed.
 
 ---
 
@@ -18,14 +18,13 @@ git pull
 `python` on PATH. Layout (binaries gitignored):
 
 ```
-workspace/pristine/                         — retail masters (never import here)
+workspace/pristine/                         — retail masters (never open in CDmage)
   FINALFANTASY7_D1.bin / .cue
   FINALFANTASY7_D2.bin / .cue
   FINALFANTASY7_D3.bin / .cue
 
 workspace/iso-extract/                      — disposable working copies
-  FINALFANTASY7_DN.bin / .cue               — from prepare script
-  FINALFANTASY7_DN_encounter.bin / .cue     — Save As + stub import
+  FINALFANTASY7_DN.bin / .cue               — prepare script, then CDmage import
   FIELD.BIN / FIELD.BIN.new
 ```
 
@@ -43,13 +42,13 @@ python scripts/prepare_encounter_workspace.py --discs N
 python scripts/prepare_encounter_workspace.py --discs N --force
 ```
 
-This copies `pristine/FINALFANTASY7_DN.*` → `iso-extract/FINALFANTASY7_DN.*`.
+Copies `pristine/FINALFANTASY7_DN.*` → `iso-extract/FINALFANTASY7_DN.*`.
 
-**Never open anything under `workspace/pristine/` in CDmage for import.**
+**Never open anything under `workspace/pristine/` in CDmage.**
 
 ### 1b. Extract `FIELD/FIELD.BIN` (CDmage)
 
-1. Open **`workspace/iso-extract/FINALFANTASY7_DN.cue`** (the working copy)  
+1. Open **`workspace/iso-extract/FINALFANTASY7_DN.cue`**  
 2. Extract `FIELD/FIELD.BIN` → `workspace/iso-extract/FIELD.BIN`
 
 ### 1c. Stub + recompress
@@ -60,21 +59,19 @@ python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
 
 Expect `workspace/iso-extract/FIELD.BIN.new`.
 
-### 1d. Save As, then import (CDmage)
+### 1d. Import (CDmage)
 
-Import may auto-save the open image — that is fine on the **working** tree only:
+With that same `iso-extract` image still open:
 
-1. With the working `FINALFANTASY7_DN.cue` still open (or reopen it from `iso-extract/`)  
-2. **File → Save As** → `FINALFANTASY7_DN_encounter` (same folder)  
-3. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`**  
-4. Pad if shorter; **never** accept truncate  
-5. Save on the `_encounter` files  
+1. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`**  
+2. Pad if shorter; **never** accept truncate  
+3. If CDmage auto-saves, that updates the **working** `.bin` only — vault is untouched  
 
-Vault under `pristine/` is unchanged. Layer build diffs vault vs `_encounter`.
+No Save As. The open file is the patched image.
 
 ### 1e. Smoke test (DuckStation)
 
-Boot `FINALFANTASY7_DN_encounter` — field loads, encounters still happen.
+Boot `workspace/iso-extract/FINALFANTASY7_DN` — field loads, encounters still happen.
 
 ---
 
@@ -91,11 +88,11 @@ Uses:
 | Role | Path |
 |------|------|
 | Pristine | `workspace/pristine/FINALFANTASY7_DN.bin` |
-| Patched | `workspace/iso-extract/FINALFANTASY7_DN_encounter.bin` |
+| Patched | `workspace/iso-extract/FINALFANTASY7_DN.bin` |
 
 Writes layers, updates `pack.json`, sets `builder/manifest.json` `"enabled": true`.
 
-**Must see `changedBytes` > 0.** Empty diff usually means the encounter image never got the stub, or you still have no real vault (both sides patched). Re-run from 1a with a clean pristine dump.
+**Must see `changedBytes` > 0.** Empty diff usually means import never stuck, the vault is already patched, or you ran `prepare --force` after patching (wiped the working copy).
 
 ```bash
 python -c "import json; d=json.load(open('builder/encounter-v0.1.0/layers/disc1.layer.json')); print(d['stats'])"

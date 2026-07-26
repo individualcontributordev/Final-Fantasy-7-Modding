@@ -102,12 +102,12 @@ def main() -> int:
     print(
         "\nNext (per disc):\n"
         "  1. Open workspace/iso-extract/FINALFANTASY7_DN.cue in CDmage\n"
+        "     (never open workspace/pristine/)\n"
         "  2. Extract FIELD/FIELD.BIN → iso-extract/FIELD.BIN\n"
         "  3. python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN\n"
-        "  4. File → Save As → FINALFANTASY7_DN_encounter (still under iso-extract)\n"
-        "  5. Import FIELD.BIN.new over FIELD/FIELD.BIN (pad if shorter; no truncate)\n"
-        "  6. Save on the _encounter image\n"
-        "  7. python scripts/build_encounter_layers.py --version 0.1.0 --discs N"
+        "  4. Import FIELD.BIN.new over FIELD/FIELD.BIN (pad if shorter; no truncate)\n"
+        "     CDmage may auto-save — that updates the iso-extract working image only\n"
+        "  5. python scripts/build_encounter_layers.py --version 0.1.0 --discs N"
     )
     return 0
 

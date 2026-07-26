@@ -1,23 +1,23 @@
 # ISO extract — disposable working copies only
 
-**Do not keep your only retail dump here.** CDmage can auto-save on import and
-overwrite the open image. Masters live in `workspace/pristine/`.
+**Do not keep your only retail dump here.** CDmage auto-saves on import into
+whatever image is open. Masters live in `workspace/pristine/`.
 
 ```
-workspace/pristine/                         — never open for import
+workspace/pristine/                 — never open in CDmage
   FINALFANTASY7_D1.bin … D3.bin (+ .cue)
 
-workspace/iso-extract/                      — working area (this folder)
-  FINALFANTASY7_DN.bin (+ .cue)             — copy from pristine (script)
-  FINALFANTASY7_DN_encounter.bin (+ .cue)   — Save As + FIELD.BIN.new import
-  FIELD.BIN / FIELD.BIN.new                 — extract + stub pipeline
+workspace/iso-extract/              — working area (this folder)
+  FINALFANTASY7_DN.bin (+ .cue)     — copy from pristine, then import stub here
+  FIELD.BIN / FIELD.BIN.new
 ```
 
-Refresh a working copy before each disc:
+Same filename in both folders on purpose: prepare copies the vault; CDmage
+patches the iso-extract file; the layer script diffs vault vs working copy.
 
 ```bash
 python scripts/prepare_encounter_workspace.py --discs 1
-# replace an existing working copy:
+# replace an existing working copy (only before patching):
 python scripts/prepare_encounter_workspace.py --discs 1 --force
 ```
 

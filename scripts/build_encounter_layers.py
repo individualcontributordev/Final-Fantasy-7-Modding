@@ -4,12 +4,12 @@
 Git Bash (after prepare + CDmage — see builder/WINDOWS-INSTRUCTIONS.md):
 
   python scripts/prepare_encounter_workspace.py --discs 1
-  # … stub + Save As + import …
+  # … extract FIELD.BIN, stub, import into the open working image …
   python scripts/build_encounter_layers.py --version 0.1.0 --discs 1
 
 Diffs:
   workspace/pristine/FINALFANTASY7_DN.bin
-    vs workspace/iso-extract/FINALFANTASY7_DN_encounter.bin
+    vs workspace/iso-extract/FINALFANTASY7_DN.bin   (working copy after import)
 
 Writes builder/encounter-v<version>/layers/discN.layer.json, updates pack.json +
 manifest.json (enabled, discs map for all discs built).
@@ -39,8 +39,10 @@ BLURB = "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U field encoun
 
 def disc_paths(disc: int) -> tuple[Path, Path]:
     stem = f"FINALFANTASY7_D{disc}"
+    # Same filename in both folders: vault stays clean; iso-extract is the
+    # CDmage working image (import auto-saves into whatever file is open).
     pristine = PRISTINE_DIR / f"{stem}.bin"
-    patched = ISO / f"{stem}_encounter.bin"
+    patched = ISO / f"{stem}.bin"
     return pristine, patched
 
 
@@ -65,8 +67,8 @@ def parse_discs(spec: str | None) -> list[int]:
         raise SystemExit(
             "No disc pairs found.\n"
             f"  Pristine: {PRISTINE_DIR}/FINALFANTASY7_DN.bin\n"
-            f"  Patched:  {ISO}/FINALFANTASY7_DN_encounter.bin\n"
-            "Run prepare_encounter_workspace.py, then Save As + import the stub."
+            f"  Working:  {ISO}/FINALFANTASY7_DN.bin\n"
+            "Run prepare_encounter_workspace.py, then import FIELD.BIN.new in CDmage."
         )
     return found
 
@@ -140,8 +142,8 @@ def build_one_disc(*, version: str, disc: int, skip_verify: bool) -> Path:
         )
     if not patched.is_file():
         raise SystemExit(
-            f"Missing patched image: {patched}\n"
-            "Prepare a working copy, Save As _encounter, import FIELD.BIN.new."
+            f"Missing working image: {patched}\n"
+            "Run prepare_encounter_workspace.py, then import FIELD.BIN.new in CDmage."
         )
 
     # Same path / same file = operator error; also catch identical content early messaging.
@@ -172,11 +174,12 @@ def build_one_disc(*, version: str, disc: int, skip_verify: bool) -> Path:
     )
     if stats["records"] == 0 or stats["changedBytes"] == 0:
         raise SystemExit(
-            f"Disc {disc}: pristine and patched images are identical.\n"
-            "  • Stub never landed in the _encounter .bin, or\n"
+            f"Disc {disc}: pristine vault and iso-extract working image are identical.\n"
+            "  • Stub never landed (import failed / wrong file open), or\n"
             "  • Vault under workspace/pristine/ is already patched "
-            "(restore a clean retail dump).\n"
-            "Re-run prepare_encounter_workspace.py, Save As, import FIELD.BIN.new."
+            "(restore a clean retail dump), or\n"
+            "  • You re-ran prepare --force after patching (wiped the working copy).\n"
+            "Re-prepare from a clean vault, open the iso-extract image, import FIELD.BIN.new."
         )
 
     if not skip_verify:
