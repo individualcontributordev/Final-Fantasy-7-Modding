@@ -1,20 +1,14 @@
-# Task: export+compress+import RCnt2 stub; DuckStation notes
+# Task: apply RCnt2 stub on disk; verify xxd; then rebuild notes
 
 # COPY-PASTE (do not edit these lines)
-export_path: workspace/iso-extract/FIELD.BIN.dec.patched
+apply_cmd: python scripts/apply_force_stub_rcnt2.py workspace/iso-extract/FIELD.BIN.dec.patched
 verify_cmd: xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
 expect_bytes: 80 1f 01 3c 20 11 22 8c
 compress_cmd: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.new
-import_target_path: FIELD/FIELD.BIN
-pad_dialog: Yes
-test_cue: workspace/iso-extract/ff7_disc1_test.cue
 
-# EVIDENCE (paste xxd line + compress sizes + playtest notes; text only)
-xxd: xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
-0000bb7c: 00 48 02 40 06 80 01 3c 19 2f 23 90 ff 00 42 30  .H.@...<./#...B0
+# EVIDENCE (paste apply output + xxd; if xxd matches, continue compress/import/DS and add playtest notes)
+apply:
+xxd:
 compress:
 cdmage_save:
-boot:
-field:
-walk:
 danger_behavior:
