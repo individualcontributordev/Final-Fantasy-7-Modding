@@ -8,9 +8,25 @@
       "kind": "addon",
       "blurb": "RCnt2 FORCE stub \u2014 Enemy Lure / Away still scale. NTSC-U field encounters. Unmodified base only (CSR stacks need a CSR-built Encounter layer).",
       "format": "ic-layer-v1",
-      "compatibleBases": ["clean"],
+      "compatibleBases": [
+        "clean"
+      ],
       "discs": {
         "1": "./encounter-v0.1.0/layers/disc1.layer.json"
+      },
+      "enabled": true
+    },
+    {
+      "id": "encounter-on-csr-plus-v0.1.0",
+      "name": "Encounter rate (on CSR+) v0.1.0",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE stub on CSR+ FIELD.BIN \u2014 Enemy Lure / Away still scale. Use with CSR+ base only.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plus-v0.1.0/layers/disc1.layer.json"
       },
       "enabled": true
     }
