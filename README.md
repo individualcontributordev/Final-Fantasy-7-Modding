@@ -40,7 +40,7 @@ ff7-modding/
 │   ├── 06-packaging-combined-ppf.md  Makou + stub → one PPF
 │   ├── windows-last-output.txt  Latest Windows cmd output
 │   └── findings/             Dated lab notebook
-├── scripts/                  decompress / compress / apply_force_stub_rcnt2
+├── scripts/                  build_field_encounter_patch + compress/decompress/apply
 └── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
 ```
 

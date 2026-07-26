@@ -18,7 +18,8 @@ PPF does **not** stack. Always: pristine dump → final combined image → one `
 | Path | Role |
 |------|------|
 | [workspace/patches/2026-07-25-force-stub-rcnt2/](../workspace/patches/2026-07-25-force-stub-rcnt2/) | Stub bytes + log |
-| [scripts/apply_force_stub_rcnt2.py](../scripts/apply_force_stub_rcnt2.py) | Writes stub into a `.dec` |
+| [scripts/build_field_encounter_patch.py](../scripts/build_field_encounter_patch.py) | **One-shot:** decompress → stub → compress |
+| [scripts/apply_force_stub_rcnt2.py](../scripts/apply_force_stub_rcnt2.py) | Stub only (into a `.dec`) |
 | [scripts/decompress_field_bin.py](../scripts/decompress_field_bin.py) | GZIPPS → `.dec` |
 | [scripts/compress_field_bin.py](../scripts/compress_field_bin.py) | `.dec` → GZIPPS `.new` |
 
@@ -36,33 +37,21 @@ In CDmage (or your ISO tool), from the **Makou-saved** image:
 
 - Extract `FIELD/FIELD.BIN` → e.g. `workspace/iso-extract/FIELD.BIN.makou`
 
-### 3. Apply encounter stub to *that* binary
+### 3. Apply encounter stub (one command)
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 
-python scripts/decompress_field_bin.py workspace/iso-extract/FIELD.BIN.makou
-
-cp workspace/iso-extract/FIELD.BIN.makou.dec \
-   workspace/iso-extract/FIELD.BIN.dec.patched
-
-python scripts/apply_force_stub_rcnt2.py \
-   workspace/iso-extract/FIELD.BIN.dec.patched
-
-xxd -g1 -s 0xBB7C -l 16 workspace/iso-extract/FIELD.BIN.dec.patched
-# must start: 80 1f 01 3c 20 11 22 8c
-
-python scripts/compress_field_bin.py \
-  workspace/iso-extract/FIELD.BIN.dec.patched \
-  workspace/iso-extract/FIELD.BIN.makou \
-  workspace/iso-extract/FIELD.BIN.new
+python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN.makou
+# writes workspace/iso-extract/FIELD.BIN.new
+# optional: -o path/to/out.new   --keep-dec
 ```
 
-`compress_field_bin.py` keeps the 8-byte GZIPPS header from the **Makou** `FIELD.BIN` (second argument). It searches zlib strategies / levels and prefers **≤ original size**. If you still see `+4` (or any growth):
+If compress reports growth and you have zopfli:
 
 ```bash
 pip install zopfli
-python scripts/compress_field_bin.py ...   # re-run; zopfli often wins those bytes
+python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN.makou
 ```
 
 Do **not** accept CDmage truncate if still larger.
@@ -97,18 +86,12 @@ fresh retail .bin  +  yourmod-disc1.ppf  →  play
 
 No Makou, no CDmage, no Python.
 
-## Dev-only: stub on stock FIELD.BIN
+### Dev-only: stub on stock FIELD.BIN
 
 For testing the stub **without** Makou (as during RE):
 
 ```bash
-python scripts/decompress_field_bin.py workspace/iso-extract/FIELD.BIN
-cp workspace/iso-extract/FIELD.BIN.dec workspace/iso-extract/FIELD.BIN.dec.patched
-python scripts/apply_force_stub_rcnt2.py workspace/iso-extract/FIELD.BIN.dec.patched
-python scripts/compress_field_bin.py \
-  workspace/iso-extract/FIELD.BIN.dec.patched \
-  workspace/iso-extract/FIELD.BIN \
-  workspace/iso-extract/FIELD.BIN.new
+python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
 ```
 
 Do **not** use that `.new` on a Makou ISO unless sizes/indexes match.

@@ -11,6 +11,10 @@ Replace vanilla Danger `+=` with lure-scaled independent FORCE using PSX **RCnt2
 ## Apply (preferred)
 
 ```bash
+# One-shot (recommended):
+python scripts/build_field_encounter_patch.py path/to/FIELD.BIN.makou
+
+# Or stub-only into an existing .dec:
 python scripts/apply_force_stub_rcnt2.py path/to/FIELD.BIN.dec.patched
 ```
 
