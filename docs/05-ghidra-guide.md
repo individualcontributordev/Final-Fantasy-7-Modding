@@ -5,7 +5,7 @@ Start here after [03-environment-setup.md](03-environment-setup.md) phase 1 chec
 ## Create project
 
 1. Ghidra → New Project → Non-Shared
-2. Location: `~/ff7-modding/workspace/ghidra/`
+2. Location: `~/Final-Fantasy-7-Modding/workspace/ghidra/`
 3. Import `workspace/iso-extract/FIELD.BIN.dec`
 
 ### Import settings

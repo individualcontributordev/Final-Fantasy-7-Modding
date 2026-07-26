@@ -9,7 +9,7 @@ Work through this list in order.
 Already created:
 
 ```
-~/ff7-modding/
+~/Final-Fantasy-7-Modding/
 ```
 
 Clone paths for reference (optional to build now):
@@ -21,7 +21,7 @@ Clone paths for reference (optional to build now):
 
 ## 2. Game image (you provide)
 
-Place files in `~/ff7-modding/workspace/iso-extract/`:
+Place files in `~/Final-Fantasy-7-Modding/workspace/iso-extract/`:
 
 - [ ] `ff7_disc1.bin` (and `.cue` if you use one)
 - Use a **clean, unmodified** rip of a disc you own
@@ -40,7 +40,7 @@ Makou Reactor does **not** export it — Makou only rewrites it when you save IS
 2. File → Open → your `ff7_disc1.bin` / `.cue`
 3. Browse to folder `FIELD`
 4. Right-click `FIELD.BIN` → Extract (or Extract As…)
-5. Save as `workspace/iso-extract/FIELD.BIN` in the `ff7-modding` clone
+5. Save as `workspace/iso-extract/FIELD.BIN` in the Final-Fantasy-7-Modding clone
 
 Option B — other ISO tools that can extract a single file from Mode 2 / 2352 images.
 
@@ -51,8 +51,8 @@ Makou is for later: editing `.DAT` fields and reinserting into the ISO after eng
 ### Verify decompression
 
 ```bash
-python3 ~/ff7-modding/scripts/decompress_field_bin.py \
-  ~/ff7-modding/workspace/iso-extract/FIELD.BIN
+python3 ~/Final-Fantasy-7-Modding/scripts/decompress_field_bin.py \
+  ~/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN
 ```
 
 Expected: creates `FIELD.BIN.dec` (~500KB–1MB+ depending on version). Script prints size.
@@ -111,7 +111,7 @@ brew install openjdk@21
 ```
 
 - [ ] Ghidra launches
-- [ ] Can create a new project at `~/ff7-modding/workspace/ghidra/`
+- [ ] Can create a new project at `~/Final-Fantasy-7-Modding/workspace/ghidra/`
 
 Optional plugins (later):
 
@@ -134,7 +134,7 @@ Any of: `xxd` (CLI), Hex Fiend (macOS), ImHex.
 ## 7. Version control (recommended)
 
 ```bash
-cd ~/ff7-modding
+cd ~/Final-Fantasy-7-Modding
 git init
 echo 'workspace/iso-extract/*.bin' >> .gitignore
 echo 'workspace/iso-extract/*.cue' >> .gitignore
