@@ -1,10 +1,14 @@
-# Task: note Enemy Lure vs Away encounter density
+# Task: poke g_enemy_lure in DuckStation; compare density
 
 # COPY-PASTE (do not edit these lines)
 watch_lure_ram: 0x80062F19
 watch_danger_ram: 0x8007173C
+poke_low: 1
+poke_mid: 16
+poke_high: 64
 
-# EVIDENCE (same hostile field walk ~similar distance; paste short notes for default / Lure / Away if available — StepID span + fight count is enough)
-default:
-lure:
-away:
+# EVIDENCE (same field walk each time; set byte at 0x80062F19 then walk; paste fight count / feel per poke)
+lure_1:
+lure_16:
+lure_64:
+notes:
