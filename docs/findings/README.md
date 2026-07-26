@@ -1,7 +1,8 @@
 # Findings journal
 
 Dated research notes for **Final Fantasy VII PSX disc modding**. Stable guides live in
-`docs/0N-*.md`; this folder is the lab notebook.
+`docs/0N-*.md`; this folder is the lab notebook. It is **not** published to the public site —
+polished posts live in [`articles/`](../articles/).
 
 **How to add an entry:** copy `_template.md` → `YYYY-MM-DD-slug.md` → update the index below.
 
