@@ -54,11 +54,16 @@ def verify_stub(dec_path: Path) -> None:
             f"verify failed jal @ 0x{JAL_OFFSET:X}: got {jal.hex(' ')}, "
             f"expected {JAL.hex(' ')}"
         )
-    # Rate-tune marker (srl/subu for lure*3/4) — present in current stub
+    # Rate-tune marker (srl lure/2) — present in current stub
     mid = data[OFFSET + 24 : OFFSET + 32]
     print(f"Verified stub @ 0x{OFFSET:X}: {head.hex(' ')} …")
     print(f"Verified jal  @ 0x{JAL_OFFSET:X}: {jal.hex(' ')}")
     print(f"Rate bytes    @ +24: {mid.hex(' ')}")
+    expect_rate = bytes.fromhex("42 18 03 00 00 00 00 00")
+    if mid != expect_rate:
+        raise SystemExit(
+            f"verify failed rate @ +24: got {mid.hex(' ')}, expected {expect_rate.hex(' ')}"
+        )
 
 
 def build(src_field_bin: Path, out_new: Path | None, keep_dec: bool) -> Path:
