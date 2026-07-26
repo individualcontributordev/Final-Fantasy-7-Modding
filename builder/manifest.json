@@ -6,29 +6,27 @@
       "id": "encounter-v0.1.0",
       "name": "Encounter rate v0.1.0",
       "kind": "addon",
-      "blurb": "RCnt2 FORCE stub \u2014 Enemy Lure / Away still scale. NTSC-U field encounters. Unmodified base only (CSR stacks need a CSR-built Encounter layer).",
+      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check default; 50% of raw). Unmodified base only.",
       "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
+      "compatibleBases": ["clean"],
       "discs": {
         "1": "./encounter-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "note": "Stub bytes updated to lure/2 — rebuild with build_encounter_on_base.py --version 0.1.1 to ship the new rate in the layer."
     },
     {
       "id": "encounter-on-csr-plus-v0.1.0",
       "name": "Encounter rate (on CSR+) v0.1.0",
       "kind": "addon",
-      "blurb": "RCnt2 FORCE stub on CSR+ FIELD.BIN \u2014 Enemy Lure / Away still scale. Use with CSR+ base only.",
+      "blurb": "RCnt2 FORCE at lure/2 on CSR+ (~3.1%/check default). Use with CSR+ base only.",
       "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus-v0.1.0"
-      ],
+      "compatibleBases": ["csr-plus-v0.1.0"],
       "discs": {
         "1": "./encounter-on-csr-plus-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "note": "Layer may still be lure*3/4 until rebuilt with the lure/2 stub."
     }
   ],
   "bases": []

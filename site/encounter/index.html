@@ -197,9 +197,10 @@
 		<header class="hero">
 			<h1>Final Fantasy VII Encounter Patcher</h1>
 			<p class="lede">
-				Replace vanilla field Danger accumulation with an RCnt2 FORCE check scaled by
-				Enemy Lure / Away, so normal encounters feel random again.
-				Preempt / StepID routing stays intact.
+				Replace vanilla field Danger accumulation with an RCnt2 FORCE check.
+				At default Enemy Lure, about <strong>3.1%</strong> of encounter checks FORCE
+				a battle roll (<strong>50%</strong> of the raw lure/256 rate).
+				Enemy Lure / Away still scale; preempt / StepID routing stays intact.
 			</p>
 		</header>
 
@@ -211,7 +212,9 @@
 				<li>Keep both files in the same folder (allow multiple downloads if asked).</li>
 			</ol>
 			<p class="note">
-				Enemy Lure / Away still scale encounter density.
+				Path: step wrap → RCnt2 vs <code>lure/2</code> sets Danger to max or zero →
+				vanilla dual StepID rolls → Lure/Away threshold. Prefer the
+				<a href="https://individualcontributor.dev/builder/">disc builder</a> for CSR stacks.
 			</p>
 
 			<div id="encounter-empty" class="empty-state">

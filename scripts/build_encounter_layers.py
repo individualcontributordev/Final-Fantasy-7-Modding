@@ -46,8 +46,8 @@ AGAINST = {
         "pack_prefix": "encounter",
         "display": "Encounter rate",
         "blurb": (
-            "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U field encounters. "
-            "Use with Unmodified only."
+            "RCnt2 FORCE at lure/2 (~3.1%/check default; 50% of raw lure/256). "
+            "Enemy Lure / Away still scale. Use with Unmodified only."
         ),
     },
     "csr": {
@@ -55,7 +55,7 @@ AGAINST = {
         "pack_prefix": "encounter-on-csr",
         "display": "Encounter rate (on CSR)",
         "blurb": (
-            "RCnt2 FORCE stub on CSR FIELD.BIN — Enemy Lure / Away still scale. "
+            "RCnt2 FORCE at lure/2 on CSR FIELD.BIN (~3.1%/check default). "
             "Use with CSR base only."
         ),
     },
@@ -64,7 +64,7 @@ AGAINST = {
         "pack_prefix": "encounter-on-csr-plus",
         "display": "Encounter rate (on CSR+)",
         "blurb": (
-            "RCnt2 FORCE stub on CSR+ FIELD.BIN — Enemy Lure / Away still scale. "
+            "RCnt2 FORCE at lure/2 on CSR+ FIELD.BIN (~3.1%/check default). "
             "Use with CSR+ base only."
         ),
     },
@@ -73,7 +73,7 @@ AGAINST = {
         "pack_prefix": "encounter-on-csr-plusplus",
         "display": "Encounter rate (on CSR++)",
         "blurb": (
-            "RCnt2 FORCE stub on CSR++ FIELD.BIN — Enemy Lure / Away still scale. "
+            "RCnt2 FORCE at lure/2 on CSR++ FIELD.BIN (~3.1%/check default). "
             "Use with CSR++ base only."
         ),
     },
