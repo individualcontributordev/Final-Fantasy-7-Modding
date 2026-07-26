@@ -147,6 +147,7 @@ def write_pack_json(
 def update_manifest(
     *,
     pack_id: str,
+    pack_prefix: str,
     version: str,
     display: str,
     blurb: str,
@@ -171,11 +172,18 @@ def update_manifest(
 
     addons = data.setdefault("addons", [])
     replaced = False
+    version_prefix = f"{pack_prefix}-v"
     for i, existing in enumerate(addons):
-        if str(existing.get("id", "")) == pack_id:
+        ex_id = str(existing.get("id", ""))
+        if ex_id == pack_id:
             addons[i] = entry
             replaced = True
-            break
+        elif ex_id.startswith(version_prefix):
+            # Older encounter packs for the same base family
+            existing["enabled"] = False
+            existing["note"] = (
+                f"Superseded by {pack_id}. Disabled automatically on rebuild."
+            )
     if not replaced:
         addons.append(entry)
 
@@ -340,6 +348,7 @@ def main() -> int:
     )
     update_manifest(
         pack_id=pack_id,
+        pack_prefix=meta["pack_prefix"],
         version=version,
         display=meta["display"],
         blurb=meta["blurb"],
