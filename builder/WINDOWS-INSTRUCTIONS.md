@@ -113,6 +113,14 @@ Then message: **Encounter layers pushed — wire builder.**
 
 ---
 
+## Stacking with CSR
+
+The retail Encounter layer **cannot** stack on CSR / CSR+ / CSR++ in the builder — it overwrites CSR’s `FIELD.BIN` region and breaks New Game. Manifest sets `compatibleBases: ["clean"]`.
+
+To ship CSR+Encounter later: prepare from a CSR-patched image, stub that disc’s `FIELD.BIN`, diff CSR base vs CSR+stub, publish a separate layer (or rebuild against each base).
+
+---
+
 ## CSR bases
 
 `Final-Fantasy-7-CSR/builder/WINDOWS-INSTRUCTIONS.md` — same idea (`workspace/pristine/` vs patched folders).
