@@ -57,13 +57,14 @@ this; real hardware may be pickier. CDmage can fix checksums if needed.
 ## Workspace file naming
 
 ```
-workspace/iso-extract/
-├── ff7_disc1.bin              Your source image (you provide)
-├── ff7_disc1.cue              Cue sheet if applicable
-├── FIELD.BIN                  Extracted from disc
+workspace/pristine/            Retail masters — never open for CDmage import
+├── FINALFANTASY7_D1.bin … D3.bin (+ .cue)
+
+workspace/iso-extract/         Disposable working copies only
+├── FINALFANTASY7_DN.bin       Copied from pristine, then CDmage import (auto-save OK)
+├── FIELD.BIN                  Extracted from working disc
 ├── FIELD.BIN.dec              Decompressed (Ghidra input)
-├── FIELD.BIN.dec.patched      After Ghidra / hex edits
 └── FIELD.BIN.new              Recompressed, ready to import
 ```
 
-Keep pristine copies. Never edit the only copy of your source ISO.
+CDmage auto-saves on import into the open file. Keep a clean vault under `pristine/`; only open copies in `iso-extract/`. No Save As required.
