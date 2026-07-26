@@ -51,7 +51,7 @@ AGAINST = {
         ),
     },
     "csr": {
-        "base_id": "csr-v0.14.0",
+        "base_id": "csr-v0.14.1",
         "pack_prefix": "encounter-on-csr",
         "display": "Encounter rate (on CSR)",
         "blurb": (
@@ -60,7 +60,7 @@ AGAINST = {
         ),
     },
     "csr-plus": {
-        "base_id": "csr-plus-v0.1.0",
+        "base_id": "csr-plus-v0.1.1",
         "pack_prefix": "encounter-on-csr-plus",
         "display": "Encounter rate (on CSR+)",
         "blurb": (
@@ -69,7 +69,7 @@ AGAINST = {
         ),
     },
     "csr-plusplus": {
-        "base_id": "csr-plusplus-v0.1.0",
+        "base_id": "csr-plusplus-v0.1.1",
         "pack_prefix": "encounter-on-csr-plusplus",
         "display": "Encounter rate (on CSR++)",
         "blurb": (
