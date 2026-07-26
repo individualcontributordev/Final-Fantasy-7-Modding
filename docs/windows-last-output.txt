@@ -1,9 +1,12 @@
-# Task: FIELD FORCE stub accepted (no Windows action)
+# Task: re-apply FORCE stub (*3/4 rate); recompress; playtest density
 
 # COPY-PASTE (do not edit these lines)
-status: field_stub_accepted
+apply_cmd: python scripts/apply_force_stub_rcnt2.py workspace/iso-extract/FIELD.BIN.dec.patched
+verify_cmd: xxd -g1 -s 0xBB7C -l 32 workspace/iso-extract/FIELD.BIN.dec.patched
+expect_has: 82 08 03 00 23 18 61 00
+compress_cmd: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN.makou workspace/iso-extract/FIELD.BIN.new
 
-# EVIDENCE (from chat)
-preempt_flag_seen: 4 then 0
-step_id_advances: yes (prior)
-notes: FIELD.BIN RCnt2 FORCE stub playtest complete pending boss when reachable
+# EVIDENCE (paste xxd + compress delta + short density note vs previous)
+xxd:
+compress:
+density_feel:

@@ -23,15 +23,18 @@ For **Makou + this stub → one PPF**, follow [docs/06-packaging-combined-ppf.md
 | `0xBB7C` | `0x800ABB7C` | 88 | stub (`stub-bb7c.hex`) |
 | `0xBBD4` | `0x800ABBD4` | 4 | must stay `jal increment_step_id` (`jal-bbd4.hex`) |
 
-## Behavior
+## Behavior (rev: slightly lower default rate)
 
 ```
-entropy = *(u32*)0x1F801120   # RCnt2
-if ((entropy & 0xff) < g_enemy_lure)  # 0x80062F19
+entropy = *(u32*)0x1F801120        # RCnt2
+thresh  = (g_enemy_lure * 3) / 4   # ~75% of raw lure
+if ((entropy & 0xff) < thresh)
     g_danger = 0xFFFF
 else
     g_danger = 0
 ```
+
+With default lure≈16 → thresh≈12 → ~4.7%/check (was ~6.25%). Lure/Away still scale.
 
 Then vanilla dual `increment_step_id` + threshold.
 
@@ -40,6 +43,7 @@ Then vanilla dual `increment_step_id` + threshold.
 - Sparse encounters (not every StepID+2)  
 - Lure poke 1 / 16 / 64 → none / normal / a lot  
 - Preempt flag `0x800716D0` still 4↔0  
+- Rev: default felt dense → `* 3/4` rate cut  
 
 ## Files in this folder
 
