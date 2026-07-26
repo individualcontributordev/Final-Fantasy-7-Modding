@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>FF7 Encounter Patcher</title>
+	<meta name="description" content="Apply the Final Fantasy VII field encounter rate mod PPF to your NTSC-U PS1 .bin in the browser." />
+	<link rel="icon" href="../assets/meteor.png" type="image/png" />
+	<link type="text/css" rel="stylesheet" href="../rom-patcher-js/style.css" media="all" />
+	<link type="text/css" rel="stylesheet" href="../site.css" media="all" />
+	<script type="text/javascript" src="../rom-patcher-js/RomPatcher.webapp.js"></script>
+	<script type="text/javascript">
+		window.addEventListener('load', function () {
+			/* Add entries when .ppf files land in ./patches/ — see patches/README.md */
+			var PATCHES = [
+				/*
+				{
+					file: './patches/encounter-disc1-v0.1.0.ppf',
+					name: 'Encounter — Disc 1 (v0.1.0)',
+					description: 'RCnt2 FORCE stub — random-feeling field encounters. NTSC-U Disc 1 .bin',
+					outputName: 'Final Fantasy VII (Disc 1) Encounter v0.1.0'
+				}
+				*/
+			];
+
+			var patchSelect = document.getElementById('csr-patch-select');
+			var patchStatus = document.getElementById('csr-patch-status');
+			var patchDescription = document.getElementById('rom-patcher-patch-description');
+			var patchDescriptionRow = document.getElementById('rom-patcher-row-patch-description');
+			var emptyState = document.getElementById('encounter-empty');
+			var patcherUi = document.getElementById('encounter-patcher-ui');
+			var selectedPatch = null;
+			var patchCache = {};
+			var loadToken = 0;
+
+			function setStatus(text) {
+				patchStatus.textContent = text || '';
+			}
+
+			function showDescription(text) {
+				patchDescription.textContent = text || '';
+				if (text) {
+					patchDescriptionRow.classList.add('show');
+				} else {
+					patchDescriptionRow.classList.remove('show');
+				}
+			}
+
+			function downloadCue(cueFileName, binFileName) {
+				var cueText =
+					'FILE "' + binFileName + '" BINARY\n' +
+					'  TRACK 01 MODE2/2352\n' +
+					'    INDEX 01 00:00:00\n';
+				var blob = new Blob([cueText], { type: 'text/plain' });
+				var url = URL.createObjectURL(blob);
+				var link = document.createElement('a');
+				link.href = url;
+				link.download = cueFileName;
+				document.body.appendChild(link);
+				link.click();
+				link.remove();
+				setTimeout(function () {
+					URL.revokeObjectURL(url);
+				}, 2000);
+			}
+
+			function setApplyBusy(isBusy, label) {
+				var applyBtn = document.getElementById('rom-patcher-button-apply');
+				if (!applyBtn) return;
+				applyBtn.disabled = !!isBusy;
+				if (isBusy) {
+					applyBtn.innerHTML = '<span class="rom-patcher-spinner"></span> ' + (label || 'Working…');
+					applyBtn.classList.add('is-busy');
+				} else {
+					applyBtn.textContent = 'Apply patch';
+					applyBtn.classList.remove('is-busy');
+				}
+			}
+
+			if (!PATCHES.length) {
+				emptyState.hidden = false;
+				patcherUi.hidden = true;
+				return;
+			}
+
+			emptyState.hidden = true;
+			patcherUi.hidden = false;
+			selectedPatch = PATCHES[0];
+
+			PATCHES.forEach(function (patch, index) {
+				var option = document.createElement('option');
+				option.value = String(index);
+				option.textContent = patch.name;
+				patchSelect.appendChild(option);
+			});
+
+			function loadSelectedPatch() {
+				var token = ++loadToken;
+				selectedPatch = PATCHES[parseInt(patchSelect.value, 10)] || PATCHES[0];
+				showDescription(selectedPatch.description);
+				setStatus('Loading patch…');
+				patchSelect.disabled = true;
+
+				var cached = patchCache[selectedPatch.file];
+				var pending = cached
+					? Promise.resolve(cached)
+					: fetch(selectedPatch.file).then(function (response) {
+						if (!response.ok) {
+							throw new Error('Could not download ' + selectedPatch.file + ' (' + response.status + ')');
+						}
+						return response.arrayBuffer();
+					}).then(function (buffer) {
+						var binFile = new BinFile(buffer);
+						binFile.fileName = selectedPatch.file.split('/').pop();
+						patchCache[selectedPatch.file] = binFile;
+						return binFile;
+					});
+
+				pending.then(function (binFile) {
+					if (token !== loadToken) return;
+					RomPatcherWeb.providePatchFile(binFile);
+					showDescription(selectedPatch.description);
+					setStatus('');
+					patchSelect.disabled = false;
+				}).catch(function (err) {
+					if (token !== loadToken) return;
+					setStatus('Failed to load patch');
+					patchSelect.disabled = false;
+					document.getElementById('rom-patcher-error-message').textContent = err.message;
+					document.getElementById('rom-patcher-row-error-message').classList.add('show');
+				});
+			}
+
+			try {
+				RomPatcherWeb.initialize({
+					language: 'en',
+					requireValidation: false,
+					allowDropFiles: true,
+					oninitialize: function () {
+						loadSelectedPatch();
+					},
+					onpatch: function (patchedRom) {
+						var binName = selectedPatch.outputName + '.bin';
+						var cueName = selectedPatch.outputName + '.cue';
+						patchedRom.fileName = binName;
+						setApplyBusy(true, 'Preparing downloads…');
+						setStatus('Saving ' + binName + ' and ' + cueName + '…');
+						downloadCue(cueName, binName);
+						setTimeout(function () {
+							setApplyBusy(false);
+							setStatus('Downloaded ' + binName + ' + matching .cue — keep them in the same folder.');
+						}, 1000);
+					}
+				});
+
+				var nativeApply = RomPatcherWeb.applyPatch.bind(RomPatcherWeb);
+				RomPatcherWeb.applyPatch = function () {
+					setApplyBusy(true, 'Applying patch…');
+					setStatus('Applying patch… large discs can take a minute.');
+					nativeApply();
+				};
+			} catch (err) {
+				var message = err.message;
+				if (/incompatible browser/i.test(message) || /variable RomPatcherWeb/i.test(message)) {
+					message = 'Your browser is outdated and is not compatible with this patcher.';
+				}
+				document.getElementById('rom-patcher-container').innerHTML = message;
+				document.getElementById('rom-patcher-container').style.color = '#ff6b8a';
+				return;
+			}
+
+			patchSelect.addEventListener('change', loadSelectedPatch);
+		});
+	</script>
+</head>
+<body>
+	<div id="space">
+		<div class="stars"></div>
+		<div class="stars"></div>
+		<div class="stars"></div>
+		<div class="stars"></div>
+		<div class="stars"></div>
+	</div>
+
+	<div class="page">
+		<div class="header-bar">
+			<div class="nav-links">
+				<a href="../">Home</a>
+				<a href="../research/">Research</a>
+				<a href="https://github.com/individualcontributordev/Final-Fantasy-7-Modding">GitHub</a>
+			</div>
+			<img src="../assets/meteor.png" alt="" class="site-logo" />
+		</div>
+
+		<header class="hero">
+			<h1>FF7 Encounter Patcher</h1>
+			<p class="lede">
+				Replace vanilla field Danger accumulation with a lure-scaled RCnt2 FORCE check
+				so normal encounters feel random again. Preempt / StepID routing stays intact.
+			</p>
+		</header>
+
+		<main class="panel">
+			<ol class="steps">
+				<li>Use a clean <strong>NTSC-U (US)</strong> Disc 1 <code>.bin</code> (not an already-patched image).</li>
+				<li>Select the encounter patch from the dropdown.</li>
+				<li>Click <strong>Apply patch</strong> — downloads the patched <code>.bin</code> and a matching <code>.cue</code>.</li>
+				<li>Keep both files in the same folder (allow multiple downloads if asked).</li>
+			</ol>
+			<p class="note">
+				Default lure still scales with Enemy Lure / Away. This page is scaffolded until a
+				<code>.ppf</code> is published under <code>patches/</code>.
+			</p>
+
+			<div id="encounter-empty" class="empty-state">
+				<strong>No patch file published yet.</strong>
+				<p style="margin:10px 0 0;">
+					When ready, add a <code>.ppf</code> under <code>site/encounter/patches/</code> and
+					uncomment / fill the <code>PATCHES</code> entry in this page. See
+					<a href="./patches/README.md">patches/README.md</a>.
+				</p>
+			</div>
+
+			<div id="encounter-patcher-ui" hidden>
+				<div id="rom-patcher-container">
+					<div class="rom-patcher-row margin-bottom" id="rom-patcher-row-file-rom">
+						<div class="text-right"><label for="rom-patcher-input-file-rom" data-localize="yes">ROM file:</label></div>
+						<div class="rom-patcher-container-input">
+							<input type="file" id="rom-patcher-input-file-rom" class="empty" disabled accept=".bin,.iso,.img" />
+						</div>
+					</div>
+					<div class="margin-bottom text-selectable text-mono text-muted" id="rom-patcher-rom-info">
+						<div class="rom-patcher-row">
+							<div class="text-right">CRC32:</div>
+							<div class="text-truncate"><span id="rom-patcher-span-crc32"></span></div>
+						</div>
+						<div class="rom-patcher-row">
+							<div class="text-right">MD5:</div>
+							<div class="text-truncate"><span id="rom-patcher-span-md5"></span></div>
+						</div>
+						<div class="rom-patcher-row">
+							<div class="text-right">SHA-1:</div>
+							<div class="text-truncate"><span id="rom-patcher-span-sha1"></span></div>
+						</div>
+						<div class="rom-patcher-row" id="rom-patcher-row-info-rom">
+							<div class="text-right">ROM:</div>
+							<div class="text-truncate"><span id="rom-patcher-span-rom-info"></span></div>
+						</div>
+					</div>
+
+					<div class="rom-patcher-row margin-bottom" id="csr-patch-row">
+						<div class="text-right"><label for="csr-patch-select">Patch:</label></div>
+						<div class="rom-patcher-container-input">
+							<select id="csr-patch-select"></select>
+							<div id="csr-patch-status" class="csr-patch-status" aria-live="polite"></div>
+						</div>
+					</div>
+
+					<div class="rom-patcher-row margin-bottom" id="rom-patcher-row-file-patch" hidden>
+						<div class="text-right"><label for="rom-patcher-input-file-patch">Patch file:</label></div>
+						<div class="rom-patcher-container-input">
+							<input type="file" id="rom-patcher-input-file-patch" accept=".ppf,.ips,.bps,.ups,.xdelta" />
+						</div>
+					</div>
+
+					<div class="rom-patcher-row margin-bottom" id="rom-patcher-row-patch-description">
+						<div class="text-right text-mono text-muted" data-localize="yes">Description:</div>
+						<div id="rom-patcher-patch-description"></div>
+					</div>
+					<div class="rom-patcher-row margin-bottom text-selectable text-mono text-muted"
+						id="rom-patcher-row-patch-requirements">
+						<div class="text-right text-mono" id="rom-patcher-patch-requirements-type">ROM requirements:</div>
+						<div class="text-truncate" id="rom-patcher-patch-requirements-value"></div>
+					</div>
+
+					<div class="text-center" id="rom-patcher-row-apply">
+						<div id="rom-patcher-row-error-message" class="margin-bottom"><span id="rom-patcher-error-message"></span></div>
+						<button id="rom-patcher-button-apply" data-localize="yes" disabled>Apply patch</button>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer class="footer">
+			<p>
+				<a href="../research/01-encounter-system.html">Encounter research</a>
+				· <a href="https://github.com/individualcontributordev/Final-Fantasy-7-Modding">GitHub</a>
+			</p>
+			<div id="rom-patcher-powered" class="text-center">
+				<a href="https://github.com/marcrobledo/RomPatcher.js" target="_blank" rel="noopener">
+					<img src="../rom-patcher-js/assets/powered_by_rom_patcher_js.png" alt="" loading="lazy" />
+					Powered by Rom Patcher JS
+				</a>
+			</div>
+			<p>IndividualContributor &copy; 1998</p>
+		</footer>
+	</div>
+</body>
+</html>

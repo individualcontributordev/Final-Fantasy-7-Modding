@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>FF7 Modding — IndividualContributor</title>
+	<meta name="description" content="Final Fantasy VII PSX mods and research — encounter rate tools, field engine notes, and browser patchers." />
+	<link rel="icon" href="./assets/meteor.png" type="image/png" />
+	<link rel="stylesheet" href="./site.css" />
+</head>
+<body>
+	<div id="space">
+		<div class="stars"></div>
+		<div class="stars"></div>
+		<div class="stars"></div>
+		<div class="stars"></div>
+		<div class="stars"></div>
+	</div>
+
+	<div class="page">
+		<div class="header-bar">
+			<div class="nav-links">
+				<a href="./">Home</a>
+				<a href="./encounter/">Encounter</a>
+				<a href="./research/">Research</a>
+				<a href="https://individualcontributor.dev/Final-Fantasy-7-CSR/">CSR</a>
+				<a href="https://github.com/individualcontributordev/Final-Fantasy-7-Modding">GitHub</a>
+			</div>
+			<img src="./assets/meteor.png" alt="" class="site-logo" />
+		</div>
+
+		<header class="hero">
+			<h1 class="brand" style="font-family:DogicaPixelBold,Arial,sans-serif;font-size:clamp(1.3rem,4.5vw,2rem);letter-spacing:2px;margin:0 0 16px;">FF7 Modding</h1>
+			<p class="lede">
+				PlayStation Final Fantasy VII tools from IndividualContributor —
+				browser patchers for gameplay mods, plus the research notes behind them.
+			</p>
+		</header>
+
+		<h2 style="font-family:DogicaPixelBold,Arial,sans-serif;font-size:1.1rem;letter-spacing:1.5px;">Mods</h2>
+		<div class="panel">
+			<ul class="mod-list">
+				<li>
+					<a class="mod-link" href="./encounter/">Encounter rate mod</a>
+					<p class="mod-blurb">Field encounters that feel random again (RCnt2 FORCE stub). Lure / Away still scale. Patcher scaffold ready — drop in a Disc 1 <code>.ppf</code> when you have one.</p>
+				</li>
+				<li>
+					<a class="mod-link" href="https://individualcontributor.dev/Final-Fantasy-7-CSR/">CutScenes Removed (CSR)</a>
+					<p class="mod-blurb">Separate project — browser patcher for CSR / CSR+ / CSR++ cutscene removals.</p>
+				</li>
+			</ul>
+		</div>
+
+		<h2 style="font-family:DogicaPixelBold,Arial,sans-serif;font-size:1.1rem;letter-spacing:1.5px;">Research</h2>
+		<div class="panel">
+			<p>
+				Reference docs and the findings journal from reverse-engineering
+				<code>FIELD.BIN</code>, disc packaging, and encounter RNG.
+			</p>
+			<div class="actions" style="display:flex;flex-wrap:wrap;gap:10px;">
+				<a href="./research/">Browse research</a>
+				<a href="https://github.com/individualcontributordev/Final-Fantasy-7-Modding">Source on GitHub</a>
+			</div>
+		</div>
+
+		<footer class="footer">
+			<p>IndividualContributor &copy; 1998</p>
+		</footer>
+	</div>
+</body>
+</html>
