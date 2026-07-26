@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Compare encounter density default vs Lure vs Away.
+**Current task:** Poke g_enemy_lure 1/16/64; compare encounter density.
