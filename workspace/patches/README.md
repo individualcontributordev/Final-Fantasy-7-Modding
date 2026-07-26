@@ -1,5 +1,13 @@
 # Patch attempt logs
 
-One file per patch attempt. Template in `docs/04-workflow.md`.
+One folder (or markdown log) per patch.
 
-Link each log to a finding in `docs/findings/` when applicable.
+## Active patches
+
+| Patch | Notes |
+|-------|-------|
+| [2026-07-25-force-stub-rcnt2/](2026-07-25-force-stub-rcnt2/) | Encounter FORCE stub; ship via [docs/06-packaging-combined-ppf.md](../../docs/06-packaging-combined-ppf.md) |
+
+Template: [docs/04-workflow.md](../../docs/04-workflow.md).
+
+Do **not** commit game `.bin` / `.dec` / `.ppf` disc images here — only `.md` / `.hex` stubs.
