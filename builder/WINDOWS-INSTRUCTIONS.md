@@ -4,6 +4,8 @@ Use **Git Bash**. Mods ship **one layer per disc** (Disc 1 / 2 / 3). Absolute `.
 
 Goal: `builder/encounter-v0.1.0/layers/disc{1,2,3}.layer.json`
 
+**Why two folders:** CDmage can auto-save when you import `FIELD.BIN.new`. If that file was your only “pristine”, the layer diff is 0 bytes. Keep masters in `workspace/pristine/` and only open copies under `workspace/iso-extract/`.
+
 ---
 
 ## 0. Setup
@@ -13,31 +15,44 @@ cd /c/path/to/Final-Fantasy-7-Modding   # or ~/Final-Fantasy-7-Modding
 git pull
 ```
 
-`python` on PATH. Images under `workspace/iso-extract/` (gitignored):
+`python` on PATH. Layout (binaries gitignored):
 
 ```
-workspace/iso-extract/
-  FINALFANTASY7_D1.bin / .cue              — pristine
+workspace/pristine/                         — retail masters (never import here)
+  FINALFANTASY7_D1.bin / .cue
   FINALFANTASY7_D2.bin / .cue
   FINALFANTASY7_D3.bin / .cue
-  FINALFANTASY7_D1_encounter.bin / .cue    — working copies (create below)
-  FINALFANTASY7_D2_encounter.bin / .cue
-  FINALFANTASY7_D3_encounter.bin / .cue
+
+workspace/iso-extract/                      — disposable working copies
+  FINALFANTASY7_DN.bin / .cue               — from prepare script
+  FINALFANTASY7_DN_encounter.bin / .cue     — Save As + stub import
+  FIELD.BIN / FIELD.BIN.new
 ```
+
+One-time: put clean Disc 1–3 images into `workspace/pristine/` (same names as above).
 
 ---
 
 ## 1. Patch each disc (repeat for N = 1, 2, 3)
 
-Never overwrite pristine `FINALFANTASY7_DN.bin`.
+### 1a. Refresh working copy from the vault
 
-### 1a. Extract `FIELD/FIELD.BIN` (CDmage)
+```bash
+python scripts/prepare_encounter_workspace.py --discs N
+# if iso-extract already has that disc:
+python scripts/prepare_encounter_workspace.py --discs N --force
+```
 
-1. Open `FINALFANTASY7_DN.cue`  
-2. Extract `FIELD/FIELD.BIN` → `workspace/iso-extract/FIELD.BIN`  
-   (overwrite this extract each disc — or use `FIELD.BIN.D{N}` if you prefer)
+This copies `pristine/FINALFANTASY7_DN.*` → `iso-extract/FINALFANTASY7_DN.*`.
 
-### 1b. Stub + recompress
+**Never open anything under `workspace/pristine/` in CDmage for import.**
+
+### 1b. Extract `FIELD/FIELD.BIN` (CDmage)
+
+1. Open **`workspace/iso-extract/FINALFANTASY7_DN.cue`** (the working copy)  
+2. Extract `FIELD/FIELD.BIN` → `workspace/iso-extract/FIELD.BIN`
+
+### 1c. Stub + recompress
 
 ```bash
 python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
@@ -45,40 +60,42 @@ python scripts/build_field_encounter_patch.py workspace/iso-extract/FIELD.BIN
 
 Expect `workspace/iso-extract/FIELD.BIN.new`.
 
-### 1c. Reimport (CDmage) — prefer Save As
+### 1d. Save As, then import (CDmage)
 
-Pristine stays untouched if you **Save As** before changing anything:
+Import may auto-save the open image — that is fine on the **working** tree only:
 
-1. Open pristine `FINALFANTASY7_DN.cue`  
-2. **File → Save As** → `FINALFANTASY7_DN_encounter` (bin + cue)  
-   Do this *before* import. You’re now editing the encounter copy; pristine is unchanged.  
+1. With the working `FINALFANTASY7_DN.cue` still open (or reopen it from `iso-extract/`)  
+2. **File → Save As** → `FINALFANTASY7_DN_encounter` (same folder)  
 3. Import `FIELD.BIN.new` over **`FIELD/FIELD.BIN`**  
 4. Pad if shorter; **never** accept truncate  
-5. **Save** (still on the `_encounter` files)
+5. Save on the `_encounter` files  
 
-(File-copy of bin+cue also works; Save As is preferred when CDmage won’t overwrite an open image.)
+Vault under `pristine/` is unchanged. Layer build diffs vault vs `_encounter`.
 
-### 1d. Smoke test (DuckStation)
+### 1e. Smoke test (DuckStation)
 
-Boot that disc’s encounter image — field loads, encounters still happen.
+Boot `FINALFANTASY7_DN_encounter` — field loads, encounters still happen.
 
 ---
 
-## 2. Diff + verify all discs (one command)
-
-After D1–D3 encounter images exist:
+## 2. Diff + verify
 
 ```bash
-python scripts/build_encounter_layers.py --version 0.1.0
-# or only some discs:
+python scripts/build_encounter_layers.py --version 0.1.0 --discs 1
+# or after all discs are ready:
 python scripts/build_encounter_layers.py --version 0.1.0 --discs 1,2,3
 ```
 
-This writes layers, updates `pack.json`, and sets `builder/manifest.json` `"enabled": true` with a **discs** map for 1/2/3.
+Uses:
 
-**Must see `changedBytes` > 0** for each disc. If pristine and encounter `.bin` match, the script exits with an error — usually CDmage import of `FIELD.BIN.new` did not stick. Re-do 1c, then re-run.
+| Role | Path |
+|------|------|
+| Pristine | `workspace/pristine/FINALFANTASY7_DN.bin` |
+| Patched | `workspace/iso-extract/FINALFANTASY7_DN_encounter.bin` |
 
-Quick check before commit:
+Writes layers, updates `pack.json`, sets `builder/manifest.json` `"enabled": true`.
+
+**Must see `changedBytes` > 0.** Empty diff usually means the encounter image never got the stub, or you still have no real vault (both sides patched). Re-run from 1a with a clean pristine dump.
 
 ```bash
 python -c "import json; d=json.load(open('builder/encounter-v0.1.0/layers/disc1.layer.json')); print(d['stats'])"
@@ -96,13 +113,12 @@ git push
 ```
 
 Then message: **Encounter layers pushed — wire builder.**
-(Builder already loads the Modding manifest; a non-empty enabled layer shows up as an add-on.)
 
 ---
 
 ## CSR bases
 
-`Final-Fantasy-7-CSR/builder/WINDOWS-INSTRUCTIONS.md` — already multi-disc.
+`Final-Fantasy-7-CSR/builder/WINDOWS-INSTRUCTIONS.md` — same idea (`workspace/pristine/` vs patched folders).
 
 ---
 

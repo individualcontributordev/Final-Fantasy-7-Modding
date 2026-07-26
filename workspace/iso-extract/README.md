@@ -1,13 +1,24 @@
-# ISO extract / disc images (gitignored except this README)
+# ISO extract — disposable working copies only
 
-Put NTSC-U Disc 1–3 images and extracts here. Never commit game binaries.
+**Do not keep your only retail dump here.** CDmage can auto-save on import and
+overwrite the open image. Masters live in `workspace/pristine/`.
 
 ```
-workspace/iso-extract/
-  FINALFANTASY7_D1.bin … D3.bin     (+ .cue)  — untouched retail
-  FINALFANTASY7_DN_encounter.bin    (+ .cue)  — after Encounter stub reimport
-  FIELD.BIN                                   — extract for the disc you are patching
-  FIELD.BIN.new                               — from build_field_encounter_patch.py
+workspace/pristine/                         — never open for import
+  FINALFANTASY7_D1.bin … D3.bin (+ .cue)
+
+workspace/iso-extract/                      — working area (this folder)
+  FINALFANTASY7_DN.bin (+ .cue)             — copy from pristine (script)
+  FINALFANTASY7_DN_encounter.bin (+ .cue)   — Save As + FIELD.BIN.new import
+  FIELD.BIN / FIELD.BIN.new                 — extract + stub pipeline
 ```
 
-Mods need a **separate layer per disc**. See `builder/WINDOWS-INSTRUCTIONS.md`.
+Refresh a working copy before each disc:
+
+```bash
+python scripts/prepare_encounter_workspace.py --discs 1
+# replace an existing working copy:
+python scripts/prepare_encounter_workspace.py --discs 1 --force
+```
+
+Full steps: `builder/WINDOWS-INSTRUCTIONS.md`.

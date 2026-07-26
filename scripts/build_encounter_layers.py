@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Build Encounter ic-layer-v1 packs for Disc 1–3.
 
-Git Bash (after you have prepared patched images — see builder/WINDOWS-INSTRUCTIONS.md):
+Git Bash (after prepare + CDmage — see builder/WINDOWS-INSTRUCTIONS.md):
 
-  python scripts/build_encounter_layers.py --version 0.1.0
-  python scripts/build_encounter_layers.py --version 0.1.0 --discs 1,2,3
+  python scripts/prepare_encounter_workspace.py --discs 1
+  # … stub + Save As + import …
+  python scripts/build_encounter_layers.py --version 0.1.0 --discs 1
 
-Looks for in workspace/iso-extract/:
-  FINALFANTASY7_DN.bin
-  FINALFANTASY7_DN_encounter.bin
+Diffs:
+  workspace/pristine/FINALFANTASY7_DN.bin
+    vs workspace/iso-extract/FINALFANTASY7_DN_encounter.bin
 
 Writes builder/encounter-v<version>/layers/discN.layer.json, updates pack.json +
 manifest.json (enabled, discs map for all discs built).
@@ -30,14 +31,16 @@ if str(_SCRIPTS) not in sys.path:
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
 
+PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 ISO = _ROOT / "workspace" / "iso-extract"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 BLURB = "RCnt2 FORCE stub — Enemy Lure / Away still scale. NTSC-U field encounters."
 
 
 def disc_paths(disc: int) -> tuple[Path, Path]:
-    pristine = ISO / f"FINALFANTASY7_D{disc}.bin"
-    patched = ISO / f"FINALFANTASY7_D{disc}_encounter.bin"
+    stem = f"FINALFANTASY7_D{disc}"
+    pristine = PRISTINE_DIR / f"{stem}.bin"
+    patched = ISO / f"{stem}_encounter.bin"
     return pristine, patched
 
 
@@ -60,8 +63,10 @@ def parse_discs(spec: str | None) -> list[int]:
     found = available_discs()
     if not found:
         raise SystemExit(
-            f"No disc pairs in {ISO}.\n"
-            "Expected FINALFANTASY7_DN.bin + FINALFANTASY7_DN_encounter.bin for each disc."
+            "No disc pairs found.\n"
+            f"  Pristine: {PRISTINE_DIR}/FINALFANTASY7_DN.bin\n"
+            f"  Patched:  {ISO}/FINALFANTASY7_DN_encounter.bin\n"
+            "Run prepare_encounter_workspace.py, then Save As + import the stub."
         )
     return found
 
@@ -129,9 +134,19 @@ def update_manifest(version: str, discs: list[int]) -> None:
 def build_one_disc(*, version: str, disc: int, skip_verify: bool) -> Path:
     pristine, patched = disc_paths(disc)
     if not pristine.is_file():
-        raise SystemExit(f"Missing pristine: {pristine}")
+        raise SystemExit(
+            f"Missing pristine vault image: {pristine}\n"
+            "Place clean retail FINALFANTASY7_DN.bin under workspace/pristine/."
+        )
     if not patched.is_file():
-        raise SystemExit(f"Missing patched: {patched}")
+        raise SystemExit(
+            f"Missing patched image: {patched}\n"
+            "Prepare a working copy, Save As _encounter, import FIELD.BIN.new."
+        )
+
+    # Same path / same file = operator error; also catch identical content early messaging.
+    if pristine.resolve() == patched.resolve():
+        raise SystemExit("Pristine and patched paths are the same file — check layout.")
 
     pack_id = f"encounter-v{version}"
     out_dir = _ROOT / "builder" / pack_id / "layers"
@@ -157,8 +172,11 @@ def build_one_disc(*, version: str, disc: int, skip_verify: bool) -> Path:
     )
     if stats["records"] == 0 or stats["changedBytes"] == 0:
         raise SystemExit(
-            f"Disc {disc}: pristine and patched images are identical — "
-            "no stub in the encounter .bin. Reimport FIELD.BIN.new and re-diff."
+            f"Disc {disc}: pristine and patched images are identical.\n"
+            "  • Stub never landed in the _encounter .bin, or\n"
+            "  • Vault under workspace/pristine/ is already patched "
+            "(restore a clean retail dump).\n"
+            "Re-run prepare_encounter_workspace.py, Save As, import FIELD.BIN.new."
         )
 
     if not skip_verify:
@@ -194,11 +212,12 @@ def main() -> int:
     pack_id = f"encounter-v{version}"
     pack_dir = _ROOT / "builder" / pack_id
 
-    print(f"Addon:   Encounter rate")
-    print(f"Version: {version}")
-    print(f"Dir:     {ISO}")
-    print(f"Discs:   {discs}")
-    print(f"Output:  builder/{pack_id}/")
+    print(f"Addon:    Encounter rate")
+    print(f"Version:  {version}")
+    print(f"Pristine: {PRISTINE_DIR}")
+    print(f"Working:  {ISO}")
+    print(f"Discs:    {discs}")
+    print(f"Output:   builder/{pack_id}/")
 
     for disc in discs:
         build_one_disc(version=version, disc=disc, skip_verify=args.skip_verify)
