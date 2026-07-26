@@ -1,79 +1,47 @@
 ---
 title: Publishing Final Fantasy VII PlayStation mods
 date: 2026-07-26
-summary: How mods on this site go from a pristine disc image to a single PPF and a browser patcher.
+summary: How a Final Fantasy VII PlayStation mod becomes a single PPF you apply in the browser.
 order: 1
 ---
 
 # Publishing Final Fantasy VII PlayStation mods
 
-Mods here target NTSC-U PlayStation disc images. Players apply one `.ppf` in the browser. Authors build that patch once against a pristine dump.
+These mods ship as **PPF** patches for NTSC-U PlayStation disc images (`.bin`). You apply them in the browser; nothing is uploaded. Each patch is built once against an untouched retail dump — PPF does not stack.
 
-## Shipped checklist
+## What goes into a release
 
-1. **Pristine baseline** — retail `.bin` + `.cue`. PPF does not stack.
-2. **Final image** — all edits applied (Makou field data, `FIELD.BIN` stubs, etc.).
-3. **One `.ppf` per disc** — `scripts/make_ppf.py`, RomPatcher.js-compatible, verified on a second retail `.bin`.
-4. **Site** — hub entry, patcher page (or shared scaffold), and an article in `articles/`.
+A finished disc mod is a pristine retail image with every intended change applied, then diffed into one `.ppf` per disc. Typical layers:
 
-Players do not need Makou, CDmage, or Ghidra.
+- **Field / map data** — per-map `.DAT` edits (scripts, walkmesh, encounter tables), often via Makou Reactor.
+- **Engine code** — compressed binaries such as `FIELD/FIELD.BIN` (field logic) or later `WORLD.BIN`.
 
-## Author pipeline
+Players only need the `.ppf` and a clean `.bin`.
+
+## Building the modified disc
 
 ```
 retail .bin
-  → optional Makou edits → Save ISO
-  → extract changed engine file (often FIELD/FIELD.BIN)
-  → decompress GZIPPS → patch → recompress
+  → optional Makou field edits → save ISO
+  → extract the engine file that changed (often FIELD/FIELD.BIN)
+  → decompress → patch bytes → recompress
   → reimport into the same working image
-  → DuckStation smoke test
-  → make_ppf.py (pristine vs final)
-  → site/<mod>/patches/ + PATCHES entry
-  → articles/ post + hub link
+  → test in DuckStation
+  → diff pristine vs final → .ppf
 ```
 
-### Makou vs engine code
+### Makou and FIELD.BIN
 
-Makou edits per-map `.DAT` (scripts, walkmesh, encounter tables). Encounter engine logic lives in compressed `FIELD/FIELD.BIN`.
-
-If a release needs both:
-
-1. Finish Makou → Save ISO.
-2. Extract `FIELD/FIELD.BIN` from **that** image (not an earlier stock extract).
-3. Patch and recompress.
-4. Import over `FIELD/FIELD.BIN` on the same image.
-
-Do not import a stock-based `FIELD.BIN.new` onto a Makou disc if sizes diverge. CDmage truncate → Cancel and restore. Shorter imports may pad with zeros.
+Makou edits map files. Encounter *engine* behavior (Danger growth, RNG calls) lives in compressed `FIELD/FIELD.BIN`. When both are needed: finish Makou and save the ISO first, then extract and patch `FIELD/FIELD.BIN` from **that** image, then reimport over the same path. Patching a stock extract and dropping it onto a Makou disc can break Square’s file index or truncate on import.
 
 ### GZIPPS
 
-`FIELD.BIN` is an 8-byte GZIPPS header plus gzip payload. Decompress to edit; recompress with project scripts and keep the header. Prefer patches that do not grow past the allocated size.
+On disc, `FIELD.BIN` starts with an 8-byte GZIPPS header plus a gzip payload. The file is decompressed for editing, then recompressed with the header preserved. Imports that are slightly shorter than the original slot can pad; imports that would truncate should be rejected.
 
-### PPF
+### The PPF
 
-```bash
-python scripts/make_ppf.py \
-  path/to/ff7_disc1_pristine.bin \
-  path/to/ff7_disc1_final.bin \
-  -o site/your-mod/patches/yourmod-disc1-v0.1.0.ppf \
-  -d "Short public description" \
-  --verify
-```
+The release artifact is a RomPatcher.js-compatible PPF 3.0 file: pristine retail `.bin` versus the final modified image, with a short description string. Applying that PPF to a second clean retail image must match the final build before it goes on the patcher page.
 
-Wire the file in the patcher’s `PATCHES` list (see `site/encounter/patches/README.md`).
+## Related
 
-## Private vs public
-
-`docs/` and `docs/findings/` are internal notes. The site builds only from `articles/`.
-
-## Next mod
-
-| Step | Done when |
-|------|-----------|
-| Goal | One clear player-facing sentence |
-| Layer | `.DAT`, engine, or Makou + engine (correct extract order) |
-| Patch | Offsets/bytes or a script under `scripts/` + `workspace/patches/` |
-| Test | Boot, relevant path, at least one fight; RAM checks if RNG-sensitive |
-| PPF | From pristine; reapplied to a second retail image |
-| Site | Hub, patcher entry, `articles/` post with `order` |
-| Naming | **Final Fantasy VII** in player-facing copy |
+- [Remaking field encounters](./remaking-field-encounters.html) — the first engine stub built this way
