@@ -39,6 +39,7 @@ Dated research notes for **FF7 PSX disc modding**. Stable guides live in
 | 2026-07-25 | [patch-log-force-stub](2026-07-25-patch-log-force-stub.md) | FORCE stub patch log (VA/file offset) | confirmed |
 | 2026-07-25 | [force-stub-complete-ghidra](2026-07-25-force-stub-complete-ghidra.md) | FORCE stub + jal restore verified in Ghidra | confirmed |
 | 2026-07-25 | [force-stub-patched-jal-clobber](2026-07-25-force-stub-patched-jal-clobber.md) | Stub OK; restore jal @ 0x800ABBD4 | confirmed |
+| 2026-07-25 | [playtest-preempt-flag](2026-07-25-playtest-preempt-flag.md) | Preempt flag still 4 then 0 | confirmed |
 | 2026-07-25 | [playtest-lure-poke](2026-07-25-playtest-lure-poke.md) | lure 1=none, 16=normal, 64=alot | confirmed |
 | 2026-07-25 | [lure-playtest-deferred](2026-07-25-lure-playtest-deferred.md) | No materia yet; poke g_enemy_lure in RAM | confirmed |
 | 2026-07-25 | [playtest-rcnt2-sparse](2026-07-25-playtest-rcnt2-sparse.md) | RCnt2 stub: sparse encounters; Offset wrap OK | confirmed |

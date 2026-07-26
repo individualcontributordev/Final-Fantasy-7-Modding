@@ -2,4 +2,4 @@
 
 **Not user-facing.**
 
-**Current task:** Confirm preempt flag path still runs (watch 0x800716D0).
+**Current:** FIELD FORCE stub accepted. Optional later: Aps preempt, WORLD.BIN, rate tune.
