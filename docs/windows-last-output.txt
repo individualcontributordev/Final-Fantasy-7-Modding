@@ -16,3 +16,27 @@ WorldScrambleRand_address:
 WorldRand_address:
 WorldRand_listing_or_decompiler:
 notes:
+                             LAB_800adf64                                    XREF[1]:     800adf84(j)  
+        800adf64 00 00 62 90     lbu        v0,0x0(v1)=>local_830
+        800adf68 00 00 00 00     nop
+        800adf6c 11 80 01 3c     lui        at,0x8011
+        800adf70 5c ae 21 24     addiu      at,at,-0x51a4
+        800adf74 21 08 26 00     addu       at,at,a2
+        800adf78 00 00 22 a0     sb         v0,0x0(at)=>DAT_8010ae5c
+        800adf7c 01 00 c6 24     addiu      a2,a2,0x1
+        800adf80 09 02 c2 28     slti       v0,a2,0x209
+        800adf84 f7 ff 40 14     bne        v0,zero,LAB_800adf64
+        800adf88 04 00 63 24     _addiu     v1,v1,0x4
+        800adf8c 8c b7 02 0c     jal        WorldScrambleRand                                undefined WorldScrambleRand()
+        800adf90 00 00 00 00     _nop
+        800adf94 8c b7 02 0c     jal        WorldScrambleRand                                undefined WorldScrambleRand()
+        800adf98 00 00 00 00     _nop
+        800adf9c 8c b7 02 0c     jal        WorldScrambleRand                                undefined WorldScrambleRand()
+        800adfa0 00 00 00 00     _nop
+        800adfa4 08 02 02 34     ori        v0,zero,0x208
+        800adfa8 11 80 01 3c     lui        at,0x8011
+        800adfac 58 ae 22 ac     sw         v0,-0x51a8(at)=>DAT_8010ae58
+        800adfb0 38 08 bf 8f     lw         ra,local_8(sp)
+        800adfb4 40 08 bd 27     addiu      sp,sp,0x840
+        800adfb8 08 00 e0 03     jr         ra
+        800adfbc 00 00 00 00     _nop
