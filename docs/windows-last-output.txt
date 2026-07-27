@@ -1,20 +1,19 @@
-# Task: find WORLD.BIN load base in DuckStation
+# Task: Ghidra import WORLD.BIN.dec @ 0x800A0000; find WorldSeedRand
 
 # COPY-PASTE (do not edit these lines)
-needle_cmd: xxd -g1 -l 32 workspace/iso-extract/WORLD.BIN.dec
-duckstation: load test ISO → reach world map (walk Midgar area grass) → pause → Memory → Search
-search_hint: paste first 16–32 bytes from needle_cmd (hex, no spaces or as DuckStation accepts)
-expected: one hit whose address is the module base (often 0x800xxxxx); Ghidra import base = that address
-ghidra_later: do NOT import yet — only report the base this task
+ghidra_base: 0x800A0000
+import_file: workspace/iso-extract/WORLD.BIN.dec
+format: Raw Binary
+language: MIPS:LE:32:default (R3000 / little endian)
+analyze: Yes (defaults OK)
+scalar_search: 0x5d588b65
+goto_if_found: address of instruction / function containing that constant
+rename_to: WorldSeedRand
+label_hint: World Map RNG seed uses multiplier 0x5D588B65 (speedrun wiki)
 
-# EVIDENCE (paste below, then save)
-needle_xxd:
-duckstation_search_hit_address:
+# EVIDENCE (paste Listing / Decompiler near the constant, then save)
+ghidra_import_base_confirmed:
+scalar_hit_address:
+function_name_after_rename:
+listing_paste:
 notes:
-xxd -g1 -l 32 workspace/iso-extract/WORLD.BIN.dec
-00000000: 4e 45 57 20 20 00 00 00 4f 4c 44 20 20 00 00 00  NEW  ...OLD  ...
-00000010: 4a 55 4d 50 20 00 00 00 46 52 4f 4d 20 00 00 00  JUMP ...FROM ...
-➜  Final-Fantasy-7-Modding git:(main)
-
-000A0000
-000A0010
