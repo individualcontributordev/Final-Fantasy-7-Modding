@@ -1,0 +1,16 @@
+{
+  "id": "field-encounter-on-csr-plus-50-v0.1.2",
+  "name": "Field encounters \u2014 Standard (50%) (on CSR+)",
+  "kind": "addon",
+  "version": "0.1.2",
+  "blurb": "Moderate random field battles. Enemy Lure / Away still work.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "csr-plus-v0.1.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 50
+}

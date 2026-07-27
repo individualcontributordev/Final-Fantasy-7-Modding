@@ -3,8 +3,8 @@
 **Date:** 2026-07-25  
 **File:** `FIELD.BIN.dec`  
 **VA base:** `0x800A0000`  
-**Package:** [workspace/patches/2026-07-25-force-stub-rcnt2/](../../workspace/patches/2026-07-25-force-stub-rcnt2/)  
-**Packaging:** [docs/06-packaging-combined-ppf.md](../06-packaging-combined-ppf.md)
+**Package:** [mods/field-random-encounters/patches/](../../mods/field-random-encounters/patches/)  
+**Ship:** [builder/WINDOWS-INSTRUCTIONS.md](../../builder/WINDOWS-INSTRUCTIONS.md)
 
 ## Change
 
@@ -24,7 +24,7 @@ Replace vanilla Danger `+=` at `0x800ABB7C`–`0x800ABBD3` (88 bytes) with lure-
 
 ## New bytes @ `0xBB7C` (88 bytes LE)
 
-See `workspace/patches/2026-07-25-force-stub-rcnt2/stub-bb7c.hex`.
+See `mods/field-random-encounters/patches/stub-bb7c.hex`.
 
 ## Revs
 

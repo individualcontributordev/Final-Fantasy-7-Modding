@@ -22,20 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Build research HTML
+      - name: Stage builder packs only
         run: |
-          pip install markdown
-          python scripts/build_site_docs.py
-      - name: Publish builder packs on Pages
-        run: |
-          rm -rf site/builder
-          cp -R builder site/builder
+          mkdir -p _site
+          cp index.html .nojekyll _site/
+          cp -R builder _site/builder
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

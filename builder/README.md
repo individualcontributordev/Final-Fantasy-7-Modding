@@ -1,14 +1,15 @@
-# Encounter builder packs
+# Builder packs (Pages publish surface)
 
-Ship Encounter layers for https://individualcontributor.dev/builder/
+JSON under this folder is what https://individualcontributor.dev/builder/ loads via
+`remoteSources` → this repo’s Pages `/builder/manifest.json`.
 
-Version: `ENCOUNTER_VERSION` (bump **before** a release build).
+Mod **source** lives under `mods/<name>/`. Builds write packs here.
 
 ```bash
-python scripts/build_all_encounter_rates.py
+python mods/field-random-encounters/scripts/build_all_rates.py
 git add builder/
-git commit -m "Encounter vX.Y.Z — Light/Standard/Dense for clean + CSR bases."
+git commit -m "Field encounters vX.Y.Z — Light/Standard/Dense for clean + CSR bases."
 git push
 ```
 
-See `WINDOWS-INSTRUCTIONS.md`. Players use the disc builder, not a separate Encounter PPF page.
+See `WINDOWS-INSTRUCTIONS.md`.

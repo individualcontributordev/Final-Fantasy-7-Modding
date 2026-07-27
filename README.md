@@ -1,62 +1,38 @@
 # Final Fantasy VII PSX Modding
 
-Research, tools, and patches for modifying **Final Fantasy VII on PlayStation** disc images — in a way that still plays on real hardware.
+Tools and notes for modifying **Final Fantasy VII** PlayStation disc images (hardware-compatible).
 
-**Site:** https://individualcontributor.dev/Final-Fantasy-7-Modding/  
-(browser patchers + public research articles)
+**Play:** https://individualcontributor.dev/builder/  
+**Repo:** https://github.com/individualcontributordev/Final-Fantasy-7-Modding
 
-This repo holds private lab docs, scripts, Ghidra notes, a findings journal, and the polished `articles/` that GitHub Pages publishes. Work spans field data, engine binaries (`FIELD.BIN`, `WORLD.BIN`, etc.), ISO layout, and emulator/hardware testing.
+## Mods
 
-## Status
+| Mod | Path | Builder |
+|-----|------|---------|
+| Field random encounters | [mods/field-random-encounters/](mods/field-random-encounters/) | Light / Standard / Dense |
+| World map random encounters | [mods/world-map-random-encounters/](mods/world-map-random-encounters/) | scaffold only |
 
-**Active — FIELD encounter FORCE stub playtested; packaging documented; public site scaffolded.** Optional next: ship encounter `.ppf`, boss preempt in-game, `WORLD.BIN`.
-
-## Topic areas
-
-| Area | Reference | Status |
-|------|-----------|--------|
-| Disc format, ISO rebuild, Makou | [docs/02-disc-format.md](docs/02-disc-format.md) | documented |
-| Tooling & emulator setup | [docs/03-environment-setup.md](docs/03-environment-setup.md) | in progress |
-| Patch workflow | [docs/04-workflow.md](docs/04-workflow.md) | documented |
-| Ghidra / RE | [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | in progress |
-| Field encounter RNG | [docs/01-encounter-system.md](docs/01-encounter-system.md) | FIELD stub playtested |
-| Combined Makou + stub PPF | [docs/06-packaging-combined-ppf.md](docs/06-packaging-combined-ppf.md) | documented |
-
-Add new topic areas as reference docs (`docs/0N-*.md`) and findings as work expands.
-
-## Project layout
+## Layout
 
 ```
-Final-Fantasy-7-Modding/
-├── AGENTS.md                 Cursor agent guide
-├── README.md                 ← you are here
-├── articles/                 public research posts (CI → site/research)
-├── site/                     GitHub Pages (hub, encounter patcher, assets)
-├── scripts/                  build_site_docs, make_ppf, field patch tools
-├── docs/                     private guides + findings journal (not published)
-└── workspace/                ISO extracts, Ghidra, patches (gitignored binaries)
+mods/          per-mod source (VERSION, patches, build scripts)
+builder/       published ic-layer-v1 packs + manifest (Pages JSON CDN)
+scripts/       shared ISO / gzip / layer helpers
+docs/          guides + findings (engineers)
+workspace/     local pristine discs / temps (gitignored binaries)
 ```
 
-Rebuild research HTML locally:
+## Release (Field encounters)
 
-```bash
-pip install markdown
-python scripts/build_site_docs.py
-```
+1. Bump `mods/field-random-encounters/VERSION` if needed  
+2. `workspace/pristine/FINALFANTASY7_D1.bin` present  
+3. `python mods/field-random-encounters/scripts/build_all_rates.py`  
+4. Commit `builder/` JSON only → push (Pages serves `/builder/`)
 
-## Research journal (private)
+Details: [builder/WINDOWS-INSTRUCTIONS.md](builder/WINDOWS-INSTRUCTIONS.md)
 
-Dated discoveries stay in [docs/findings/](docs/findings/README.md). Public write-ups live in
-[articles/](articles/README.md).
+## Docs for engineers
 
-## Disc builder layers
+Start at [docs/00-goals.md](docs/00-goals.md). Encounter system: [docs/01-encounter-system.md](docs/01-encounter-system.md). Lab notebook: [docs/findings/](docs/findings/).
 
-Windows handoff to export stackable layers for the main-site builder:
-
-[builder/WINDOWS-INSTRUCTIONS.md](builder/WINDOWS-INSTRUCTIONS.md)
-
-## GitHub
-
-Repo: [individualcontributordev/Final-Fantasy-7-Modding](https://github.com/individualcontributordev/Final-Fantasy-7-Modding)
-
-After clone: `git config core.hooksPath .githooks` (strips Cursor commit trailers; see `.cursor/rules/no-cursor-commit-trailers.mdc`).
+After clone: `git config core.hooksPath .githooks`

@@ -51,9 +51,6 @@ workspace/**/*.dst
 **/duckstation*/
 **/*.duckstation*
 
-# Generated research HTML (built in CI / scripts/build_site_docs.py)
-site/research/
-
 # Python
 __pycache__/
 *.py[cod]
@@ -61,6 +58,9 @@ __pycache__/
 .venv/
 venv/
 .env
+
+# Pages staging (CI only)
+_site/
 
 # OS / editor
 .DS_Store

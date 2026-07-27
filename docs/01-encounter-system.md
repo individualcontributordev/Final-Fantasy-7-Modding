@@ -128,7 +128,7 @@ Danger also **carries across field changes** if you never fought — so chaining
 - **Vanilla:** each check raises Danger, then rolls vs `(Danger × lure)`.  
 - **Mod:** each check has a flat FORCE chance (Light / Standard / Dense). Same odds from step one.
 
-Public write-up: [articles/remaking-field-encounters.md](../articles/remaking-field-encounters.md). Patch bytes: [workspace/patches/2026-07-25-force-stub-rcnt2/](../workspace/patches/2026-07-25-force-stub-rcnt2/).
+Patch bytes: [mods/field-random-encounters/patches/](../mods/field-random-encounters/patches/).
 
 | Component | File | Change |
 |-----------|------|--------|

@@ -1,17 +1,19 @@
-# Windows (Git Bash): Encounter layers
+# Windows (Git Bash): Field encounter layers
 
 ## Versions (this release)
 
 | Pack | Version | Source |
 |------|---------|--------|
-| CSR | `0.14.1` | CSR repo builder + PPFs |
+| CSR | `0.14.1` | CSR repo builder |
 | CSR+ | `0.1.1` | CSR repo |
 | CSR++ | `0.1.1` | CSR repo |
-| Encounter | `0.1.2` | `builder/ENCOUNTER_VERSION` — rates **25 / 50 / 75** |
+| Field encounters | `0.1.2` | `mods/field-random-encounters/VERSION` — rates **25 / 50 / 75** |
 
-Encounter `--against` resolves the live CSR base id from Pages (e.g. `csr-plus-v0.1.1`).
+`--against` resolves the live CSR base id from Pages (e.g. `csr-plus-v0.1.1`).
 
-Player labels: **Light (25%)** / **Standard (50%)** / **Dense (75%)** — denser = more random field battles.
+Player labels: **Light (25%)** / **Standard (50%)** / **Dense (75%)** — denser = more random **field** battles.
+
+World map encounters are a separate mod (not built here yet).
 
 ---
 
@@ -23,20 +25,20 @@ Needs `workspace/pristine/FINALFANTASY7_D1.bin` (never open in CDmage).
 cd /c/path/to/Final-Fantasy-7-Modding
 git pull
 
-python scripts/build_all_encounter_rates.py
+python mods/field-random-encounters/scripts/build_all_rates.py
 
 git add builder/
 git status   # JSON only — no .bin
-git commit -m "Encounter v0.1.2 — 25/50/75% for clean + CSR bases."
+git commit -m "Field encounters v0.1.2 — 25/50/75% for clean + CSR bases."
 git push
 ```
 
 One pack:
 
 ```bash
-python scripts/build_encounter_on_base.py --against csr-plus --rate 25 --discs 1
+python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --rate 25 --discs 1
 ```
 
-New builds **do not** auto-disable older Encounter packs. Set `"enabled": false` in `builder/manifest.json` yourself when you want to hide one.
+New builds **do not** auto-disable older packs. Set `"enabled": false` in `builder/manifest.json` yourself when you want to hide one.
 
-No `--version` needed unless overriding `ENCOUNTER_VERSION`.
+No `--version` needed unless overriding `mods/field-random-encounters/VERSION`.

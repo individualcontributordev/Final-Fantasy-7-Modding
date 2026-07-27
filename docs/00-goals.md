@@ -1,61 +1,22 @@
 # Goals
 
-## Project scope
+PS1 Final Fantasy VII disc modding: change engine/field data, keep hardware playability, ship stackable `ic-layer-v1` packs for https://individualcontributor.dev/builder/.
 
-**Final Fantasy VII PSX disc modding** — understand, change, and rebuild PlayStation disc images so
-mods remain playable on console hardware (and test accurately in emulators).
+**In repo:** scripts, docs, layer JSON. **Not in repo:** disc images, `.bin` dumps.
 
-This includes:
+## Reading order
 
-- ISO / sector layout and Square’s custom indexes (`FIELD.BIN`, `WORLD.BIN`, etc.)
-- Per-map field data (`.DAT` and related files) via tools like Makou Reactor
-- Engine binaries in gzip blobs on the disc (RE in Ghidra, MIPS patches)
-- Workflow: extract → edit → recompress → reinsert → verify
-
-**Platform:** PS1 (PSX) disc images only for now — not PC / 7th Heaven.
-
-**Out of scope:** piracy / sharing disc images.  
-**In scope for authors:** documenting how to build a **combined PPF** from a disc you own ([docs/06-packaging-combined-ppf.md](06-packaging-combined-ppf.md)) — the repo does not ship game data or `.ppf` binaries.
-
-## Topic areas
-
-Work is organized by topic. Each gets reference docs and findings as we learn.
-
-| Topic | Docs | Notes |
-|-------|------|-------|
-| Disc & ISO | `02-disc-format.md`, `04-workflow.md` | Makou/ff7tk save path, GZIPPS |
-| Tooling | `03-environment-setup.md` | DuckStation, Ghidra, scripts |
-| Field encounter RNG | `01-encounter-system.md` | **First research thread** — not the whole project |
-| *(future)* | TBD | Kernel, battle, world map, scripts, etc. |
-
-New topics: add `docs/0N-topic.md` + findings; update this table and the README.
-
-### Encounter RNG (current research thread)
-
-One candidate mod: **Danger = 0 on field enter**; each movement encounter check
-may RNG-set Danger to MAX (independent entropy), while **StepID/Offset stay vanilla**
-so boss preempt stays routable. See
-[findings/2026-07-25-patch-target-field-load-reseed.md](findings/2026-07-25-patch-target-field-load-reseed.md).
-
-That idea requires patching `FIELD.BIN` (and eventually `WORLD.BIN`), not just Makou
-field edits.
-
-## Success criteria — “environment ready”
-
-Applies to any mod work in this repo:
-
-- [ ] Clean Final Fantasy VII PS1 disc image (`.bin` + `.cue`) in `workspace/iso-extract/`
-- [ ] Can extract key files (`FIELD.BIN`, etc.) from the image
-- [ ] `scripts/decompress_field_bin.py` runs successfully
-- [ ] Emulator boots the image (DuckStation Safe Mode — see findings)
-- [ ] Ghidra project created under `workspace/ghidra/`
-- [ ] Can recompress, reinsert into ISO, and boot again
-
-Topic-specific milestones (e.g. find RNG table in Ghidra) live in findings and topic docs.
+| Need | Go to |
+|------|--------|
+| Ship Field encounter rates | `mods/field-random-encounters/` + `builder/WINDOWS-INSTRUCTIONS.md` |
+| Encounter RE / RAM map | `docs/01-encounter-system.md` |
+| ISO / GZIPPS / Makou | `docs/02-disc-format.md`, `docs/04-workflow.md` |
+| Tools | `docs/03-environment-setup.md`, `docs/05-ghidra-guide.md` |
+| Day-by-day RE trail | `docs/findings/` |
 
 ## Principles
 
-1. **Console-first** — if it doesn’t work on hardware, it’s not done (emulator is for dev).
-2. **Document as we go** — findings journal + reference docs, not chat-only knowledge.
-3. **Pristine backups** — never edit the only copy of a source ISO.
-4. **Minimal patches** — smallest change that achieves the goal; avoid unrelated edits.
+1. Console-first (emulator for iteration).
+2. Pristine vault never opened in CDmage — work on copies / scripted inject.
+3. Smallest patch that works; document offsets in findings or mod `patches/`.
+4. Publish only JSON under `builder/` (Pages CDN for the main-site builder).
