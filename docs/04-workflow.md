@@ -30,7 +30,7 @@ cp workspace/iso-extract/FIELD.BIN workspace/iso-extract/FIELD.BIN.pristine
 ### 2. Decompress (if starting fresh)
 
 ```bash
-python3 scripts/decompress_field_bin.py workspace/iso-extract/FIELD.BIN
+python3 scripts/decompress_gzipps.py workspace/iso-extract/FIELD.BIN
 ```
 
 ### 3. Patch
@@ -42,7 +42,7 @@ python3 scripts/decompress_field_bin.py workspace/iso-extract/FIELD.BIN
 ### 4. Recompress
 
 ```bash
-python3 scripts/compress_field_bin.py \
+python3 scripts/compress_gzipps.py \
   workspace/iso-extract/FIELD.BIN.dec.patched \
   workspace/iso-extract/FIELD.BIN \
   workspace/iso-extract/FIELD.BIN.new
