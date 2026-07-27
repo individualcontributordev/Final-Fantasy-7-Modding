@@ -38,26 +38,29 @@ step fraction wraps
   → battle if threshold passes (FORCE almost always does)
 ```
 
-## Shipped rate
+## Shipped rates
 
 ```
 entropy = *(u32*)0x1F801120        # RCnt2
-thresh  = g_enemy_lure / 2         # 50% of raw lure byte
+thresh  = g_enemy_lure scaled by rate (see table)
 if ((entropy & 0xff) < thresh)
     g_danger = 0xFFFF
 else
     g_danger = 0
 ```
 
-**P(FORCE) ≈ (g_enemy_lure / 2) / 256 = g_enemy_lure / 512** per check.
+| Rate pack | Formula | At lure 16 | Hex file |
+|-----------|---------|------------|----------|
+| **25%** | `lure / 4` | ~1.56% | `stub-bb7c-rate25.hex` |
+| **50%** | `lure / 2` | ~3.13% | `stub-bb7c-rate50.hex` (also `stub-bb7c.hex`) |
+| **75%** | `lure × 3/4` | ~4.69% | `stub-bb7c-rate75.hex` |
 
-| At lure | thresh | ≈ P(FORCE) | vs raw `lure/256` |
-|---------|--------|------------|-------------------|
-| 16 (default) | 8 | **3.13%** | **50%** |
-| was `* 3/4` | 12 | 4.69% | 75% |
-| was raw | 16 | 6.25% | 100% |
+Lure/Away materia still scale `g_enemy_lure`. Builder add-ons share `exclusiveGroup: encounter-rate`.
 
-Lure/Away materia still scale `g_enemy_lure`.
+```bash
+python scripts/build_all_encounter_rates.py
+# or: python scripts/build_encounter_on_base.py --against clean --rate 25 --discs 1
+```
 
 ## Playtest
 
