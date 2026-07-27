@@ -82,6 +82,7 @@ Living list — add a row when a capability is **repeatably** usable (see skill 
 | Hardware burn checklist (PS2 MechaPwn / MODE2 cue) | 2026-07 | `docs/07-hardware-burn.md` |
 | ImgBurn EDC verify fail can still boot on MechaPwn PS2 | 2026-07 | CSR `notes/2026-07-27-imgburn-verify-yamada.md` |
 | MiSTer PSX as pre-burn behavioral gate (Ghidra/Makou) | 2026-07 | `docs/07-hardware-burn.md` |
+| Builder EDC repair → ImgBurn → PS2 fields load (CSR+ D1) | 2026-07 | CSR `notes/2026-07-27-imgburn-verify-yamada.md` |
 
 ## Keep the process honest
 
