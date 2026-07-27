@@ -44,6 +44,7 @@ Needs `workspace/pristine/FINALFANTASY7_D1.bin`. After CSR base **ids** change, 
 | Findings index | `docs/findings/README.md` |
 | Ghidra | `docs/05-ghidra-guide.md` |
 | Disc / Makou | `docs/02-disc-format.md` |
+| **PS2 burn / hardware** | `docs/07-hardware-burn.md` |
 
 New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters`.
 

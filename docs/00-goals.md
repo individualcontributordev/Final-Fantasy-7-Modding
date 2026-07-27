@@ -13,6 +13,7 @@ PS1 Final Fantasy VII disc modding: change engine/field data, keep hardware play
 | Encounter RE / RAM map | [01-encounter-system.md](01-encounter-system.md) |
 | ISO / GZIPPS / Makou | [02-disc-format.md](02-disc-format.md), [04-workflow.md](04-workflow.md) |
 | Tools | [03-environment-setup.md](03-environment-setup.md), [05-ghidra-guide.md](05-ghidra-guide.md) |
+| **Burn / PS2 MechaPwn test** | [07-hardware-burn.md](07-hardware-burn.md) |
 | Day-by-day RE trail | [findings/](findings/) |
 
 ## Principles
