@@ -1,10 +1,15 @@
 # Findings journal
 
-Dated research notes for **Final Fantasy VII PSX disc modding**. Stable guides live in
-`docs/0N-*.md`; this folder is the lab notebook. It is **not** published to the public site —
-polished posts live in [`articles/`](../articles/).
+Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub: `mods/field-random-encounters/`.
 
-**How to add an entry:** copy `_template.md` → `YYYY-MM-DD-slug.md` → update the index below.
+## Start here (engineers)
+
+1. **Shipped behaviour** — `docs/01-encounter-system.md` + `mods/field-random-encounters/patches/README.md`
+2. **How to rebuild layers** — `builder/WINDOWS-INSTRUCTIONS.md`
+3. **ISO / FIELD.BIN pipeline** — `docs/02-disc-format.md`, `docs/04-workflow.md`
+4. **This folder** — dated RE steps (Ghidra addresses, dead ends, playtests). Keep when diagnosing regressions; skip for “just ship a rate”.
+
+**How to add:** copy `_template.md` → `YYYY-MM-DD-slug.md` → add a row below.
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
@@ -73,21 +78,11 @@ polished posts live in [`articles/`](../articles/).
 ### Encounter RNG
 - [2026-07-25-encounter-rng-architecture](2026-07-25-encounter-rng-architecture.md)
 - [2026-07-25-patch-target-field-load-reseed](2026-07-25-patch-target-field-load-reseed.md)
-- [2026-07-25-ghidra-zero-xrefs-rng-table](2026-07-25-ghidra-zero-xrefs-rng-table.md)
-- [2026-07-25-ghidra-no-stepid-scalars](2026-07-25-ghidra-no-stepid-scalars.md)
-- [2026-07-25-field-dec-addr-search](2026-07-25-field-dec-addr-search.md)
-- [2026-07-25-increment-step-id](2026-07-25-increment-step-id.md)
-- [2026-07-25-increment-step-id-complete](2026-07-25-increment-step-id-complete.md)
-- [2026-07-25-increment-step-id-xrefs](2026-07-25-increment-step-id-xrefs.md)
-- [2026-07-25-encounter-check](2026-07-25-encounter-check.md)
-- [2026-07-25-encounter-check-entry](2026-07-25-encounter-check-entry.md)
-- [2026-07-25-g-danger-rename](2026-07-25-g-danger-rename.md)
-- [2026-07-25-danger-increment](2026-07-25-danger-increment.md)
+- [2026-07-25-patch-log-force-stub](2026-07-25-patch-log-force-stub.md)
+- [2026-07-25-playtest-rcnt2-sparse](2026-07-25-playtest-rcnt2-sparse.md)
 
-### Tools & environment
+### Tools & ISO
 - [2026-07-25-duckstation-accurate-settings](2026-07-25-duckstation-accurate-settings.md)
-
-### Disc / ISO
 - [2026-07-25-makou-iso-save-path](2026-07-25-makou-iso-save-path.md)
 - [2026-07-25-field-bin-extract](2026-07-25-field-bin-extract.md)
-- [2026-07-25-search-ran-on-compressed-field-bin](2026-07-25-search-ran-on-compressed-field-bin.md)
+- [2026-07-25-cdmage-field-bin-path](2026-07-25-cdmage-field-bin-path.md)

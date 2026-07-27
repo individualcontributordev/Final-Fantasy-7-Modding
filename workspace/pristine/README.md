@@ -1,7 +1,6 @@
 # Pristine retail discs (gitignored binaries)
 
-**Never open these in CDmage.** Import auto-saves the open file — that is what
-wiped earlier “pristine” dumps and produced empty Encounter layers.
+**Never open these in CDmage.** Import auto-saves the open file.
 
 ```
 workspace/pristine/
@@ -10,10 +9,7 @@ workspace/pristine/
   FINALFANTASY7_D3.bin  (+ .cue)
 ```
 
-Working copies (same filenames) live under `workspace/iso-extract/`:
-
-```bash
-python scripts/prepare_encounter_workspace.py --discs 1
-```
+Field encounter builds (`mods/field-random-encounters/scripts/build_on_base.py`)
+read pristine here and write temps under `workspace/iso-extract/_on_base/`.
 
 See `builder/WINDOWS-INSTRUCTIONS.md`.

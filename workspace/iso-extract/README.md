@@ -1,24 +1,9 @@
-# ISO extract — disposable working copies only
+# ISO extract — disposable working / temp area
 
-**Do not keep your only retail dump here.** CDmage auto-saves on import into
-whatever image is open. Masters live in `workspace/pristine/`.
+**Do not keep your only retail dump here.** Masters live in `workspace/pristine/`.
 
-```
-workspace/pristine/                 — never open in CDmage
-  FINALFANTASY7_D1.bin … D3.bin (+ .cue)
+Normal Field encounter builds use `workspace/iso-extract/_on_base/` (gitignored temps).
 
-workspace/iso-extract/              — working area (this folder)
-  FINALFANTASY7_DN.bin (+ .cue)     — copy from pristine, then import stub here
-  FIELD.BIN / FIELD.BIN.new
-```
-
-Same filename in both folders on purpose: prepare copies the vault; CDmage
-patches the iso-extract file; the layer script diffs vault vs working copy.
-
-```bash
-python scripts/prepare_encounter_workspace.py --discs 1
-# replace an existing working copy (only before patching):
-python scripts/prepare_encounter_workspace.py --discs 1 --force
-```
+Prefer `mods/field-random-encounters/scripts/build_on_base.py` so you never open the vault in CDmage.
 
 Full steps: `builder/WINDOWS-INSTRUCTIONS.md`.

@@ -35,8 +35,10 @@ Research and modding project for **Final Fantasy VII PlayStation disc images**.
 | `docs/windows-last-output.txt` | Latest Windows command output (git pipe) |
 | `docs/0N-*.md` | Curated reference by topic |
 | `docs/findings/` | Dated journal entries |
+| `mods/` | One folder per shippable mod |
+| `builder/` | Published layer JSON for Pages / builder |
 | `scripts/` | Shared tooling |
-| `workspace/` | Local disc/Ghidra/patches (gitignored binaries) |
+| `workspace/` | Local disc/Ghidra (gitignored binaries) |
 
 ## Topic docs
 
