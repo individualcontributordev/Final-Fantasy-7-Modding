@@ -1,0 +1,14 @@
+{
+  "id": "encounter-on-csr-plusplus-v0.1.1",
+  "name": "Encounter rate (on CSR++)",
+  "kind": "addon",
+  "version": "0.1.1",
+  "blurb": "RCnt2 FORCE at lure/2 on CSR++ FIELD.BIN (~3.1%/check default). Use with CSR++ base only.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-plusplus-v0.1.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  }
+}

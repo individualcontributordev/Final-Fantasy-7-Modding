@@ -8,12 +8,14 @@
       "kind": "addon",
       "blurb": "Superseded by v0.1.1.",
       "format": "ic-layer-v1",
-      "compatibleBases": ["clean"],
+      "compatibleBases": [
+        "clean"
+      ],
       "discs": {
         "1": "./encounter-v0.1.0/layers/disc1.layer.json"
       },
       "enabled": false,
-      "note": "Rebuild: python scripts/build_encounter_on_base.py --against clean --discs 1"
+      "note": "Superseded by encounter-v0.1.1. Disabled automatically on rebuild."
     },
     {
       "id": "encounter-on-csr-plus-v0.1.0",
@@ -21,12 +23,70 @@
       "kind": "addon",
       "blurb": "Superseded by v0.1.1 against csr-plus-v0.1.1.",
       "format": "ic-layer-v1",
-      "compatibleBases": ["csr-plus-v0.1.1"],
+      "compatibleBases": [
+        "csr-plus-v0.1.1"
+      ],
       "discs": {
         "1": "./encounter-on-csr-plus-v0.1.0/layers/disc1.layer.json"
       },
       "enabled": false,
-      "note": "Rebuild after CSR+ 0.1.1 is on Pages."
+      "note": "Superseded by encounter-on-csr-plus-v0.1.1. Disabled automatically on rebuild."
+    },
+    {
+      "id": "encounter-v0.1.1",
+      "name": "Encounter rate v0.1.1",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check default; 50% of raw lure/256). Enemy Lure / Away still scale. Use with Unmodified only.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./encounter-v0.1.1/layers/disc1.layer.json"
+      },
+      "enabled": true
+    },
+    {
+      "id": "encounter-on-csr-v0.1.1",
+      "name": "Encounter rate (on CSR) v0.1.1",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 on CSR FIELD.BIN (~3.1%/check default). Use with CSR base only.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-v0.1.1/layers/disc1.layer.json"
+      },
+      "enabled": true
+    },
+    {
+      "id": "encounter-on-csr-plus-v0.1.1",
+      "name": "Encounter rate (on CSR+) v0.1.1",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 on CSR+ FIELD.BIN (~3.1%/check default). Use with CSR+ base only.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plus-v0.1.1/layers/disc1.layer.json"
+      },
+      "enabled": true
+    },
+    {
+      "id": "encounter-on-csr-plusplus-v0.1.1",
+      "name": "Encounter rate (on CSR++) v0.1.1",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 on CSR++ FIELD.BIN (~3.1%/check default). Use with CSR++ base only.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plusplus-v0.1.1/layers/disc1.layer.json"
+      },
+      "enabled": true
     }
   ],
   "bases": []
