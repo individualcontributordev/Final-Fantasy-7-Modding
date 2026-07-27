@@ -2,7 +2,9 @@
 """Build Field-encounter-on-<base> layers without CDmage.
 
   python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
-  python mods/field-random-encounters/scripts/build_on_base.py --against clean --rate 25 --discs 1
+  python mods/field-random-encounters/scripts/build_on_base.py --against clean --density light --discs 1
+
+Omit --density to pick Light / Standard / Dense / All interactively.
 
 Version from mods/field-random-encounters/VERSION unless --version.
 Writes packs under builder/ and updates builder/manifest.json.
@@ -24,16 +26,18 @@ _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent  # mods/<name> → repo root
 _SHARED = _ROOT / "scripts"
-for p in (_MOD_SCRIPTS, _SHARED):
+# Prefer this mod's scripts over deprecated repo-root shims with the same names.
+for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
+
 
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
 from build_field_bin import build as build_field_stub  # noqa: E402
+from density import parse_densities, prompt_densities, rate_label  # noqa: E402
 from pack_meta import (  # noqa: E402
 	AGAINST,
-	RATES,
 	VERSION_FILE,
 	meta_for,
 	update_manifest,
@@ -269,11 +273,15 @@ def main() -> int:
 		help="Builder base this pack stacks on",
 	)
 	ap.add_argument(
+		"--density",
 		"--rate",
-		type=int,
-		choices=RATES,
-		default=50,
-		help="Encounter density as %% of raw lure/256 (default 50)",
+		dest="density",
+		default=None,
+		metavar="PRESET",
+		help=(
+			"light / standard / dense / all (or 25 / 50 / 75). "
+			"Omit to pick interactively."
+		),
 	)
 	ap.add_argument("--base-id", default=None, help="Override CSR base id")
 	ap.add_argument(
@@ -299,12 +307,16 @@ def main() -> int:
 	if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
 		raise SystemExit(f"Weird version '{version}'")
 
-	against = args.against
-	meta = meta_for(against, args.rate)
+	rates = (
+		parse_densities(args.density)
+		if args.density is not None
+		else prompt_densities(allow_all=True, default="standard")
+	)
 	discs = parse_discs(args.discs)
 	if args.base_layer and len(discs) != 1:
 		raise SystemExit("--base-layer only works with a single --discs value")
 
+	against = args.against
 	csr_manifest = None
 	if against == "clean":
 		base_id = "clean"
@@ -313,66 +325,71 @@ def main() -> int:
 	else:
 		csr_manifest = fetch_json(args.csr_manifest)
 		base_id = resolve_base_id(against, csr_manifest)
-	meta["base_id"] = base_id
 
-	print(f"Against:  {against}")
-	print(f"Base id:  {base_id}")
-	print(f"Rate:     {meta['rate']}%")
-	print(f"Version:  {version}")
-	print(f"Discs:    {discs}")
-	print(f"Pristine: {args.pristine_dir}")
+	for rate in rates:
+		meta = meta_for(against, rate)
+		meta["base_id"] = base_id
 
-	for disc in discs:
-		print(f"\n######## Disc {disc} ########")
-		build_one(
-			against=against,
-			disc=disc,
+		print(f"\n######## {rate_label(rate)} on {against} ########")
+		print(f"Against:  {against}")
+		print(f"Base id:  {base_id}")
+		print(f"Density:  {rate_label(rate)}")
+		print(f"Version:  {version}")
+		print(f"Discs:    {discs}")
+		print(f"Pristine: {args.pristine_dir}")
+
+		for disc in discs:
+			print(f"\n######## Disc {disc} ########")
+			build_one(
+				against=against,
+				disc=disc,
+				version=version,
+				base_id=base_id,
+				meta=meta,
+				pristine_dir=args.pristine_dir.expanduser().resolve(),
+				manifest_url=args.csr_manifest,
+				csr_manifest=csr_manifest,
+				base_layer_arg=args.base_layer,
+				keep_work=args.keep_work,
+			)
+
+		pack_id = f"{meta['pack_prefix']}-v{version}"
+		pack_dir = _ROOT / "builder" / pack_id
+		existing: list[int] = []
+		layers_dir = pack_dir / "layers"
+		if layers_dir.is_dir():
+			for p in layers_dir.glob("disc*.layer.json"):
+				mid = p.name.removeprefix("disc").removesuffix(".layer.json")
+				if mid.isdigit():
+					existing.append(int(mid))
+		existing = sorted(set(existing))
+		if not existing:
+			raise SystemExit(f"No disc*.layer.json under {layers_dir}")
+
+		write_pack_json(
+			pack_dir,
+			pack_id=pack_id,
 			version=version,
-			base_id=base_id,
-			meta=meta,
-			pristine_dir=args.pristine_dir.expanduser().resolve(),
-			manifest_url=args.csr_manifest,
-			csr_manifest=csr_manifest,
-			base_layer_arg=args.base_layer,
-			keep_work=args.keep_work,
+			display=meta["display"],
+			blurb=meta["blurb"],
+			compatible_bases=[base_id],
+			discs=existing,
+			rate=meta["rate"],
 		)
+		update_manifest(
+			pack_id=pack_id,
+			pack_prefix=meta["pack_prefix"],
+			version=version,
+			display=meta["display"],
+			blurb=meta["blurb"],
+			compatible_bases=[base_id],
+			discs=existing,
+			rate=meta["rate"],
+		)
+		print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
+		print(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
 
-	pack_id = f"{meta['pack_prefix']}-v{version}"
-	pack_dir = _ROOT / "builder" / pack_id
-	existing: list[int] = []
-	layers_dir = pack_dir / "layers"
-	if layers_dir.is_dir():
-		for p in layers_dir.glob("disc*.layer.json"):
-			mid = p.name.removeprefix("disc").removesuffix(".layer.json")
-			if mid.isdigit():
-				existing.append(int(mid))
-	existing = sorted(set(existing))
-	if not existing:
-		raise SystemExit(f"No disc*.layer.json under {layers_dir}")
-
-	write_pack_json(
-		pack_dir,
-		pack_id=pack_id,
-		version=version,
-		display=meta["display"],
-		blurb=meta["blurb"],
-		compatible_bases=[base_id],
-		discs=existing,
-		rate=meta["rate"],
-	)
-	update_manifest(
-		pack_id=pack_id,
-		pack_prefix=meta["pack_prefix"],
-		version=version,
-		display=meta["display"],
-		blurb=meta["blurb"],
-		compatible_bases=[base_id],
-		discs=existing,
-		rate=meta["rate"],
-	)
-	print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
-	print(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
-	print("Commit JSON under builder/ only.")
+	print("\nCommit JSON under builder/ only.")
 	return 0
 
 

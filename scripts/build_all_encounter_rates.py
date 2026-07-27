@@ -8,10 +8,8 @@ from pathlib import Path
 
 target = (
 	Path(__file__).resolve().parents[1]
-	/ "mods"
-	/ "field-random-encounters"
-	/ "scripts"
-	/ "build_all_rates.py"
+	/ "mods/field-random-encounters/scripts/build_all_rates.py"
 )
-sys.argv[0] = str(target)
-runpy.run_path(str(target), run_name="__main__")
+if __name__ == "__main__":
+	sys.argv[0] = str(target)
+	runpy.run_path(str(target), run_name="__main__")

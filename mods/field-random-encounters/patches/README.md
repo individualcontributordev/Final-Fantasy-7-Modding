@@ -13,7 +13,7 @@ Replace vanilla Danger `+=` with lure-scaled independent FORCE using PSX **RCnt2
 ```bash
 python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
 
-# Or stub-only into an existing .dec:
+# Or stub-only into an existing .dec (prompts for density unless --density is set):
 python mods/field-random-encounters/scripts/apply_force_stub_rcnt2.py path/to/FIELD.BIN.dec.patched
 ```
 
@@ -58,7 +58,7 @@ Lure/Away materia still scale `g_enemy_lure`. Builder add-ons use `exclusiveGrou
 
 ```bash
 python mods/field-random-encounters/scripts/build_all_rates.py
-# or: python mods/field-random-encounters/scripts/build_on_base.py --against clean --rate 25 --discs 1
+# or: python mods/field-random-encounters/scripts/build_on_base.py --against clean --density light --discs 1
 ```
 
 ## Playtest

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build a patched FIELD.BIN.new with the encounter FORCE stub.
 
-  python mods/field-random-encounters/scripts/build_field_bin.py path/to/FIELD.BIN --rate 50
+  python mods/field-random-encounters/scripts/build_field_bin.py path/to/FIELD.BIN
+  python mods/field-random-encounters/scripts/build_field_bin.py path/to/FIELD.BIN --density light
 """
 
 from __future__ import annotations
@@ -13,9 +14,11 @@ from pathlib import Path
 _MOD_SCRIPTS = Path(__file__).resolve().parent
 _ROOT = _MOD_SCRIPTS.parent.parent.parent  # scripts → mod → mods → repo
 _SHARED = _ROOT / "scripts"
-for p in (_MOD_SCRIPTS, _SHARED):
+# Prefer this mod's scripts over deprecated repo-root shims with the same names.
+for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
+
 
 from apply_force_stub_rcnt2 import (  # noqa: E402
 	JAL,
@@ -27,6 +30,7 @@ from apply_force_stub_rcnt2 import (  # noqa: E402
 )
 from compress_field_bin import compress_field_bin  # noqa: E402
 from decompress_field_bin import decompress_field_bin  # noqa: E402
+from density import parse_one_density, prompt_densities, rate_label  # noqa: E402
 
 EXPECT_HEAD = bytes.fromhex("80 1f 01 3c 20 11 22 8c")
 
@@ -124,11 +128,12 @@ def main() -> None:
 		help="Output path (default: FIELD.BIN.new next to input)",
 	)
 	ap.add_argument(
+		"--density",
 		"--rate",
-		type=int,
-		choices=RATES,
-		default=50,
-		help="Encounter density as %% of raw lure/256 (default 50)",
+		dest="density",
+		default=None,
+		metavar="PRESET",
+		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
 	)
 	ap.add_argument(
 		"--keep-dec",
@@ -136,7 +141,13 @@ def main() -> None:
 		help="Keep intermediate .dec / .dec.patched files",
 	)
 	args = ap.parse_args()
-	build(args.field_bin, args.output, args.keep_dec, rate=args.rate)
+	rate = (
+		parse_one_density(args.density)
+		if args.density is not None
+		else prompt_densities(allow_all=False)[0]
+	)
+	print(f"Density: {rate_label(rate)}")
+	build(args.field_bin, args.output, args.keep_dec, rate=rate)
 
 
 if __name__ == "__main__":
