@@ -44,15 +44,15 @@ Mac: use a tool that burns from `.cue` as raw Mode 2 (e.g. `cdrdao` / Toast “R
 | CSR-only | Cutscene skips match DuckStation |
 | + Field Light/Standard/Dense | Density feels like emu; Lure/Away still scale if you have materia |
 
-## If it fails on console but works in DuckStation
+## If ImgBurn verify fails early (EDC)
 
-Likely **stale EDC/ECC** on patched sectors (inject/scripts rewrite Form 1 user data and leave sector footers). Emulators tolerate this; hardware often does not.
+Example seen with CSR+ Disc 1: miscompare at LBA ~614, **offset 2072**, image `0x00` vs device `0xCC`, path `\INIT\YAMADA.BIN`.
 
-Mitigations to try next:
+Offset 2072 is the **EDC footer**, not file payload. User data may still be intact.
 
-1. Rebuild EDC/ECC on the `.bin` before burn (CDmage / a Mode2 repair tool — document which worked in findings)
-2. Re-rip / re-build from pristine and re-apply via builder
-3. Note exact symptom (spin-up fail, freeze on map X, mid-FMV read error)
+1. Try the disc on the PS2 anyway.
+2. If the console fails: reburn **4x DAO**, better media; then consider EDC/ECC rebuild on the `.bin` before another burn.
+3. Log result in a finding / `notes/` screenshot + short md.
 
 ## Report results
 
