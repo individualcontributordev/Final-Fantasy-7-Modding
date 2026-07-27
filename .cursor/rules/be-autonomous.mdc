@@ -9,9 +9,10 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 
 ## Do without asking
 
-- Commit/push docs, rules, scripts (`auto-commit-push.mdc`)
+- Commit/push docs, rules, scripts, builder JSON (`auto-commit-push.mdc`)
 - On **check results**: pull, analyze evidence, record findings, continue
 - Reply with the **next single complete Windows task in chat**
+- Prefer skills: `record-findings`, `ship-field-encounters` when those tasks apply
 
 ## Windows task quality bar
 
