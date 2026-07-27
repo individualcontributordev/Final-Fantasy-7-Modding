@@ -8,6 +8,7 @@ PS1 Final Fantasy VII disc modding: change engine/field data, keep hardware play
 
 | Need | Go to |
 |------|--------|
+| **Start a new mod (RE → ship)** | [06-new-mod-research.md](06-new-mod-research.md) |
 | Ship Field encounter rates | root [README.md](../README.md) |
 | Encounter RE / RAM map | [01-encounter-system.md](01-encounter-system.md) |
 | ISO / GZIPPS / Makou | [02-disc-format.md](02-disc-format.md), [04-workflow.md](04-workflow.md) |

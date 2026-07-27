@@ -39,12 +39,13 @@ Needs `workspace/pristine/FINALFANTASY7_D1.bin`. After CSR base **ids** change, 
 
 | Start | Path |
 |-------|------|
+| **New mod (idea → builder)** | `docs/06-new-mod-research.md` |
 | Encounter system | `docs/01-encounter-system.md` |
 | Findings index | `docs/findings/README.md` |
 | Ghidra | `docs/05-ghidra-guide.md` |
 | Disc / Makou | `docs/02-disc-format.md` |
 
-New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skill: `.cursor/skills/record-findings`. Ship packs: `.cursor/skills/ship-field-encounters`.
+New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skills: `record-findings`, `research-new-mod`, `ship-field-encounters`.
 
 ## Rules (Cursor)
 
