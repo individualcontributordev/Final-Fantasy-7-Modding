@@ -80,6 +80,7 @@ Living list — add a row when a capability is **repeatably** usable (see skill 
 | Ghidra FIELD import aligned @ `0x800A0000` with DuckStation | 2026-07 | `docs/05-ghidra-guide.md` |
 | Scripted on-base Field pack build (`build_on_base` / `build_all_rates`) | 2026-07 | `ship-field-encounters` skill |
 | Hardware burn checklist (PS2 MechaPwn / MODE2 cue) | 2026-07 | `docs/07-hardware-burn.md` |
+| ImgBurn EDC verify fail can still boot on MechaPwn PS2 | 2026-07 | CSR `notes/2026-07-27-imgburn-verify-yamada.md` |
 
 ## Keep the process honest
 
