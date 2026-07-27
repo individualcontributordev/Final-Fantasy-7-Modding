@@ -1,9 +1,9 @@
 {
   "id": "encounter-on-csr-plusplus-25-v0.1.2",
-  "name": "Encounter 25% (on CSR++)",
+  "name": "Encounter \u2014 Light (25%) (on CSR++)",
   "kind": "addon",
   "version": "0.1.2",
-  "blurb": "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR++) base only.",
+  "blurb": "Fewer random field battles. Enemy Lure / Away still work.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "encounter-rate",
   "compatibleBases": [

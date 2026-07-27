@@ -65,10 +65,16 @@ AGAINST = {
 	},
 }
 
+RATE_LABEL = {
+	25: "Light",
+	50: "Standard",
+	75: "Dense",
+}
+
 RATE_BLURB = {
-	25: "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256).",
-	50: "RCnt2 FORCE at lure/2 (~3.1%/check at default lure; 50% of raw lure/256).",
-	75: "RCnt2 FORCE at lure×3/4 (~4.7%/check at default lure; 75% of raw lure/256).",
+	25: "Fewer random field battles.",
+	50: "Moderate random field battles.",
+	75: "More random field battles.",
 }
 
 
@@ -80,14 +86,12 @@ def meta_for(against: str, rate: int) -> dict:
 	base = AGAINST[against]
 	on = base["on_label"]
 	pack_prefix = f"{base['prefix_stem']}-{rate}"
+	label = RATE_LABEL[rate]
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": pack_prefix,
-		"display": f"Encounter {rate}%{on}",
-		"blurb": (
-			f"{RATE_BLURB[rate]} Enemy Lure / Away still scale."
-			+ (f" Use with{on.strip()} base only." if on else " Use with Unmodified only.")
-		),
+		"display": f"Encounter — {label} ({rate}%){on}",
+		"blurb": f"{RATE_BLURB[rate]} Enemy Lure / Away still work.",
 		"rate": rate,
 		"against": against,
 	}

@@ -11,7 +11,7 @@
 
 Encounter `--against` resolves the live CSR base id from Pages (e.g. `csr-plus-v0.1.1`).
 
-Rates are % of raw `lure/256` (default lure 16 → ~1.6% / 3.1% / 4.7% per check).
+Player labels: **Light (25%)** / **Standard (50%)** / **Dense (75%)** — denser = more random field battles.
 
 ---
 
