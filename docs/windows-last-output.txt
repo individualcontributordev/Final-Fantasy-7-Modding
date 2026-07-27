@@ -1,12 +1,15 @@
-# Task: re-apply FORCE stub (*3/4 rate); recompress; playtest density
+# Task: extract + decompress WORLD.BIN
 
 # COPY-PASTE (do not edit these lines)
-apply_cmd: python scripts/apply_force_stub_rcnt2.py workspace/iso-extract/FIELD.BIN.dec.patched
-verify_cmd: xxd -g1 -s 0xBB7C -l 32 workspace/iso-extract/FIELD.BIN.dec.patched
-expect_has: 82 08 03 00 23 18 61 00
-compress_cmd: python scripts/compress_field_bin.py workspace/iso-extract/FIELD.BIN.dec.patched workspace/iso-extract/FIELD.BIN.makou workspace/iso-extract/FIELD.BIN.new
+cdmage_path_guess: WORLD.BIN
+extract_dest: workspace/iso-extract/WORLD.BIN
+decompress_cmd: python scripts/decompress_field_bin.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
+header_cmd: xxd -g1 -l 16 workspace/iso-extract/WORLD.BIN
+size_cmd: ls -l workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
 
-# EVIDENCE (paste xxd + compress delta + short density note vs previous)
-xxd:
-compress:
-density_feel:
+# EVIDENCE (paste below, then save)
+cdmage_path:
+header_xxd:
+decompress_stdout:
+ls_l:
+notes:

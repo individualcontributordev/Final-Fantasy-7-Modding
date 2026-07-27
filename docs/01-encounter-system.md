@@ -133,7 +133,7 @@ Patch bytes: [mods/field-random-encounters/patches/](../mods/field-random-encoun
 | Component | File | Change |
 |-----------|------|--------|
 | Danger growth → RCnt2 FORCE | `FIELD.BIN` | Shipped stub above |
-| World map encounters | `WORLD.BIN` | Same idea (later) |
+| World map encounters | `WORLD.BIN` | Separate engine + WorldRand; see [2026-07-27-world-map-encounter-plan](findings/2026-07-27-world-map-encounter-plan.md) |
 | Per-map battle tables / rate | `*.DAT` | Unchanged |
 
 ## Separate RNG systems (do not confuse)
