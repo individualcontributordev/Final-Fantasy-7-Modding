@@ -12,6 +12,28 @@ Validate patches before calling them hardware-ready. Different tools catch diffe
 
 **MiSTer** (not classic MiST) is the FPGA platform with a strong PlayStation **1** core. There is no mature PS2 FPGA stand-in — your MechaPwn PS2 remains the final console gate.
 
+### Why MiSTer is not in this repo
+
+MiSTer is **physical hardware** (typically a Terasic DE10-Nano + extras), plus a PS1 BIOS you must supply yourself. It is not a library or CI dependency. This repo stays disc-mod focused (scripts, layers, findings) — see `keep-repo-succinct`. Setup lives in official MiSTer docs; we only document how it fits **our** verify ladder.
+
+### Set up MiSTer (once)
+
+1. Hardware: DE10-Nano-based MiSTer (kit or DIY) — [MiSTer wiki](https://mister-devel.github.io/MkDocs_MiSTer/)
+2. On the device: run **update_all** (or equivalent) so the **PSX** core is installed
+3. Place region BIOS files where the PSX core expects them (commonly under `games/PSX/` — follow current core README; US BIOS for NTSC-U FF7)
+4. Copy your test `.bin` + `.cue` into a per-game folder under `games/PSX/` (names must match the cue `FILE` line)
+5. Menu → PSX core → load the `.cue`
+
+Optional: batch/remote launch helpers exist (`mbc`, REST launchers) to **start** a game from another PC. They do **not** assert “mod works.”
+
+### Headless / automated MiSTer?
+
+**No useful headless verifier for our mods.** You still open the game and play (or watch) through the patched content.
+
+- MiSTer is an interactive FPGA console, not a unit-test runner.
+- Remote/CLI tools can load a core/cue; they cannot judge CSR skips, encounter density, or “no softlock in Sector 1.”
+- Keep **DuckStation** for RAM watches / fast iterate; use **MiSTer** for a human behavioral gate; use **PS2 burn** for optical proof.
+
 ### When to use MiSTer
 
 Use after DuckStation looks good, **before** burning, for:
