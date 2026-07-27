@@ -41,7 +41,9 @@ Never put the *only* copy of an address in chat. Chat may repeat it; the file is
 
 Chat must include: Goal, Numbered steps, What you should see, Commit commands, **check results**.
 
-**Do not** say “see the handoff” or “fill the answers.” Chat = how; file = what to type + evidence paste area. Day-to-day release steps: root README; agent context: AGENTS.md.
+**Do not** say “see the handoff” or “fill the answers.” Chat = how; file = what to type + evidence paste area.
+
+Day-to-day release: root README. Densities: interactive CLI or `--density light|standard|dense|all`. Agent context: AGENTS.md.
 
 ## No paste into chat
 
