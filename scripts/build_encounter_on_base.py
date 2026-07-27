@@ -387,11 +387,11 @@ def main() -> int:
         blurb=meta["blurb"],
         compatible_bases=[base_id],
         discs=existing,
-        legacy_prefixes=meta["legacy_prefixes"],
         rate=meta["rate"],
     )
     print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
     print(f"compatibleBases={base_id!r}; exclusiveGroup=encounter-rate")
+    print("Older packs stay enabled — set enabled:false in manifest.json to hide them.")
     print("Commit JSON under builder/ only. Smoke-test DuckStation New Game on a builder stack.")
     return 0
 

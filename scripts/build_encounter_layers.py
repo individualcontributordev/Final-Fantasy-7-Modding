@@ -46,25 +46,21 @@ AGAINST = {
 	"clean": {
 		"base_id": "clean",
 		"prefix_stem": "encounter",
-		"legacy_prefixes": ("encounter-v",),
 		"on_label": "",
 	},
 	"csr": {
 		"base_id": "csr-v0.14.1",
 		"prefix_stem": "encounter-on-csr",
-		"legacy_prefixes": ("encounter-on-csr-v",),
 		"on_label": " (on CSR)",
 	},
 	"csr-plus": {
 		"base_id": "csr-plus-v0.1.1",
 		"prefix_stem": "encounter-on-csr-plus",
-		"legacy_prefixes": ("encounter-on-csr-plus-v",),
 		"on_label": " (on CSR+)",
 	},
 	"csr-plusplus": {
 		"base_id": "csr-plusplus-v0.1.1",
 		"prefix_stem": "encounter-on-csr-plusplus",
-		"legacy_prefixes": ("encounter-on-csr-plusplus-v",),
 		"on_label": " (on CSR++)",
 	},
 }
@@ -87,7 +83,6 @@ def meta_for(against: str, rate: int) -> dict:
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": pack_prefix,
-		"legacy_prefixes": base["legacy_prefixes"],
 		"display": f"Encounter {rate}%{on}",
 		"blurb": (
 			f"{RATE_BLURB[rate]} Enemy Lure / Away still scale."
@@ -175,7 +170,6 @@ def update_manifest(
 	blurb: str,
 	compatible_bases: list[str],
 	discs: list[int],
-	legacy_prefixes: tuple[str, ...] = (),
 	rate: int | None = None,
 ) -> None:
 	if not MANIFEST_PATH.is_file():
@@ -199,24 +193,11 @@ def update_manifest(
 
 	addons = data.setdefault("addons", [])
 	replaced = False
-	version_prefix = f"{pack_prefix}-v"
 	for i, existing in enumerate(addons):
-		ex_id = str(existing.get("id", ""))
-		if ex_id == pack_id:
+		if str(existing.get("id", "")) == pack_id:
 			addons[i] = entry
 			replaced = True
-			continue
-		supersede = ex_id.startswith(version_prefix)
-		if not supersede:
-			for leg in legacy_prefixes:
-				if ex_id.startswith(leg):
-					supersede = True
-					break
-		if supersede:
-			existing["enabled"] = False
-			existing["note"] = (
-				f"Superseded by {pack_id}. Disabled automatically on rebuild."
-			)
+			break
 	if not replaced:
 		addons.append(entry)
 
@@ -230,15 +211,15 @@ def resolve_base_bin(disc: int, against: str, base_dir: Path | None) -> Path:
     if base_dir is None:
         raise SystemExit(
             f"--against {against} requires --base-dir "
-            "(CSR repo folder with FINALFANTASY7_DN (patched).bin)."
+            "(CSR repo folder with FINALFANTASY7_DN.bin)."
         )
     base_dir = base_dir.expanduser().resolve()
-    patched = base_dir / f"FINALFANTASY7_D{disc} (patched).bin"
-    retail_name = base_dir / f"FINALFANTASY7_D{disc}.bin"
-    if patched.is_file():
-        return patched
-    if retail_name.is_file():
-        return retail_name
+    plain = base_dir / f"FINALFANTASY7_D{disc}.bin"
+    legacy = base_dir / f"FINALFANTASY7_D{disc} (patched).bin"
+    if plain.is_file():
+        return plain
+    if legacy.is_file():
+        return legacy
     raise SystemExit(f"Missing base image for disc {disc} under {base_dir}")
 
 
@@ -332,7 +313,7 @@ def main() -> int:
 	ap.add_argument(
 		"--base-dir",
 		default=None,
-		help="CSR workspace folder with FINALFANTASY7_DN (patched).bin (required unless --against clean)",
+		help="CSR workspace folder with FINALFANTASY7_DN.bin (required unless --against clean)",
 	)
 	ap.add_argument(
 		"--skip-verify",
@@ -396,7 +377,6 @@ def main() -> int:
 		blurb=meta["blurb"],
 		compatible_bases=compatible,
 		discs=discs,
-		legacy_prefixes=meta["legacy_prefixes"],
 		rate=meta["rate"],
 	)
 	print(f"\nUpdated {pack_dir / 'pack.json'}")
