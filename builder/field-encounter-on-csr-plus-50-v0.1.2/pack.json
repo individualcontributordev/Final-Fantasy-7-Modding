@@ -3,7 +3,7 @@
   "name": "Field encounters \u2014 Standard (50%) (on CSR+)",
   "kind": "addon",
   "version": "0.1.2",
-  "blurb": "Moderate random field battles. Enemy Lure / Away still work.",
+  "blurb": "Moderate random field battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [

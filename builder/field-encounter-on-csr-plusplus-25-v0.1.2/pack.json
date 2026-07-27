@@ -3,7 +3,7 @@
   "name": "Field encounters \u2014 Light (25%) (on CSR++)",
   "kind": "addon",
   "version": "0.1.2",
-  "blurb": "Fewer random field battles. Enemy Lure / Away still work.",
+  "blurb": "Fewer random field battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
