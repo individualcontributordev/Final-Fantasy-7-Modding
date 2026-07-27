@@ -1,26 +1,13 @@
-# Task: extract + decompress WORLD.BIN
+# Task: find WORLD.BIN load base in DuckStation
 
 # COPY-PASTE (do not edit these lines)
-cdmage_path_guess: WORLD.BIN
-extract_dest: workspace/iso-extract/WORLD.BIN
-decompress_cmd: python scripts/decompress_gzipps.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
-header_cmd: xxd -g1 -l 16 workspace/iso-extract/WORLD.BIN
-size_cmd: ls -l workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
+needle_cmd: xxd -g1 -l 32 workspace/iso-extract/WORLD.BIN.dec
+duckstation: load test ISO → reach world map (walk Midgar area grass) → pause → Memory → Search
+search_hint: paste first 16–32 bytes from needle_cmd (hex, no spaces or as DuckStation accepts)
+expected: one hit whose address is the module base (often 0x800xxxxx); Ghidra import base = that address
+ghidra_later: do NOT import yet — only report the base this task
 
 # EVIDENCE (paste below, then save)
-cdmage_path:
-header_xxd:
-decompress_stdout:
-ls_l:
+needle_xxd:
+duckstation_search_hit_address:
 notes:
-python scripts/decompress_gzipps.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
-Source:           D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN
-Compressed size:  66715 bytes
-Expected dec size:164032 bytes
-GZIPPS sub-header:54e40400
-Wrote:            D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.dec (164032 bytes)
-➜  Final-Fantasy-7-Modding git:(main) xxd -g1 -l 16 workspace/iso-extract/WORLD.BIN
-00000000: c0 80 02 00 54 e4 04 00 1f 8b 08 00 00 00 00 00  ....T...........
-➜  Final-Fantasy-7-Modding git:(main) ls -l workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
--rw-r--r-- 1 David 197121  66715 Aug  4  1997 workspace/iso-extract/WORLD.BIN
--rw-r--r-- 1 David 197121 164032 Jul 28 00:12 workspace/iso-extract/WORLD.BIN.dec
