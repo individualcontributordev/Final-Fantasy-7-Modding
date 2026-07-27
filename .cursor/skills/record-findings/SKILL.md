@@ -59,8 +59,8 @@ Add a "Sources" link back to the finding file. Do not delete the journal entry.
 
 ## Patch log
 
-Hardware-impacting changes also get `workspace/patches/YYYY-MM-DD-slug.md`
-(see `docs/04-workflow.md`). Link the finding and the patch log to each other.
+Hardware-impacting changes also get a finding under `docs/findings/` and, when
+shipping, stub notes under `mods/<mod>/patches/` (see `docs/04-workflow.md`).
 
 ## Quality bar
 
@@ -79,9 +79,9 @@ Avoid duplicating entire reference docs inside findings — link instead.
 ```
 ~/Final-Fantasy-7-Modding/
 ├── docs/findings/
+├── mods/<mod>/patches/
 ├── workspace/iso-extract/
 ├── workspace/ghidra/
-├── workspace/patches/
 ├── scripts/
 ~/makoureactor/
 ~/ff7tk/

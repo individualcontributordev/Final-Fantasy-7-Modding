@@ -4,7 +4,7 @@
 **File:** `FIELD.BIN.dec`  
 **VA base:** `0x800A0000`  
 **Package:** [mods/field-random-encounters/patches/](../../mods/field-random-encounters/patches/)  
-**Ship:** [builder/WINDOWS-INSTRUCTIONS.md](../../builder/WINDOWS-INSTRUCTIONS.md)
+**Ship:** root [README.md](../../README.md)
 
 ## Change
 

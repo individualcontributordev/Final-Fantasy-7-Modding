@@ -3,7 +3,7 @@
 
 Canonical bytes live in mods/field-random-encounters/patches/.
 
-Ship via disc builder layers: builder/WINDOWS-INSTRUCTIONS.md
+Ship via disc builder layers: see repo root README.
 """
 from __future__ import annotations
 

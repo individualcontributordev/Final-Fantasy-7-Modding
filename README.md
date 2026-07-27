@@ -16,23 +16,52 @@ Tools and notes for modifying **Final Fantasy VII** PlayStation disc images (har
 
 ```
 mods/          per-mod source (VERSION, patches, build scripts)
-builder/       published ic-layer-v1 packs + manifest (Pages JSON CDN)
+builder/       published ic-layer-v1 packs + manifest.json (Pages CDN)
 scripts/       shared ISO / gzip / layer helpers
-docs/          guides + findings (engineers)
-workspace/     local pristine discs / temps (gitignored binaries)
+docs/          RE reference + findings lab notebook
+workspace/     local pristine discs / temps (gitignored)
 ```
 
-## Release (Field encounters)
+## Play
 
-1. Bump `mods/field-random-encounters/VERSION` if needed  
-2. `workspace/pristine/FINALFANTASY7_D1.bin` present  
-3. `python mods/field-random-encounters/scripts/build_all_rates.py`  
-4. Commit `builder/` JSON only → push (Pages serves `/builder/`)
+Use the disc builder: pick a cutscene base, optional Field encounter density, download zip.
 
-Details: [builder/WINDOWS-INSTRUCTIONS.md](builder/WINDOWS-INSTRUCTIONS.md)
+## Release Field encounters
 
-## Docs for engineers
+Needs `workspace/pristine/FINALFANTASY7_D1.bin` (never open in CDmage).
 
-Start at [docs/00-goals.md](docs/00-goals.md). Encounter system: [docs/01-encounter-system.md](docs/01-encounter-system.md). Lab notebook: [docs/findings/](docs/findings/).
+```bash
+cd /c/path/to/Final-Fantasy-7-Modding
+git pull
+
+# bump mods/field-random-encounters/VERSION when shipping a new release
+python mods/field-random-encounters/scripts/build_all_rates.py
+
+git add builder/
+git status   # JSON only — no .bin
+git commit -m "Field encounters v0.1.2 — 25/50/75% for clean + CSR bases."
+git push
+```
+
+One pack:
+
+```bash
+python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --rate 25 --discs 1
+```
+
+`--against` resolves the live CSR base id from Pages. Older packs stay enabled until you set `"enabled": false` in `builder/manifest.json`.
+
+Rates: **Light 25%** / **Standard 50%** / **Dense 75%** of raw `lure/256`. Stub notes: `mods/field-random-encounters/patches/`.
+
+## For engineers (RE)
+
+| Doc | Contents |
+|-----|----------|
+| [docs/01-encounter-system.md](docs/01-encounter-system.md) | Field encounter RAM / Ghidra map |
+| [docs/02-disc-format.md](docs/02-disc-format.md) | ISO, GZIPPS, Makou |
+| [docs/03-environment-setup.md](docs/03-environment-setup.md) | Tools checklist |
+| [docs/04-workflow.md](docs/04-workflow.md) | Edit → inject → verify |
+| [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | Ghidra workflow |
+| [docs/findings/](docs/findings/) | Dated lab notebook |
 
 After clone: `git config core.hooksPath .githooks`

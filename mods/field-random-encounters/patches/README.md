@@ -17,7 +17,7 @@ python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus 
 python mods/field-random-encounters/scripts/apply_force_stub_rcnt2.py path/to/FIELD.BIN.dec.patched
 ```
 
-Ship via `build_on_base.py` / `build_all_rates.py` — see [../README.md](../README.md) and `builder/WINDOWS-INSTRUCTIONS.md`.
+Ship via `build_on_base.py` / `build_all_rates.py` — see mod [README.md](../README.md) and repo root README.
 
 ## File offsets
 
