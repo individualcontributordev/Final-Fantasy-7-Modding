@@ -95,4 +95,5 @@ Update when confirmed; see reference docs for detail:
 - Makou/ff7tk `pack()` updates gzip indexes on ISO save
 - GZIPPS: 8-byte header then gzip (`scripts/decompress_field_bin.py`)
 - DuckStation **Safe Mode** for hardware-like testing
-- Encounter RNG is one topic — lives in `FIELD.BIN` engine (`01-encounter-system.md`)
+- Encounter FORCE stubs: Light/Standard/Dense presets only (`mods/.../scripts/density.py`)
+- Players apply packs via https://individualcontributor.dev/builder/ (this repo is CDN + research)
