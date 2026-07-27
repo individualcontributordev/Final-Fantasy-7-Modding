@@ -39,6 +39,6 @@ Do **not** patch Field Danger or reuse Field stub offsets. Do **not** expect Mak
 ## Open
 
 - [ ] PS1 RAM address for world Danger
-- [ ] `WORLD.BIN` load base VA
+- [ ] `WORLD.BIN` load base VA ← next Windows task
 - [ ] Exact stub site + byte budget
 - [ ] Whether Field + World packs share one `exclusiveGroup` or two

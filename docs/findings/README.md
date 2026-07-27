@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-28 | [world-bin-extract](2026-07-28-world-bin-extract.md) | WORLD.BIN 66715 → .dec 164032; GZIPPS OK | confirmed |
 | 2026-07-27 | [world-map-encounter-plan](2026-07-27-world-map-encounter-plan.md) | WORLD.BIN target; WorldRand + separate Danger; Field stub does not apply | planned |
 | 2026-07-25 | [g-formation](2026-07-25-g-formation.md) | DAT_80071c20 → g_formation via lbu @ 0x800ABA38 | confirmed |
 | 2026-07-25 | [increment-formation](2026-07-25-increment-formation.md) | FUN_800aba34; Formation @ 0x80071C20; table lookup | confirmed |
