@@ -29,6 +29,7 @@ Full write-up: `docs/06-new-mod-research.md`. Follow that; this skill is the che
 - Smallest change; document offsets
 - Decompress → patch `.dec` → recompress → inject (`docs/04-workflow.md`)
 - Playtest with RAM watches that falsify “it boots so it works”
+- Prefer **MiSTer PSX** after DuckStation for high-confidence logic checks (`docs/07-hardware-burn.md`)
 - Freeze shipping bytes under `mods/<mod>/patches/`
 
 ## 4. Scaffold + ship
