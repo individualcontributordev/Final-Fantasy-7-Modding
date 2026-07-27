@@ -95,6 +95,17 @@ Also:
 
 Full detail: [findings/2026-07-25-duckstation-accurate-settings.md](findings/2026-07-25-duckstation-accurate-settings.md)
 
+### MiSTer PSX (high-confidence behavioral gate)
+
+[MiSTer](https://mister-devel.github.io/MkDocs_MiSTer/) **PSX** FPGA core — near-real PlayStation **1** (not PS2).
+
+- Use **after** DuckStation Safe Mode looks good, **before** burning for Ghidra/Makou logic checks
+- Load the same `.bin` + `.cue` you would burn
+- Strong confidence the **mod behavior** will work on PS1 hardware
+- Does **not** replace PS2 MechaPwn + CD-R for optical/EDC/burn issues
+
+Full ladder: [07-hardware-burn.md](07-hardware-burn.md)
+
 ## 4. Ghidra
 
 Download: https://github.com/NationalSecurityAgency/ghidra/releases

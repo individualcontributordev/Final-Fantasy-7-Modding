@@ -22,7 +22,7 @@ Players never see this repo’s RE trail. They only get packs on https://individ
 | **Pristine vault** | Never open masters in CDmage; only copies under `workspace/iso-extract/`. | [02](02-disc-format.md) |
 | **Stack bases** | Add-ons diff against **clean** or a **CSR base id**, not an arbitrary mashup. | root README, CSR Pages manifest |
 | **Builder contract** | `ic-layer-v1`, `compatibleBases`, `exclusiveGroup`, short blurbs. | `.cursor/rules/builder-packs.mdc` |
-| **Hardware bar** | Emulator first; keep patches small; EDC/ECC quirks on real discs. | [02](02-disc-format.md), [03](03-environment-setup.md) |
+| **Hardware bar** | DuckStation → MiSTer PSX → burn/PS2; EDC on real discs. | [07](07-hardware-burn.md), [03](03-environment-setup.md) |
 
 ## Research loop (Mac agent + Windows human)
 
@@ -31,7 +31,7 @@ Players never see this repo’s RE trail. They only get packs on https://individ
 3. **One Windows RE task** — chat steps + `docs/windows-last-output.txt` COPY-PASTE/EVIDENCE (see `.cursor/rules/mac-human-workflow.mdc`).
 4. **Record findings** — `docs/findings/YYYY-MM-DD-slug.md` immediately; promote confirmed facts to `docs/0N-*.md`.
 5. **Prototype the smallest patch** — prefer in-place stubs over huge caves; keep dual `jal`s / call sites intact unless proven safe.
-6. **Inject + playtest** — [04-workflow.md](04-workflow.md); DuckStation Safe Mode; watch the RAM that proves the change.
+6. **Inject + playtest** — [04-workflow.md](04-workflow.md); DuckStation Safe Mode → **MiSTer PSX** for high-confidence logic → burn/PS2 for optical ([07-hardware-burn.md](07-hardware-burn.md)).
 7. **Freeze stub bytes** under `mods/<mod>/patches/` when shipping.
 8. **Ship layers** — scaffold `mods/<mod>/` (VERSION, patches, scripts), build packs for each `compatibleBases` you support, update `builder/manifest.json`.
 
@@ -81,6 +81,7 @@ Living list — add a row when a capability is **repeatably** usable (see skill 
 | Scripted on-base Field pack build (`build_on_base` / `build_all_rates`) | 2026-07 | `ship-field-encounters` skill |
 | Hardware burn checklist (PS2 MechaPwn / MODE2 cue) | 2026-07 | `docs/07-hardware-burn.md` |
 | ImgBurn EDC verify fail can still boot on MechaPwn PS2 | 2026-07 | CSR `notes/2026-07-27-imgburn-verify-yamada.md` |
+| MiSTer PSX as pre-burn behavioral gate (Ghidra/Makou) | 2026-07 | `docs/07-hardware-burn.md` |
 
 ## Keep the process honest
 
