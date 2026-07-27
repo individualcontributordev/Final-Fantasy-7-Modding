@@ -95,15 +95,28 @@ Field **scale** (default 512) is in section 1 of the `.DAT` and affects Danger g
 Replace the vanilla **Danger +=** block in `encounter_check` (`0x800ABB7C`, 88 bytes) with an RCnt2 FORCE stub. Dual `increment_step_id` and the Lure/Away threshold path stay.
 
 ```
-thresh   = g_enemy_lure / 2
+thresh   = g_enemy_lure scaled by pack (25% / 50% / 75%)
 g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
 ```
 
-| At default lure (16) | P(FORCE) / check | vs raw `lure/256` |
-|----------------------|------------------|-------------------|
-| Raw lure | ~6.25% | 100% |
-| Earlier `* 3/4` | ~4.69% | 75% |
-| **Shipped `/ 2`** | **~3.13%** | **50%** |
+| At default lure (16) | Pack label | P(FORCE) / check | vs raw `lure/256` |
+|----------------------|------------|------------------|-------------------|
+| Raw lure | (not shipped) | ~6.25% | 100% |
+| **75%** (`× 3/4`) | **Dense** | ~4.69% | 75% |
+| **50%** (`/ 2`) | **Standard** | ~3.13% | 50% |
+| **25%** (`/ 4`) | **Light** | ~1.56% | 25% |
+
+### Vanilla vs Encounter mod (feel)
+
+These are **not** the same system. The % labels only rank mod packs against each other — **Standard is not vanilla**.
+
+| | Early walk (Danger low) | After a long dry spell (Danger high) |
+|--|--|--|
+| **Vanilla (no add-on)** | Usually sparser | Can get very dense |
+| **Standard (50%)** | Often busier than vanilla | Often calmer than “maxed Danger” vanilla |
+
+- **Vanilla:** each check raises Danger, then rolls vs `(Danger × lure)`. Fights cluster after dry spells; reset after battle.
+- **Mod:** each check has a flat FORCE chance (Light / Standard / Dense). No ramp — same odds from step one.
 
 Public write-up: [articles/remaking-field-encounters.md](../articles/remaking-field-encounters.md). Patch bytes: [workspace/patches/2026-07-25-force-stub-rcnt2/](../workspace/patches/2026-07-25-force-stub-rcnt2/).
 

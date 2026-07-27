@@ -1,7 +1,7 @@
 ---
 title: Remaking field encounters
 date: 2026-07-26
-summary: Vanilla Danger / StepID path, and the RCnt2 FORCE stub at half Enemy Lure density.
+summary: Vanilla Danger ramp vs Light / Standard / Dense FORCE packs — not the same system.
 order: 2
 ---
 
