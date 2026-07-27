@@ -1,20 +1,18 @@
-# Task: Ghidra import WORLD.BIN.dec @ 0x800A0000; find WorldSeedRand
+# Task: find WorldSeedRand via lui/ori halves (not full word)
 
 # COPY-PASTE (do not edit these lines)
-ghidra_base: 0x800A0000
-import_file: workspace/iso-extract/WORLD.BIN.dec
-format: Raw Binary
-language: MIPS:LE:32:default (R3000 / little endian)
-analyze: Yes (defaults OK)
-scalar_search: 0x5d588b65
-goto_if_found: address of instruction / function containing that constant
+memory_search_hex: 65 8b 58 5d
+scalar_hi: 0x5d58
+scalar_lo: 0x8b65
+alt_scalar_a: 0x1e9
+alt_scalar_b: 0x208
 rename_to: WorldSeedRand
-label_hint: World Map RNG seed uses multiplier 0x5D588B65 (speedrun wiki)
+what_success_looks_like: lui/ori (or mult) of 0x5D588B65 inside a seed function; or Memory hit on LE bytes
 
-# EVIDENCE (paste Listing / Decompiler near the constant, then save)
-ghidra_import_base_confirmed:
-scalar_hit_address:
-function_name_after_rename:
+# EVIDENCE (paste below, then save)
+memory_search_hits:
+scalar_0x5d58_hits_count_or_addrs:
+scalar_0x8b65_hits_count_or_addrs:
+best_candidate_address:
 listing_paste:
 notes:
-added image.png screenshot, could not find 0x5d588b65

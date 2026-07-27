@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-28 | [worldseedrand-scalar-miss](2026-07-28-worldseedrand-scalar-miss.md) | 0x5D588B65 full scalar 0 hits; try lui/ori halves | confirmed |
 | 2026-07-28 | [world-bin-load-base](2026-07-28-world-bin-load-base.md) | WORLD.BIN @ 0x800A0000 (same slot as FIELD) | confirmed |
 | 2026-07-28 | [world-bin-extract](2026-07-28-world-bin-extract.md) | WORLD.BIN 66715 → .dec 164032; GZIPPS OK | confirmed |
 | 2026-07-27 | [world-map-encounter-plan](2026-07-27-world-map-encounter-plan.md) | WORLD.BIN target; WorldRand + separate Danger; Field stub does not apply | planned |
