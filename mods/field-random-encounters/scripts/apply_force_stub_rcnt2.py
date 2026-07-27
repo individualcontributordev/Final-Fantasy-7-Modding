@@ -8,12 +8,12 @@ Ship via disc builder layers: see repo root README.
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
+
+from density import RATES, parse_one_density, prompt_densities, rate_label
 
 OFFSET = 0xBB7C
 JAL_OFFSET = 0xBBD4
-RATES = (25, 50, 75)
 
 _MOD = Path(__file__).resolve().parents[1]
 _PATCH_DIR = _MOD / "patches"
@@ -79,17 +79,23 @@ def main() -> None:
 	ap = argparse.ArgumentParser(description="Apply RCnt2 FORCE stub to FIELD.BIN.dec")
 	ap.add_argument("dec", type=Path, help="FIELD.BIN.dec or .dec.patched")
 	ap.add_argument(
+		"--density",
 		"--rate",
-		type=int,
-		choices=RATES,
-		default=50,
-		help="Encounter density as %% of raw lure/256 (default 50)",
+		dest="density",
+		default=None,
+		metavar="PRESET",
+		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
 	)
 	args = ap.parse_args()
-	stub = apply_stub(args.dec, args.rate)
+	rate = (
+		parse_one_density(args.density)
+		if args.density is not None
+		else prompt_densities(allow_all=False)[0]
+	)
+	stub = apply_stub(args.dec, rate)
 	print(
 		f"Patched {args.dec} @ 0x{OFFSET:X} ({len(stub)} bytes); "
-		f"jal @ 0x{JAL_OFFSET:X}; rate={args.rate}%"
+		f"jal @ 0x{JAL_OFFSET:X}; {rate_label(rate)}"
 	)
 	print("Head:", stub[:8].hex(" "))
 	print("Rate:", stub[24:32].hex(" "))

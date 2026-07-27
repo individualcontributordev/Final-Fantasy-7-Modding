@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 """Helpers + optional CLI for Field encounter ic-layer-v1 packs.
 
-Primary Windows path:
-
   python mods/field-random-encounters/scripts/build_all_rates.py
-  python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --rate 25 --discs 1
-
-Shared ISO/diff tools live in repo scripts/. This module owns naming + manifest updates.
+  python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
 """
 
 from __future__ import annotations
@@ -21,19 +17,21 @@ _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent  # mods/<name> → repo root
 _SHARED = _ROOT / "scripts"
-for p in (_MOD_SCRIPTS, _SHARED):
+# Prefer this mod's scripts over deprecated repo-root shims with the same names.
+for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
 
+
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
+from density import RATES, parse_one_density, prompt_densities, rate_label  # noqa: E402
 
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 ISO = _ROOT / "workspace" / "iso-extract"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
 EXCLUSIVE_GROUP = "field-encounter-rate"
-RATES = (25, 50, 75)
 
 AGAINST = {
 	"clean": {
@@ -301,11 +299,12 @@ def main() -> int:
 		help="Which builder base this Field encounter layer stacks on",
 	)
 	ap.add_argument(
+		"--density",
 		"--rate",
-		type=int,
-		choices=RATES,
-		default=50,
-		help="Encounter density as %% of raw lure/256 (default 50)",
+		dest="density",
+		default=None,
+		metavar="PRESET",
+		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
 	)
 	ap.add_argument(
 		"--base-dir",
@@ -324,7 +323,12 @@ def main() -> int:
 		raise SystemExit(f"Weird version '{version}' — expected like 0.1.0")
 
 	against = args.against
-	meta = meta_for(against, args.rate)
+	rate = (
+		parse_one_density(args.density)
+		if args.density is not None
+		else prompt_densities(allow_all=False)[0]
+	)
+	meta = meta_for(against, rate)
 	base_dir = Path(args.base_dir) if args.base_dir else None
 	if against != "clean" and base_dir is None:
 		raise SystemExit(f"--against {against} requires --base-dir")
@@ -340,7 +344,7 @@ def main() -> int:
 
 	print(f"Addon:     {meta['display']}")
 	print(f"Version:   {version}")
-	print(f"Rate:      {meta['rate']}%")
+	print(f"Density:   {rate_label(meta['rate'])}")
 	print(f"Against:   {against} → compatibleBases={compatible}")
 	print(f"Working:   {ISO}")
 	print(f"Discs:     {discs}")

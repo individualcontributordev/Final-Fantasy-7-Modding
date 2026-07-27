@@ -39,19 +39,21 @@ python mods/field-random-encounters/scripts/build_all_rates.py
 
 git add builder/
 git status   # JSON only — no .bin
-git commit -m "Field encounters v0.1.2 — 25/50/75% for clean + CSR bases."
+git commit -m "Field encounters v0.1.2 — Light/Standard/Dense for clean + CSR bases."
 git push
 ```
 
-One pack:
+One pack (omit `--density` to pick Light / Standard / Dense / All interactively):
 
 ```bash
-python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --rate 25 --discs 1
+python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
+# or non-interactive:
+python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --density light --discs 1
 ```
 
 `--against` resolves the live CSR base id from Pages. Older packs stay enabled until you set `"enabled": false` in `builder/manifest.json`.
 
-Rates: **Light 25%** / **Standard 50%** / **Dense 75%** of raw `lure/256`. Stub notes: `mods/field-random-encounters/patches/`.
+Densities are **named presets** (not a free-form %): **Light** / **Standard** / **Dense**. Stub notes: `mods/field-random-encounters/patches/`.
 
 ## For engineers (RE)
 
