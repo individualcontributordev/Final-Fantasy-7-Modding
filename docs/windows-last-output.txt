@@ -11,3 +11,10 @@ ghidra_later: do NOT import yet — only report the base this task
 needle_xxd:
 duckstation_search_hit_address:
 notes:
+xxd -g1 -l 32 workspace/iso-extract/WORLD.BIN.dec
+00000000: 4e 45 57 20 20 00 00 00 4f 4c 44 20 20 00 00 00  NEW  ...OLD  ...
+00000010: 4a 55 4d 50 20 00 00 00 46 52 4f 4d 20 00 00 00  JUMP ...FROM ...
+➜  Final-Fantasy-7-Modding git:(main)
+
+000A0000
+000A0010
