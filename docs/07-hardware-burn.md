@@ -44,18 +44,9 @@ Mac: use a tool that burns from `.cue` as raw Mode 2 (e.g. `cdrdao` / Toast “R
 | CSR-only | Cutscene skips match DuckStation |
 | + Field Light/Standard/Dense | Density feels like emu; Lure/Away still scale if you have materia |
 
-## If ImgBurn verify fails early (EDC)
+## EDC/ECC after builder apply
 
-Example: CSR+ Disc 1 miscompare at LBA ~614, **offset 2072**, image `0x00` vs device `0xCC`, path `\INIT\YAMADA.BIN`.
-
-Offset 2072 is the **EDC footer**, not file payload. Builder layers can zero footers while leaving user data intact.
-
-**Confirmed:** that burn **still loaded fine on PS2 Slim 77003 (MechaPwn)**. Prefer trying the console before reburning.
-
-1. Try the disc on the PS2 first.
-2. If the console fails: reburn **4x DAO**, better media; optional `Final-Fantasy-7-CSR/scripts/repair_mode2_edc.py` against pristine.
-3. Long-term: rebuild CSR layers from images with valid EDC/ECC so verifies pass.
-4. Log result in a finding / `notes/` screenshot + short md.
+The disc builder regenerates Mode2 Form1 EDC/ECC for every sector changed by layers (`builder/edc.js`). New zips should ImgBurn-verify cleanly. Older zips (before this fix) may still verify-fail at offset 2072 but can boot on MechaPwn.
 
 ## Report results
 
