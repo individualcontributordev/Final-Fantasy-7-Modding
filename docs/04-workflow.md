@@ -37,7 +37,7 @@ python3 scripts/decompress_field_bin.py workspace/iso-extract/FIELD.BIN
 
 - Ghidra: edit `FIELD.BIN.dec` in place, or export patched binary
 - Save as `FIELD.BIN.dec.patched`
-- Record offset, old bytes, new bytes in `workspace/patches/YYYY-MM-DD-description.md`
+- Record offset, old bytes, new bytes in `docs/findings/YYYY-MM-DD-description.md` (and stub bytes under `mods/<mod>/patches/` when shipping)
 
 ### 4. Recompress
 
@@ -96,12 +96,12 @@ In emulator memory viewer while walking on a hostile field:
 ## Shipping to the disc builder
 
 Diff the final image against the stack base (retail or CSR) into `ic-layer-v1` JSON.
-Encounter packs: [builder/WINDOWS-INSTRUCTIONS.md](../builder/WINDOWS-INSTRUCTIONS.md).
+Encounter packs: root [README.md](../README.md).
 Stub bytes: `mods/field-random-encounters/patches/`.
 
 ## Patch log template
 
-Create `workspace/patches/YYYY-MM-DD-short-name.md`:
+Create `docs/findings/YYYY-MM-DD-short-name.md`:
 
 ```markdown
 # Patch: [name]

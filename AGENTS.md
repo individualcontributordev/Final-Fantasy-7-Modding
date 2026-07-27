@@ -1,48 +1,41 @@
-# FF7 PSX Modding — Agent Guide
+# FF7 PSX Modding — Agent guide
 
-Research and modding project for **Final Fantasy VII PlayStation disc images**.
+## How we work
 
-## Workflow
+- **Mac (this chat):** only agent. Give **full Windows steps in chat** — never send the user to open a handoff file for day-to-day work.
+- **Windows:** human — discs, Ghidra, DuckStation, Git Bash.
+- Outputs from Windows → `docs/windows-last-output.txt` + push when needed; user says **check results**.
+- Never commit ISO/`.bin`. `git pull --ff-only` before acting.
 
-- **Mac Cursor (this chat):** only agent. Gives **full instructions in chat**.
-- **Windows:** human only — disc, Ghidra, DuckStation, Git Bash.
-- **Never** tell the user to open/read `docs/windows-handoff.md` for steps.
-- **Never** ask to paste across PCs. Outputs → `docs/windows-last-output.txt` + push → user says **check results**.
-- Mac may install helper tools; **not** DuckStation or Ghidra.
-- Always `git pull --ff-only` before acting (`.cursor/rules/mac-human-workflow.mdc`).
+## Day-to-day
 
-## Start here (agent)
+Release / play steps are in the **root README**. Prefer that. Mod-specific stub notes: `mods/field-random-encounters/`.
 
-1. `docs/00-goals.md` — project scope
-2. `docs/03-environment-setup.md` — tool checklist
-3. `docs/findings/README.md` — lab notebook index
-4. `docs/05-ghidra-guide.md` — RE reference
+## When guiding a Field encounter rebuild
 
-## Rules
+```bash
+cd /c/path/to/Final-Fantasy-7-Modding
+git pull
+# bump mods/field-random-encounters/VERSION if releasing
+python mods/field-random-encounters/scripts/build_all_rates.py
+git add builder/
+git commit -m "Field encounters vX.Y.Z …"
+git push
+```
 
-- **Mac/human workflow** (`.cursor/rules/mac-human-workflow.mdc`) — instruct in chat
-- **Be autonomous** (`.cursor/rules/be-autonomous.mdc`)
-- **Keep repo succinct** (`.cursor/rules/keep-repo-succinct.mdc`)
-- **Auto commit and push** (`.cursor/rules/auto-commit-push.mdc`)
-- **Capture findings** (`.cursor/rules/capture-research-findings.mdc`)
-- **No Cursor commit trailers** (`.cursor/rules/no-cursor-commit-trailers.mdc`)
-- Never commit ISO/binary files
+Needs `workspace/pristine/FINALFANTASY7_D1.bin`. After CSR base **ids** change, rebuild so `compatibleBases` match.
 
-## Repo layout
+## RE / research
 
-| Path | Purpose |
-|------|---------|
-| `docs/windows-last-output.txt` | Latest Windows command output (git pipe) |
-| `docs/0N-*.md` | Curated reference by topic |
-| `docs/findings/` | Dated journal entries |
-| `mods/` | One folder per shippable mod |
-| `builder/` | Published layer JSON for Pages / builder |
-| `scripts/` | Shared tooling |
-| `workspace/` | Local disc/Ghidra (gitignored binaries) |
+| Start | Path |
+|-------|------|
+| Encounter system | `docs/01-encounter-system.md` |
+| Findings index | `docs/findings/README.md` |
+| Ghidra | `docs/05-ghidra-guide.md` |
+| Disc / Makou | `docs/02-disc-format.md` |
 
-## Topic docs
+New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README (see `.cursor/skills/record-findings`).
 
-- `01-encounter-system.md` — field encounter RNG
-- `02-disc-format.md` — ISO, FIELD.BIN, Makou/ff7tk
-- `04-workflow.md` — edit → rebuild → test
-- `05-ghidra-guide.md` — RE workflow
+## Rules (Cursor)
+
+`.cursor/rules/` — mac-human-workflow, be-autonomous, keep-repo-succinct, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.

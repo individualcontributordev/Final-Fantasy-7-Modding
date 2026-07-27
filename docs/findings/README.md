@@ -5,7 +5,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 ## Start here (engineers)
 
 1. **Shipped behaviour** — `docs/01-encounter-system.md` + `mods/field-random-encounters/patches/README.md`
-2. **How to rebuild layers** — `builder/WINDOWS-INSTRUCTIONS.md`
+2. **How to rebuild layers** — root `README.md`
 3. **ISO / FIELD.BIN pipeline** — `docs/02-disc-format.md`, `docs/04-workflow.md`
 4. **This folder** — dated RE steps (Ghidra addresses, dead ends, playtests). Keep when diagnosing regressions; skip for “just ship a rate”.
 

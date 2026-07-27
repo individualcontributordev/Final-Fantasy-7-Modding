@@ -1,20 +1,13 @@
 # Local disc / RE artifacts — never commit game data or large binaries
 
-# workspace: ignore everything except folder READMEs
+# workspace: ignore everything except .gitkeep placeholders
 workspace/*
 !workspace/**/
-!workspace/**/README.md
+!workspace/**/.gitkeep
 
 # Ghidra projects (local)
 workspace/ghidra/*
 !workspace/ghidra/.gitkeep
-
-# Patch outputs: keep docs + small hex stubs; ignore rebuilt game blobs
-workspace/patches/**
-!workspace/patches/**/
-!workspace/patches/**/*.md
-!workspace/patches/**/*.hex
-!workspace/patches/README.md
 
 # Common disc / dump companions (anywhere under workspace)
 workspace/**/*.bin
