@@ -52,3 +52,10 @@ mods/<name>/scripts/    # when automating builds
 - Invent free-form rate knobs when a few presets suffice
 - Skip findings and rely on chat memory
 - Publish without stating which base the layer was built against
+- Leave a process breakthrough only in chat — run `evolve-re-process` so `docs/06` stays true
+
+## Related
+
+- Improve the loop after breakthroughs: `evolve-re-process`
+- Journal facts: `record-findings`
+- Ship Field packs: `ship-field-encounters`

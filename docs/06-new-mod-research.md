@@ -67,3 +67,19 @@ Mirror Field’s pattern: named presets if you have discrete variants; interacti
 | World map encounter density | `WORLD.BIN` | Scaffold: `mods/world-map-random-encounters/` — repeat Field RE on world engine |
 | Map/script tweaks | `.DAT` via Makou | Often no engine stub; still ship as layers vs chosen base |
 | Other FIELD behaviors | `FIELD.BIN` | Same GZIPPS + Ghidra loop |
+
+## Capabilities unlocked
+
+Living list — add a row when a capability is **repeatably** usable (see skill `evolve-re-process`).
+
+| Capability | Since | Entry |
+|------------|-------|--------|
+| Field encounter density packs (Light/Standard/Dense) on clean + CSR bases | 2026-07 | `mods/field-random-encounters/`, root README |
+| Browser `ic-layer-v1` shipping (no PPF) | 2026-07 | builder Pages CDN |
+| Mac↔Windows RE loop via `windows-last-output.txt` | 2026-07 | `.cursor/rules/mac-human-workflow.mdc` |
+| Ghidra FIELD import aligned @ `0x800A0000` with DuckStation | 2026-07 | `docs/05-ghidra-guide.md` |
+| Scripted on-base Field pack build (`build_on_base` / `build_all_rates`) | 2026-07 | `ship-field-encounters` skill |
+
+## Keep the process honest
+
+When RE gets faster or a new surface opens, update **this doc** and the agent skills in the same session — do not leave breakthroughs only in chat or a single finding. Rule: `.cursor/rules/evolve-re-process.mdc`.

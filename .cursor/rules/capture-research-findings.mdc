@@ -14,6 +14,7 @@ If we learned anything useful (addresses, offsets, settings, patch results, cont
 1. Create or update a file in `docs/findings/` using `_template.md`
 2. Add a row to `docs/findings/README.md`
 3. Promote verified facts into the matching `docs/0N-*.md` reference doc
+4. If it **improves the RE loop** or **unlocks a new mod capability**, also run `.cursor/skills/evolve-re-process` (update `docs/06-new-mod-research.md`)
 
 Follow the full workflow in `.cursor/skills/record-findings/SKILL.md`.
 

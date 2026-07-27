@@ -45,8 +45,10 @@ Needs `workspace/pristine/FINALFANTASY7_D1.bin`. After CSR base **ids** change, 
 | Ghidra | `docs/05-ghidra-guide.md` |
 | Disc / Makou | `docs/02-disc-format.md` |
 
-New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skills: `record-findings`, `research-new-mod`, `ship-field-encounters`.
+New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters`.
+
+When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.md` (Capabilities table) in the same session — rule `evolve-re-process`.
 
 ## Rules (Cursor)
 
-`.cursor/rules/` — mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
+`.cursor/rules/` — mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
