@@ -17,3 +17,4 @@ scalar_hit_address:
 function_name_after_rename:
 listing_paste:
 notes:
+added image.png screenshot, could not find 0x5d588b65
