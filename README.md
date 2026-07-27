@@ -59,6 +59,7 @@ Densities are **named presets** (not a free-form %): **Light** / **Standard** / 
 
 | Doc | Contents |
 |-----|----------|
+| [docs/06-new-mod-research.md](docs/06-new-mod-research.md) | Idea → RE → patch → builder pack |
 | [docs/01-encounter-system.md](docs/01-encounter-system.md) | Field encounter RAM / Ghidra map |
 | [docs/02-disc-format.md](docs/02-disc-format.md) | ISO, GZIPPS, Makou |
 | [docs/03-environment-setup.md](docs/03-environment-setup.md) | Tools checklist |
