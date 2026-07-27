@@ -3,7 +3,7 @@
   "name": "Field encounters \u2014 Dense (75%) (on CSR++)",
   "kind": "addon",
   "version": "0.1.2",
-  "blurb": "More random field battles. Enemy Lure / Away still work.",
+  "blurb": "More random field battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [

@@ -84,7 +84,7 @@ def meta_for(against: str, rate: int) -> dict:
 		"base_id": base["base_id"],
 		"pack_prefix": pack_prefix,
 		"display": f"Field encounters — {label} ({rate}%){on}",
-		"blurb": f"{RATE_BLURB[rate]} Enemy Lure / Away still work.",
+		"blurb": RATE_BLURB[rate],
 		"rate": rate,
 		"against": against,
 	}

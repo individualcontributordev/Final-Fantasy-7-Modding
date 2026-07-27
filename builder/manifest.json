@@ -6,7 +6,7 @@
       "id": "field-encounter-25-v0.1.2",
       "name": "Field encounters \u2014 Light (25%) v0.1.2",
       "kind": "addon",
-      "blurb": "Fewer random field battles. Enemy Lure / Away still work.",
+      "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -22,7 +22,7 @@
       "id": "field-encounter-50-v0.1.2",
       "name": "Field encounters \u2014 Standard (50%) v0.1.2",
       "kind": "addon",
-      "blurb": "Moderate random field battles. Enemy Lure / Away still work.",
+      "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -38,7 +38,7 @@
       "id": "field-encounter-75-v0.1.2",
       "name": "Field encounters \u2014 Dense (75%) v0.1.2",
       "kind": "addon",
-      "blurb": "More random field battles. Enemy Lure / Away still work.",
+      "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -54,7 +54,7 @@
       "id": "field-encounter-on-csr-25-v0.1.2",
       "name": "Field encounters \u2014 Light (25%) (on CSR) v0.1.2",
       "kind": "addon",
-      "blurb": "Fewer random field battles. Enemy Lure / Away still work.",
+      "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -70,7 +70,7 @@
       "id": "field-encounter-on-csr-50-v0.1.2",
       "name": "Field encounters \u2014 Standard (50%) (on CSR) v0.1.2",
       "kind": "addon",
-      "blurb": "Moderate random field battles. Enemy Lure / Away still work.",
+      "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -86,7 +86,7 @@
       "id": "field-encounter-on-csr-75-v0.1.2",
       "name": "Field encounters \u2014 Dense (75%) (on CSR) v0.1.2",
       "kind": "addon",
-      "blurb": "More random field battles. Enemy Lure / Away still work.",
+      "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -102,7 +102,7 @@
       "id": "field-encounter-on-csr-plus-25-v0.1.2",
       "name": "Field encounters \u2014 Light (25%) (on CSR+) v0.1.2",
       "kind": "addon",
-      "blurb": "Fewer random field battles. Enemy Lure / Away still work.",
+      "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -118,7 +118,7 @@
       "id": "field-encounter-on-csr-plus-50-v0.1.2",
       "name": "Field encounters \u2014 Standard (50%) (on CSR+) v0.1.2",
       "kind": "addon",
-      "blurb": "Moderate random field battles. Enemy Lure / Away still work.",
+      "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -134,7 +134,7 @@
       "id": "field-encounter-on-csr-plus-75-v0.1.2",
       "name": "Field encounters \u2014 Dense (75%) (on CSR+) v0.1.2",
       "kind": "addon",
-      "blurb": "More random field battles. Enemy Lure / Away still work.",
+      "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -150,7 +150,7 @@
       "id": "field-encounter-on-csr-plusplus-25-v0.1.2",
       "name": "Field encounters \u2014 Light (25%) (on CSR++) v0.1.2",
       "kind": "addon",
-      "blurb": "Fewer random field battles. Enemy Lure / Away still work.",
+      "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -166,7 +166,7 @@
       "id": "field-encounter-on-csr-plusplus-50-v0.1.2",
       "name": "Field encounters \u2014 Standard (50%) (on CSR++) v0.1.2",
       "kind": "addon",
-      "blurb": "Moderate random field battles. Enemy Lure / Away still work.",
+      "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -182,7 +182,7 @@
       "id": "field-encounter-on-csr-plusplus-75-v0.1.2",
       "name": "Field encounters \u2014 Dense (75%) (on CSR++) v0.1.2",
       "kind": "addon",
-      "blurb": "More random field battles. Enemy Lure / Away still work.",
+      "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
