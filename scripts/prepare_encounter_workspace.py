@@ -12,7 +12,8 @@ CSR / CSR+ / CSR++ stack (copy THAT base’s patched image — never the retail 
     --from-dir /c/path/to/Final-Fantasy-7-CSR/workspace/csr-plus
 
 Expects under --from-dir:
-  FINALFANTASY7_DN (patched).bin   (+ .cue if present)
+  FINALFANTASY7_DN.bin   (+ .cue if present)
+  (legacy: FINALFANTASY7_DN (patched).bin still accepted)
 
 Writes:
   workspace/iso-extract/FINALFANTASY7_DN.bin (+ .cue)
@@ -83,15 +84,15 @@ def source_bin_and_cue(disc: int, from_dir: Path | None) -> tuple[Path, Path | N
 
     patched = from_dir / f"{PATCHED_NAME.format(disc=disc)}.bin"
     retail = from_dir / f"{DISC_STEM.format(disc=disc)}.bin"
-    if patched.is_file():
-        bin_src = patched
-    elif retail.is_file():
+    if retail.is_file():
         bin_src = retail
+    elif patched.is_file():
+        bin_src = patched
     else:
         raise SystemExit(
             f"Missing disc {disc} under {from_dir}\n"
-            f"  looked for: {patched.name}\n"
-            f"           or: {retail.name}"
+            f"  looked for: {retail.name}\n"
+            f"           or: {patched.name}"
         )
 
     cue_candidates = [
