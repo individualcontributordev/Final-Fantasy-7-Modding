@@ -1,20 +1,14 @@
-# Builder packs (Modding)
+# Encounter builder packs
 
-Stackable `ic-layer-v1` packs for https://individualcontributor.dev/builder/
+Ship Encounter layers for https://individualcontributor.dev/builder/
 
-Do **not** commit `.bin` / `.cue` game images. Only JSON manifests + layer files.
+Version: `ENCOUNTER_VERSION` (bump **before** a release build).
 
-## Pack layout
-
-```
-builder/
-  manifest.json                 # listed on the main site via remoteSources
-  encounter-v0.1.0/
-    pack.json                   # metadata for this pack
-    layers/
-      disc1.layer.json          # produced on Windows — see WINDOWS-INSTRUCTIONS.md
+```bash
+python scripts/build_all_encounter_rates.py
+git add builder/
+git commit -m "Encounter vX.Y.Z — Light/Standard/Dense for clean + CSR bases."
+git push
 ```
 
-## Windows
-
-Follow [WINDOWS-INSTRUCTIONS.md](./WINDOWS-INSTRUCTIONS.md).
+See `WINDOWS-INSTRUCTIONS.md`. Players use the disc builder, not a separate Encounter PPF page.
