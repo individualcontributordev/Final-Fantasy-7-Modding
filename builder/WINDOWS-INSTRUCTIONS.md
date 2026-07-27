@@ -37,4 +37,6 @@ One pack:
 python scripts/build_encounter_on_base.py --against csr-plus --rate 25 --discs 1
 ```
 
+New builds **do not** auto-disable older Encounter packs. Set `"enabled": false` in `builder/manifest.json` yourself when you want to hide one.
+
 No `--version` needed unless overriding `ENCOUNTER_VERSION`.
