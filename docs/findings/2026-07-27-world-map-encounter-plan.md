@@ -30,7 +30,7 @@ Do **not** patch Field Danger or reuse Field stub offsets. Do **not** expect Mak
 
 ## RE ladder
 
-1. Extract + decompress `WORLD.BIN` → `WORLD.BIN.dec`
+1. Extract + decompress `WORLD.BIN` → `WORLD.BIN.dec` (`scripts/decompress_gzipps.py`)
 2. Align Ghidra import base with DuckStation PC on world map
 3. Find `WorldSeedRand` / `WorldRand` (constant `0x5D588B65` is a strong fingerprint)
 4. Xref callers → encounter check → Danger += block size

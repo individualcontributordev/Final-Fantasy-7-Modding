@@ -44,7 +44,7 @@ Source: `makoureactor/src/core/field/FieldArchiveIOPS.cpp`
 
 | Tool | Use |
 |------|-----|
-| Project scripts | Decompress / recompress GZIPPS |
+| Project scripts | Decompress / recompress GZIPPS (`decompress_gzipps.py` / `compress_gzipps.py`) |
 | Makou Reactor | Open ISO, save ISO (after manual FIELD.BIN swap) |
 | CDmage / CDProg | Alternative: import single file at same LBA |
 | ff7tk `IsoArchive` | Programmatic pack (used by Makou internally) |

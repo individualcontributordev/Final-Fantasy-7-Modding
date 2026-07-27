@@ -28,8 +28,8 @@ from apply_force_stub_rcnt2 import (  # noqa: E402
 	RATES,
 	apply_stub,
 )
-from compress_field_bin import compress_field_bin  # noqa: E402
-from decompress_field_bin import decompress_field_bin  # noqa: E402
+from compress_gzipps import compress_gzipps  # noqa: E402
+from decompress_gzipps import decompress_gzipps  # noqa: E402
 from density import parse_one_density, prompt_densities, rate_label  # noqa: E402
 
 EXPECT_HEAD = bytes.fromhex("80 1f 01 3c 20 11 22 8c")
@@ -84,7 +84,7 @@ def build(
 		out_new = out_new.expanduser().resolve()
 
 	print("=== 1/4 decompress ===")
-	raw_dec = decompress_field_bin(src_field_bin, None)
+	raw_dec = decompress_gzipps(src_field_bin, None)
 	dec_path.write_bytes(raw_dec.read_bytes())
 
 	print(f"\n=== 2/4 apply FORCE stub (rate {rate}%) ===")
@@ -95,7 +95,7 @@ def build(
 	verify_stub(dec_path, rate)
 
 	print("\n=== 4/4 compress → FIELD.BIN.new ===")
-	result = compress_field_bin(dec_path, src_field_bin, out_new)
+	result = compress_gzipps(dec_path, src_field_bin, out_new)
 
 	if not keep_dec:
 		stock_dec = Path(str(src_field_bin) + ".dec")

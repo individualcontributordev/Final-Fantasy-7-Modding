@@ -51,7 +51,7 @@ Makou is for later: editing `.DAT` fields and reinserting into the ISO after eng
 ### Verify decompression
 
 ```bash
-python3 ~/Final-Fantasy-7-Modding/scripts/decompress_field_bin.py \
+python3 ~/Final-Fantasy-7-Modding/scripts/decompress_gzipps.py \
   ~/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN
 ```
 

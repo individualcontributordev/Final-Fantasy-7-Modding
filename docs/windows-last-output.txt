@@ -3,7 +3,7 @@
 # COPY-PASTE (do not edit these lines)
 cdmage_path_guess: WORLD.BIN
 extract_dest: workspace/iso-extract/WORLD.BIN
-decompress_cmd: python scripts/decompress_field_bin.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
+decompress_cmd: python scripts/decompress_gzipps.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
 header_cmd: xxd -g1 -l 16 workspace/iso-extract/WORLD.BIN
 size_cmd: ls -l workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
 
