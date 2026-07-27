@@ -7,27 +7,34 @@
 | CSR | `0.14.1` | CSR repo builder + PPFs |
 | CSR+ | `0.1.1` | CSR repo |
 | CSR++ | `0.1.1` | CSR repo |
-| Encounter | `0.1.1` | `builder/ENCOUNTER_VERSION` |
+| Encounter | `0.1.2` | `builder/ENCOUNTER_VERSION` — rates **25 / 50 / 75** |
 
 Encounter `--against` resolves the live CSR base id from Pages (e.g. `csr-plus-v0.1.1`).
 
+Rates are % of raw `lure/256` (default lure 16 → ~1.6% / 3.1% / 4.7% per check).
+
 ---
 
-## After CSR bases are live on Pages
+## Build all rates × all bases (Disc 1)
+
+Needs `workspace/pristine/FINALFANTASY7_D1.bin` (never open in CDmage).
 
 ```bash
 cd /c/path/to/Final-Fantasy-7-Modding
 git pull
 
-python scripts/build_encounter_on_base.py --against clean --discs 1
-python scripts/build_encounter_on_base.py --against csr --discs 1
-python scripts/build_encounter_on_base.py --against csr-plus --discs 1
-python scripts/build_encounter_on_base.py --against csr-plusplus --discs 1
+python scripts/build_all_encounter_rates.py
 
 git add builder/
 git status   # JSON only — no .bin
-git commit -m "Encounter v0.1.1 (lure/2) for clean + CSR bases."
+git commit -m "Encounter v0.1.2 — 25/50/75% for clean + CSR bases."
 git push
+```
+
+One pack:
+
+```bash
+python scripts/build_encounter_on_base.py --against csr-plus --rate 25 --discs 1
 ```
 
 No `--version` needed unless overriding `ENCOUNTER_VERSION`.

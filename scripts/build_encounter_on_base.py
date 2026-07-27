@@ -39,9 +39,11 @@ if str(_SCRIPTS) not in sys.path:
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
 from build_encounter_layers import (  # noqa: E402
-    AGAINST,
-    update_manifest,
-    write_pack_json,
+	AGAINST,
+	RATES,
+	meta_for,
+	update_manifest,
+	write_pack_json,
 )
 from build_field_encounter_patch import build as build_field_stub  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
@@ -158,7 +160,7 @@ def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
     print(f"  wrote {out_bin} ({len(image)} bytes)")
 
 
-def stub_and_inject(base_bin: Path, work_dir: Path) -> Path:
+def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
     """Extract FIELD.BIN from base, stub, pad-inject into a copy. Returns patched path."""
     print("=== extract FIELD/FIELD.BIN ===")
     base_bytes = bytearray(base_bin.read_bytes())
@@ -168,8 +170,10 @@ def stub_and_inject(base_bin: Path, work_dir: Path) -> Path:
     field_path.write_bytes(field)
     print(f"  LBA={meta.lba} size={meta.size} → {field_path}")
 
-    print("=== stub FIELD.BIN ===")
-    field_new = build_field_stub(field_path, work_dir / "FIELD.BIN.new", keep_dec=False)
+    print(f"=== stub FIELD.BIN (rate {rate}%) ===")
+    field_new = build_field_stub(
+        field_path, work_dir / "FIELD.BIN.new", keep_dec=False, rate=rate
+    )
     new_bytes = field_new.read_bytes()
     print(f"  FIELD.BIN.new = {len(new_bytes)} bytes (slot {meta.size})")
 
@@ -201,7 +205,7 @@ def build_one(
     if not pristine.is_file():
         raise SystemExit(f"Missing pristine: {pristine}")
 
-    work_dir = WORK_ROOT / f"{against}-d{disc}"
+    work_dir = WORK_ROOT / f"{against}-r{meta['rate']}-d{disc}"
     if work_dir.exists():
         shutil.rmtree(work_dir)
     work_dir.mkdir(parents=True)
@@ -219,7 +223,7 @@ def build_one(
 
     base_bin = work_dir / "base.bin"
     make_base_image(pristine, layer, base_bin)
-    patched_bin = stub_and_inject(base_bin, work_dir)
+    patched_bin = stub_and_inject(base_bin, work_dir, meta["rate"])
 
     print("=== diff → encounter layer ===")
     out_dir = _ROOT / "builder" / pack_id / "layers"
@@ -227,7 +231,8 @@ def build_one(
     out_path = out_dir / f"disc{disc}.layer.json"
     layer_id = f"{meta['pack_prefix']}-disc{disc}-v{version}"
     description = (
-        f"Encounter RCnt2 FORCE stub — NTSC-U Disc {disc} (against {base_id})"
+        f"Encounter {meta['rate']}% RCnt2 FORCE stub — NTSC-U Disc {disc} "
+        f"(against {base_id})"
     )
     built = build_layer(
         base_bin,
@@ -275,6 +280,13 @@ def main() -> int:
         help="Builder base this Encounter pack stacks on",
     )
     ap.add_argument(
+        "--rate",
+        type=int,
+        choices=RATES,
+        default=50,
+        help="Encounter density as %% of raw lure/256 (default 50)",
+    )
+    ap.add_argument(
         "--base-id",
         default=None,
         help="Override CSR base id (default: infer from remote CSR manifest)",
@@ -307,7 +319,7 @@ def main() -> int:
         raise SystemExit(f"Weird version '{version}'")
 
     against = args.against
-    meta = dict(AGAINST[against])
+    meta = meta_for(against, args.rate)
     discs = parse_discs(args.discs)
     if args.base_layer and len(discs) != 1:
         raise SystemExit("--base-layer only works with a single --discs value")
@@ -324,6 +336,7 @@ def main() -> int:
 
     print(f"Against:  {against}")
     print(f"Base id:  {base_id}")
+    print(f"Rate:     {meta['rate']}%")
     print(f"Version:  {version}  (encounter stub)")
     print(f"Discs:    {discs}")
     print(f"Pristine: {args.pristine_dir}")
@@ -364,6 +377,7 @@ def main() -> int:
         blurb=meta["blurb"],
         compatible_bases=[base_id],
         discs=existing,
+        rate=meta["rate"],
     )
     update_manifest(
         pack_id=pack_id,
@@ -373,9 +387,11 @@ def main() -> int:
         blurb=meta["blurb"],
         compatible_bases=[base_id],
         discs=existing,
+        legacy_prefixes=meta["legacy_prefixes"],
+        rate=meta["rate"],
     )
     print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
-    print(f"compatibleBases={base_id!r}; older {meta['pack_prefix']}-v* addons disabled.")
+    print(f"compatibleBases={base_id!r}; exclusiveGroup=encounter-rate")
     print("Commit JSON under builder/ only. Smoke-test DuckStation New Game on a builder stack.")
     return 0
 
