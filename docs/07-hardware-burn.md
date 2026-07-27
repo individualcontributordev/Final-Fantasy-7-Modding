@@ -98,7 +98,7 @@ Mac: use a tool that burns from `.cue` as raw Mode 2 (e.g. `cdrdao` / Toast “R
 
 ## EDC/ECC after builder apply
 
-The disc builder regenerates Mode2 Form1 EDC/ECC for every sector changed by layers (`builder/edc.js`). New zips should ImgBurn-verify cleanly. Older zips (before this fix) may still verify-fail at offset 2072 but can boot on MechaPwn.
+The disc builder regenerates Mode2 Form1 EDC/ECC for every sector changed by layers (`builder/edc.js`). New zips should ImgBurn-verify cleanly. **Confirmed on PS2 Slim 77003 (MechaPwn):** post-repair CSR+ Disc 1 burn loads and fields load.
 
 ## Report results
 
