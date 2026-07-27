@@ -1,8 +1,38 @@
-# Hardware burn / PS2 test (MechaPwn)
+# Hardware & high-confidence verify
 
-Validate builder zips on real hardware. Emulators often ignore bad sector checksums; consoles may not.
+Validate patches before calling them hardware-ready. Different tools catch different failures.
 
-## Console
+## Verification ladder
+
+| Step | Tool | High confidence for | Weak for |
+|------|------|---------------------|----------|
+| 1 | DuckStation **Safe Mode** | Fast iterate, RAM watches | Can hide CD/timing/EDC issues |
+| 2 | **MiSTer PSX** FPGA core | Ghidra / Makou **game logic** on near-real PS1 | Burned CD-R, MechaPwn, optical EDC |
+| 3 | Burn + **PS2 Slim 77003 (MechaPwn)** | Disc image + burn + your console | Slow; use after (1)/(2) |
+
+**MiSTer** (not classic MiST) is the FPGA platform with a strong PlayStation **1** core. There is no mature PS2 FPGA stand-in — your MechaPwn PS2 remains the final console gate.
+
+### When to use MiSTer
+
+Use after DuckStation looks good, **before** burning, for:
+
+- Ghidra engine patches (`FIELD.BIN` stubs, encounter logic, crashes/softlocks)
+- Makou field/script/data edits
+- Timing-sensitive feel DuckStation might paper over (FMV/XA, seek quirks, odd GPU/CD bugs)
+
+**Pass bar:** boots, reaches the patched content, behavior matches intent — treat as **strong evidence** the mod logic will work on real PS1 hardware.
+
+**Does not replace** a burned CD-R on the PS2 for ImgBurn/EDC/media/laser issues (MiSTer loads `.bin/.cue` from storage, not through an optical drive).
+
+### Suggested order for a Ghidra/Makou change
+
+1. Patch → inject → DuckStation Safe Mode + RAM proof  
+2. Same `.bin` + `.cue` on **MiSTer PSX**  
+3. Builder zip (EDC repair on apply) → burn → **PS2 MechaPwn** when shipping / after disc-format changes  
+
+---
+
+## Console burn (MechaPwn)
 
 - PS2 Slim **77003** + **MechaPwn** (backup PS1 CD-ROMs)
 - Burn **CD-R** (not DVD) — FF7 is a PS1 CD image (`MODE2/2352`)
@@ -41,7 +71,7 @@ Mac: use a tool that burns from `.cue` as raw Mode 2 (e.g. `cdrdao` / Toast “R
 | Boot to title | No freeze / read error early |
 | New Game → train / Sector 1 | Field loads |
 | Walk hostile field | No crash; battles can still occur |
-| CSR-only | Cutscene skips match DuckStation |
+| CSR-only | Cutscene skips match DuckStation / MiSTer |
 | + Field Light/Standard/Dense | Density feels like emu; Lure/Away still scale if you have materia |
 
 ## EDC/ECC after builder apply
@@ -50,4 +80,4 @@ The disc builder regenerates Mode2 Form1 EDC/ECC for every sector changed by lay
 
 ## Report results
 
-Paste short notes under `docs/windows-last-output.txt` **EVIDENCE** (or a finding `docs/findings/YYYY-MM-DD-ps2-burn-….md`) and say **check results**. Include: pack list from `APPLIED.txt`, burn speed/media, pass/fail table.
+Paste short notes under `docs/windows-last-output.txt` **EVIDENCE** (or a finding `docs/findings/YYYY-MM-DD-ps2-burn-….md` / `…-mister-….md`) and say **check results**. Include: pack list from `APPLIED.txt`, whether MiSTer was run, burn speed/media, pass/fail table.

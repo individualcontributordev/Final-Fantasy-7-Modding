@@ -59,9 +59,13 @@ Preserves original 8-byte GZIPPS header from source `FIELD.BIN`.
 **Important:** If compressed size grows beyond original sector allocation, ff7tk/Makou
 relocates the file and updates the index. Small patches usually fit in place.
 
-### 6. Test in emulator
+### 6. Test in emulator → FPGA → (optional) burn
 
-Use `ff7_disc1_test.bin` (copy of modified ISO).
+1. **DuckStation Safe Mode** — fast iterate; RAM watches  
+2. **MiSTer PSX** — high confidence Ghidra/Makou logic will work on PS1 hardware  
+3. **Burn + PS2 MechaPwn** — when shipping or after disc-format/EDC changes ([07-hardware-burn.md](07-hardware-burn.md))
+
+Use `ff7_disc1_test.bin` (copy of modified ISO) for (1)/(2).
 
 | Test | Pass criteria |
 |------|---------------|
