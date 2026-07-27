@@ -72,23 +72,33 @@ flowchart TD
 
 ### Shipped formula
 
+Builder packs scale the threshold (player labels in parentheses):
+
 ```
 entropy = *(u32*)0x1F801120          # PSX root counter RCnt2
-thresh  = g_enemy_lure / 2           # integer divide
+thresh  = g_enemy_lure scaled by pack rate
 g_danger = ((entropy & 0xff) < thresh) ? 0xFFFF : 0
 ```
 
-Per encounter check (assuming a uniform low byte), **P(FORCE) ≈ thresh / 256 = g_enemy_lure / 512**.
+| Pack | Threshold | P(FORCE) / check (lure 16) | vs raw `lure/256` |
+|------|-----------|----------------------------|-------------------|
+| (not shipped) | `lure` | ~6.25% | 100% |
+| **Dense** | `lure × 3/4` | ~4.69% | 75% |
+| **Standard** | `lure / 2` | ~3.13% | 50% |
+| **Light** | `lure / 4` | ~1.56% | 25% |
 
-### Rate history (default lure ≈ 16)
+Enemy Lure / Away still move `g_enemy_lure`, so materia still scales density.
 
-| Revision | Threshold | P(FORCE) per check | vs raw lure/256 |
-|----------|-----------|--------------------|-----------------|
-| Raw lure | `lure` | ~6.25% | 100% |
-| First cut | `(lure * 3) / 4` | ~4.69% | **75%** of raw |
-| **Shipped** | `lure / 2` | **~3.13%** | **50%** of raw |
+### Vanilla vs mod (feel)
 
-At default lure 16: thresh 8 → about **3.1%** of checks FORCE Danger high. Enemy Lure / Away still move `g_enemy_lure`, so materia still scales density. RAM pokes: `1` ≈ none, `16` ≈ current normal, `64` ≈ high.
+**Standard is not vanilla.** The % ranks mod packs against each other only.
+
+| | Early walk (Danger low) | After a long dry spell (Danger high) |
+|--|--|--|
+| **Vanilla (no add-on)** | Usually sparser | Can get very dense |
+| **Standard** | Often busier than vanilla | Often calmer than maxed-Danger vanilla |
+
+Vanilla raises Danger each check, then rolls vs `(Danger × lure)` — fights cluster after dry spells and reset after battle. The mod uses a flat FORCE chance per check (Light / Standard / Dense) with no ramp.
 
 Preempt / StepID routing is unchanged (Offset still advances on wrap; preempt flag `0x800716D0` still moves 4↔0).
 

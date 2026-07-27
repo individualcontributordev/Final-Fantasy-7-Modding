@@ -110,13 +110,23 @@ g_danger = ((RCnt2 & 0xff) < thresh) ? 0xFFFF : 0
 
 These are **not** the same system. The % labels only rank mod packs against each other — **Standard is not vanilla**.
 
-| | Early walk (Danger low) | After a long dry spell (Danger high) |
-|--|--|--|
-| **Vanilla (no add-on)** | Usually sparser | Can get very dense |
-| **Standard (50%)** | Often busier than vanilla | Often calmer than “maxed Danger” vanilla |
+**Vanilla Danger ramp (resets after every fight):**
 
-- **Vanilla:** each check raises Danger, then rolls vs `(Danger × lure)`. Fights cluster after dry spells; reset after battle.
-- **Mod:** each check has a flat FORCE chance (Light / Standard / Dense). No ramp — same odds from step one.
+1. After a fight (or New Game) → Danger ≈ 0 → many checks miss → quiet stretch  
+2. Keep walking with **no** fight → Danger climbs each check → a battle becomes likely  
+3. Fight hits → Danger → 0 → back to (1)
+
+Danger also **carries across field changes** if you never fought — so chaining maps without a battle can make the next hostile field hit sooner.
+
+| | Feel |
+|--|--|
+| **Vanilla (no add-on)** | Quiet right after a fight, then tension builds until the next one |
+| **Light (25%)** | Sparse — density often feels like a step-routed run (few fights; still random, not routed) |
+| **Standard (50%)** | Noticeably busier than Light; flat chance every check (no post-fight quiet ramp) |
+| **Dense (75%)** | Busy on purpose |
+
+- **Vanilla:** each check raises Danger, then rolls vs `(Danger × lure)`.  
+- **Mod:** each check has a flat FORCE chance (Light / Standard / Dense). Same odds from step one.
 
 Public write-up: [articles/remaking-field-encounters.md](../articles/remaking-field-encounters.md). Patch bytes: [workspace/patches/2026-07-25-force-stub-rcnt2/](../workspace/patches/2026-07-25-force-stub-rcnt2/).
 
