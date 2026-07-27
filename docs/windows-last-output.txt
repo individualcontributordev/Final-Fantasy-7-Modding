@@ -14,3 +14,592 @@ worldscramblerand_address:
 listing_or_decompiler:
 xref_count_hint:
 notes:
+
+800c47ec	ori s1,s1,0x208	0x208	0x208	WorldRand
+800c4254	_ori a1=>DAT_1f800208,a1,0x208	0x208	0x208	WorldRand
+800c41b4	ori s2,s2,0x208	0x208	0x208	WorldRand
+800adfa4	ori v0,zero,0x208	0x208	0x208	WorldSeedRand
+
+        800c47d8 20 00 63 24     _addiu     v1,v1,0x20
+        800c47dc e0 13 03 08     j          LAB_800c4f80
+        800c47e0 01 00 02 34     _ori       v0,zero,0x1
+                             LAB_800c47e4                                    XREF[1]:     800c41a0(j)  
+        800c47e4 00 02 ef 35     ori        t7,t7,0x200
+        800c47e8 80 1f 11 3c     lui        s1,0x1f80
+        800c47ec 08 02 31 36     ori        s1,s1,0x208
+        800c47f0 80 1f 12 3c     lui        s2,0x1f80
+        800c47f4 28 02 52 36     ori        s2,s2,0x228
+        800c47f8 80 1f 16 3c     lui        s6,0x1f80
+        800c47fc 48 02 d6 36     ori        s6,s6,0x248
+        800c4800 80 1f 1e 3c     lui        s8,0x1f80
+        800c4804 28 00 af af     sw         t7=>DAT_1f800200,local_70(sp)
+        800c4808 10 00 af 8f     lw         t7,local_88(sp)
+        800c480c 68 02 de 37     ori        s8,s8,0x268
+        800c4810 18 00 e4 95     lhu        a0,0x18(t7)
+        800c4814 1c 00 e3 8d     lw         v1,0x1c(t7)
+        800c4818 20 00 f4 8d     lw         s4,0x20(t7)
+        800c481c 00 10 02 34     ori        v0,zero,0x1000
+        800c4820 80 1f 01 3c     lui        at,0x1f80
+        800c4824 18 02 22 a4     sh         v0,offset DAT_1f800218(at)
+        800c4828 80 1f 01 3c     lui        at,0x1f80
+        800c482c 10 02 22 a4     sh         v0,offset DAT_1f800210(at)
+        800c4830 00 00 22 a6     sh         v0,0x0(s1)=>DAT_1f800208
+        800c4834 80 1f 01 3c     lui        at,0x1f80
+        800c4838 24 02 20 ac     sw         zero,offset DAT_1f800224(at)
+        800c483c 80 1f 01 3c     lui        at,0x1f80
+        800c4840 20 02 20 ac     sw         zero,offset DAT_1f800220(at)
+        800c4844 80 1f 01 3c     lui        at,0x1f80
+        800c4848 1c 02 20 ac     sw         zero,offset DAT_1f80021c(at)
+        800c484c 80 1f 01 3c     lui        at,0x1f80
+        800c4850 16 02 20 a4     sh         zero,offset DAT_1f800216(at)
+        800c4854 80 1f 01 3c     lui        at,0x1f80
+        800c4858 14 02 20 a4     sh         zero,offset DAT_1f800214(at)
+        800c485c 80 1f 01 3c     lui        at,0x1f80
+        800c4860 12 02 20 a4     sh         zero,offset DAT_1f800212(at)
+        800c4864 80 1f 01 3c     lui        at,0x1f80
+
+
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined WorldRand()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x4]:4  local_4                                 XREF[2]:     800c414c(W), 
+                                                                                                   800c4f80(R)  
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800c4150(W), 
+                                                                                                   800c4f84(R)  
+             undefined4        Stack[-0xc]:4  local_c                                 XREF[2]:     800c4154(W), 
+                                                                                                   800c4f88(R)  
+             undefined4        Stack[-0x10]:4 local_10                                XREF[2]:     800c4158(W), 
+                                                                                                   800c4f8c(R)  
+             undefined4        Stack[-0x14]:4 local_14                                XREF[2]:     800c415c(W), 
+                                                                                                   800c4f90(R)  
+             undefined4        Stack[-0x18]:4 local_18                                XREF[2]:     800c4160(W), 
+                                                                                                   800c4f94(R)  
+             undefined4        Stack[-0x1c]:4 local_1c                                XREF[2]:     800c4164(W), 
+                                                                                                   800c4f98(R)  
+             undefined4        Stack[-0x20]:4 local_20                                XREF[2]:     800c4168(W), 
+                                                                                                   800c4f9c(R)  
+             undefined4        Stack[-0x24]:4 local_24                                XREF[2]:     800c416c(W), 
+                                                                                                   800c4fa0(R)  
+             undefined4        Stack[-0x28]:4 local_28                                XREF[2]:     800c4170(W), 
+                                                                                                   800c4fa4(R)  
+             undefined4        Stack[-0x40]:4 local_40                                XREF[3]:     800c4940(W), 
+                                                                                                   800c4df0(R), 
+                                                                                                   800c4f30(R)  
+             undefined4        Stack[-0x48]:4 local_48                                XREF[3]:     800c4930(W), 
+                                                                                                   800c4d94(R), 
+                                                                                                   800c4ed4(R)  
+             undefined4        Stack[-0x50]:4 local_50                                XREF[3]:     800c4924(W), 
+                                                                                                   800c4d50(R), 
+                                                                                                   800c4e90(R)  
+             undefined4        Stack[-0x58]:4 local_58                                XREF[3]:     800c4918(W), 
+                                                                                                   800c4b4c(R), 
+                                                                                                   800c4c64(R)  
+             undefined4        Stack[-0x60]:4 local_60                                XREF[3]:     800c490c(W), 
+                                                                                                   800c4ae0(R), 
+                                                                                                   800c4c08(R)  
+             undefined4        Stack[-0x68]:4 local_68                                XREF[3]:     800c4900(W), 
+                                                                                                   800c4a8c(R), 
+                                                                                                   800c4bc4(R)  
+             undefined4        Stack[-0x70]:4 local_70                                XREF[3]:     800c4804(W), 
+                                                                                                   800c48b0(R), 
+                                                                                                   800c4f4c(R)  
+             undefined4        Stack[-0x88]:4 local_88                                XREF[6]:     800c4174(W), 
+                                                                                                   800c4798(R), 
+                                                                                                   800c47c0(R), 
+                                                                                                   800c4808(R), 
+                                                                                                   800c48c0(R), 
+                                                                                                   800c4f58(R)  
+                             WorldRand                                       XREF[2]:     FUN_800b5e28:800b60e4(c), 
+                                                                                          FUN_800b5e28:800b6118(c)  
+        800c4148 68 ff bd 27     addiu      sp,sp,-0x98
+        800c414c 94 00 bf af     sw         ra,local_4(sp)
+        800c4150 90 00 be af     sw         s8,local_8(sp)
+        800c4154 8c 00 b7 af     sw         s7,local_c(sp)
+        800c4158 88 00 b6 af     sw         s6,local_10(sp)
+        800c415c 84 00 b5 af     sw         s5,local_14(sp)
+        800c4160 80 00 b4 af     sw         s4,local_18(sp)
+        800c4164 7c 00 b3 af     sw         s3,local_1c(sp)
+        800c4168 78 00 b2 af     sw         s2,local_20(sp)
+        800c416c 74 00 b1 af     sw         s1,local_24(sp)
+        800c4170 70 00 b0 af     sw         s0,local_28(sp)
+        800c4174 10 00 a4 af     sw         a0,local_88(sp)
+        800c4178 01 00 a2 90     lbu        v0,0x1(a1)
+        800c417c 00 00 a4 90     lbu        a0,0x0(a1)
+        800c4180 00 19 02 00     sll        v1,v0,0x4
+        800c4184 23 18 62 00     subu       v1,v1,v0
+        800c4188 80 18 03 00     sll        v1,v1,0x2
+        800c418c 0d 80 02 3c     lui        v0,0x800d
+        800c4190 00 81 42 24     addiu      v0,v0,-0x7f00
+        800c4194 06 00 80 10     beq        a0,zero,LAB_800c41b0
+        800c4198 21 80 62 00     _addu      s0,v1,v0
+        800c419c 01 00 02 34     ori        v0,zero,0x1
+
+
+/* WARNING: Removing unreachable block (ram,0x800c44f0) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined4 WorldRand(int param_1,char *param_2)
+
+{
+  byte bVar1;
+  undefined4 extraout_at;
+  undefined4 extraout_at_00;
+  short sVar2;
+  short sVar3;
+  undefined4 uVar4;
+  int iVar5;
+  int iVar6;
+  int iVar7;
+  int iVar8;
+  undefined1 *puVar9;
+  ushort *puVar10;
+  int iVar11;
+  int iVar12;
+  int iVar13;
+  int iVar14;
+  int iVar15;
+  int iVar16;
+  int iVar17;
+  int iVar18;
+  uint uVar19;
+  uint uVar20;
+  uint uVar21;
+  undefined4 uVar22;
+  undefined4 uVar23;
+  uint uVar24;
+  uint uVar25;
+  uint uVar26;
+  undefined4 uVar27;
+  undefined4 uVar28;
+  uint uVar29;
+  uint uVar30;
+  uint uVar31;
+  undefined4 uVar32;
+  undefined4 uVar33;
+  undefined4 *puVar34;
+  uint uVar35;
+  
+  iVar11 = (uint)(byte)param_2[1] * 0x3c;
+  if (*param_2 == '\0') {
+    *(undefined2 *)(iVar11 + -0x7ff37f00) = *(undefined2 *)(param_2 + 2);
+    *(undefined2 *)(iVar11 + -0x7ff37efe) = *(undefined2 *)(param_2 + 4);
+    *(undefined2 *)(iVar11 + -0x7ff37efc) = *(undefined2 *)(param_2 + 6);
+    _DAT_1f800200 = *(undefined2 *)(iVar11 + -0x7ff37f00);
+    *(undefined2 *)(iVar11 + -0x7ff37efa) = *(undefined2 *)(param_2 + 8);
+    _DAT_1f800202 = *(undefined2 *)(iVar11 + -0x7ff37efe);
+    _DAT_1f800204 = *(undefined2 *)(iVar11 + -0x7ff37efc);
+    _DAT_1f800206 = 0;
+    func_0x8003a0b8(&DAT_1f800200,&DAT_1f800208);
+    *(short *)(iVar11 + -0x7ff37ef8) = _DAT_1f800208;
+    *(short *)(iVar11 + -0x7ff37ef6) = _DAT_1f80020a;
+    *(short *)(iVar11 + -0x7ff37ef4) = _DAT_1f80020c;
+    iVar16 = (int)_DAT_1f80020c;
+    if (iVar16 == 0) {
+      iVar16 = (int)_DAT_1f80020a;
+      if (iVar16 == 0) {
+        iVar16 = (int)_DAT_1f800208;
+        if (iVar16 == 0) {
+          return 1;
+        }
+        _DAT_1f800214 = (uint)_DAT_1f800216 << 0x10;
+        iVar5 = (int)*(short *)(iVar11 + -0x7ff37efa) << 0xc;
+        if (iVar16 == 0) {
+          trap(0x1c00);
+        }
+        if ((iVar16 == -1) && (iVar5 == -0x80000000)) {
+          trap(0x1800);
+        }
+        _DAT_1f800210 = iVar5 / iVar16 & 0xffff;
+      }
+      else {
+        _DAT_1f800214 = (uint)_DAT_1f800216 << 0x10;
+        iVar5 = (int)*(short *)(iVar11 + -0x7ff37efa) << 0xc;
+        if (iVar16 == 0) {
+          trap(0x1c00);
+        }
+        if ((iVar16 == -1) && (iVar5 == -0x80000000)) {
+          trap(0x1800);
+        }
+        _DAT_1f800210 = iVar5 / iVar16 << 0x10;
+      }
+    }
+    else {
+      _DAT_1f800210 = 0;
+      iVar5 = (int)*(short *)(iVar11 + -0x7ff37efa) << 0xc;
+      if (iVar16 == 0) {
+        trap(0x1c00);
+      }
+      if ((iVar16 == -1) && (iVar5 == -0x80000000)) {
+        trap(0x1800);
+      }
+      _DAT_1f800214 = CONCAT22(_DAT_1f800216,(short)(iVar5 / iVar16));
+    }
+    *(undefined2 *)(iVar11 + -0x7ff37ef2) = _DAT_1f800210;
+    *(undefined2 *)(iVar11 + -0x7ff37ef0) = _DAT_1f800212;
+    *(undefined2 *)(iVar11 + -0x7ff37eee) = _DAT_1f800214;
+    _DAT_1f800218 = 0;
+    _DAT_1f80021c = CONCAT22(DAT_1f80021c_2,0x1000);
+    uVar35 = _DAT_1f80020c * 0x1000;
+    if ((int)uVar35 < 0) {
+      uVar35 = uVar35 + 0xfff;
+    }
+    iVar16 = _DAT_1f80020a * 0x1000;
+    if (iVar16 < 0) {
+      iVar16 = iVar16 + 0xfff;
+    }
+    sVar3 = (short)(iVar16 >> 0xc);
+    iVar16 = _DAT_1f800208 * -0x1000;
+    if (iVar16 < 0) {
+      iVar16 = iVar16 + 0xfff;
+    }
+    sVar2 = (short)(iVar16 >> 0xc);
+    _DAT_1f800220 = CONCAT22(sVar2,sVar3);
+    _DAT_1f800224 = (uint)_DAT_1f800226 << 0x10;
+    sVar3 = func_0x80039f5c((int)sVar3 * (int)sVar3 + (int)sVar2 * (int)sVar2);
+    func_0x8003a0b8(&DAT_1f800220,&DAT_1f800228);
+    if (((_DAT_1f800228 == 0) && (_DAT_1f80022a == 0)) && (_DAT_1f80022c == 0)) {
+      *(undefined2 *)(iVar11 + -0x7ff37eec) = 0x1000;
+      *(undefined2 *)(iVar11 + -0x7ff37eea) = 0;
+      *(undefined2 *)(iVar11 + -0x7ff37ee8) = 0;
+      *(undefined2 *)(iVar11 + -0x7ff37ee6) = 0;
+      *(undefined2 *)(iVar11 + -0x7ff37ee4) = 0x1000;
+      *(undefined2 *)(iVar11 + -0x7ff37ee2) = 0;
+      *(undefined2 *)(iVar11 + -0x7ff37ee0) = 0;
+      *(undefined2 *)(iVar11 + -0x7ff37ede) = 0;
+      *(undefined2 *)(iVar11 + -0x7ff37edc) = 0x1000;
+    }
+    else {
+      iVar17 = (int)_DAT_1f800228;
+      iVar14 = (int)_DAT_1f80022a;
+      iVar12 = (int)_DAT_1f80022c;
+      iVar16 = iVar17 * iVar14;
+      iVar5 = iVar17 * iVar12;
+      iVar8 = iVar14 * iVar12;
+      iVar6 = (int)sVar3;
+      iVar7 = -(iVar17 * iVar17);
+      iVar13 = iVar7 + 0x1000000;
+      iVar18 = (int)(short)(uVar35 >> 0xc);
+      iVar15 = 0x1000 - iVar18;
+      if (iVar13 < 0) {
+        iVar13 = iVar7 + 0x1000fff;
+      }
+      iVar7 = iVar17 * iVar17 + iVar18 * (iVar13 >> 0xc);
+      if (iVar7 < 0) {
+        iVar7 = iVar7 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37eec) = (short)(iVar7 >> 0xc);
+      if (iVar16 < 0) {
+        iVar16 = iVar16 + 0xfff;
+      }
+      iVar16 = (iVar16 >> 0xc) * iVar15;
+      iVar7 = iVar16 - iVar12 * iVar6;
+      if (iVar7 < 0) {
+        iVar7 = iVar7 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37eea) = (short)(iVar7 >> 0xc);
+      if (iVar5 < 0) {
+        iVar5 = iVar5 + 0xfff;
+      }
+      iVar5 = (iVar5 >> 0xc) * iVar15;
+      iVar7 = iVar5 + iVar14 * iVar6;
+      if (iVar7 < 0) {
+        iVar7 = iVar7 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37ee8) = (short)(iVar7 >> 0xc);
+      iVar16 = iVar16 + iVar12 * iVar6;
+      if (iVar16 < 0) {
+        iVar16 = iVar16 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37ee6) = (short)(iVar16 >> 0xc);
+      iVar16 = -(iVar14 * iVar14);
+      iVar7 = iVar16 + 0x1000000;
+      if (iVar7 < 0) {
+        iVar7 = iVar16 + 0x1000fff;
+      }
+      iVar16 = iVar14 * iVar14 + iVar18 * (iVar7 >> 0xc);
+      if (iVar16 < 0) {
+        iVar16 = iVar16 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37ee4) = (short)(iVar16 >> 0xc);
+      if (iVar8 < 0) {
+        iVar8 = iVar8 + 0xfff;
+      }
+      iVar15 = (iVar8 >> 0xc) * iVar15;
+      iVar16 = iVar15 - iVar17 * iVar6;
+      if (iVar16 < 0) {
+        iVar16 = iVar16 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37ee2) = (short)(iVar16 >> 0xc);
+      iVar5 = iVar5 - iVar14 * iVar6;
+      if (iVar5 < 0) {
+        iVar5 = iVar5 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37ee0) = (short)(iVar5 >> 0xc);
+      iVar15 = iVar15 + iVar17 * iVar6;
+      if (iVar15 < 0) {
+        iVar15 = iVar15 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37ede) = (short)(iVar15 >> 0xc);
+      iVar16 = -(iVar12 * iVar12);
+      iVar5 = iVar16 + 0x1000000;
+      if (iVar5 < 0) {
+        iVar5 = iVar16 + 0x1000fff;
+      }
+      iVar16 = iVar12 * iVar12 + iVar18 * (iVar5 >> 0xc);
+      if (iVar16 < 0) {
+        iVar16 = iVar16 + 0xfff;
+      }
+      *(short *)(iVar11 + -0x7ff37edc) = (short)(iVar16 >> 0xc);
+    }
+    uVar35 = 0;
+    puVar9 = (undefined1 *)((uint)*(ushort *)(param_1 + 0x18) + *(int *)(param_1 + 0x1c));
+    if (*(char *)(param_1 + 3) == '\0') {
+      uVar4 = 1;
+    }
+    else {
+      do {
+        *puVar9 = 0;
+        uVar35 = uVar35 + 1;
+        puVar9 = puVar9 + 0x20;
+      } while (uVar35 < *(byte *)(param_1 + 3));
+      uVar4 = 1;
+    }
+  }
+  else {
+    uVar4 = 1;
+    if (*param_2 == '\x01') {
+      puVar34 = *(undefined4 **)(param_1 + 0x20);
+      _DAT_1f800218 = CONCAT22(_DAT_1f80021a,0x1000);
+      _DAT_1f800224 = 0;
+      _DAT_1f800220 = 0;
+      _DAT_1f80021c = 0;
+      _DAT_1f800214 = 0;
+      _DAT_1f800210 = 0x1000;
+      _DAT_1f80020c = 0;
+      _DAT_1f800208 = 0x1000;
+      _DAT_1f800244 = 0;
+      _DAT_1f800240 = 0;
+      _DAT_1f80023c = 0;
+      _DAT_1f800264 = 0;
+      _DAT_1f800260 = 0;
+      _DAT_1f80025c = 0;
+      _DAT_1f800200 = *(undefined2 *)(iVar11 + -0x7ff37ef8);
+      _DAT_1f800202 = *(undefined2 *)(iVar11 + -0x7ff37ef6);
+      _DAT_1f800204 = *(undefined2 *)(iVar11 + -0x7ff37ef4);
+      uVar35 = 0;
+      _DAT_1f800206 = 0;
+      uVar4 = 0x1f800000;
+      iVar16 = (uint)*(ushort *)(param_1 + 0x18) + *(int *)(param_1 + 0x1c);
+      if (*(char *)(param_1 + 3) != '\0') {
+        do {
+          _DAT_1f800228 = *(undefined4 *)(iVar11 + -0x7ff37eec);
+          _DAT_1f80022c = *(undefined4 *)(iVar11 + -0x7ff37ee8);
+          _DAT_1f800230 = *(undefined4 *)(iVar11 + -0x7ff37ee4);
+          _DAT_1f800234 = *(undefined4 *)(iVar11 + -0x7ff37ee0);
+          _DAT_1f800238 = CONCAT22(DAT_1f800238_2,*(undefined2 *)(iVar11 + -0x7ff37edc));
+          setCopControlWord(2,0,_DAT_1f800208);
+          setCopControlWord(2,0x800,_DAT_1f80020c);
+          setCopControlWord(2,0x1000,_DAT_1f800210);
+          setCopControlWord(2,0x1800,_DAT_1f800214);
+          setCopControlWord(2,0x2000,_DAT_1f800218);
+          puVar10 = (ushort *)(puVar34 + (uint)*(byte *)(iVar16 + 1) * 8);
+          setCopReg(2,0x4800,(uint)*puVar10);
+          setCopReg(2,0x5000,(uint)puVar10[3]);
+          setCopReg(2,0x5800,(uint)puVar10[6]);
+          copFunction(2,0x49e012);
+          uVar19 = getCopReg(2,0x4800);
+          uVar24 = getCopReg(2,0x5000);
+          uVar29 = getCopReg(2,0x5800);
+          bVar1 = *(byte *)(iVar16 + 1);
+          setCopReg(2,0x4800,(uint)*(ushort *)((int)puVar34 + (uint)bVar1 * 0x20 + 2));
+          setCopReg(2,0x5000,(uint)*(ushort *)(puVar34 + (uint)bVar1 * 8 + 2));
+          setCopReg(2,0x5800,(uint)*(ushort *)((int)puVar34 + (uint)bVar1 * 0x20 + 0xe));
+          copFunction(2,0x49e012);
+          uVar20 = getCopReg(2,0x4800);
+          uVar25 = getCopReg(2,0x5000);
+          uVar30 = getCopReg(2,0x5800);
+          bVar1 = *(byte *)(iVar16 + 1);
+          setCopReg(2,0x4800,(uint)*(ushort *)(puVar34 + (uint)bVar1 * 8 + 1));
+          setCopReg(2,0x5000,(uint)*(ushort *)((int)puVar34 + (uint)bVar1 * 0x20 + 10));
+          setCopReg(2,0x5800,(uint)*(ushort *)(puVar34 + (uint)bVar1 * 8 + 4));
+          copFunction(2,0x49e012);
+          uVar21 = getCopReg(2,0x4800);
+          uVar26 = getCopReg(2,0x5000);
+          uVar31 = getCopReg(2,0x5800);
+          setCopControlWord(2,0x2800,-(int)*(short *)(iVar11 + -0x7ff37ef2));
+          setCopControlWord(2,0x3000,-(int)*(short *)(iVar11 + -0x7ff37ef0));
+          setCopControlWord(2,0x3800,-(int)*(short *)(iVar11 + -0x7ff37eee));
+          bVar1 = *(byte *)(iVar16 + 1);
+          setCopReg(2,0,CONCAT22(*(undefined2 *)(puVar34 + (uint)bVar1 * 8 + 6),
+                                 *(undefined2 *)(puVar34 + (uint)bVar1 * 8 + 5)));
+          setCopReg(2,uVar4,puVar34[(uint)bVar1 * 8 + 7]);
+          copFunction(2,0x480012);
+          uVar28 = getCopReg(2,9);
+          uVar33 = getCopReg(2,10);
+          uVar23 = getCopReg(2,0xb);
+          setCopControlWord(2,0,_DAT_1f800228);
+          setCopControlWord(2,0x800,_DAT_1f80022c);
+          setCopControlWord(2,0x1000,_DAT_1f800230);
+          setCopControlWord(2,0x1800,_DAT_1f800234);
+          setCopControlWord(2,0x2000,_DAT_1f800238);
+          setCopReg(2,0x4800,uVar19 & 0xffff);
+          setCopReg(2,0x5000,uVar24 & 0xffff);
+          setCopReg(2,0x5800,uVar29 & 0xffff);
+          copFunction(2,0x49e012);
+          uVar22 = getCopReg(2,0x4800);
+          uVar27 = getCopReg(2,0x5000);
+          uVar32 = getCopReg(2,0x5800);
+          _DAT_1f800268 = (undefined2)uVar22;
+          _DAT_1f80026e = (undefined2)uVar27;
+          _DAT_1f800274 = (undefined2)uVar32;
+          setCopReg(2,0x4800,uVar20 & 0xffff);
+          setCopReg(2,0x5000,uVar25 & 0xffff);
+          setCopReg(2,0x5800,uVar30 & 0xffff);
+          copFunction(2,0x49e012);
+          uVar22 = getCopReg(2,0x4800);
+          uVar27 = getCopReg(2,0x5000);
+          uVar32 = getCopReg(2,0x5800);
+          _DAT_1f80026a = (undefined2)uVar22;
+          _DAT_1f800270 = (undefined2)uVar27;
+          _DAT_1f800276 = (undefined2)uVar32;
+          setCopReg(2,0x4800,uVar21 & 0xffff);
+          setCopReg(2,0x5000,uVar26 & 0xffff);
+          setCopReg(2,0x5800,uVar31 & 0xffff);
+          copFunction(2,0x49e012);
+          uVar22 = getCopReg(2,0x4800);
+          uVar27 = getCopReg(2,0x5000);
+          uVar32 = getCopReg(2,0x5800);
+          _DAT_1f80026c = (undefined2)uVar22;
+          _DAT_1f800272 = (undefined2)uVar27;
+          _DAT_1f800278 = (undefined2)uVar32;
+          setCopControlWord(2,0x2800,_DAT_1f80023c);
+          setCopControlWord(2,0x3000,_DAT_1f800240);
+          setCopControlWord(2,0x3800,_DAT_1f800244);
+          _DAT_1f800280 = (undefined2)uVar33;
+          _DAT_1f80027c = (undefined2)uVar28;
+          setCopReg(2,0,CONCAT22(_DAT_1f800280,_DAT_1f80027c));
+          setCopReg(2,uVar4,uVar23);
+          copFunction(2,0x480012);
+          _DAT_1f80027c = getCopReg(2,9);
+          _DAT_1f800280 = getCopReg(2,10);
+          _DAT_1f800284 = getCopReg(2,0xb);
+          _DAT_1f80021c = (int)*(short *)(iVar11 + -0x7ff37ef2);
+          _DAT_1f800220 = (int)*(short *)(iVar11 + -0x7ff37ef0);
+          _DAT_1f800224 = (int)*(short *)(iVar11 + -0x7ff37eee);
+          func_0x8003bf3c(&DAT_1f800228,&DAT_1f800248);
+          setCopControlWord(2,0,*puVar34);
+          setCopControlWord(2,0x800,puVar34[1]);
+          setCopControlWord(2,0x1000,puVar34[2]);
+          setCopControlWord(2,0x1800,puVar34[3]);
+          setCopControlWord(2,0x2000,puVar34[4]);
+          setCopReg(2,0x4800,_DAT_1f800208 & 0xffff);
+          setCopReg(2,0x5000,_DAT_1f80020c >> 0x10);
+          setCopReg(2,0x5800,_DAT_1f800214 & 0xffff);
+          copFunction(2,0x49e012);
+          uVar4 = getCopReg(2,0x4800);
+          uVar28 = getCopReg(2,0x5000);
+          uVar33 = getCopReg(2,0x5800);
+          _DAT_1f800288 = CONCAT22(_DAT_1f80028a,(short)uVar4);
+          _DAT_1f80028c = CONCAT22((short)uVar28,_DAT_1f80028c);
+          _DAT_1f800294 = CONCAT22(_DAT_1f800296,(short)uVar33);
+          setCopReg(2,0x4800,_DAT_1f800208 >> 0x10);
+          setCopReg(2,0x5000,_DAT_1f800210 & 0xffff);
+          setCopReg(2,0x5800,_DAT_1f800214 >> 0x10);
+          copFunction(2,0x49e012);
+          uVar4 = getCopReg(2,0x4800);
+          uVar28 = getCopReg(2,0x5000);
+          uVar33 = getCopReg(2,0x5800);
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f80028a = (short)uVar4;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800290 = (short)uVar28;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800296 = (short)uVar33;
+          setCopReg(2,0x4800,_DAT_1f80020c & 0xffff);
+          setCopReg(2,0x5000,_DAT_1f800210 >> 0x10);
+          setCopReg(2,0x5800,_DAT_1f800218 & 0xffff);
+          copFunction(2,0x49e012);
+          uVar4 = getCopReg(2,0x4800);
+          uVar28 = getCopReg(2,0x5000);
+          uVar33 = getCopReg(2,0x5800);
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f80028c = (short)uVar4;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800292 = (short)uVar28;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800298 = (short)uVar33;
+          setCopControlWord(2,0x2800,puVar34[5]);
+          setCopControlWord(2,0x3000,puVar34[6]);
+          setCopControlWord(2,0x3800,puVar34[7]);
+          setCopReg(2,0,CONCAT22(_DAT_1f800220,_DAT_1f80021c));
+          setCopReg(2,extraout_at,_DAT_1f800224);
+          copFunction(2,0x480012);
+          uVar4 = getCopReg(2,9);
+          uVar28 = getCopReg(2,10);
+          uVar33 = getCopReg(2,0xb);
+          setCopControlWord(2,0,_DAT_1f800288);
+          setCopControlWord(2,0x800,_DAT_1f80028c);
+          setCopControlWord(2,0x1000,_DAT_1f800290);
+          setCopControlWord(2,0x1800,_DAT_1f800294);
+          setCopControlWord(2,0x2000,_DAT_1f800298);
+          setCopReg(2,0x4800,(uint)_DAT_1f800248);
+          setCopReg(2,0x5000,(uint)_DAT_1f80024e);
+          setCopReg(2,0x5800,(uint)_DAT_1f800254);
+          copFunction(2,0x49e012);
+          uVar23 = getCopReg(2,0x4800);
+          uVar22 = getCopReg(2,0x5000);
+          uVar27 = getCopReg(2,0x5800);
+          _DAT_1f80028a = SUB42(_DAT_1f800288,2);
+          _DAT_1f800288 = CONCAT22(_DAT_1f80028a,(short)uVar23);
+          _DAT_1f80028c = (undefined2)_DAT_1f80028c;
+          _DAT_1f80028c = CONCAT22((short)uVar22,_DAT_1f80028c);
+          _DAT_1f800296 = SUB42(_DAT_1f800294,2);
+          _DAT_1f800294 = CONCAT22(_DAT_1f800296,(short)uVar27);
+          setCopReg(2,0x4800,(uint)_DAT_1f80024a);
+          setCopReg(2,0x5000,(uint)_DAT_1f800250);
+          setCopReg(2,0x5800,(uint)_DAT_1f800256);
+          copFunction(2,0x49e012);
+          uVar23 = getCopReg(2,0x4800);
+          uVar22 = getCopReg(2,0x5000);
+          uVar27 = getCopReg(2,0x5800);
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f80028a = (short)uVar23;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800290 = (short)uVar22;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800296 = (short)uVar27;
+          setCopReg(2,0x4800,(uint)_DAT_1f80024c);
+          setCopReg(2,0x5000,(uint)_DAT_1f800252);
+          setCopReg(2,0x5800,(uint)_DAT_1f800258);
+          copFunction(2,0x49e012);
+          uVar23 = getCopReg(2,0x4800);
+          uVar22 = getCopReg(2,0x5000);
+          uVar27 = getCopReg(2,0x5800);
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f80028c = (short)uVar23;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800292 = (short)uVar22;
+                    /* WARNING: Ignoring partial resolution of indirect */
+          _DAT_1f800298 = (short)uVar27;
+          setCopControlWord(2,0x2800,uVar4);
+          setCopControlWord(2,0x3000,uVar28);
+          setCopControlWord(2,0x3800,uVar33);
+          setCopReg(2,0,CONCAT22(_DAT_1f800260,_DAT_1f80025c));
+          setCopReg(2,extraout_at,_DAT_1f800264);
+          copFunction(2,0x480012);
+          _DAT_1f80029c = getCopReg(2,9);
+          _DAT_1f8002a0 = getCopReg(2,10);
+          _DAT_1f8002a4 = getCopReg(2,0xb);
+          FUN_800c4fb4(iVar16,&DAT_1f800200,&DAT_1f800268,&DAT_1f800288);
+          uVar35 = uVar35 + 1;
+          iVar16 = iVar16 + 0x20;
+          uVar4 = extraout_at_00;
+        } while (uVar35 < *(byte *)(param_1 + 3));
+      }
+      uVar4 = 0;
+    }
+  }
+  return uVar4;
+}
