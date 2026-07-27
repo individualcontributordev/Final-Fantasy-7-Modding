@@ -16,3 +16,35 @@ scalar_0x8b65_hits_count_or_addrs:
 best_candidate_address:
 listing_paste:
 notes:
+
+800adeb8	lui t0,0x5d58	0x5d58	0x5d58	FUN_800adea8
+800adebc	ori t0,t0,0x8b65	0x8b65	0x8b65	FUN_800adea8
+
+
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined WorldSeedRand()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800adeac(W), 
+                                                                                                   800adfb0(R)  
+             undefined4        Stack[-0x7ec   local_7ec                               XREF[1]:     800adf4c(W)  
+             undefined4        Stack[-0x7f0   local_7f0                               XREF[3]:     800adf0c(R), 
+                                                                                                   800adf28(W), 
+                                                                                                   800adf38(R)  
+             undefined4        Stack[-0x7f4   local_7f4                               XREF[1]:     800adf14(R)  
+             undefined4        Stack[-0x82c   local_82c                               XREF[1]:     800adf34(R)  
+             undefined4        Stack[-0x830   local_830                               XREF[4]:     800adef4(W), 
+                                                                                                   800adf10(*), 
+                                                                                                   800adf30(R), 
+                                                                                                   800adf64(R)  
+                             WorldSeedRand                                   XREF[1]:     FUN_800b7228:800b736c(c)  
+        800adea8 c0 f7 bd 27     addiu      sp,sp,-0x840
+        800adeac 38 08 bf af     sw         ra,local_8(sp)
+        800adeb0 21 38 00 00     clear      a3
+        800adeb4 21 30 00 00     clear      a2
+        800adeb8 58 5d 08 3c     lui        t0,0x5d58
+        800adebc 65 8b 08 35     ori        t0,t0,0x8b65
+        800adec0 00 80 09 3c     lui        t1,0x8000
+                             LAB_800adec4                                    XREF[1]:     800adf00(j)  
+        800adec4 1f 00 05 34     ori        a1,zero,0x1f
