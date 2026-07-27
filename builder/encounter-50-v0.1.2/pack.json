@@ -1,0 +1,16 @@
+{
+  "id": "encounter-50-v0.1.2",
+  "name": "Encounter 50%",
+  "kind": "addon",
+  "version": "0.1.2",
+  "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check at default lure; 50% of raw lure/256). Enemy Lure / Away still scale. Use with Unmodified only.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "encounter-rate",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 50
+}

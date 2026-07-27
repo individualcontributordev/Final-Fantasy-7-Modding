@@ -1,0 +1,16 @@
+{
+  "id": "encounter-on-csr-25-v0.1.2",
+  "name": "Encounter 25% (on CSR)",
+  "kind": "addon",
+  "version": "0.1.2",
+  "blurb": "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR) base only.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "encounter-rate",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 25
+}
