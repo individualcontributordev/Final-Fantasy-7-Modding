@@ -15,7 +15,7 @@
         "1": "./encounter-v0.1.0/layers/disc1.layer.json"
       },
       "enabled": false,
-      "note": "Superseded by encounter-v0.1.1. Disabled automatically on rebuild."
+      "note": "Superseded by encounter-75-v0.1.2. Disabled automatically on rebuild."
     },
     {
       "id": "encounter-on-csr-plus-v0.1.0",
@@ -30,7 +30,7 @@
         "1": "./encounter-on-csr-plus-v0.1.0/layers/disc1.layer.json"
       },
       "enabled": false,
-      "note": "Superseded by encounter-on-csr-plus-v0.1.1. Disabled automatically on rebuild."
+      "note": "Superseded by encounter-on-csr-plus-75-v0.1.2. Disabled automatically on rebuild."
     },
     {
       "id": "encounter-v0.1.1",
@@ -44,7 +44,8 @@
       "discs": {
         "1": "./encounter-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": false,
+      "note": "Superseded by encounter-75-v0.1.2. Disabled automatically on rebuild."
     },
     {
       "id": "encounter-on-csr-v0.1.1",
@@ -58,7 +59,8 @@
       "discs": {
         "1": "./encounter-on-csr-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": false,
+      "note": "Superseded by encounter-on-csr-75-v0.1.2. Disabled automatically on rebuild."
     },
     {
       "id": "encounter-on-csr-plus-v0.1.1",
@@ -72,7 +74,8 @@
       "discs": {
         "1": "./encounter-on-csr-plus-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": false,
+      "note": "Superseded by encounter-on-csr-plus-75-v0.1.2. Disabled automatically on rebuild."
     },
     {
       "id": "encounter-on-csr-plusplus-v0.1.1",
@@ -86,7 +89,200 @@
       "discs": {
         "1": "./encounter-on-csr-plusplus-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": false,
+      "note": "Superseded by encounter-on-csr-plusplus-75-v0.1.2. Disabled automatically on rebuild."
+    },
+    {
+      "id": "encounter-25-v0.1.2",
+      "name": "Encounter 25% v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256). Enemy Lure / Away still scale. Use with Unmodified only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./encounter-25-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25
+    },
+    {
+      "id": "encounter-on-csr-25-v0.1.2",
+      "name": "Encounter 25% (on CSR) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-25-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25
+    },
+    {
+      "id": "encounter-on-csr-plus-25-v0.1.2",
+      "name": "Encounter 25% (on CSR+) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR+) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-plus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plus-25-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25
+    },
+    {
+      "id": "encounter-on-csr-plusplus-25-v0.1.2",
+      "name": "Encounter 25% (on CSR++) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/4 (~1.6%/check at default lure; 25% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR++) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plusplus-25-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25
+    },
+    {
+      "id": "encounter-50-v0.1.2",
+      "name": "Encounter 50% v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check at default lure; 50% of raw lure/256). Enemy Lure / Away still scale. Use with Unmodified only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./encounter-50-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50
+    },
+    {
+      "id": "encounter-on-csr-50-v0.1.2",
+      "name": "Encounter 50% (on CSR) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check at default lure; 50% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-50-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50
+    },
+    {
+      "id": "encounter-on-csr-plus-50-v0.1.2",
+      "name": "Encounter 50% (on CSR+) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check at default lure; 50% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR+) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-plus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plus-50-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50
+    },
+    {
+      "id": "encounter-on-csr-plusplus-50-v0.1.2",
+      "name": "Encounter 50% (on CSR++) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure/2 (~3.1%/check at default lure; 50% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR++) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plusplus-50-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50
+    },
+    {
+      "id": "encounter-75-v0.1.2",
+      "name": "Encounter 75% v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure\u00d73/4 (~4.7%/check at default lure; 75% of raw lure/256). Enemy Lure / Away still scale. Use with Unmodified only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./encounter-75-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75
+    },
+    {
+      "id": "encounter-on-csr-75-v0.1.2",
+      "name": "Encounter 75% (on CSR) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure\u00d73/4 (~4.7%/check at default lure; 75% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-75-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75
+    },
+    {
+      "id": "encounter-on-csr-plus-75-v0.1.2",
+      "name": "Encounter 75% (on CSR+) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure\u00d73/4 (~4.7%/check at default lure; 75% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR+) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-plus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plus-75-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75
+    },
+    {
+      "id": "encounter-on-csr-plusplus-75-v0.1.2",
+      "name": "Encounter 75% (on CSR++) v0.1.2",
+      "kind": "addon",
+      "blurb": "RCnt2 FORCE at lure\u00d73/4 (~4.7%/check at default lure; 75% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR++) base only.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "encounter-rate",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./encounter-on-csr-plusplus-75-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75
     }
   ],
   "bases": []

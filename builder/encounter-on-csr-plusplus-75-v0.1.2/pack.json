@@ -1,0 +1,16 @@
+{
+  "id": "encounter-on-csr-plusplus-75-v0.1.2",
+  "name": "Encounter 75% (on CSR++)",
+  "kind": "addon",
+  "version": "0.1.2",
+  "blurb": "RCnt2 FORCE at lure\u00d73/4 (~4.7%/check at default lure; 75% of raw lure/256). Enemy Lure / Away still scale. Use with(on CSR++) base only.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "encounter-rate",
+  "compatibleBases": [
+    "csr-plusplus-v0.1.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 75
+}
