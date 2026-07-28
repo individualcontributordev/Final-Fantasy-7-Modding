@@ -9,7 +9,7 @@
 | Symbol | VA |
 |--------|-----|
 | `world_encounter_check` | `0x800B7C7C` (was `FUN_800b7c7c`) |
-| **`g_world_danger`** | **`0x80116284`** (word — not the Field halfword) |
+| **`g_world_danger`** | **`0x80116284`** (word — runtime RAM, **not** in `.dec`; rename via `sw`/`lw` operand) |
 | Danger += / rate path | `0x800B7DBC`–`0x800B7E18` |
 | Battle `jal WorldRand` | `0x800B7E1C` |
 | Compare | `0x800B7E28`–`0x800B7E38`: `WorldRand() < (g_world_danger >> 8)` |

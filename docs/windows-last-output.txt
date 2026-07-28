@@ -1,14 +1,17 @@
-# Task: rename g_world_danger; identify FUN_800b7b54
+# Task: rename g_world_danger via instruction operand (not Go To RAM)
 
 # COPY-PASTE (do not edit these lines)
-goto_danger: 0x80116284
-rename_danger_to: g_world_danger
+why: 0x80116284 is BSS/RAM outside WORLD.BIN image — G Go To finds nothing
+goto_instruction: 0x800B7E18
+expect_listing: sw …, offset DAT_80116284(at)   OR similar
+how_rename: click the DAT_80116284 operand in Listing (or Decompiler) → L → g_world_danger
+alt_goto: 0x800B7DF8
 goto_helper: 0x800B7B54
 rename_helper_if_lure: world_lure_factor
-what_success_looks_like: FUN_800b7b54 returns Enemy Lure (or lure×N); short Decompiler
 
-# EVIDENCE (short)
+# EVIDENCE
 g_world_danger_renamed:
+listing_line_with_new_name:
 FUN_800b7b54_decompiler:
 helper_rename_applied:
 notes:
