@@ -13,5 +13,27 @@ playtest: CDmage import WORLD.BIN.new → DuckStation world map grass — encoun
 apply_stdout:
 xxd_head:
 compress_stdout:
-playtest_notes:
+playtest_notes: less encounters than vanilla
 notes:
+python scripts/decompress_gzipps.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
+Source:           D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN
+Compressed size:  66715 bytes
+Expected dec size:164032 bytes
+GZIPPS sub-header:54e40400
+Wrote:            D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.dec (164032 bytes)
+➜  Final-Fantasy-7-Modding git:(main) cp workspace/iso-extract/WORLD.BIN.dec workspace/iso-extract/WORLD.BIN.dec.patched
+➜  Final-Fantasy-7-Modding git:(main) python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py workspace/iso-extract/WORLD.BIN.dec.patched --density standard
+Patched workspace\iso-extract\WORLD.BIN.dec.patched @ 0x17DB4 (104 bytes); jal @ 0x17E1C; Standard (50%)
+Head: 80 1f 01 3c 20 11 22 8c
+Marker: 42 18 03 00
+➜  Final-Fantasy-7-Modding git:(main) xxd -g1 -s 0x17DB4 -l 32 workspace/iso-extract/WORLD.BIN.dec.patched
+00017db4: 80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c  ...< ."........<
+00017dc4: 19 2f 23 90 ff 00 42 30 42 18 03 00 00 00 00 00  ./#...B0B.......
+➜  Final-Fantasy-7-Modding git:(main) python scripts/compress_gzipps.py workspace/iso-extract/WORLD.BIN.dec.patched workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.new
+Source (dec):     D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.dec.patched (164032 bytes)
+Original (bin):   D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN (66715 bytes)
+Output:           D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.new (63538 bytes)
+Method:           zopfli
+Size delta:       -3177 bytes
+Shorter than original — CDmage 'pad with zeros?' → Yes.
+➜  Final-Fantasy-7-Modding git:(main)
