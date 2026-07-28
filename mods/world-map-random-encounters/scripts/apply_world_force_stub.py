@@ -12,11 +12,11 @@ from pathlib import Path
 _MOD = Path(__file__).resolve().parents[1]
 _PATCH = _MOD / "patches"
 _ROOT = _MOD.parent.parent
-sys.path.insert(0, str(_MOD / "scripts"))
-# Reuse Field density presets if present
+# density.py lives under field-random-encounters/scripts
 _FIELD_SCRIPTS = _ROOT / "mods" / "field-random-encounters" / "scripts"
 if _FIELD_SCRIPTS.is_dir():
 	sys.path.insert(0, str(_FIELD_SCRIPTS))
+sys.path.insert(0, str(_MOD / "scripts"))
 
 from density import RATES, parse_one_density, prompt_densities, rate_label  # noqa: E402
 

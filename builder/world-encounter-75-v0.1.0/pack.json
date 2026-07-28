@@ -1,0 +1,16 @@
+{
+  "id": "world-encounter-75-v0.1.0",
+  "name": "World encounters \u2014 Dense (75%)",
+  "kind": "addon",
+  "version": "0.1.0",
+  "blurb": "More random world-map battles.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "world-encounter-rate",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 75
+}

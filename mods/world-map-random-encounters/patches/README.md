@@ -26,7 +26,7 @@ Same density presets as Field (Light / Standard / Dense).
 ```bash
 python scripts/decompress_gzipps.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
 cp workspace/iso-extract/WORLD.BIN.dec workspace/iso-extract/WORLD.BIN.dec.patched
-python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py \
+python mods/world-map-random-encounters/scripts/apply_world_force_stub.py \
   workspace/iso-extract/WORLD.BIN.dec.patched --density standard
 ```
 

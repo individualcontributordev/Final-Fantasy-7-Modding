@@ -22,7 +22,7 @@ _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent
 _SHARED = _ROOT / "scripts"
 _FIELD_SCRIPTS = _ROOT / "mods" / "field-random-encounters" / "scripts"
-for p in (_SHARED, _MOD_SCRIPTS, _FIELD_SCRIPTS):
+for p in (_SHARED, _FIELD_SCRIPTS, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
 
@@ -30,7 +30,7 @@ from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
 from build_world_bin import build as build_world_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
-from pack_meta import (  # noqa: E402
+from world_pack_meta import (  # noqa: E402
 	AGAINST,
 	VERSION_FILE,
 	meta_for,
@@ -48,7 +48,7 @@ DEFAULT_CSR_MANIFEST = (
 DEFAULT_CSR_MANIFEST_ALT = (
 	"https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
 )
-WORLD_PATH = "WORLD.BIN"
+WORLD_PATH = "WORLD/WORLD.BIN"
 
 
 def parse_discs(spec: str) -> list[int]:
