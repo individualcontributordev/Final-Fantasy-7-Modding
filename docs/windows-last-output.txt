@@ -1,7 +1,16 @@
-# Task: idle — world Standard stub playtested
+# Task: quick Light then Dense world stub playtest
 
 # COPY-PASTE (do not edit these lines)
-status: waiting on next direction from Mac chat
+# Light
+apply_light: python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py workspace/iso-extract/WORLD.BIN.dec.patched --density light
+compress_light: python scripts/compress_gzipps.py workspace/iso-extract/WORLD.BIN.dec.patched workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.new
+# Dense (after Light feel-check: re-copy vanilla .dec first)
+recopy_dec: cp workspace/iso-extract/WORLD.BIN.dec workspace/iso-extract/WORLD.BIN.dec.patched
+apply_dense: python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py workspace/iso-extract/WORLD.BIN.dec.patched --density dense
+compress_dense: python scripts/compress_gzipps.py workspace/iso-extract/WORLD.BIN.dec.patched workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.new
+playtest: CDmage import WORLD.BIN.new each time → DuckStation world grass ~2 min feel
 
 # EVIDENCE
+light_feel_vs_standard:
+dense_feel_vs_standard:
 notes:
