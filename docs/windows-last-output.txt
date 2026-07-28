@@ -12,5 +12,40 @@ playtest: CDmage import WORLD.BIN.new each time → DuckStation world grass ~2 m
 
 # EVIDENCE
 light_feel_vs_standard:
+
+python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py workspace/iso-extract/WORLD.BIN.dec.patched --density light
+Patched workspace\iso-extract\WORLD.BIN.dec.patched @ 0x17DB4 (104 bytes); jal @ 0x17E1C; Light (25%)
+Head: 80 1f 01 3c 20 11 22 8c
+Marker: 82 18 03 00
+➜  Final-Fantasy-7-Modding git:(main) python scripts/compress_gzipps.py workspace/iso-extract/WORLD.BIN.dec.patched workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.new
+Source (dec):     D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.dec.patched (164032 bytes)
+Original (bin):   D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN (66715 bytes)
+Output:           D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.new (63529 bytes)
+Method:           zopfli
+Size delta:       -3186 bytes
+Shorter than original — CDmage 'pad with zeros?' → Yes.
+➜  Final-Fantasy-7-Modding git:(main)
+
+light feels similar to standard
+
+
 dense_feel_vs_standard:
+
+✗ cp workspace/iso-extract/WORLD.BIN.dec workspace/iso-extract/WORLD.BIN.dec.patched
+➜  Final-Fantasy-7-Modding git:(main) ✗ python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py workspace/iso-extract/WORLD.BIN.dec.patched --density dense
+Patched workspace\iso-extract\WORLD.BIN.dec.patched @ 0x17DB4 (104 bytes); jal @ 0x17E1C; Dense (75%)
+Head: 80 1f 01 3c 20 11 22 8c
+Marker: 40 08 03 00
+➜  Final-Fantasy-7-Modding git:(main) ✗ python scripts/compress_gzipps.py workspace/iso-extract/WORLD.BIN.dec.patched workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.new
+Source (dec):     D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.dec.patched (164032 bytes)
+Original (bin):   D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN (66715 bytes)
+Output:           D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\WORLD.BIN.new (63537 bytes)
+Method:           zopfli
+Size delta:       -3178 bytes
+Shorter than original — CDmage 'pad with zeros?' → Yes.
+➜  Final-Fantasy-7-Modding git:(main) ✗
+
+
+yes noticalbe more than standard
+
 notes:
