@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-28 | [worldrand](2026-07-28-worldrand.md) | WorldRand @ 0x800ADFC0; index wrap 0x208; ~20 xrefs | confirmed |
 | 2026-07-28 | [worldrand-candidate](2026-07-28-worldrand-candidate.md) | FUN_800adfc0 sole non-seed caller of WorldScrambleRand | likely |
 | 2026-07-28 | [worldscramblerand](2026-07-28-worldscramblerand.md) | WorldScrambleRand @ 0x800ADE30; index 0x8010AE58; buf 0x8010AE5C | confirmed |
 | 2026-07-28 | [worldrand-mislabel](2026-07-28-worldrand-mislabel.md) | 0x800C4148 is NOT WorldRand (scratch/GPU; 0x208 false positive) | confirmed |
