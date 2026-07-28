@@ -30,10 +30,16 @@ Release / play steps: **root README**. Stub tech notes: `mods/field-random-encou
 # prompts Light / Standard / Dense / All unless --density is set
 python mods/field-random-encounters/scripts/build_all_rates.py
 # one pack:
-python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
+python mods/field-random-encounters/scripts/build_on_base.py --against csr --discs 1
 ```
 
 Needs `workspace/pristine/FINALFANTASY7_D1.bin`. After CSR base **ids** change, rebuild so `compatibleBases` match.
+
+**Live CSR bases as of 2026-07-28: `clean` (Unmodified) and `csr-v0.14.1` only.**
+`csr-plus-v0.1.1` and `csr-plusplus-v0.1.1` are retired from the builder — CSR+
+trims now ship as individual `csr-plus-scene-*` add-ons from the CSR repo, and
+CSR++ moved to Makou Reactor. Don't rebuild `-on-csr-plus-*` /
+`-on-csr-plusplus-*` combo packs; they were removed as orphaned.
 
 ## RE / research
 
