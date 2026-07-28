@@ -40,5 +40,6 @@ Do **not** patch Field Danger or reuse Field stub offsets. Do **not** expect Mak
 
 - [ ] PS1 RAM address for world Danger
 - [x] `WORLD.BIN` load base VA = **`0x800A0000`**
-- [ ] Exact stub site + byte budget
+- [x] `WorldRand` / seed / scramble located
+- [ ] Exact stub site + byte budget (Danger += block)
 - [ ] Whether Field + World packs share one `exclusiveGroup` or two
