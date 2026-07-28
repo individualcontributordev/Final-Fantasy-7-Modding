@@ -1,0 +1,134 @@
+#!/usr/bin/env python3
+"""Build a patched WORLD.BIN.new with the encounter FORCE stub.
+
+  python mods/world-map-random-encounters/scripts/build_world_bin.py path/to/WORLD.BIN
+  python mods/world-map-random-encounters/scripts/build_world_bin.py path/to/WORLD.BIN --density light
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+_MOD_SCRIPTS = Path(__file__).resolve().parent
+_MOD = _MOD_SCRIPTS.parent
+_ROOT = _MOD.parent.parent
+_SHARED = _ROOT / "scripts"
+_FIELD_SCRIPTS = _ROOT / "mods" / "field-random-encounters" / "scripts"
+for p in (_SHARED, _MOD_SCRIPTS, _FIELD_SCRIPTS):
+	if str(p) not in sys.path:
+		sys.path.insert(0, str(p))
+
+from apply_force_stub_rcnt2 import (  # noqa: E402
+	JAL,
+	JAL_OFFSET,
+	OFFSET,
+	RATE_MARKERS,
+	RATES,
+	apply_stub,
+)
+from compress_gzipps import compress_gzipps  # noqa: E402
+from decompress_gzipps import decompress_gzipps  # noqa: E402
+from density import parse_one_density, prompt_densities, rate_label  # noqa: E402
+
+EXPECT_HEAD = bytes.fromhex("80 1f 01 3c 20 11 22 8c")
+
+
+def verify_stub(dec_path: Path, rate: int = 50) -> None:
+	data = dec_path.read_bytes()
+	head = data[OFFSET : OFFSET + 8]
+	jal = data[JAL_OFFSET : JAL_OFFSET + 4]
+	if head != EXPECT_HEAD:
+		raise SystemExit(
+			f"verify failed @ 0x{OFFSET:X}: got {head.hex(' ')}, "
+			f"expected {EXPECT_HEAD.hex(' ')}"
+		)
+	if jal != JAL:
+		raise SystemExit(
+			f"verify failed jal @ 0x{JAL_OFFSET:X}: got {jal.hex(' ')}, "
+			f"expected {JAL.hex(' ')}"
+		)
+	mid = data[OFFSET + 24 : OFFSET + 28]
+	expect_rate = RATE_MARKERS[rate]
+	print(f"Verified stub @ 0x{OFFSET:X}: {head.hex(' ')} …")
+	print(f"Verified jal  @ 0x{JAL_OFFSET:X}: {jal.hex(' ')}")
+	print(f"Rate {rate}%   @ +24: {mid.hex(' ')}")
+	if mid != expect_rate:
+		raise SystemExit(
+			f"verify failed rate @ +24: got {mid.hex(' ')}, expected {expect_rate.hex(' ')}"
+		)
+
+
+def build(
+	src_bin: Path,
+	out_new: Path | None,
+	keep_dec: bool,
+	rate: int = 50,
+) -> Path:
+	if rate not in RATES:
+		raise SystemExit(f"rate must be one of {RATES}, got {rate}")
+
+	src_bin = src_bin.expanduser().resolve()
+	if not src_bin.is_file():
+		raise SystemExit(f"not found: {src_bin}")
+
+	dec_path = src_bin.with_name(src_bin.name + ".dec.patched")
+	if out_new is None:
+		out_new = src_bin.with_name("WORLD.BIN.new")
+	else:
+		out_new = out_new.expanduser().resolve()
+
+	print("=== 1/4 decompress ===")
+	raw_dec = decompress_gzipps(src_bin, None)
+	dec_path.write_bytes(raw_dec.read_bytes())
+
+	print(f"\n=== 2/4 apply FORCE stub (rate {rate}%) ===")
+	apply_stub(dec_path, rate)
+	print(f"Wrote stub into {dec_path}")
+
+	print("\n=== 3/4 verify ===")
+	verify_stub(dec_path, rate)
+
+	print("\n=== 4/4 compress → WORLD.BIN.new ===")
+	result = compress_gzipps(dec_path, src_bin, out_new)
+
+	if not keep_dec:
+		stock_dec = Path(str(src_bin) + ".dec")
+		if stock_dec.is_file() and stock_dec.resolve() != dec_path.resolve():
+			stock_dec.unlink()
+			print(f"Removed intermediate {stock_dec}")
+
+	print("\n=== done ===")
+	print(f"Import this over WORLD.BIN in CDmage:\n  {result}")
+	print("If 'pad with zeros?' → Yes. If 'truncate?' → Cancel.")
+	return result
+
+
+def main() -> None:
+	ap = argparse.ArgumentParser(
+		description="Decompress WORLD.BIN, apply encounter FORCE stub, recompress."
+	)
+	ap.add_argument("world_bin", type=Path, help="Extracted WORLD.BIN (GZIPPS)")
+	ap.add_argument("-o", "--output", type=Path, default=None, help="Output WORLD.BIN.new")
+	ap.add_argument("--keep-dec", action="store_true")
+	ap.add_argument(
+		"--density",
+		"--rate",
+		dest="density",
+		default=None,
+		metavar="PRESET",
+		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
+	)
+	args = ap.parse_args()
+	rate = (
+		parse_one_density(args.density)
+		if args.density is not None
+		else prompt_densities(allow_all=False)[0]
+	)
+	print(f"Density: {rate_label(rate)}")
+	build(args.world_bin, args.output, args.keep_dec, rate)
+
+
+if __name__ == "__main__":
+	main()
