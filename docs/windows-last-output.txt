@@ -1,15 +1,15 @@
-# Task: DuckStation break WorldRand → capture RA before battle
+# Task: at WorldRand break, copy register ra (only)
 
 # COPY-PASTE (do not edit these lines)
 breakpoint_address: 0x800ADFC0
-duckstation: Debug → Breakpoints → add CPU exec 0x800ADFC0
-howto: world map hostile grass → walk until fights feel imminent → on each break note RA (r31) → continue; when a battle starts, the last few RAs before battle are the hot callers
-ghidra_after: G → (RA - 8) should land on jal WorldRand; open containing function
-rename_to: world_encounter_check
+register_to_copy: ra
+also_called: r31
+where_in_duckstation: CPU Debugger → Registers pane → row ra
+when: each break while walking grass; write the hex value; Continue (F1/Run)
+before_battle: the last ra you saw is the important one
+ghidra: G → that address (or address-8) → should be delay-slot / jal WorldRand
 
-# EVIDENCE (paste RA values + which led into battle)
-ra_samples:
-ra_just_before_battle:
-ghidra_function_of_that_jal:
-listing_or_decompiler_around_jal:
+# EVIDENCE (fill ra hex values — no screenshots needed)
+ra_list:
+ra_last_before_battle:
 notes:
