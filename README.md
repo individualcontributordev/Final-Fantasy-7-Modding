@@ -46,9 +46,9 @@ git push
 One pack (omit `--density` to pick Light / Standard / Dense / All interactively):
 
 ```bash
-python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
+python mods/field-random-encounters/scripts/build_on_base.py --against csr --discs 1
 # or non-interactive:
-python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --density light --discs 1
+python mods/field-random-encounters/scripts/build_on_base.py --against csr --density light --discs 1
 ```
 
 `--against` resolves the live CSR base id from Pages. Older packs stay enabled until you set `"enabled": false` in `builder/manifest.json`.
