@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-28 | [worldrand-break-partial](2026-07-28-worldrand-break-partial.md) | DS break hits WorldRand; need ra register values | partial |
 | 2026-07-28 | [worldrand-xrefs-reject](2026-07-28-worldrand-xrefs-reject.md) | abb24/a21b4/b0250 not encounter; use DS break on WorldRand | confirmed |
 | 2026-07-28 | [world-4000-scalar-miss](2026-07-28-world-4000-scalar-miss.md) | 0x4000 hits are GTE/flags; encounter likely uses sll 14 | likely |
 | 2026-07-28 | [worldrand](2026-07-28-worldrand.md) | WorldRand @ 0x800ADFC0; index wrap 0x208; ~20 xrefs | confirmed |
