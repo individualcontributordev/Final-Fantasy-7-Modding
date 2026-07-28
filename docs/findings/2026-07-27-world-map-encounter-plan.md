@@ -44,5 +44,5 @@ Do **not** patch Field Danger or reuse Field stub offsets. Do **not** expect Mak
 - [x] Encounter path function = **`world_encounter_check`** (`0x800B7C7C`)
 - [x] Stub window `0x800B7DB4`–`0x800B7E1B` (104 bytes); patches drafted
 - [x] `world_lure_factor` / `g_enemy_lure` confirmed
-- [ ] Playtest stub on DuckStation
-- [ ] Ship builder packs + `exclusiveGroup` decision
+- [x] Playtest stub on DuckStation (Standard — fewer than vanilla)
+- [ ] Ship builder packs + `exclusiveGroup` (`world-encounter-rate`?)
