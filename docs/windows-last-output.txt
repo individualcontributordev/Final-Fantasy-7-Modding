@@ -1,97 +1,17 @@
-# Task: rename g_world_danger via instruction operand (not Go To RAM)
+# Task: apply world FORCE stub (standard) + DuckStation playtest
 
 # COPY-PASTE (do not edit these lines)
-why: 0x80116284 is BSS/RAM outside WORLD.BIN image — G Go To finds nothing
-goto_instruction: 0x800B7E18
-expect_listing: sw …, offset DAT_80116284(at)   OR similar
-how_rename: click the DAT_80116284 operand in Listing (or Decompiler) → L → g_world_danger
-alt_goto: 0x800B7DF8
-goto_helper: 0x800B7B54
-rename_helper_if_lure: world_lure_factor
+decompress_cmd: python scripts/decompress_gzipps.py workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.dec
+copy_cmd: cp workspace/iso-extract/WORLD.BIN.dec workspace/iso-extract/WORLD.BIN.dec.patched
+apply_cmd: python mods/world-map-random-encounters/scripts/apply_force_stub_rcnt2.py workspace/iso-extract/WORLD.BIN.dec.patched --density standard
+verify_cmd: xxd -g1 -s 0x17DB4 -l 32 workspace/iso-extract/WORLD.BIN.dec.patched
+expect_head: 80 1f 01 3c 20 11 22 8c
+compress_cmd: python scripts/compress_gzipps.py workspace/iso-extract/WORLD.BIN.dec.patched workspace/iso-extract/WORLD.BIN workspace/iso-extract/WORLD.BIN.new
+playtest: CDmage import WORLD.BIN.new → DuckStation world map grass — encounters should feel flat/random (Standard), not vanilla Danger ramp
 
 # EVIDENCE
-g_world_danger_renamed:
-listing_line_with_new_name:
-FUN_800b7b54_decompiler:
-helper_rename_applied:
+apply_stdout:
+xxd_head:
+compress_stdout:
+playtest_notes:
 notes:
-
-
-uint world_lure_factor(void)
-
-{
-  uint uVar1;
-  
-  uVar1 = (uint)DAT_80062f19;
-  if (0x10 < uVar1) {
-    uVar1 = uVar1 << 1;
-  }
-  return uVar1;
-}
-
-                             **************************************************************
-                             *                          FUNCTION                          *
-                             **************************************************************
-                               undefined world_lure_factor()
-             undefined         <UNASSIGNED>   <RETURN>
-                             world_lure_factor                               XREF[2]:     world_encounter_check:800b7cbc(c
-                                                                                          world_encounter_check:800b7dbc(c
-        800b7b54 06 80 03 3c     lui        v1,0x8006
-        800b7b58 19 2f 63 90     lbu        v1,offset DAT_80062f19(v1)
-        800b7b5c 00 00 00 00     nop
-        800b7b60 11 00 62 2c     sltiu      v0,v1,0x11
-        800b7b64 02 00 40 14     bne        v0,zero,LAB_800b7b70
-        800b7b68 00 00 00 00     _nop
-        800b7b6c 40 18 03 00     sll        v1,v1,0x1
-                             LAB_800b7b70                                    XREF[1]:     800b7b64(j)  
-        800b7b70 08 00 e0 03     jr         ra
-        800b7b74 21 10 60 00     _move      v0,v1
-
-
-
-
-        800b7de0 00 80 01 3c     _lui       at,0x8000
-        800b7de4 02 00 41 14     bne        v0,at,LAB_800b7df0
-        800b7de8 00 00 00 00     _nop
-        800b7dec 0d 00 06 00     break      0x1800
-                             LAB_800b7df0                                    XREF[2]:     800b7ddc(j), 800b7de4(j)  
-        800b7df0 12 10 00 00     mflo       v0
-        800b7df4 11 80 03 3c     lui        v1,0x8011
-        800b7df8 84 62 63 8c     lw         v1,offset g_world_danger(v1)
-        800b7dfc 85 df 02 08     j          LAB_800b7e14
-        800b7e00 21 10 43 00     _addu      v0,v0,v1
-                             LAB_800b7e04                                    XREF[1]:     800b7db4(j)  
-        800b7e04 11 80 02 3c     lui        v0,0x8011
-        800b7e08 84 62 42 8c     lw         v0,offset g_world_danger(v0)
-        800b7e0c 00 00 00 00     nop
-        800b7e10 ff 7f 42 24     addiu      v0,v0,0x7fff
-                             LAB_800b7e14                                    XREF[1]:     800b7dfc(j)  
-        800b7e14 11 80 01 3c     lui        at,0x8011
-        800b7e18 84 62 22 ac     sw         v0,offset g_world_danger(at)
-        800b7e1c f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
-        800b7e20 00 00 00 00     _nop
-        800b7e24 11 80 03 3c     lui        v1,0x8011
-        800b7e28 84 62 63 8c     lw         v1,offset g_world_danger(v1)
-        800b7e2c 00 00 00 00     nop
-        800b7e30 03 1a 03 00     sra        v1,v1,0x8
-        800b7e34 2a 10 43 00     slt        v0,v0,v1
-        800b7e38 22 01 40 10     beq        v0,zero,LAB_800b82c4
-        800b7e3c ff ff 02 24     _li        v0,-0x1
-        800b7e40 00 00 22 96     lhu        v0,0x0(s1)=>DAT_800bda28
-        800b7e44 00 00 00 00     nop
-        800b7e48 01 00 42 30     andi       v0,v0,0x1
-        800b7e4c 1d 01 40 10     beq        v0,zero,LAB_800b82c4
-        800b7e50 ff ff 02 24     _li        v0,-0x1
-        800b7e54 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
-        800b7e58 00 00 00 00     _nop
-
-
-
-                             LAB_800b7e14                                    XREF[1]:     800b7dfc(j)  
-        800b7e14 11 80 01 3c     lui        at,0x8011
-        800b7e18 84 62 22 ac     sw         v0,offset DAT_80116284(at)
-        800b7e1c f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
-        800b7e20 00 00 00 00     _nop
-        800b7e24 11 80 03 3c     lui        v1,0x8011
-        800b7e28 84 62 63 8c     lw         v1,offset DAT_80116284(v1)
-        800b7e2c 00 00 00 00     nop

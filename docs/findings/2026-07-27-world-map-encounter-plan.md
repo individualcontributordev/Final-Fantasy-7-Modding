@@ -42,6 +42,7 @@ Do **not** patch Field Danger or reuse Field stub offsets. Do **not** expect Mak
 - [x] `WORLD.BIN` load base VA = **`0x800A0000`**
 - [x] `WorldRand` / seed / scramble located
 - [x] Encounter path function = **`world_encounter_check`** (`0x800B7C7C`)
-- [ ] Exact stub site + byte budget — candidate `0x800B7DBC`–`0x800B7E18` (~96 bytes)
-- [ ] Confirm `FUN_800b7b54` (lure?)
-- [ ] Whether Field + World packs share one `exclusiveGroup` or two
+- [x] Stub window `0x800B7DB4`–`0x800B7E1B` (104 bytes); patches drafted
+- [x] `world_lure_factor` / `g_enemy_lure` confirmed
+- [ ] Playtest stub on DuckStation
+- [ ] Ship builder packs + `exclusiveGroup` decision

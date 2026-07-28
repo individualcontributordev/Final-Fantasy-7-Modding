@@ -1,7 +1,7 @@
 # World map random encounters
 
-Goal: same Light / Standard / Dense RCnt2 FORCE densities as Field, on the world map (`WORLD.BIN`).
+Same Light / Standard / Dense RCnt2 FORCE densities as Field, for the overworld (`WORLD.BIN`).
 
-Not in the builder yet — RE in progress. Plan: [docs/findings/2026-07-27-world-map-encounter-plan.md](../../docs/findings/2026-07-27-world-map-encounter-plan.md).
+Stub replaces Danger += in `world_encounter_check` (`0x800B7DB4`). See [patches/README.md](patches/README.md).
 
-World map uses **WorldRand** and its own Danger counter; the Field `FIELD.BIN` stub does not affect the overworld.
+**Not in the builder yet** — playtest stub first, then ship `ic-layer-v1` packs.
