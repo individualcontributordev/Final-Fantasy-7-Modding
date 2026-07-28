@@ -11,3 +11,73 @@ expect_buffer: 0x8010AE5C
 renamed:
 listing_or_decompiler:
 notes:
+
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined WorldRand()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800adfcc(W), 
+                                                                                                   800ae014(R)  
+                             WorldRand                                       XREF[20]:    FUN_800a1370:800a13a4(c), 
+                                                                                          FUN_800a1370:800a13b0(c), 
+                                                                                          FUN_800a21b4:800a3004(c), 
+                                                                                          FUN_800abb24:800abdf4(c), 
+                                                                                          FUN_800b0250:800b0300(c), 
+                                                                                          FUN_800b0810:800b0b5c(c), 
+                                                                                          FUN_800b0810:800b0b74(c), 
+                                                                                          FUN_800b307c:800b3164(c), 
+                                                                                          FUN_800b307c:800b3180(c), 
+                                                                                          FUN_800b307c:800b3198(c), 
+                                                                                          FUN_800b5314:800b55a8(c), 
+                                                                                          FUN_800b5314:800b5630(c), 
+                                                                                          FUN_800b7c7c:800b7e1c(c), 
+                                                                                          FUN_800b7c7c:800b7e54(c), 
+                                                                                          FUN_800b7c7c:800b7f74(c), 
+                                                                                          FUN_800b7c7c:800b80a0(c), 
+                                                                                          FUN_800b7c7c:800b80d4(c), 
+                                                                                          FUN_800b7c7c:800b8144(c), 
+                                                                                          FUN_800b7c7c:800b8184(c), 
+                                                                                          FUN_800b7c7c:800b81c4(c)  
+        800adfc0 11 80 02 3c     lui        v0,0x8011
+        800adfc4 58 ae 42 8c     lw         v0,-0x51a8(v0)=>DAT_8010ae58
+        800adfc8 e8 ff bd 27     addiu      sp,sp,-0x18
+        800adfcc 10 00 bf af     sw         ra,local_8(sp)
+        800adfd0 01 00 42 24     addiu      v0,v0,0x1
+        800adfd4 11 80 01 3c     lui        at,0x8011
+        800adfd8 58 ae 22 ac     sw         v0,-0x51a8(at)=>DAT_8010ae58
+        800adfdc 09 02 42 28     slti       v0,v0,0x209
+        800adfe0 05 00 40 14     bne        v0,zero,LAB_800adff8
+        800adfe4 00 00 00 00     _nop
+        800adfe8 8c b7 02 0c     jal        WorldScrambleRand                                undefined WorldScrambleRand()
+        800adfec 00 00 00 00     _nop
+        800adff0 11 80 01 3c     lui        at,0x8011
+        800adff4 58 ae 20 ac     sw         zero,-0x51a8(at)=>DAT_8010ae58
+                             LAB_800adff8                                    XREF[1]:     800adfe0(j)  
+        800adff8 11 80 02 3c     lui        v0,0x8011
+        800adffc 58 ae 42 8c     lw         v0,-0x51a8(v0)=>DAT_8010ae58
+        800ae000 00 00 00 00     nop
+        800ae004 11 80 01 3c     lui        at,0x8011
+        800ae008 5c ae 21 24     addiu      at,at,-0x51a4
+        800ae00c 21 08 22 00     addu       at,at,v0
+        800ae010 00 00 22 90     lbu        v0,0x0(at)=>DAT_8010ae5c
+        800ae014 10 00 bf 8f     lw         ra,local_8(sp)
+        800ae018 18 00 bd 27     addiu      sp,sp,0x18
+        800ae01c 08 00 e0 03     jr         ra
+        800ae020 00 00 00 00     _nop
+
+
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined1 WorldRand(void)
+
+{
+  _DAT_8010ae58 = _DAT_8010ae58 + 1;
+  if (0x208 < _DAT_8010ae58) {
+    WorldScrambleRand();
+    _DAT_8010ae58 = 0;
+  }
+  return (&DAT_8010ae5c)[_DAT_8010ae58];
+}
