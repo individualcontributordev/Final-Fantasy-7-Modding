@@ -15,3 +15,72 @@ WorldRand_address:
 xref_path_used:
 listing_or_decompiler:
 notes:
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined WorldScrambleRand()
+             undefined         <UNASSIGNED>   <RETURN>
+                             WorldScrambleRand                               XREF[4]:     WorldSeedRand:800adf8c(c), 
+                                                                                          WorldSeedRand:800adf94(c), 
+                                                                                          WorldSeedRand:800adf9c(c), 
+                                                                                          FUN_800adfc0:800adfe8(c)  
+        800ade30 21 20 00 00     clear      a0
+        800ade34 11 80 05 3c     lui        a1,0x8011
+        800ade38 5c ae a5 24     addiu      a1,a1,-0x51a4
+                             LAB_800ade3c                                    XREF[1]:     800ade60(j)  
+        800ade3c 00 00 a2 90     lbu        v0,0x0(a1)=>DAT_8010ae5c
+        800ade40 11 80 01 3c     lui        at,0x8011
+        800ade44 45 b0 21 24     addiu      at,at,-0x4fbb
+        800ade48 21 08 24 00     addu       at,at,a0
+        800ade4c 00 00 23 90     lbu        v1,0x0(at)
+        800ade50 01 00 84 24     addiu      a0,a0,0x1
+        800ade54 26 10 43 00     xor        v0,v0,v1
+        800ade58 00 00 a2 a0     sb         v0,0x0(a1)=>DAT_8010ae5c
+        800ade5c 20 00 82 28     slti       v0,a0,0x20
+        800ade60 f6 ff 40 14     bne        v0,zero,LAB_800ade3c
+        800ade64 01 00 a5 24     _addiu     a1,a1,0x1
+        800ade68 20 00 04 34     ori        a0,zero,0x20
+        800ade6c 11 80 05 3c     lui        a1,0x8011
+        800ade70 7c ae a5 24     addiu      a1,a1,-0x5184
+                             LAB_800ade74                                    XREF[1]:     800ade98(j)  
+        800ade74 00 00 a2 90     lbu        v0,0x0(a1)=>DAT_8010ae7c
+        800ade78 11 80 01 3c     lui        at,0x8011
+        800ade7c 3c ae 21 24     addiu      at,at,-0x51c4
+        800ade80 21 08 24 00     addu       at,at,a0
+        800ade84 00 00 23 90     lbu        v1,0x0(at)=>DAT_8010ae5c
+        800ade88 01 00 84 24     addiu      a0,a0,0x1
+        800ade8c 26 10 43 00     xor        v0,v0,v1
+        800ade90 00 00 a2 a0     sb         v0,0x0(a1)=>DAT_8010ae7c
+        800ade94 09 02 82 28     slti       v0,a0,0x209
+        800ade98 f6 ff 40 14     bne        v0,zero,LAB_800ade74
+        800ade9c 01 00 a5 24     _addiu     a1,a1,0x1
+        800adea0 08 00 e0 03     jr         ra
+        800adea4 00 00 00 00     _nop
+
+
+
+void WorldScrambleRand(void)
+
+{
+  byte *pbVar1;
+  int iVar2;
+  byte *pbVar3;
+  
+  iVar2 = 0;
+  pbVar3 = &DAT_8010ae5c;
+  do {
+    pbVar1 = (byte *)(iVar2 + -0x7fef4fbb);
+    iVar2 = iVar2 + 1;
+    *pbVar3 = *pbVar3 ^ *pbVar1;
+    pbVar3 = pbVar3 + 1;
+  } while (iVar2 < 0x20);
+  iVar2 = 0x20;
+  pbVar3 = &DAT_8010ae7c;
+  do {
+    pbVar1 = &DAT_8010ae3c + iVar2;
+    iVar2 = iVar2 + 1;
+    *pbVar3 = *pbVar3 ^ *pbVar1;
+    pbVar3 = pbVar3 + 1;
+  } while (iVar2 < 0x209);
+  return;
+}
