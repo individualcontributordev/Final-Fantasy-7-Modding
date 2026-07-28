@@ -2,6 +2,14 @@
 
 Same Light / Standard / Dense RCnt2 FORCE densities as Field, for the overworld (`WORLD.BIN`).
 
-Stub replaces Danger += in `world_encounter_check` (`0x800B7DB4`). See [patches/README.md](patches/README.md).
+## Playtest stub
 
-**Not in the builder yet** — playtest stub first, then ship `ic-layer-v1` packs.
+See [patches/README.md](patches/README.md).
+
+## Ship builder packs
+
+```bash
+python mods/world-map-random-encounters/scripts/build_all_rates.py --density all --discs 1
+```
+
+`exclusiveGroup`: `world-encounter-rate` (can stack with Field). Skill: `ship-world-encounters`.
