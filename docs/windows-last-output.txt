@@ -1,63 +1,15 @@
-# Task: find world encounter check (Danger += then WorldRand)
+# Task: open WorldRand single-call xrefs; find Danger+= / compare
 
 # COPY-PASTE (do not edit these lines)
 worldrand: 0x800ADFC0
-scalar_16384: 0x4000
-single_call_xrefs_try_first: 0x800ABB24 0x800A21B4 0x800B0250
-rename_encounter_to: world_encounter_check
-what_success_looks_like: Danger accumulates (lure*0x4000)/rate then compare WorldRand() vs Danger>>8 (or /256); rename that function
+try_in_order: 0x800ABB24 0x800A21B4 0x800B0250
+how: G → address → find jal WorldRand in function → Decompiler around that call
+look_for: sll by 14 (×16384), div by rate, Danger halfword +=, then WorldRand() < (Danger>>8)
+rename_to: world_encounter_check
+do_not: scalar-search 0x4000 again (GTE noise)
 
-# EVIDENCE (paste the matching function Listing/Decompiler — keep focused on Danger+= and WorldRand compare)
-candidate_address:
-world_danger_ram_if_seen:
+# EVIDENCE (one candidate at a time — paste Decompiler around jal WorldRand)
+opened_address:
+has_jal_WorldRand:
 listing_or_decompiler:
 notes:
-800c609c	ctc2 t4,0x4000	0x4000	0x4000	FUN_800c5cd4
-800c38d8	ctc2 t4,0x4000	0x4000	0x4000	FUN_800c31f0
-800c3720	ctc2 t4,0x4000	0x4000	0x4000	FUN_800c31f0
-800c255c	mtc2 t9,0x4000	0x4000	0x4000	FUN_800c2524
-800c1bc4	mtc2 s6,0x4000	0x4000	0x4000	FUN_800c1490
-800c1b10	mtc2 s1,0x4000	0x4000	0x4000	FUN_800c1490
-800c1ae0	mtc2 s2,0x4000	0x4000	0x4000	FUN_800c1490
-800c1a58	mtc2 s2,0x4000	0x4000	0x4000	FUN_800c1490
-800c1a2c	mtc2 s1,0x4000	0x4000	0x4000	FUN_800c1490
-800c19ec	mtc2 t2,0x4000	0x4000	0x4000	FUN_800c1490
-800c1988	mtc2 s0,0x4000	0x4000	0x4000	FUN_800c1490
-800c18e0	mtc2 s6,0x4000	0x4000	0x4000	FUN_800c1490
-800c170c	mtc2 v0,0x4000	0x4000	0x4000	FUN_800c1490
-800c16e0	mtc2 s2,0x4000	0x4000	0x4000	FUN_800c1490
-800c167c	mtc2 s2,0x4000	0x4000	0x4000	FUN_800c1490
-800c1660	mtc2 s1,0x4000	0x4000	0x4000	FUN_800c1490
-800c162c	mtc2 t2,0x4000	0x4000	0x4000	FUN_800c1490
-800c15cc	mtc2 v0,0x4000	0x4000	0x4000	FUN_800c1490
-800b9398	andi v0,v0,0x4000	0x4000	0x4000	FUN_800b90c0
-800b77b4	lui v0,0x4000	0x4000	0x4000	FUN_800b77a8
-800b22b8	ori v1,v1,0x4000	0x4000	0x4000	FUN_800b21e4
-800b0f3c	ori v0,v0,0x4000	0x4000	0x4000	FUN_800b0e84
-800b0db8	ori t0,t0,0x4000	0x4000	0x4000	FUN_800b0d98
-800b07dc	ori v1,v1,0x4000	0x4000	0x4000	FUN_800b0794
-800ab9d8	ori v0,v0,0x4000	0x4000	0x4000	FUN_800ab988
-800aaeb4	ori v1,v1,0x4000	0x4000	0x4000	FUN_800aab18
-800aa534	ori v0,v0,0x4000	0x4000	0x4000	FUN_800aa304
-800aa4e0	ori v0,v0,0x4000	0x4000	0x4000	FUN_800aa304
-800aa3f4	ori v0,v0,0x4000	0x4000	0x4000	FUN_800aa304
-800aa3a0	ori v0,v0,0x4000	0x4000	0x4000	FUN_800aa304
-800a7288	ori v0,v0,0x4000	0x4000	0x4000	FUN_800a71e8
-800a6a84	ori v0,v0,0x4000	0x4000	0x4000	FUN_800a6994
-800a6a24	ori v0,v0,0x4000	0x4000	0x4000	FUN_800a6994
-800a4fe0	addiu a0,a0,0x4000	0x4000	0x4000	FUN_800a4f78
-800a4fd0	addiu v0,a1,0x4000	0x4000	0x4000	FUN_800a4f78
-800a2cf0	andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2ce0	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2b24	andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2b00	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2aec	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2ad8	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2a40	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a28bc	andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a26fc	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2638	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a2528	andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-800a24f0	_andi v0,s0,0x4000	0x4000	0x4000	FUN_800a21b4
-
-did not find any jal WorldRand
