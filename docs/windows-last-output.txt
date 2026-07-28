@@ -1,70 +1,17 @@
-# Task: at WorldRand break, copy register ra (only)
+# Task: rename FUN_800b7c7c; find Danger+= / WorldRand battle compare
 
 # COPY-PASTE (do not edit these lines)
-breakpoint_address: 0x800ADFC0
-register_to_copy: ra
-also_called: r31
-where_in_duckstation: CPU Debugger → Registers pane → row ra
-when: each break while walking grass; write the hex value; Continue (F1/Run)
-before_battle: the last ra you saw is the important one
-ghidra: G → that address (or address-8) → should be delay-slot / jal WorldRand
+goto_function: 0x800B7C7C
+rename_to: world_encounter_check
+goto_last_jal: 0x800B81C4
+hint_other_jals: 0x800B7E1C 0x800B7E54 0x800B80A0 0x800B80D4 0x800B8144 0x800B8184
+look_for: Danger halfword += (maybe sll 14 / div by rate); compare WorldRand vs Danger>>8; note Danger RAM address
+keep_paste_short: Decompiler around Danger+= and the compare only (not whole 8-call function)
 
-# EVIDENCE (fill ra hex values — no screenshots needed)
-ra_list:
-0x800B0B64
-0x8003CF74
-0x800B0B64
-0x800B0B7C
-0x800B0B64
-0x800B0B7C
-0x800B0B64
-0x800A300C
-0x800B0B64
-0x800A300C
-0x800B7E24
-0x800A300C
-0x800A300C
-0x800B0B64
-0x800B0B7C
-0x800B7E24
-0x800B7E24
-0x800B7E24
-0x800B0B64
-0x800B7E24
-0x800B7E24
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800B0B64
-0x800B0B7C
-0x800A300C
-0x800B7E24
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800A300C
-0x800B7E24
-0x800B7E24
-0x800B0B64
-0x800B0B7C
-0x800B7E24
-0x800B0B64
-0x800B0B7C
-0x800B7E24
-0x800B7E24
-0x800B7E5C
-0x800B80A8
-0x800B80DC
-0x800B814C
-0x800B818C
-0x800B81CC
-
-
-ra_last_before_battle:0x800B81CC
+# EVIDENCE
+renamed:
+world_danger_ram:
+danger_add_address:
+battle_compare_address:
+listing_or_decompiler:
 notes:
