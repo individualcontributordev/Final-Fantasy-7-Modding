@@ -16,11 +16,11 @@ _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent
 _SHARED = _ROOT / "scripts"
 _FIELD_SCRIPTS = _ROOT / "mods" / "field-random-encounters" / "scripts"
-for p in (_SHARED, _MOD_SCRIPTS, _FIELD_SCRIPTS):
+for p in (_SHARED, _FIELD_SCRIPTS, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
 
-from apply_force_stub_rcnt2 import (  # noqa: E402
+from apply_world_force_stub import (  # noqa: E402
 	JAL,
 	JAL_OFFSET,
 	OFFSET,
