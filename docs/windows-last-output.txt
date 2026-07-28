@@ -15,3 +15,742 @@ danger_add_address:
 battle_compare_address:
 listing_or_decompiler:
 notes:
+
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                               undefined world_encounter_check()
+             undefined         <UNASSIGNED>   <RETURN>
+             undefined4        Stack[-0x4]:4  local_4                                 XREF[2]:     800b7ca0(W), 
+                                                                                                   800b8300(R)  
+             undefined4        Stack[-0x8]:4  local_8                                 XREF[2]:     800b7c90(W), 
+                                                                                                   800b8304(R)  
+             undefined4        Stack[-0xc]:4  local_c                                 XREF[2]:     800b7c88(W), 
+                                                                                                   800b8308(R)  
+             undefined4        Stack[-0x10]:4 local_10                                XREF[2]:     800b7c80(W), 
+                                                                                                   800b830c(R)  
+             undefined4        Stack[-0x14]:4 local_14                                XREF[2]:     800b7ca4(W), 
+                                                                                                   800b8310(R)  
+             undefined4        Stack[-0x18]:4 local_18                                XREF[2]:     800b7c98(W), 
+                                                                                                   800b8314(R)  
+             undefined4        Stack[-0x1c]:4 local_1c                                XREF[2]:     800b7ca8(W), 
+                                                                                                   800b8318(R)  
+             undefined4        Stack[-0x20]:4 local_20                                XREF[2]:     800b7cb0(W), 
+                                                                                                   800b831c(R)  
+                             world_encounter_check                           XREF[1]:     FUN_800b832c:800b843c(c)  
+        800b7c7c d0 ff bd 27     addiu      sp,sp,-0x30
+        800b7c80 20 00 b4 af     sw         s4,local_10(sp)
+        800b7c84 21 a0 00 00     clear      s4
+        800b7c88 24 00 b5 af     sw         s5,local_c(sp)
+        800b7c8c 21 a8 00 00     clear      s5
+        800b7c90 28 00 b6 af     sw         s6,local_8(sp)
+        800b7c94 21 b0 00 00     clear      s6
+        800b7c98 18 00 b2 af     sw         s2,local_18(sp)
+        800b7c9c ff ff 12 24     li         s2,-0x1
+        800b7ca0 2c 00 bf af     sw         ra,local_4(sp)
+        800b7ca4 1c 00 b3 af     sw         s3,local_14(sp)
+        800b7ca8 14 00 b1 af     sw         s1,local_1c(sp)
+        800b7cac 91 a6 02 0c     jal        FUN_800a9a44                                     undefined FUN_800a9a44()
+        800b7cb0 10 00 b0 af     _sw        s0,local_20(sp)
+        800b7cb4 9c a6 02 0c     jal        FUN_800a9a70                                     undefined FUN_800a9a70()
+        800b7cb8 21 80 40 00     _move      s0,v0
+        800b7cbc d5 de 02 0c     jal        FUN_800b7b54                                     undefined FUN_800b7b54()
+        800b7cc0 21 98 40 00     _move      s3,v0
+        800b7cc4 7e 01 40 10     beq        v0,zero,LAB_800b82c0
+        800b7cc8 00 00 00 00     _nop
+        800b7ccc 03 00 61 06     bgez       s3,LAB_800b7cdc
+        800b7cd0 10 00 62 2a     _slti      v0,s3,0x10
+        800b7cd4 3a df 02 08     j          LAB_800b7ce8
+        800b7cd8 21 98 00 00     _clear     s3
+                             LAB_800b7cdc                                    XREF[1]:     800b7ccc(j)  
+        800b7cdc 03 00 40 14     bne        v0,zero,LAB_800b7cec
+        800b7ce0 10 00 02 34     _ori       v0,zero,0x10
+        800b7ce4 0f 00 13 34     ori        s3,zero,0xf
+                             LAB_800b7ce8                                    XREF[1]:     800b7cd4(j)  
+        800b7ce8 10 00 02 34     ori        v0,zero,0x10
+                             LAB_800b7cec                                    XREF[1]:     800b7cdc(j)  
+        800b7cec 02 00 02 16     bne        s0,v0,LAB_800b7cf8
+        800b7cf0 18 00 02 34     _ori       v0,zero,0x18
+        800b7cf4 21 80 00 00     clear      s0
+                             LAB_800b7cf8                                    XREF[1]:     800b7cec(j)  
+        800b7cf8 02 00 02 16     bne        s0,v0,LAB_800b7d04
+        800b7cfc 80 18 13 00     _sll       v1,s3,0x2
+        800b7d00 08 00 10 34     ori        s0,zero,0x8
+                             LAB_800b7d04                                    XREF[1]:     800b7cf8(j)  
+        800b7d04 0c 80 01 3c     lui        at,0x800c
+        800b7d08 b4 72 21 24     addiu      at,at,0x72b4
+        800b7d0c 21 08 23 00     addu       at,at,v1
+        800b7d10 00 00 22 90     lbu        v0,0x0(at)=>DAT_800c72b4
+        800b7d14 00 00 00 00     nop
+        800b7d18 1c 00 50 10     beq        v0,s0,LAB_800b7d8c
+        800b7d1c 00 00 00 00     _nop
+        800b7d20 0c 80 01 3c     lui        at,0x800c
+        800b7d24 b5 72 21 24     addiu      at,at,0x72b5
+        800b7d28 21 08 23 00     addu       at,at,v1
+        800b7d2c 00 00 22 90     lbu        v0,0x0(at)=>DAT_800c72b5                         = 09h
+        800b7d30 00 00 00 00     nop
+        800b7d34 03 00 50 14     bne        v0,s0,LAB_800b7d44
+        800b7d38 00 00 00 00     _nop
+        800b7d3c 64 df 02 08     j          LAB_800b7d90
+        800b7d40 01 00 10 34     _ori       s0,zero,0x1
+                             LAB_800b7d44                                    XREF[1]:     800b7d34(j)  
+        800b7d44 0c 80 01 3c     lui        at,0x800c
+        800b7d48 b6 72 21 24     addiu      at,at,0x72b6
+        800b7d4c 21 08 23 00     addu       at,at,v1
+        800b7d50 00 00 22 90     lbu        v0,0x0(at)=>DAT_800c72b6
+        800b7d54 00 00 00 00     nop
+        800b7d58 03 00 50 14     bne        v0,s0,LAB_800b7d68
+        800b7d5c 00 00 00 00     _nop
+        800b7d60 64 df 02 08     j          LAB_800b7d90
+        800b7d64 02 00 10 34     _ori       s0,zero,0x2
+                             LAB_800b7d68                                    XREF[1]:     800b7d58(j)  
+        800b7d68 0c 80 01 3c     lui        at,0x800c
+        800b7d6c b7 72 21 24     addiu      at,at,0x72b7
+        800b7d70 21 08 23 00     addu       at,at,v1
+        800b7d74 00 00 22 90     lbu        v0,0x0(at)=>DAT_800c72b7                         = 11h
+        800b7d78 00 00 00 00     nop
+        800b7d7c 04 00 50 14     bne        v0,s0,LAB_800b7d90
+        800b7d80 21 80 00 00     _clear     s0
+        800b7d84 64 df 02 08     j          LAB_800b7d90
+        800b7d88 03 00 10 34     _ori       s0,zero,0x3
+                             LAB_800b7d8c                                    XREF[1]:     800b7d18(j)  
+        800b7d8c 21 80 00 00     clear      s0
+                             LAB_800b7d90                                    XREF[4]:     800b7d3c(j), 800b7d60(j), 
+                                                                                          800b7d7c(j), 800b7d84(j)  
+        800b7d90 c0 21 13 00     sll        a0,s3,0x7
+        800b7d94 40 11 10 00     sll        v0,s0,0x5
+        800b7d98 0c 80 03 3c     lui        v1,0x800c
+        800b7d9c e8 d9 63 24     addiu      v1,v1,-0x2618
+        800b7da0 21 10 43 00     addu       v0,v0,v1
+        800b7da4 21 88 82 00     addu       s1,a0,v0
+        800b7da8 00 00 22 96     lhu        v0,0x0(s1)=>DAT_800bda28                         = 2001h
+                                                                                             = 1401h
+                                                                                             = 4001h
+        800b7dac 00 00 00 00     nop
+        800b7db0 02 82 02 00     srl        s0,v0,0x8
+        800b7db4 13 00 00 12     beq        s0,zero,LAB_800b7e04
+        800b7db8 00 00 00 00     _nop
+        800b7dbc d5 de 02 0c     jal        FUN_800b7b54                                     undefined FUN_800b7b54()
+        800b7dc0 00 00 00 00     _nop
+        800b7dc4 80 12 02 00     sll        v0,v0,0xa
+        800b7dc8 1a 00 50 00     div        v0,s0
+        800b7dcc 02 00 00 16     bne        s0,zero,LAB_800b7dd8
+        800b7dd0 00 00 00 00     _nop
+        800b7dd4 0d 00 07 00     break      0x1c00
+                             LAB_800b7dd8                                    XREF[1]:     800b7dcc(j)  
+        800b7dd8 ff ff 01 24     li         at,-0x1
+        800b7ddc 04 00 01 16     bne        s0,at,LAB_800b7df0
+        800b7de0 00 80 01 3c     _lui       at,0x8000
+        800b7de4 02 00 41 14     bne        v0,at,LAB_800b7df0
+        800b7de8 00 00 00 00     _nop
+        800b7dec 0d 00 06 00     break      0x1800
+                             LAB_800b7df0                                    XREF[2]:     800b7ddc(j), 800b7de4(j)  
+        800b7df0 12 10 00 00     mflo       v0
+        800b7df4 11 80 03 3c     lui        v1,0x8011
+        800b7df8 84 62 63 8c     lw         v1,offset DAT_80116284(v1)
+        800b7dfc 85 df 02 08     j          LAB_800b7e14
+        800b7e00 21 10 43 00     _addu      v0,v0,v1
+                             LAB_800b7e04                                    XREF[1]:     800b7db4(j)  
+        800b7e04 11 80 02 3c     lui        v0,0x8011
+        800b7e08 84 62 42 8c     lw         v0,offset DAT_80116284(v0)
+        800b7e0c 00 00 00 00     nop
+        800b7e10 ff 7f 42 24     addiu      v0,v0,0x7fff
+                             LAB_800b7e14                                    XREF[1]:     800b7dfc(j)  
+        800b7e14 11 80 01 3c     lui        at,0x8011
+        800b7e18 84 62 22 ac     sw         v0,offset DAT_80116284(at)
+        800b7e1c f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b7e20 00 00 00 00     _nop
+        800b7e24 11 80 03 3c     lui        v1,0x8011
+        800b7e28 84 62 63 8c     lw         v1,offset DAT_80116284(v1)
+        800b7e2c 00 00 00 00     nop
+        800b7e30 03 1a 03 00     sra        v1,v1,0x8
+        800b7e34 2a 10 43 00     slt        v0,v0,v1
+        800b7e38 22 01 40 10     beq        v0,zero,LAB_800b82c4
+        800b7e3c ff ff 02 24     _li        v0,-0x1
+        800b7e40 00 00 22 96     lhu        v0,0x0(s1)=>DAT_800bda28
+        800b7e44 00 00 00 00     nop
+        800b7e48 01 00 42 30     andi       v0,v0,0x1
+        800b7e4c 1d 01 40 10     beq        v0,zero,LAB_800b82c4
+        800b7e50 ff ff 02 24     _li        v0,-0x1
+        800b7e54 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b7e58 00 00 00 00     _nop
+        800b7e5c 0c 80 01 3c     lui        at,0x800c
+        800b7e60 f4 72 21 24     addiu      at,at,0x72f4
+        800b7e64 21 08 33 00     addu       at,at,s3
+        800b7e68 00 00 23 90     lbu        v1,0x0(at)=>DAT_800c72f4
+        800b7e6c 00 00 00 00     nop
+        800b7e70 2a 10 43 00     slt        v0,v0,v1
+        800b7e74 31 00 40 10     beq        v0,zero,LAB_800b7f3c
+        800b7e78 00 00 00 00     _nop
+        800b7e7c 91 a6 02 0c     jal        FUN_800a9a44                                     undefined FUN_800a9a44()
+        800b7e80 00 00 00 00     _nop
+        800b7e84 01 00 03 34     ori        v1,zero,0x1
+        800b7e88 06 00 43 10     beq        v0,v1,LAB_800b7ea4
+        800b7e8c 00 00 00 00     _nop
+        800b7e90 91 a6 02 0c     jal        FUN_800a9a44                                     undefined FUN_800a9a44()
+        800b7e94 00 00 00 00     _nop
+        800b7e98 19 00 03 34     ori        v1,zero,0x19
+        800b7e9c 27 00 43 14     bne        v0,v1,LAB_800b7f3c
+        800b7ea0 00 00 00 00     _nop
+                             LAB_800b7ea4                                    XREF[1]:     800b7e88(j)  
+        800b7ea4 f0 de 02 0c     jal        FUN_800b7bc0                                     undefined FUN_800b7bc0()
+        800b7ea8 00 00 00 00     _nop
+        800b7eac 23 00 40 10     beq        v0,zero,LAB_800b7f3c
+        800b7eb0 00 00 00 00     _nop
+        800b7eb4 96 95 00 0c     jal        SUB_80025658
+        800b7eb8 21 20 00 00     _clear     a0
+        800b7ebc 21 28 40 00     move       a1,v0
+        800b7ec0 21 18 00 00     clear      v1
+        800b7ec4 21 20 00 00     clear      a0
+                             LAB_800b7ec8                                    XREF[1]:     800b7ef0(j)  
+        800b7ec8 0c 80 01 3c     lui        at,0x800c
+        800b7ecc 48 d9 21 24     addiu      at,at,-0x26b8
+        800b7ed0 21 08 24 00     addu       at,at,a0
+        800b7ed4 00 00 22 94     lhu        v0,0x0(at)=>DAT_800bd948                         = 0014h
+                                                                                             = 0019h
+        800b7ed8 00 00 00 00     nop
+        800b7edc 2a 10 45 00     slt        v0,v0,a1
+        800b7ee0 06 00 40 10     beq        v0,zero,LAB_800b7efc
+        800b7ee4 08 00 62 28     _slti      v0,v1,0x8
+        800b7ee8 01 00 63 24     addiu      v1,v1,0x1
+        800b7eec 08 00 62 28     slti       v0,v1,0x8
+        800b7ef0 f5 ff 40 14     bne        v0,zero,LAB_800b7ec8
+        800b7ef4 04 00 84 24     _addiu     a0,a0,0x4
+        800b7ef8 08 00 62 28     slti       v0,v1,0x8
+                             LAB_800b7efc                                    XREF[1]:     800b7ee0(j)  
+        800b7efc 03 00 40 14     bne        v0,zero,LAB_800b7f0c
+        800b7f00 80 10 03 00     _sll       v0,v1,0x2
+        800b7f04 07 00 03 34     ori        v1,zero,0x7
+        800b7f08 80 10 03 00     sll        v0,v1,0x2
+                             LAB_800b7f0c                                    XREF[1]:     800b7efc(j)  
+        800b7f0c 0c 80 01 3c     lui        at,0x800c
+        800b7f10 4a d9 21 24     addiu      at,at,-0x26b6
+        800b7f14 21 08 22 00     addu       at,at,v0
+        800b7f18 00 00 30 94     lhu        s0,0x0(at)=>DAT_800bd952                         = 0110h
+                                                                                             = 0116h
+        800b7f1c 91 a6 02 0c     jal        FUN_800a9a44                                     undefined FUN_800a9a44()
+        800b7f20 ff 03 10 32     _andi      s0,s0,0x3ff
+        800b7f24 19 00 03 34     ori        v1,zero,0x19
+        800b7f28 02 00 43 14     bne        v0,v1,LAB_800b7f34
+        800b7f2c 21 90 00 02     _move      s2,s0
+        800b7f30 01 00 52 26     addiu      s2,s2,0x1
+                             LAB_800b7f34                                    XREF[1]:     800b7f28(j)  
+        800b7f34 b0 e0 02 08     j          LAB_800b82c0
+        800b7f38 01 00 16 34     _ori       s6,zero,0x1
+                             LAB_800b7f3c                                    XREF[3]:     800b7e74(j), 800b7e9c(j), 
+                                                                                          800b7eac(j)  
+        800b7f3c 11 80 01 3c     lui        at,0x8011
+        800b7f40 84 62 20 ac     sw         zero,offset DAT_80116284(at)
+        800b7f44 a9 a6 02 0c     jal        FUN_800a9aa4                                     undefined FUN_800a9aa4()
+        800b7f48 00 00 00 00     _nop
+        800b7f4c 54 00 40 10     beq        v0,zero,LAB_800b80a0
+        800b7f50 00 00 00 00     _nop
+        800b7f54 ec de 02 0c     jal        FUN_800b7bb0                                     undefined FUN_800b7bb0()
+        800b7f58 00 00 00 00     _nop
+        800b7f5c 50 00 40 10     beq        v0,zero,LAB_800b80a0
+        800b7f60 00 00 00 00     _nop
+        800b7f64 69 a4 02 0c     jal        FUN_800a91a4                                     undefined FUN_800a91a4()
+        800b7f68 07 00 04 34     _ori       a0,zero,0x7
+        800b7f6c 4c 00 40 10     beq        v0,zero,LAB_800b80a0
+        800b7f70 00 00 00 00     _nop
+        800b7f74 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b7f78 00 00 00 00     _nop
+        800b7f7c ec de 02 0c     jal        FUN_800b7bb0                                     undefined FUN_800b7bb0()
+        800b7f80 21 80 40 00     _move      s0,v0
+        800b7f84 00 83 10 00     sll        s0,s0,0xc
+        800b7f88 1a 00 02 02     div        s0,v0
+        800b7f8c 02 00 40 14     bne        v0,zero,LAB_800b7f98
+        800b7f90 00 00 00 00     _nop
+        800b7f94 0d 00 07 00     break      0x1c00
+                             LAB_800b7f98                                    XREF[1]:     800b7f8c(j)  
+        800b7f98 ff ff 01 24     li         at,-0x1
+        800b7f9c 04 00 41 14     bne        v0,at,LAB_800b7fb0
+        800b7fa0 00 80 01 3c     _lui       at,0x8000
+        800b7fa4 02 00 01 16     bne        s0,at,LAB_800b7fb0
+        800b7fa8 00 00 00 00     _nop
+        800b7fac 0d 00 06 00     break      0x1800
+                             LAB_800b7fb0                                    XREF[2]:     800b7f9c(j), 800b7fa4(j)  
+        800b7fb0 12 80 00 00     mflo       s0
+        800b7fb4 16 00 23 96     lhu        v1,0x16(s1)=>DAT_800bda3e
+        800b7fb8 00 00 00 00     nop
+        800b7fbc 2a 10 03 02     slt        v0,s0,v1
+        800b7fc0 04 00 40 10     beq        v0,zero,LAB_800b7fd4
+        800b7fc4 00 00 00 00     _nop
+        800b7fc8 16 00 22 96     lhu        v0,0x16(s1)=>DAT_800bda3e
+        800b7fcc 10 e0 02 08     j          LAB_800b8040
+        800b7fd0 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b7fd4                                    XREF[1]:     800b7fc0(j)  
+        800b7fd4 18 00 22 96     lhu        v0,0x18(s1)=>DAT_800bda40
+        800b7fd8 00 00 00 00     nop
+        800b7fdc 21 18 62 00     addu       v1,v1,v0
+        800b7fe0 2a 10 03 02     slt        v0,s0,v1
+        800b7fe4 04 00 40 10     beq        v0,zero,LAB_800b7ff8
+        800b7fe8 00 00 00 00     _nop
+        800b7fec 18 00 22 96     lhu        v0,0x18(s1)=>DAT_800bda40
+        800b7ff0 10 e0 02 08     j          LAB_800b8040
+        800b7ff4 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b7ff8                                    XREF[1]:     800b7fe4(j)  
+        800b7ff8 1a 00 22 96     lhu        v0,0x1a(s1)=>DAT_800bda42
+        800b7ffc 00 00 00 00     nop
+        800b8000 21 18 62 00     addu       v1,v1,v0
+        800b8004 2a 10 03 02     slt        v0,s0,v1
+        800b8008 04 00 40 10     beq        v0,zero,LAB_800b801c
+        800b800c 00 00 00 00     _nop
+        800b8010 1a 00 22 96     lhu        v0,0x1a(s1)=>DAT_800bda42
+        800b8014 10 e0 02 08     j          LAB_800b8040
+        800b8018 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b801c                                    XREF[1]:     800b8008(j)  
+        800b801c 1c 00 22 96     lhu        v0,0x1c(s1)=>DAT_800bda44
+        800b8020 00 00 00 00     nop
+        800b8024 21 18 62 00     addu       v1,v1,v0
+        800b8028 2a 10 03 02     slt        v0,s0,v1
+        800b802c 05 00 40 10     beq        v0,zero,LAB_800b8044
+        800b8030 21 18 00 00     _clear     v1
+        800b8034 1c 00 22 96     lhu        v0,0x1c(s1)=>DAT_800bda44
+        800b8038 00 00 00 00     nop
+        800b803c ff 03 52 30     andi       s2,v0,0x3ff
+                             LAB_800b8040                                    XREF[3]:     800b7fcc(j), 800b7ff0(j), 
+                                                                                          800b8014(j)  
+        800b8040 21 18 00 00     clear      v1
+                             LAB_800b8044                                    XREF[1]:     800b802c(j)  
+        800b8044 21 20 00 00     clear      a0
+                             LAB_800b8048                                    XREF[1]:     800b806c(j)  
+        800b8048 0c 80 01 3c     lui        at,0x800c
+        800b804c 68 d9 21 24     addiu      at,at,-0x2698
+        800b8050 21 08 24 00     addu       at,at,a0
+        800b8054 00 00 22 94     lhu        v0,0x0(at)=>DAT_800bd968                         = 0038h
+                                                                                             = 0039h
+        800b8058 00 00 00 00     nop
+        800b805c 06 00 52 10     beq        v0,s2,LAB_800b8078
+        800b8060 20 00 62 28     _slti      v0,v1,0x20
+        800b8064 01 00 63 24     addiu      v1,v1,0x1
+        800b8068 20 00 62 28     slti       v0,v1,0x20
+        800b806c f6 ff 40 14     bne        v0,zero,LAB_800b8048
+        800b8070 04 00 84 24     _addiu     a0,a0,0x4
+        800b8074 20 00 62 28     slti       v0,v1,0x20
+                             LAB_800b8078                                    XREF[1]:     800b805c(j)  
+        800b8078 07 00 40 10     beq        v0,zero,LAB_800b8098
+        800b807c 80 10 03 00     _sll       v0,v1,0x2
+        800b8080 0c 80 01 3c     lui        at,0x800c
+        800b8084 6a d9 21 24     addiu      at,at,-0x2696
+        800b8088 21 08 22 00     addu       at,at,v0
+        800b808c 00 00 24 94     lhu        a0,0x0(at)=>DAT_800bd972                         = 0007h
+                                                                                             = 0008h
+        800b8090 c7 de 02 0c     jal        FUN_800b7b1c                                     undefined FUN_800b7b1c()
+        800b8094 00 00 00 00     _nop
+                             LAB_800b8098                                    XREF[1]:     800b8078(j)  
+        800b8098 27 10 12 00     nor        v0,zero,s2
+        800b809c 2b a8 02 00     sltu       s5,zero,v0
+                             LAB_800b80a0                                    XREF[3]:     800b7f4c(j), 800b7f5c(j), 
+                                                                                          800b7f6c(j)  
+        800b80a0 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b80a4 00 00 00 00     _nop
+        800b80a8 de de 02 0c     jal        FUN_800b7b78                                     undefined FUN_800b7b78()
+        800b80ac 21 80 40 00     _move      s0,v0
+        800b80b0 2a a0 02 02     slt        s4,s0,v0
+        800b80b4 40 00 80 16     bne        s4,zero,LAB_800b81b8
+        800b80b8 00 00 00 00     _nop
+        800b80bc f4 de 02 0c     jal        FUN_800b7bd0                                     undefined FUN_800b7bd0()
+        800b80c0 00 00 00 00     _nop
+        800b80c4 19 00 40 10     beq        v0,zero,LAB_800b812c
+        800b80c8 00 00 00 00     _nop
+        800b80cc 17 00 41 06     bgez       s2,LAB_800b812c
+        800b80d0 00 00 00 00     _nop
+        800b80d4 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b80d8 00 00 00 00     _nop
+        800b80dc e8 de 02 0c     jal        FUN_800b7ba0                                     undefined FUN_800b7ba0()
+        800b80e0 21 80 40 00     _move      s0,v0
+        800b80e4 0e 00 23 96     lhu        v1,0xe(s1)=>DAT_800bda36
+        800b80e8 08 00 42 24     addiu      v0,v0,0x8
+        800b80ec 04 80 50 00     sllv       s0,s0,v0
+        800b80f0 2a 10 03 02     slt        v0,s0,v1
+        800b80f4 04 00 40 10     beq        v0,zero,LAB_800b8108
+        800b80f8 00 00 00 00     _nop
+        800b80fc 0e 00 22 96     lhu        v0,0xe(s1)=>DAT_800bda36
+        800b8100 4b e0 02 08     j          LAB_800b812c
+        800b8104 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b8108                                    XREF[1]:     800b80f4(j)  
+        800b8108 10 00 22 96     lhu        v0,0x10(s1)=>DAT_800bda38
+        800b810c 00 00 00 00     nop
+        800b8110 21 18 62 00     addu       v1,v1,v0
+        800b8114 2a 10 03 02     slt        v0,s0,v1
+        800b8118 04 00 40 10     beq        v0,zero,LAB_800b812c
+        800b811c 00 00 00 00     _nop
+        800b8120 10 00 22 96     lhu        v0,0x10(s1)=>DAT_800bda38
+        800b8124 00 00 00 00     nop
+        800b8128 ff 03 52 30     andi       s2,v0,0x3ff
+                             LAB_800b812c                                    XREF[4]:     800b80c4(j), 800b80cc(j), 
+                                                                                          800b8100(j), 800b8118(j)  
+        800b812c f6 de 02 0c     jal        FUN_800b7bd8                                     undefined FUN_800b7bd8()
+        800b8130 00 00 00 00     _nop
+        800b8134 0d 00 40 10     beq        v0,zero,LAB_800b816c
+        800b8138 00 00 00 00     _nop
+        800b813c 0b 00 41 06     bgez       s2,LAB_800b816c
+        800b8140 00 00 00 00     _nop
+        800b8144 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b8148 00 00 00 00     _nop
+        800b814c 12 00 23 96     lhu        v1,0x12(s1)=>DAT_800bda3a
+        800b8150 00 82 02 00     sll        s0,v0,0x8
+        800b8154 2a 10 03 02     slt        v0,s0,v1
+        800b8158 04 00 40 10     beq        v0,zero,LAB_800b816c
+        800b815c 00 00 00 00     _nop
+        800b8160 12 00 22 96     lhu        v0,0x12(s1)=>DAT_800bda3a
+        800b8164 00 00 00 00     nop
+        800b8168 ff 03 52 30     andi       s2,v0,0x3ff
+                             LAB_800b816c                                    XREF[3]:     800b8134(j), 800b813c(j), 
+                                                                                          800b8158(j)  
+        800b816c 05 df 02 0c     jal        FUN_800b7c14                                     undefined FUN_800b7c14()
+        800b8170 00 00 00 00     _nop
+        800b8174 10 00 40 10     beq        v0,zero,LAB_800b81b8
+        800b8178 00 00 00 00     _nop
+        800b817c 51 00 41 06     bgez       s2,LAB_800b82c4
+        800b8180 ff ff 02 24     _li        v0,-0x1
+        800b8184 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b8188 00 00 00 00     _nop
+        800b818c e8 de 02 0c     jal        FUN_800b7ba0                                     undefined FUN_800b7ba0()
+        800b8190 21 80 40 00     _move      s0,v0
+        800b8194 14 00 23 96     lhu        v1,0x14(s1)=>DAT_800bda3c
+        800b8198 08 00 42 24     addiu      v0,v0,0x8
+        800b819c 04 80 50 00     sllv       s0,s0,v0
+        800b81a0 2a 10 03 02     slt        v0,s0,v1
+        800b81a4 04 00 40 10     beq        v0,zero,LAB_800b81b8
+        800b81a8 00 00 00 00     _nop
+        800b81ac 14 00 22 96     lhu        v0,0x14(s1)=>DAT_800bda3c
+        800b81b0 00 00 00 00     nop
+        800b81b4 ff 03 52 30     andi       s2,v0,0x3ff
+                             LAB_800b81b8                                    XREF[3]:     800b80b4(j), 800b8174(j), 
+                                                                                          800b81a4(j)  
+        800b81b8 42 00 41 06     bgez       s2,LAB_800b82c4
+        800b81bc ff ff 02 24     _li        v0,-0x1
+        800b81c0 21 98 00 00     clear      s3
+                             LAB_800b81c4                                    XREF[1]:     800b82b8(j)  
+        800b81c4 f0 b7 02 0c     jal        WorldRand                                        undefined WorldRand()
+        800b81c8 00 00 00 00     _nop
+        800b81cc 02 00 23 96     lhu        v1,0x2(s1)=>DAT_800bda2a
+        800b81d0 00 82 02 00     sll        s0,v0,0x8
+        800b81d4 2a 10 03 02     slt        v0,s0,v1
+        800b81d8 04 00 40 10     beq        v0,zero,LAB_800b81ec
+        800b81dc 00 00 00 00     _nop
+        800b81e0 02 00 22 96     lhu        v0,0x2(s1)=>DAT_800bda2a
+        800b81e4 a8 e0 02 08     j          LAB_800b82a0
+        800b81e8 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b81ec                                    XREF[1]:     800b81d8(j)  
+        800b81ec 04 00 22 96     lhu        v0,0x4(s1)=>DAT_800bda2c
+        800b81f0 00 00 00 00     nop
+        800b81f4 21 18 62 00     addu       v1,v1,v0
+        800b81f8 2a 10 03 02     slt        v0,s0,v1
+        800b81fc 04 00 40 10     beq        v0,zero,LAB_800b8210
+        800b8200 00 00 00 00     _nop
+        800b8204 04 00 22 96     lhu        v0,0x4(s1)=>DAT_800bda2c
+        800b8208 a8 e0 02 08     j          LAB_800b82a0
+        800b820c ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b8210                                    XREF[1]:     800b81fc(j)  
+        800b8210 06 00 22 96     lhu        v0,0x6(s1)=>DAT_800bda2e
+        800b8214 00 00 00 00     nop
+        800b8218 21 18 62 00     addu       v1,v1,v0
+        800b821c 2a 10 03 02     slt        v0,s0,v1
+        800b8220 04 00 40 10     beq        v0,zero,LAB_800b8234
+        800b8224 00 00 00 00     _nop
+        800b8228 06 00 22 96     lhu        v0,0x6(s1)=>DAT_800bda2e
+        800b822c a8 e0 02 08     j          LAB_800b82a0
+        800b8230 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b8234                                    XREF[1]:     800b8220(j)  
+        800b8234 08 00 22 96     lhu        v0,0x8(s1)=>DAT_800bda30
+        800b8238 00 00 00 00     nop
+        800b823c 21 18 62 00     addu       v1,v1,v0
+        800b8240 2a 10 03 02     slt        v0,s0,v1
+        800b8244 04 00 40 10     beq        v0,zero,LAB_800b8258
+        800b8248 00 00 00 00     _nop
+        800b824c 08 00 22 96     lhu        v0,0x8(s1)=>DAT_800bda30
+        800b8250 a8 e0 02 08     j          LAB_800b82a0
+        800b8254 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b8258                                    XREF[1]:     800b8244(j)  
+        800b8258 0a 00 22 96     lhu        v0,0xa(s1)=>DAT_800bda32
+        800b825c 00 00 00 00     nop
+        800b8260 21 18 62 00     addu       v1,v1,v0
+        800b8264 2a 10 03 02     slt        v0,s0,v1
+        800b8268 04 00 40 10     beq        v0,zero,LAB_800b827c
+        800b826c 00 00 00 00     _nop
+        800b8270 0a 00 22 96     lhu        v0,0xa(s1)=>DAT_800bda32
+        800b8274 a8 e0 02 08     j          LAB_800b82a0
+        800b8278 ff 03 52 30     _andi      s2,v0,0x3ff
+                             LAB_800b827c                                    XREF[1]:     800b8268(j)  
+        800b827c 0c 00 22 96     lhu        v0,0xc(s1)=>DAT_800bda34
+        800b8280 00 00 00 00     nop
+        800b8284 21 18 62 00     addu       v1,v1,v0
+        800b8288 2a 10 03 02     slt        v0,s0,v1
+        800b828c 05 00 40 10     beq        v0,zero,LAB_800b82a4
+        800b8290 21 10 60 02     _move      v0,s3
+        800b8294 0c 00 22 96     lhu        v0,0xc(s1)=>DAT_800bda34
+        800b8298 00 00 00 00     nop
+        800b829c ff 03 52 30     andi       s2,v0,0x3ff
+                             LAB_800b82a0                                    XREF[5]:     800b81e4(j), 800b8208(j), 
+                                                                                          800b822c(j), 800b8250(j), 
+                                                                                          800b8274(j)  
+        800b82a0 21 10 60 02     move       v0,s3
+                             LAB_800b82a4                                    XREF[1]:     800b828c(j)  
+        800b82a4 06 00 40 1c     bgtz       v0,LAB_800b82c0
+        800b82a8 01 00 73 26     _addiu     s3,s3,0x1
+        800b82ac 0a 80 02 3c     lui        v0,0x800a
+        800b82b0 3c d6 42 94     lhu        v0,-0x29c4(v0)=>DAT_8009d63c
+        800b82b4 00 00 00 00     nop
+        800b82b8 c2 ff 42 12     beq        s2,v0,LAB_800b81c4
+        800b82bc 00 00 00 00     _nop
+                             LAB_800b82c0                                    XREF[3]:     800b7cc4(j), 800b7f34(j), 
+                                                                                          800b82a4(j)  
+        800b82c0 ff ff 02 24     li         v0,-0x1
+                             LAB_800b82c4                                    XREF[4]:     800b7e38(j), 800b7e4c(j), 
+                                                                                          800b817c(j), 800b81b8(j)  
+        800b82c4 0b 00 42 12     beq        s2,v0,LAB_800b82f4
+        800b82c8 c0 17 14 00     _sll       v0,s4,0x1f
+        800b82cc 0a 80 01 3c     lui        at,0x800a
+        800b82d0 3c d6 32 a4     sh         s2,-0x29c4(at)=>DAT_8009d63c
+        800b82d4 f8 d8 02 0c     jal        FUN_800b63e0                                     undefined FUN_800b63e0()
+        800b82d8 01 00 04 34     _ori       a0,zero,0x1
+        800b82dc 02 00 a0 12     beq        s5,zero,LAB_800b82e8
+        800b82e0 04 00 04 34     _ori       a0,zero,0x4
+        800b82e4 05 00 04 34     ori        a0,zero,0x5
+                             LAB_800b82e8                                    XREF[1]:     800b82dc(j)  
+        800b82e8 fc d8 02 0c     jal        FUN_800b63f0                                     undefined FUN_800b63f0()
+        800b82ec 00 00 00 00     _nop
+        800b82f0 c0 17 14 00     sll        v0,s4,0x1f
+                             LAB_800b82f4                                    XREF[1]:     800b82c4(j)  
+        800b82f4 25 10 42 02     or         v0,s2,v0
+        800b82f8 80 1f 16 00     sll        v1,s6,0x1e
+        800b82fc 25 10 43 00     or         v0,v0,v1
+        800b8300 2c 00 bf 8f     lw         ra,local_4(sp)
+        800b8304 28 00 b6 8f     lw         s6,local_8(sp)
+        800b8308 24 00 b5 8f     lw         s5,local_c(sp)
+        800b830c 20 00 b4 8f     lw         s4,local_10(sp)
+        800b8310 1c 00 b3 8f     lw         s3,local_14(sp)
+        800b8314 18 00 b2 8f     lw         s2,local_18(sp)
+        800b8318 14 00 b1 8f     lw         s1,local_1c(sp)
+        800b831c 10 00 b0 8f     lw         s0,local_20(sp)
+        800b8320 30 00 bd 27     addiu      sp,sp,0x30
+        800b8324 08 00 e0 03     jr         ra
+        800b8328 00 00 00 00     _nop
+
+
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+uint world_encounter_check(void)
+
+{
+  bool bVar1;
+  bool bVar2;
+  uint uVar3;
+  int iVar4;
+  int iVar5;
+  undefined4 uVar6;
+  int iVar7;
+  ushort *puVar8;
+  uint uVar9;
+  bool bVar10;
+  int iVar11;
+  
+  bVar10 = false;
+  bVar2 = false;
+  iVar11 = 0;
+  uVar9 = 0xffffffff;
+  uVar3 = FUN_800a9a44();
+  iVar4 = FUN_800a9a70();
+  iVar5 = FUN_800b7b54();
+  if (iVar5 != 0) {
+    if (iVar4 < 0) {
+      iVar4 = 0;
+    }
+    else if (0xf < iVar4) {
+      iVar4 = 0xf;
+    }
+    if (uVar3 == 0x10) {
+      uVar3 = 0;
+    }
+    iVar5 = iVar4 * 4;
+    if (uVar3 == 0x18) {
+      uVar3 = 8;
+    }
+    if ((byte)(&DAT_800c72b4)[iVar5] == uVar3) {
+      iVar7 = 0;
+    }
+    else if ((byte)(&DAT_800c72b5)[iVar5] == uVar3) {
+      iVar7 = 1;
+    }
+    else if ((byte)(&DAT_800c72b6)[iVar5] == uVar3) {
+      iVar7 = 2;
+    }
+    else {
+      iVar7 = 0;
+      if ((byte)(&DAT_800c72b7)[iVar5] == uVar3) {
+        iVar7 = 3;
+      }
+    }
+    puVar8 = &DAT_800bd9e8 + iVar7 * 0x10 + iVar4 * 0x40;
+    uVar3 = (uint)(*puVar8 >> 8);
+    if (uVar3 == 0) {
+      _DAT_80116284 = _DAT_80116284 + 0x7fff;
+    }
+    else {
+      iVar5 = FUN_800b7b54();
+      if (uVar3 == 0) {
+        trap(0x1c00);
+      }
+      if ((uVar3 == 0xffffffff) && (iVar5 << 10 == -0x80000000)) {
+        trap(0x1800);
+      }
+      _DAT_80116284 = (iVar5 << 10) / (int)uVar3 + _DAT_80116284;
+    }
+    iVar5 = WorldRand();
+    if ((iVar5 < _DAT_80116284 >> 8) && ((*puVar8 & 1) != 0)) {
+      iVar5 = WorldRand();
+      if ((iVar5 < (int)(uint)(byte)(&DAT_800c72f4)[iVar4]) &&
+         (((iVar4 = FUN_800a9a44(), iVar4 == 1 || (iVar4 = FUN_800a9a44(), iVar4 == 0x19)) &&
+          (iVar4 = FUN_800b7bc0(), iVar4 != 0)))) {
+        iVar4 = func_0x80025658(0);
+        iVar5 = 0;
+        iVar11 = 0;
+        do {
+          if (iVar4 <= (int)(uint)*(ushort *)((int)&DAT_800bd948 + iVar11)) break;
+          iVar5 = iVar5 + 1;
+          iVar11 = iVar11 + 4;
+        } while (iVar5 < 8);
+        iVar4 = iVar5 << 2;
+        if (7 < iVar5) {
+          iVar4 = 0x1c;
+        }
+        uVar9 = *(ushort *)(iVar4 + -0x7ff426b6) & 0x3ff;
+        iVar4 = FUN_800a9a44();
+        if (iVar4 == 0x19) {
+          uVar9 = uVar9 + 1;
+        }
+        iVar11 = 1;
+      }
+      else {
+        _DAT_80116284 = 0;
+        iVar4 = FUN_800a9aa4();
+        if (((iVar4 != 0) && (iVar4 = FUN_800b7bb0(), iVar4 != 0)) &&
+           (iVar4 = FUN_800a91a4(7), iVar4 != 0)) {
+          iVar4 = WorldRand();
+          iVar5 = FUN_800b7bb0();
+          iVar7 = (iVar4 << 0xc) / iVar5;
+          if (iVar5 == 0) {
+            trap(0x1c00);
+          }
+          if ((iVar5 == -1) && (iVar4 << 0xc == -0x80000000)) {
+            trap(0x1800);
+          }
+          if (iVar7 < (int)(uint)puVar8[0xb]) {
+            uVar9 = puVar8[0xb] & 0x3ff;
+          }
+          else {
+            iVar4 = (uint)puVar8[0xb] + (uint)puVar8[0xc];
+            if (iVar7 < iVar4) {
+              uVar9 = puVar8[0xc] & 0x3ff;
+            }
+            else {
+              iVar4 = iVar4 + (uint)puVar8[0xd];
+              if (iVar7 < iVar4) {
+                uVar9 = puVar8[0xd] & 0x3ff;
+              }
+              else if (iVar7 < (int)(iVar4 + (uint)puVar8[0xe])) {
+                uVar9 = puVar8[0xe] & 0x3ff;
+              }
+            }
+          }
+          iVar4 = 0;
+          iVar5 = 0;
+          do {
+            if (*(ushort *)((int)&DAT_800bd968 + iVar5) == uVar9) break;
+            iVar4 = iVar4 + 1;
+            iVar5 = iVar5 + 4;
+          } while (iVar4 < 0x20);
+          if (iVar4 < 0x20) {
+            FUN_800b7b1c(*(undefined2 *)(iVar4 * 4 + -0x7ff42696));
+          }
+          bVar2 = uVar9 != 0xffffffff;
+        }
+        iVar4 = WorldRand();
+        iVar5 = FUN_800b7b78();
+        bVar10 = iVar4 < iVar5;
+        if (!bVar10) {
+          iVar4 = FUN_800b7bd0();
+          if ((iVar4 != 0) && ((int)uVar9 < 0)) {
+            iVar4 = WorldRand();
+            iVar5 = FUN_800b7ba0();
+            iVar4 = iVar4 << (iVar5 + 8U & 0x1f);
+            if (iVar4 < (int)(uint)puVar8[7]) {
+              uVar9 = puVar8[7] & 0x3ff;
+            }
+            else if (iVar4 < (int)((uint)puVar8[7] + (uint)puVar8[8])) {
+              uVar9 = puVar8[8] & 0x3ff;
+            }
+          }
+          iVar4 = FUN_800b7bd8();
+          if (((iVar4 != 0) && ((int)uVar9 < 0)) &&
+             (iVar4 = WorldRand(), iVar4 << 8 < (int)(uint)puVar8[9])) {
+            uVar9 = puVar8[9] & 0x3ff;
+          }
+          iVar4 = FUN_800b7c14();
+          if (iVar4 != 0) {
+            if (-1 < (int)uVar9) goto LAB_800b82c4;
+            iVar4 = WorldRand();
+            iVar5 = FUN_800b7ba0();
+            if (iVar4 << (iVar5 + 8U & 0x1f) < (int)(uint)puVar8[10]) {
+              uVar9 = puVar8[10] & 0x3ff;
+            }
+          }
+        }
+        if ((int)uVar9 < 0) {
+          iVar4 = 0;
+          do {
+            iVar5 = WorldRand();
+            iVar5 = iVar5 << 8;
+            if (iVar5 < (int)(uint)puVar8[1]) {
+              uVar9 = puVar8[1] & 0x3ff;
+            }
+            else {
+              iVar7 = (uint)puVar8[1] + (uint)puVar8[2];
+              if (iVar5 < iVar7) {
+                uVar9 = puVar8[2] & 0x3ff;
+              }
+              else {
+                iVar7 = iVar7 + (uint)puVar8[3];
+                if (iVar5 < iVar7) {
+                  uVar9 = puVar8[3] & 0x3ff;
+                }
+                else {
+                  iVar7 = iVar7 + (uint)puVar8[4];
+                  if (iVar5 < iVar7) {
+                    uVar9 = puVar8[4] & 0x3ff;
+                  }
+                  else {
+                    iVar7 = iVar7 + (uint)puVar8[5];
+                    if (iVar5 < iVar7) {
+                      uVar9 = puVar8[5] & 0x3ff;
+                    }
+                    else if (iVar5 < (int)(iVar7 + (uint)puVar8[6])) {
+                      uVar9 = puVar8[6] & 0x3ff;
+                    }
+                  }
+                }
+              }
+            }
+            bVar1 = iVar4 < 1;
+            iVar4 = iVar4 + 1;
+          } while ((bVar1) && (uVar9 == _DAT_8009d63c));
+        }
+      }
+    }
+  }
+LAB_800b82c4:
+  if (uVar9 != 0xffffffff) {
+    _DAT_8009d63c = (ushort)uVar9;
+    FUN_800b63e0(1);
+    uVar6 = 4;
+    if (bVar2) {
+      uVar6 = 5;
+    }
+    FUN_800b63f0(uVar6);
+  }
+  return uVar9 | (uint)bVar10 << 0x1f | iVar11 << 0x1e;
+}
