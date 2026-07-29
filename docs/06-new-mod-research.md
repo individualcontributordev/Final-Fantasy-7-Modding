@@ -49,7 +49,7 @@ Mirror Field’s pattern: named presets if you have discrete variants; interacti
 
 ## Stacking rules
 
-- **Bases** (exclusive): Unmodified / CSR / CSR+ / CSR++ — owned by CSR repo.
+- **Bases** (exclusive): Unmodified / CSR / Highwind (formerly "CSR++") — owned by CSR repo. CSR+ is no longer a base; its trims are `csr-plus-scene-*` add-ons on top of CSR.
 - **Add-ons** (this repo): must declare `compatibleBases` and usually an `exclusiveGroup` if variants conflict.
 - After CSR publishes a new base **id**, rebuild add-ons.
 
