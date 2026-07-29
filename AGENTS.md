@@ -2,6 +2,8 @@
 
 Part of the IndividualContributor FF7 stack. Players use **https://individualcontributor.dev/builder/** only. This repo publishes **add-on** `ic-layer-v1` packs (CDN via GitHub Pages). CSR bases live in **Final-Fantasy-7-CSR**.
 
+**Makou `FIELD/*.DAT` add-ons and CSR+ scene packs** live in the CSR repo (`ship-makou-addon`, `ship-csr-plus-scene`). **This repo** = engine/RE + encounter density packs (`research-new-mod`, `ship-field-encounters`, `ship-world-encounters`).
+
 ## How we work
 
 - **Mac (this chat):** only agent. Give **full Windows steps in chat** — never send the user to a handoff file for day-to-day work.

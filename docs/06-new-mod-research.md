@@ -27,7 +27,7 @@ Players never see this repo’s RE trail. They only get packs on https://individ
 ## Research loop (Mac agent + Windows human)
 
 1. **State the behavior** in one sentence (e.g. “fewer random field battles, Lure still works”).
-2. **Pick the file** — engine (`FIELD.BIN` / `WORLD.BIN`) vs per-map data (Makou `.DAT`). Many “game feel” mods need the engine.
+2. **Pick the file** — engine (`FIELD.BIN` / `WORLD.BIN`) vs per-map data (Makou `.DAT`). Many “game feel” mods need the engine. **Makou FIELD packs / CSR+ scenes → Final-Fantasy-7-CSR** (`ship-makou-addon`, `ship-csr-plus-scene`); continue here only for engine/RE work.
 3. **One Windows RE task** — chat steps + `docs/windows-last-output.txt` COPY-PASTE/EVIDENCE (see `.agents/rules/mac-human-workflow.mdc`).
 4. **Record findings** — `docs/findings/YYYY-MM-DD-slug.md` immediately; promote confirmed facts to `docs/0N-*.md`.
 5. **Prototype the smallest patch** — prefer in-place stubs over huge caves; keep dual `jal`s / call sites intact unless proven safe.
