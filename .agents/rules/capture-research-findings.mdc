@@ -7,16 +7,29 @@ alwaysApply: true
 
 This repo is an active RE/mod project. **Do not let discoveries live only in chat.**
 
+## During the session (do not wait for “goodbye”)
+
+When a discovery becomes **actionable or confirmed**, journal it in the **same turn** — not only in chat, not deferred to session end.
+
+Counts as research (must capture):
+
+- Addresses, watch recipes, breakpoint lists
+- Builder/disc verify PASS/FAIL with config
+- Playtest/debugger conclusions (“value X is expected”, “not a stub bug”)
+- Contradictions of prior docs or human observations you resolved
+
+1. Create or update `docs/findings/YYYY-MM-DD-slug.md` (use `_template.md`)
+2. Add a row to `docs/findings/README.md`
+3. Promote durable facts into the matching `docs/0N-*.md` and/or `mods/.../patches/README.md`
+4. If it **improves the RE loop** or **unlocks a new mod capability**, also run skill `evolve-re-process` (update `docs/06-new-mod-research.md`)
+
+Screenshots under `docs/` are evidence only; the finding file is the durable record.
+
+Follow skill `.agents/skills/record-findings/SKILL.md`.
+
 ## Before ending a session
 
-If we learned anything useful (addresses, offsets, settings, patch results, contradictions):
-
-1. Create or update a file in `docs/findings/` using `_template.md`
-2. Add a row to `docs/findings/README.md`
-3. Promote verified facts into the matching `docs/0N-*.md` reference doc
-4. If it **improves the RE loop** or **unlocks a new mod capability**, also run `.cursor/skills/evolve-re-process` (update `docs/06-new-mod-research.md`)
-
-Follow the full workflow in `.cursor/skills/record-findings/SKILL.md`.
+Sweep the turn/history: anything still only in chat or `windows-last-task` evidence that meets the bar above → write the finding before stopping.
 
 ## Conventions
 
