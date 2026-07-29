@@ -13,7 +13,9 @@
         "clean"
       ],
       "discs": {
-        "1": "./field-encounter-25-v0.1.2/layers/disc1.layer.json"
+        "1": "./field-encounter-25-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-25-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-25-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 25
@@ -29,7 +31,9 @@
         "clean"
       ],
       "discs": {
-        "1": "./field-encounter-50-v0.1.2/layers/disc1.layer.json"
+        "1": "./field-encounter-50-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-50-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-50-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 50
@@ -45,7 +49,9 @@
         "clean"
       ],
       "discs": {
-        "1": "./field-encounter-75-v0.1.2/layers/disc1.layer.json"
+        "1": "./field-encounter-75-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-75-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-75-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 75
@@ -61,7 +67,9 @@
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-25-v0.1.2/layers/disc1.layer.json"
+        "1": "./field-encounter-on-csr-25-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-25-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-25-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 25
@@ -77,7 +85,9 @@
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-50-v0.1.2/layers/disc1.layer.json"
+        "1": "./field-encounter-on-csr-50-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-50-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-50-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 50
@@ -93,7 +103,63 @@
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-75-v0.1.2/layers/disc1.layer.json"
+        "1": "./field-encounter-on-csr-75-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-75-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-75-v0.1.2/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 75
+    },
+    {
+      "id": "field-encounter-on-csr-plusplus-25-v0.1.2",
+      "name": "Field encounters \u2014 Light (25%) (on Highwind) v0.1.2",
+      "kind": "addon",
+      "blurb": "Fewer random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plusplus-25-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-plusplus-25-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-plusplus-25-v0.1.2/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 25
+    },
+    {
+      "id": "field-encounter-on-csr-plusplus-50-v0.1.2",
+      "name": "Field encounters \u2014 Standard (50%) (on Highwind) v0.1.2",
+      "kind": "addon",
+      "blurb": "Moderate random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plusplus-50-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-plusplus-50-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-plusplus-50-v0.1.2/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 50
+    },
+    {
+      "id": "field-encounter-on-csr-plusplus-75-v0.1.2",
+      "name": "Field encounters \u2014 Dense (75%) (on Highwind) v0.1.2",
+      "kind": "addon",
+      "blurb": "More random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plusplus-v0.1.1"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plusplus-75-v0.1.2/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-plusplus-75-v0.1.2/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-plusplus-75-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 75
@@ -109,23 +175,9 @@
         "clean"
       ],
       "discs": {
-        "1": "./world-encounter-25-v0.1.0/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "rate": 25
-    },
-    {
-      "id": "world-encounter-on-csr-25-v0.1.0",
-      "name": "World encounters \u2014 Light (25%) (on CSR) v0.1.0",
-      "kind": "addon",
-      "blurb": "Fewer random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-25-v0.1.0/layers/disc1.layer.json"
+        "1": "./world-encounter-25-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-25-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-25-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 25
@@ -141,23 +193,9 @@
         "clean"
       ],
       "discs": {
-        "1": "./world-encounter-50-v0.1.0/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "rate": 50
-    },
-    {
-      "id": "world-encounter-on-csr-50-v0.1.0",
-      "name": "World encounters \u2014 Standard (50%) (on CSR) v0.1.0",
-      "kind": "addon",
-      "blurb": "Moderate random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-50-v0.1.0/layers/disc1.layer.json"
+        "1": "./world-encounter-50-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-50-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-50-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 50
@@ -173,10 +211,48 @@
         "clean"
       ],
       "discs": {
-        "1": "./world-encounter-75-v0.1.0/layers/disc1.layer.json"
+        "1": "./world-encounter-75-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-75-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-75-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 75
+    },
+    {
+      "id": "world-encounter-on-csr-25-v0.1.0",
+      "name": "World encounters \u2014 Light (25%) (on CSR) v0.1.0",
+      "kind": "addon",
+      "blurb": "Fewer random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-25-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-25-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-25-v0.1.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 25
+    },
+    {
+      "id": "world-encounter-on-csr-50-v0.1.0",
+      "name": "World encounters \u2014 Standard (50%) (on CSR) v0.1.0",
+      "kind": "addon",
+      "blurb": "Moderate random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-50-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-50-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-50-v0.1.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 50
     },
     {
       "id": "world-encounter-on-csr-75-v0.1.0",
@@ -189,62 +265,16 @@
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-75-v0.1.0/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "rate": 75
-    },
-    {
-      "id": "field-encounter-on-csr-plusplus-25-v0.1.2",
-      "name": "Field encounters \u2014 Light (25%) (on Highwind)",
-      "kind": "addon",
-      "blurb": "Fewer random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plusplus-v0.1.1"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plusplus-25-v0.1.2/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "rate": 25
-    },
-    {
-      "id": "field-encounter-on-csr-plusplus-50-v0.1.2",
-      "name": "Field encounters \u2014 Standard (50%) (on Highwind)",
-      "kind": "addon",
-      "blurb": "Moderate random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plusplus-v0.1.1"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plusplus-50-v0.1.2/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "rate": 50
-    },
-    {
-      "id": "field-encounter-on-csr-plusplus-75-v0.1.2",
-      "name": "Field encounters \u2014 Dense (75%) (on Highwind)",
-      "kind": "addon",
-      "blurb": "More random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plusplus-v0.1.1"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plusplus-75-v0.1.2/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-75-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-75-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-75-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 75
     },
     {
       "id": "world-encounter-on-csr-plusplus-25-v0.1.0",
-      "name": "World encounters \u2014 Light (25%) (on Highwind)",
+      "name": "World encounters \u2014 Light (25%) (on Highwind) v0.1.0",
       "kind": "addon",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
@@ -253,14 +283,16 @@
         "csr-plusplus-v0.1.1"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-plusplus-25-v0.1.0/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-plusplus-25-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-plusplus-25-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-plusplus-25-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 25
     },
     {
       "id": "world-encounter-on-csr-plusplus-50-v0.1.0",
-      "name": "World encounters \u2014 Standard (50%) (on Highwind)",
+      "name": "World encounters \u2014 Standard (50%) (on Highwind) v0.1.0",
       "kind": "addon",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
@@ -269,14 +301,16 @@
         "csr-plusplus-v0.1.1"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-plusplus-50-v0.1.0/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-plusplus-50-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-plusplus-50-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-plusplus-50-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 50
     },
     {
       "id": "world-encounter-on-csr-plusplus-75-v0.1.0",
-      "name": "World encounters \u2014 Dense (75%) (on Highwind)",
+      "name": "World encounters \u2014 Dense (75%) (on Highwind) v0.1.0",
       "kind": "addon",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
@@ -285,7 +319,9 @@
         "csr-plusplus-v0.1.1"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-plusplus-75-v0.1.0/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-plusplus-75-v0.1.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-plusplus-75-v0.1.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-plusplus-75-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 75

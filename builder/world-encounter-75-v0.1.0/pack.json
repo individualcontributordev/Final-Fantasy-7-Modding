@@ -10,7 +10,9 @@
     "clean"
   ],
   "discs": {
-    "1": "./layers/disc1.layer.json"
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
   },
   "rate": 75
 }
