@@ -78,6 +78,8 @@ Never commit game binaries (`.bin`, `.dec`, ISO, Ghidra DBs).
 `git pull --ff-only` → read evidence / new commits → next **single** task (new file + push).
 Does **not** mean live builder/CDN audit unless the human asks for end-of-flow builder verify.
 
+If the check **confirms RE or playtest facts** (addresses, watches, BPs, PASS/FAIL, “not a bug”), write or update `docs/findings/` in the **same turn** (rule `capture-research-findings`). Chat is not the archive.
+
 ## Before Mac acts
 
 ```bash

@@ -31,3 +31,9 @@ python mods/world-map-random-encounters/scripts/apply_world_force_stub.py \
 ```
 
 Then recompress + CDmage import (same GZIPPS path as Field).
+
+## Runtime watches (2026-07-30)
+
+- `g_world_danger` @ `0x80116284` (word). Each check the stub stores **only** `0` or `0xFFFF`. `FFFF` may last one check; a later miss overwrites with `0` (normal — not a bug).
+- Break: execute `0x800B7DE0` (FORCE ori) / `0x800B7DF4` (sw), or **write** `0x80116284`. Do not execute-break data RAM.
+- Observed mid-values such as `0x40` at the same address are **not** stub FORCE outputs. Full playtest: `docs/findings/2026-07-30-world-light-runtime-verify.md`.
