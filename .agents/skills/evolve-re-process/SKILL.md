@@ -11,7 +11,7 @@ description: >-
 
 Goal: the next mod is faster than the last because the **process docs stay true**.
 
-## When to run (also enforced by `.cursor/rules/evolve-re-process.mdc`)
+## When to run (also enforced by `.agents/rules/evolve-re-process.mdc`)
 
 Run this skill at the end of a session (or mid-session after a breakthrough) if you can answer yes to any:
 

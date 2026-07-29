@@ -21,7 +21,7 @@ Full write-up: `docs/06-new-mod-research.md`. Follow that; this skill is the che
 
 - One atomic Windows task per turn (chat + `docs/windows-last-output.txt`)
 - Align Ghidra VA with DuckStation before deep xref work (`docs/05-ghidra-guide.md`)
-- Journal every useful result: `.cursor/skills/record-findings`
+- Journal every useful result: `.agents/skills/record-findings`
 - Promote confirmed facts into `docs/0N-*.md`
 
 ## 3. Patch + prove

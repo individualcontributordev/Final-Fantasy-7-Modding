@@ -33,7 +33,7 @@ Record a finding when any of these are true:
 - User says "remember this" or "document this"
 - After **check results**: useful content appeared in `docs/windows-last-output.txt` (pasted listing/decompiler)
 
-User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). File has COPY-PASTE values + EVIDENCE paste only — **never** yes/no answer blanks. See `.cursor/rules/mac-human-workflow.mdc`.
+User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). File has COPY-PASTE values + EVIDENCE paste only — **never** yes/no answer blanks. See `.agents/rules/mac-human-workflow.mdc`.
 
 ## Create a finding file
 
