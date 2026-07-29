@@ -102,4 +102,4 @@ The disc builder regenerates Mode2 Form1 EDC/ECC for every sector changed by lay
 
 ## Report results
 
-Paste short notes under `docs/windows-last-output.txt` **EVIDENCE** (or a finding `docs/findings/YYYY-MM-DD-ps2-burn-….md` / `…-mister-….md`) and say **check results**. Include: pack list from `APPLIED.txt`, whether MiSTer was run, burn speed/media, pass/fail table.
+Paste short notes under `docs/windows-last-task.md` **EVIDENCE** (or a finding `docs/findings/YYYY-MM-DD-ps2-burn-….md` / `…-mister-….md`) and say **check results**. Include: pack list from `APPLIED.txt`, whether MiSTer was run, burn speed/media, pass/fail table.
