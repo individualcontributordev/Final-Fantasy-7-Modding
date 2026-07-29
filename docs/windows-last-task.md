@@ -41,4 +41,17 @@ python scripts/verify_builder_config.py \
 ## Evidence
 
 ```
+g git:(main) if [ -f workspace/pristine/FINALFANTASY7_D1.bin ]; then
+  PRISTINE="workspace/pristine/FINALFANTASY7_D1.bin"
+else
+  PRISTINE="../Final-Fantasy-7-CSR/workspace/pristine/FINALFANTASY7_D1.bin"
+fi
+➜  Final-Fantasy-7-Modding git:(main) python scripts/verify_builder_config.py \
+  --pristine "$PRISTINE" \
+  --disc 1 \
+  --base clean \
+  --addon field-encounter-25-v0.1.2 \
+  --addon world-encounter-25-v0.1.0
+CSR verify script not found: D:\projects\Final-Fantasy-7-CSR\scripts\verify_builder_config.py
+➜  Final-Fantasy-7-Modding git:(main)
 ```
