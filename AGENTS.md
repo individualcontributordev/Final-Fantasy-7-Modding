@@ -65,8 +65,35 @@ When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.m
 
 ## Rules / skills layout
 
-Canonical trees: **`.agents/rules/`**, **`.agents/skills/`** (edit here only).
+| Path | Role |
+|------|------|
+| **`.agents/rules/`**, **`.agents/skills/`** | **Canonical copies** — real files, edit only here, committed in this repo |
+| **`.augment/rules`**, **`.augment/skills`** | **Relative symlinks** → `../.agents/rules` and `../.agents/skills` so Auggie loads them |
 
-Auggie also loads **`.augment/rules`** and **`.augment/skills`**, which are **symlinks** to those dirs (same pattern as other projects). Do not duplicate content under `.augment/`.
+No Mac/Windows absolute paths. Each clone only needs repo-relative links.
+
+**Windows Git:** enable symlink support so checkouts are real links, not text files:
+
+```bat
+git config --global core.symlinks true
+```
+
+Then re-clone or restore links (Developer Mode or admin may be required):
+
+```bat
+cd Final-Fantasy-7-Modding
+git checkout -- .augment
+```
+
+If Git still materializes text files, recreate from repo root:
+
+```bat
+cd .augment
+del rules skills 2>nul
+mklink /D rules ..\.agents\rules
+mklink /D skills ..\.agents\skills
+```
+
+Do **not** copy rule/skill trees into `.augment/` — only symlink.
 
 Rules include: mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
