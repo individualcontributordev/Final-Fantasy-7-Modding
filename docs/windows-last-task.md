@@ -1,91 +1,66 @@
-# Task: verify the builder zip you boot in DuckStation
+# Task: DuckStation breakpoints — catch world Light FORCE hit (0xFFFF)
 
 ## Goal
 
-Check the **extracted builder zip** Disc 1 image against the same **base + addon** config you chose in the builder (Unmodified + Light field + Light world).
+Confirm g_world_danger is set to **0xFFFF** on a stub FORCE hit (not only the miss path writing **0**).
+Prior shots already showed stub at 0x800B7DB4 and sw to 0x80116284 with v0=0.
 
-Uses verify_built_disc.py with --base / --addon / --disc (same idea as verify_builder_config.py), plus APPLIED.txt + RCnt2 stubs.
+## Success
 
-Prior **builder config** verify (layers only) already PASSed.
+At the store (0x800B7DF4) or right after it:
+
+- Register **v0** = 0x0000FFFF (or 0xFFFFFFFF if shown wide — low half FFFF is what matters)
+- Memory **0x80116284** (4 bytes LE) = FF FF 00 00 or word 0000FFFF
+
+Miss path is also valid (v0=0, memory 0). You need **at least one hit path** while walking toward a fight.
+
+## Breakpoints (set these)
+
+In DuckStation CPU Debugger -> Breakpoints:
+
+| # | Address | Type | Why |
+|---|---------|------|-----|
+| 1 | 0x800B7DE0 | **Execute** | ori v0, zero, 0xffff — FORCE hit branch |
+| 2 | 0x800B7DF4 | **Execute** | sw v0, 0x6284(at) — store to g_world_danger |
+| 3 | 0x80116284 | **Write** (memory write), not Execute | Fires when danger is stored |
+
+Optional:
+
+| Address | Type | Why |
+|---------|------|-----|
+| 0x800B7DEC | Execute | miss path (v0 = 0) — contrast only |
+| 0x800B7E1C | Execute | jal WorldRand after stub — battle roll |
+
+**Do not** use Execute on 0x80116284 (that is data).
 
 ## Steps
 
-1. git pull --ff-only in **Final-Fantasy-7-Modding**.
-2. Set BUILT_D1 to the Disc 1 .bin next to the .cue DuckStation opens.
-3. Run the copy-paste block (edit pack ids only if your manifest versions differ).
-4. Paste full stdout under Evidence. Commit this file + push. Say **check**.
+1. Boot the same builder zip cue (clean + field Light + world Light).
+2. Enter **world map** grass where encounters happen.
+3. Set breakpoints above; unpause.
+4. Run until #1 or #2 hits with **v0 = FFFF**, or until #3 write shows FFFF in memory.
+5. Note hit counts / one line of register+memory under Evidence (or new docs/image.png).
+6. Commit this file + screenshot. Say **check**.
 
-## Success looks like
+## Memory / CE (while broken)
 
-- Final line: PASS — built disc matches base+addon config
-- Layer records OK for each addon
-- FIELD stub@0xbb7c=YES and WORLD stub@0x17db4=YES
+- DS Memory goto 0x80116284 — 4-byte hex
+- CE: duckstation exe +7F1600 +116284 — 4 Bytes, Hex
 
-## Copy-paste
+## Reference addresses
 
-```bash
-cd "$(git rev-parse --show-toplevel)"
-git pull --ff-only
-
-# >>> path to the Disc 1 .bin DuckStation uses (builder zip extract) <<<
-BUILT_D1="/c/path/to/builder-output/FINALFANTASY7_D1.bin"
-
-python scripts/verify_built_disc.py "$BUILT_D1" \
-  --disc 1 \
-  --base clean \
-  --addon field-encounter-25-v0.1.2 \
-  --addon world-encounter-25-v0.1.0
 ```
+
+Execute: 800B7DE0   ori v0, zero, 0xffff     (FORCE)
+
+Execute: 800B7DF4   sw  v0, 0x6284(at)       (store g_world_danger)
+
+Write:   80116284   g_world_danger
+
+```
+
 
 ## Evidence
 
 ```
-7-Modding git:(main) python scripts/verify_built_disc.py ../../Downloads/ff7-builder-d1+clean+field-encounter-25-v0.1.2+world-encounter-25-v0.1.0/ff7-builder-d1+clean+field-encounter-25-v0.1.2+world-encounter-25-v0.1.0.bin \
-  --disc 1 \
-  --base clean \
-  --addon field-encounter-25-v0.1.2 \
-  --addon world-encounter-25-v0.1.0
-Image: D:\Downloads\ff7-builder-d1+clean+field-encounter-25-v0.1.2+world-encounter-25-v0.1.0\ff7-builder-d1+clean+field-encounter-25-v0.1.2+world-encounter-25-v0.1.0.bin (747435024 bytes)
-Config: base=clean addons=['field-encounter-25-v0.1.2', 'world-encounter-25-v0.1.0'] disc=1
-
-=== APPLIED.txt (D:\Downloads\ff7-builder-d1+clean+field-encounter-25-v0.1.2+world-encounter-25-v0.1.0\APPLIED.txt) ===
-Final Fantasy VII — IndividualContributor
-
-Disc: 1
-Base: Unmodified (retail)
-Add-ons:
-  - Field encounters — Light (25%) v0.1.2
-  - World encounters — Light (25%) v0.1.0
-EDC/ECC sectors repaired: 75
-
-Play:
-- Keep the .bin and .cue in the same folder.
-- Open the .cue in DuckStation (or your emulator).
-- Real PS2 (MechaPwn): burn from the .cue as MODE2/2352 DAO (see Modding docs/07-hardware-burn.md).
-- Builder regenerates Mode2 Form1 EDC/ECC on patched sectors after applying layers.
-
-https://individualcontributor.dev/builder/
-
-  expect mention of 'clean': yes
-  expect mention of 'field-encounter-25-v0.1.2': yes
-  expect mention of 'world-encounter-25-v0.1.0': yes
-
-=== Layer records on image ===
-  base clean: (no base layer)
-  addon field-encounter-25-v0.1.2: 364 records — OK
-  addon world-encounter-25-v0.1.0: 290 records — OK
-
-=== Engine stubs (when encounter addons selected) ===
-  FIELD/FIELD.BIN: stub@0xbb7c=YES
-  WORLD/WORLD.BIN: stub@0x17db4=YES
-
-Stack checked: base:clean, addon:field-encounter-25-v0.1.2, addon:world-encounter-25-v0.1.0
-PASS — built disc matches base+addon config (layer payloads present)
-➜  Final-Fantasy-7-Modding git:(main)
-
-g_danger 2 bytes 
-["duckstation-qt-x64-ReleaseLTCG.exe"+7F1600]+7173C
-
-g_world_danger
-["duckstation-qt-x64-ReleaseLTCG.exe"+7F1600]+116284
 ```
