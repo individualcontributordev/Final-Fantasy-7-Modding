@@ -37,7 +37,12 @@ python scripts/verify_builder_config.py \
 # must PASS per disc you ship
 ```
 
-Optional zip smoke: `python scripts/verify_built_disc.py path/to/built.bin` (WORLD stub@0x17db4=YES).
+Optional zip smoke with config flags:
+
+```bash
+python scripts/verify_built_disc.py path/to/built.bin \
+  --disc 1 --base clean --addon world-encounter-25-vX.Y.Z
+```
 
 Then commit `builder/` (+ VERSION) → push → Pages.
 
