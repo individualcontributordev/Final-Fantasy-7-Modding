@@ -1,5 +1,5 @@
 ---
-description: Mac agent instructs in chat; commit copy-paste values; user pastes evidence only
+description: Mac commits Windows task to repo first; human pulls and runs; check = pull evidence
 alwaysApply: true
 ---
 
@@ -7,75 +7,74 @@ alwaysApply: true
 
 ## Roles
 
-- **Mac (this Cursor chat):** only agent. Instruct the user here with full steps.
-- **Windows:** human only. Ghidra, DuckStation, disc, Git Bash. No Windows Cursor agent.
+| Machine | Who | Does |
+|---------|-----|------|
+| **Mac (this chat)** | agent | Plans; **writes the Windows task into the repo and pushes** before asking the human to run anything; short chat pointer only. On **check**: pull and review committed evidence. |
+| **Windows** | human | `git pull`, run commands from the committed file, paste evidence, commit/push. Makou / DuckStation / Ghidra / Git Bash. No Windows Cursor agent. |
+
+## Hard rule: instructions live in the repo
+
+**Never** give a Windows task that only exists in chat.
+
+Before asking the human to execute:
+
+1. Write **`docs/windows-last-output.txt`** (Goal, steps, COPY-PASTE commands, empty EVIDENCE).
+2. Prefer small **scripts** for multi-step CLI (`scripts/…`, SRP — one job per script). Put the exact invoke line in COPY-PASTE.
+3. **Commit + push** that file (and any new script) from Mac.
+4. Chat: one-line goal + “pull and open `docs/windows-last-output.txt`” + say **check** when done.
+
+If a script is needed and does not exist, create it in the same turn as the task file.
 
 ## One atomic task per reply
 
-Each Mac reply that needs Windows work is **exactly one task**.
+Exactly one Windows task per agent turn.
 
-## Instruct in chat + commit copy-paste values
-
-Chat has the numbered GUI walkthrough (clicks, keys, what success looks like).
-
-**Every address, label name, search string, and other typed value must also be in the committed file** so the user can copy-paste on Windows without retyping from chat.
-
-### `docs/windows-last-output.txt` layout
+## `docs/windows-last-output.txt` layout
 
 ```
 # Task: short name
 
-# COPY-PASTE (do not edit these lines)
-goto_address: 0x800ABA70
-rename_to: encounter_check
+# GOAL
+...
 
-# EVIDENCE (paste Listing / Decompiler below, then save)
+# STEPS
+1. ...
+
+# COPY-PASTE (do not edit these lines)
+command: ...
+
+# EVIDENCE (paste below, then save)
 ```
 
-- **COPY-PASTE:** agent writes exact values; user copies into Ghidra.
-- **EVIDENCE:** user pastes raw Ghidra output (listing lines, decompiler, errors). **No answer blanks. Never ask the user to fill `yes`/`no`/`skip` fields.**
+- **COPY-PASTE:** exact commands/paths; user does not retype from chat.
+- **EVIDENCE:** raw tool output only. No `yes`/`no` blanks.
+- Never ask to paste large output into **chat**.
 
-Agent infers success/failure from the pasted evidence on **check results**.
-
-Never put the *only* copy of an address in chat. Chat may repeat it; the file is the copy-paste source.
-
-Chat must include: Goal, Numbered steps, What you should see, Commit commands, **check results**.
-
-**Do not** say “see the handoff” or “fill the answers.” Chat = how; file = what to type + evidence paste area.
-
-Day-to-day release: root README. Densities: interactive CLI or `--density light|standard|dense|all`. Agent context: AGENTS.md.
-
-## No paste into chat
-
-Never ask to paste Windows output into chat. Evidence goes only in `docs/windows-last-output.txt`.
-
-## Commit pattern (Windows)
-
-1. Agent writes `docs/windows-last-output.txt` (COPY-PASTE + empty EVIDENCE section), commits, pushes
-2. Chat: full steps + this block:
+## Windows loop
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-notepad docs/windows-last-output.txt
-# copy from COPY-PASTE; paste evidence under EVIDENCE; save
+# do STEPS / COPY-PASTE from docs/windows-last-output.txt
+# paste under EVIDENCE; save
 git add docs/windows-last-output.txt
 git commit -m "Windows output: <task>"
 git push
 ```
 
-3. They say **check results**
+Then say **check** (or **check results**).
 
 Never commit game binaries (`.bin`, `.dec`, ISO, Ghidra DBs).
 
-## Before reading or acting
+## On “check”
+
+`git pull --ff-only` → read evidence / new commits → next **single** task (new file + push).
+Does **not** mean live builder/CDN audit unless the human asks for end-of-flow builder verify.
+
+## Before Mac acts
 
 ```bash
 git pull --ff-only
 ```
 
 Stop if pull fails.
-
-## On “check results”
-
-Pull → read evidence → update findings → next **single** task (chat steps + new COPY-PASTE file, no answer blanks).
