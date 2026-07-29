@@ -6,11 +6,12 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 
 ## How we work
 
-- **Mac (this chat):** only agent. Give **full Windows steps in chat** — never send the user to a handoff file for day-to-day work.
-- **Windows:** human — discs, Ghidra, DuckStation, Git Bash.
-- Outputs from Windows → `docs/windows-last-output.txt` + push; user says **check results**.
+- **Mac (this chat):** agent — **commits the Windows task into the repo first** (`docs/windows-last-output.txt` + scripts), then a short chat pointer. Never chat-only runbooks.
+- **Windows:** human — `git pull`, run COPY-PASTE from that file, paste evidence, push; discs / Ghidra / DuckStation / Git Bash.
+- User says **check** → Mac pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
-- Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/`).
+- Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/mac-human-workflow.mdc`).
+- Built-disc smoke: `python scripts/verify_built_disc.py path/to/built.bin` (APPLIED + RCnt2 stubs).
 
 ## Architecture (do not regress)
 
