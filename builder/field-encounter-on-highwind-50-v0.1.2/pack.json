@@ -1,0 +1,18 @@
+{
+  "id": "field-encounter-on-highwind-50-v0.1.2",
+  "name": "Field encounters \u2014 Standard (50%) (on Highwind)",
+  "kind": "addon",
+  "version": "0.1.2",
+  "blurb": "Moderate random field battles.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "highwind-v0.1.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "rate": 50
+}

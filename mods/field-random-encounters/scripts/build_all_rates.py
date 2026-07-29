@@ -19,7 +19,7 @@ BUILD = _MOD_SCRIPTS / "build_on_base.py"
 
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
 
-AGAINSTS = ("clean", "csr", "csr-plus", "csr-plusplus")
+AGAINSTS = ("clean", "csr", "csr-plus", "highwind")
 
 
 def main() -> int:
@@ -42,7 +42,7 @@ def main() -> int:
 	ap.add_argument(
 		"--against",
 		default=None,
-		help="Optional single base (default: all of clean/csr/csr-plus/csr-plusplus)",
+		help="Optional single base (default: all of clean/csr/csr-plus/highwind)",
 	)
 	ap.add_argument("--version", default=None, help="Override VERSION file")
 	args = ap.parse_args()

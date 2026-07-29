@@ -49,9 +49,9 @@ AGAINST = {
 		"prefix_stem": "field-encounter-on-csr-plus",
 		"on_label": " (on CSR+)",
 	},
-	"csr-plusplus": {
-		"base_id": "csr-plusplus-v0.1.1",
-		"prefix_stem": "field-encounter-on-csr-plusplus",
+	"highwind": {
+		"base_id": "highwind-v0.1.1",
+		"prefix_stem": "field-encounter-on-highwind",
 		"on_label": " (on Highwind)",
 	},
 }
