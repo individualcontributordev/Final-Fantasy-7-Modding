@@ -50,11 +50,13 @@ python scripts/verify_builder_config.py \
 
 Must print `PASS` for each base/disc you ship. Wrong `compatibleBases` or missing disc layer fails here.
 
-Optional post-builder zip smoke (after human downloads a build):
+Optional post-builder zip smoke (same config flags as verify_builder_config):
 
 ```bash
-python scripts/verify_built_disc.py "/path/to/built/FINALFANTASY7_D1.bin"
-# FIELD stub@0xbb7c=YES when Light/Standard/Dense field is on that image
+python scripts/verify_built_disc.py "/path/to/built/FINALFANTASY7_D1.bin" \
+  --disc 1 --base clean \
+  --addon field-encounter-25-vX.Y.Z
+# PASS = layer payloads + stubs on the boot image
 ```
 
 Then: `git status` → commit `builder/` (+ VERSION) → push → Pages.
