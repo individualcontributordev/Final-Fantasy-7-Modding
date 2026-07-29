@@ -37,7 +37,7 @@ Densities are **presets**, not free-form `%`. Invalid: `--density 1`. Valid: `li
 1. `git status` — only `builder/**/*.json` (and VERSION if bumped)
 2. Commit + push (auto-commit rule applies)
 3. Wait for Pages; confirm https://individualcontributor.dev/builder/ lists the packs
-4. Optional Windows smoke on a built zip (Mac writes task to `docs/windows-last-output.txt` first):
+4. Optional Windows smoke on a built zip (Mac writes task to `docs/windows-last-task.md` first):
 
 ```bash
 python scripts/verify_built_disc.py "/path/to/built/FINALFANTASY7_D1.bin"

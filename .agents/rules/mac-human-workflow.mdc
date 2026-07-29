@@ -18,10 +18,10 @@ alwaysApply: true
 
 Before asking the human to execute:
 
-1. Write **`docs/windows-last-output.txt`** (Goal, steps, COPY-PASTE commands, empty EVIDENCE).
+1. Write **`docs/windows-last-task.md`** (Goal, steps, COPY-PASTE commands, empty EVIDENCE).
 2. Prefer small **scripts** for multi-step CLI (`scripts/…`, SRP — one job per script). Put the exact invoke line in COPY-PASTE.
 3. **Commit + push** that file (and any new script) from Mac.
-4. Chat: one-line goal + “pull and open `docs/windows-last-output.txt`” + say **check** when done.
+4. Chat: one-line goal + “pull and open `docs/windows-last-task.md`” + say **check** when done.
 
 If a script is needed and does not exist, create it in the same turn as the task file.
 
@@ -29,25 +29,32 @@ If a script is needed and does not exist, create it in the same turn as the task
 
 Exactly one Windows task per agent turn.
 
-## `docs/windows-last-output.txt` layout
+## `docs/windows-last-task.md` layout (markdown)
 
-```
+Use real markdown headings and fenced code blocks:
+
+```markdown
 # Task: short name
 
-# GOAL
+## Goal
 ...
 
-# STEPS
+## Steps
 1. ...
 
-# COPY-PASTE (do not edit these lines)
-command: ...
+## Copy-paste
 
-# EVIDENCE (paste below, then save)
+```bash
+exact commands here
 ```
 
-- **COPY-PASTE:** exact commands/paths; user does not retype from chat.
-- **EVIDENCE:** raw tool output only. No `yes`/`no` blanks.
+## Evidence
+
+Paste raw tool output below (fenced code block OK).
+```
+
+- **Copy-paste:** exact commands/paths in a `bash` fence; user does not retype from chat.
+- **Evidence:** raw tool output only. No `yes`/`no` blanks.
 - Never ask to paste large output into **chat**.
 
 ## Windows loop
@@ -55,9 +62,9 @@ command: ...
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-# do STEPS / COPY-PASTE from docs/windows-last-output.txt
+# do STEPS / COPY-PASTE from docs/windows-last-task.md
 # paste under EVIDENCE; save
-git add docs/windows-last-output.txt
+git add docs/windows-last-task.md
 git commit -m "Windows output: <task>"
 git push
 ```

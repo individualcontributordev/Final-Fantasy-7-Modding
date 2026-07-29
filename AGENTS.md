@@ -6,7 +6,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 
 ## How we work
 
-- **Mac (this chat):** agent — **commits the Windows task into the repo first** (`docs/windows-last-output.txt` + scripts), then a short chat pointer. Never chat-only runbooks.
+- **Mac (this chat):** agent — **commits the Windows task into the repo first** (`docs/windows-last-task.md` + scripts), then a short chat pointer. Never chat-only runbooks.
 - **Windows:** human — `git pull`, run COPY-PASTE from that file, paste evidence, push; discs / Ghidra / DuckStation / Git Bash.
 - User says **check** → Mac pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
