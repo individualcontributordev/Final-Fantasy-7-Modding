@@ -25,7 +25,8 @@ git pull --ff-only
 python mods/field-random-encounters/scripts/build_all_rates.py
 
 # One against + one density (omit --density to prompt)
-python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
+# against: clean | csr | highwind  (csr-plus base is retired)
+python mods/field-random-encounters/scripts/build_on_base.py --against highwind --discs 1
 python mods/field-random-encounters/scripts/build_on_base.py --against clean --density light --discs 1
 ```
 

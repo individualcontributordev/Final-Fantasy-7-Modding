@@ -17,7 +17,7 @@ Full write-up: `docs/06-new-mod-research.md`. Follow that; this skill is the che
 - **Makou vs Ghidra fork (do this first):**
   - Map data `FIELD/*.DAT` (Makou) → stop here; use **Final-Fantasy-7-CSR** skills `ship-makou-addon` or `ship-csr-plus-scene`
   - Engine binary `FIELD.BIN` / `WORLD.BIN` (Ghidra) → continue in this repo
-- Which stack bases must it support? (`clean`, `csr-v…`, `csr-plusplus-v…`)
+- Which stack bases must it support? (`clean`, `csr-v…`, `highwind-v…`)
 
 ## 2. RE (Mac ↔ Windows)
 

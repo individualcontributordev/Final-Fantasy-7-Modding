@@ -89,8 +89,8 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 		return "clean"
 	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
 	ids = [str(b.get("id", "")) for b in bases]
-	if against == "csr-plusplus":
-		cands = [i for i in ids if i.startswith("csr-plusplus-v")]
+	if against == "highwind":
+		cands = [i for i in ids if i.startswith("highwind-v")]
 	elif against == "csr-plus":
 		cands = [i for i in ids if i.startswith("csr-plus-v")]
 	elif against == "csr":
