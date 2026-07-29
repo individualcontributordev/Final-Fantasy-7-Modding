@@ -8,7 +8,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 - **Windows:** human — discs, Ghidra, DuckStation, Git Bash.
 - Outputs from Windows → `docs/windows-last-output.txt` + push; user says **check results**.
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
-- Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no Cursor trailers; auto commit/push when work lands (see `.cursor/rules/`).
+- Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/`).
 
 ## Architecture (do not regress)
 
@@ -61,4 +61,4 @@ When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.m
 
 ## Rules (Cursor)
 
-`.cursor/rules/` — mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
+`.agents/rules/` — mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
