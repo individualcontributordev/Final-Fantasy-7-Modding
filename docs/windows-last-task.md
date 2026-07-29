@@ -1,29 +1,40 @@
-# Task: verify Unmodified + Light field/world as a builder config
+# Task: pull CSR then re-run Unmodified + Light config verify
 
 ## Goal
 
-Confirm the same stack the **site builder** would apply for **Unmodified + Light field + Light world** on Disc 1 stacks cleanly from `builder/` packs (no zip path / env vars required beyond pristine).
+Last run failed because **Final-Fantasy-7-CSR** on Windows lacked
+`scripts/verify_builder_config.py` (clone behind `main`). Pull CSR, then re-run the clean + Light field/world stack verify.
+
+## Prior evidence (keep for history)
+
+```
+CSR verify script not found: D:\projects\Final-Fantasy-7-CSR\scripts\verify_builder_config.py
+```
 
 ## Steps
 
-1. `git pull --ff-only` in **Final-Fantasy-7-Modding**.
-2. **Final-Fantasy-7-CSR** should sit as a sibling clone (wrapper default), or pass `--csr-root`.
-3. Point `--pristine` at a retail Disc 1 `.bin` (this repo `workspace/pristine/` or CSR’s).
-4. Run the copy-paste block. Edit pack ids only if `builder/manifest.json` shows newer versions.
-5. Paste full stdout under [Evidence](#evidence). One line on prior DuckStation Danger feel is fine. Commit this file + push. Say **check**.
+1. Pull **both** repos (CSR first).
+2. Confirm the CSR script exists.
+3. Re-run `verify_builder_config.py` for clean + Light field + Light world, disc 1.
+4. Paste full stdout under [Evidence](#evidence). One line on prior DuckStation Danger feel is fine. Commit this file + push. Say **check**.
 
 ## Success looks like
 
-- Line: `PASS — builder config applies cleanly`
-- Addons resolve: `field-encounter-25-v0.1.2`, `world-encounter-25-v0.1.0` on base `clean`
+- `ls` / `test -f` shows CSR `scripts/verify_builder_config.py`
+- Final line: `PASS — builder config applies cleanly`
 
 ## Copy-paste
 
 ```bash
-cd "$(git rev-parse --show-toplevel)"
+# 1) CSR must be current
+cd /d/projects/Final-Fantasy-7-CSR
+git pull --ff-only
+test -f scripts/verify_builder_config.py && echo "CSR script OK" || echo "CSR script MISSING"
+
+# 2) Modding + verify
+cd /d/projects/Final-Fantasy-7-Modding
 git pull --ff-only
 
-# Prefer local pristine; fallback to CSR sibling if needed
 if [ -f workspace/pristine/FINALFANTASY7_D1.bin ]; then
   PRISTINE="workspace/pristine/FINALFANTASY7_D1.bin"
 else
@@ -38,20 +49,18 @@ python scripts/verify_builder_config.py \
   --addon world-encounter-25-v0.1.0
 ```
 
+If your CSR path is not `D:\projects\Final-Fantasy-7-CSR`, fix the `cd` paths or:
+
+```bash
+python scripts/verify_builder_config.py \
+  --csr-root "/d/path/to/Final-Fantasy-7-CSR" \
+  --pristine "$PRISTINE" \
+  --disc 1 --base clean \
+  --addon field-encounter-25-v0.1.2 \
+  --addon world-encounter-25-v0.1.0
+```
+
 ## Evidence
 
 ```
-g git:(main) if [ -f workspace/pristine/FINALFANTASY7_D1.bin ]; then
-  PRISTINE="workspace/pristine/FINALFANTASY7_D1.bin"
-else
-  PRISTINE="../Final-Fantasy-7-CSR/workspace/pristine/FINALFANTASY7_D1.bin"
-fi
-➜  Final-Fantasy-7-Modding git:(main) python scripts/verify_builder_config.py \
-  --pristine "$PRISTINE" \
-  --disc 1 \
-  --base clean \
-  --addon field-encounter-25-v0.1.2 \
-  --addon world-encounter-25-v0.1.0
-CSR verify script not found: D:\projects\Final-Fantasy-7-CSR\scripts\verify_builder_config.py
-➜  Final-Fantasy-7-Modding git:(main)
 ```
