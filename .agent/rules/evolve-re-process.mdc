@@ -1,0 +1,37 @@
+---
+description: Evolve RE process docs when workflows improve or new capabilities unlock
+alwaysApply: true
+---
+
+# Evolve the RE process
+
+Findings alone are not enough. When work **speeds up RE**, **removes a dead end**, or **unlocks a new mod class**, update the living process in the same session.
+
+## Triggers (do this without being asked)
+
+Update process docs/skills when any of these happen:
+
+- A repeatable RE shortcut (search order, Ghidra label, DuckStation watch, script)
+- Proof that a prior assumption was wrong (file ownership, VA base, tool limitation)
+- A new injectable surface (e.g. `WORLD.BIN`, battle engine, Makou-only path that ships as layers)
+- A safer/faster inject or verify path (script replaces manual steps)
+- A builder/stack rule players or pack authors must follow
+
+## Where to write
+
+| Change type | Update |
+|-------------|--------|
+| End-to-end loop / mental model | `docs/06-new-mod-research.md` |
+| Topic reference (encounters, disc, Ghidra…) | matching `docs/0N-*.md` |
+| Dated discovery | `docs/findings/` first (`record-findings`) |
+| Agent checklist | `.cursor/skills/research-new-mod` and/or `evolve-re-process` |
+| New capability unlocked | `docs/06-new-mod-research.md` → **Capabilities unlocked** table |
+
+## Rules of thumb
+
+- Prefer **editing** `06` / `0N` over new meta-docs
+- Keep process steps actionable (commands, addresses, “do X before Y”)
+- Retire obsolete steps explicitly (strike or delete — don’t leave contradictory guides)
+- Commit/push with the finding or ship work (auto-commit applies)
+
+Full checklist: `.cursor/skills/evolve-re-process/SKILL.md`.

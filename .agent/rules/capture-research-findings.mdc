@@ -1,0 +1,32 @@
+---
+description: Capture FF7 PSX modding discoveries in docs/findings/ during this project
+alwaysApply: true
+---
+
+# Capture research findings
+
+This repo is an active RE/mod project. **Do not let discoveries live only in chat.**
+
+## Before ending a session
+
+If we learned anything useful (addresses, offsets, settings, patch results, contradictions):
+
+1. Create or update a file in `docs/findings/` using `_template.md`
+2. Add a row to `docs/findings/README.md`
+3. Promote verified facts into the matching `docs/0N-*.md` reference doc
+4. If it **improves the RE loop** or **unlocks a new mod capability**, also run `.cursor/skills/evolve-re-process` (update `docs/06-new-mod-research.md`)
+
+Follow the full workflow in `.cursor/skills/record-findings/SKILL.md`.
+
+## Conventions
+
+- Finding files: `docs/findings/YYYY-MM-DD-slug.md`
+- Confidence tags: `confirmed` | `likely` | `unverified`
+- Link Ghidra addresses as `` `0x8009C540` `` with PS1 base `0x80000000`
+- Never commit ISO/binary files — they stay in `workspace/iso-extract/`
+
+## Do not
+
+- Create findings for trivial chat (greetings, generic tool install with no project-specific detail)
+- Overwrite reference docs with unverified guesses
+- Store disc images or copyrighted game data in git

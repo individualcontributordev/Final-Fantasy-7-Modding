@@ -1,0 +1,36 @@
+---
+description: Keep repo content minimal — only what helps other engineers mod FF7 PSX
+alwaysApply: true
+---
+
+# Keep the repo succinct
+
+Only add or keep material that helps **other engineers** understand and mod FF7 PSX discs. When in doubt, leave it out or put it in chat, not git.
+
+## Do not commit
+
+- Personal machine setup (SSH keys, git identity, account-specific remotes, IDE preferences)
+- Session narrative, “how we got here,” or duplicate instructions already in rules/skills
+- Generic tool docs with no FF7/PSX-specific detail
+- New files when a short addition to an existing doc is enough
+- Redundant READMEs / WINDOWS-INSTRUCTIONS / handoff sprawl — root README + AGENTS.md are enough
+- Empty folder placeholders as README.md — use `.gitkeep` under `workspace/`
+
+## Do commit
+
+- FF7 disc format, file layout, addresses, patch workflow, verified RE results
+- Scripts and commands that are part of the modding workflow
+- Findings with **project-specific** facts (offsets, behaviors, test results)
+- Active **`docs/windows-last-output.txt`** when used as the git output pipe (overwrite each run)
+- Published **`builder/`** JSON packs + `mods/<mod>/` source
+
+## Writing style
+
+- Short, scannable reference — tables and bullets over prose
+- One home per fact: reference doc OR finding, not both with the same text
+- README and `AGENTS.md` are indexes; deep detail lives in `docs/0N-*.md`, `docs/findings/`, or `mods/*/patches/`
+- Trim or delete docs that no longer earn their keep
+
+## Before adding anything
+
+Ask: *Would a new contributor need this to mod the disc, or is it only useful to me on this machine?* If the latter, do not add it.
