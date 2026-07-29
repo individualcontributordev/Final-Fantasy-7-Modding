@@ -14,8 +14,10 @@ Full write-up: `docs/06-new-mod-research.md`. Follow that; this skill is the che
 ## 1. Frame the mod
 
 - One-sentence player-facing behavior
-- Engine binary vs Makou map data? (wrong answer wastes the week)
-- Which stack bases must it support? (`clean`, `csr-v…`, …)
+- **Makou vs Ghidra fork (do this first):**
+  - Map data `FIELD/*.DAT` (Makou) → stop here; use **Final-Fantasy-7-CSR** skills `ship-makou-addon` or `ship-csr-plus-scene`
+  - Engine binary `FIELD.BIN` / `WORLD.BIN` (Ghidra) → continue in this repo
+- Which stack bases must it support? (`clean`, `csr-v…`, `csr-plusplus-v…`)
 
 ## 2. RE (Mac ↔ Windows)
 
