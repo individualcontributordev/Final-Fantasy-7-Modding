@@ -63,4 +63,26 @@ python scripts/verify_builder_config.py \
 ## Evidence
 
 ```
+ if [ -f workspace/pristine/FINALFANTASY7_D1.bin ]; then
+  PRISTINE="workspace/pristine/FINALFANTASY7_D1.bin"
+else
+  PRISTINE="../Final-Fantasy-7-CSR/workspace/pristine/FINALFANTASY7_D1.bin"
+fi
+
+python scripts/verify_builder_config.py \
+  --pristine "$PRISTINE" \
+  --disc 1 \
+  --base clean \
+  --addon field-encounter-25-v0.1.2 \
+  --addon world-encounter-25-v0.1.0
+Config: base=clean addons=['field-encounter-25-v0.1.2', 'world-encounter-25-v0.1.0'] disc=1
+Pristine: D:\projects\Final-Fantasy-7-Modding\workspace\pristine\FINALFANTASY7_D1.BIN
+  OK base clean (no base layer)
+  OK addon field-encounter-25-v0.1.2 ← field-encounter-25-v0.1.2\layers\disc1.layer.json (364 records)
+  OK addon world-encounter-25-v0.1.0 ← world-encounter-25-v0.1.0\layers\disc1.layer.json (290 records)
+Stack:
+  - base:clean (pristine only)
+  - addon:field-encounter-25-v0.1.2 (disc1.layer.json, 364 records)
+  - addon:world-encounter-25-v0.1.0 (disc1.layer.json, 290 records)
+PASS — builder config applies cleanly (654 total records)
 ```
