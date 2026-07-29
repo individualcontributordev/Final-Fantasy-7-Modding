@@ -36,12 +36,13 @@ python mods/field-random-encounters/scripts/build_on_base.py --against csr --dis
 Needs `workspace/pristine/FINALFANTASY7_D1.bin`. After CSR base **ids** change, rebuild so `compatibleBases` match.
 
 **Live CSR bases as of 2026-07-28: `clean` (Unmodified), `csr-v0.14.1`, and
-`csr-plusplus-v0.1.1` (displayed as "Highwind" — its own separate mod, not a
-bigger CSR+; renamed from "CSR++" so it doesn't read as more CSR).**
+`csr-plusplus-v0.1.1` ("Highwind") — a full playthrough compressed to ~2-3
+hours, its own separate mod, not a bigger CSR+.**
 `csr-plus-v0.1.1` stays retired — CSR+ trims now ship as individual
 `csr-plus-scene-*` add-ons from the CSR repo instead. Don't rebuild
-`-on-csr-plus-*` / `-on-csr-plusplus-*` combo packs; they were removed as
-orphaned, and Highwind doesn't stack with CSR+ scene add-ons anyway.
+`-on-csr-plus-*` combo packs (CSR+ base is retired); Highwind doesn't stack
+with CSR+ scene add-ons either way, but field/world encounter rate packs
+should still ship `-on-csr-plusplus-*` variants since Highwind is a live base.
 
 ## RE / research
 

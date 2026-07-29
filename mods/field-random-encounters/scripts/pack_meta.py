@@ -52,7 +52,7 @@ AGAINST = {
 	"csr-plusplus": {
 		"base_id": "csr-plusplus-v0.1.1",
 		"prefix_stem": "field-encounter-on-csr-plusplus",
-		"on_label": " (on CSR++)",
+		"on_label": " (on Highwind)",
 	},
 }
 
