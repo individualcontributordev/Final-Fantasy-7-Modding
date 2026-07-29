@@ -1,45 +1,44 @@
-# Task: verify Unmodified + Light field/world built disc (Danger ramp)
+# Task: verify Unmodified + Light field/world as a builder config
 
 ## Goal
 
-Prove whether the DuckStation Disc 1 image you boot actually has the Light field (and world) RCnt2 FORCE stubs applied. Vanilla Danger that climbs steadily usually means the FIELD stub is **not** present (wrong image, or pack not in `APPLIED.txt`).
+Confirm the same stack the **site builder** would apply for **Unmodified + Light field + Light world** on Disc 1 stacks cleanly from `builder/` packs (no zip path / env vars required beyond pristine).
 
 ## Steps
 
-1. `git pull --ff-only` in **Final-Fantasy-7-Modding** (this repo).
-2. Set `BUILT_D1` to the Disc 1 `.bin` next to the `.cue` DuckStation opens (builder zip extract folder — **not** pristine redump).
-3. Run `verify_built_disc.py` on that path (commands below).
-4. Paste full script stdout under [Evidence](#evidence) (and `APPLIED.txt` text if the script did not find it).
-5. Commit this file + push. Say **check**.
+1. `git pull --ff-only` in **Final-Fantasy-7-Modding**.
+2. **Final-Fantasy-7-CSR** should sit as a sibling clone (wrapper default), or pass `--csr-root`.
+3. Point `--pristine` at a retail Disc 1 `.bin` (this repo `workspace/pristine/` or CSR’s).
+4. Run the copy-paste block. Edit pack ids only if `builder/manifest.json` shows newer versions.
+5. Paste full stdout under [Evidence](#evidence). One line on prior DuckStation Danger feel is fine. Commit this file + push. Say **check**.
 
 ## Success looks like
 
-- `APPLIED.txt` mentions field-encounter Light (`25` / light) on clean, and world-encounter light if you selected it.
-- `FIELD/FIELD.BIN` line: `stub@0xbb7c=YES`
-- `WORLD/WORLD.BIN` line: `stub@0x17db4=YES` (if world light was selected)
-
-If `FIELD stub@0xbb7c=NO` → pack not on that image; rebuild Unmodified + Light with the **clean** `field-encounter-25` pack and re-verify before more DuckStation time.
+- Line: `PASS — builder config applies cleanly`
+- Addons resolve: `field-encounter-25-v0.1.2`, `world-encounter-25-v0.1.0` on base `clean`
 
 ## Copy-paste
-
-Git Bash — edit **only** the `BUILT_D1=` path.
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 
-# >>> set this to your built Disc 1 .bin (DuckStation's folder) <<<
-BUILT_D1="/c/path/to/builder-output/FINALFANTASY7_D1.bin"
+# Prefer local pristine; fallback to CSR sibling if needed
+if [ -f workspace/pristine/FINALFANTASY7_D1.bin ]; then
+  PRISTINE="workspace/pristine/FINALFANTASY7_D1.bin"
+else
+  PRISTINE="../Final-Fantasy-7-CSR/workspace/pristine/FINALFANTASY7_D1.bin"
+fi
 
-python scripts/verify_built_disc.py "$BUILT_D1"
-
-# optional: show APPLIED next to bin if verify said not found
-# cat "$(dirname "$BUILT_D1")/APPLIED.txt"
+python scripts/verify_builder_config.py \
+  --pristine "$PRISTINE" \
+  --disc 1 \
+  --base clean \
+  --addon field-encounter-25-v0.1.2 \
+  --addon world-encounter-25-v0.1.0
 ```
 
 ## Evidence
-
-Paste script output below, then save.
 
 ```
 ```

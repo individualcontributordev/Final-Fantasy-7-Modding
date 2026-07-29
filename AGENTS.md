@@ -11,7 +11,8 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 - User says **check** → Mac pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
 - Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/mac-human-workflow.mdc`).
-- Built-disc smoke: `python scripts/verify_built_disc.py path/to/built.bin` (APPLIED + RCnt2 stubs).
+- **Before publish:** `python scripts/verify_builder_config.py --pristine … --disc N --base … --addon …` (stacks layers like the site; required in ship skills).
+- Optional built-zip smoke: `python scripts/verify_built_disc.py path/to/built.bin` (APPLIED + RCnt2 stubs).
 
 ## Architecture (do not regress)
 

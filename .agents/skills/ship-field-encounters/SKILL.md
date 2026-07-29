@@ -32,17 +32,32 @@ python mods/field-random-encounters/scripts/build_on_base.py --against clean --d
 
 Densities are **presets**, not free-form `%`. Invalid: `--density 1`. Valid: `light` / `standard` / `dense` / `all` (or 25 / 50 / 75).
 
-## After build
+## After build — verify builder config (required before publish)
 
-1. `git status` — only `builder/**/*.json` (and VERSION if bumped)
-2. Commit + push (auto-commit rule applies)
-3. Wait for Pages; confirm https://individualcontributor.dev/builder/ lists the packs
-4. Optional Windows smoke on a built zip (Mac writes task to `docs/windows-last-task.md` first):
+Stack the pack like the site builder (needs CSR sibling repo + pristine bin):
+
+```bash
+# clean Light disc 1 example — use the pack ids you just built
+python scripts/verify_builder_config.py \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 --base clean \
+  --addon field-encounter-25-vX.Y.Z
+
+# CSR / Highwind variants:
+#   --base csr-v0.14.1 --addon field-encounter-on-csr-25-vX.Y.Z
+#   --base highwind-v0.1.1 --addon field-encounter-on-highwind-25-vX.Y.Z
+```
+
+Must print `PASS` for each base/disc you ship. Wrong `compatibleBases` or missing disc layer fails here.
+
+Optional post-builder zip smoke (after human downloads a build):
 
 ```bash
 python scripts/verify_built_disc.py "/path/to/built/FINALFANTASY7_D1.bin"
-# FIELD stub@0xbb7c=YES for Light/Standard/Dense field packs on that image
+# FIELD stub@0xbb7c=YES when Light/Standard/Dense field is on that image
 ```
+
+Then: `git status` → commit `builder/` (+ VERSION) → push → Pages.
 
 ## If CSR base ids changed
 

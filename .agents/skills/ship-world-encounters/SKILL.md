@@ -26,10 +26,20 @@ python mods/world-map-random-encounters/scripts/build_all_rates.py --density all
 
 `exclusiveGroup`: `world-encounter-rate` (stacks with Field packs).
 
-## After build
+## After build — verify builder config (required before publish)
 
-1. Commit `builder/` JSON (+ VERSION if bumped)
-2. Push; wait for Pages; confirm builder UI lists world packs
+```bash
+python scripts/verify_builder_config.py \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 --base clean \
+  --addon world-encounter-25-vX.Y.Z
+# also --base csr-v0.14.1 / highwind-v0.1.1 with matching -on-csr- / -on-highwind- pack ids
+# must PASS per disc you ship
+```
+
+Optional zip smoke: `python scripts/verify_built_disc.py path/to/built.bin` (WORLD stub@0x17db4=YES).
+
+Then commit `builder/` (+ VERSION) → push → Pages.
 
 ## Do not
 
