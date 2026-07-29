@@ -63,6 +63,10 @@ New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skill
 
 When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.md` (Capabilities table) in the same session — rule `evolve-re-process`.
 
-## Rules (Cursor)
+## Rules / skills layout
 
-`.agents/rules/` — mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
+Canonical trees: **`.agents/rules/`**, **`.agents/skills/`** (edit here only).
+
+Auggie also loads **`.augment/rules`** and **`.augment/skills`**, which are **symlinks** to those dirs (same pattern as other projects). Do not duplicate content under `.augment/`.
+
+Rules include: mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
