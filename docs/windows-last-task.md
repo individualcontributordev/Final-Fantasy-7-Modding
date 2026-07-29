@@ -82,4 +82,10 @@ https://individualcontributor.dev/builder/
 Stack checked: base:clean, addon:field-encounter-25-v0.1.2, addon:world-encounter-25-v0.1.0
 PASS — built disc matches base+addon config (layer payloads present)
 ➜  Final-Fantasy-7-Modding git:(main)
+
+g_danger 2 bytes 
+["duckstation-qt-x64-ReleaseLTCG.exe"+7F1600]+7173C
+
+g_world_danger
+["duckstation-qt-x64-ReleaseLTCG.exe"+7F1600]+116284
 ```
