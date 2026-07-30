@@ -53,14 +53,13 @@ Must print `PASS` for each base/disc you ship. Wrong `compatibleBases` or missin
 Optional post-builder zip smoke:
 
 ```bash
-# Prefer extract folder or stamped .bin — infers disc/base/addons from name + APPLIED.txt
+# Extract folder or .bin; APPLIED.txt must sit next to the .bin (config source)
 python scripts/verify_built_disc.py "/path/to/ff7-builder-d1+…/"
-# Overrides still work if needed: --disc 1 --base clean --addon field-encounter-25-vX.Y.Z
 ```
 
 **Zip verify rules** (see `docs/findings/2026-07-30-verify-built-disc-stacking.md`):
 
-- Inference order: CLI → builder stamp (`ff7-builder-dN+base+addons…`) → APPLIED display names via catalog.
+- Config **only** from APPLIED.txt (Disc / Base / Add-ons → catalog ids). No pack-id flags.
 - Ignores Mode2 EDC/ECC (`sector_off >= 2072`) and **base** user-bytes later addons overwrite.
 
 Then: `git status` → commit `builder/` (+ VERSION) → push → Pages.

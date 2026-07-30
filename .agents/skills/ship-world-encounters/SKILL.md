@@ -41,13 +41,12 @@ Optional zip smoke:
 
 ```bash
 python scripts/verify_built_disc.py path/to/ff7-builder-d1+…/
-# infers disc/base/addons from stamp + APPLIED.txt; CLI flags still override
+# config only from APPLIED.txt next to the .bin
 ```
 
 **Zip verify rules** (see `docs/findings/2026-07-30-verify-built-disc-stacking.md`):
 
-- Inference: CLI → builder stamp → APPLIED names via catalog.
-- Ignores Mode2 EDC/ECC and base bytes later addons overwrite.
+- APPLIED.txt only (no pack-id flags). Ignores Mode2 EDC/ECC and base bytes later addons overwrite.
 
 Then commit `builder/` (+ VERSION) → push → Pages.
 
