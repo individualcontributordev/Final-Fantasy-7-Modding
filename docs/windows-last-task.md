@@ -1,68 +1,52 @@
-# Task: fix .augment symlinks (Git Bash on Windows)
+# Task: playtest CSR base + Light field + Light world (disc 1)
 
 ## Goal
 
-Ensure this clone has **in-repo** agent files under `.agents/` and Auggie entrypoints under `.augment/` as **relative** symlinks (not plain text, not absolute paths outside the repo).
+Continue published-pack matrix. **Already done:** Unmodified (clean) + Light field + Light world — builder zip PASS, runtime field OK, world FORCE 0/FFFF + battle confirmed.
 
-## Layout (already correct in git)
+**This task:** same encounter Lights on **CSR** base (not clean, not Highwind yet).
 
-| Path | Role |
-|------|------|
-| `.agents/rules/`, `.agents/skills/` | Canonical copies — real files, edit only here |
-| `.augment/rules` → `../.agents/rules` | Relative symlink for Auggie |
-| `.augment/skills` → `../.agents/skills` | Relative symlink for Auggie |
+## Matrix status
 
-Do **not** point at another machine path or home directory. Do **not** copy trees into `.augment/`.
+| Base | Field Light | World Light | Status |
+|------|-------------|-------------|--------|
+| Unmodified (clean) | 25 | 25 | **PASS** (prior session) |
+| CSR `csr-v0.14.1` | on-csr-25 | on-csr-25 | **this task** |
+| Highwind `highwind-v0.1.1` | on-highwind-25 | on-highwind-25 | later |
+| CSR + CSR+ scene checkboxes | — | — | later |
 
 ## Success
 
-From the **repo root** in Git Bash, you should see:
+1. Browser builder: base **CSR**, Field encounters **Light**, World encounters **Light** (on-csr packs). Build disc 1 zip.
+2. `verify_built_disc.py` → **PASS** for the config below.
+3. DuckStation: boots; field feels Light; world map still gets occasional battles (stub live). Optional: one line that both feel OK.
 
-- `ls -la .augment` shows `rules -> ../.agents/rules` and `skills -> ../.agents/skills`
-- `test -f .augment/rules/mac-human-workflow.mdc && echo rules_ok` prints `rules_ok`
-- Modding: `test -f .augment/skills/record-findings/SKILL.md && echo skills_ok` prints `skills_ok`
-- CSR (if fixing that clone): `test -f .augment/skills/ship-csr-plus-scene/SKILL.md && echo skills_ok`
+## Steps
 
-## Steps (Git Bash — not cmd mklink)
+1. `git pull --ff-only` in Final-Fantasy-7-Modding (and CSR sibling if used for pristine/tools).
+2. https://individualcontributor.dev/builder/ — hard refresh if needed.
+3. Load pristine NTSC-U **Disc 1**.
+4. Base: **CSR**. Add-ons: Field **Light**, World **Light** (must be the CSR-compatible variants, not clean-only).
+5. Build → extract zip. Note folder path for BUILT_D1.
+6. Run copy-paste verify. Paste full stdout under Evidence.
+7. Short DuckStation play (field + world grass). One-line playtest note under Evidence.
+8. Commit this file + push. Say **check**.
 
-### 1. Enable Git symlinks (once per machine)
+## Copy-paste
 
-    git config --global core.symlinks true
-
-Windows may need **Developer Mode** (Settings → Privacy and security → For developers) or an elevated shell so Git can create symlinks.
-
-### 2. Prefer Git restoring links
+Git Bash — set BUILT_D1 to the built disc 1 .bin:
 
     cd "$(git rev-parse --show-toplevel)"
     git pull --ff-only
-    rm -rf .augment/rules .augment/skills
-    git checkout -- .augment
-    ls -la .augment
 
-### 3. If Git left plain text files or broken links — recreate with ln -s
+    BUILT_D1="/c/path/to/builder-output/your-d1.bin"
 
-    cd "$(git rev-parse --show-toplevel)"
-    mkdir -p .augment
-    cd .augment
-    rm -rf rules skills
-    ln -s ../.agents/rules rules
-    ln -s ../.agents/skills skills
-    ls -la
-    test -f rules/mac-human-workflow.mdc && echo rules_ok
-    test -d skills && ls skills && echo skills_ok
-
-Repeat for **Final-Fantasy-7-CSR** and **individualcontributordev.github.io** if those clones are broken too (same commands, each repo root).
-
-### 4. Do not use
-
-- cmd `mklink` (use Git Bash `ln -s` instead)
-- Absolute paths (`/d/projects/...`, `C:\...`)
-- Copying rule/skill files into `.augment/`
-
-Also documented in root **AGENTS.md** (Rules / skills layout).
+    python scripts/verify_built_disc.py "$BUILT_D1" \
+      --disc 1 \
+      --base csr-v0.14.1 \
+      --addon field-encounter-on-csr-25-v0.1.2 \
+      --addon world-encounter-on-csr-25-v0.1.0
 
 ## Evidence
 
-Paste `ls -la .augment` and the `rules_ok` / `skills_ok` lines below, then commit this file and push. Say **check**.
-
-    (paste here)
+    (paste verify stdout + playtest one-liner)
