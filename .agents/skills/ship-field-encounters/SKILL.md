@@ -50,21 +50,18 @@ python scripts/verify_builder_config.py \
 
 Must print `PASS` for each base/disc you ship. Wrong `compatibleBases` or missing disc layer fails here.
 
-Optional post-builder zip smoke (same config flags as verify_builder_config):
+Optional post-builder zip smoke:
 
 ```bash
-python scripts/verify_built_disc.py "/path/to/built/FINALFANTASY7_D1.bin" \
-  --disc 1 --base clean \
-  --addon field-encounter-25-vX.Y.Z
-# PASS = layer payloads + stubs on the boot image
+# Prefer extract folder or stamped .bin — infers disc/base/addons from name + APPLIED.txt
+python scripts/verify_built_disc.py "/path/to/ff7-builder-d1+…/"
+# Overrides still work if needed: --disc 1 --base clean --addon field-encounter-25-vX.Y.Z
 ```
 
 **Zip verify rules** (see `docs/findings/2026-07-30-verify-built-disc-stacking.md`):
 
-- Pack ids must match **APPLIED.txt** / zip folder (`-on-csr-` / `-on-highwind-` when that base was selected — never clean ids on a Highwind zip).
-- Script ignores Mode2 EDC/ECC (`sector_off >= 2072`) — builder repairs those after layers.
-- Script ignores **base** user-bytes later addons overwrite (field stub on Highwind/CSR is expected).
-- Always pass the full `--addon` list used in the build so stacking ignore is correct.
+- Inference order: CLI → builder stamp (`ff7-builder-dN+base+addons…`) → APPLIED display names via catalog.
+- Ignores Mode2 EDC/ECC (`sector_off >= 2072`) and **base** user-bytes later addons overwrite.
 
 Then: `git status` → commit `builder/` (+ VERSION) → push → Pages.
 
