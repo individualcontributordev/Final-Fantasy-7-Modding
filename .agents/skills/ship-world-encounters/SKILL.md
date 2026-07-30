@@ -42,7 +42,14 @@ Optional zip smoke with config flags:
 ```bash
 python scripts/verify_built_disc.py path/to/built.bin \
   --disc 1 --base clean --addon world-encounter-25-vX.Y.Z
+# with field too: add --addon field-encounter-… matching the zip
 ```
+
+**Zip verify rules** (see `docs/findings/2026-07-30-verify-built-disc-stacking.md`):
+
+- Pack ids must match **APPLIED.txt** / zip folder (`-on-csr-` / `-on-highwind-` when that base was selected).
+- Ignores Mode2 EDC/ECC and base bytes later addons overwrite — false FAIL if you omit addons or use wrong base-variant ids.
+- Pass every `--addon` from the build so base stacking ignore is correct.
 
 Then commit `builder/` (+ VERSION) → push → Pages.
 
