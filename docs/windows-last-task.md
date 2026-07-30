@@ -15,13 +15,13 @@ Next published-pack matrix row after Highwind Lights PASS.
 | CSR + CSR+ Hojo (D2) | optional | optional | after D1 scene |
 
 Verifier stacking: docs/findings/2026-07-30-verify-built-disc-stacking.md
-Script now **infers** disc/base/addons from the builder folder/bin name + APPLIED.txt.
+verify_built_disc.py reads config **only** from APPLIED.txt (no pack-id flags).
 
 ## Success
 
 1. Builder: base **CSR**, check **CSR+ Aerith house**, Field/World **Light** (CSR variants).
-2. verify_built_disc.py on the extract folder or .bin -> **PASS** (no need to type pack ids).
-3. DuckStation disc 1: boots; field + world Light feel OK (one-line note). Aerith house if you reach it.
+2. verify_built_disc.py on the extract folder or .bin (APPLIED.txt must sit next to the .bin) -> **PASS**.
+3. DuckStation disc 1: boots; field + world Light feel OK (one-line note).
 
 ## Steps
 
@@ -29,20 +29,18 @@ Script now **infers** disc/base/addons from the builder folder/bin name + APPLIE
 2. https://individualcontributor.dev/builder/ (hard refresh).
 3. Load pristine NTSC-U **Disc 1**.
 4. Base **CSR**; CSR+ Aerith house; Field Light; World Light (CSR packs).
-5. Build -> extract. Point COPY-PASTE at the extract folder or .bin.
-6. Paste stdout + playtest line under Evidence. Commit + push. Say **check**.
+5. Build -> extract (keep APPLIED.txt with the .bin).
+6. Run copy-paste. Paste stdout + playtest line under Evidence. Commit + push. Say **check**.
 
 ## Copy-paste
 
     cd "$(git rev-parse --show-toplevel)"
     git pull --ff-only
 
-    # Folder from the builder zip (keeps APPLIED.txt next to the .bin) - preferred:
+    # Extract folder from the builder zip (must contain .bin + APPLIED.txt):
     BUILT="/c/path/to/ff7-builder-d1+csr-v0.14.1+..."
 
     python scripts/verify_built_disc.py "$BUILT"
-
-Optional overrides still work: --disc / --base / --addon (must match the zip).
 
 ## Evidence
 
