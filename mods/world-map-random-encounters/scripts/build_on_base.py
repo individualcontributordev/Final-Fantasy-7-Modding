@@ -337,6 +337,8 @@ def main() -> int:
 			compatible_bases=[base_id],
 			discs=existing,
 			rate=meta["rate"],
+			group_label=meta.get("group_label"),
+			option_label=meta.get("option_label"),
 		)
 		update_manifest(
 			pack_id=pack_id,
@@ -347,6 +349,8 @@ def main() -> int:
 			compatible_bases=[base_id],
 			discs=existing,
 			rate=meta["rate"],
+			group_label=meta.get("group_label"),
+			option_label=meta.get("option_label"),
 		)
 		print(f"\nUpdated {pack_dir / 'pack.json'}")
 		print(f"Updated builder/manifest.json")

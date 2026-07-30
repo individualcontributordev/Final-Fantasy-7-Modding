@@ -4,7 +4,7 @@
   "addons": [
     {
       "id": "field-encounter-25-v0.1.2",
-      "name": "Field encounters \u2014 Light (25%) v0.1.2",
+      "name": "Field Random Encounters \u2014 Light (25%) v0.1.2",
       "kind": "addon",
       "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
@@ -18,11 +18,13 @@
         "3": "./field-encounter-25-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 25
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)"
     },
     {
       "id": "field-encounter-50-v0.1.2",
-      "name": "Field encounters \u2014 Standard (50%) v0.1.2",
+      "name": "Field Random Encounters \u2014 Standard (50%) v0.1.2",
       "kind": "addon",
       "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
@@ -36,11 +38,13 @@
         "3": "./field-encounter-50-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 50
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)"
     },
     {
       "id": "field-encounter-75-v0.1.2",
-      "name": "Field encounters \u2014 Dense (75%) v0.1.2",
+      "name": "Field Random Encounters \u2014 Dense (75%) v0.1.2",
       "kind": "addon",
       "blurb": "More random field battles.",
       "format": "ic-layer-v1",
@@ -54,11 +58,13 @@
         "3": "./field-encounter-75-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 75
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)"
     },
     {
       "id": "field-encounter-on-csr-25-v0.1.2",
-      "name": "Field encounters \u2014 Light (25%) (on CSR) v0.1.2",
+      "name": "Field Random Encounters \u2014 Light (25%) (on CSR) v0.1.2",
       "kind": "addon",
       "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
@@ -72,11 +78,13 @@
         "3": "./field-encounter-on-csr-25-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 25
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)"
     },
     {
       "id": "field-encounter-on-csr-50-v0.1.2",
-      "name": "Field encounters \u2014 Standard (50%) (on CSR) v0.1.2",
+      "name": "Field Random Encounters \u2014 Standard (50%) (on CSR) v0.1.2",
       "kind": "addon",
       "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
@@ -90,11 +98,13 @@
         "3": "./field-encounter-on-csr-50-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 50
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)"
     },
     {
       "id": "field-encounter-on-csr-75-v0.1.2",
-      "name": "Field encounters \u2014 Dense (75%) (on CSR) v0.1.2",
+      "name": "Field Random Encounters \u2014 Dense (75%) (on CSR) v0.1.2",
       "kind": "addon",
       "blurb": "More random field battles.",
       "format": "ic-layer-v1",
@@ -108,11 +118,13 @@
         "3": "./field-encounter-on-csr-75-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 75
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)"
     },
     {
       "id": "field-encounter-on-highwind-25-v0.1.2",
-      "name": "Field encounters \u2014 Light (25%) (on Highwind) v0.1.2",
+      "name": "Field Random Encounters \u2014 Light (25%) (on Highwind) v0.1.2",
       "kind": "addon",
       "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
@@ -126,11 +138,13 @@
         "3": "./field-encounter-on-highwind-25-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 25
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)"
     },
     {
       "id": "field-encounter-on-highwind-50-v0.1.2",
-      "name": "Field encounters \u2014 Standard (50%) (on Highwind) v0.1.2",
+      "name": "Field Random Encounters \u2014 Standard (50%) (on Highwind) v0.1.2",
       "kind": "addon",
       "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
@@ -144,11 +158,13 @@
         "3": "./field-encounter-on-highwind-50-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 50
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)"
     },
     {
       "id": "field-encounter-on-highwind-75-v0.1.2",
-      "name": "Field encounters \u2014 Dense (75%) (on Highwind) v0.1.2",
+      "name": "Field Random Encounters \u2014 Dense (75%) (on Highwind) v0.1.2",
       "kind": "addon",
       "blurb": "More random field battles.",
       "format": "ic-layer-v1",
@@ -162,11 +178,13 @@
         "3": "./field-encounter-on-highwind-75-v0.1.2/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 75
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)"
     },
     {
       "id": "world-encounter-25-v0.1.0",
-      "name": "World encounters \u2014 Light (25%) v0.1.0",
+      "name": "World Random Encounters \u2014 Light (25%) v0.1.0",
       "kind": "addon",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
@@ -180,11 +198,13 @@
         "3": "./world-encounter-25-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 25
+      "rate": 25,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Light (25%)"
     },
     {
       "id": "world-encounter-50-v0.1.0",
-      "name": "World encounters \u2014 Standard (50%) v0.1.0",
+      "name": "World Random Encounters \u2014 Standard (50%) v0.1.0",
       "kind": "addon",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
@@ -198,11 +218,13 @@
         "3": "./world-encounter-50-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 50
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Standard (50%)"
     },
     {
       "id": "world-encounter-75-v0.1.0",
-      "name": "World encounters \u2014 Dense (75%) v0.1.0",
+      "name": "World Random Encounters \u2014 Dense (75%) v0.1.0",
       "kind": "addon",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
@@ -216,11 +238,13 @@
         "3": "./world-encounter-75-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 75
+      "rate": 75,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Dense (75%)"
     },
     {
       "id": "world-encounter-on-csr-25-v0.1.0",
-      "name": "World encounters \u2014 Light (25%) (on CSR) v0.1.0",
+      "name": "World Random Encounters \u2014 Light (25%) (on CSR) v0.1.0",
       "kind": "addon",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
@@ -234,11 +258,13 @@
         "3": "./world-encounter-on-csr-25-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 25
+      "rate": 25,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Light (25%)"
     },
     {
       "id": "world-encounter-on-csr-50-v0.1.0",
-      "name": "World encounters \u2014 Standard (50%) (on CSR) v0.1.0",
+      "name": "World Random Encounters \u2014 Standard (50%) (on CSR) v0.1.0",
       "kind": "addon",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
@@ -252,11 +278,13 @@
         "3": "./world-encounter-on-csr-50-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 50
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Standard (50%)"
     },
     {
       "id": "world-encounter-on-csr-75-v0.1.0",
-      "name": "World encounters \u2014 Dense (75%) (on CSR) v0.1.0",
+      "name": "World Random Encounters \u2014 Dense (75%) (on CSR) v0.1.0",
       "kind": "addon",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
@@ -270,11 +298,13 @@
         "3": "./world-encounter-on-csr-75-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 75
+      "rate": 75,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Dense (75%)"
     },
     {
       "id": "world-encounter-on-highwind-25-v0.1.0",
-      "name": "World encounters \u2014 Light (25%) (on Highwind) v0.1.0",
+      "name": "World Random Encounters \u2014 Light (25%) (on Highwind) v0.1.0",
       "kind": "addon",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
@@ -288,11 +318,13 @@
         "3": "./world-encounter-on-highwind-25-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 25
+      "rate": 25,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Light (25%)"
     },
     {
       "id": "world-encounter-on-highwind-50-v0.1.0",
-      "name": "World encounters \u2014 Standard (50%) (on Highwind) v0.1.0",
+      "name": "World Random Encounters \u2014 Standard (50%) (on Highwind) v0.1.0",
       "kind": "addon",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
@@ -306,11 +338,13 @@
         "3": "./world-encounter-on-highwind-50-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 50
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Standard (50%)"
     },
     {
       "id": "world-encounter-on-highwind-75-v0.1.0",
-      "name": "World encounters \u2014 Dense (75%) (on Highwind) v0.1.0",
+      "name": "World Random Encounters \u2014 Dense (75%) (on Highwind) v0.1.0",
       "kind": "addon",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
@@ -324,7 +358,9 @@
         "3": "./world-encounter-on-highwind-75-v0.1.0/layers/disc3.layer.json"
       },
       "enabled": true,
-      "rate": 75
+      "rate": 75,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Dense (75%)"
     }
   ],
   "bases": []

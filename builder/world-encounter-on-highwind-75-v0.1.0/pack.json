@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-highwind-75-v0.1.0",
-  "name": "World encounters \u2014 Dense (75%) (on Highwind)",
+  "name": "World Random Encounters \u2014 Dense (75%) (on Highwind)",
   "kind": "addon",
   "version": "0.1.0",
   "blurb": "More random world-map battles.",
@@ -14,5 +14,7 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
-  "rate": 75
+  "rate": 75,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Dense (75%)"
 }

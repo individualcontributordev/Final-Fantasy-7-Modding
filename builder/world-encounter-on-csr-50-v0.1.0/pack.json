@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-csr-50-v0.1.0",
-  "name": "World encounters \u2014 Standard (50%) (on CSR)",
+  "name": "World Random Encounters \u2014 Standard (50%) (on CSR)",
   "kind": "addon",
   "version": "0.1.0",
   "blurb": "Moderate random world-map battles.",
@@ -14,5 +14,7 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
-  "rate": 50
+  "rate": 50,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Standard (50%)"
 }

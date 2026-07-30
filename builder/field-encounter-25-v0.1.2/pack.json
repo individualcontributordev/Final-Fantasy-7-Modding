@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-25-v0.1.2",
-  "name": "Field encounters \u2014 Light (25%)",
+  "name": "Field Random Encounters \u2014 Light (25%)",
   "kind": "addon",
   "version": "0.1.2",
   "blurb": "Fewer random field battles.",
@@ -14,5 +14,7 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
-  "rate": 25
+  "rate": 25,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Light (25%)"
 }

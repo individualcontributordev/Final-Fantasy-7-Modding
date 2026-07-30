@@ -58,7 +58,9 @@ def meta_for(against: str, rate: int) -> dict:
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": pack_prefix,
-		"display": f"World encounters — {label} ({rate}%){on}",
+		"display": f"World Random Encounters — {label} ({rate}%){on}",
+		"group_label": "World Random Encounters",
+		"option_label": f"{label} ({rate}%)",
 		"blurb": RATE_BLURB[rate],
 		"rate": rate,
 		"against": against,
@@ -75,6 +77,8 @@ def write_pack_json(
 	compatible_bases: list[str],
 	discs: list[int],
 	rate: int | None = None,
+	group_label: str | None = None,
+	option_label: str | None = None,
 ) -> None:
 	pack = {
 		"id": pack_id,
@@ -89,6 +93,10 @@ def write_pack_json(
 	}
 	if rate is not None:
 		pack["rate"] = rate
+	if group_label:
+		pack["groupLabel"] = group_label
+	if option_label:
+		pack["optionLabel"] = option_label
 	pack_dir.mkdir(parents=True, exist_ok=True)
 	(pack_dir / "pack.json").write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
 
@@ -103,6 +111,8 @@ def update_manifest(
 	compatible_bases: list[str],
 	discs: list[int],
 	rate: int | None = None,
+	group_label: str | None = None,
+	option_label: str | None = None,
 ) -> None:
 	if not MANIFEST_PATH.is_file():
 		raise SystemExit(f"Missing {MANIFEST_PATH}")
@@ -120,6 +130,10 @@ def update_manifest(
 	}
 	if rate is not None:
 		entry["rate"] = rate
+	if group_label:
+		entry["groupLabel"] = group_label
+	if option_label:
+		entry["optionLabel"] = option_label
 
 	addons = data.setdefault("addons", [])
 	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
