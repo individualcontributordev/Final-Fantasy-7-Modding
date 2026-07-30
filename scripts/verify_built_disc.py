@@ -155,20 +155,64 @@ def _user_payload_matches(image: bytes, off: int, data: bytes) -> int | None:
 	return None
 
 
-def _records_present(image: bytes, layer_path: Path) -> tuple[int, int | None]:
-	"""Return (record_count, first_user-payload mismatch offset or None)."""
+def _layer_user_offsets(layer_path: Path) -> set[int]:
+	"""Absolute offsets in sector user data touched by this layer."""
 	layer = json.loads(layer_path.read_text(encoding="utf-8"))
 	if layer.get("format") != "ic-layer-v1":
 		raise SystemExit(f"{layer_path}: expected ic-layer-v1")
+	out: set[int] = set()
+	for rec in layer.get("records") or []:
+		off = int(rec["offset"])
+		data = bytes.fromhex(rec["hex"])
+		for i in range(len(data)):
+			abs_off = off + i
+			if abs_off % _SECTOR < _USER_END:
+				out.add(abs_off)
+	return out
+
+
+def _records_present(
+	image: bytes,
+	layer_path: Path,
+	*,
+	ignore_user_offsets: set[int] | None = None,
+) -> tuple[int, int | None]:
+	"""Return (record_count, first_user-payload mismatch offset or None).
+
+	ignore_user_offsets: bytes later packs intentionally overwrite (base must not
+	fail because field/world stubs stomped Highwind/CSR payload there).
+	"""
+	layer = json.loads(layer_path.read_text(encoding="utf-8"))
+	if layer.get("format") != "ic-layer-v1":
+		raise SystemExit(f"{layer_path}: expected ic-layer-v1")
+	ignore = ignore_user_offsets or set()
 	first = None
 	n = 0
 	for rec in layer.get("records") or []:
 		n += 1
 		off = int(rec["offset"])
 		data = bytes.fromhex(rec["hex"])
-		bad = _user_payload_matches(image, off, data)
-		if bad is not None and first is None:
-			first = bad
+		# Compare contiguous user-data runs, skipping EDC/ECC and later-addon spans.
+		run_start = None
+		run = bytearray()
+		for i, want in enumerate(data):
+			abs_off = off + i
+			skip = abs_off % _SECTOR >= _USER_END or abs_off in ignore
+			if skip:
+				if run:
+					bad = _user_payload_matches(image, run_start, bytes(run))
+					if bad is not None and first is None:
+						first = bad
+					run = bytearray()
+					run_start = None
+				continue
+			if run_start is None:
+				run_start = abs_off
+			run.append(want)
+		if run:
+			bad = _user_payload_matches(image, run_start, bytes(run))
+			if bad is not None and first is None:
+				first = bad
 	return n, first
 
 
@@ -245,22 +289,12 @@ def main() -> int:
 	stack_labels: list[str] = []
 
 	base_id = args.base.strip()
-	if base_id not in ("clean", "unmodified"):
-		if base_id not in catalog:
-			raise SystemExit(f"Unknown base id {base_id!r}")
-		meta = catalog[base_id]
-		lp = _layer_path(meta, args.disc)
-		n, bad = _records_present(image, lp)
-		ok = bad is None
-		print(f"  base {base_id}: {n} records — {'OK' if ok else f'MISSING payload @ {bad:#x}'}")
-		stack_labels.append(f"base:{base_id}")
-		if not ok:
-			failed = True
-	else:
-		print("  base clean: (no base layer)")
-		stack_labels.append("base:clean")
-
 	need_base = "clean" if base_id in ("clean", "unmodified") else base_id
+
+	# Later addons intentionally overwrite base bytes (e.g. FIELD.BIN stub on Highwind).
+	# Collect addon user offsets first so base check can ignore those spans.
+	addon_ignore: set[int] = set()
+	addon_metas: list[tuple[str, dict, Path]] = []
 	for addon_id in args.addons:
 		if addon_id not in catalog:
 			raise SystemExit(f"Unknown addon id {addon_id!r}")
@@ -271,6 +305,29 @@ def main() -> int:
 			failed = True
 			continue
 		lp = _layer_path(meta, args.disc)
+		addon_metas.append((addon_id, meta, lp))
+		addon_ignore |= _layer_user_offsets(lp)
+
+	if base_id not in ("clean", "unmodified"):
+		if base_id not in catalog:
+			raise SystemExit(f"Unknown base id {base_id!r}")
+		meta = catalog[base_id]
+		lp = _layer_path(meta, args.disc)
+		n, bad = _records_present(image, lp, ignore_user_offsets=addon_ignore)
+		ok = bad is None
+		extra = f" (ignored {len(addon_ignore)} addon-overwritten user bytes)" if addon_ignore else ""
+		print(
+			f"  base {base_id}: {n} records — "
+			f"{'OK' if ok else f'MISSING payload @ {bad:#x}'}{extra if ok else ''}"
+		)
+		stack_labels.append(f"base:{base_id}")
+		if not ok:
+			failed = True
+	else:
+		print("  base clean: (no base layer)")
+		stack_labels.append("base:clean")
+
+	for addon_id, meta, lp in addon_metas:
 		n, bad = _records_present(image, lp)
 		ok = bad is None
 		print(f"  addon {addon_id}: {n} records — {'OK' if ok else f'MISSING payload @ {bad:#x}'}")
