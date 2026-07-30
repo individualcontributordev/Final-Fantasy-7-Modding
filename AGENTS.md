@@ -72,28 +72,23 @@ When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.m
 
 No Mac/Windows absolute paths. Each clone only needs repo-relative links.
 
-**Windows Git:** enable symlink support so checkouts are real links, not text files:
+**Windows (Git Bash):** enable symlink support so checkouts are real links, not text files. Developer Mode (or admin) may be required.
 
-```bat
-git config --global core.symlinks true
-```
+    git config --global core.symlinks true
+    cd "$(git rev-parse --show-toplevel)"
+    git pull --ff-only
+    rm -rf .augment/rules .augment/skills
+    git checkout -- .augment
+    ls -la .augment
 
-Then re-clone or restore links (Developer Mode or admin may be required):
+If Git still leaves plain text files:
 
-```bat
-cd Final-Fantasy-7-Modding
-git checkout -- .augment
-```
+    cd "$(git rev-parse --show-toplevel)/.augment"
+    rm -rf rules skills
+    ln -s ../.agents/rules rules
+    ln -s ../.agents/skills skills
+    ls -la
 
-If Git still materializes text files, recreate from repo root:
-
-```bat
-cd .augment
-del rules skills 2>nul
-mklink /D rules ..\.agents\rules
-mklink /D skills ..\.agents\skills
-```
-
-Do **not** copy rule/skill trees into `.augment/` — only symlink.
+Do **not** use cmd `mklink` unless you prefer cmd. Do **not** copy rule/skill trees into `.augment/` — only symlink. Step-by-step task form: `docs/windows-last-task.md` when that task is posted.
 
 Rules include: mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
