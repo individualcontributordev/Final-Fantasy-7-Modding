@@ -4,15 +4,25 @@
 Like verify_builder_config, but the *subject* is the bootable .bin from a
 builder zip (not pristine + layers only).
 
+  # Prefer: let the script read zip folder name + APPLIED.txt
+  python scripts/verify_built_disc.py path/to/built.bin
+  python scripts/verify_built_disc.py path/to/builder-output-folder/
+
+  # Optional overrides (must match the zip if given):
   python scripts/verify_built_disc.py path/to/built.bin \
     --disc 1 --base clean \
     --addon field-encounter-25-v0.1.2 \
     --addon world-encounter-25-v0.1.0
 
+Config is inferred from (first hit wins per field, CLI always wins):
+  1) --disc / --base / --addon flags
+  2) Builder output name: ff7-builder-d1+baseId+addonId+...
+  3) APPLIED.txt next to the .bin (Disc / Base / Add-ons display names → catalog ids)
+
 Checks:
   1) APPLIED.txt (if present) mentions expected pack names/ids
   2) Every ic-layer record for the selected base+addons is present on the image
-     (payload match; EDC footers may differ after builder repair)
+     (payload match; EDC/ECC + base bytes later addons overwrite are ignored)
   3) Optional: RCnt2 FORCE stubs in FIELD/WORLD when those addons are selected
 
 Requires sibling Final-Fantasy-7-CSR (or --csr-root) for base layers + apply helpers.
@@ -23,6 +33,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -79,6 +90,239 @@ def _resolve_bin(path: Path) -> Path:
 			print(f"Note: multiple .bin files; using {bins[0].name}", file=sys.stderr)
 		return bins[0]
 	raise SystemExit(f"Not a .bin or directory: {path}")
+
+
+_BUILDER_STAMP_RE = re.compile(
+	r"(?:^|[/\\])ff7-builder-(?:d(?P<disc>[123])\+)?(?P<body>[^/\\]+?)(?:\.(?:bin|cue|zip))?$",
+	re.IGNORECASE,
+)
+
+
+def _parse_builder_stamp(name: str, catalog: dict[str, dict]) -> dict:
+	"""Parse ff7-builder-dN+base+addon… into disc/base/addons using catalog ids."""
+	m = _BUILDER_STAMP_RE.search(name.replace("\\", "/"))
+	if not m:
+		return {}
+	out: dict = {}
+	if m.group("disc"):
+		out["disc"] = int(m.group("disc"))
+	parts = [p for p in m.group("body").split("+") if p]
+	if not parts:
+		return out
+	# First segment is base (clean | csr-v… | highwind-v…); rest are addons.
+	base = parts[0]
+	if base in ("clean", "unmodified") or base in catalog:
+		out["base"] = "clean" if base == "unmodified" else base
+		addons = parts[1:]
+	else:
+		# Unusual stamp without known base — treat all known addon ids only.
+		addons = parts
+	known = [a for a in addons if a in catalog]
+	unknown = [a for a in addons if a not in catalog]
+	if unknown:
+		print(
+			f"Note: stamp has unknown pack id(s) (not in local manifests): {unknown}",
+			file=sys.stderr,
+		)
+	if known:
+		out["addons"] = known
+	return out
+
+
+def _norm_name(s: str) -> str:
+	"""Lowercase collapse for matching APPLIED display names to catalog."""
+	s = s.lower().replace("—", "-").replace("–", "-")
+	s = re.sub(r"\s+", " ", s).strip()
+	return s
+
+
+def _parse_applied_text(text: str, catalog: dict[str, dict]) -> dict:
+	"""Map APPLIED.txt display lines to catalog pack ids."""
+	out: dict = {}
+	lines = text.splitlines()
+	disc_m = re.search(r"(?im)^\s*Disc:\s*([123])\s*$", text)
+	if disc_m:
+		out["disc"] = int(disc_m.group(1))
+
+	base_m = re.search(r"(?im)^\s*Base:\s*(.+?)\s*$", text)
+	if base_m:
+		base_label = base_m.group(1).strip()
+		low = base_label.lower()
+		if "unmodified" in low or "retail" in low or low in ("clean", "none"):
+			out["base"] = "clean"
+		else:
+			# Prefer exact/near name match against base catalog entries.
+			bases = [
+				(pid, meta)
+				for pid, meta in catalog.items()
+				if meta.get("kind") == "base"
+			]
+			bn = _norm_name(base_label)
+			picked = None
+			for pid, meta in bases:
+				name = str(meta["entry"].get("name") or "")
+				nn = _norm_name(name)
+				if bn == nn or bn in nn or nn in bn:
+					picked = pid
+					break
+				if "highwind" in bn and "highwind" in pid:
+					picked = pid
+					break
+				if bn.startswith("csr") and pid.startswith("csr-v") and "highwind" not in bn:
+					picked = pid
+					break
+			if picked:
+				out["base"] = picked
+
+	# Collect "- Name" lines under Add-ons:
+	addon_labels: list[str] = []
+	in_addons = False
+	for line in lines:
+		if re.match(r"(?i)^\s*Add-ons:\s*$", line):
+			in_addons = True
+			continue
+		if re.match(r"(?i)^\s*Add-ons:\s*none\s*$", line):
+			out["addons"] = []
+			in_addons = False
+			continue
+		if in_addons:
+			if re.match(r"(?i)^\s*EDC/ECC", line) or re.match(r"(?i)^\s*Play:", line):
+				in_addons = False
+				continue
+			if not line.strip():
+				# blank after list ends section
+				if addon_labels:
+					in_addons = False
+				continue
+			m = re.match(r"^\s*-\s+(.+?)\s*$", line)
+			if m:
+				addon_labels.append(m.group(1).strip())
+			else:
+				in_addons = False
+
+	if addon_labels:
+		addons_cat = [
+			(pid, meta)
+			for pid, meta in catalog.items()
+			if meta.get("kind") == "addon"
+		]
+		resolved: list[str] = []
+		for label in addon_labels:
+			ln = _norm_name(label)
+			best = None
+			# Exact normalized name match first.
+			for pid, meta in addons_cat:
+				name = str(meta["entry"].get("name") or "")
+				if _norm_name(name) == ln:
+					best = pid
+					break
+			if best is None:
+				# Longest catalog name contained in label or vice versa.
+				cands: list[tuple[int, str]] = []
+				for pid, meta in addons_cat:
+					name = str(meta["entry"].get("name") or "")
+					nn = _norm_name(name)
+					if not nn:
+						continue
+					if nn == ln or nn in ln or ln in nn:
+						cands.append((len(nn), pid))
+				if cands:
+					cands.sort(reverse=True)
+					best = cands[0][1]
+			if best is None:
+				print(
+					f"Note: APPLIED add-on line not matched to catalog: {label!r}",
+					file=sys.stderr,
+				)
+			else:
+				resolved.append(best)
+		if resolved:
+			out["addons"] = resolved
+	return out
+
+
+def _infer_config(
+	bin_path: Path,
+	catalog: dict[str, dict],
+	*,
+	cli_disc: int | None,
+	cli_base: str | None,
+	cli_addons: list[str] | None,
+) -> tuple[int, str, list[str], list[str]]:
+	"""Resolve disc/base/addons. Returns (disc, base, addons, sources)."""
+	sources: list[str] = []
+	stamp = _parse_builder_stamp(bin_path.name, catalog)
+	if not stamp.get("addons") and not stamp.get("base"):
+		# Also try parent folder (zip extract dir often named like the bin).
+		stamp = {**_parse_builder_stamp(bin_path.parent.name, catalog), **stamp}
+
+	applied_path = bin_path.parent / "APPLIED.txt"
+	applied: dict = {}
+	if applied_path.is_file():
+		applied = _parse_applied_text(
+			applied_path.read_text(encoding="utf-8", errors="replace"),
+			catalog,
+		)
+
+	# Disc
+	disc = cli_disc
+	if disc is not None:
+		sources.append("disc:cli")
+	elif stamp.get("disc") is not None:
+		disc = int(stamp["disc"])
+		sources.append("disc:stamp")
+	elif applied.get("disc") is not None:
+		disc = int(applied["disc"])
+		sources.append("disc:APPLIED")
+	else:
+		raise SystemExit(
+			"Could not infer --disc (pass --disc 1|2|3, or use ff7-builder-dN+… name / APPLIED.txt)"
+		)
+
+	# Base
+	base = (cli_base or "").strip() or None
+	if base:
+		sources.append("base:cli")
+	elif stamp.get("base"):
+		base = str(stamp["base"])
+		sources.append("base:stamp")
+	elif applied.get("base"):
+		base = str(applied["base"])
+		sources.append("base:APPLIED")
+	else:
+		raise SystemExit(
+			"Could not infer --base (pass --base, or use builder stamp name / APPLIED.txt)"
+		)
+
+	# Addons: CLI wins entirely if any --addon given; else stamp; else APPLIED.
+	if cli_addons:
+		addons = list(cli_addons)
+		sources.append("addons:cli")
+	elif stamp.get("addons") is not None:
+		addons = list(stamp["addons"])
+		sources.append("addons:stamp")
+	elif applied.get("addons") is not None:
+		addons = list(applied["addons"])
+		sources.append("addons:APPLIED")
+	else:
+		addons = []
+		sources.append("addons:(none)")
+
+	# If stamp and APPLIED both had addons and CLI did not, prefer stamp (exact ids)
+	# but warn when APPLIED resolved a different set.
+	if (
+		not cli_addons
+		and stamp.get("addons") is not None
+		and applied.get("addons") is not None
+		and list(stamp["addons"]) != list(applied["addons"])
+	):
+		print(
+			"Note: stamp addons differ from APPLIED-resolved ids; using stamp "
+			f"(stamp={stamp['addons']}, APPLIED={applied['addons']})",
+			file=sys.stderr,
+		)
+
+	return disc, base, addons, sources
 
 
 def _applied_mentions(pid: str, low: str) -> bool:
@@ -233,12 +477,31 @@ def _stub_check(image: bytes, iso_path: str, stub_off: int) -> str:
 
 def main() -> int:
 	ap = argparse.ArgumentParser(
-		description="Verify builder-output disc matches a base+addon config"
+		description=(
+			"Verify builder-output disc matches a base+addon config. "
+			"Disc/base/addons are inferred from the .bin name and APPLIED.txt when flags are omitted."
+		)
 	)
 	ap.add_argument("path", type=Path, help="Built .bin or folder containing it")
-	ap.add_argument("--disc", type=int, required=True, choices=(1, 2, 3))
-	ap.add_argument("--base", required=True, help="Base id: clean | csr-v… | highwind-v…")
-	ap.add_argument("--addon", action="append", default=[], dest="addons")
+	ap.add_argument(
+		"--disc",
+		type=int,
+		default=None,
+		choices=(1, 2, 3),
+		help="Disc number (optional if stamp/APPLIED has it)",
+	)
+	ap.add_argument(
+		"--base",
+		default=None,
+		help="Base id: clean | csr-v… | highwind-v… (optional if stamp/APPLIED has it)",
+	)
+	ap.add_argument(
+		"--addon",
+		action="append",
+		default=None,
+		dest="addons",
+		help="Addon id (repeatable). If omitted, inferred from stamp then APPLIED.txt",
+	)
 	ap.add_argument(
 		"--csr-root",
 		type=Path,
@@ -272,11 +535,21 @@ def main() -> int:
 
 	bin_path = _resolve_bin(args.path)
 	image = bin_path.read_bytes()
+
+	disc, base_id, addons, sources = _infer_config(
+		bin_path,
+		catalog,
+		cli_disc=args.disc,
+		cli_base=args.base,
+		cli_addons=args.addons,
+	)
+
 	print(f"Image: {bin_path} ({len(image)} bytes)")
-	print(f"Config: base={args.base} addons={args.addons} disc={args.disc}")
+	print(f"Config: base={base_id} addons={addons} disc={disc}")
+	print(f"Inferred from: {', '.join(sources)}")
 	print()
 
-	expected_ids = [args.base, *args.addons]
+	expected_ids = [base_id, *addons]
 	applied = bin_path.parent / "APPLIED.txt"
 	applied_missing: list[str] = []
 	if applied.is_file():
@@ -288,14 +561,13 @@ def main() -> int:
 	failed = False
 	stack_labels: list[str] = []
 
-	base_id = args.base.strip()
 	need_base = "clean" if base_id in ("clean", "unmodified") else base_id
 
 	# Later addons intentionally overwrite base bytes (e.g. FIELD.BIN stub on Highwind).
 	# Collect addon user offsets first so base check can ignore those spans.
 	addon_ignore: set[int] = set()
 	addon_metas: list[tuple[str, dict, Path]] = []
-	for addon_id in args.addons:
+	for addon_id in addons:
 		if addon_id not in catalog:
 			raise SystemExit(f"Unknown addon id {addon_id!r}")
 		meta = catalog[addon_id]
@@ -304,7 +576,7 @@ def main() -> int:
 			print(f"  addon {addon_id}: compatibleBases={compat} excludes {need_base!r} — FAIL")
 			failed = True
 			continue
-		lp = _layer_path(meta, args.disc)
+		lp = _layer_path(meta, disc)
 		addon_metas.append((addon_id, meta, lp))
 		addon_ignore |= _layer_user_offsets(lp)
 
@@ -312,7 +584,7 @@ def main() -> int:
 		if base_id not in catalog:
 			raise SystemExit(f"Unknown base id {base_id!r}")
 		meta = catalog[base_id]
-		lp = _layer_path(meta, args.disc)
+		lp = _layer_path(meta, disc)
 		n, bad = _records_present(image, lp, ignore_user_offsets=addon_ignore)
 		ok = bad is None
 		extra = f" (ignored {len(addon_ignore)} addon-overwritten user bytes)" if addon_ignore else ""
@@ -335,8 +607,8 @@ def main() -> int:
 		if not ok:
 			failed = True
 
-	want_field_stub = any("field-encounter" in a for a in args.addons)
-	want_world_stub = any("world-encounter" in a for a in args.addons)
+	want_field_stub = any("field-encounter" in a for a in addons)
+	want_world_stub = any("world-encounter" in a for a in addons)
 	if not args.skip_stub_check and (want_field_stub or want_world_stub):
 		print()
 		print("=== Engine stubs (when encounter addons selected) ===")

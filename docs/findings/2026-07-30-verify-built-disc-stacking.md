@@ -52,10 +52,22 @@ Windows evidence in docs/windows-last-task.md; offset analysis vs CSR highwind +
 
 Stops false FAIL on valid builder zips. Always pass **matching** base/addon ids from the zip folder name / APPLIED.txt.
 
+## Infer config (no manual --addon)
+
+`verify_built_disc.py` resolves disc/base/addons when flags are omitted:
+
+1. **CLI** `--disc` / `--base` / `--addon` (if given, wins)
+2. **Builder stamp** in `.bin` or parent folder name:
+   `ff7-builder-d1+highwind-v0.1.1+field-encounter-on-highwind-25-v0.1.2+…`
+3. **APPLIED.txt** next to the `.bin`: maps `Base:` / `Add-ons:` display names to catalog ids via local manifests
+
+Prefer pointing the script at the **extract folder** (or the stamped `.bin` with APPLIED beside it). Wrong clean-vs-on-highwind ids from hand-typing should no longer happen.
+
 ## Follow-ups
 
 - [x] EDC ignore in verify_built_disc
 - [x] Addon-overwrite ignore for base check
+- [x] Infer pack ids from stamp + APPLIED.txt
 - [ ] Optional: CSR+ scene packs on CSR base (next matrix row)
 
 ## Sources
