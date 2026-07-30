@@ -44,17 +44,18 @@ UI check (optional glance): dropdown labels should read **Field Random Encounter
       --addon field-encounter-on-highwind-25-v0.1.2 \
       --addon world-encounter-on-highwind-25-v0.1.0
 
-## Prior evidence (wrong pack ids in verify command)
+## Prior evidence
 
-You built the **correct** Highwind zip (APPLIED lists on-Highwind Light packs; stubs YES).
-Verify was run with **clean** pack ids by mistake:
+**Zip is correct** (APPLIED + correct on-highwind ids + stubs YES). Last FAIL:
 
-    --addon field-encounter-25-v0.1.2
-    --addon world-encounter-25-v0.1.0
+    base highwind-v0.1.1: MISSING payload @ 0x7b5e0a9
+    addon field-encounter-on-highwind-25… OK
+    addon world-encounter-on-highwind-25… OK
+    stubs YES
 
-Those are clean-only; use the **on-highwind** ids in Copy-paste above (not clean ids).
-Also: base layer "MISSING @ 0x161138" was EDC footer noise (builder repairs EDC after apply).
-`verify_built_disc.py` now ignores EDC/ECC bytes — **git pull** before re-run.
+That base mismatch is **expected stacking**: field Light overwrites Highwind bytes inside FIELD.BIN (same offset). Not a bad base.
+
+`verify_built_disc.py` now ignores base user-bytes covered by later addons (and still ignores EDC/ECC). **git pull** then re-run the same Copy-paste on the same BUILT_D1 — should PASS. Then one-line DuckStation note.
 
 ## Evidence
 
