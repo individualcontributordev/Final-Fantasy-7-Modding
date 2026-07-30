@@ -56,6 +56,7 @@ After a finding is **verified** (reproduced twice or confirmed in source):
 | Tools / emulator | `docs/03-environment-setup.md` |
 | Patch workflow | `docs/04-workflow.md` |
 | Ghidra procedure | `docs/05-ghidra-guide.md` |
+| Builder zip verify (EDC/stack) | `docs/findings/2026-07-30-verify-built-disc-stacking.md` + ship-*-encounters skills / AGENTS.md |
 | New topic | New `docs/0N-topic.md` + row in `docs/00-goals.md` |
 
 Add a "Sources" link back to the finding file. Do not delete the journal entry.

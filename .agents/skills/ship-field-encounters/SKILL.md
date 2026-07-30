@@ -59,6 +59,13 @@ python scripts/verify_built_disc.py "/path/to/built/FINALFANTASY7_D1.bin" \
 # PASS = layer payloads + stubs on the boot image
 ```
 
+**Zip verify rules** (see `docs/findings/2026-07-30-verify-built-disc-stacking.md`):
+
+- Pack ids must match **APPLIED.txt** / zip folder (`-on-csr-` / `-on-highwind-` when that base was selected — never clean ids on a Highwind zip).
+- Script ignores Mode2 EDC/ECC (`sector_off >= 2072`) — builder repairs those after layers.
+- Script ignores **base** user-bytes later addons overwrite (field stub on Highwind/CSR is expected).
+- Always pass the full `--addon` list used in the build so stacking ignore is correct.
+
 Then: `git status` → commit `builder/` (+ VERSION) → push → Pages.
 
 ## If CSR base ids changed

@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-07-30 | [verify-built-disc-stacking](2026-07-30-verify-built-disc-stacking.md) | Zip verify: match APPLIED ids; ignore EDC/ECC + base bytes addons overwrite | confirmed |
 | 2026-07-30 | [world-light-runtime-verify](2026-07-30-world-light-runtime-verify.md) | Builder zip PASS; stub live; danger 0/FFFF; 0x40 not FORCE; DS/CE watches | confirmed |
 | 2026-07-28 | [world-light-dense-feel](2026-07-28-world-light-dense-feel.md) | Light≈Standard short walk; Dense clearly higher; ship all three | likely |
 | 2026-07-28 | [world-force-playtest](2026-07-28-world-force-playtest.md) | Standard stub applied; fewer fights than vanilla on DS | likely |
