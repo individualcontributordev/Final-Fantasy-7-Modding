@@ -135,8 +135,28 @@ def _print_applied(applied: Path, expected_ids: list[str]) -> list[str]:
 	return missing
 
 
+# Mode2/2352: user data ends before EDC at sector offset 2072 (builder repairs EDC/ECC after layers).
+_SECTOR = 2352
+_USER_END = 2072
+
+
+def _user_payload_matches(image: bytes, off: int, data: bytes) -> int | None:
+	"""Compare layer bytes that fall in sector user regions only.
+
+	Returns first absolute mismatch offset, or None if all user bytes match.
+	Bytes in EDC/ECC (sector_off >= 2072) are ignored — site builder rewrites those.
+	"""
+	for i, want in enumerate(data):
+		abs_off = off + i
+		if abs_off % _SECTOR >= _USER_END:
+			continue
+		if abs_off >= len(image) or image[abs_off] != want:
+			return abs_off
+	return None
+
+
 def _records_present(image: bytes, layer_path: Path) -> tuple[int, int | None]:
-	"""Return (record_count, first_mismatch_offset or None)."""
+	"""Return (record_count, first_user-payload mismatch offset or None)."""
 	layer = json.loads(layer_path.read_text(encoding="utf-8"))
 	if layer.get("format") != "ic-layer-v1":
 		raise SystemExit(f"{layer_path}: expected ic-layer-v1")
@@ -146,10 +166,9 @@ def _records_present(image: bytes, layer_path: Path) -> tuple[int, int | None]:
 		n += 1
 		off = int(rec["offset"])
 		data = bytes.fromhex(rec["hex"])
-		got = image[off : off + len(data)]
-		if got != data:
-			if first is None:
-				first = off
+		bad = _user_payload_matches(image, off, data)
+		if bad is not None and first is None:
+			first = bad
 	return n, first
 
 

@@ -44,6 +44,18 @@ UI check (optional glance): dropdown labels should read **Field Random Encounter
       --addon field-encounter-on-highwind-25-v0.1.2 \
       --addon world-encounter-on-highwind-25-v0.1.0
 
+## Prior evidence (wrong pack ids in verify command)
+
+You built the **correct** Highwind zip (APPLIED lists on-Highwind Light packs; stubs YES).
+Verify was run with **clean** pack ids by mistake:
+
+    --addon field-encounter-25-v0.1.2
+    --addon world-encounter-25-v0.1.0
+
+Those are clean-only; use the **on-highwind** ids in Copy-paste above (not clean ids).
+Also: base layer "MISSING @ 0x161138" was EDC footer noise (builder repairs EDC after apply).
+`verify_built_disc.py` now ignores EDC/ECC bytes — **git pull** before re-run.
+
 ## Evidence
 
     (paste verify stdout + playtest one-liner)
