@@ -47,3 +47,44 @@ UI check (optional glance): dropdown labels should read **Field Random Encounter
 ## Evidence
 
     (paste verify stdout + playtest one-liner)
+ Final-Fantasy-7-Modding git:(main) ✗ python scripts/verify_built_disc.py ../../Downloads/ff7-builder-d1+highwind-v0.1.1+field-encounter-on-highwind-25-v0.1.2+world-encounter-on-highwind-25-v0.1.0/ff7-builder-d1+highwind-v0.1.1+field-encounter-on-highwind-25-v0.1.2+world-encounter-on-highwind-25-v0.1.0.bin \
+  --disc 1 \
+  --base highwind-v0.1.1 \
+  --addon field-encounter-25-v0.1.2 \
+  --addon world-encounter-25-v0.1.0
+Image: D:\Downloads\ff7-builder-d1+highwind-v0.1.1+field-encounter-on-highwind-25-v0.1.2+world-encounter-on-highwind-25-v0.1.0\ff7-builder-d1+highwind-v0.1.1+field-encounter-on-highwind-25-v0.1.2+world-encounter-on-highwind-25-v0.1.0.bin (747435024 bytes)
+Config: base=highwind-v0.1.1 addons=['field-encounter-25-v0.1.2', 'world-encounter-25-v0.1.0'] disc=1
+
+=== APPLIED.txt (D:\Downloads\ff7-builder-d1+highwind-v0.1.1+field-encounter-on-highwind-25-v0.1.2+world-encounter-on-highwind-25-v0.1.0\APPLIED.txt) ===
+Final Fantasy VII — IndividualContributor
+
+Disc: 1
+Base: Highwind v0.1.1
+Add-ons:
+  - Field Random Encounters — Light (25%) (on Highwind) v0.1.2
+  - World Random Encounters — Light (25%) (on Highwind) v0.1.0
+EDC/ECC sectors repaired: 4531
+
+Play:
+- Keep the .bin and .cue in the same folder.
+- Open the .cue in DuckStation (or your emulator).
+- Real PS2 (MechaPwn): burn from the .cue as MODE2/2352 DAO (see Modding docs/07-hardware-burn.md).
+- Builder regenerates Mode2 Form1 EDC/ECC on patched sectors after applying layers.
+
+https://individualcontributor.dev/builder/
+
+  expect mention of 'highwind-v0.1.1': yes
+  expect mention of 'field-encounter-25-v0.1.2': yes
+  expect mention of 'world-encounter-25-v0.1.0': yes
+
+=== Layer records on image ===
+  base highwind-v0.1.1: 94714 records — MISSING payload @ 0x161138
+  addon field-encounter-25-v0.1.2: compatibleBases=['clean'] excludes 'highwind-v0.1.1' — FAIL
+  addon world-encounter-25-v0.1.0: compatibleBases=['clean'] excludes 'highwind-v0.1.1' — FAIL
+
+=== Engine stubs (when encounter addons selected) ===
+  FIELD/FIELD.BIN: stub@0xbb7c=YES
+  WORLD/WORLD.BIN: stub@0x17db4=YES
+
+Stack checked: base:highwind-v0.1.1
+FAIL — built disc does not match this builder config
