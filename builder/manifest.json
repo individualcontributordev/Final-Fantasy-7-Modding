@@ -383,6 +383,44 @@
         "world-encounter-on-highwind-25-v0.1.0"
       ],
       "kind": "mod"
+    },
+    {
+      "id": "random-encounters-standard",
+      "name": "Random Encounters (Standard)",
+      "blurb": "Field and world map Standard (50%) random encounters for the selected base experience.",
+      "compatibleBases": [
+        "clean",
+        "csr-v0.14.1",
+        "highwind-v0.1.1"
+      ],
+      "addons": [
+        "field-encounter-50-v0.1.2",
+        "world-encounter-50-v0.1.0",
+        "field-encounter-on-csr-50-v0.1.2",
+        "world-encounter-on-csr-50-v0.1.0",
+        "field-encounter-on-highwind-50-v0.1.2",
+        "world-encounter-on-highwind-50-v0.1.0"
+      ],
+      "kind": "mod"
+    },
+    {
+      "id": "random-encounters-dense",
+      "name": "Random Encounters (Dense)",
+      "blurb": "Field and world map Dense (75%) random encounters for the selected base experience.",
+      "compatibleBases": [
+        "clean",
+        "csr-v0.14.1",
+        "highwind-v0.1.1"
+      ],
+      "addons": [
+        "field-encounter-75-v0.1.2",
+        "world-encounter-75-v0.1.0",
+        "field-encounter-on-csr-75-v0.1.2",
+        "world-encounter-on-csr-75-v0.1.0",
+        "field-encounter-on-highwind-75-v0.1.2",
+        "world-encounter-on-highwind-75-v0.1.0"
+      ],
+      "kind": "mod"
     }
   ],
   "explainer": {
