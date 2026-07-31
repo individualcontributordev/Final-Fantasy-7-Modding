@@ -83,7 +83,7 @@ def write_pack_json(
 	pack = {
 		"id": pack_id,
 		"name": display,
-		"kind": "addon",
+		"kind": "mod",
 		"version": version,
 		"blurb": blurb,
 		"format": "ic-layer-v1",
@@ -120,7 +120,7 @@ def update_manifest(
 	entry = {
 		"id": pack_id,
 		"name": f"{display} v{version}",
-		"kind": "addon",
+		"kind": "mod",
 		"blurb": blurb,
 		"format": "ic-layer-v1",
 		"exclusiveGroup": EXCLUSIVE_GROUP,

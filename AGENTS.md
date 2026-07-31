@@ -1,6 +1,6 @@
 # FF7 PSX Modding — Agent guide
 
-Part of the IndividualContributor FF7 stack. Players use **https://individualcontributor.dev/builder/** only. This repo publishes **add-on** `ic-layer-v1` packs (CDN via GitHub Pages). CSR bases live in **Final-Fantasy-7-CSR**.
+Part of the IndividualContributor FF7 stack. Players use **https://individualcontributor.dev/builder/** only. This repo publishes **mod** `ic-layer-v1` packs (CDN via GitHub Pages). CSR bases live in **Final-Fantasy-7-CSR**.
 
 **Makou `FIELD/*.DAT` add-ons and CSR+ scene packs** live in the CSR repo (`ship-makou-addon`, `ship-csr-plus-scene`). **This repo** = engine/RE + encounter density packs (`research-new-mod`, `ship-field-encounters`, `ship-world-encounters`).
 
@@ -23,7 +23,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 | `mods/<name>/` | Source of truth for a mod (VERSION, CHANGELOG, patches, scripts) |
 
 - No PPF / RomPatcher / full-disc patcher UI.
-- Field encounter rates are **named presets** (`light` / `standard` / `dense`), not free-form `%`. Pack ids still embed `25`/`50`/`75`.
+- Field/World encounter rates are **mods** with named presets (`light` / `standard` / `dense`), not free-form `%`. Pack ids still embed `25`/`50`/`75`.
 - Add-ons use `exclusiveGroup: field-encounter-rate` and `compatibleBases` matching live CSR base ids.
 - **Changelogs:** [CHANGELOGS.md](CHANGELOGS.md) — one file per mod under `mods/<name>/CHANGELOG.md`. **Newest release at the top.**
 
