@@ -363,5 +363,25 @@
       "optionLabel": "Dense (75%)"
     }
   ],
-  "bases": []
+  "bases": [],
+  "presets": [
+    {
+      "id": "random-encounters-light",
+      "name": "Random Encounters (Light)",
+      "blurb": "Field and world map Light (25%) random encounters for the selected base experience.",
+      "compatibleBases": [
+        "clean",
+        "csr-v0.14.1",
+        "highwind-v0.1.1"
+      ],
+      "addons": [
+        "field-encounter-25-v0.1.2",
+        "world-encounter-25-v0.1.0",
+        "field-encounter-on-csr-25-v0.1.2",
+        "world-encounter-on-csr-25-v0.1.0",
+        "field-encounter-on-highwind-25-v0.1.2",
+        "world-encounter-on-highwind-25-v0.1.0"
+      ]
+    }
+  ]
 }
