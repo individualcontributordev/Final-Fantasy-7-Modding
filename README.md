@@ -7,19 +7,22 @@ Tools and notes for modifying **Final Fantasy VII** PlayStation disc images (har
 
 ## Mods
 
-| Mod | Path | Builder |
-|-----|------|---------|
-| Field random encounters | [mods/field-random-encounters/](mods/field-random-encounters/) | Light / Standard / Dense |
-| World map random encounters | [mods/world-map-random-encounters/](mods/world-map-random-encounters/) | scaffold only |
+| Mod | Path | Builder | Changelog |
+|-----|------|---------|-----------|
+| Field random encounters | [mods/field-random-encounters/](mods/field-random-encounters/) | Light / Standard / Dense | [CHANGELOG](mods/field-random-encounters/CHANGELOG.md) |
+| World map random encounters | [mods/world-map-random-encounters/](mods/world-map-random-encounters/) | Light / Standard / Dense | [CHANGELOG](mods/world-map-random-encounters/CHANGELOG.md) |
+
+Release notes index: **[CHANGELOGS.md](CHANGELOGS.md)** (newest entry at the **top** of each file).
 
 ## Layout
 
 ```
-mods/          per-mod source (VERSION, patches, build scripts)
+mods/          per-mod source (VERSION, CHANGELOG, patches, build scripts)
 builder/       published ic-layer-v1 packs + manifest.json (Pages CDN)
 scripts/       shared ISO / gzip / layer helpers
 docs/          RE reference + findings lab notebook
 workspace/     local pristine discs / temps (gitignored)
+CHANGELOGS.md  index of mod release notes (newest-at-top rule)
 ```
 
 ## Play

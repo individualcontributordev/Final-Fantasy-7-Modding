@@ -12,6 +12,7 @@ python mods/field-random-encounters/scripts/build_all_rates.py
 python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --density light --discs 1
 ```
 
-- `VERSION` — pack version  
-- `patches/` — stub bytes + technical notes  
-- `scripts/` — build entrypoints (`density.py` owns the presets/menu)  
+- `VERSION` — pack version
+- `CHANGELOG.md` — release notes (**newest at top**)
+- `patches/` — stub bytes + technical notes
+- `scripts/` — build entrypoints (`density.py` owns the presets/menu)
