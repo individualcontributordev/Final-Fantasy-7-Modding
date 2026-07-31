@@ -48,7 +48,9 @@ python scripts/verify_built_disc.py path/to/ff7-builder-d1+…/
 
 - APPLIED.txt only (no pack-id flags). Ignores Mode2 EDC/ECC and base bytes later addons overwrite.
 
-Then commit `builder/` (+ VERSION) → push → Pages.
+Then add a **newest-at-top** entry under `mods/world-map-random-encounters/CHANGELOG.md`
+(see root `CHANGELOGS.md`), bump `VERSION` if needed → commit `builder/` + changelog
+(+ VERSION) → push → Pages.
 
 ## Do not
 

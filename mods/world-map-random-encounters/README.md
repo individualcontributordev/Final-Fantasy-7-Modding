@@ -13,3 +13,7 @@ python mods/world-map-random-encounters/scripts/build_all_rates.py --density all
 ```
 
 `exclusiveGroup`: `world-encounter-rate` (can stack with Field). Skill: `ship-world-encounters`.
+
+- `VERSION` — pack version
+- `CHANGELOG.md` — release notes (**newest at top**)
+- `patches/` — stub notes

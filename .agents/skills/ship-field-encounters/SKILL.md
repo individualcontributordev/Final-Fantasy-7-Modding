@@ -62,7 +62,9 @@ python scripts/verify_built_disc.py "/path/to/ff7-builder-d1+…/"
 - Config **only** from APPLIED.txt (Disc / Base / Add-ons → catalog ids). No pack-id flags.
 - Ignores Mode2 EDC/ECC (`sector_off >= 2072`) and **base** user-bytes later addons overwrite.
 
-Then: `git status` → commit `builder/` (+ VERSION) → push → Pages.
+Then: add a **newest-at-top** entry under `mods/field-random-encounters/CHANGELOG.md`
+(see root `CHANGELOGS.md`), bump `VERSION` if needed → commit `builder/` + changelog
+(+ VERSION) → push → Pages.
 
 ## If CSR base ids changed
 
