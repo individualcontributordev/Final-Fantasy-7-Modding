@@ -1,7 +1,7 @@
 {
   "id": "field-encounter-on-csr-25-v0.1.2",
   "name": "Field Random Encounters \u2014 Light (25%) (on CSR)",
-  "kind": "addon",
+  "kind": "mod",
   "version": "0.1.2",
   "blurb": "Fewer random field battles.",
   "format": "ic-layer-v1",

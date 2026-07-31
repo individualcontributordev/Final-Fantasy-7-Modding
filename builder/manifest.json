@@ -5,7 +5,7 @@
     {
       "id": "field-encounter-25-v0.1.2",
       "name": "Field Random Encounters \u2014 Light (25%) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -25,7 +25,7 @@
     {
       "id": "field-encounter-50-v0.1.2",
       "name": "Field Random Encounters \u2014 Standard (50%) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -45,7 +45,7 @@
     {
       "id": "field-encounter-75-v0.1.2",
       "name": "Field Random Encounters \u2014 Dense (75%) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -65,7 +65,7 @@
     {
       "id": "field-encounter-on-csr-25-v0.1.2",
       "name": "Field Random Encounters \u2014 Light (25%) (on CSR) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -85,7 +85,7 @@
     {
       "id": "field-encounter-on-csr-50-v0.1.2",
       "name": "Field Random Encounters \u2014 Standard (50%) (on CSR) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -105,7 +105,7 @@
     {
       "id": "field-encounter-on-csr-75-v0.1.2",
       "name": "Field Random Encounters \u2014 Dense (75%) (on CSR) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -125,7 +125,7 @@
     {
       "id": "field-encounter-on-highwind-25-v0.1.2",
       "name": "Field Random Encounters \u2014 Light (25%) (on Highwind) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Fewer random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -145,7 +145,7 @@
     {
       "id": "field-encounter-on-highwind-50-v0.1.2",
       "name": "Field Random Encounters \u2014 Standard (50%) (on Highwind) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Moderate random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -165,7 +165,7 @@
     {
       "id": "field-encounter-on-highwind-75-v0.1.2",
       "name": "Field Random Encounters \u2014 Dense (75%) (on Highwind) v0.1.2",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "More random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -185,7 +185,7 @@
     {
       "id": "world-encounter-25-v0.1.0",
       "name": "World Random Encounters \u2014 Light (25%) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -205,7 +205,7 @@
     {
       "id": "world-encounter-50-v0.1.0",
       "name": "World Random Encounters \u2014 Standard (50%) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -225,7 +225,7 @@
     {
       "id": "world-encounter-75-v0.1.0",
       "name": "World Random Encounters \u2014 Dense (75%) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -245,7 +245,7 @@
     {
       "id": "world-encounter-on-csr-25-v0.1.0",
       "name": "World Random Encounters \u2014 Light (25%) (on CSR) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -265,7 +265,7 @@
     {
       "id": "world-encounter-on-csr-50-v0.1.0",
       "name": "World Random Encounters \u2014 Standard (50%) (on CSR) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -285,7 +285,7 @@
     {
       "id": "world-encounter-on-csr-75-v0.1.0",
       "name": "World Random Encounters \u2014 Dense (75%) (on CSR) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -305,7 +305,7 @@
     {
       "id": "world-encounter-on-highwind-25-v0.1.0",
       "name": "World Random Encounters \u2014 Light (25%) (on Highwind) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Fewer random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -325,7 +325,7 @@
     {
       "id": "world-encounter-on-highwind-50-v0.1.0",
       "name": "World Random Encounters \u2014 Standard (50%) (on Highwind) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "Moderate random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -345,7 +345,7 @@
     {
       "id": "world-encounter-on-highwind-75-v0.1.0",
       "name": "World Random Encounters \u2014 Dense (75%) (on Highwind) v0.1.0",
-      "kind": "addon",
+      "kind": "mod",
       "blurb": "More random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -381,7 +381,11 @@
         "world-encounter-on-csr-25-v0.1.0",
         "field-encounter-on-highwind-25-v0.1.2",
         "world-encounter-on-highwind-25-v0.1.0"
-      ]
+      ],
+      "kind": "mod"
     }
-  ]
+  ],
+  "explainer": {
+    "mods": "Optional mods. Compatible with Unmodified, CSR, and Highwind."
+  }
 }
