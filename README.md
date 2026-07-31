@@ -17,13 +17,17 @@ Release notes index: **[CHANGELOGS.md](CHANGELOGS.md)** (newest entry at the **t
 ## Layout
 
 ```
-mods/          per-mod source (VERSION, CHANGELOG, patches, build scripts)
-builder/       published ic-layer-v1 packs + manifest.json (Pages CDN)
-scripts/       shared ISO / gzip / layer helpers
-docs/          RE reference + findings lab notebook
-workspace/     local pristine discs / temps (gitignored)
-CHANGELOGS.md  index of mod release notes (newest-at-top rule)
+mods/<name>/          source of truth (VERSION, CHANGELOG, patches, scripts/)
+mods/<name>/scripts/  that mod's build pipeline (build_all_rates, build_on_base, …)
+builder/              published ic-layer-v1 packs + manifest.json (Pages CDN)
+scripts/              shared only: ISO / gzip / layer / verify helpers
+docs/                 RE reference + findings lab notebook
+workspace/            local pristine discs / temps (gitignored)
+CHANGELOGS.md         index of mod release notes (newest-at-top rule)
 ```
+
+Mod build entrypoints live under `mods/<name>/scripts/`, not root `scripts/`.
+Root `scripts/` is for reusable disc/ISO tools (`apply_layer`, `verify_*`, compress, …).
 
 ## Play
 

@@ -20,8 +20,8 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 |-------|------|
 | Homepage builder | UI; loads local Unmodified + remote CSR/Modding manifests |
 | This repo Pages | Silent CDN: `builder/manifest.json` + pack JSON (+ redirect `index.html`) |
-| `mods/<name>/` | Source of truth for a mod (VERSION, CHANGELOG, patches, scripts) |
-
+| `mods/<name>/` | Source of truth for a mod (VERSION, CHANGELOG, patches, **scripts/**) |
+| `scripts/` (root) | Shared ISO/layer/verify only — **not** mod build entrypoints |
 - No PPF / RomPatcher / full-disc patcher UI.
 - Field/World encounter rates are **mods** with named presets (`light` / `standard` / `dense`), not free-form `%`. Pack ids still embed `25`/`50`/`75`.
 - Add-ons use `exclusiveGroup: field-encounter-rate` and `compatibleBases` matching live CSR base ids.
