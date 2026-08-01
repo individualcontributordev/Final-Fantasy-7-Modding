@@ -68,4 +68,8 @@ $RECYCLE.BIN/
 .vscode/
 *.code-workspace
 
-
+# Browser captures — sanitize before archive
+*.har
+# history archives are intentional tracked artifacts
+!docs/history/
+!docs/history/**/

@@ -1,61 +1,43 @@
 # Suggestions backlog
 
 Ideas for **engine / gameplay mods** (all bases).
-Priority reflects usefulness and fit — not a release promise.
+Not a release promise.
 
-Cutscenes, CSR+ packs, and Highwind live in the CSR repo:
+How this stack grew: [docs/history/HISTORY.md](history/HISTORY.md)
+
+Cutscenes / CSR+ / Highwind:
 https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/docs/SUGGESTIONS.md
 
-## Products today
+## Today
 
 | | |
 |--|--|
-| Field random encounters | Light / Standard / Dense on Unmodified, CSR, Highwind |
-| World random encounters | Same |
+| Field / world random encounters | Light · Standard · Dense on Unmodified, CSR, Highwind |
 | Builder | Mods section + density presets |
-
----
 
 ## Done
 
-- Field and world density packs (per base)
-- Builder mods UI and Light / Standard / Dense presets
-- Shared verify and layer tools
+- Density packs per base
+- Builder mods UI and presets
+- Shared verify / layer tools
+- Sanitized Discord history archive under docs/history/
 
----
+## Next (priority)
 
-## Next (priority order)
+1. **Encounter off (0%)** — field and world; all bases; separate from Light  
+   (long-standing need for cleaner world-map / low-enc practice without only 25%).
+2. **Battle pacing** — shorter entry / win-death / fanfare where safe on PSX  
+   (same class of time-save runners know from other CSRs; engine work).
+3. Later — long forced-battle speedups; clearer mod grouping; console/FPGA notes.
 
-### 1. Encounter off (0%)
-
-- Field and world **no random encounters**
-- Separate from Light (25%)
-- Available on Unmodified, CSR, and Highwind
-
-### 2. Battle pacing
-
-- Shorter battle entry, win/death, and/or fanfare where safe on PSX
-- Engine work (not field script packs)
-
-### 3. Later
-
-- Other long forced-battle speedups once battle pacing exists
-- Clearer builder grouping as more mods ship
-- Console / FPGA known-good stack notes
-
----
-
-## Not planned here
+## Not here
 
 | Idea | Why |
 |------|-----|
-| Cutscene / scene trims | CSR repo (packs or bases) |
-| Baking no-encounters into CSR or Highwind | Keep as optional mods |
-| Full randomizers or category forks | Out of scope for now |
-
----
+| Cutscene packs / Highwind trims | CSR repo |
+| Baking no-encounters into CSR or Highwind | Keep optional as mods |
+| Full randomizers | Out of scope for now |
 
 ## Feedback
 
-Try mods from the site builder, then send concise notes (what you ran + what you want).
-Useful items get folded into this list; it is not a vote tally.
+Use the site builder, then send short notes (what you ran + what you want).
