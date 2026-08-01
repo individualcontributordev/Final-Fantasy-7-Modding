@@ -27,6 +27,7 @@ from apply_world_force_stub import (  # noqa: E402
 	RATE_MARKERS,
 	RATES,
 	apply_stub,
+	stub_for_rate,
 )
 from compress_gzipps import compress_gzipps  # noqa: E402
 from decompress_gzipps import decompress_gzipps  # noqa: E402
@@ -37,27 +38,21 @@ EXPECT_HEAD = bytes.fromhex("80 1f 01 3c 20 11 22 8c")
 
 def verify_stub(dec_path: Path, rate: int = 50) -> None:
 	data = dec_path.read_bytes()
-	head = data[OFFSET : OFFSET + 8]
+	expect = stub_for_rate(rate)
+	got = data[OFFSET : OFFSET + len(expect)]
 	jal = data[JAL_OFFSET : JAL_OFFSET + 4]
-	if head != EXPECT_HEAD:
+	if got != expect:
 		raise SystemExit(
-			f"verify failed @ 0x{OFFSET:X}: got {head.hex(' ')}, "
-			f"expected {EXPECT_HEAD.hex(' ')}"
+			f"verify failed stub @ 0x{OFFSET:X}: got {got[:16].hex(' ')}…, "
+			f"expected {expect[:16].hex(' ')}…"
 		)
 	if jal != JAL:
 		raise SystemExit(
 			f"verify failed jal @ 0x{JAL_OFFSET:X}: got {jal.hex(' ')}, "
 			f"expected {JAL.hex(' ')}"
 		)
-	mid = data[OFFSET + 24 : OFFSET + 28]
-	expect_rate = RATE_MARKERS[rate]
-	print(f"Verified stub @ 0x{OFFSET:X}: {head.hex(' ')} …")
+	print(f"Verified stub @ 0x{OFFSET:X} ({len(expect)} bytes, rate {rate}%)")
 	print(f"Verified jal  @ 0x{JAL_OFFSET:X}: {jal.hex(' ')}")
-	print(f"Rate {rate}%   @ +24: {mid.hex(' ')}")
-	if mid != expect_rate:
-		raise SystemExit(
-			f"verify failed rate @ +24: got {mid.hex(' ')}, expected {expect_rate.hex(' ')}"
-		)
 
 
 def build(

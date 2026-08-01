@@ -19,6 +19,7 @@ _MOD = Path(__file__).resolve().parents[1]
 _PATCH_DIR = _MOD / "patches"
 
 RATE_MARKERS = {
+	0: bytes.fromhex("00 00 00 00 00 00 00 00"),  # Off: no threshold ops; danger cleared
 	25: bytes.fromhex("82 18 03 00 00 00 00 00"),
 	50: bytes.fromhex("42 18 03 00 00 00 00 00"),
 	75: bytes.fromhex("82 08 03 00 23 18 61 00"),
@@ -46,16 +47,21 @@ _FALLBACK = {
 }
 
 
-def _load_hex(name: str, fallback: str) -> bytes:
+def _load_hex(name: str, fallback: str = "") -> bytes:
 	path = _PATCH_DIR / name
-	text = path.read_text() if path.is_file() else fallback
+	if path.is_file():
+		text = path.read_text()
+	elif fallback:
+		text = fallback
+	else:
+		raise SystemExit(f"missing patch file: {path}")
 	return bytes.fromhex(text.replace("\n", " "))
 
 
 def stub_for_rate(rate: int) -> bytes:
 	if rate not in RATES:
 		raise SystemExit(f"rate must be one of {RATES}, got {rate}")
-	return _load_hex(f"stub-bb7c-rate{rate}.hex", _FALLBACK[rate])
+	return _load_hex(f"stub-bb7c-rate{rate}.hex", _FALLBACK.get(rate, ""))
 
 
 JAL = _load_hex("jal-bbd4.hex", "72 ae 02 0c")
@@ -84,7 +90,7 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="PRESET",
-		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
+		help="off / light / standard / dense (or 0 / 25 / 50 / 75). Omit to pick interactively.",
 	)
 	args = ap.parse_args()
 	rate = (

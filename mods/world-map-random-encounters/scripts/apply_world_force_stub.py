@@ -26,6 +26,7 @@ JAL_OFFSET = 0x17E1C
 STUB_LEN = 104
 
 RATE_MARKERS = {
+	0: bytes.fromhex("00 00 00 00"),  # Off
 	25: bytes.fromhex("82 18 03 00"),  # srl v1,v1,2
 	50: bytes.fromhex("42 18 03 00"),  # srl v1,v1,1
 	75: bytes.fromhex("40 08 03 00"),  # sll at,v1,1 (start of *3/4)
@@ -68,7 +69,7 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="PRESET",
-		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
+		help="off / light / standard / dense (or 0 / 25 / 50 / 75). Omit to pick interactively.",
 	)
 	args = ap.parse_args()
 	rate = (

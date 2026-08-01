@@ -1,9 +1,18 @@
 # World map random encounters — changelog
 
-RCnt2 FORCE stub in WORLD.BIN. Densities: Light (25%) / Standard (50%) / Dense (75%).
+RCnt2 FORCE stub in WORLD.BIN. Densities: Off (0%) / Light (25%) / Standard (50%) / Dense (75%).
 Index: [CHANGELOGS.md](../../CHANGELOGS.md). **Newest at top.**
 
 Current VERSION file: see `VERSION` in this folder.
+
+## v0.2.0
+
+- Off (0%) packs for Unmodified (clean), CSR (csr-v0.14.1), and Highwind
+  (highwind-v0.1.1), discs 1–3.
+- Pack ids: world-encounter-0-v0.2.0, world-encounter-on-csr-0-v0.2.0,
+  world-encounter-on-highwind-0-v0.2.0.
+- Builder option Off (0%) in World Random Encounters; preset
+  Random Encounters (Off) (field + world).
 
 ## v0.1.0
 
