@@ -29,7 +29,7 @@ Follow skill `.agents/skills/record-findings/SKILL.md`.
 
 ## Before ending a session
 
-Sweep the turn/history: anything still only in chat or `windows-last-task` evidence that meets the bar above → write the finding before stopping.
+Sweep the turn/history: anything still only in chat or `INSTRUCTIONS` evidence that meets the bar above → write the finding before stopping.
 
 ## Conventions
 

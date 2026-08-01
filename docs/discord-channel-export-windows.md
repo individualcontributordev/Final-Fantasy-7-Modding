@@ -95,7 +95,7 @@ Optional readable HTML: `-f HtmlDark` instead of `-f Json`.
 2. **Do not** `git add` `.token` or `out\`.
 3. Say **check** in the Mac chat and point at the folder path if you synced it,
    or paste only a short status (message count / file name) under Evidence in
-   `docs/windows-last-task.md` if that task is active.
+   `docs/INSTRUCTIONS.md` if that task is active.
 
 ## Bot token?
 

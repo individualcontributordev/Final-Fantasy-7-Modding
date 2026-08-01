@@ -1,16 +1,18 @@
 ---
-description: Mac commits Windows task to repo first; human pulls and runs; check = pull evidence
+description: Mac commits Windows instructions to repo first; human pulls and runs; check = pull evidence
 alwaysApply: true
 ---
 
 # Mac agent / human Windows workflow
 
-## Roles
+## Roles (strict)
 
 | Machine | Who | Does |
 |---------|-----|------|
-| **Mac (this chat)** | agent | Plans; **writes the Windows task into the repo and pushes** before asking the human to run anything; short chat pointer only. On **check**: pull and review committed evidence. |
-| **Windows** | human | `git pull`, run commands from the committed file, paste evidence, commit/push. Makou / DuckStation / Ghidra / Git Bash. No Windows Cursor agent. |
+| **Mac (this chat)** | agent | Plans; **writes Windows work into `docs/INSTRUCTIONS.md` and pushes** before the human runs it; short chat pointer only. On **check**: pull and review **repo** evidence. |
+| **Windows** | human | **Everything operational:** discs, Ghidra, DuckStation, Git Bash, **all** scripts, builds, commits, pushes. |
+
+No Windows Cursor agent.
 
 ## Hard rule: instructions live in the repo
 
@@ -18,67 +20,35 @@ alwaysApply: true
 
 Before asking the human to execute:
 
-1. Write **`docs/windows-last-task.md`** (Goal, steps, COPY-PASTE commands, empty EVIDENCE).
-2. Prefer small **scripts** for multi-step CLI (`scripts/…`, SRP — one job per script). Put the exact invoke line in COPY-PASTE.
-3. **Commit + push** that file (and any new script) from Mac.
-4. Chat: one-line goal + “pull and open `docs/windows-last-task.md`” + say **check** when done.
-
-If a script is needed and does not exist, create it in the same turn as the task file.
+1. Write **`docs/INSTRUCTIONS.md`** (Goal, steps, COPY-PASTE, empty EVIDENCE). Overwrite each run.
+2. Prefer small **scripts**. Put the exact invoke line in COPY-PASTE.
+3. **Commit + push** from Mac.
+4. Chat: one-line goal + “pull and open `docs/INSTRUCTIONS.md`” + **check**.
 
 ## One atomic task per reply
 
 Exactly one Windows task per agent turn.
 
-## `docs/windows-last-task.md` layout (markdown)
+## `docs/INSTRUCTIONS.md` layout (markdown)
 
-Use real markdown headings and fenced code blocks:
-
-```markdown
-# Task: short name
-
-## Goal
-...
-
-## Steps
-1. ...
-
-## Copy-paste
-
-```bash
-exact commands here
-```
-
-## Evidence
-
-Paste raw tool output below (fenced code block OK).
-```
-
-- **Copy-paste:** exact commands/paths in a `bash` fence; user does not retype from chat.
-- **Evidence:** raw tool output only. No `yes`/`no` blanks.
-- Never ask to paste large output into **chat**.
+`# Task`, `## Goal`, `## Steps`, `## Copy-paste`, `## Evidence`. Idle = short status.
 
 ## Windows loop
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-# do STEPS / COPY-PASTE from docs/windows-last-task.md
-# paste under EVIDENCE; save
-git add docs/windows-last-task.md
-git commit -m "Windows output: <task>"
+# STEPS / COPY-PASTE from docs/INSTRUCTIONS.md
+git add docs/INSTRUCTIONS.md
+git commit -m "Windows: <task>"
 git push
 ```
 
-Then say **check** (or **check results**).
-
-Never commit game binaries (`.bin`, `.dec`, ISO, Ghidra DBs).
+Then say **check**. Never commit `.bin` / `.cue` / ISO.
 
 ## On “check”
 
-`git pull --ff-only` → read evidence / new commits → next **single** task (new file + push).
-Does **not** mean live builder/CDN audit unless the human asks for end-of-flow builder verify.
-
-If the check **confirms RE or playtest facts** (addresses, watches, BPs, PASS/FAIL, “not a bug”), write or update `docs/findings/` in the **same turn** (rule `capture-research-findings`). Chat is not the archive.
+Pull → review committed evidence → next task in-repo.
 
 ## Before Mac acts
 

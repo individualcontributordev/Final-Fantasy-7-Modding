@@ -46,7 +46,7 @@ Not clean `field-encounter-25-v0.1.2` / `world-encounter-25-v0.1.0` (compatibleB
 
 ## How we found it
 
-Windows evidence in docs/windows-last-task.md; offset analysis vs CSR highwind + Modding field layer JSON; verifier updates 0cfcd6c / 19fcd32.
+Windows evidence in docs/INSTRUCTIONS.md; offset analysis vs CSR highwind + Modding field layer JSON; verifier updates 0cfcd6c / 19fcd32.
 
 ## Why it matters
 

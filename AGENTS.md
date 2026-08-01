@@ -6,7 +6,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 
 ## How we work
 
-- **Mac (this chat):** agent — **commits the Windows task into the repo first** (`docs/windows-last-task.md` + scripts), then a short chat pointer. Never chat-only runbooks.
+- **Mac (this chat):** agent — **commits the Windows task into the repo first** (`docs/INSTRUCTIONS.md` + scripts), then a short chat pointer. Never chat-only runbooks.
 - **Windows:** human — `git pull`, run COPY-PASTE from that file, paste evidence, push; discs / Ghidra / DuckStation / Git Bash.
 - User says **check** → Mac pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
@@ -90,6 +90,6 @@ If Git still leaves plain text files:
     ln -s ../.agents/skills skills
     ls -la
 
-Do **not** use cmd `mklink` unless you prefer cmd. Do **not** copy rule/skill trees into `.augment/` — only symlink. Step-by-step task form: `docs/windows-last-task.md` when that task is posted.
+Do **not** use cmd `mklink` unless you prefer cmd. Do **not** copy rule/skill trees into `.augment/` — only symlink. Step-by-step task form: `docs/INSTRUCTIONS.md` when that task is posted.
 
 Rules include: mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
