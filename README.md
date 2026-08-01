@@ -75,3 +75,6 @@ Densities are **named presets** (not a free-form %): **Light** / **Standard** / 
 | [docs/findings/](docs/findings/) | Dated lab notebook |
 
 After clone: `git config core.hooksPath .githooks`
+## Suggestions backlog
+
+Community-prioritised encounter/engine mods: [docs/SUGGESTIONS.md](docs/SUGGESTIONS.md)

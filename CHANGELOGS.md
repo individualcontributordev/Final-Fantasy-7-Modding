@@ -35,3 +35,6 @@ builder/<pack-id>/          layers only — no long prose
 | Ship world densities | `ship-world-encounters` | `mods/world-map-random-encounters/CHANGELOG.md` + `VERSION` |
 
 Same git push as `builder/` for that release.
+## Backlog
+
+- Community suggestions (prioritised): [docs/SUGGESTIONS.md](docs/SUGGESTIONS.md)
