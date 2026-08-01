@@ -40,4 +40,4 @@ Same git push as `builder/` for that release.
 - Community suggestions (prioritised): [docs/SUGGESTIONS.md](docs/SUGGESTIONS.md)
 ## History
 
-- [docs/history/HISTORY.md](docs/history/HISTORY.md)
+- [https://individualcontributor.dev/history/](https://individualcontributor.dev/history/)

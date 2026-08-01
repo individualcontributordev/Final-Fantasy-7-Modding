@@ -81,4 +81,4 @@ Community-prioritised encounter/engine mods: [docs/SUGGESTIONS.md](docs/SUGGESTI
 ## History
 
 Story of CSR and mods (with archived chats):
-[docs/history/HISTORY.md](docs/history/HISTORY.md)
+[https://individualcontributor.dev/history/](https://individualcontributor.dev/history/)

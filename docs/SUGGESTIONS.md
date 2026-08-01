@@ -3,7 +3,7 @@
 Ideas for **engine / gameplay mods** (all bases).
 Not a release promise.
 
-How this stack grew: [docs/history/HISTORY.md](history/HISTORY.md)
+How this stack grew: [https://individualcontributor.dev/history/](history/HISTORY.md)
 
 Cutscenes / CSR+ / Highwind:
 https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/docs/SUGGESTIONS.md
@@ -20,7 +20,7 @@ https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/docs/S
 - Density packs per base
 - Builder mods UI and presets
 - Shared verify / layer tools
-- Sanitized Discord history archive under docs/history/
+- History archive on the site (https://individualcontributor.dev/history/)
 
 ## Next (priority)
 
