@@ -101,3 +101,17 @@ Optional readable HTML: `-f HtmlDark` instead of `-f Json`.
 
 Only if a **bot is in that server** with View Channel + Read Message History.
 If you do not own the server and no admin invited a bot, use the **user** token steps above.
+
+## Alternative: Chrome HAR (no token file)
+
+If you already scrolled the channel with DevTools Network open:
+
+1. Filter messages then right-click list -> Save all as HAR with content.
+2. Do not commit the .har (gitignores *.har).
+3. On a machine with this repo:
+
+    cd "$(git rev-parse --show-toplevel)"
+    python scripts/har_discord_messages.py path/to/discord.com.har
+
+Writes workspace/discord-export/channel-<id>-messages.json and .md
+
