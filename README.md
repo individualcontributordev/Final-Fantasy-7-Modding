@@ -78,3 +78,7 @@ After clone: `git config core.hooksPath .githooks`
 ## Suggestions backlog
 
 Community-prioritised encounter/engine mods: [docs/SUGGESTIONS.md](docs/SUGGESTIONS.md)
+## History
+
+Story of CSR and mods (with archived chats):
+[docs/history/HISTORY.md](docs/history/HISTORY.md)

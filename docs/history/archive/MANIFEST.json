@@ -1,0 +1,135 @@
+{
+  "archives": [
+    {
+      "slug": "2024-09-csr-dev-thread",
+      "title": "CSR development thread (pre-channel)",
+      "note": "Original forum-style thread where PSX CSR was born (Sep\u2013Nov 2024).",
+      "channelIds": [
+        "1288235003901120586"
+      ],
+      "messageCount": 1355,
+      "dateRange": [
+        "2024-09-29",
+        "2024-11-19"
+      ],
+      "archive": "docs/history/archive/2024-09-csr-dev-thread.sanitized.har.gz",
+      "messagesJson": "docs/history/extracts/2024-09-csr-dev-thread-messages.json.gz",
+      "messagesMarkdown": "docs/history/extracts/2024-09-csr-dev-thread-messages.md.gz",
+      "topAuthors": [
+        [
+          "individualcontributor",
+          639
+        ],
+        [
+          "awesomewaves",
+          444
+        ],
+        [
+          "hopeproductions",
+          121
+        ],
+        [
+          ".okamikaze",
+          76
+        ],
+        [
+          ".rendall",
+          32
+        ],
+        [
+          "teeejj0102",
+          13
+        ],
+        [
+          "doumeis",
+          13
+        ],
+        [
+          "phek1200",
+          8
+        ],
+        [
+          "dashretro",
+          5
+        ],
+        [
+          "themattdavis",
+          4
+        ]
+      ],
+      "originalBytes": 2352363,
+      "gzipBytes": 155173
+    },
+    {
+      "slug": "2024-11-csr-channel",
+      "title": "CSR discussion channel",
+      "note": "Dedicated CSR channel after thread (Nov 2024\u2013Jul 2026).",
+      "channelIds": [
+        "1307919162534006854"
+      ],
+      "messageCount": 1700,
+      "dateRange": [
+        "2024-11-18",
+        "2026-07-29"
+      ],
+      "archive": "docs/history/archive/2024-11-csr-channel.sanitized.har.gz",
+      "messagesJson": "docs/history/extracts/2024-11-csr-channel-messages.json.gz",
+      "messagesMarkdown": "docs/history/extracts/2024-11-csr-channel-messages.md.gz",
+      "topAuthors": [
+        [
+          "individualcontributor",
+          591
+        ],
+        [
+          "awesomewaves",
+          320
+        ],
+        [
+          "cornfed",
+          267
+        ],
+        [
+          "phek1200",
+          81
+        ],
+        [
+          ".okamikaze",
+          75
+        ],
+        [
+          "doumeis",
+          65
+        ],
+        [
+          "jayrod316",
+          37
+        ],
+        [
+          "acezephyr",
+          35
+        ],
+        [
+          "teeejj0102",
+          26
+        ],
+        [
+          ".rendall",
+          25
+        ],
+        [
+          "katombaz",
+          25
+        ],
+        [
+          "lemon6559",
+          15
+        ]
+      ],
+      "originalBytes": 3291737,
+      "gzipBytes": 273362
+    }
+  ],
+  "totalMessages": 3055,
+  "generated": "2026-08-01",
+  "mergedMessagesJson": "docs/history/extracts/all-messages-merged.json.gz"
+}
