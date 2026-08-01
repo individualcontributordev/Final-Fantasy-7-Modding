@@ -1,90 +1,61 @@
-# Modding suggestions (community)
+# Suggestions backlog
 
-Source: FF7 speedrun Discord CSR channel export (2024-11 → 2026-07).
-This repo = **engine RE + cross-base mods** (encounters today). Cutscene
-products live in **Final-Fantasy-7-CSR** — see that repo’s `docs/SUGGESTIONS.md`.
+Ideas for **engine / gameplay mods** (all bases).
+Priority reflects usefulness and fit — not a release promise.
 
-Demand = frequency / multi-person interest. Not a commitment.
+Cutscenes, CSR+ packs, and Highwind live in the CSR repo:
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/docs/SUGGESTIONS.md
 
-## Product lines (current)
+## Products today
 
-| Product | Role |
-|---------|------|
-| Field random encounters | Light / Standard / Dense on clean, CSR, Highwind |
-| World random encounters | Same densities × bases |
-| Builder mods UI | All-base mods section + Light/Standard/Dense presets |
+| | |
+|--|--|
+| Field random encounters | Light / Standard / Dense on Unmodified, CSR, Highwind |
+| World random encounters | Same |
+| Builder | Mods section + density presets |
 
 ---
 
 ## Done
 
-| Item | Status | Notes |
-|------|--------|--------|
-| Field encounter density packs (25/50/75) | **Done** | Per-base layers (clean / CSR / Highwind) |
-| World encounter density packs | **Done** | Same |
-| Builder: mods on all bases | **Done** | Packs vs Mods split on site |
-| Presets Light / Standard / Dense | **Done** | Field+World together |
-| Console burn smoke (RE + base) | **Partial** | IC reported PS2 slim OK on early stack |
-| Shared tools (layer apply, verify, HAR extract) | **Done** | Root `scripts/` |
+- Field and world density packs (per base)
+- Builder mods UI and Light / Standard / Dense presets
+- Shared verify and layer tools
 
 ---
 
-## To do — prioritised
+## Next (priority order)
 
-### P1 — encounter / battle mods (high runner interest)
+### 1. Encounter off (0%)
 
-| ID | Suggestion | Demand | Notes |
-|----|------------|--------|--------|
-| M-01 | **0% / off** field + world encounters (true no-enc) | High (Luzbel WM noenc for ocean-skip IGT; longstanding) | Distinct from Light 25%. Need safe engine patch + per-base variants. |
-| M-02 | **Battle open / win / death / fanfare shorten** | High (Cornfed FF9 CSR; Phek priority after CSR+; Okami FF9 length context) | Engine binary work (not Makou FIELD). Highest “mod” upside after densities. |
-| M-03 | World-map no-enc **segment** option (e.g. post-Zolom) if full 0% is hard | Med–High (Luzbel ocean-skip) | Prefer full M-01; segment is fallback. |
+- Field and world **no random encounters**
+- Separate from Light (25%)
+- Available on Unmodified, CSR, and Highwind
 
-### P2 — gameplay quality-of-life mods
+### 2. Battle pacing
 
-| ID | Suggestion | Demand | Notes |
-|----|------------|--------|--------|
-| M-04 | Faster **Diamond Weapon** (or other long forced battles) | Med (IC mentioned with battle anim work) | After M-02 infrastructure. |
-| M-05 | Optional **pre-empt / formation** practice helpers | Low–Med | Careful: must not silently break step routes unless labeled. |
-| M-06 | “Random encounters feel like routed Light” tuning docs / preset blurb | Med | Soft: Light already aimed at this; publish expected variance. |
+- Shorter battle entry, win/death, and/or fanfare where safe on PSX
+- Engine work (not field script packs)
 
-### P2 — tooling
+### 3. Later
 
-| ID | Suggestion | Demand | Notes |
-|----|------------|--------|--------|
-| T-01 | Builder: clearer battle-mod vs encounter-mod grouping when M-02 lands | — | UX when catalog grows. |
-| T-02 | Verify stacks: CSR + many packs + RE in one command matrix | Med | Partially have `verify_builder_config` / built-disc. |
-| T-03 | Document FPGA / console known-good stacks | Med (Okami FPGA notes) | Findings + README pointer. |
-
-### P3
-
-| ID | Suggestion | Notes |
-|----|------------|--------|
-| M-07 | Pincer-chance / exotic formation chaos mod | Fun; niche; after M-01/M-02. |
-| M-08 | Auto “Chuck Norris” joke items NPC | IC joke; invalidates runs — novelty only. |
+- Other long forced-battle speedups once battle pacing exists
+- Clearer builder grouping as more mods ship
+- Console / FPGA known-good stack notes
 
 ---
 
-## Deprioritised / reject (here)
+## Not planned here
 
-| Suggestion | Why |
-|------------|-----|
-| Putting encounter 0% **into CSR base** | Must stay a **mod** so Unmodified/CSR/Highwind choose. |
-| Scene/cutscene requests | CSR repo packs/base — not this repo. |
-| Changing CSR skill-check scenes for battle IGT | Cutscene product decision. |
-| Full game “randomizer” | Out of scope vs density + battle timing mods. |
-| Self-bot Discord scrapers as product | N/A; HAR/export is human workflow only. |
+| Idea | Why |
+|------|-----|
+| Cutscene / scene trims | CSR repo (packs or bases) |
+| Baking no-encounters into CSR or Highwind | Keep as optional mods |
+| Full randomizers or category forks | Out of scope for now |
 
 ---
 
-## Suggested next ships (short)
+## Feedback
 
-1. **M-01** Field+World **Off (0%)** mod family (all bases), builder group + preset.  
-2. Spike **M-02** battle intro/outro/fanfare (Ghidra / existing encounter RE).  
-3. Wire M-02 as builder **mods** with base-specific layers if needed.  
-4. Keep encounter presets in sync when CSR/Highwind base IDs bump.
-
-## Related docs
-
-- Encounter system: `docs/01-encounter-system.md`  
-- New mod pipeline: `docs/06-new-mod-research.md`  
-- CSR cutscene backlog: CSR repo `docs/SUGGESTIONS.md`
+Try mods from the site builder, then send concise notes (what you ran + what you want).
+Useful items get folded into this list; it is not a vote tally.
