@@ -1,47 +1,59 @@
-# Task: playtest CSR + CSR+ Aerith house + Light field/world (disc 1)
+# Task: export one Discord channel (Windows)
 
 ## Goal
 
-Next published-pack matrix row after Highwind Lights PASS.
+Personal archive of a channel you can open, using DiscordChatExporter CLI.
+Full guide: **[docs/discord-channel-export-windows.md](discord-channel-export-windows.md)**
 
-## Matrix status
+## Do not
 
-| Base | Field Light | World Light | Status |
-|------|-------------|-------------|--------|
-| Unmodified (clean) | 25 | 25 | **PASS** |
-| CSR csr-v0.14.1 | on-csr-25 | on-csr-25 | **PASS** |
-| Highwind highwind-v0.1.1 | on-highwind-25 | on-highwind-25 | **PASS** (script + play OK) |
-| CSR + CSR+ Aerith house (D1) | on-csr-25 | on-csr-25 | **this task** |
-| CSR + CSR+ Hojo (D2) | optional | optional | after D1 scene |
-
-Verifier stacking: docs/findings/2026-07-30-verify-built-disc-stacking.md
-verify_built_disc.py reads config **only** from APPLIED.txt (no pack-id flags).
+- Paste your token into chat, Discord, or git.
+- Commit `.token` or export `out/` dumps.
 
 ## Success
 
-1. Builder: base **CSR**, check **CSR+ Aerith house**, Field/World **Light** (CSR variants).
-2. verify_built_disc.py on the extract folder or .bin (APPLIED.txt must sit next to the .bin) -> **PASS**.
-3. DuckStation disc 1: boots; field + world Light feel OK (one-line note).
+1. CLI installed (`DiscordChatExporter.Cli.win-x64.zip` from release 2.47.3).
+2. Token saved only as local `.token` next to the exe.
+3. Channel exported to `out/` as **Json**.
+4. Evidence: file name(s) + approx size (no token).
 
 ## Steps
 
-1. git pull --ff-only in Final-Fantasy-7-Modding.
-2. https://individualcontributor.dev/builder/ (hard refresh).
-3. Load pristine NTSC-U **Disc 1**.
-4. Base **CSR**; CSR+ Aerith house; Field Light; World Light (CSR packs).
-5. Build -> extract (keep APPLIED.txt with the .bin).
-6. Run copy-paste. Paste stdout + playtest line under Evidence. Commit + push. Say **check**.
+1. Read `docs/discord-channel-export-windows.md`.
+2. Download CLI → unzip under `%USERPROFILE%\tools\DiscordChatExporter.Cli\`.
+3. Get user token (browser Network → filter `messages` → `authorization` header).
+4. Save `.token`; get Channel ID (Developer Mode).
+5. Run copy-paste below. Say **check** when done.
 
-## Copy-paste
+## Copy-paste (Git Bash)
 
-    cd "$(git rev-parse --show-toplevel)"
-    git pull --ff-only
+    cd /c/Users/$USER/tools/DiscordChatExporter.Cli
+    # first time only: place DiscordChatExporter.Cli.exe here from the zip
+    # first time only: printf '%s' 'YOUR_TOKEN' > .token && chmod 600 .token
 
-    # Extract folder from the builder zip (must contain .bin + APPLIED.txt):
-    BUILT="/c/path/to/ff7-builder-d1+csr-v0.14.1+..."
+    mkdir -p out
+    export DISCORD_TOKEN="$(tr -d '\r\n' < .token)"
+    ./DiscordChatExporter.Cli.exe export \
+      -c YOUR_CHANNEL_ID \
+      -f Json \
+      -o out/ \
+      --include-threads All \
+      --utc
+    ls -la out/
 
-    python scripts/verify_built_disc.py "$BUILT"
+## Copy-paste (PowerShell)
+
+    cd $env:USERPROFILE\tools\DiscordChatExporter.Cli
+    New-Item -ItemType Directory -Force -Path .\out | Out-Null
+    $env:DISCORD_TOKEN = (Get-Content -Raw .\.token).Trim()
+    .\DiscordChatExporter.Cli.exe export `
+      -c YOUR_CHANNEL_ID `
+      -f Json `
+      -o .\out\ `
+      --include-threads All `
+      --utc
+    Get-ChildItem .\out
 
 ## Evidence
 
-    (paste verify stdout + playtest one-liner)
+    (ls of out/ — file names + sizes only)
