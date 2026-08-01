@@ -37,13 +37,14 @@ AGAINST = {
 	},
 }
 
-RATE_LABEL = {25: "Light", 50: "Standard", 75: "Dense"}
+RATE_LABEL = {0: "Off", 25: "Light", 50: "Standard", 75: "Dense"}
 RATE_BLURB = {
+	0: "No random world-map battles.",
 	25: "Fewer random world-map battles.",
 	50: "Moderate random world-map battles.",
 	75: "More random world-map battles.",
 }
-RATES = (25, 50, 75)
+RATES = (0, 25, 50, 75)
 
 
 def meta_for(against: str, rate: int) -> dict:

@@ -57,12 +57,14 @@ AGAINST = {
 }
 
 RATE_LABEL = {
+	0: "Off",
 	25: "Light",
 	50: "Standard",
 	75: "Dense",
 }
 
 RATE_BLURB = {
+	0: "No random field battles.",
 	25: "Fewer random field battles.",
 	50: "Moderate random field battles.",
 	75: "More random field battles.",

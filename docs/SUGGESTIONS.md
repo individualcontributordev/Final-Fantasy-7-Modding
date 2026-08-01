@@ -24,19 +24,6 @@ https://individualcontributor.dev/history/
 
 ## Open
 
-### Encounter off (0%)
-
-Request: field and world packs with encounters fully off, as their own density
-(not almost-Light). Long-standing need for cleaner world-map work and low-enc
-practice without only the 25% Light preset.
-
-Context: luzbel asked early (2024-11) for a world-map no-encounter option
-(e.g. around ocean skip / super-low IGT segments) when Makou did not expose WM
-the same way as fields. Engine stubs later made field/world density packs
-possible; 0% is the missing step below Light.
-
-Should ship on the same bases as existing densities (clean / CSR / Highwind)
-and stay a mod, not baked into CSR or Highwind.
 
 ### Battle pacing (entry / win-death / fanfare)
 
@@ -89,6 +76,10 @@ with light random vs tool-assist no enc.
 ---
 
 ## Done
+
+**Done - Encounter off (0%)**  
+Field and world Off packs + builder preset Random Encounters (Off) for Unmodified / CSR / Highwind (v0.2.0).
+
 
 **Done - Field random encounter density packs**  
 RCnt2 FORCE-style field stub; Light (25%) / Standard (50%) / Dense (75%) on

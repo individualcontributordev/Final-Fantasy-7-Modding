@@ -361,10 +361,149 @@
       "rate": 75,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Dense (75%)"
+    },
+    {
+      "id": "field-encounter-0-v0.2.0",
+      "name": "Field Random Encounters \u2014 Off (0%) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./field-encounter-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./field-encounter-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./field-encounter-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "field-encounter-on-csr-0-v0.2.0",
+      "name": "Field Random Encounters \u2014 Off (0%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "field-encounter-on-highwind-0-v0.2.0",
+      "name": "Field Random Encounters \u2014 Off (0%) (on Highwind) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind-v0.1.1"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./field-encounter-on-highwind-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./field-encounter-on-highwind-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "world-encounter-0-v0.2.0",
+      "name": "World Random Encounters \u2014 Off (0%) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./world-encounter-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./world-encounter-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./world-encounter-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "world-encounter-on-csr-0-v0.2.0",
+      "name": "World Random Encounters \u2014 Off (0%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "world-encounter-on-highwind-0-v0.2.0",
+      "name": "World Random Encounters \u2014 Off (0%) (on Highwind) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind-v0.1.1"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-highwind-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-highwind-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Off (0%)"
     }
   ],
   "bases": [],
   "presets": [
+    {
+      "id": "random-encounters-off",
+      "name": "Random Encounters (Off)",
+      "blurb": "Field and world map Off (0%) \u2014 no random encounters for the selected base experience.",
+      "compatibleBases": [
+        "clean",
+        "csr-v0.14.1",
+        "highwind-v0.1.1"
+      ],
+      "addons": [
+        "field-encounter-0-v0.2.0",
+        "field-encounter-on-csr-0-v0.2.0",
+        "field-encounter-on-highwind-0-v0.2.0",
+        "world-encounter-0-v0.2.0",
+        "world-encounter-on-csr-0-v0.2.0",
+        "world-encounter-on-highwind-0-v0.2.0"
+      ],
+      "kind": "mod"
+    },
     {
       "id": "random-encounters-light",
       "name": "Random Encounters (Light)",

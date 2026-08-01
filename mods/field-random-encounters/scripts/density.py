@@ -10,9 +10,15 @@ from __future__ import annotations
 import sys
 
 # Pack id / stub files still use these integers (field-encounter-25-v…).
-RATES = (25, 50, 75)
+RATES = (0, 25, 50, 75)
 
 DENSITIES: tuple[dict, ...] = (
+	{
+		"name": "off",
+		"rate": 0,
+		"title": "Off (0%)",
+		"hint": "No random field battles (FORCE path always clears Danger)",
+	},
 	{
 		"name": "light",
 		"rate": 25,
@@ -37,8 +43,8 @@ _BY_NAME = {d["name"]: d["rate"] for d in DENSITIES}
 _BY_RATE = {d["rate"]: d for d in DENSITIES}
 
 RATE_HELP = (
-	"light / standard / dense (or 25 / 50 / 75). "
-	"Not a free-form % — only these three shipped stubs."
+	"off / light / standard / dense (or 0 / 25 / 50 / 75). "
+	"Not a free-form % — only these shipped stubs."
 )
 
 
@@ -95,7 +101,7 @@ def print_density_menu(*, allow_all: bool) -> None:
 	for i, d in enumerate(DENSITIES, start=1):
 		print(f"  [{i}] {d['title']:<16}  {d['hint']}")
 	if allow_all:
-		print(f"  [{len(DENSITIES) + 1}] All               Build Light + Standard + Dense")
+		print(f"  [{len(DENSITIES) + 1}] All               Build Off + Light + Standard + Dense")
 	print()
 
 
