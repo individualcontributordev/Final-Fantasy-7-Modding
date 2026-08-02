@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-02 | [noswap-disc-change-pristine](2026-08-02-noswap-disc-change-pristine.md) | D1: DISK0001 + MOVIE/DISKn.LZS; swap = Makou Ask for disc N then map jump | confirmed |
 | 2026-08-02 | [disc-cross-compare](2026-08-02-disc-cross-compare.md) | D1/D2/D3: code+FIELD identical; diffs are FMV + disc-id; single-disc no-swap plausible without full movies | confirmed |
 | 2026-07-30 | [verify-built-disc-stacking](2026-07-30-verify-built-disc-stacking.md) | Zip verify: match APPLIED ids; ignore EDC/ECC + base bytes addons overwrite | confirmed |
 | 2026-07-30 | [world-light-runtime-verify](2026-07-30-world-light-runtime-verify.md) | Builder zip PASS; stub live; danger 0/FFFF; 0x40 not FORCE; DS/CE watches | confirmed |
