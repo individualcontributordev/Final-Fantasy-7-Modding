@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-02 | [noswap-blackbgb-hub-branches](2026-08-02-noswap-blackbgb-hub-branches.md) | blackbgb S0: 4 asks → las0_1#744 / lost2#634; save bits 5/2 + Var[13][0] | confirmed |
 | 2026-08-02 | [noswap-ask-for-disc-inventory](2026-08-02-noswap-ask-for-disc-inventory.md) | D1 Ask for disc: 19 hits in blackbgb/e/3 only; hub=blackbgb #103 | confirmed |
 | 2026-08-02 | [noswap-disc-change-pristine](2026-08-02-noswap-disc-change-pristine.md) | D1: DISK0001 + MOVIE/DISKn.LZS; swap = Makou Ask for disc N then map jump | confirmed |
 | 2026-08-02 | [disc-cross-compare](2026-08-02-disc-cross-compare.md) | D1/D2/D3: code+FIELD identical; diffs are FMV + disc-id; single-disc no-swap plausible without full movies | confirmed |
