@@ -130,7 +130,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./field-encounter-on-highwind-25-v0.1.2/layers/disc1.layer.json",
@@ -150,7 +150,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./field-encounter-on-highwind-50-v0.1.2/layers/disc1.layer.json",
@@ -170,7 +170,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./field-encounter-on-highwind-75-v0.1.2/layers/disc1.layer.json",
@@ -310,7 +310,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./world-encounter-on-highwind-25-v0.1.0/layers/disc1.layer.json",
@@ -330,7 +330,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./world-encounter-on-highwind-50-v0.1.0/layers/disc1.layer.json",
@@ -350,7 +350,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./world-encounter-on-highwind-75-v0.1.0/layers/disc1.layer.json",
@@ -410,7 +410,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./field-encounter-on-highwind-0-v0.2.0/layers/disc1.layer.json",
@@ -470,7 +470,7 @@
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "discs": {
         "1": "./world-encounter-on-highwind-0-v0.2.0/layers/disc1.layer.json",

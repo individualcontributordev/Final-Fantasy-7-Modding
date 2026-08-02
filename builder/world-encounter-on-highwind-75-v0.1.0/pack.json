@@ -7,7 +7,7 @@
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
-    "highwind-v0.1.1"
+    "highwind-v0.2.0"
   ],
   "discs": {
     "1": "./layers/disc1.layer.json",
