@@ -5,6 +5,10 @@ Index: [CHANGELOGS.md](../../CHANGELOGS.md). **Newest at top.**
 
 Current VERSION file: see `VERSION` in this folder.
 
+## 2026-08-02
+
+- Retarget Highwind packs to highwind-v0.2.0 (CSR+ scene trims baked into Highwind base; engine stubs unchanged).
+
 ## v0.2.0
 
 - Off (0%) packs for Unmodified (clean), CSR (csr-v0.14.1), and Highwind
