@@ -7,7 +7,7 @@ Current VERSION file: see `VERSION` in this folder.
 
 ## 2026-08-02
 
-- Retarget Highwind packs to highwind-v0.2.0 (CSR+ scene trims baked into Highwind base; engine stubs unchanged).
+- Retarget Highwind packs to highwind-v0.2.0 (base id bump; engine stubs unchanged).
 
 ## v0.2.0
 
