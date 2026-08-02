@@ -50,10 +50,6 @@ Then say **check**. Never commit `.bin` / `.cue` / ISO.
 
 Pull → review committed evidence → next task in-repo.
 
-## Discord posts
-
-When shipping a player-facing release, put a **short** copy-paste under **Discord post** in `docs/INSTRUCTIONS.md` (see keep-repo-succinct). Do not write long channel essays.
-
 ## Before agent acts
 
 ```bash
