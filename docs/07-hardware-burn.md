@@ -67,7 +67,7 @@ Use after DuckStation looks good, **before** burning, for:
 
 **First hardware disc (recommended):** Disc **1** only — one variable at a time (e.g. CSR, then later CSR+Light).
 
-## Burn (ImgBurn on Windows — preferred)
+## Burn (ImgBurn (PC) — preferred)
 
 1. Insert a quality CD-R (avoid no-name ultra-cheap spindles if the laser is picky)
 2. ImgBurn → **Write image file to disc**
@@ -78,7 +78,7 @@ Use after DuckStation looks good, **before** burning, for:
    - Do **not** “ISO9660 data disc” the `.bin` as a file
 5. Verify (ImgBurn verify pass) before ejecting
 
-Mac: use a tool that burns from `.cue` as raw Mode 2 (e.g. `cdrdao` / Toast “RAW”). Finder “burn folder” will **not** work.
+Other hosts: use a tool that burns from `.cue` as raw Mode 2 (e.g. `cdrdao`). GUI “burn folder” shortcuts usually will **not** work.
 
 ## Boot on PS2
 

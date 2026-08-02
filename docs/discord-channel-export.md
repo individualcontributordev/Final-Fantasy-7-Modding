@@ -1,4 +1,4 @@
-# Discord channel export (Windows)
+# Discord channel export
 
 One-time personal archive of a channel **you can already open**.
 Uses [DiscordChatExporter](https://github.com/Tyrrrz/DiscordChatExporter) CLI.
@@ -11,7 +11,7 @@ User-token automation is against Discord TOS — use only for your own archive; 
 Release: https://github.com/Tyrrrz/DiscordChatExporter/releases/tag/2.47.3
 
 - Most PCs: **`DiscordChatExporter.Cli.win-x64.zip`**
-- ARM Windows: **`DiscordChatExporter.Cli.win-arm64.zip`**
+- ARM build: **`DiscordChatExporter.Cli.win-arm64.zip`**
 
 Unzip to a folder you control, e.g.:
 
@@ -93,7 +93,7 @@ Optional readable HTML: `-f HtmlDark` instead of `-f Json`.
 
 1. Confirm `out\` has `.json` (and no errors in the console).
 2. **Do not** `git add` `.token` or `out\`.
-3. Say **check** in the Mac chat and point at the folder path if you synced it,
+3. Say **check** in the agent chat and point at the folder path if you synced it,
    or paste only a short status (message count / file name) under Evidence in
    `docs/INSTRUCTIONS.md` if that task is active.
 

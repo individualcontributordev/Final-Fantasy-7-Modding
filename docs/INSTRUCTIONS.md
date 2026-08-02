@@ -1,7 +1,7 @@
 # Instructions
 
-Windows handoff + Discord posts. Mac overwrites this file and pushes.
-You: git pull --ff-only, follow task or copy the post. Say **check** when done.
+Operational handoff + Discord posts. Agent overwrites this file and pushes.
+You: git pull --ff-only, follow the task or copy the post. Say **check** when done.
 
 Discord posts: short, skimmable, one builder link. No essays.
 

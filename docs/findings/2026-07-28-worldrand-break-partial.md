@@ -10,7 +10,7 @@ Screenshots `docs/image1.png` / `docs/image2.png`:
 
 - Execute breakpoint @ **`0x800ADFC0`** (`WorldRand` entry `lui v0,0x8011`) — **Hit Count 6**
 - On world map (Midgar-area grass visible in one shot)
-- `windows-last-output.txt` evidence fields still empty — **no RA values**
+- `session output log` evidence fields still empty — **no RA values**
 
 ## Gap
 

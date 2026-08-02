@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-25  
 **Confidence:** confirmed  
-**Source:** `docs/windows-last-output.txt` (search on 264008-byte `.dec`)
+**Source:** `session output log` (search on 264008-byte `.dec`)
 
 ## Results
 

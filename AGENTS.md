@@ -6,11 +6,11 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 
 ## How we work
 
-- **Mac (this chat):** agent — **commits the Windows task into the repo first** (`docs/INSTRUCTIONS.md` + scripts), then a short chat pointer. Never chat-only runbooks.
-- **Windows:** human — `git pull`, run COPY-PASTE from that file, paste evidence, push; discs / Ghidra / DuckStation / Git Bash.
-- User says **check** → Mac pulls and reviews **repo** evidence (not live CDN unless asked).
+- **Agent (this chat):** **commits the operational task into the repo first** (`docs/INSTRUCTIONS.md` + scripts), then a short chat pointer. Never chat-only runbooks.
+- **Human:** `git pull`, run COPY-PASTE from that file, paste evidence, push; discs / Ghidra / DuckStation / Git Bash.
+- User says **check** → Agent pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
-- Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/mac-human-workflow.mdc`).
+- Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/agent-human-workflow.mdc`).
 - **Before publish:** `python scripts/verify_builder_config.py --pristine … --disc N --base … --addon …` (stacks layers like the site; required in ship skills).
 - Optional built-zip smoke: `python scripts/verify_built_disc.py path/to/extract-or.bin` — config **only** from `APPLIED.txt` next to the image (no pack-id flags). Ignores EDC/ECC and base bytes later addons overwrite — `docs/findings/2026-07-30-verify-built-disc-stacking.md`.
 
@@ -71,9 +71,9 @@ When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.m
 | **`.agents/rules/`**, **`.agents/skills/`** | **Canonical copies** — real files, edit only here, committed in this repo |
 | **`.augment/rules`**, **`.augment/skills`** | **Relative symlinks** → `../.agents/rules` and `../.agents/skills` so Auggie loads them |
 
-No Mac/Windows absolute paths. Each clone only needs repo-relative links.
+No machine-absolute paths. Each clone only needs repo-relative links.
 
-**Windows (Git Bash):** enable symlink support so checkouts are real links, not text files. Developer Mode (or admin) may be required.
+**Disc host (Git Bash or similar):** enable symlink support so checkouts are real links, not text files. Developer Mode (or admin) may be required.
 
     git config --global core.symlinks true
     cd "$(git rev-parse --show-toplevel)"
@@ -92,4 +92,4 @@ If Git still leaves plain text files:
 
 Do **not** use cmd `mklink` unless you prefer cmd. Do **not** copy rule/skill trees into `.augment/` — only symlink. Step-by-step task form: `docs/INSTRUCTIONS.md` when that task is posted.
 
-Rules include: mac-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.
+Rules include: agent-human-workflow, be-autonomous, keep-repo-succinct, builder-packs, evolve-re-process, auto-commit-push, capture-research-findings, no-cursor-commit-trailers.

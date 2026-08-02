@@ -18,7 +18,7 @@ Run this skill at the end of a session (or mid-session after a breakthrough) if 
 1. Would a future agent waste time without this note?
 2. Did we unlock a **new capability** (new file, new verify method, new ship path)?
 3. Did we **invalidate** a step in `docs/06-new-mod-research.md` or `docs/04-workflow.md`?
-4. Did we add a script that should replace a manual Windows chore?
+4. Did we add a script that should replace a manual manual chore?
 
 ## Checklist
 

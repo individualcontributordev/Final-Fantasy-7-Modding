@@ -1,5 +1,5 @@
 ---
-description: Act autonomously; one Windows task in chat; copy-paste file; evidence paste only
+description: Act autonomously; one operational task in chat; copy-paste file; evidence paste only
 alwaysApply: true
 ---
 
@@ -11,10 +11,10 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 
 - Commit/push docs, rules, scripts, builder JSON (`auto-commit-push.mdc`)
 - On **check results**: pull, analyze evidence, record findings, continue
-- Reply with the **next single complete Windows task in chat**
+- Reply with the **next single complete operational task in chat**
 - Prefer skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters` when those tasks apply
 
-## Windows task quality bar
+## operational task quality bar
 
 - **Chat:** one goal, numbered clicks/keys, what success looks like, commit commands
 - **Committed file:** COPY-PASTE values + empty EVIDENCE section
@@ -26,7 +26,7 @@ If a step needs judgment, describe the landmark concretely (mnemonic, register, 
 ## Do not
 
 - Point the user at a handoff markdown file for day-to-day steps (use chat + root README / AGENTS.md)
-- Batch multiple unrelated RE goals into one Windows turn
+- Batch multiple unrelated RE goals into one operational turn
 - Ask them to paste between PCs (into chat)
 - Ask them to fill structured answer fields
 - Ask “want me to…?” for routine next steps
