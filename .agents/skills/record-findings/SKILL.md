@@ -36,7 +36,7 @@ Record a finding when any of these are true:
 - After **check** / **check results**: useful content in `docs/INSTRUCTIONS.md`, screenshots, or chat that confirms watches/BPs/PASS-FAIL — **journal immediately**
 - “Value looks weird” resolved (e.g. mid-value is not stub output; FFFF is one frame) — that conclusion is a finding
 
-User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). File has COPY-PASTE values + EVIDENCE paste only — **never** yes/no answer blanks. See `.agents/rules/mac-human-workflow.mdc`.
+User-facing next steps always go **in chat** as **one atomic task** (full GUI/commands, addresses, expected observations). File has COPY-PASTE values + EVIDENCE paste only — **never** yes/no answer blanks. See `.agents/rules/agent-human-workflow.mdc`.
 
 ## Create a finding file
 

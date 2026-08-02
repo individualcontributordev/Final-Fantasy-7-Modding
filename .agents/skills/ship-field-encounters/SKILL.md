@@ -72,6 +72,6 @@ Rebuild against the new ids so `compatibleBases` stay correct. Old packs can sta
 
 ## Do not
 
-- Reintroduce PPF / Windows patcher UI
+- Reintroduce PPF / offline patcher UI
 - Put patch notes only in chat — stub notes go under `mods/field-random-encounters/patches/`
 - Commit disc images

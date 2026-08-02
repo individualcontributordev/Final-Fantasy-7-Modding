@@ -13,7 +13,7 @@ Only add or keep material that helps **other engineers** understand and mod FF7 
 - Session narrative, "how we got here," or duplicate instructions already in rules/skills
 - Generic tool docs with no FF7/PSX-specific detail
 - New files when a short addition to an existing doc is enough
-- Redundant READMEs / WINDOWS-INSTRUCTIONS / handoff sprawl — root README + AGENTS.md are enough
+- Redundant READMEs / extra instruction sprawl / handoff sprawl — root README + AGENTS.md are enough
 - Empty folder placeholders as README.md — use `.gitkeep` under `workspace/`
 
 ## Do commit

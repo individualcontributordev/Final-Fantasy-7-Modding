@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-25  
 **Confidence:** confirmed  
-**Source:** Ghidra listing in `docs/windows-last-output.txt`
+**Source:** Ghidra listing in `session output log`
 
 ## Why scalars missed StepID
 

@@ -19,9 +19,9 @@ Full write-up: `docs/06-new-mod-research.md`. Follow that; this skill is the che
   - Engine binary `FIELD.BIN` / `WORLD.BIN` (Ghidra) → continue in this repo
 - Which stack bases must it support? (`clean`, `csr-v…`, `highwind-v…`)
 
-## 2. RE (Mac ↔ Windows)
+## 2. RE (Agent ↔ human)
 
-- One atomic Windows task per turn (chat + `docs/INSTRUCTIONS.md`)
+- One atomic operational task per turn (chat + `docs/INSTRUCTIONS.md`)
 - Align Ghidra VA with DuckStation before deep xref work (`docs/05-ghidra-guide.md`)
 - Journal every useful result: `.agents/skills/record-findings`
 - Promote confirmed facts into `docs/0N-*.md`

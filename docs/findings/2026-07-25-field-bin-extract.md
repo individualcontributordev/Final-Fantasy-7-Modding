@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-25  
 **Confidence:** confirmed  
-**Machine:** Windows (CDImage B5 + `scripts/decompress_field_bin.py`)
+**Tools:** CDImage B5 + `scripts/decompress_field_bin.py`
 
 ## Result
 
@@ -13,7 +13,7 @@
 | GZIPPS sub-header | `dc 3d 03 00` |
 | Encounter RNG table | file offset `0x40638` in `.dec` (`B1 CA EE 6C…`) |
 
-Backups on Windows: `ff7_disc1_pristine.bin`, `FIELD.BIN.pristine`.
+Local backups: `ff7_disc1_pristine.bin`, `FIELD.BIN.pristine`.
 
 ## Notes
 
