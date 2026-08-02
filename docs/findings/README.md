@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-02 | [noswap-blackbgb-ask-skip-proto](2026-08-02-noswap-blackbgb-ask-skip-proto.md) | blackbgb: Ask skipped via Goto OK; gate Bit OFF accidentally skipped — fix | confirmed |
 | 2026-08-02 | [noswap-blackbgb-hub-branches](2026-08-02-noswap-blackbgb-hub-branches.md) | blackbgb S0: 4 asks → las0_1#744 / lost2#634; save bits 5/2 + Var[13][0] | confirmed |
 | 2026-08-02 | [noswap-ask-for-disc-inventory](2026-08-02-noswap-ask-for-disc-inventory.md) | D1 Ask for disc: 19 hits in blackbgb/e/3 only; hub=blackbgb #103 | confirmed |
 | 2026-08-02 | [noswap-disc-change-pristine](2026-08-02-noswap-disc-change-pristine.md) | D1: DISK0001 + MOVIE/DISKn.LZS; swap = Makou Ask for disc N then map jump | confirmed |
