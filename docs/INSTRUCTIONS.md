@@ -49,17 +49,31 @@ git pull --ff-only
 |-----|----|--------------|----------|------------------------------|
 | | | | | |
 
+see screenshot
+
+field numbers
+
+blackbge 106 (no jumps to this field from anywhere in the scripts on disc 1)
+blackbgb 103 
+blackbg3 95 (no jumps to this field from anywhere in the scripts on disc 1)
+
+blackbgb 103 is also used to run mini games like the byke(motorcycle) mini-game
+
 ### Set next movie (multi-disc) — optional
 
 | Map | Id | Script locus | Per-disc movies | Notes |
 |-----|----|--------------|-----------------|-------|
 | | | | | |
 
+
+
 ### Counts
 
 - Ask disc 1: N
 - Ask disc 2: N
 - Ask disc 3: N
+
+
 
 ## Done when
 
