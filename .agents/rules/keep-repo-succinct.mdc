@@ -31,14 +31,6 @@ Only add or keep material that helps **other engineers** understand and mod FF7 
 - README and `AGENTS.md` are indexes; deep detail lives in `docs/0N-*.md`, `docs/findings/`, or `mods/*/patches/`
 - Trim or delete docs that no longer earn their keep
 
-## Discord posts in `docs/INSTRUCTIONS.md`
-
-- **Succinct:** a few short lines, easy to paste into Discord
-- What shipped + who it is for (one sentence)
-- Builder link on its own line: https://individualcontributor.dev/builder/
-- No long explanations, tables, commit hashes, or "how it works" unless asked
-- Prefer overwrite: latest post under **Discord post (copy-paste)**; drop old drafts
-
 ## Before adding anything
 
 Ask: *Would a new contributor need this to mod the disc, or is it only useful to me on this machine?* If the latter, do not add it.
