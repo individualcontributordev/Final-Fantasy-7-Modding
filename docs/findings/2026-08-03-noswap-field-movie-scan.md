@@ -26,3 +26,8 @@ LOSLAKE3 id 58 → OPENING.BIN in Tier 1 (matches known bug).
 ## Action
 
 Operator continues Makou trims using Tier 1 + Find All; rebuild layer when done.
+
+## Follow-up
+
+D2/D3 exclusive movies used by field scripts (trim candidates on D1):
+mods/no-disc-swap/patches/field-movie-d2d3-missing-on-d1.md
