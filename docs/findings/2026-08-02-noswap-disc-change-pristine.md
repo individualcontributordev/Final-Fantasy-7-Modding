@@ -1,4 +1,4 @@
-# No-swap RE — pristine D1 disc identity + field disc-change
+# No-disc-swap RE — pristine D1 disc identity + field disc-change
 
 **Date:** 2026-08-02
 **Confidence:** confirmed (ISO dump + Makou script paste)
@@ -6,7 +6,7 @@
 
 ## Goal
 
-How Unmodified Disc 1 encodes disc id and requests other discs. Baseline for an any-base no-swap add-on.
+How Unmodified Disc 1 encodes disc id and requests other discs. Baseline for an any-base no-disc-swap add-on.
 
 ## ISO / files (D1)
 
@@ -36,7 +36,7 @@ Disc changes are **field script opcodes**, not only a boot file check. Example g
 Also present: multi-disc movie pick, e.g.  
 `Set next movie: rcktfail (disc 1), rckethit1 (disc 2), No45 (disc 3)` then `Play movie`.
 
-So a no-swap pack must at least:
+So a no-disc-swap pack must at least:
 
 1. Neutralize or no-op **Ask for disc N** (or always succeed with current medium)
 2. Keep the following **map jump** on the same physical image (maps must exist on that image — full FIELD set is shared across retail discs)

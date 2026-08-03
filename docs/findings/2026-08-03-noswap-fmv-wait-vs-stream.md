@@ -1,12 +1,12 @@
 # Finding: Wrong FMV often shorter than wait — manip timing may still hold
 
 **Date:** 2026-08-03
-**Status:** operator observation (DuckStation); policy input for CSR no-swap
+**Status:** operator observation (DuckStation); policy input for CSR no-disc-swap
 **Confidence:** likely for Clean wrong-stream case; confirm per manip on CSR
 
 ## Observation
 
-On Clean no-swap (MOVIE left vanilla), when a D2/D3 movie id resolves to the
+On Clean no-disc-swap (MOVIE left vanilla), when a D2/D3 movie id resolves to the
 wrong stream on D1, the video often does not play full length, but
 gameplay continues as if the original beat completed.
 
@@ -22,8 +22,8 @@ wait is duration-based rather than stream-EOF-based.
 
 | Stack | Implication |
 |-------|-------------|
-| Clean + no-swap | Wrong FMV OK; no need to import D2/D3 movies for timing alone |
-| CSR base + no-swap | Prefer leave MOVIE; only copy manip-critical files if a specific manip needs the correct frames/audio, not only wall-clock. Default: try without movie copies; add whitelist only on proven FAIL |
+| Clean + no-disc-swap | Wrong FMV OK; no need to import D2/D3 movies for timing alone |
+| CSR base + no-disc-swap | Prefer leave MOVIE; only copy manip-critical files if a specific manip needs the correct frames/audio, not only wall-clock. Default: try without movie copies; add whitelist only on proven FAIL |
 | CSR+ / Highwind | Trims remove plays; no movie copy |
 
 ## Not proven

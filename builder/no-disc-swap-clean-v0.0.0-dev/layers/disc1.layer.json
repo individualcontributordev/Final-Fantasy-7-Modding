@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
-  "id": "no-swap-clean-v0.0.0-dev-disc1",
-  "description": "No-swap Clean D1: Makou Ask-for-disc removal + SNOVA/BATTLE.X LBA v3 (NTSC-U Disc 1 against clean)",
+  "id": "no-disc-swap-clean-v0.0.0-dev-disc1",
+  "description": "No-disc-swap Clean D1: Makou Ask-for-disc removal + SNOVA/BATTLE.X LBA v3 (NTSC-U Disc 1 against clean)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 747435024,

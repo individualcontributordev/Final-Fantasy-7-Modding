@@ -5,7 +5,7 @@ Root cause of Supernova freeze after SNOVA file inject: BATTLE.X embeds
 absolute D3 sector numbers for SNOVA0-15 and LASBOSS3. Files on D1 at a
 new LBA are never read for the effect; audio path may still tick.
 
-  python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
+  python3 mods/no-disc-swap/scripts/inject_snova_d3_to_d1.py \
     --d1 workspace/iso-extract/ff7_d1_snova_test.bin \
     --d3 workspace/pristine/FINALFANTASY7_D3.bin \
     --in-place

@@ -1,4 +1,4 @@
-# No-swap — Makou Ask-for-disc removal playtest (pristine D1)
+# No-disc-swap — Makou Ask-for-disc removal playtest (pristine D1)
 
 **Date:** 2026-08-03
 **Confidence:** confirmed on DuckStation; **console not tested**

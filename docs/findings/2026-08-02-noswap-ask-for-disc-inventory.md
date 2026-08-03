@@ -1,4 +1,4 @@
-# No-swap — Ask for disc inventory (pristine D1)
+# No-disc-swap — Ask for disc inventory (pristine D1)
 
 **Date:** 2026-08-02
 **Confidence:** confirmed (Makou Find All screenshots + operator notes)
@@ -29,7 +29,7 @@ Inbound jumps **to** `blackbgb` (separate Find All) include e.g. `frst_1`,
 |-------|--------|------|-----|
 | AD | Script 4 | 2 | disc **2** |
 
-### `blackbgb` (#103) — priority for no-swap
+### `blackbgb` (#103) — priority for no-disc-swap
 
 | Group | Script | Line | Ask |
 |-------|--------|------|-----|
