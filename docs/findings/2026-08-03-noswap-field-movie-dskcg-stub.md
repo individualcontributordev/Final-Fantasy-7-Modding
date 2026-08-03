@@ -24,3 +24,19 @@ mods/no-swap/scripts/stub_field_movie_dskcg.py
 ## Policy
 
 clean/Highwind: always stub both. CSR: always DSKCG; MOVIE whitelist later.
+
+## Playtest v1 failure (2026-08-03)
+
+Bare jr ra; nop at handler entry caused **new game black screen**.
+Field opcode handlers must advance the entity script PC or the same op re-executes forever.
+
+## v2 stub
+
+Same DSKCG/MOVIE offsets, 16 instructions:
+
+- index = *(u8*)0x800722C4
+- pc = *(u16*)(0x800831FC + index*2)
+- *pc += 1 (MOVIE) or += 2 (DSKCG)
+- return 0
+
+Tool updated accordingly.
