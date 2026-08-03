@@ -483,38 +483,21 @@
       "optionLabel": "Off (0%)"
     },
     {
-      "id": "no-disc-swap-clean-v0.0.0-dev",
-      "name": "No-disc-swap (Clean D1) v0.0.0-dev",
+      "id": "no-disc-swap-clean-v0.1.1",
+      "name": "No-disc-swap (Clean D1) v0.1.1",
       "kind": "mod",
-      "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. WIP \u2014 console pending.",
+      "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. Multi-disc FMVs trimmed.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "no-disc-swap",
       "compatibleBases": [
         "clean"
       ],
       "discs": {
-        "1": "./no-disc-swap-clean-v0.0.0-dev/layers/disc1.layer.json"
+        "1": "./no-disc-swap-clean-v0.1.1/layers/disc1.layer.json"
       },
       "enabled": false,
       "groupLabel": "No-disc-swap",
-      "optionLabel": "Clean D1 v0.0.0-dev (dev)"
-    },
-    {
-      "id": "no-disc-swap-clean-v0.1.0-dev",
-      "name": "No-disc-swap (Clean D1) v0.1.0-dev",
-      "kind": "mod",
-      "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. WIP \u2014 console pending.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "no-disc-swap",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./no-disc-swap-clean-v0.1.0-dev/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "groupLabel": "No-disc-swap",
-      "optionLabel": "Clean D1 v0.1.0-dev (dev)"
+      "optionLabel": "Clean D1 v0.1.1"
     }
   ],
   "bases": [],
