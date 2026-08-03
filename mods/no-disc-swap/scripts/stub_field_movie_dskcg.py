@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FIELD no-swap stubs.
+"""FIELD no-disc-swap stubs.
 
 Default (v6): **DSKCG only** — force-complete disc-change opcode.
 MOVIE left vanilla (entry stubs softlocked intro).
@@ -11,7 +11,7 @@ DSKCG v6:
   - return 0
 Does NOT start disc UI / fade (skips that path entirely).
 
-  python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \\
+  python3 mods/no-disc-swap/scripts/stub_field_movie_dskcg.py \\
     --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin --in-place
 """
 from __future__ import annotations

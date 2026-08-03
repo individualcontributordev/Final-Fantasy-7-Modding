@@ -18,13 +18,13 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | 2026-08-03 | [noswap-supernova-ds-pass](2026-08-03-noswap-supernova-ds-pass.md) | Supernova DS PASS after BATTLE.X LBA remap v3 |
 | 2026-08-03 | [noswap-snova-injector](2026-08-03-noswap-snova-injector.md) | D3 SNOVA/ inject onto D1; offline OK; DS playtest pending |
 | 2026-08-03 | [noswap-makou-ask-ds-pass](2026-08-03-noswap-makou-ask-ds-pass.md) | Makou all Ask-for-disc removed; DuckStation PASS; console untested | confirmed |
-| 2026-08-03 | [noswap-field-movie-dskcg-stub](2026-08-03-noswap-field-movie-dskcg-stub.md) | FIELD DSKCG+MOVIE handlers; jr ra stub plan; tool under mods/no-swap | likely |
+| 2026-08-03 | [noswap-field-movie-dskcg-stub](2026-08-03-noswap-field-movie-dskcg-stub.md) | FIELD DSKCG+MOVIE handlers; jr ra stub plan; tool under mods/no-disc-swap | likely |
 | 2026-08-03 | [noswap-full-run-scope](2026-08-03-noswap-full-run-scope.md) | No ship until full-run safe; SNOVA/movies/Asks all required | confirmed |
 | 2026-08-02 | [noswap-blackbgb-ask-skip-proto](2026-08-02-noswap-blackbgb-ask-skip-proto.md) | blackbgb: Ask skipped via Goto OK; gate Bit OFF accidentally skipped — fix | confirmed |
 | 2026-08-02 | [noswap-blackbgb-hub-branches](2026-08-02-noswap-blackbgb-hub-branches.md) | blackbgb S0: 4 asks → las0_1#744 / lost2#634; save bits 5/2 + Var[13][0] | confirmed |
 | 2026-08-02 | [noswap-ask-for-disc-inventory](2026-08-02-noswap-ask-for-disc-inventory.md) | D1 Ask for disc: 19 hits in blackbgb/e/3 only; hub=blackbgb #103 | confirmed |
 | 2026-08-02 | [noswap-disc-change-pristine](2026-08-02-noswap-disc-change-pristine.md) | D1: DISK0001 + MOVIE/DISKn.LZS; swap = Makou Ask for disc N then map jump | confirmed |
-| 2026-08-02 | [disc-cross-compare](2026-08-02-disc-cross-compare.md) | D1/D2/D3: code+FIELD identical; diffs are FMV + disc-id; single-disc no-swap plausible without full movies | confirmed |
+| 2026-08-02 | [disc-cross-compare](2026-08-02-disc-cross-compare.md) | D1/D2/D3: code+FIELD identical; diffs are FMV + disc-id; single-disc no-disc-swap plausible without full movies | confirmed |
 | 2026-07-30 | [verify-built-disc-stacking](2026-07-30-verify-built-disc-stacking.md) | Zip verify: match APPLIED ids; ignore EDC/ECC + base bytes addons overwrite | confirmed |
 | 2026-07-30 | [world-light-runtime-verify](2026-07-30-world-light-runtime-verify.md) | Builder zip PASS; stub live; danger 0/FFFF; 0x40 not FORCE; DS/CE watches | confirmed |
 | 2026-07-28 | [world-light-dense-feel](2026-07-28-world-light-dense-feel.md) | Light≈Standard short walk; Dense clearly higher; ship all three | likely |

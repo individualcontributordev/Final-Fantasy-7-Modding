@@ -1,4 +1,4 @@
-# No-swap full-run scope (do not ship incomplete pack)
+# No-disc-swap full-run scope (do not ship incomplete pack)
 
 **Date:** 2026-08-03
 **Confidence:** confirmed (layout + prior DS + operator history)
@@ -16,7 +16,7 @@ on Unmodified D1 (then other bases). Hub-only Ask removal is **not** shippable a
 | DISKINFO / disc id (if re-checked) | Wrong-disc reject |
 | Other D2/D3-only MOVIE files hit mid-run | Random freezes |
 
-Shared FIELD maps exist on all discs; **media does not**. No-swap = script gates
+Shared FIELD maps exist on all discs; **media does not**. No-disc-swap = script gates
 + missing-media policy (skip and/or copy small assets like SNOVA).
 
 ## Target product (later)
@@ -38,7 +38,7 @@ on **clean** D1 first; then CSR/Highwind if bytes allow. Not a base bump.
 - Combined Ask + SNOVA work bin — DuckStation PASS
 - Wrong FMV shorter than wait — manip time may still hold; see
   2026-08-03-noswap-fmv-wait-vs-stream.md
-- Clean rebuild recipe: mods/no-swap/README.md
+- Clean rebuild recipe: mods/no-disc-swap/README.md
 - Pack scaffold: build_clean_d1_layer.py (enabled false until ship gate)
 
 ## Open work (order)
@@ -70,14 +70,14 @@ FIELD MOVIE/DSKCG engine stubs abandoned for playable builds.
 
 | Stack | Ask disc | Field Play movie | Extra media on D1 image |
 |-------|----------|------------------|-------------------------|
-| **Unmodified + no-swap** | Makou delete all DSKCG | **Leave** (wrong FMV for D2/D3 spots OK) | No manip-movie import; Supernova still needs `SNOVA/` or battle fix if final battle is reached |
-| **CSR + no-swap** (base only) | Makou delete all DSKCG (vs CSR baseline) | **Leave** | **Copy manip-critical MOVIE files from D2/D3 onto D1** so CSR manips (FD/List, etc.) keep correct streams |
-| **CSR + CSR+ scene packs + no-swap** | Same Asks | Scenes that would play those FMVs are **already trimmed** by CSR+ | **No movie copy for CSR+** — wrong PMVIE/set-movie values are irrelevant because the packs do not play those FMVs |
-| **Highwind + no-swap** | Makou vs Highwind baseline | Trims remove the play paths | **No movie copy** — wrong set-movie values not a concern |
+| **Unmodified + no-disc-swap** | Makou delete all DSKCG | **Leave** (wrong FMV for D2/D3 spots OK) | No manip-movie import; Supernova still needs `SNOVA/` or battle fix if final battle is reached |
+| **CSR + no-disc-swap** (base only) | Makou delete all DSKCG (vs CSR baseline) | **Leave** | **Copy manip-critical MOVIE files from D2/D3 onto D1** so CSR manips (FD/List, etc.) keep correct streams |
+| **CSR + CSR+ scene packs + no-disc-swap** | Same Asks | Scenes that would play those FMVs are **already trimmed** by CSR+ | **No movie copy for CSR+** — wrong PMVIE/set-movie values are irrelevant because the packs do not play those FMVs |
+| **Highwind + no-disc-swap** | Makou vs Highwind baseline | Trims remove the play paths | **No movie copy** — wrong set-movie values not a concern |
 
 ### CSR base manip movies (CSR-only, planned)
 
-- Only when no-swap is aimed at **CSR base** routing that still runs the FMV.
+- Only when no-disc-swap is aimed at **CSR base** routing that still runs the FMV.
 - Default try without movie copies first (see FMV wait finding). Whitelist from speedrun/CSR notes + playtest only on FAIL; ISO inject of selected `MOVIE/*` onto D1 (not FIELD MOVIE stubs).
 - If a movie will not fit: prefer a scene trim that drops the play, or accept skip — do not stuff full endings onto D1 without need.
 

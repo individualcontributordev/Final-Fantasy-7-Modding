@@ -35,11 +35,11 @@ Verified: all 17 table entries match find_file on patched image; no residual
 
 ## Tool
 
-mods/no-swap/scripts/inject_snova_d3_to_d1.py (v3)
+mods/no-disc-swap/scripts/inject_snova_d3_to_d1.py (v3)
 
 ## Playtest v3
 
 **PASS (DuckStation):** Supernova effect completes; battle resumes.
-Confirms BATTLE.X LBA remap + SNOVA file inject is sufficient for no-swap.
+Confirms BATTLE.X LBA remap + SNOVA file inject is sufficient for no-disc-swap.
 
 Console not yet tested.

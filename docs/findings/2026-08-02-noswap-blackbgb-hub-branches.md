@@ -1,4 +1,4 @@
-# No-swap — blackbgb S0-Main disc branches (pristine)
+# No-disc-swap — blackbgb S0-Main disc branches (pristine)
 
 **Date:** 2026-08-02
 **Confidence:** confirmed (full Makou script paste)
@@ -25,7 +25,7 @@ removal, etc.
   `Var[13][0] = target disc`, show save menu; on next load the *other* branch
   (bit 5 / bit 2 direct) can fire Ask without another prompt.
 - **Post-ask always jumps** to a map that exists on all retail discs (shared FIELD set).
-- No-swap minimal edit: **remove or no-op each `Ask for disc N`**, keep waits/music/jumps/flags.
+- No-disc-swap minimal edit: **remove or no-op each `Ask for disc N`**, keep waits/music/jumps/flags.
 
 ### Line numbers (inventory screenshot)
 
@@ -41,7 +41,7 @@ numbers may shift in paste; use gates + jumps as identity.
 | `Var[3][131]` bit 2 | **multi-disc movie** `rcktfail` / `rckethit1` / `No45` then `rktsid` (#558) |
 | `$GameMoment == 638` | Aerith materia strip → `gninn` (#522) |
 
-Movie branch is a second no-swap surface (pick D1 file or skip) — not required for Ask-no-op prototype.
+Movie branch is a second no-disc-swap surface (pick D1 file or skip) — not required for Ask-no-op prototype.
 
 ## Minimal prototype (next)
 
