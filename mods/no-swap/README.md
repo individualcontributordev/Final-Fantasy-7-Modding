@@ -22,3 +22,7 @@ Load VA base `0x800A0000`. Opcode table file `0x40228`.
 | 0xF9 | MOVIE | 0x800CCE94 | 0x2CE94 | jr ra; nop |
 
 Tool: `scripts/stub_field_movie_dskcg.py`
+
+## Status (2026-08-03)
+
+MOVIE opcode entry stubs softlock new game. Tool default is **DSKCG-only**.

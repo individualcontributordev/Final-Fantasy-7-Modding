@@ -59,3 +59,13 @@ Still audio + black + no field load. Entity pointer writes at intro are suspect.
 ## v4
 
 No entity dereference. Fast-path style: PC+=delta, clear 0x80071C1C + 0x801144D4, v0=0, jr ra.
+
+## v4 FAIL + pivot (2026-08-03)
+
+v4 same softlock (audio ~1:30 intro, no field). Replacing MOVIE entry is abandoned
+for playable builds.
+
+## v5
+
+Default tool patches **DSKCG only**. MOVIE vanilla. Full FMV-skip needs another
+layer (e.g. stream player), not opcode 0xF9 entry rewrite.
