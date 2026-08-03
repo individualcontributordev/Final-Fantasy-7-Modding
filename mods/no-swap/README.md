@@ -1,34 +1,116 @@
-# No-swap (full-run) — WIP
+# No-swap (full-run) — Clean Unmodified D1
 
-Single-disc / no disc-swap pack. **Not shipped** until full-run playtest.
+Single-disc play on Disc 1 only: no Ask-for-disc, Supernova works.
+Not a public builder ship yet until console smoke + full-run gates clear.
 
-## Policy
+Players (later): https://individualcontributor.dev/builder/
 
-| Base (later packs) | Ask disc (DSKCG) | Field FMV (MOVIE) | Supernova |
-|--------------------|------------------|-------------------|-----------|
-| clean | stub skip | stub skip all | TODO battle stub |
-| CSR | stub skip | stub skip except manip whitelist | TODO |
-| Highwind | stub skip | stub skip all | TODO |
+## What works (DuckStation, 2026-08-03)
 
-Engine stubs preferred over editing every field script.
+| Piece | Method | Status |
+|-------|--------|--------|
+| Ask for disc | Makou remove DSKCG on FIELD maps | DS PASS |
+| Supernova | D3 SNOVA raw-copy + BATTLE.X LBA remap | DS PASS |
+| Combined work bin | Makou then inject once | DS PASS |
+| Wrong D2/D3 FMVs | Leave MOVIE vanilla (wrong clip OK) | intentional |
+| Console | See docs/INSTRUCTIONS.md smoke | pending |
 
-## FIELD.BIN stubs (found)
+Engine FIELD MOVIE/DSKCG opcode stubs are abandoned (intro/disc-change softlocks).
 
-Load VA base `0x800A0000`. Opcode table file `0x40228`.
+## Rebuild recipe (Clean / Unmodified)
 
-| Op | Name | Handler VA | FILE off | Stub |
-|----|------|------------|----------|------|
-| 0x0E | DSKCG | 0x800C523C | 0x2523C | jr ra; nop |
-| 0xF9 | MOVIE | 0x800CCE94 | 0x2CE94 | jr ra; nop |
+### 0. Inputs (gitignored)
 
-Tool: `scripts/stub_field_movie_dskcg.py`
+- workspace/pristine/FINALFANTASY7_D1.bin
+- workspace/pristine/FINALFANTASY7_D3.bin
+- Work: workspace/iso-extract/ff7_d1_noswap_work.bin
 
-## Status (2026-08-03)
+### 1. Fresh work copy
 
-MOVIE opcode entry stubs softlock new game. Tool default is **DSKCG-only**.
+    cd Final-Fantasy-7-Modding
+    git pull --ff-only
+    cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
 
-## Playable path (current)
+### 2. Makou — remove every Ask for disc
 
-FIELD.BIN opcode stubs for MOVIE/DSKCG are **abandoned for playable builds**
-(softlock / black disc-change). Use Makou Ask-for-disc removal on vanilla FIELD.
-Tool retained under scripts/ for RE only.
+Open the work image (not pristine). Delete Ask for disc only; keep Bit clears,
+conditions, and map jumps after each ask.
+
+Maps / inventory: docs/findings/2026-08-02-noswap-ask-for-disc-inventory.md
+
+| Map | Field # | Notes |
+|-----|---------|--------|
+| BLACKBGB | 103 | Priority hub — init S0 Main (4 asks) |
+| BLACKBGE | 106 | Completeness |
+| BLACKBG3 | 95 | Completeness |
+
+Save FIELD back into the work bin so the ISO is updated.
+DS hub smoke before step 3 is recommended.
+
+### 3. SNOVA + BATTLE.X inject (once)
+
+    cp -f workspace/iso-extract/ff7_d1_noswap_work.bin \
+          workspace/iso-extract/ff7_d1_noswap_work.pre_snova.bak
+
+    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
+      --d1 workspace/iso-extract/ff7_d1_noswap_work.bin \
+      --d3 workspace/pristine/FINALFANTASY7_D3.bin \
+      --in-place
+
+Must print:
+
+- raw-copy + BATTLE.X LBA patch v3
+- verify: BATTLE.X 17 LBA entries remapped
+- verify: all SNOVA files match D3
+
+Script refuses double inject. Restore bak or restart from step 1 if needed.
+
+### 4. DuckStation smoke
+
+1. New game → intro FMV → first field
+2. One former disc-ask path (no UI; continues)
+3. Final battle Supernova (save/cheat) → effect finishes, battle resumes
+
+### 5. Optional console smoke
+
+See root docs/INSTRUCTIONS.md (console section) and docs/07-hardware-burn.md.
+New sectors need EDC repair before optical burn; MiSTer/FILE may differ.
+
+### 6. Optional: build builder layer (dev)
+
+    python3 mods/no-swap/scripts/build_clean_d1_layer.py \
+      --work workspace/iso-extract/ff7_d1_noswap_work.bin \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin
+
+Writes builder/no-swap-clean-v*/layers/disc1.layer.json from VERSION.
+Does not enable the pack in manifest until you decide to ship.
+
+Note: a SNOVA-only layer can be built from ff7_d1_snova_test.bin for inject-only tests; ship layer must come from Ask+Makou combined work bin.
+
+
+## FMV policy (Clean)
+
+- Do not stub MOVIE; do not import full D2/D3 movies for Clean.
+- Wrong FMV may play at multi-disc moments; often not full length while the
+  field wait still spans the original duration → List/manip timers that
+  key off that wait still line up. See
+  docs/findings/2026-08-03-noswap-fmv-wait-vs-stream.md.
+- CSR base may still want a small manip-critical movie file whitelist later;
+  CSR+ / Highwind rely on trims (no movie copy). Prefer try without copies first.
+
+## Layout
+
+    mods/no-swap/
+      VERSION
+      README.md
+      CHANGELOG.md
+      patches/README.md
+      scripts/
+        inject_snova_d3_to_d1.py
+        build_clean_d1_layer.py
+        stub_field_movie_dskcg.py   # RE only — not for playable bins
+
+## Ship gate (do not skip)
+
+Full single-disc run expectation on Clean D1, then console confidence, then
+enabled: true on a versioned pack. Hub-only or SNOVA-only is not shippable alone.

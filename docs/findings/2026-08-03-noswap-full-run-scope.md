@@ -32,13 +32,19 @@ on **clean** D1 first; then CSR/Highwind if bytes allow. Not a base bump.
 
 ## Progress
 
-- **Makou all Ask-for-disc removed — DuckStation PASS** (2026-08-03). Console untested.
-  See `2026-08-03-noswap-makou-ask-ds-pass.md`.
+- Makou all Ask-for-disc removed — DuckStation PASS (2026-08-03). Console untested.
+  See 2026-08-03-noswap-makou-ask-ds-pass.md.
+- Supernova v3 (SNOVA + BATTLE.X LBA) — DuckStation PASS
+- Combined Ask + SNOVA work bin — DuckStation PASS
+- Wrong FMV shorter than wait — manip time may still hold; see
+  2026-08-03-noswap-fmv-wait-vs-stream.md
+- Clean rebuild recipe: mods/no-swap/README.md
+- Pack scaffold: build_clean_d1_layer.py (enabled false until ship gate)
 
 ## Open work (order)
 
 1. ~~Field Ask-for-disc~~ — Makou delete all; **DS PASS** (console TBD)
-2. Supernova / `SNOVA/` (copy D3→D1 or battle stub)
+2. DONE Supernova / `SNOVA/` (copy D3→D1 or battle stub)
 3. Endings / other missing media if still freeze on clean leave-Play policy
 4. CSR-base manip movie copy list + inject (CSR-only); CSR+/HW no movie copy
 5. Diff → pack(s); console smoke; ship only after full-run gates
@@ -72,7 +78,7 @@ FIELD MOVIE/DSKCG engine stubs abandoned for playable builds.
 ### CSR base manip movies (CSR-only, planned)
 
 - Only when no-swap is aimed at **CSR base** routing that still runs the FMV.
-- Whitelist from speedrun/CSR notes + playtest; ISO inject of selected `MOVIE/*` onto D1 (not FIELD MOVIE stubs).
+- Default try without movie copies first (see FMV wait finding). Whitelist from speedrun/CSR notes + playtest only on FAIL; ISO inject of selected `MOVIE/*` onto D1 (not FIELD MOVIE stubs).
 - If a movie will not fit: prefer a scene trim that drops the play, or accept skip — do not stuff full endings onto D1 without need.
 
 ### CSR+ packs and Highwind — no movie import
