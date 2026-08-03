@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-03 | [noswap-field-movie-dskcg-stub](2026-08-03-noswap-field-movie-dskcg-stub.md) | FIELD DSKCG+MOVIE handlers; jr ra stub plan; tool under mods/no-swap | likely |
 | 2026-08-03 | [noswap-full-run-scope](2026-08-03-noswap-full-run-scope.md) | No ship until full-run safe; SNOVA/movies/Asks all required | confirmed |
 | 2026-08-02 | [noswap-blackbgb-ask-skip-proto](2026-08-02-noswap-blackbgb-ask-skip-proto.md) | blackbgb: Ask skipped via Goto OK; gate Bit OFF accidentally skipped — fix | confirmed |
 | 2026-08-02 | [noswap-blackbgb-hub-branches](2026-08-02-noswap-blackbgb-hub-branches.md) | blackbgb S0: 4 asks → las0_1#744 / lost2#634; save bits 5/2 + Var[13][0] | confirmed |
