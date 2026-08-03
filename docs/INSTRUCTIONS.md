@@ -52,3 +52,14 @@ Say **check**.
 
 Then FIELD recompress/inject may be the bug — report that; next is inject verification
 on unmodified recompress with zero stubs.
+
+Final-Fantasy-7-Modding git:(main) cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
+python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
+  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
+  --in-place
+DSKCG @ 0x2523C: 64B v5 (0a80023c20d84290 -> stub)
+MOVIE: left vanilla (intro/FMV intact on D1)
+recompressed FIELD.BIN 85435 -> 85382 (slot 85435)
+wrote workspace\iso-extract\ff7_d1_noswap_work.bin
+
+intro movie plays and first field loads fine. ask disc screen not shown but screen stays black, no sound. 
