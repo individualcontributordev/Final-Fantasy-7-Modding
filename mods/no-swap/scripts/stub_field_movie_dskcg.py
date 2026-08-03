@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Stub FF7 PSX FIELD no-swap helpers.
+"""FIELD no-swap stubs.
 
-Default: **DSKCG only** (Ask for disc). MOVIE left vanilla so intro/FMV
-state machine can complete on disc 1.
+Default (v6): **DSKCG only** — force-complete disc-change opcode.
+MOVIE left vanilla (entry stubs softlocked intro).
+
+DSKCG v6:
+  - stack frame
+  - entity* = *(u32*)0x8009C6E0; if non-null: clear byte@1 (leave wait state)
+  - script PC[index] += 2
+  - return 0
+Does NOT start disc UI / fade (skips that path entirely).
 
   python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \\
     --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin --in-place
-
-  # optional experiments (often softlock — not for playtest):
-  #   --also-movie
-
-History: MOVIE entry stubs v1–v4 all softlocked new game (black + audio).
 """
 from __future__ import annotations
 
@@ -26,6 +28,7 @@ from decompress_gzipps import GZIPPS_HEADER_SIZE  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_padded  # noqa: E402
 
 FIELD_PATH = "FIELD/FIELD.BIN"
+DSKCG_OFF = 0x2523C
 
 
 def _I(op, rs, rt, rd=0, sh=0, fn=0, imm=0):
@@ -37,29 +40,66 @@ def _I(op, rs, rt, rd=0, sh=0, fn=0, imm=0):
 
 
 def _B(ws):
-    return b"".join(w.to_bytes(4, "little") for w in ws)
+    return b"".join((w & 0xFFFFFFFF).to_bytes(4, "little") for w in ws)
 
 
-def stub_pc(delta: int) -> bytes:
-    """PC += delta, clear two flags, return 0. No entity writes."""
-    R0, V0, AT, RA = 0, 2, 1, 31
-    T0, T1, T2 = 8, 9, 10
+def dskcg_v6() -> bytes:
+    """Force-complete DSKCG without disc UI."""
+    # beq encoding: relative in instructions from delay slot
+    # Sequence:
+    #   addiu sp,sp,-24
+    #   sw ra,16(sp)
+    #   lui t0,0x800a
+    #   lw t0,-14624(t0)     # entity*
+    #   nop
+    #   beq t0,zero, +3      # skip sb if null (to after sb)
+    #   nop
+    #   sb zero,1(t0)
+    #   lui t1,0x8007
+    #   lbu t1,0x22C4(t1)
+    #   sll t1,t1,1
+    #   lui t2,0x8008
+    #   addiu t2,t2,0x31FC
+    #   addu t2,t2,t1
+    #   lhu t3,0(t2)
+    #   addiu t3,t3,2
+    #   sh t3,0(t2)
+    #   or v0,zero,zero
+    #   lw ra,16(sp)
+    #   addiu sp,sp,24
+    #   jr ra
+    #   nop
+    R0, V0, SP, RA = 0, 2, 29, 31
+    T0, T1, T2, T3 = 8, 9, 10, 11
+    # beq t0, zero, +3  means skip 3 insns after delay: nop, sb, then land on lui t1
+    # From beq at index 5, delay=6, target offset = 5+1+3 = 9 → lui t1
+    # relative = 3 from instruction after delay (index 7 is sb, 8 would be next)
+    # standard: target = (pc_of_beq + 4) + (rel<<2); rel counted in words from delay slot
+    # we want to branch to lui t1 which is 2 words after beq+delay (skip nop and sb)
+    # delay is nop; after delay is sb; after sb is lui. rel=+2 from delay slot.
+    beq_rel = 2
     return _B(
         [
-            _I(0xF, 0, T0, imm=0x8007),
-            _I(0x24, T0, T0, imm=0x22C4),
-            _I(0, 0, T0, T0, sh=1, fn=0),
-            _I(0xF, 0, T1, imm=0x8008),
-            _I(9, T1, T1, imm=0x31FC),
-            _I(0, T1, T0, T1, fn=0x21),
-            _I(0x25, T1, T2, imm=0),
-            _I(9, T2, T2, imm=delta),
-            _I(0x29, T1, T2, imm=0),
-            _I(0xF, 0, AT, imm=0x8007),
-            _I(0x28, AT, R0, imm=0x1C1C),
-            _I(0xF, 0, AT, imm=0x8011),
-            _I(0x29, AT, R0, imm=17620),
+            _I(9, SP, SP, imm=-24),
+            _I(0x2B, SP, RA, imm=16),
+            _I(0xF, 0, T0, imm=0x800A),
+            _I(0x23, T0, T0, imm=-14624),
+            0,  # nop
+            _I(4, T0, R0, imm=beq_rel),  # beq t0, zero, +2
+            0,  # delay nop
+            _I(0x28, T0, R0, imm=1),  # sb zero, 1(t0)
+            _I(0xF, 0, T1, imm=0x8007),
+            _I(0x24, T1, T1, imm=0x22C4),
+            _I(0, 0, T1, T1, sh=1, fn=0),
+            _I(0xF, 0, T2, imm=0x8008),
+            _I(9, T2, T2, imm=0x31FC),
+            _I(0, T2, T1, T2, fn=0x21),
+            _I(0x25, T2, T3, imm=0),
+            _I(9, T3, T3, imm=2),
+            _I(0x29, T2, T3, imm=0),
             _I(0, 0, 0, V0, fn=0x25),
+            _I(0x23, SP, RA, imm=16),
+            _I(9, SP, SP, imm=24),
             _I(0, RA, 0, 0, fn=8),
             0,
         ]
@@ -76,18 +116,14 @@ def compress_field(dec: bytes, template_header: bytes) -> bytes:
     )
 
 
-def apply_stubs(dec: bytearray, also_movie: bool) -> list[str]:
-    notes = []
-    patches = [("DSKCG", 0x2523C, stub_pc(2))]
-    if also_movie:
-        patches.append(("MOVIE", 0x2CE94, stub_pc(1)))
-    for name, off, stub in patches:
-        old = bytes(dec[off : off + 8])
-        dec[off : off + len(stub)] = stub
-        notes.append(f"{name} @ 0x{off:X}: {len(stub)}B v5 ({old.hex()} -> stub)")
-    if not also_movie:
-        notes.append("MOVIE: left vanilla (intro/FMV intact on D1)")
-    return notes
+def apply(dec: bytearray) -> list[str]:
+    stub = dskcg_v6()
+    old = bytes(dec[DSKCG_OFF : DSKCG_OFF + 8])
+    dec[DSKCG_OFF : DSKCG_OFF + len(stub)] = stub
+    return [
+        f"DSKCG @ 0x{DSKCG_OFF:X}: {len(stub)}B v6 force-complete (was {old.hex()})",
+        "MOVIE: left vanilla",
+    ]
 
 
 def main() -> int:
@@ -97,21 +133,14 @@ def main() -> int:
     ap.add_argument("--in-place", action="store_true")
     ap.add_argument("--dec-out", type=Path)
     ap.add_argument("--dry-run", action="store_true")
-    ap.add_argument(
-        "--also-movie",
-        action="store_true",
-        help="Also stub MOVIE (known softlock risk — not default)",
-    )
     args = ap.parse_args()
-
     img = bytearray(args.disc_image.read_bytes())
     comp = extract_file(bytes(img), FIELD_PATH)
     dec = bytearray(decompress_field(comp))
-    for n in apply_stubs(dec, args.also_movie):
+    for n in apply(dec):
         print(n)
     if args.dec_out:
         args.dec_out.write_bytes(dec)
-        print("wrote", args.dec_out)
     if args.dry_run:
         print("dry-run: no disc write")
         return 0

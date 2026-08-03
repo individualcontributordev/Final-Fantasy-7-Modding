@@ -1,18 +1,22 @@
-# Task: No-swap — test v5 DSKCG-only (MOVIE vanilla)
+# Task: No-swap — test v6 DSKCG force-complete
 
-## Status of MOVIE stubs
+## Last results
 
-| Ver | Result |
-|-----|--------|
-| v1–v4 MOVIE entry stubs | FAIL — black screen, intro audio, field never loads |
+- v5 DSKCG-only: **intro + first field PASS** (MOVIE vanilla good)
+- Disc-change: **no Ask UI**, but **black + silence** (stuck on blackbgb / never
+  music+MAPJUMP after DSKCG)
 
-**Stop replacing the MOVIE opcode for now.** Intro/FMV on D1 needs the real handler.
+blackbgb is a black map; after a working DSKCG the script should still hit
+**Play music** then **Jump** to lost2/las0_1. No sound ⇒ script not past DSKCG.
 
-## v5 strategy
+## v6 change
 
-1. **DSKCG only** — skip disc-change wait (PC+2, no entity writes)
-2. **MOVIE left pristine** — new game / field FMV should work on D1
-3. Missing FMV / Supernova later via a different hook (stream layer), not 0xF9 entry
+DSKCG force-complete with:
+- stack + ra save
+- entity* null check; if set, clear wait byte@1
+- script PC += 2
+- return 0  
+MOVIE still vanilla.
 
 ## Apply
 
@@ -25,41 +29,29 @@ python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
   --in-place
 ```
 
-Expect:
-- `DSKCG @ ... v5`
-- `MOVIE: left vanilla`
-
-Do **not** pass `--also-movie` unless experimenting.
+Expect: `DSKCG ... v6 force-complete` and `MOVIE: left vanilla`.
 
 ## Playtest
 
-1. **New game** — must show intro **video** (not black) and reach first field
-2. Optional: disc-change hub save — no insert-disc lock
-3. Do not expect FMV-cut yet
+1. New game still OK (intro + field)
+2. Disc-change hub save:
+   - no insert-disc UI
+   - **music after** and/or **map jump** to lost2 / las0_1 (not permanent black silence)
 
 ## Evidence
 
 ```
-Tool output:
-New game intro video + first field: PASS/FAIL
-Disc Ask (if tested): PASS/FAIL/not tested
+Tool (v6):
+New game still OK: PASS/FAIL
+Disc-change: PASS/FAIL
+  - music after? 
+  - jumped to lost2/las0_1?
 Notes:
 ```
 
 Say **check**.
 
-## If new game still fails on DSKCG-only
+## Fallback if v6 still black+silent
 
-Then FIELD recompress/inject may be the bug — report that; next is inject verification
-on unmodified recompress with zero stubs.
-
-Final-Fantasy-7-Modding git:(main) cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
-python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
-  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
-  --in-place
-DSKCG @ 0x2523C: 64B v5 (0a80023c20d84290 -> stub)
-MOVIE: left vanilla (intro/FMV intact on D1)
-recompressed FIELD.BIN 85435 -> 85382 (slot 85435)
-wrote workspace\iso-extract\ff7_d1_noswap_work.bin
-
-intro movie plays and first field loads fine. ask disc screen not shown but screen stays black, no sound. 
+Switch to **Makou-only** Ask removal on all DSKCG maps (proven on blackbgb earlier)
+plus vanilla FIELD; engine FMV skip later via another hook.
