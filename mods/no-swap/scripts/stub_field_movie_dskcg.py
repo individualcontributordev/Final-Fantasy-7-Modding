@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Stub FIELD DSKCG + MOVIE (no-swap / no-FMV) — v4.
+"""Stub FF7 PSX FIELD no-swap helpers.
 
-History:
-  v1 jr-ra only → black screen (no PC++)
-  v2 PC++ only → audio, still stuck (incomplete)
-  v3 PC++ + entity* writes → still stuck (likely bad entity ptr at intro)
-  v4 PC++ + flag clears, **no entity dereference** (match original fast path)
+Default: **DSKCG only** (Ask for disc). MOVIE left vanilla so intro/FMV
+state machine can complete on disc 1.
 
   python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \\
     --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin --in-place
+
+  # optional experiments (often softlock — not for playtest):
+  #   --also-movie
+
+History: MOVIE entry stubs v1–v4 all softlocked new game (black + audio).
 """
 from __future__ import annotations
 
@@ -39,6 +41,7 @@ def _B(ws):
 
 
 def stub_pc(delta: int) -> bytes:
+    """PC += delta, clear two flags, return 0. No entity writes."""
     R0, V0, AT, RA = 0, 2, 1, 31
     T0, T1, T2 = 8, 9, 10
     return _B(
@@ -63,9 +66,6 @@ def stub_pc(delta: int) -> bytes:
     )
 
 
-STUBS = {"DSKCG": (0x2523C, stub_pc(2)), "MOVIE": (0x2CE94, stub_pc(1))}
-
-
 def decompress_field(comp: bytes) -> bytes:
     return gzip.decompress(comp[GZIPPS_HEADER_SIZE:])
 
@@ -76,12 +76,17 @@ def compress_field(dec: bytes, template_header: bytes) -> bytes:
     )
 
 
-def apply_stubs(dec: bytearray) -> list[str]:
+def apply_stubs(dec: bytearray, also_movie: bool) -> list[str]:
     notes = []
-    for name, (off, stub) in STUBS.items():
+    patches = [("DSKCG", 0x2523C, stub_pc(2))]
+    if also_movie:
+        patches.append(("MOVIE", 0x2CE94, stub_pc(1)))
+    for name, off, stub in patches:
         old = bytes(dec[off : off + 8])
         dec[off : off + len(stub)] = stub
-        notes.append(f"{name} @ 0x{off:X}: {len(stub)}B v4 no-entity (was {old.hex()})")
+        notes.append(f"{name} @ 0x{off:X}: {len(stub)}B v5 ({old.hex()} -> stub)")
+    if not also_movie:
+        notes.append("MOVIE: left vanilla (intro/FMV intact on D1)")
     return notes
 
 
@@ -92,14 +97,21 @@ def main() -> int:
     ap.add_argument("--in-place", action="store_true")
     ap.add_argument("--dec-out", type=Path)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument(
+        "--also-movie",
+        action="store_true",
+        help="Also stub MOVIE (known softlock risk — not default)",
+    )
     args = ap.parse_args()
+
     img = bytearray(args.disc_image.read_bytes())
     comp = extract_file(bytes(img), FIELD_PATH)
     dec = bytearray(decompress_field(comp))
-    for n in apply_stubs(dec):
+    for n in apply_stubs(dec, args.also_movie):
         print(n)
     if args.dec_out:
         args.dec_out.write_bytes(dec)
+        print("wrote", args.dec_out)
     if args.dry_run:
         print("dry-run: no disc write")
         return 0
