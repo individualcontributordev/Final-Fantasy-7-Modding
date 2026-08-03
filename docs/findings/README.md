@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-04 | [noswap-fr-e-blin70-movie-trims](2026-08-04-noswap-fr-e-blin70-movie-trims.md) | fr_e #347 + blin70_4 #269 Set+Play trims |
 | 2026-08-04 | [noswap-d2d3-movie-trims-unblock](2026-08-04-noswap-d2d3-movie-trims-unblock.md) | D2/D3 Set+Play trims unblocked playtest |
 | 2026-08-04 | [noswap-load-save-asks-disc2](2026-08-04-noswap-load-save-asks-disc2.md) | Load save asks disc 2: save disc id vs field Ask |
 | 2026-08-03 | [noswap-field-movie-scan](2026-08-03-noswap-field-movie-scan.md) | D1 PMVIE scan Tier1 crawl candidates |
