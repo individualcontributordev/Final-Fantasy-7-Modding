@@ -6,6 +6,8 @@ Makou script edits (not engine MOVIE stubs).
 
 | Map / DAT | Issue | Edit |
 |-----------|-------|------|
+| **fr_e** (#347) BLIN? | After Diamond Weapon — Set+Play blocked progress | Operator deleted Set+Play |
+| **blin70_4** (#269) GameMoment >= 1572 | Set+Play needed trim | Operator deleted Set+Play |
 | LOSLAKE3 (ioslake3) | ids 57/58 → ONTRAIN + OPENING.BIN; D2 wants loslake1+lslmv | Remove Set+Play; keep jump |
 | Crawl sites (operator) | Missing movie slows field to crawl | Remove Set+Play found |
 | Final descent BG movie (operator) | BG movie missing | Remove Set+Play |
