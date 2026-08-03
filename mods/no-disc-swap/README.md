@@ -1,7 +1,7 @@
 # No-disc-swap (full-run) — Clean Unmodified D1
 
 Single-disc play on Disc 1 only: no Ask-for-disc, Supernova works.
-Not a public builder ship yet until console smoke + full-run gates clear.
+Builder pack: no-disc-swap-clean-v0.1.0-dev (movie trims). Full-run still open.
 
 Players (later): https://individualcontributor.dev/builder/
 
