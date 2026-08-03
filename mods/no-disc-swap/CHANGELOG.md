@@ -2,6 +2,10 @@
 
 Newest at top.
 
+## Unreleased
+
+- D2/D3-range Set+Play trims (operator) unblocked mid/late playtest; republish when stable
+
 ## 0.1.0-dev
 
 - FIELD movie trims: remove Set next movie + Play movie on crawl / missing-FMV sites

@@ -1,38 +1,27 @@
-# Task: No-disc-swap — load save asks for disc 2
+# Task: No-disc-swap — continue playtest; publish next layer when ready
 
-## Report
+## Status
 
-0.1.0 burned pack: loading a save asks for disc 2.
+- Operator: D2/D3-range Set next movie + Play movie trims on D1 unblocked playtest; continuing.
+- Finding: docs/findings/2026-08-04-noswap-d2d3-movie-trims-unblock.md
+- Remaining list (pre-trim audit): mods/no-disc-swap/patches/field-movie-d2d3-after-disc-change.md
+- Load D2 save still asks disc 2 unless save disc id is 1 / D1-origin save
 
-## Analysis (this machine)
+## While playing
 
-Applied 0.1.0 has Ask removed on BLACKBGB / BLACKBG3 / BLACKBGE.
-DISKINFO still DISK0001. SAVEMENU unchanged.
+Note any new: crawl, ask-for-disc, freeze, map name, field id.
 
-So this is almost certainly **save file disc ID = 2**, not missing field Ask edits.
+## When ready to ship next pack
 
-Finding: docs/findings/2026-08-04-noswap-load-save-asks-disc2.md
+1. Work bin = Ask trims + all movie Set/Play trims + SNOVA v3
+2. build_clean_d1_layer.py (bump VERSION e.g. 0.1.1-dev)
+3. verify_builder_config + enable + push
+4. Builder rebuild + burn
 
-## Please confirm
+## Evidence (optional)
 
-    Ask appears: at save list / after load confirm / after field enters
-    Save was made on: retail D2 / D2 image / this D1 pack / unknown
-    Approximate story point:
-
-## Workarounds now
-
-1. New game on the no-swap D1 disc (or load a pure D1 save)
-2. Edit memcard save disc number to 1
-3. Continue playtest from a D1-origin save
-
-## If we need pack fix
-
-Next RE: SAVEMENU / load path ignore save disc field so any progress save loads on D1-only.
-
-## Evidence
-
-    Where ask shows:
-    Save origin:
+    Still blocked anywhere:
+    Next pack published:
     Notes:
 
 Say check.
