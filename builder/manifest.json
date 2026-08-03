@@ -481,6 +481,23 @@
       "rate": 0,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "no-swap-clean-v0.0.0-dev",
+      "name": "No-swap (Clean D1) v0.0.0-dev",
+      "kind": "mod",
+      "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. WIP \u2014 console pending.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "no-swap",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./no-swap-clean-v0.0.0-dev/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "groupLabel": "No-swap",
+      "optionLabel": "Clean D1 v0.0.0-dev (dev)"
     }
   ],
   "bases": [],
