@@ -1,42 +1,37 @@
-# Task: No-disc-swap — retest builder after EDC grow fix
+# Task: No-disc-swap — console smoke after ImgBurn verify PASS
 
-## Cause of error
+## Done
 
-Builder message: source and patched image sizes differ
+- DuckStation: Ask + Supernova + combined PASS
+- Builder: grow/EDC fix shipped (site edc.js)
+- **ImgBurn verify: PASS** (burned CD-R of builder no-disc-swap Clean D1)
 
-applyLayer already supports growing the image (SNOVA +570 sectors).
-EDC repair required source.length === patched.length and threw.
+## Goal
 
-## Fix (site)
+Boot the burned disc on console (PS2 MechaPwn ladder) and smoke.
 
-individualcontributordev.github.io builder/edc.js — pushed.
-Repair now allows patched longer than source; regenerates EDC on changed
-+ newly appended sectors.
+## Console checks (Disc 1)
 
-## Your steps
-
-1. Hard refresh builder (cache bust): https://individualcontributor.dev/builder/
-   Use a private window if the old edc.js is cached.
-2. Base: Unmodified / clean
-3. Add-on: No-disc-swap Clean D1
-4. Disc 1 → Build
-
-Expect: zip download succeeds (no size-differ error).
-APPLIED.txt may note EDC sectors repaired.
-
-5. Burn path: image already EDC-repaired by builder; still follow
-   docs/07-hardware-burn.md if your burner requires extra steps.
-6. Console smoke.
+| Check | Result |
+|-------|--------|
+| Boot to title | |
+| New game to first field | |
+| One former disc-ask (no Ask UI, continues) | |
+| Supernova if late save | PASS/FAIL/not tested |
+| Any read error / freeze | notes |
 
 ## Evidence
 
-    Builder build: PASS/FAIL
-    Notes:
-    Console: …
+    Console: PS2 MechaPwn / other:
+    Boot/title: PASS/FAIL
+    New game/field: PASS/FAIL
+    Disc-ask: PASS/FAIL/not tested
+    Supernova: PASS/FAIL/not tested
+    Notes (media, speed, APPLIED packs):
 
 Say check.
 
 ## Notes
 
-- Pack remains D1-only; grown size ~748.8 MB vs retail ~747.4 MB
-- Do not commit .bin
+- ImgBurn verify PASS means Mode2 image written and read back clean on the burner drive — strong optical signal, not yet a PS2 laser proof.
+- Same order as docs/07-hardware-burn.md pass table.
