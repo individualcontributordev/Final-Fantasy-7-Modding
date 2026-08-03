@@ -1,7 +1,7 @@
 # Finding: Supernova needs BATTLE.X LBA remap (not just SNOVA files)
 
 **Date:** 2026-08-03
-**Status:** v3 offline OK; DS playtest pending
+**Status:** v3 DuckStation PASS (Supernova completes)
 
 ## Failures
 
@@ -36,3 +36,10 @@ Verified: all 17 table entries match find_file on patched image; no residual
 ## Tool
 
 mods/no-swap/scripts/inject_snova_d3_to_d1.py (v3)
+
+## Playtest v3
+
+**PASS (DuckStation):** Supernova effect completes; battle resumes.
+Confirms BATTLE.X LBA remap + SNOVA file inject is sufficient for no-swap.
+
+Console not yet tested.
