@@ -69,3 +69,12 @@ for playable builds.
 
 Default tool patches **DSKCG only**. MOVIE vanilla. Full FMV-skip needs another
 layer (e.g. stream player), not opcode 0xF9 entry rewrite.
+
+## v5 playtest (2026-08-03)
+
+- Intro + first field: **PASS** (MOVIE vanilla)
+- Disc-change: no Ask UI, **black + no sound** (script not reaching post-DSKCG music/jump)
+
+## v6
+
+DSKCG force-complete with stack + null-safe entity clear + PC+=2. MOVIE still vanilla.
