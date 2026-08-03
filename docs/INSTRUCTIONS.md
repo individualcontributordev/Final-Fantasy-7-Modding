@@ -1,27 +1,38 @@
-# Task: No-disc-swap — remaining D2/D3 movie trims (post-0.1.0)
+# Task: No-disc-swap — load save asks for disc 2
 
-## Done here
+## Report
 
-- Applied no-disc-swap-clean-v0.1.0-dev to pristine D1
-- Rescanned D2 fields id>=632 (losin2+) and D3 id>=741 (canon_2+)
-- List: mods/no-disc-swap/patches/field-movie-d2d3-after-disc-change.md
+0.1.0 burned pack: loading a save asks for disc 2.
 
-## Remaining on applied 0.1.0 (still have Play pairs)
+## Analysis (this machine)
 
-D2 range: LOST2, LOSLAKE1, ANCNT2, GAIA_32, ZMIND1, ZMIND2, ZMIND3, LAS0_8, MD8_52
-(TRNAD_53 already trimmed)
+Applied 0.1.0 has Ask removed on BLACKBGB / BLACKBG3 / BLACKBGE.
+DISKINFO still DISK0001. SAVEMENU unchanged.
 
-D3 range: LAS0_8 (FCAR)
+So this is almost certainly **save file disc ID = 2**, not missing field Ask edits.
 
-## Your next Makou pass on D1 work bin
+Finding: docs/findings/2026-08-04-noswap-load-save-asks-disc2.md
 
-Open those DATs, Find Set next movie / Play movie, delete; keep Wait/Jump.
-Rebuild layer 0.1.1 (or overwrite 0.1.0) when done.
+## Please confirm
+
+    Ask appears: at save list / after load confirm / after field enters
+    Save was made on: retail D2 / D2 image / this D1 pack / unknown
+    Approximate story point:
+
+## Workarounds now
+
+1. New game on the no-swap D1 disc (or load a pure D1 save)
+2. Edit memcard save disc number to 1
+3. Continue playtest from a D1-origin save
+
+## If we need pack fix
+
+Next RE: SAVEMENU / load path ignore save disc field so any progress save loads on D1-only.
 
 ## Evidence
 
-    Trims done:
-    Layer rebuilt/pushed:
+    Where ask shows:
+    Save origin:
     Notes:
 
 Say check.
