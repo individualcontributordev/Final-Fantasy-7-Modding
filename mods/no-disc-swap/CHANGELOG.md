@@ -5,6 +5,7 @@ Newest at top.
 ## Unreleased
 
 - D2/D3-range Set+Play trims (operator) unblocked mid/late playtest; republish when stable
+- fr_e (#347) after Diamond Weapon; blin70_4 (#269) GameMoment>=1572 Set+Play removed
 
 ## 0.1.0-dev
 
