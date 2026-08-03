@@ -88,6 +88,8 @@ Does not enable the pack in manifest until you decide to ship.
 Note: a SNOVA-only layer can be built from ff7_d1_snova_test.bin for inject-only tests; ship layer must come from Ask+Makou combined work bin.
 
 
+FIELD movie trims (optional polish): patches/field-movie-trims.md
+
 ## FMV policy (Clean)
 
 - Do not stub MOVIE; do not import full D2/D3 movies for Clean.

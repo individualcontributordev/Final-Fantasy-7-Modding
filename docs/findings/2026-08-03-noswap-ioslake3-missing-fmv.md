@@ -1,54 +1,65 @@
-# Finding: ioslake3 missing FMV (not freeze) on Clean no-disc-swap
+# Finding: ioslake3 missing FMV — D1 movie IDs are wrong streams
 
 **Date:** 2026-08-03
-**Status:** observed on Clean + no-disc-swap (console or DS playtest)
-**Map:** ioslake3 — group S0 Main (operator report)
+**Status:** root-caused from Makou dump + MOVIE dir listing
+**Map:** ioslake3 — S0 Main, GameMoment == 1398
 
 ## Symptom
 
-- Not a hard freeze
-- Bugenhagen stays on-field (animated / idle)
-- An FMV is supposed to play and does not
+Bugenhagen on-field (animated/idle). FMV should play; does not. Not a hard freeze.
 
-## Script shape (operator)
+## Script (operator dump in INSTRUCTIONS)
 
-S0 Main roughly:
+If GameMoment == 1398:
+- Set next movie: No57 (D1), loslake1 (D2), No57 (D3)
+- Play movie
+- Set next movie: No58 (D1), lslmv (D2), No58 (D3)
+- Play movie
+- Jump to map loslake1 (#637)
 
-1. Set next movie: No57 (D1) / ioslake1 (D2) / No57 (D3)
-2. Play movie
-3. Another Set next movie
-4. Play movie
-5. Jump (progress)
+## Root cause
 
-## Diagnosis
+Makou No57/No58 are movie table indices, not missing filenames.
 
-Clean no-disc-swap **leaves MOVIE vanilla**. Multi-disc set-movie tables often point at
-streams that are wrong or empty on D1-only. Result can be:
+| Index | D1 file (pristine list order) | D2 intended |
+|------:|-------------------------------|-------------|
+| 57 | ONTRAIN.MOV (~3.9 MB) | LOSLAKE1.MOV (~6.0 MB) |
+| 58 | OPENING.BIN (~149 KB, not a normal FMV) | LSLMV.STR (~1.8 MB) |
 
-- no visible FMV
-- character left in place during the wait
-- script still eventually continues (or feels stuck if wait is long)
+On D1-only no-disc-swap, Play movie uses the D1 column → wrong/unplayable
+streams → no scene FMV, field left up. Script can still finish waits and
+Jump to loslake1 if MOVIE wait completes.
 
-This is **media/presentation**, not Ask-for-disc and not Supernova.
+D2-only assets: MOVIE/LOSLAKE1.MOV, MOVIE/LSLMV.STR (not on D1/D3).
 
-## Policy call (Clean)
+## Options
 
-| Goal | Action |
-|------|--------|
-| Full-run progress only | **Leave** movie ops if the Jump still fires after the wait |
-| Avoid long empty stares | Makou: remove **Play movie** (and redundant Set next movie); **keep Jump** + flags |
-| Correct video on D1 | Copy the needed MOVIE file(s) onto D1 (large; not default for Clean) |
+| Option | Effort | Result |
+|--------|--------|--------|
+| A. Leave vanilla | none | Missing FMV; continue if jump fires |
+| B. Makou trim Play movie (+ Set next movie) | small | No empty stare; keep Execute/Wait/Jump |
+| C. Copy D2 LOSLAKE1 + LSLMV onto D1 + fix IDs | large | Correct video |
 
-Do **not** engine-stub MOVIE (0xF9) — breaks intro.
+Clean pack default: B for polish; A if shipping minimal.
+Do not engine-stub MOVIE 0xF9.
 
-## Next
+## Recommended Makou edit (option B)
 
-1. Confirm whether the field eventually advances without input after N seconds
-2. If yes and only cosmetics: optional trim for polish, not a blocker
-3. If never advances: must trim Play movie ops (treat like soft hang)
-4. Push Makou script dump under mods/no-disc-swap/patches/field/ for exact line list
+In ioslake3 S0 Main, GameMoment 1398 block only:
+
+Delete both Set next movie lines and both Play movie lines.
+
+Keep: Execute script lines (mf + Untitled), all Wait frames,
+Execute script #7, Jump to loslake1.
+
+Do not touch Label 1 / other GameMoment paths unless playtest shows a problem.
+
+## Pack rebuild
+
+After edit on combined work bin: inject SNOVA if needed, build_clean_d1_layer,
+verify_builder_config, push, new builder zip.
 
 ## Related
 
 - 2026-08-03-noswap-fmv-wait-vs-stream.md
-- 2026-08-03-noswap-full-run-scope.md FMV policy
+- mods/no-disc-swap/patches/field-movie-trims.md
