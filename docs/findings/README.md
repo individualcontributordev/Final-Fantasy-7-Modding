@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-03 | [noswap-snova-injector](2026-08-03-noswap-snova-injector.md) | D3 SNOVA/ inject onto D1; offline OK; DS playtest pending |
 | 2026-08-03 | [noswap-makou-ask-ds-pass](2026-08-03-noswap-makou-ask-ds-pass.md) | Makou all Ask-for-disc removed; DuckStation PASS; console untested | confirmed |
 | 2026-08-03 | [noswap-field-movie-dskcg-stub](2026-08-03-noswap-field-movie-dskcg-stub.md) | FIELD DSKCG+MOVIE handlers; jr ra stub plan; tool under mods/no-swap | likely |
 | 2026-08-03 | [noswap-full-run-scope](2026-08-03-noswap-full-run-scope.md) | No ship until full-run safe; SNOVA/movies/Asks all required | confirmed |
