@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Copy D3 SNOVA/* onto a D1 Mode2 FF7 image by raw-copying the contiguous
-SNOVA extent (dir + 17 files = 570 sectors), then remapping directory LBAs
-and fixing MSF headers. Preserves EDC/ECC on file sectors (unlike v1
-user-data rewrite).
+"""Copy D3 SNOVA onto D1 and remap BATTLE.X hardcoded LBAs.
+
+Root cause of Supernova freeze after SNOVA file inject: BATTLE.X embeds
+absolute D3 sector numbers for SNOVA0-15 and LASBOSS3. Files on D1 at a
+new LBA are never read for the effect; audio path may still tick.
 
   python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
     --d1 workspace/iso-extract/ff7_d1_snova_test.bin \
@@ -12,13 +13,16 @@ user-data rewrite).
 from __future__ import annotations
 
 import argparse
+import gzip
 import struct
 import sys
+import tempfile
 from pathlib import Path
 
 _SCRIPTS = Path(__file__).resolve().parents[3] / "scripts"
 sys.path.insert(0, str(_SCRIPTS))
 
+from compress_gzipps import compress_gzipps  # noqa: E402
 from psx_mode2_iso import (  # noqa: E402
     SECTOR,
     USER,
@@ -28,11 +32,33 @@ from psx_mode2_iso import (  # noqa: E402
     _user,
     extract_file,
     find_file,
+    replace_file_padded,
 )
 
-# D3 retail layout (verified contiguous)
 D3_SNOVA_DIR_LBA = 127100
-D3_SNOVA_SECTORS = 570  # dir + files through SNOVA15
+D3_SNOVA_SECTORS = 570
+
+# Decompressed BATTLE.X offsets: (D3_LBA, file_off_of_u32_lba)
+# Pairs at 0x48d78+: SNOVA0..SNOVA15 as (lba, padded_size); sizes unchanged.
+BATTLE_SNOVA_LBA_OFF = [
+    (127254, 0x48D78),  # SNOVA0
+    (127293, 0x48D80),  # SNOVA1
+    (127320, 0x48D88),  # SNOVA2
+    (127354, 0x48D90),  # SNOVA3
+    (127373, 0x48D98),  # SNOVA4
+    (127394, 0x48DA0),  # SNOVA5
+    (127430, 0x48DA8),  # SNOVA6
+    (127442, 0x48DB0),  # SNOVA7
+    (127464, 0x48DB8),  # SNOVA8
+    (127503, 0x48DC0),  # SNOVA9
+    (127544, 0x48DC8),  # SNOVA10
+    (127555, 0x48DD0),  # SNOVA11
+    (127562, 0x48DD8),  # SNOVA12
+    (127571, 0x48DE0),  # SNOVA13
+    (127618, 0x48DE8),  # SNOVA14
+    (127649, 0x48DF0),  # SNOVA15
+]
+BATTLE_LASBOSS3_OFF = (127101, 0x4F5A8)
 
 
 def both_u32(v: int) -> bytes:
@@ -129,7 +155,6 @@ def ent_name_L(e: bytes) -> str:
 
 
 def patch_dir_lbas(user: bytearray, delta: int, new_self: int, new_parent: int) -> None:
-    """Add delta to every directory record LBA; set . and .. explicitly."""
     i = 0
     while i < len(user):
         ln = user[i]
@@ -148,12 +173,43 @@ def patch_dir_lbas(user: bytearray, delta: int, new_self: int, new_parent: int) 
         i += ln
 
 
+def patch_battle_x_lbas(img: bytearray, delta: int) -> None:
+    """Rewrite hardcoded D3 SNOVA LBAs in BATTLE.X.dec then recompress."""
+    raw = extract_file(img, "BATTLE/BATTLE.X")
+    if raw[8:10] != b"\x1f\x8b":
+        raise SystemExit("BATTLE.X not gzipps @8")
+    dec = bytearray(gzip.decompress(raw[8:]))
+    patches = list(BATTLE_SNOVA_LBA_OFF) + [BATTLE_LASBOSS3_OFF]
+    for d3_lba, off in patches:
+        cur = struct.unpack_from("<I", dec, off)[0]
+        if cur != d3_lba:
+            raise SystemExit("BATTLE.X LBA mismatch at 0x%X: got %s want %s" % (off, cur, d3_lba))
+        new = d3_lba + delta
+        struct.pack_into("<I", dec, off, new)
+        print("  BATTLE.X LBA 0x%X: %s -> %s" % (off, d3_lba, new))
+    # recompress into original size budget
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        dec_path = td / "BATTLE.X.dec"
+        orig_path = td / "BATTLE.X.orig"
+        out_path = td / "BATTLE.X.new"
+        dec_path.write_bytes(dec)
+        orig_path.write_bytes(raw)
+        compress_gzipps(dec_path, orig_path, out_path)
+        new_raw = out_path.read_bytes()
+    if len(new_raw) > len(raw):
+        raise SystemExit("BATTLE.X recompress %s > original %s" % (len(new_raw), len(raw)))
+    print("  BATTLE.X recompress %s -> %s (pad %s)" % (len(raw), len(new_raw), len(raw) - len(new_raw)))
+    replace_file_padded(img, "BATTLE/BATTLE.X", new_raw)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--d1", type=Path, required=True)
     ap.add_argument("--d3", type=Path, required=True)
     ap.add_argument("--in-place", action="store_true")
     ap.add_argument("-o", type=Path)
+    ap.add_argument("--skip-battle-patch", action="store_true")
     args = ap.parse_args()
 
     img = bytearray(args.d1.read_bytes())
@@ -182,10 +238,7 @@ def main() -> int:
     first_file_lba = min(lb for _, lb, _ in files)
     last = max(lb + (sz + USER - 1) // USER for _, lb, sz in files)
     if first_file_lba != D3_SNOVA_DIR_LBA + 1 or last - D3_SNOVA_DIR_LBA != D3_SNOVA_SECTORS:
-        raise SystemExit(
-            "D3 SNOVA not contiguous as expected: files %s..%s (want dir %s, %s sectors)"
-            % (first_file_lba, last, D3_SNOVA_DIR_LBA, D3_SNOVA_SECTORS)
-        )
+        raise SystemExit("D3 SNOVA not contiguous as expected")
     print("D3 SNOVA raw block LBA %s+%s files=%s" % (D3_SNOVA_DIR_LBA, D3_SNOVA_SECTORS, len(files)))
 
     old_sec = len(img) // SECTOR
@@ -195,13 +248,9 @@ def main() -> int:
     img.extend(b"\x00" * (D3_SNOVA_SECTORS * SECTOR))
     print("grow sectors %s -> %s (delta LBA %s)" % (old_sec, new_sec, delta))
 
-    # Raw copy full Mode2 sectors from D3 (keeps EDC/ECC + subheaders)
     src = D3_SNOVA_DIR_LBA * SECTOR
     dst = new_dir * SECTOR
-    nbytes = D3_SNOVA_SECTORS * SECTOR
-    img[dst : dst + nbytes] = d3[src : src + nbytes]
-
-    # Fix MSF on every copied sector for new LBAs
+    img[dst : dst + D3_SNOVA_SECTORS * SECTOR] = d3[src : src + D3_SNOVA_SECTORS * SECTOR]
     for s in range(new_dir, new_sec):
         fix_sector_msf(img, s)
 
@@ -215,7 +264,6 @@ def main() -> int:
     dir_user = bytearray(img[new_dir * SECTOR + 24 : new_dir * SECTOR + 24 + USER])
     patch_dir_lbas(dir_user, delta, new_dir, root_lba)
     img[new_dir * SECTOR + 24 : new_dir * SECTOR + 24 + USER] = dir_user
-    # Directory user changed -> EDC stale; zero EDC/ECC tail (DS OK). File sectors untouched.
     img[new_dir * SECTOR + 24 + USER : new_dir * SECTOR + SECTOR] = b"\x00" * (SECTOR - 24 - USER)
 
     root_blob = bytearray(_read_extent(img, root_lba, root_size))
@@ -255,7 +303,6 @@ def main() -> int:
     for lba in {pt_l, pt_l2}:
         if lba:
             write_user_sector(img, lba, pt_pad, hdr_from=pt_l)
-
     ments = []
     for e in ents:
         nm = ent_name_L(e)
@@ -272,22 +319,31 @@ def main() -> int:
     pvd[80:88] = both_u32(new_sec)
     write_user_sector(img, 16, bytes(pvd), hdr_from=16)
 
+    if not args.skip_battle_patch:
+        print("patch BATTLE.X hardcoded SNOVA LBAs (delta %s)" % delta)
+        patch_battle_x_lbas(img, delta)
+
     out = args.d1 if args.in_place or not args.o else args.o
     if not args.in_place and not args.o:
         raise SystemExit("pass --in-place or -o OUT.bin")
     out.write_bytes(img)
-    print("wrote %s (raw-copy v2)" % out)
+    print("wrote %s (raw-copy + BATTLE.X LBA patch v3)" % out)
 
     for n, _lb, sz in files:
         got = extract_file(bytes(img), "SNOVA/%s" % n)
         exp = extract_file(d3, "SNOVA/%s" % n)
         if got != exp or len(got) != sz:
             raise SystemExit("verify fail %s" % n)
-    f0 = find_file(bytes(img), "SNOVA/SNOVA0.LZS")
-    d3f = find_file(d3, "SNOVA/SNOVA0.LZS")
-    s1 = bytes(img[f0.lba * SECTOR + 16 : f0.lba * SECTOR + SECTOR])
-    s3 = d3[d3f.lba * SECTOR + 16 : d3f.lba * SECTOR + SECTOR]
-    print("SNOVA0 sector sub+payload+edc match D3: %s (LBA d1=%s d3=%s)" % (s1 == s3, f0.lba, d3f.lba))
+    # verify battle patch
+    if not args.skip_battle_patch:
+        braw = extract_file(bytes(img), "BATTLE/BATTLE.X")
+        bdec = gzip.decompress(braw[8:])
+        for d3_lba, off in list(BATTLE_SNOVA_LBA_OFF) + [BATTLE_LASBOSS3_OFF]:
+            got = struct.unpack_from("<I", bdec, off)[0]
+            want = d3_lba + delta
+            if got != want:
+                raise SystemExit("battle verify fail 0x%X got %s want %s" % (off, got, want))
+        print("verify: BATTLE.X 17 LBA entries remapped")
     print("verify: all SNOVA files match D3")
     return 0
 
