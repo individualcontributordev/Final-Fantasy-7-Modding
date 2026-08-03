@@ -1,36 +1,40 @@
 # Finding: D3 SNOVA inject onto D1 (Mode2 grow)
 
 **Date:** 2026-08-03
-**Status:** tool verified offline; in-game Supernova playtest pending
+**Status:** v2 offline OK; v1 in-game FAIL; v2 playtest pending
 
 ## Summary
 
 Supernova assets live only on retail D3 under SNOVA/ (17 files, ~1.15 MB).
-D1 root had ~830 bytes padding — enough for one extra directory record.
-Image grows by 570 sectors (~1.34 MB raw Mode2).
+D1 root has padding for one extra directory record. Image grows +570 sectors.
 
-## Tool
+## Playtest v1 (user-data rewrite)
+
+**FAIL (DuckStation):** Supernova SFX audible, then battle frozen; after SFX ends
+music continues but battle stays frozen.
+
+v1 wrote user payloads with cloned headers and zero EDC/ECC. Audio path
+could still run; effect/GPU completion likely choked on bad sectors.
+
+## Tool v2 (raw-copy)
 
 mods/no-swap/scripts/inject_snova_d3_to_d1.py
 
-- Appends SNOVA/ dir + files at end of volume
-- Patches root dir, type-L/M path tables, PVD volume size + path table size
-- Verifies via extract_file byte-match vs D3
+- D3 SNOVA dir LBA 127100 is contiguous for 570 sectors (dir + all files)
+- memcpy full Mode2 sectors from D3 (keeps subheader + EDC/ECC)
+- Fix MSF (bytes 12-14) for new LBAs only
+- Remap LBAs inside SNOVA directory user; zero EDC on dir sector only
+- Patch root dir, L/M path tables, PVD size
 
-## Offline result
+Offline:
 
-SNOVA files=17 bytes=1149307
-grow sectors 317787 -> 318357 (+570)
-verify: all SNOVA files match D3
-
-Test image (local only): workspace/iso-extract/ff7_d1_snova_test.bin
-
-## Caveats
-
-- EDC/ECC zero on new sectors — DuckStation OK; burn needs repair
-- Path table insert is name-sorted under parent 1
-- Do not double-inject (script aborts if SNOVA/SNOVA0.LZS exists)
+    D3 SNOVA raw block LBA 127100+570 files=17
+    grow sectors 317787 -> 318357
+    SNOVA0 sector sub+payload+edc match D3: True
+    verify: all SNOVA files match D3
 
 ## Next
 
-Playtest Supernova on DuckStation; then inject onto Ask-fixed work bin.
+Retest Supernova on v2 image. If still FAIL, look beyond ISO integrity
+(battle effect waiter / disc-id checks) — not more file copies (only
+SNOVA + huge ending movies are D3-only besides SCUS).

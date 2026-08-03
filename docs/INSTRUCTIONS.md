@@ -1,60 +1,62 @@
-# Task: No-swap — playtest Supernova after SNOVA inject
+# Task: No-swap — retest Supernova (SNOVA raw-copy v2)
 
-## Done
+## Result so far
 
-- Makou: all Ask-for-disc removed on D1 work bin
-- DuckStation disc-ask: PASS (console not tested)
-- Finding: docs/findings/2026-08-03-noswap-makou-ask-ds-pass.md
-- Engine FIELD MOVIE/DSKCG stubs: abandoned for playable bins
-- SNOVA injector offline-verified: mods/no-swap/scripts/inject_snova_d3_to_d1.py
-  - 17 files from D3, ~1.15 MB, grows image +570 sectors
-  - extract_file round-trip OK on workspace/iso-extract/ff7_d1_snova_test.bin
+- Ask-for-disc Makou: DS PASS
+- SNOVA inject v1 (user-data rewrite, zero EDC): FAIL
+  - Heard Supernova SFX, then battle frozen; music kept playing after SFX ended
+- SNOVA inject v2 raw-copy: preserves D3 EDC/ECC on file sectors; fixes MSF only
+  - Offline: SNOVA0 sector sub+payload+edc match D3: True
 
-## Goal this turn
+## Goal
 
-Confirm Supernova does not freeze on D1-only in DuckStation.
+Rebuild with v2 and confirm Supernova finishes (battle unfreezes).
 
-### Build options
+## Build (must rebuild — do not reuse v1 image)
 
-A — Supernova-only smoke (pristine + SNOVA), already local if kept:
+    cd Final-Fantasy-7-Modding
+    git pull --ff-only
 
+    # A: pristine + SNOVA (Supernova smoke)
     cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_snova_test.bin
-    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py       --d1 workspace/iso-extract/ff7_d1_snova_test.bin       --d3 workspace/pristine/FINALFANTASY7_D3.bin       --in-place
+    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
+      --d1 workspace/iso-extract/ff7_d1_snova_test.bin \
+      --d3 workspace/pristine/FINALFANTASY7_D3.bin \
+      --in-place
 
-Load a late-game / final-battle save in DuckStation on that image.
+Must print:
+- wrote ... (raw-copy v2)
+- SNOVA0 sector sub+payload+edc match D3: True
+- verify: all SNOVA files match D3
 
-B — Combined (Ask-fixed work + SNOVA), preferred once A works:
+If injecting on Ask-fixed work, restore bak first (no double inject):
 
-    cp -f workspace/iso-extract/ff7_d1_noswap_work.bin           workspace/iso-extract/ff7_d1_noswap_work.pre_snova.bak
-    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py       --d1 workspace/iso-extract/ff7_d1_noswap_work.bin       --d3 workspace/pristine/FINALFANTASY7_D3.bin       --in-place
+    cp -f workspace/iso-extract/ff7_d1_noswap_work.pre_snova.bak \
+          workspace/iso-extract/ff7_d1_noswap_work.bin
+    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
+      --d1 workspace/iso-extract/ff7_d1_noswap_work.bin \
+      --d3 workspace/pristine/FINALFANTASY7_D3.bin \
+      --in-place
 
-Must print: verify: all SNOVA files match D3
-Refuse if SNOVA already present (use bak or rebuild).
+## Playtest
 
-### Playtest
+DuckStation on the NEW image, final battle / force Supernova.
 
-1. DuckStation to final battle / force Supernova (save or cheat)
-2. Attack must run without permanent freeze
-3. If B: quick smoke new game + one former disc-ask map still OK
+| PASS | FAIL |
+|------|------|
+| Effect plays and battle resumes | SFX + freeze again, or worse |
 
 ## Evidence
 
-    Image used: snova_test / noswap_work+SNOVA / other:
-    Tool verify line seen: yes/no
-    Supernova DS: PASS/FAIL/not tested
-    Notes (freeze point / black / crash):
-    New game + disc-change (if B): PASS/FAIL/not tested
+    Tool: raw-copy v2 yes/no (paste last 3 lines)
+    Image: snova_test / noswap_work
+    Supernova DS: PASS/FAIL
+    Notes:
 
-Say check. No pack ship this turn.
+Say check.
 
 ## Notes
 
-- Makou cannot add ISO dirs. Injector (or CDmage) does SNOVA.
-- New sectors have zero EDC/ECC — OK for DuckStation; repair before real burn.
-- Do not commit .bin images.
-
-## Out of scope
-
-- FIELD MOVIE engine stubs
-- CSR manip movie whitelist
-- Publishing builder pack
+- v1 zeroed EDC/ECC — likely why graphics stalled after audio
+- D3 SNOVA is one contiguous 570-sector block; v2 memcpy that block
+- Do not commit .bin images
