@@ -2,17 +2,12 @@
 
 Newest at top.
 
-## 0.1.1-dev
+## 0.1.1
 
 - More FIELD Set next movie + Play movie trims from playtest (D2/D3-range sites,
   fr_e #347 after Diamond Weapon, blin70_4 #269 GameMoment>=1572, descent/lake, etc.)
 - Rebuild Clean D1 builder layer from combined work bin
 - Prior: Ask-for-disc removal, SNOVA + BATTLE.X LBA v3
-
-## Unreleased
-
-- D2/D3-range Set+Play trims (operator) unblocked mid/late playtest; republish when stable
-- fr_e (#347) after Diamond Weapon; blin70_4 (#269) GameMoment>=1572 Set+Play removed
 
 ## 0.1.0-dev
 
