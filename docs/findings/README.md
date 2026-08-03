@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-03 | [noswap-ioslake3-missing-fmv](2026-08-03-noswap-ioslake3-missing-fmv.md) | ioslake3 missing FMV (Bugenhagen idle); not freeze |
 | 2026-08-03 | [noswap-console-boot-pass](2026-08-03-noswap-console-boot-pass.md) | no-disc-swap burned CD: title/new game/first field PASS |
 | 2026-08-03 | [noswap-imgburn-verify-pass](2026-08-03-noswap-imgburn-verify-pass.md) | no-disc-swap CD-R ImgBurn verify PASS; console pending |
 | 2026-08-03 | [noswap-fmv-wait-vs-stream](2026-08-03-noswap-fmv-wait-vs-stream.md) | Wrong FMV often ends early; wait/manip time may still match |
