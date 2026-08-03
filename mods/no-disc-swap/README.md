@@ -1,4 +1,4 @@
-# No-swap (full-run) — Clean Unmodified D1
+# No-disc-swap (full-run) — Clean Unmodified D1
 
 Single-disc play on Disc 1 only: no Ask-for-disc, Supernova works.
 Not a public builder ship yet until console smoke + full-run gates clear.
@@ -52,7 +52,7 @@ DS hub smoke before step 3 is recommended.
     cp -f workspace/iso-extract/ff7_d1_noswap_work.bin \
           workspace/iso-extract/ff7_d1_noswap_work.pre_snova.bak
 
-    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
+    python3 mods/no-disc-swap/scripts/inject_snova_d3_to_d1.py \
       --d1 workspace/iso-extract/ff7_d1_noswap_work.bin \
       --d3 workspace/pristine/FINALFANTASY7_D3.bin \
       --in-place
@@ -78,11 +78,11 @@ New sectors need EDC repair before optical burn; MiSTer/FILE may differ.
 
 ### 6. Optional: build builder layer (dev)
 
-    python3 mods/no-swap/scripts/build_clean_d1_layer.py \
+    python3 mods/no-disc-swap/scripts/build_clean_d1_layer.py \
       --work workspace/iso-extract/ff7_d1_noswap_work.bin \
       --pristine workspace/pristine/FINALFANTASY7_D1.bin
 
-Writes builder/no-swap-clean-v*/layers/disc1.layer.json from VERSION.
+Writes builder/no-disc-swap-clean-v*/layers/disc1.layer.json from VERSION.
 Does not enable the pack in manifest until you decide to ship.
 
 Note: a SNOVA-only layer can be built from ff7_d1_snova_test.bin for inject-only tests; ship layer must come from Ask+Makou combined work bin.
@@ -100,7 +100,7 @@ Note: a SNOVA-only layer can be built from ff7_d1_snova_test.bin for inject-only
 
 ## Layout
 
-    mods/no-swap/
+    mods/no-disc-swap/
       VERSION
       README.md
       CHANGELOG.md

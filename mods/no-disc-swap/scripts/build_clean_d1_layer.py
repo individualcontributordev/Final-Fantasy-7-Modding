@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Diff a combined no-swap work bin against pristine D1 into ic-layer-v1.
+"""Diff a combined no-disc-swap work bin against pristine D1 into ic-layer-v1.
 
 Work bin must already include Makou Ask removals + SNOVA inject v3.
 Does not commit images. Layer JSON may be large (SNOVA + BATTLE.X).
 
-  python3 mods/no-swap/scripts/build_clean_d1_layer.py \
+  python3 mods/no-disc-swap/scripts/build_clean_d1_layer.py \
     --work workspace/iso-extract/ff7_d1_noswap_work.bin \
     --pristine workspace/pristine/FINALFANTASY7_D1.bin
 """
@@ -23,12 +23,12 @@ from bin_diff_to_layer import build_layer  # noqa: E402
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--work", type=Path, required=True, help="Combined no-swap D1 .bin")
+    ap.add_argument("--work", type=Path, required=True, help="Combined no-disc-swap D1 .bin")
     ap.add_argument("--pristine", type=Path, required=True, help="Pristine D1 .bin")
     ap.add_argument(
         "--version",
         default=None,
-        help="Pack version override (default: mods/no-swap/VERSION)",
+        help="Pack version override (default: mods/no-disc-swap/VERSION)",
     )
     ap.add_argument(
         "--out-dir",
@@ -40,7 +40,7 @@ def main() -> int:
 
     mod = Path(__file__).resolve().parents[1]
     ver = (args.version or (mod / "VERSION").read_text().strip()).lstrip("v")
-    pack_id = "no-swap-clean-v%s" % ver
+    pack_id = "no-disc-swap-clean-v%s" % ver
     out_dir = args.out_dir or (_ROOT / "builder" / pack_id)
     layer_path = out_dir / "layers" / "disc1.layer.json"
 
@@ -53,7 +53,7 @@ def main() -> int:
 
     layer_id = "%s-disc1" % pack_id
     desc = (
-        "No-swap Clean D1: Makou Ask-for-disc removal + SNOVA/BATTLE.X LBA v3 "
+        "No-disc-swap Clean D1: Makou Ask-for-disc removal + SNOVA/BATTLE.X LBA v3 "
         "(NTSC-U Disc 1 against clean)"
     )
     print("diff %s vs %s ..." % (args.work, args.pristine))
@@ -76,15 +76,15 @@ def main() -> int:
     man = json.loads(man_path.read_text(encoding="utf-8"))
     entry = {
         "id": pack_id,
-        "name": "No-swap (Clean D1) v%s" % ver,
+        "name": "No-disc-swap (Clean D1) v%s" % ver,
         "kind": "mod",
         "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. WIP — console pending.",
         "format": "ic-layer-v1",
-        "exclusiveGroup": "no-swap",
+        "exclusiveGroup": "no-disc-swap",
         "compatibleBases": ["clean"],
         "discs": {"1": "./%s/layers/disc1.layer.json" % pack_id},
         "enabled": False,
-        "groupLabel": "No-swap",
+        "groupLabel": "No-disc-swap",
         "optionLabel": "Clean D1 v%s (dev)" % ver,
     }
     addons = man.setdefault("addons", [])

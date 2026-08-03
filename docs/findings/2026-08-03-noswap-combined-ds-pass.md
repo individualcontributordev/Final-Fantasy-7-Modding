@@ -1,4 +1,4 @@
-# Finding: No-swap combined Ask + SNOVA D1 DuckStation PASS
+# Finding: No-disc-swap combined Ask + SNOVA D1 DuckStation PASS
 
 **Date:** 2026-08-03
 **Status:** confirmed on DS
@@ -22,9 +22,9 @@ Local paths (not in git):
 
 1. Pristine D1 -> work bin
 2. Makou: remove Ask-for-disc per inventory findings (keep post-Ask jumps/flags)
-3. Once: python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py --d1 WORK --d3 D3 --in-place
+3. Once: python3 mods/no-disc-swap/scripts/inject_snova_d3_to_d1.py --d1 WORK --d3 D3 --in-place
 4. Expect: raw-copy + BATTLE.X LBA patch v3; 17 LBA entries remapped
 
 ## Next
 
-Document recipe in mods/no-swap; CSR movie whitelist; later pack/console.
+Document recipe in mods/no-disc-swap; CSR movie whitelist; later pack/console.

@@ -1,4 +1,4 @@
-# No-swap — blackbgb Ask skip prototype (pristine D1)
+# No-disc-swap — blackbgb Ask skip prototype (pristine D1)
 
 **Date:** 2026-08-02
 **Confidence:** confirmed (script paste after Makou edit)

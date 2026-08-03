@@ -1,4 +1,4 @@
-# No-swap — FIELD DSKCG + MOVIE engine stubs
+# No-disc-swap — FIELD DSKCG + MOVIE engine stubs
 
 **Date:** 2026-08-03
 **Confidence:** likely (static RE; playtest required)
@@ -19,7 +19,7 @@ Battle Supernova / SNOVA is separate (not FIELD MOVIE).
 
 ## Tool
 
-mods/no-swap/scripts/stub_field_movie_dskcg.py
+mods/no-disc-swap/scripts/stub_field_movie_dskcg.py
 
 ## Policy
 

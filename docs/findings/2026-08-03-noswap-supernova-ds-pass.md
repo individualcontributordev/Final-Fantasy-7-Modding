@@ -1,4 +1,4 @@
-# Finding: No-swap Supernova DuckStation PASS (v3)
+# Finding: No-disc-swap Supernova DuckStation PASS (v3)
 
 **Date:** 2026-08-03
 **Status:** confirmed on DS

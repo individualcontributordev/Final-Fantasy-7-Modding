@@ -1,4 +1,4 @@
-# No-swap changelog
+# No-disc-swap changelog
 
 Newest at top.
 

@@ -1,4 +1,4 @@
-# No-swap patches / RE notes
+# No-disc-swap patches / RE notes
 
 ## Playable path (use this)
 
