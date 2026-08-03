@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-03 | [noswap-combined-ds-pass](2026-08-03-noswap-combined-ds-pass.md) | Ask+SNOVA combined D1 work bin DS PASS |
 | 2026-08-03 | [noswap-supernova-ds-pass](2026-08-03-noswap-supernova-ds-pass.md) | Supernova DS PASS after BATTLE.X LBA remap v3 |
 | 2026-08-03 | [noswap-snova-injector](2026-08-03-noswap-snova-injector.md) | D3 SNOVA/ inject onto D1; offline OK; DS playtest pending |
 | 2026-08-03 | [noswap-makou-ask-ds-pass](2026-08-03-noswap-makou-ask-ds-pass.md) | Makou all Ask-for-disc removed; DuckStation PASS; console untested | confirmed |
