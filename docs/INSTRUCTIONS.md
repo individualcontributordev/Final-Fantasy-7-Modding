@@ -55,3 +55,14 @@ Say **check**.
 
 Switch to **Makou-only** Ask removal on all DSKCG maps (proven on blackbgb earlier)
 plus vanilla FIELD; engine FMV skip later via another hook.
+
+cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
+python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
+  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
+  --in-place
+DSKCG @ 0x2523C: 88B v6 force-complete (was 0a80023c20d84290)
+MOVIE: left vanilla
+recompressed FIELD.BIN 85435 -> 85373 (slot 85435)
+wrote workspace\iso-extract\ff7_d1_noswap_work.bin
+
+black screen again
