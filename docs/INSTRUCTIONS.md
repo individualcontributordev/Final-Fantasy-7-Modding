@@ -17,7 +17,7 @@ VERSION in repo is already **0.1.1**.
     #   --d1 WORK.bin --d3 workspace/pristine/FINALFANTASY7_D3.bin --in-place
 
     python3 mods/no-disc-swap/scripts/build_clean_d1_layer.py \
-      --work path/to/ff7_d1_noswap_work.bin \
+      --work "D:\Downloads\ff7-builder-d1+clean+no-disc-swap-clean-v0.0.0-dev (1)\ff7-builder-d1+clean+no-disc-swap-clean-v0.0.0-dev.bin" \
       --pristine workspace/pristine/FINALFANTASY7_D1.bin
 
 Expect: builder/no-disc-swap-clean-v0.1.1/layers/disc1.layer.json
