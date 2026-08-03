@@ -52,3 +52,14 @@ Say **check** when done. Commit INSTRUCTIONS only if you paste evidence in-repo.
 ## Out of scope
 
 Builder pack; battle SNOVA stub; CSR whitelist.
+
+cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
+➜  Final-Fantasy-7-Modding git:(main) python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
+  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
+  --in-place
+DSKCG @ 0x2523C: 0a80023c20d84290 -> 0800e00300000000
+MOVIE @ 0x2CE94: 0a80023c20d84290 -> 0800e00300000000
+recompressed FIELD.BIN 85435 -> 85358 (slot 85435)
+wrote workspace\iso-extract\ff7_d1_noswap_work.bin
+
+new game black screen, does not load first field
