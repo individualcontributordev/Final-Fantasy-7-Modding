@@ -1,10 +1,22 @@
-# Task: No-swap — retest FIELD stubs v2 (PC advance)
+# Task: No-swap — retest FIELD stubs v3 (full completion)
 
-Prior v1 bare jr-ra caused **new game black screen** (MOVIE never advanced script PC).
+## What failed
 
-v2 stubs: complete opcode by script PC += size, then return (no FMV / no disc wait).
+- v1 jr-ra: black screen (no script PC advance)
+- v2 PC+ only: you heard movie audio, then still no first field — MOVIE is a
+  multi-frame state machine; finishing needs entity state/flag clears too
 
-## Apply (fresh pristine recommended)
+## v3
+
+MOVIE stub now:
+- clear entity byte@1 and half@38 (movie wait state)
+- script PC += 1
+- clear 0x80071C1C and 0x801144D4 (flags original path touches)
+- return 0
+
+DSKCG: clear entity state + PC += 2 + return 0
+
+## Apply
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
@@ -15,22 +27,20 @@ python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
   --in-place
 ```
 
-Expect DSKCG PC+2 and MOVIE PC+1, recompress OK.
+## Playtest (critical)
 
-## Playtest
+1. **New game** — must reach Midgar / first field after intro (no permanent black)
+2. Intro FMV — ideally skipped or silent skip; must not softlock after audio
+3. Note if you still hear full intro audio with black video (partial)
 
-1. **New game** — must leave black screen and reach Midgar field (or continue past first MOVIE)
-2. Field FMV — skip, no hang
-3. Disc-change hub if available — no insert wait
-4. Supernova — may still freeze (not patched)
+Optional: disc-change hub if you have a save.
 
 ## Evidence
 
 ```
 Tool output:
-New game / first field: PASS/FAIL
-FMV skip: PASS/FAIL/not tested
-Disc Ask: PASS/FAIL/not tested
+New game reaches field: PASS/FAIL
+Intro behavior:
 Notes:
 ```
 

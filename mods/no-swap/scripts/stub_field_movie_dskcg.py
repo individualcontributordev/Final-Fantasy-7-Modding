@@ -1,21 +1,12 @@
 #!/usr/bin/env python3
-"""Stub FF7 PSX FIELD.BIN movie + disc-change opcodes (no-swap / no-FMV).
+"""Stub FF7 PSX FIELD DSKCG + MOVIE with full completion (no wait / no FMV).
 
-Patches decompressed FIELD overlay then optionally recompresses + injects
-into a disc image.
+v1 bare jr-ra → black screen (no PC advance).
+v2 PC-only → audio can still play; field may not resume (state/flags).
+v3 clear entity movie state + flags + PC advance + return 0.
 
   python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \\
-    --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \\
-    --in-place
-
-Stubs (FILE offsets in FIELD.dec, VA base 0x800A0000):
-  DSKCG (0x0E) @ 0x2523C — complete opcode (PC+=2), no disc wait
-  MOVIE (0xF9) @ 0x2CE94 — complete opcode (PC+=1), no FMV
-
-IMPORTANT: bare jr-ra is WRONG — field ops must advance script PC or the
-same op re-runs every frame (new-game black screen).
-
-Does not touch battle Supernova (SNOVA).
+    --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin --in-place
 """
 from __future__ import annotations
 
@@ -33,52 +24,75 @@ from psx_mode2_iso import extract_file, replace_file_padded  # noqa: E402
 
 FIELD_PATH = "FIELD/FIELD.BIN"
 
-# Script PC advance stubs (see finding). Uses:
-#   index = *(u8*)0x800722C4
-#   pc    = (u16*)0x800831FC + index
-#   *pc  += delta  (1=MOVIE, 2=DSKCG)
-#   return 0
 
-def _stub(pc_delta: int) -> bytes:
-    def I(op, rs, rt, rd=0, sh=0, fn=0, imm=0):
-        if op == 0:
-            w = (op << 26) | (rs << 21) | (rt << 16) | (rd << 11) | (sh << 6) | fn
-        else:
-            w = (op << 26) | (rs << 21) | (rt << 16) | (imm & 0xFFFF)
-        return w & 0xFFFFFFFF
-
-    R0, V0, SP, RA = 0, 2, 29, 31
-    T0, T1, T2 = 8, 9, 10
-    words = [
-        I(9, SP, SP, imm=-24),
-        I(0x2B, SP, RA, imm=16),
-        I(0xF, 0, T0, imm=0x8007),
-        I(0x24, T0, T0, imm=0x22C4),
-        I(0, 0, T0, T0, sh=1, fn=0),
-        I(0xF, 0, T1, imm=0x8008),
-        I(9, T1, T1, imm=0x31FC),
-        I(0, T1, T0, T1, fn=0x21),
-        I(0x25, T1, T2, imm=0),
-        I(9, T2, T2, imm=pc_delta),
-        I(0x29, T1, T2, imm=0),
-        I(0, 0, 0, V0, fn=0x25),
-        I(0x23, SP, RA, imm=16),
-        I(9, SP, SP, imm=24),
-        I(0, RA, 0, 0, fn=8),
-        0,
-    ]
-    return b"".join(w.to_bytes(4, "little") for w in words)
+def _I(op, rs, rt, rd=0, sh=0, fn=0, imm=0):
+    if op == 0:
+        w = (op << 26) | (rs << 21) | (rt << 16) | (rd << 11) | (sh << 6) | fn
+    else:
+        w = (op << 26) | (rs << 21) | (rt << 16) | (imm & 0xFFFF)
+    return w & 0xFFFFFFFF
 
 
-STUBS = {
-    "DSKCG": (0x2523C, _stub(2)),
-    "MOVIE": (0x2CE94, _stub(1)),
-}
+def _bytes(ws):
+    return b"".join(w.to_bytes(4, "little") for w in ws)
+
+
+def movie_stub():
+    R0, V0, AT, RA, A0, T0, T1, T2 = 0, 2, 1, 31, 4, 8, 9, 10
+    return _bytes(
+        [
+            _I(0xF, 0, A0, imm=0x800A),
+            _I(0x23, A0, A0, imm=-14624),
+            _I(0x28, A0, R0, imm=1),
+            _I(0x29, A0, R0, imm=38),
+            _I(0xF, 0, T0, imm=0x8007),
+            _I(0x24, T0, T0, imm=0x22C4),
+            _I(0, 0, T0, T0, sh=1, fn=0),
+            _I(0xF, 0, T1, imm=0x8008),
+            _I(9, T1, T1, imm=0x31FC),
+            _I(0, T1, T0, T1, fn=0x21),
+            _I(0x25, T1, T2, imm=0),
+            _I(9, T2, T2, imm=1),
+            _I(0x29, T1, T2, imm=0),
+            _I(0xF, 0, AT, imm=0x8007),
+            _I(0x28, AT, R0, imm=0x1C1C),
+            _I(0xF, 0, AT, imm=0x8011),
+            _I(0x29, AT, R0, imm=17620),
+            _I(0, 0, 0, V0, fn=0x25),
+            _I(0, RA, 0, 0, fn=8),
+            0,
+        ]
+    )
+
+
+def dskcg_stub():
+    R0, V0, RA, A0, T0, T1, T2 = 0, 2, 31, 4, 8, 9, 10
+    return _bytes(
+        [
+            _I(0xF, 0, A0, imm=0x800A),
+            _I(0x23, A0, A0, imm=-14624),
+            _I(0x28, A0, R0, imm=1),
+            _I(0x29, A0, R0, imm=38),
+            _I(0xF, 0, T0, imm=0x8007),
+            _I(0x24, T0, T0, imm=0x22C4),
+            _I(0, 0, T0, T0, sh=1, fn=0),
+            _I(0xF, 0, T1, imm=0x8008),
+            _I(9, T1, T1, imm=0x31FC),
+            _I(0, T1, T0, T1, fn=0x21),
+            _I(0x25, T1, T2, imm=0),
+            _I(9, T2, T2, imm=2),
+            _I(0x29, T1, T2, imm=0),
+            _I(0, 0, 0, V0, fn=0x25),
+            _I(0, RA, 0, 0, fn=8),
+            0,
+        ]
+    )
+
+
+STUBS = {"DSKCG": (0x2523C, dskcg_stub()), "MOVIE": (0x2CE94, movie_stub())}
 
 
 def decompress_field(comp: bytes) -> bytes:
-    if len(comp) <= GZIPPS_HEADER_SIZE:
-        raise ValueError("FIELD.BIN too small")
     return gzip.decompress(comp[GZIPPS_HEADER_SIZE:])
 
 
@@ -91,11 +105,9 @@ def compress_field(dec: bytes, template_header: bytes) -> bytes:
 def apply_stubs(dec: bytearray) -> list[str]:
     notes = []
     for name, (off, stub) in STUBS.items():
-        old = bytes(dec[off : off + len(stub)])
+        old = bytes(dec[off : off + 8])
         dec[off : off + len(stub)] = stub
-        notes.append(f"{name} @ 0x{off:X}: {len(stub)} bytes (PC+{2 if name=='DSKCG' else 1})")
-        notes.append(f"  was {old[:16].hex()}...")
-        notes.append(f"  now {stub[:16].hex()}...")
+        notes.append(f"{name} @ 0x{off:X}: {len(stub)}B complete-stub (was {old.hex()})")
     return notes
 
 
@@ -113,24 +125,20 @@ def main() -> int:
     dec = bytearray(decompress_field(comp))
     for n in apply_stubs(dec):
         print(n)
-
     if args.dec_out:
         args.dec_out.write_bytes(dec)
         print("wrote", args.dec_out)
-
     if args.dry_run:
         print("dry-run: no disc write")
         return 0
-
     new_comp = compress_field(bytes(dec), comp[:8])
     print(f"recompressed FIELD.BIN {len(comp)} -> {len(new_comp)} (slot {len(comp)})")
     if len(new_comp) > len(comp):
-        raise SystemExit(f"compressed stub FIELD too large: {len(new_comp)} > {len(comp)}")
-
+        raise SystemExit(f"compressed too large {len(new_comp)} > {len(comp)}")
     replace_file_padded(img, FIELD_PATH, new_comp)
     out = args.disc_image if args.in_place or not args.output else args.output
     if not args.in_place and not args.output:
-        raise SystemExit("pass --in-place or -o OUT.bin")
+        raise SystemExit("pass --in-place or -o")
     out.write_bytes(img)
     print("wrote", out)
     return 0

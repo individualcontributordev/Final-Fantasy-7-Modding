@@ -40,3 +40,14 @@ Same DSKCG/MOVIE offsets, 16 instructions:
 - return 0
 
 Tool updated accordingly.
+
+## Playtest v2 (2026-08-03)
+
+PC-advance-only stub: operator heard movie audio on black screen; field never
+loaded after audio ended. MOVIE handler is multi-state — first entries set
+entity status / flags and wait; completion path clears status@+1, half@+38,
+advances PC, returns 0. Must replicate completion, not only PC++.
+
+## v3
+
+Full completion stub at MOVIE/DSKCG entry (see tool).
