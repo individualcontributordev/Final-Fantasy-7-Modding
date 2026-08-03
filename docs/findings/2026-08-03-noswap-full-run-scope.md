@@ -30,12 +30,18 @@ on **clean** D1 first; then CSR/Highwind if bytes allow. Not a base bump.
 - Working edit (Ask removed, Bit OFF kept); DS hub smoke OK
 - Path (operator): workspace/iso-extract/ff7_d1_noswap_re.bin
 
+## Progress
+
+- **Makou all Ask-for-disc removed — DuckStation PASS** (2026-08-03). Console untested.
+  See `2026-08-03-noswap-makou-ask-ds-pass.md`.
+
 ## Open work (order)
 
-1. Inventory all freeze classes on a D1-only image (field Ask, field movie, battle SNOVA, endings)
-2. Patch/skip each class on working D1 bin
-3. Playtest critical path (disc2 gate, disc3 gate, Supernova, one multi-disc field movie)
-4. Diff vs pristine → pack; verify; ship only after playtest PASS
+1. ~~Field Ask-for-disc~~ — Makou delete all; **DS PASS** (console TBD)
+2. Supernova / `SNOVA/` (copy D3→D1 or battle stub)
+3. Endings / other missing media if still freeze on clean leave-Play policy
+4. CSR-base manip movie copy list + inject (CSR-only); CSR+/HW no movie copy
+5. Diff → pack(s); console smoke; ship only after full-run gates
 
 ## Local bins (never git commit)
 
