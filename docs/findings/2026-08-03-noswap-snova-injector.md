@@ -1,40 +1,38 @@
-# Finding: D3 SNOVA inject onto D1 (Mode2 grow)
+# Finding: Supernova needs BATTLE.X LBA remap (not just SNOVA files)
 
 **Date:** 2026-08-03
-**Status:** v2 offline OK; v1 in-game FAIL; v2 playtest pending
+**Status:** v3 offline OK; DS playtest pending
 
-## Summary
+## Failures
 
-Supernova assets live only on retail D3 under SNOVA/ (17 files, ~1.15 MB).
-D1 root has padding for one extra directory record. Image grows +570 sectors.
+| Ver | Method | DS result |
+|-----|--------|-----------|
+| v1 | user-data inject, zero EDC | SFX + battle freeze |
+| v2 | raw-copy SNOVA EDC intact | same freeze |
 
-## Playtest v1 (user-data rewrite)
+## Root cause
 
-**FAIL (DuckStation):** Supernova SFX audible, then battle frozen; after SFX ends
-music continues but battle stays frozen.
+BATTLE.X.dec (gzipps) contains absolute Mode2 LBAs for D3 SNOVA assets:
 
-v1 wrote user payloads with cloned headers and zero EDC/ECC. Audio path
-could still run; effect/GPU completion likely choked on bad sectors.
+- 0x48D78 + 8*n : SNOVA0..SNOVA15 as (lba, padded_size) pairs
+- 0x4F5A8 : LASBOSS3.BIN (lba, padded_size 313344)
 
-## Tool v2 (raw-copy)
+D3 values e.g. SNOVA0=127254, LASBOSS3=127101. No CdSearchFile path — pure LBA table.
 
-mods/no-swap/scripts/inject_snova_d3_to_d1.py
+Copying files to end of D1 leaves the table pointing at empty D3 sectors on the
+D1 image → effect never completes.
 
-- D3 SNOVA dir LBA 127100 is contiguous for 570 sectors (dir + all files)
-- memcpy full Mode2 sectors from D3 (keeps subheader + EDC/ECC)
-- Fix MSF (bytes 12-14) for new LBAs only
-- Remap LBAs inside SNOVA directory user; zero EDC on dir sector only
-- Patch root dir, L/M path tables, PVD size
+## Fix v3
 
-Offline:
+After raw-copy with LBA delta = new_snova_dir - 127100:
 
-    D3 SNOVA raw block LBA 127100+570 files=17
-    grow sectors 317787 -> 318357
-    SNOVA0 sector sub+payload+edc match D3: True
-    verify: all SNOVA files match D3
+- rewrite each table lba to d3_lba + delta
+- recompress BATTLE.X via compress_gzipps (fits under original size)
+- replace_file_padded
 
-## Next
+Verified: all 17 table entries match find_file on patched image; no residual
+127xxx LBAs left in BATTLE.X.
 
-Retest Supernova on v2 image. If still FAIL, look beyond ISO integrity
-(battle effect waiter / disc-id checks) — not more file copies (only
-SNOVA + huge ending movies are D3-only besides SCUS).
+## Tool
+
+mods/no-swap/scripts/inject_snova_d3_to_d1.py (v3)

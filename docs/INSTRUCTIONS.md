@@ -1,23 +1,24 @@
-# Task: No-swap — retest Supernova (SNOVA raw-copy v2)
+# Task: No-swap — retest Supernova (v3 BATTLE.X LBA remap)
 
-## Result so far
+## Why v1/v2 failed
 
-- Ask-for-disc Makou: DS PASS
-- SNOVA inject v1 (user-data rewrite, zero EDC): FAIL
-  - Heard Supernova SFX, then battle frozen; music kept playing after SFX ended
-- SNOVA inject v2 raw-copy: preserves D3 EDC/ECC on file sectors; fixes MSF only
-  - Offline: SNOVA0 sector sub+payload+edc match D3: True
+Copying SNOVA/ onto D1 is not enough. BATTLE.X hardcodes absolute D3 sector
+numbers for SNOVA0-15 and LASBOSS3. The effect still read the old D3 LBAs
+(empty/wrong on D1) → SFX path could tick, battle graphics wait forever.
 
-## Goal
+## Fix v3 (pushed)
 
-Rebuild with v2 and confirm Supernova finishes (battle unfreezes).
+mods/no-swap/scripts/inject_snova_d3_to_d1.py
 
-## Build (must rebuild — do not reuse v1 image)
+1. Raw-copy D3 SNOVA block (+570 sectors, EDC kept)
+2. Patch decompressed BATTLE.X LBA table (17 entries), recompress, replace
+
+Offline verified: table LBAs == find_file LBAs for all 17 assets.
+
+## Build (must rebuild)
 
     cd Final-Fantasy-7-Modding
     git pull --ff-only
-
-    # A: pristine + SNOVA (Supernova smoke)
     cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_snova_test.bin
     python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
       --d1 workspace/iso-extract/ff7_d1_snova_test.bin \
@@ -25,38 +26,31 @@ Rebuild with v2 and confirm Supernova finishes (battle unfreezes).
       --in-place
 
 Must print:
-- wrote ... (raw-copy v2)
-- SNOVA0 sector sub+payload+edc match D3: True
+- raw-copy + BATTLE.X LBA patch v3
+- verify: BATTLE.X 17 LBA entries remapped
 - verify: all SNOVA files match D3
 
-If injecting on Ask-fixed work, restore bak first (no double inject):
-
-    cp -f workspace/iso-extract/ff7_d1_noswap_work.pre_snova.bak \
-          workspace/iso-extract/ff7_d1_noswap_work.bin
-    python3 mods/no-swap/scripts/inject_snova_d3_to_d1.py \
-      --d1 workspace/iso-extract/ff7_d1_noswap_work.bin \
-      --d3 workspace/pristine/FINALFANTASY7_D3.bin \
-      --in-place
+Do not reuse v1/v2 images.
 
 ## Playtest
 
-DuckStation on the NEW image, final battle / force Supernova.
+DuckStation final battle / force Supernova.
 
 | PASS | FAIL |
 |------|------|
-| Effect plays and battle resumes | SFX + freeze again, or worse |
+| Effect finishes, battle resumes | Freeze after SFX again |
 
 ## Evidence
 
-    Tool: raw-copy v2 yes/no (paste last 3 lines)
-    Image: snova_test / noswap_work
+    Tool: v3 yes/no (paste verify lines)
     Supernova DS: PASS/FAIL
     Notes:
 
 Say check.
 
-## Notes
+## If still FAIL
 
-- v1 zeroed EDC/ECC — likely why graphics stalled after audio
-- D3 SNOVA is one contiguous 570-sector block; v2 memcpy that block
-- Do not commit .bin images
+Then try battle stub (force-complete safer effect) for console pack — file
+inject path exhausted for SNOVA LBA table known sites.
+
+Do not commit .bin images.
