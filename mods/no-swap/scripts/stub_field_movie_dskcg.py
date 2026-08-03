@@ -9,10 +9,13 @@ into a disc image.
     --in-place
 
 Stubs (FILE offsets in FIELD.dec, VA base 0x800A0000):
-  DSKCG (0x0E Ask/change disc) @ 0x2523C → jr ra; nop
-  MOVIE (0xF9 Play movie)      @ 0x2CE94 → jr ra; nop
+  DSKCG (0x0E) @ 0x2523C — complete opcode (PC+=2), no disc wait
+  MOVIE (0xF9) @ 0x2CE94 — complete opcode (PC+=1), no FMV
 
-Does not touch battle Supernova (SNOVA) — separate follow-up.
+IMPORTANT: bare jr-ra is WRONG — field ops must advance script PC or the
+same op re-runs every frame (new-game black screen).
+
+Does not touch battle Supernova (SNOVA).
 """
 from __future__ import annotations
 
@@ -29,11 +32,47 @@ from decompress_gzipps import GZIPPS_HEADER_SIZE  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_padded  # noqa: E402
 
 FIELD_PATH = "FIELD/FIELD.BIN"
-# jr $ra ; nop
-STUB = bytes.fromhex("0800e00300000000")
-PATCHES = {
-    "DSKCG": 0x2523C,
-    "MOVIE": 0x2CE94,
+
+# Script PC advance stubs (see finding). Uses:
+#   index = *(u8*)0x800722C4
+#   pc    = (u16*)0x800831FC + index
+#   *pc  += delta  (1=MOVIE, 2=DSKCG)
+#   return 0
+
+def _stub(pc_delta: int) -> bytes:
+    def I(op, rs, rt, rd=0, sh=0, fn=0, imm=0):
+        if op == 0:
+            w = (op << 26) | (rs << 21) | (rt << 16) | (rd << 11) | (sh << 6) | fn
+        else:
+            w = (op << 26) | (rs << 21) | (rt << 16) | (imm & 0xFFFF)
+        return w & 0xFFFFFFFF
+
+    R0, V0, SP, RA = 0, 2, 29, 31
+    T0, T1, T2 = 8, 9, 10
+    words = [
+        I(9, SP, SP, imm=-24),
+        I(0x2B, SP, RA, imm=16),
+        I(0xF, 0, T0, imm=0x8007),
+        I(0x24, T0, T0, imm=0x22C4),
+        I(0, 0, T0, T0, sh=1, fn=0),
+        I(0xF, 0, T1, imm=0x8008),
+        I(9, T1, T1, imm=0x31FC),
+        I(0, T1, T0, T1, fn=0x21),
+        I(0x25, T1, T2, imm=0),
+        I(9, T2, T2, imm=pc_delta),
+        I(0x29, T1, T2, imm=0),
+        I(0, 0, 0, V0, fn=0x25),
+        I(0x23, SP, RA, imm=16),
+        I(9, SP, SP, imm=24),
+        I(0, RA, 0, 0, fn=8),
+        0,
+    ]
+    return b"".join(w.to_bytes(4, "little") for w in words)
+
+
+STUBS = {
+    "DSKCG": (0x2523C, _stub(2)),
+    "MOVIE": (0x2CE94, _stub(1)),
 }
 
 
@@ -44,9 +83,6 @@ def decompress_field(comp: bytes) -> bytes:
 
 
 def compress_field(dec: bytes, template_header: bytes) -> bytes:
-    """GZIPPS: 4-byte dec size LE + 4-byte subheader + gzip payload."""
-    if len(template_header) < 8:
-        raise ValueError("bad template")
     sub = template_header[4:8]
     payload = gzip.compress(dec, compresslevel=9, mtime=0)
     return struct.pack("<I", len(dec)) + sub + payload
@@ -54,30 +90,28 @@ def compress_field(dec: bytes, template_header: bytes) -> bytes:
 
 def apply_stubs(dec: bytearray) -> list[str]:
     notes = []
-    for name, off in PATCHES.items():
-        old = bytes(dec[off : off + 8])
-        dec[off : off + 8] = STUB
-        notes.append(f"{name} @ 0x{off:X}: {old.hex()} -> {STUB.hex()}")
+    for name, (off, stub) in STUBS.items():
+        old = bytes(dec[off : off + len(stub)])
+        dec[off : off + len(stub)] = stub
+        notes.append(f"{name} @ 0x{off:X}: {len(stub)} bytes (PC+{2 if name=='DSKCG' else 1})")
+        notes.append(f"  was {old[:16].hex()}...")
+        notes.append(f"  now {stub[:16].hex()}...")
     return notes
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--disc-image", type=Path, help="Mode2 .bin to patch in place or to -o")
-    ap.add_argument("-o", "--output", type=Path, help="Write new disc image (default: --in-place)")
+    ap.add_argument("--disc-image", type=Path, required=True)
+    ap.add_argument("-o", "--output", type=Path)
     ap.add_argument("--in-place", action="store_true")
-    ap.add_argument("--dec-out", type=Path, help="Also write patched FIELD.dec")
+    ap.add_argument("--dec-out", type=Path)
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-
-    if not args.disc_image:
-        ap.error("need --disc-image")
 
     img = bytearray(args.disc_image.read_bytes())
     comp = extract_file(bytes(img), FIELD_PATH)
     dec = bytearray(decompress_field(comp))
-    notes = apply_stubs(dec)
-    for n in notes:
+    for n in apply_stubs(dec):
         print(n)
 
     if args.dec_out:
@@ -91,10 +125,7 @@ def main() -> int:
     new_comp = compress_field(bytes(dec), comp[:8])
     print(f"recompressed FIELD.BIN {len(comp)} -> {len(new_comp)} (slot {len(comp)})")
     if len(new_comp) > len(comp):
-        raise SystemExit(
-            f"compressed stub FIELD larger than ISO slot ({len(new_comp)} > {len(comp)}). "
-            "Try different gzip settings or cave patch."
-        )
+        raise SystemExit(f"compressed stub FIELD too large: {len(new_comp)} > {len(comp)}")
 
     replace_file_padded(img, FIELD_PATH, new_comp)
     out = args.disc_image if args.in_place or not args.output else args.output
