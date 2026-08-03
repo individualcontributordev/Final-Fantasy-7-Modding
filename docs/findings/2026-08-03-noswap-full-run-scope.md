@@ -52,4 +52,24 @@ Agent can read/diff/edit copies there. Do not force git add on .bin.
 - DSKCG (0x0E) entry stubs: no Ask UI but disc-change **black/silent** — **abandoned** for play
 
 **Playable path:** Makou remove Ask-for-disc (DSKCG) on all maps; pristine FIELD.BIN.
-FMV policy + Supernova still open (other hooks / later).
+FIELD MOVIE/DSKCG engine stubs abandoned for playable builds.
+
+## FMV / media policy (updated)
+
+| Stack | Ask disc | Field Play movie | Extra media on D1 image |
+|-------|----------|------------------|-------------------------|
+| **Unmodified + no-swap** | Makou delete all DSKCG | **Leave** (wrong FMV for D2/D3 spots OK) | Optional later; Supernova still needs `SNOVA/` or battle fix |
+| **CSR + no-swap** | Makou delete all DSKCG (vs CSR baseline) | **Leave** | **Copy manip-critical MOVIE files from D2/D3 onto the D1 image** so FD/list and other CSR manips keep correct streams |
+| **CSR + CSR+ scenes + no-swap** | Same | Same | Same copy set + CSR+ scene packs (some already drop FMV-triggering scenes) |
+| **Highwind + no-swap** | Makou vs Highwind baseline | Prefer none / already heavily cut | No manip-movie import required |
+
+### CSR manip movies (planned)
+
+- Build **per-base** no-swap pack (or no-swap-on-csr) that can include **ISO layers for selected `MOVIE/*` (and related) files**, not only FIELD scripts.
+- Whitelist = movies CSR routing still relies on after disc-change is gone (document list from speedrun/CSR notes + playtest; e.g. any still used for FD / List timing).
+- Implementation needs free space on D1 + inject path (not FIELD entry stubs). If a file is too large / no slot, prefer CSR+ scene trim that removes that FMV call instead of forcing a full ending on D1.
+- Supernova: still **D3 `SNOVA/`** (~1.1 MB) — good candidate to copy for all bases that reach final battle on D1-only, or battle stub later.
+
+### Why not one pack for all bases
+
+Manip movie set is **CSR-only**. Clean and Highwind packs should not pull unused multi-disc FMVs.
