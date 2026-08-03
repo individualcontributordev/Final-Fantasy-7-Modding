@@ -45,3 +45,15 @@ Notes:
 ```
 
 Say **check**.
+
+ Final-Fantasy-7-Modding git:(main) cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
+python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
+  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
+  --in-place
+DSKCG @ 0x2523C: 64B v4 no-entity (was 0a80023c20d84290)
+MOVIE @ 0x2CE94: 64B v4 no-entity (was 0a80023c20d84290)
+recompressed FIELD.BIN 85435 -> 85373 (slot 85435)
+wrote workspace\iso-extract\ff7_d1_noswap_work.bin
+
+
+still the same, black screen, movie sounds of intro no visuals, field does not load after, intro is probably 1 min 30 secs long
