@@ -78,14 +78,14 @@ def main() -> int:
         "id": pack_id,
         "name": "No-disc-swap (Clean D1) v%s" % ver,
         "kind": "mod",
-        "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. WIP — console pending.",
+        "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. Multi-disc FMVs trimmed.",
         "format": "ic-layer-v1",
         "exclusiveGroup": "no-disc-swap",
         "compatibleBases": ["clean"],
         "discs": {"1": "./%s/layers/disc1.layer.json" % pack_id},
         "enabled": False,
         "groupLabel": "No-disc-swap",
-        "optionLabel": "Clean D1 v%s (dev)" % ver,
+        "optionLabel": "Clean D1 v%s" % ver,
     }
     addons = man.setdefault("addons", [])
     for i, a in enumerate(addons):
