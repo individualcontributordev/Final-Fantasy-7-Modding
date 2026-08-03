@@ -58,18 +58,26 @@ FIELD MOVIE/DSKCG engine stubs abandoned for playable builds.
 
 | Stack | Ask disc | Field Play movie | Extra media on D1 image |
 |-------|----------|------------------|-------------------------|
-| **Unmodified + no-swap** | Makou delete all DSKCG | **Leave** (wrong FMV for D2/D3 spots OK) | Optional later; Supernova still needs `SNOVA/` or battle fix |
-| **CSR + no-swap** | Makou delete all DSKCG (vs CSR baseline) | **Leave** | **Copy manip-critical MOVIE files from D2/D3 onto the D1 image** so FD/list and other CSR manips keep correct streams |
-| **CSR + CSR+ scenes + no-swap** | Same | Same | Same copy set + CSR+ scene packs (some already drop FMV-triggering scenes) |
-| **Highwind + no-swap** | Makou vs Highwind baseline | Prefer none / already heavily cut | No manip-movie import required |
+| **Unmodified + no-swap** | Makou delete all DSKCG | **Leave** (wrong FMV for D2/D3 spots OK) | No manip-movie import; Supernova still needs `SNOVA/` or battle fix if final battle is reached |
+| **CSR + no-swap** (base only) | Makou delete all DSKCG (vs CSR baseline) | **Leave** | **Copy manip-critical MOVIE files from D2/D3 onto D1** so CSR manips (FD/List, etc.) keep correct streams |
+| **CSR + CSR+ scene packs + no-swap** | Same Asks | Scenes that would play those FMVs are **already trimmed** by CSR+ | **No movie copy for CSR+** — wrong PMVIE/set-movie values are irrelevant because the packs do not play those FMVs |
+| **Highwind + no-swap** | Makou vs Highwind baseline | Trims remove the play paths | **No movie copy** — wrong set-movie values not a concern |
 
-### CSR manip movies (planned)
+### CSR base manip movies (CSR-only, planned)
 
-- Build **per-base** no-swap pack (or no-swap-on-csr) that can include **ISO layers for selected `MOVIE/*` (and related) files**, not only FIELD scripts.
-- Whitelist = movies CSR routing still relies on after disc-change is gone (document list from speedrun/CSR notes + playtest; e.g. any still used for FD / List timing).
-- Implementation needs free space on D1 + inject path (not FIELD entry stubs). If a file is too large / no slot, prefer CSR+ scene trim that removes that FMV call instead of forcing a full ending on D1.
-- Supernova: still **D3 `SNOVA/`** (~1.1 MB) — good candidate to copy for all bases that reach final battle on D1-only, or battle stub later.
+- Only when no-swap is aimed at **CSR base** routing that still runs the FMV.
+- Whitelist from speedrun/CSR notes + playtest; ISO inject of selected `MOVIE/*` onto D1 (not FIELD MOVIE stubs).
+- If a movie will not fit: prefer a scene trim that drops the play, or accept skip — do not stuff full endings onto D1 without need.
+
+### CSR+ packs and Highwind — no movie import
+
+- **CSR+ scene packs:** cutscene/FMV paths are removed or skipped by design. Do **not** copy D2/D3 movies for CSR+; leftover set-movie ids are harmless if nothing plays them.
+- **Highwind:** same — aggressive trims; no manip-movie import; wrong set-movie not a concern.
+- **Supernova (`SNOVA/`):** still separate if the final battle is reachable on that stack; not solved by CSR+ trims alone.
 
 ### Why not one pack for all bases
 
-Manip movie set is **CSR-only**. Clean and Highwind packs should not pull unused multi-disc FMVs.
+- Clean: Asks only (+ optional wrong FMV).
+- CSR base: Asks + **optional manip movie files**.
+- Highwind / CSR+ context: Asks only; **no** movie payload.
+
