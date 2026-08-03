@@ -51,3 +51,11 @@ advances PC, returns 0. Must replicate completion, not only PC++.
 ## v3
 
 Full completion stub at MOVIE/DSKCG entry (see tool).
+
+## v3 playtest FAIL
+
+Still audio + black + no field load. Entity pointer writes at intro are suspect.
+
+## v4
+
+No entity dereference. Fast-path style: PC+=delta, clear 0x80071C1C + 0x801144D4, v0=0, jr ra.

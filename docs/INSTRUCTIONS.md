@@ -1,26 +1,21 @@
-# Task: No-swap — retest FIELD stubs v3 (full completion)
+# Task: No-swap — retest FIELD stubs v4 (no entity writes)
 
-## What failed (already known — do not re-run v2)
+## Failures so far
 
-- v1 jr-ra: black screen (no script PC advance)
-- v2 PC+ only: movie **audio** on black screen, then no first field
-  (MOVIE multi-frame state not cleared)
+| Ver | Behavior |
+|-----|----------|
+| v1 jr-ra | black, no progress |
+| v2 PC++ only | audio + black, no field |
+| v3 PC++ + entity* clear | same (entity ptr may be invalid at intro) |
 
-Older check paste was **v2** tool output (PC+1 / PC+2). Ignore for v3.
+## v4 theory
 
-## v3 (current tool on main)
+Original MOVIE has a fast path that **only** does PC+=1 + return (no entity stores).
+v3 always wrote entity+1 / +38 via *(0x8009C6E0) — dangerous if null/wrong during boot intro.
 
-MOVIE completion stub at entry:
-- clear entity byte@1 + half@38
-- script PC += 1
-- clear flags 0x80071C1C + 0x801144D4
-- return 0
+v4: **script PC += size + clear flags + return 0**. No entity pointer loads.
 
-DSKCG: clear entity state + PC += 2 + return 0
-
-Tool output should say **complete-stub** (not only PC+1 / PC+2).
-
-## Apply (must git pull first)
+## Apply
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
@@ -31,22 +26,21 @@ python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
   --in-place
 ```
 
-Confirm lines like:
-`MOVIE @ 0x2CE94: 80B complete-stub` and `DSKCG ... 64B complete-stub`
+Tool lines should say **v4 no-entity**.
 
-## Playtest (critical)
+## Playtest
 
-1. **New game** — must reach Midgar / first field (not stuck black after intro)
-2. Intro FMV — skip or no softlock after any audio
-3. Optional disc-change hub save
+1. New game → first field? PASS/FAIL
+2. If still audio on black: note duration; does field ever appear after?
+3. If still FAIL: stop tool experiments for now — next is different approach
+   (e.g. only skip low-level stream start, leave handler body alone)
 
 ## Evidence
 
 ```
-git log -1 --oneline:
-Tool output (v3 complete-stub lines):
+Tool output (must say v4):
 New game reaches field: PASS/FAIL
-Intro behavior:
+Intro:
 Notes:
 ```
 
