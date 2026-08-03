@@ -78,3 +78,14 @@ layer (e.g. stream player), not opcode 0xF9 entry rewrite.
 ## v6
 
 DSKCG force-complete with stack + null-safe entity clear + PC+=2. MOVIE still vanilla.
+
+## v6 FAIL + pivot (2026-08-03)
+
+v6 DSKCG force-complete: operator still **black screen** at disc-change (no reliable
+music/MAPJUMP after). Intro had been PASS on v5.
+
+**Decision:** stop shipping/testing FIELD.BIN DSKCG entry stubs for playable builds.
+Disc-change stays **Makou**: delete DSKCG (Ask for disc) ops in field scripts on a
+**vanilla** FIELD.BIN image (no engine patch). FMV/Supernova stay separate later.
+
+Tool `stub_field_movie_dskcg.py` kept for RE only; default docs point to Makou path.

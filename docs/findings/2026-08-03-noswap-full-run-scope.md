@@ -45,3 +45,11 @@ Place under Modding (gitignored):
 - workspace/pristine/FINALFANTASY7_D{1,2,3}.bin if missing
 
 Agent can read/diff/edit copies there. Do not force git add on .bin.
+
+## Engine stub outcome (2026-08-03)
+
+- MOVIE (0xF9) entry stubs: softlock intro — **abandoned**
+- DSKCG (0x0E) entry stubs: no Ask UI but disc-change **black/silent** — **abandoned** for play
+
+**Playable path:** Makou remove Ask-for-disc (DSKCG) on all maps; pristine FIELD.BIN.
+FMV policy + Supernova still open (other hooks / later).
