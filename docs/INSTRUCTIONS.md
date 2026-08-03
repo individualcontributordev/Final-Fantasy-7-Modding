@@ -1,68 +1,65 @@
-# Task: No-swap — test v6 DSKCG force-complete
+# Task: No-swap — Makou remove all Ask-for-disc (engine stubs abandoned)
 
-## Last results
+## Engine stubs: stop for playable builds
 
-- v5 DSKCG-only: **intro + first field PASS** (MOVIE vanilla good)
-- Disc-change: **no Ask UI**, but **black + silence** (stuck on blackbgb / never
-  music+MAPJUMP after DSKCG)
+| Approach | Result |
+|----------|--------|
+| MOVIE entry stubs v1–v4 | Intro softlock |
+| DSKCG entry stubs v5–v6 | Intro OK on v5; disc-change **black + silence** |
 
-blackbgb is a black map; after a working DSKCG the script should still hit
-**Play music** then **Jump** to lost2/las0_1. No sound ⇒ script not past DSKCG.
+Do **not** run `stub_field_movie_dskcg.py` for playtest bins anymore.
 
-## v6 change
+## Goal this turn
 
-DSKCG force-complete with:
-- stack + ra save
-- entity* null check; if set, clear wait byte@1
-- script PC += 2
-- return 0  
-MOVIE still vanilla.
+On a **pristine D1 copy** (vanilla FIELD.BIN), use **Makou only** to delete every
+**Ask for disc** (DSKCG). Same style as the cleaned blackbgb hub (delete Ask, keep
+Bit OFF / jumps / music).
 
-## Apply
+This matches what already worked for blackbgb in script form.
+
+## Work image
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
+mkdir -p workspace/iso-extract
 cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
-python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
-  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
-  --in-place
 ```
 
-Expect: `DSKCG ... v6 force-complete` and `MOVIE: left vanilla`.
+Open **that** bin in Makou (not an engine-stubbed bin).
 
-## Playtest
+## Edits (Makou)
 
-1. New game still OK (intro + field)
-2. Disc-change hub save:
-   - no insert-disc UI
-   - **music after** and/or **map jump** to lost2 / las0_1 (not permanent black silence)
+1. Find All **Ask for disc** / DSKCG on the whole archive.
+2. For **every** hit (known: blackbgb #103, blackbg3 #95, blackbge #106 — plus any others):
+   - **Delete** the Ask-for-disc op only
+   - Keep Bit OFF, waits, music, MAPJUMP, save UI
+   - Do not leave skip-Gotos that jump over Bit OFF
+3. Find All again → **0** hits.
+4. Save all changed fields back into `ff7_d1_noswap_work.bin`.
+
+## Playtest (DuckStation)
+
+1. **New game** — intro video + first field (must PASS; proves no bad FIELD.BIN patch)
+2. **Disc-change hub** (blackbgb paths) — no insert UI; **music + jump** to lost2 / las0_1
+3. Optional: any other Ask sites you know
 
 ## Evidence
 
 ```
-Tool (v6):
-New game still OK: PASS/FAIL
-Disc-change: PASS/FAIL
-  - music after? 
-  - jumped to lost2/las0_1?
+Work bin path:
+Find All Ask count after edit: 0 / N
+Maps edited:
+New game: PASS/FAIL
+Disc-change blackbgb: PASS/FAIL (music? jump map?)
 Notes:
 ```
 
-Say **check**.
+Paste one cleaned disc branch if useful. Commit this file with evidence if you want
+it in git (no .bin). Say **check**.
 
-## Fallback if v6 still black+silent
+## Out of scope this turn
 
-Switch to **Makou-only** Ask removal on all DSKCG maps (proven on blackbgb earlier)
-plus vanilla FIELD; engine FMV skip later via another hook.
-
-cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_noswap_work.bin
-python3 mods/no-swap/scripts/stub_field_movie_dskcg.py \
-  --disc-image workspace/iso-extract/ff7_d1_noswap_work.bin \
-  --in-place
-DSKCG @ 0x2523C: 88B v6 force-complete (was 0a80023c20d84290)
-MOVIE: left vanilla
-recompressed FIELD.BIN 85435 -> 85373 (slot 85435)
-wrote workspace\iso-extract\ff7_d1_noswap_work.bin
-
-black screen again
+- Engine stub experiments
+- FMV cut / Supernova
+- Builder pack ship

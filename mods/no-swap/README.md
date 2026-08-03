@@ -26,3 +26,9 @@ Tool: `scripts/stub_field_movie_dskcg.py`
 ## Status (2026-08-03)
 
 MOVIE opcode entry stubs softlock new game. Tool default is **DSKCG-only**.
+
+## Playable path (current)
+
+FIELD.BIN opcode stubs for MOVIE/DSKCG are **abandoned for playable builds**
+(softlock / black disc-change). Use Makou Ask-for-disc removal on vanilla FIELD.
+Tool retained under scripts/ for RE only.
