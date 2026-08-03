@@ -1,33 +1,29 @@
-# Task: No-disc-swap — console smoke continued
+# Task: No-disc-swap — ioslake3 missing FMV (not freeze)
 
-## Done (console burn)
+## Report
 
-- ImgBurn verify: PASS
-- **Boot to title: PASS**
-- **New game to first field: PASS**
-- Disc-ask hub: not reported yet
-- Supernova: not reported yet
+Map **ioslake3** S0 Main: Bugenhagen idle/animated, FMV should play and does not.
+Not a freeze hardlock (per operator).
 
-Finding: docs/findings/2026-08-03-noswap-console-boot-pass.md
+Script not yet on this clone — push dump when ready.
 
-## Still useful if easy
+## Decision for Clean no-disc-swap
 
-| Check | Why |
-|-------|-----|
-| Former disc-ask path | Confirms Makou Ask removal on optical |
-| Supernova (late save) | Confirms SNOVA+BATTLE.X on optical / high LBA |
+Default product policy: **leave Play movie** (wrong/missing FMV OK if story continues).
 
-Not blocking for "disc boots and plays early game."
+Trim in Makou **only if**:
+- the map never advances after the movie wait, or
+- you want polish (skip empty stare) and will rebuild the pack layer
 
-## Evidence (optional more smoke)
+If trimming: delete Play movie (+ optional Set next movie); **keep Jump** and bits.
 
-    Disc-ask: PASS/FAIL/not tested
-    Supernova: PASS/FAIL/not tested
-    Notes:
+## Please confirm
 
-Say check. Or stop here and call early-game console gate PASS.
+    ioslake3 eventually continues after wait: yes / no / unknown
+    Want pack trim for polish: yes / no
+    Script dump pushed: path or pending
 
-## Notes
+Say check.
 
 - Do not commit .bin images
 - Pack is D1-only; D2/D3 layers not required for this add-on
