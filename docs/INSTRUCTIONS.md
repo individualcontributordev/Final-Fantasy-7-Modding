@@ -1,48 +1,55 @@
-# Task: No-disc-swap — ioslake3 missing FMV (not freeze)
+# Task: No-disc-swap — apply ioslake3 movie trim (optional polish)
 
-## Report
+## Root cause (checked)
 
-Map **ioslake3** S0 Main: Bugenhagen idle/animated, FMV should play and does not.
-Not a freeze hardlock (per operator).
+ioslake3 S0 Main at GameMoment 1398:
 
-Script not yet on this clone — push dump when ready.
+- Set next movie No57 D1 = ONTRAIN.MOV (D2 wants loslake1)
+- Set next movie No58 D1 = OPENING.BIN (D2 wants lslmv)
+- Real files D2-only: LOSLAKE1.MOV, LSLMV.STR
 
-## Decision for Clean no-disc-swap
+Missing FMV + Bugenhagen idle is expected on D1-only without trim/copy.
+Not a freeze; Jump to loslake1 should still be reachable after waits if MOVIE returns.
 
-Default product policy: **leave Play movie** (wrong/missing FMV OK if story continues).
+Finding: docs/findings/2026-08-03-noswap-ioslake3-missing-fmv.md
+Recipe: mods/no-disc-swap/patches/field-movie-trims.md
 
-Trim in Makou **only if**:
-- the map never advances after the movie wait, or
-- you want polish (skip empty stare) and will rebuild the pack layer
+## Your Makou edit (recommended polish)
 
-If trimming: delete Play movie (+ optional Set next movie); **keep Jump** and bits.
+Work bin with Ask+SNOVA (or rebuild per mods/no-disc-swap/README.md).
 
-## Please confirm
+Map ioslake3, script S0 Main, block GameMoment == 1398:
 
-    ioslake3 eventually continues after wait: yes / no / unknown
-    Want pack trim for polish: yes / no
-    Script dump pushed: path or pending
+1. Delete both Set next movie lines
+2. Delete both Play movie lines
+3. Keep all Execute script, Wait, and Jump to loslake1
+
+Smoke on DuckStation: scene progresses to loslake1 without long blank stare.
+
+## Then republish pack
+
+    python3 mods/no-disc-swap/scripts/build_clean_d1_layer.py \
+      --work workspace/iso-extract/ff7_d1_noswap_work.bin \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin
+
+Ensure manifest enabled true for no-disc-swap-clean-v0.0.0-dev, then:
+
+    python3 scripts/verify_builder_config.py \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+      --disc 1 --base clean \
+      --addon no-disc-swap-clean-v0.0.0-dev
+
+Commit builder layer + push, then new builder zip / burn if needed.
+
+## Evidence
+
+    Makou trim applied: yes/no
+    DS advance to loslake1: PASS/FAIL
+    Layer rebuilt + pushed: yes/no
+    Notes:
 
 Say check.
 
-- Do not commit .bin images
-- Pack is D1-only; D2/D3 layers not required for this add-on
-- Leave CSR movie copies out for now (wrong FMV wait finding)
+## If you prefer leave vanilla
 
-If $GameMoment == 1398 (else goto label 1)
-	Execute script #3 in group Untitled (No5) (priority 6/6) - Waiting for end of execution to continue
-	Wait 3 frame
-	Set next movie: No57 (disc 1), loslake1 (disc 2), No57 (disc 3)
-	Execute script #4 in extern group mf (No1) (priority 6/6) - Only if the script is not already running
-	Play movie
-	Execute script #6 in extern group Untitled (No6) (priority 6/6) - Only if the script is not already running
-	Execute script #6 in group Untitled (No5) (priority 6/6) - Waiting for end of execution to continue
-	Set next movie: No58 (disc 1), lslmv (disc 2), No58 (disc 3)
-	Execute script #3 in extern group mf (No1) (priority 6/6) - Only if the script is not already running
-	Play movie
-	Wait 10 frame
-	Execute script #7 in group Untitled (No5) (priority 6/6) - Waiting for end of execution to continue
-	Wait 20 frame
-	Jump to map loslake1 (#637) (X=643, Y=-324, triangle ID=19, direction=176)
-Label 1
-Goto label 1
+No edit required for full-run if Jump already fires; missing FMV only.
