@@ -20,3 +20,7 @@ Builder Clean D1 no-disc-swap image burned to CD-R; **ImgBurn verify PASS**.
 ## Next
 
 Console smoke per docs/07-hardware-burn.md and docs/INSTRUCTIONS.md.
+
+## Follow-up
+
+Console: title + new game + first field **PASS** (see 2026-08-03-noswap-console-boot-pass.md).

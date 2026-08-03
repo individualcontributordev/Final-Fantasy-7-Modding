@@ -1,37 +1,33 @@
-# Task: No-disc-swap — console smoke after ImgBurn verify PASS
+# Task: No-disc-swap — console smoke continued
 
-## Done
+## Done (console burn)
 
-- DuckStation: Ask + Supernova + combined PASS
-- Builder: grow/EDC fix shipped (site edc.js)
-- **ImgBurn verify: PASS** (burned CD-R of builder no-disc-swap Clean D1)
+- ImgBurn verify: PASS
+- **Boot to title: PASS**
+- **New game to first field: PASS**
+- Disc-ask hub: not reported yet
+- Supernova: not reported yet
 
-## Goal
+Finding: docs/findings/2026-08-03-noswap-console-boot-pass.md
 
-Boot the burned disc on console (PS2 MechaPwn ladder) and smoke.
+## Still useful if easy
 
-## Console checks (Disc 1)
+| Check | Why |
+|-------|-----|
+| Former disc-ask path | Confirms Makou Ask removal on optical |
+| Supernova (late save) | Confirms SNOVA+BATTLE.X on optical / high LBA |
 
-| Check | Result |
-|-------|--------|
-| Boot to title | |
-| New game to first field | |
-| One former disc-ask (no Ask UI, continues) | |
-| Supernova if late save | PASS/FAIL/not tested |
-| Any read error / freeze | notes |
+Not blocking for "disc boots and plays early game."
 
-## Evidence
+## Evidence (optional more smoke)
 
-    Console: PS2 MechaPwn / other:
-    Boot/title: PASS/FAIL
-    New game/field: PASS/FAIL
     Disc-ask: PASS/FAIL/not tested
     Supernova: PASS/FAIL/not tested
-    Notes (media, speed, APPLIED packs):
+    Notes:
 
-Say check.
+Say check. Or stop here and call early-game console gate PASS.
 
 ## Notes
 
-- ImgBurn verify PASS means Mode2 image written and read back clean on the burner drive — strong optical signal, not yet a PS2 laser proof.
-- Same order as docs/07-hardware-burn.md pass table.
+- Early-game console PASS + ImgBurn verify = strong ship confidence for boot/play.
+- Full-run / endgame still open on Clean no-disc-swap.
