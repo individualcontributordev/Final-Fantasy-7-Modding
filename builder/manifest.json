@@ -497,15 +497,15 @@
       },
       "enabled": false,
       "groupLabel": "Single-disc",
-      "optionLabel": "Clean (retired)"
+      "optionLabel": "Clean (retired)",
+      "layout": "global"
     },
     {
       "id": "single-disc-on-csr-v0.1.1",
-      "name": "Single-disc v0.1.1",
+      "name": "Single-disc",
       "kind": "mod",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. Stops insert-disc prompts, fixes freezes, Supernova on D1, CSR D2/D3 map changes on D1. On CSR without CSR+ scene packs, also adds the manip cutscene videos automatically.",
+      "blurb": "Whole-game option (not Disc 1 only): play the full run from one Disc 1 image. On CSR, also adds cutscene videos needed without CSR+ scene packs. Turn this on only if you want a single physical/ISO disc.",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "single-disc",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
@@ -513,8 +513,8 @@
         "1": "./single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
       },
       "enabled": true,
-      "groupLabel": "Single-disc",
-      "optionLabel": "On"
+      "hint": "Applies to the whole game \u2014 use one Disc 1 image only.",
+      "layout": "global"
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.0",
