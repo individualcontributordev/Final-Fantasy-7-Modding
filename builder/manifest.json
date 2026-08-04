@@ -518,7 +518,7 @@
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.0",
-      "name": "Single-disc CSR manip movies v0.1.0 (seed)",
+      "name": "Single-disc CSR movies",
       "kind": "mod",
       "blurb": "Hidden in UI. Auto-applied with Single-disc on CSR when no CSR+ scenes. Seed videos on D1 (LASTFLOR, LAST4_3, LASTMAP, CANONHT2).",
       "format": "ic-layer-v1",
@@ -531,7 +531,7 @@
       },
       "enabled": true,
       "groupLabel": "Single-disc CSR movies (auto)",
-      "optionLabel": "Manip movie seed v0.1.0",
+      "optionLabel": "Seed v0.1.0",
       "uiHidden": true,
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.1",
@@ -539,7 +539,8 @@
           "csr-v0.14.1"
         ],
         "unlessAddonIdPrefix": "csr-plus-scene-"
-      }
+      },
+      "version": "0.1.0"
     }
   ],
   "bases": [],
