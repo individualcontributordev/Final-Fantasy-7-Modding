@@ -4,6 +4,10 @@ Newest at top.
 
 ## Unreleased
 
+- single-disc-on-csr: blackbgb Ask no-op (keep Play music); LOST2 from CSR D2 (break scene)
+- movie seed pack rebuilt on that core
+
+
 - Operator: blackbgb Ask removed on CSR core (rebuild pack next).
 
 - single-disc-csr-manip-movies-v0.1.0 seed: LASTFLOR, LAST4_3, LASTMAP, CANONHT2
