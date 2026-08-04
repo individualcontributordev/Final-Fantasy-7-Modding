@@ -1,103 +1,58 @@
-# Task: Build no-disc-swap for CSR+ and Highwind (CSR base deferred)
+# Task: Finish no-disc-swap-on-csr BLACKBGB; then Highwind
 
-## Policy
+## Done (agent)
 
-| Stack | no-disc-swap now? |
-|-------|-------------------|
-| Unmodified | No |
-| CSR base alone + manip movies | **Defer** (disc size) |
-| CSR + CSR+ | **Yes - build now** |
-| Highwind | **Yes - build now** |
+- Partial pack: builder/no-disc-swap-on-csr-v0.1.1 vs csr-v0.14.1
+- 17 FIELD maps from Clean recipe + SNOVA/BATTLE.X LBA v3
+- FIELD.BIN left as CSR (no Clean engine delta)
+- BLACKBGB left as CSR (cannot paste Clean file - CSR hub conflict)
+- Work: workspace/iso-extract/ff7_d1_csr_noswap_work.bin
+- CSR base: workspace/iso-extract/ff7_d1_csr_base.bin
+- Finding: docs/findings/2026-08-04-noswap-on-csr-build-status.md
 
-CSR+ removes field FMVs; Highwind trims cutscenes. Core pack only:
+## Now (operator Makou)
 
-- Ask-for-disc Makou removal (vs that base FIELD)
-- Field Set+Play trims where crawl still happens
-- SNOVA + BATTLE.X LBA inject
-- No D2/D3 manip movie file copies
+1. Open ff7_d1_csr_noswap_work.bin in Makou Reactor
+2. Field blackbgb - remove all Ask for disc; keep CSR jumps/bits
+3. Save FIELD into the same work bin
+4. Rebuild layer vs CSR base (script below)
+5. verify_builder_config vs csr-v0.14.1 + pack
+6. DuckStation CSR + CSR+ + no-disc-swap-on-csr smoke
 
-Live base ids (verify on CSR Pages): csr-v0.14.1, highwind-v0.2.0
+### Rebuild layer after Makou
 
-## Pack targets
+python3 -c "
+import json, sys
+from pathlib import Path
+sys.path.insert(0, \"scripts\")
+from bin_diff_to_layer import build_layer
+base = Path(\"workspace/iso-extract/ff7_d1_csr_base.bin\")
+work = Path(\"workspace/iso-extract/ff7_d1_csr_noswap_work.bin\")
+out = Path(\"builder/no-disc-swap-on-csr-v0.1.1/layers/disc1.layer.json\")
+layer = build_layer(base, work, layer_id=\"no-disc-swap-on-csr-v0.1.1-disc1\",
+    description=\"No-disc-swap on CSR D1 after BLACKBGB Makou\")
+out.write_text(json.dumps(layer, indent=2) + chr(10))
+print(layer[\"stats\"])
+"
 
-1. no-disc-swap-on-csr-v0.1.1
-   - compatibleBases: [csr-v0.14.1]
-   - Used with CSR+ scene add-ons (and alone later when manip pack exists)
-2. no-disc-swap-on-highwind-v0.1.1
-   - compatibleBases: [highwind-v0.2.0]
+### Verify
 
-## Recipe (each base)
+python3 scripts/verify_builder_config.py \\
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \\
+  --disc 1 --base csr-v0.14.1 \\
+  --addon no-disc-swap-on-csr-v0.1.1
 
-### A. Baseline D1 image
+## After CSR pack complete
 
-Builder or layer apply:
-
-- CSR: pristine + csr-v0.14.1 disc1 layer -> workspace/iso-extract/ff7_d1_csr_base.bin
-- Highwind: pristine + highwind-v0.2.0 disc1 layer -> workspace/iso-extract/ff7_d1_hw_base.bin
-
-### B. Work copy + Makou
-
-    cp -f BASE.bin workspace/iso-extract/ff7_d1_BASE_noswap_work.bin
-
-Makou on work bin:
-
-1. Remove all Ask for disc (keep jumps/bits)
-2. Remove Set next movie + Play movie on same sites as Clean playtest
-   (CSR+/HW may already lack some; trim what remains / crawls)
-3. Save FIELD into work bin
-
-### C. SNOVA
-
-    python3 mods/no-disc-swap/scripts/inject_snova_d3_to_d1.py \
-      --d1 WORK.bin \
-      --d3 workspace/pristine/FINALFANTASY7_D3.bin \
-      --in-place
-
-### D. Layer vs baseline (not pristine Clean)
-
-    python3 mods/no-disc-swap/scripts/build_clean_d1_layer.py \
-      --work WORK.bin \
-      --pristine BASE.bin \
-      --version 0.1.1
-
-Then rename pack dir + manifest:
-
-- id / path: no-disc-swap-on-csr-v0.1.1 or no-disc-swap-on-highwind-v0.1.1
-- compatibleBases: csr-v0.14.1 or highwind-v0.2.0
-- enabled: true
-- exclusiveGroup: no-disc-swap
-
-### E. Verify + push
-
-    python3 scripts/verify_builder_config.py \
-      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-      --disc 1 --base csr-v0.14.1 \
-      --addon no-disc-swap-on-csr-v0.1.1
-
-    # and/or highwind-v0.2.0 + no-disc-swap-on-highwind-v0.1.1
-
-CSR+ stack check example:
-
-    python3 scripts/verify_builder_config.py \
-      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-      --disc 1 --base csr-v0.14.1 \
-      --addon csr-plus-scene-... --addon no-disc-swap-on-csr-v0.1.1
-
-(Use real CSR+ addon ids from CSR manifest.)
-
-Commit builder packs + manifest; push; builder smoke + burn.
-
-## Order of work
-
-1. Highwind (simpler - one base, aggressive trims)
-2. CSR core pack for use with CSR+
-3. Later: CSR manip-movie pack + CSR-alone stack
+- no-disc-swap-on-highwind-v0.1.1 (same core recipe vs highwind-v0.2.0)
+- Defer CSR-alone manip-movie pack (disc size)
 
 ## Evidence
 
-    HW pack: built/published/verified
-    CSR pack: built/published/verified
-    CSR+ stack smoke:
-    Notes:
+BLACKBGB Makou done:
+Layer rebuild:
+verify_builder_config:
+CSR+ smoke:
+Notes:
 
-Say check.
+Say check when BLACKBGB is done, or want Highwind next without waiting.

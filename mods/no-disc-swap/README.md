@@ -9,7 +9,7 @@ by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR
 |------|---------------|--------|
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs. |
 | CSR base (alone) | LATER | Needs manip-movie copies on D1; disc space tight (~93 MB free after SNOVA). Deferred. |
-| CSR + CSR+ scene packs | YES (next) | CSR+ removes field FMVs - no movie pack. Core no-disc-swap + SNOVA only. |
+| CSR + CSR+ scene packs | YES (partial) | Pack no-disc-swap-on-csr-v0.1.1: field trims + SNOVA. BLACKBGB Ask still needs Makou on CSR. |
 | Highwind | YES (next) | Cutscene trims - no movie pack. Core no-disc-swap + SNOVA only. |
 
 Clean pack no-disc-swap-clean-v0.1.1 is retired (enabled false in builder manifest).

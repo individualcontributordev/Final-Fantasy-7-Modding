@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-04 | [noswap-on-csr-build-status](2026-08-04-noswap-on-csr-build-status.md) | CSR no-disc-swap pack v0.1.1 partial; BLACKBGB Makou pending |
 | 2026-08-04 | [noswap-ship-csrplus-highwind-first](2026-08-04-noswap-ship-csrplus-highwind-first.md) | Ship CSR+/HW no-disc-swap first; defer CSR manip movies |
 | 2026-08-04 | [noswap-bases-csr-highwind-only](2026-08-04-noswap-bases-csr-highwind-only.md) | no-disc-swap CSR/HW only; Clean retired |
 | 2026-08-04 | [noswap-imgburn-edc-warn-console-ok](2026-08-04-noswap-imgburn-edc-warn-console-ok.md) | ImgBurn EDC warn but console play OK v0.1.1 |

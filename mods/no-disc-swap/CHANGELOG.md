@@ -4,6 +4,9 @@ Newest at top.
 
 ## Unreleased
 
+- builder: no-disc-swap-on-csr-v0.1.1 (csr-v0.14.1) - Clean field trims + SNOVA;
+  BLACKBGB Ask still CSR/Makou; FIELD.BIN left as CSR.
+
 - Policy: no-disc-swap not on Unmodified. Clean pack disabled.
 - **Ship first:** CSR+ stacks + Highwind (core + SNOVA; no manip-movie pack).
 - **Defer:** CSR base alone + required manip-movie copies (disc space).
