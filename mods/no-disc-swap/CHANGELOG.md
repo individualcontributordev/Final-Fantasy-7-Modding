@@ -2,6 +2,11 @@
 
 Newest at top.
 
+## Unreleased
+
+- Policy: no-disc-swap only on CSR, CSR+ stacks, and Highwind - not Unmodified/clean
+  (keep Unmodified free of field/FMV changes). Clean builder pack disabled.
+
 ## 0.1.1
 
 - More FIELD Set next movie + Play movie trims from playtest (D2/D3-range sites,

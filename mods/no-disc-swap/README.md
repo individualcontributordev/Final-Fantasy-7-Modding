@@ -1,9 +1,20 @@
-# No-disc-swap (full-run) — Clean Unmodified D1
+# No-disc-swap (full-run)
 
-Single-disc play on Disc 1 only: no Ask-for-disc, Supernova works.
-Builder pack: no-disc-swap-clean-v0.1.1 (movie trims). Full-run still open.
+Single-disc play: no Ask-for-disc, Supernova on D1, multi-disc field FMV handled
+by script trims (optional CSR manip-movie pack).
 
-Players (later): https://individualcontributor.dev/builder/
+## Supported bases (builder)
+
+| Base | no-disc-swap? | Notes |
+|------|---------------|--------|
+| Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs (e.g. encounter rates). |
+| CSR | YES | Primary target; optional manip-movie add-on |
+| CSR + CSR+ scene packs | YES | Core no-disc-swap-on-csr; omit manip-movie pack |
+| Highwind | YES | Separate pack vs Highwind baseline |
+
+Clean pack no-disc-swap-clean-v0.1.1 is retired (enabled false in builder manifest).
+
+Players: https://individualcontributor.dev/builder/
 
 ## What works (DuckStation, 2026-08-03)
 
