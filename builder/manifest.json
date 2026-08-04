@@ -498,6 +498,23 @@
       "enabled": false,
       "groupLabel": "No-disc-swap",
       "optionLabel": "Clean D1 v0.1.1"
+    },
+    {
+      "id": "no-disc-swap-on-csr-v0.1.1",
+      "name": "No-disc-swap (on CSR) v0.1.1",
+      "kind": "mod",
+      "blurb": "Single-disc on CSR: Ask/movie field trims + Supernova. For CSR+ stacks. BLACKBGB Ask Makou pending. No manip-movie pack.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "no-disc-swap",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./no-disc-swap-on-csr-v0.1.1/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "No-disc-swap",
+      "optionLabel": "On CSR v0.1.1 (partial)"
     }
   ],
   "bases": [],
