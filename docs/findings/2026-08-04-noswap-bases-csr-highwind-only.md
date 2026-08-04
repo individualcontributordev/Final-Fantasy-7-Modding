@@ -5,9 +5,11 @@
 
 ## Decision
 
+**Ship first:** CSR+ stacks and Highwind. **Defer:** CSR base + manip movies (size).
+
 no-disc-swap may be applied only to:
 
-- CSR base (keeps manip-critical FMVs; manip-movie pack **required** with no-disc-swap)
+- CSR base (later - manip movies required; disc space limited)
 - CSR + CSR+ scene stacks (CSR+ removes field FMVs; no movie-copy pack)
 - Highwind base (cutscene trims; no movie-copy pack)
 
