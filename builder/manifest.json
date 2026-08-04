@@ -515,6 +515,23 @@
       "enabled": true,
       "groupLabel": "Single-disc",
       "optionLabel": "On CSR v0.1.1 (partial)"
+    },
+    {
+      "id": "single-disc-csr-manip-movies-v0.1.0",
+      "name": "Single-disc CSR manip movies v0.1.0 (seed)",
+      "kind": "mod",
+      "blurb": "With CSR single-disc core when no CSR+ scenes. Seed: LASTFLOR, LAST4_3, LASTMAP, CANONHT2 (id-slot overwrite). Playtest.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "single-disc-csr-movies",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Single-disc CSR movies",
+      "optionLabel": "Manip movie seed v0.1.0"
     }
   ],
   "bases": [],

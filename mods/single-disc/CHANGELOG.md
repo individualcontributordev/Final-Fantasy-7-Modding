@@ -4,6 +4,9 @@ Newest at top.
 
 ## Unreleased
 
+- single-disc-csr-manip-movies-v0.1.0 seed: LASTFLOR, LAST4_3, LASTMAP, CANONHT2
+  (id-slot overwrite on D1). inject_movies_by_disc_id.py + csr-manip-movie-seed.txt.
+
 - CSR manip movie whitelist starter + list_d2d3_only_movies.py (inventory task)
 
 - Renamed mod id/path from no-disc-swap to **single-disc** (builder packs,
