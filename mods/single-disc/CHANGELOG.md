@@ -4,6 +4,10 @@ Newest at top.
 
 ## Unreleased
 
+- single-disc-on-csr: merge all CSR D2+D3 changed FIELD maps onto D1 (keep CSR D1 FIELD.BIN)
+- blackbgb Ask nop + LOST2 D2 break retained; movie seed rebuilt
+
+
 - single-disc-on-csr: blackbgb Ask no-op (keep Play music); LOST2 from CSR D2 (break scene)
 - movie seed pack rebuilt on that core
 
