@@ -1,0 +1,6 @@
+# CSR single-disc playtest seed — inject by disc-local PMVIE id into D1 slots
+# format: <2|3> <FILENAME>
+3 LASTFLOR.MOV
+3 LAST4_3.BIN
+3 LASTMAP.BIN
+2 CANONHT2.MOV
