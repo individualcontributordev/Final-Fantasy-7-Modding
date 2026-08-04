@@ -4,6 +4,8 @@ Newest at top.
 
 ## Unreleased
 
+- Operator: blackbgb Ask removed on CSR core (rebuild pack next).
+
 - single-disc-csr-manip-movies-v0.1.0 seed: LASTFLOR, LAST4_3, LASTMAP, CANONHT2
   (id-slot overwrite on D1). inject_movies_by_disc_id.py + csr-manip-movie-seed.txt.
 
