@@ -5,6 +5,13 @@
 
 ## Goal
 
+Operator distinction:
+
+- **CSR base:** certain FMVs kept for manips (FD/List etc.) - need correct streams on D1-only
+  when those Plays still run.
+- **CSR+:** removes/skips field FMVs - no manip-movie ISO copies needed.
+
+
 - CSR base + no-disc-swap: keep manip-critical FMV streams correct (copy D2/D3
   MOVIE files onto D1 + leave Play movie for those sites).
 - CSR + CSR+ scene packs + no-disc-swap: do not need those copies (scenes cut);
