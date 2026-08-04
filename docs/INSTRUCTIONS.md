@@ -1,65 +1,48 @@
-# Task: CSR single-disc — playtest music + break scene (updated packs)
+# Task: CSR single-disc — playtest full D2/D3 CSR map merge
 
-## Already done for you (published)
+## Done (published)
 
-Updated packs on git main:
+Core pack single-disc-on-csr-v0.1.1 now includes:
 
-| Pack | What changed |
-|------|----------------|
-| single-disc-on-csr-v0.1.1 | blackbgb: Ask for disc turned into a no-op jump so Play music still runs; lost2 on Disc 1 is now CSR Disc 2 lost2 (5-min break scene) |
-| single-disc-csr-manip-movies-v0.1.0 | Same four videos as before (rebuilt on new core) |
+1. CSR Disc 1 base (as always)
+2. **All CSR Disc 2 field map changes** copied onto Disc 1 (72 maps)
+3. **All CSR Disc 3 field map changes** copied onto Disc 1 (5 maps)
+4. CSR Disc 1 FIELD.BIN kept (not Disc 2 engine file)
+5. blackbgb: no insert-disc prompt; music still runs
+6. lost2: CSR Disc 2 break scene
+7. Supernova + earlier single-disc freeze fixes where still present
+8. Movie seed pack rebuilt on top (same 4 videos)
 
-Verify: PASS for CSR + both packs.
+Not done by applying disc2/disc3 layer files onto D1 (that would corrupt offsets).
+Done by copying each changed FIELD file from CSR D2/D3 onto D1.
 
-Local playtest image (gitignored):
+List: mods/single-disc/patches/csr-d2d3-field-merge-on-d1.md
+
+Verify: PASS
+
+Local bin:
 
     workspace/iso-extract/ff7_d1_csr_single_disc_playtest_work.bin
 
-Same content as builder stack after Pages updates.
-
 ---
 
-## What you do now
+## What you do
 
 1. git pull
-2. New builder zip: CSR v0.14.1 + Single-disc on CSR + movie seed (no CSR+)
-   or open the local playtest .bin above in DuckStation
-3. Check:
-   - Path that used to ask for a disc: music plays, no insert-disc prompt
-   - After Jenova Life / into lost2: break scene (5 min or continue)
-4. Say check with notes
+2. New builder zip: CSR + Single-disc on CSR + movie seed (no CSR+)
+   or use the local bin above
+3. Playtest hard: early game, disc1-to-disc2 moment, break scene, music, late maps
+4. Say check with anything wrong (map name)
 
----
-
-## Did we copy all CSR Disc 2 and Disc 3 onto Disc 1?
-
-No.
-
-| What | On Disc 1 single-disc? |
-|------|-------------------------|
-| CSR Disc 1 field/script changes | Yes (CSR base pack) |
-| Supernova files from Disc 3 | Yes (core pack) |
-| A few multi-disc videos (seed list) | Yes (movie pack) |
-| lost2 break scene from CSR Disc 2 | Yes (just added in core) |
-| Every CSR change that only exists on Disc 2 or Disc 3 maps | No — many map files differ per disc; we did not merge all of D2/D3 CSR into D1 |
-
-CSR ships three disc images. Single-disc D1 starts from CSR Disc 1, then we add only what single-disc needs (no disc ask, no freezes, Supernova, break scene, seed videos). Other D2/D3-only CSR tweaks still live on those discs for multi-disc play.
-
-If something on late Disc 2/3 CSR feels wrong on single-disc, say which map — we can copy that file the same way as lost2.
-
----
-
-## Technical notes (optional)
-
-- blackbgb: one Ask for disc 3 at byte 432 replaced with forward jump +0 so the next op (Play music) still runs. File size unchanged.
-- lost2: CSR D2 file is 17090 bytes; D1 slot grew from 17007 (same sector count).
+Note: merging D2/D3 CSR maps can put back some insert-disc or freeze scripts that Clean-style edits had removed on a few maps. Report those maps if you hit them.
 
 ---
 
 ## Notes for check
 
-    New zip or local bin:
-    Music on hub path:
-    Break scene on lost2:
+    Boot:
+    Break scene:
+    Music after hub:
     Ask for disc:
-    Other problems:
+    Freeze/crawl (map):
+    Other:
