@@ -1,7 +1,7 @@
 # Finding: CSR manip FMVs on D1 — pack split vs CSR+ stacks
 
 **Date:** 2026-08-04
-**Status:** product design (builder stacking)
+**Status:** product design — **deferred** until after CSR+/Highwind packs ship
 
 ## Goal
 
