@@ -2,6 +2,11 @@
 
 ## Policy (locked)
 
+- CSR base: keeps certain FMVs for manips - optional D2/D3 movie copies on D1
+- CSR+: removes field FMVs - no manip-movie pack
+- Highwind: trims - no manip-movie pack
+- Unmodified: no no-disc-swap
+
 no-disc-swap only for:
 
 - CSR
