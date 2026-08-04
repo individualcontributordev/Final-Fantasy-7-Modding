@@ -497,13 +497,13 @@
       },
       "enabled": false,
       "groupLabel": "Single-disc",
-      "optionLabel": "Clean D1 v0.1.1"
+      "optionLabel": "Clean (retired)"
     },
     {
       "id": "single-disc-on-csr-v0.1.1",
-      "name": "Single-disc (on CSR) v0.1.1",
+      "name": "Single-disc v0.1.1",
       "kind": "mod",
-      "blurb": "Single-disc on CSR: Ask/movie field trims + Supernova. For CSR+ stacks. BLACKBGB Ask Makou pending. No manip-movie pack.",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. Stops insert-disc prompts, fixes freezes, Supernova on D1, CSR D2/D3 map changes on D1. On CSR without CSR+ scene packs, also adds the manip cutscene videos automatically.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "single-disc",
       "compatibleBases": [
@@ -514,15 +514,15 @@
       },
       "enabled": true,
       "groupLabel": "Single-disc",
-      "optionLabel": "On CSR v0.1.1 (partial)"
+      "optionLabel": "On"
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.0",
       "name": "Single-disc CSR manip movies v0.1.0 (seed)",
       "kind": "mod",
-      "blurb": "With CSR single-disc core when no CSR+ scenes. Seed: LASTFLOR, LAST4_3, LASTMAP, CANONHT2 (id-slot overwrite). Playtest.",
+      "blurb": "Hidden in UI. Auto-applied with Single-disc on CSR when no CSR+ scenes. Seed videos on D1 (LASTFLOR, LAST4_3, LASTMAP, CANONHT2).",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "single-disc-csr-movies",
+      "exclusiveGroup": "single-disc-csr-movies-auto",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
@@ -530,8 +530,16 @@
         "1": "./single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
       },
       "enabled": true,
-      "groupLabel": "Single-disc CSR movies",
-      "optionLabel": "Manip movie seed v0.1.0"
+      "groupLabel": "Single-disc CSR movies (auto)",
+      "optionLabel": "Manip movie seed v0.1.0",
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.1",
+        "bases": [
+          "csr-v0.14.1"
+        ],
+        "unlessAddonIdPrefix": "csr-plus-scene-"
+      }
     }
   ],
   "bases": [],
