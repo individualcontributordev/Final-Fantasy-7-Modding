@@ -5,6 +5,9 @@
 
 ## Goal
 
+Operator: manip-movie pack is **not optional on CSR base** - always ship/enable with
+no-disc-swap-on-csr. Only CSR+ stacks skip the movie pack.
+
 Operator distinction:
 
 - **CSR base:** certain FMVs kept for manips (FD/List etc.) - need correct streams on D1-only
@@ -35,22 +38,19 @@ UI gains conditional deps (it does not today).
 | Pack id (example) | Contents | When to enable |
 |-------------------|----------|----------------|
 | no-disc-swap-on-csr-vX | Ask trims, non-manip field movie Set+Play trims (crawl/unblock), SNOVA+BATTLE.X | Always with CSR no-disc-swap |
-| no-disc-swap-csr-manip-movies-vX | ISO inject of whitelist D2/D3 MOVIE only; no Play deletion for those sites | Pure CSR / manip runners without relying on CSR+ cuts |
+| no-disc-swap-csr-manip-movies-vX | ISO inject of whitelist D2/D3 MOVIE only; no Play deletion for those sites | **Required** with CSR base no-disc-swap; **omit** when CSR+ scene packs are used |
 
 User stacks:
 
-- CSR manips, single disc: Base CSR + no-disc-swap-on-csr + manip-movies
-- CSR + CSR+ scenes, single disc: Base CSR + CSR+ scene packs + no-disc-swap-on-csr (no manip-movies pack)
+- CSR base, single disc: Base CSR + no-disc-swap-on-csr + manip-movies (**both required**)
+- CSR + CSR+ scenes, single disc: Base CSR + CSR+ scene packs + no-disc-swap-on-csr (no manip-movies)
 
 Both stacks need SNOVA (in the core no-disc-swap-on-csr pack).
 
 ### Alternative: one fat CSR pack
 
-Put manip movies inside no-disc-swap-on-csr always.
-
-- Pros: one checkbox
-- Cons: CSR+ users burn extra movie data for no benefit
-- OK if whitelist is small
+Merge manip movies into no-disc-swap-on-csr (still must not use that fat pack with CSR+
+if avoiding movie payload - then need a thin CSR+ variant). Split remains cleaner.
 
 ### Do not
 
