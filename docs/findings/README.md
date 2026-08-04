@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-04 | [noswap-imgburn-edc-warn-console-ok](2026-08-04-noswap-imgburn-edc-warn-console-ok.md) | ImgBurn EDC warn but console play OK v0.1.1 |
 | 2026-08-04 | [noswap-csr-manip-movies-pack-split](2026-08-04-noswap-csr-manip-movies-pack-split.md) | CSR manip FMV optional pack; not auto-off with CSR+ |
 | 2026-08-04 | [noswap-fr-e-blin70-movie-trims](2026-08-04-noswap-fr-e-blin70-movie-trims.md) | fr_e #347 + blin70_4 #269 Set+Play trims |
 | 2026-08-04 | [noswap-d2d3-movie-trims-unblock](2026-08-04-noswap-d2d3-movie-trims-unblock.md) | D2/D3 Set+Play trims unblocked playtest |
