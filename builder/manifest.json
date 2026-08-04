@@ -483,37 +483,37 @@
       "optionLabel": "Off (0%)"
     },
     {
-      "id": "no-disc-swap-clean-v0.1.1",
-      "name": "No-disc-swap (Clean D1) v0.1.1",
+      "id": "single-disc-clean-v0.1.1",
+      "name": "Single-disc (Clean D1) v0.1.1",
       "kind": "mod",
-      "blurb": "RETIRED for Clean/Unmodified. no-disc-swap is CSR/Highwind only so Unmodified stays field/FMV-vanilla. Use CSR or Highwind base.",
+      "blurb": "RETIRED for Clean/Unmodified. single-disc is CSR/Highwind only so Unmodified stays field/FMV-vanilla. Use CSR or Highwind base.",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "no-disc-swap",
+      "exclusiveGroup": "single-disc",
       "compatibleBases": [
         "clean"
       ],
       "discs": {
-        "1": "./no-disc-swap-clean-v0.1.1/layers/disc1.layer.json"
+        "1": "./single-disc-clean-v0.1.1/layers/disc1.layer.json"
       },
       "enabled": false,
-      "groupLabel": "No-disc-swap",
+      "groupLabel": "Single-disc",
       "optionLabel": "Clean D1 v0.1.1"
     },
     {
-      "id": "no-disc-swap-on-csr-v0.1.1",
-      "name": "No-disc-swap (on CSR) v0.1.1",
+      "id": "single-disc-on-csr-v0.1.1",
+      "name": "Single-disc (on CSR) v0.1.1",
       "kind": "mod",
       "blurb": "Single-disc on CSR: Ask/movie field trims + Supernova. For CSR+ stacks. BLACKBGB Ask Makou pending. No manip-movie pack.",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "no-disc-swap",
+      "exclusiveGroup": "single-disc",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./no-disc-swap-on-csr-v0.1.1/layers/disc1.layer.json"
+        "1": "./single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
       },
       "enabled": true,
-      "groupLabel": "No-disc-swap",
+      "groupLabel": "Single-disc",
       "optionLabel": "On CSR v0.1.1 (partial)"
     }
   ],

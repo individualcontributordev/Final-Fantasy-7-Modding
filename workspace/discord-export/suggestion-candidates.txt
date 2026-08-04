@@ -1,0 +1,2947 @@
+--- 2024-11-18 @awesomewaves ---
+Why is the channel labelled practice mod? Seems a bit biased
+
+--- 2024-11-18 @awesomewaves ---
+Just seems unnecessary labelling to be honest. It's not intended in it's final form to be just a practice mod
+
+--- 2024-11-18 @cornfed ---
+than we change it when it transforms into a final mod lol
+
+--- 2024-11-18 @cornfed ---
+this video highlights the things we can do for nms, i might have missed some stuff but i commented on what i could
+
+--- 2024-11-18 @kumatv ---
+pretty sure it's meant to be CSR/practice mods but you can't have "/" in channel names
+
+--- 2024-11-18 @doumeis ---
+ah yea good point, a channel for mods in general, mainly csr
+
+--- 2024-11-18 @acezephyr ---
+From the perspective of the leaderboards for which this is a server for, it is true that CSR is a modded version of the game that would be illegitimate for submission. It is a practice mod, but I don't mean to imply that it's *just* a practice mod.
+
+--- 2024-11-18 @hopeproductions ---
+I think people are wanting it to be a category
+
+--- 2024-11-18 @acezephyr ---
+Here is why that is, as of now, not a good idea. I had sent this to IndividualContributor when he asked me a similar question.
+
+1. The changes that would be made would have to be approved by the moderators, or more likely by a community vote. Currently, they are decided and implemented by a single person.
+2. The exact changes made seem like they may be based on the route that it is expected to use through them, i.e. FD manip, I believe. I assume (though I cannot prove without a good deal of effort) that IC added a couple areas where RNG is manually called extra times to match the expected state after the cutscenes in FD manip. This would assume that the number of RNG calls that happen is the number that happen in the current any% route, and if a different route were to use a different manipulation through there, it may need to be programmed to call RNG a different number of times, necessisating different versions of CSR for different routes.
+3. There should be a way to compile a ROM from a patch file to the scripts, instead of a patch file directly to the ROM. It's somewhat difficult to tell what exactly was changed in the scripts as is, and while there is documentation to describe what was changed, it would be good to be able to easily audit these changes and their implementation (see the previous point).
+4. It is still being updated with changes meant to change the amount of time runs take.
+
+As such, relative to the current official SRC leaderboards, it can only be used as a tool and not as an official version of the game, and primarily as a tool for practice, again relative to the official leaderboards which this is the server for.
+
+--- 2024-11-18 @hopeproductions ---
+I'm assuming we can move the conversation towards what it would take to become a category. 
+I'm seeing that changes should be route ambiguous.
+More documentation/ability to compare
+Finished state
+More community input/voting specifically?
+I don't understand 3 tbh.
+
+--- 2024-11-18 @cornfed ---
+it still needs quite a bit of work before we propose it to the mods
+
+--- 2024-11-18 @acezephyr ---
+I (and most likely the other mods) aren't inherently against mods like this having official leaderboards, but they would require the same level of discussion, specification, community input, and transparency in implementation as SpeedSquare, if not more.
+
+--- 2024-11-18 @individualcontributor ---
+<@122501498981711874> I hope you don't mind but I'll share my original request and my replies in relation to this from our private conversation.
+
+---
+
+My original request 
+
+---
+
+Morning Ace, just wanted to clarify with you that the CSR is not a practice mod/tool specifically. There has been a lot of demand for this CSR as it makes runs more accessible to a lot of folks. Of course people can use the CSR mods for practice but I think calling it a practice mod or tool is incorrect. 
+
+Can I request that you remove "practice" and "tool" from the channel name and description?
+
+Some names that would be fine:
+- CSR
+- Cut-Scene-Remover
+- Cut-Scene-Remover-Mod
+- Cut-Scenes-Removed-Mod
+- CSR-mod
+- FF7-CSR-Mod
+- FF7-CSR
+
+--- 2024-11-18 @individualcontributor ---
+---
+
+Your reply is stated above 
+
+---
+
+My response 
+
+---
+
+Thanks for the context Ace. 
+
+Just to clarify, I'm not requesting a leaderboard and didn't realize it was a 1:1 relationship between channels and leaderboards.
+
+1. Yes I think once the final version was released any further changes would need this.
+
+2. The CSR will cover at least any% and variants with 100% as a stretch goal. 
+
+I have not artificially manipulated RNG in any way, it performs exactly like the original game.
+
+3. I'm using Makou Reactor and don't intend to change the dev process or environment. I understand your concern but I'm not aware of tooling to do this. Maybe we can chat when the final CSR version is released.
+
+4. Yes still in progress, but as mentioned when the final version is released it won't be updated again, at least without very good reason to do so.
+
+I think given your decision to not change the name of the channel and description it might be best to not have a channel at all because it's misrepresenting the CSR in my opinion.
+
+I respect your decision and would appreciate that you respect my request to delete the channel entirely if we can't come to an agreement.
+
+My request hasn't changed and just to highlight I'm not requesting a leaderboard. Is there a compromise?
+
+--- 2024-11-18 @individualcontributor ---
+---
+
+As it stands I just want to say again, I'm not looking for a leaderboard I think a leaderboard should follow competition. I'm just looking for a place to more easily track discussion of the CSR.
+
+And the reason for my original request again was to make sure the CSR that we are working on is not misrepresented as a practice mod or tool.
+
+I'm happy to continue using the old thread and would appreciate it if you could delete this channel or remove CSR from the name and description if possible.
+
+--- 2024-11-18 @individualcontributor ---
+---
+
+Reply to my original request 
+
+---
+
+I don't intend to for now.
+
+As of now, I don't think it's reasonable for CSR to be supported with a leaderboard for a couple of reasons:
+1. The changes that would be made would have to be approved by the moderators, or more likely by a community vote. 
+2. The exact changes made seem like they may be based on the route that it is expected to use through them, i.e. FD manip, I believe. I assume (though I cannot prove without a good deal of effort) that you added a couple areas where RNG is manually called extra times to match the expected state after the cutscenes in FD manip. This would assume that the number of RNG calls that happen is the number that happen in the current any% route, and if a different route were to use a different manipulation through there, it may need to be programmed to call RNG a different number of times, necessisating different versions of CSR for different routes.
+3. I'd like if there was a way to compile a ROM from a patch file to the scripts, instead of a patch file directly to the ROM. It's somewhat difficult to tell what exactly was changed in the scripts as is, and while there is documentation to describe what was changed, it would be good to be able to easily audit these changes and their implementation (see the previous point).
+4. It is still being updated with changes meant to change the amount of time runs take.
+
+As such, relative to the current official SRC leaderboards, it can only be used as a tool and not as an official version of the game, and primarily as a tool for practice, again relative to the official leaderboards which this is the server for.
+
+--- 2024-11-18 @awesomewaves ---
+All the above aside, the request was simply to have a channel to discuss the ongoing creation of the CSR mod, instead of using a thread. 
+
+Can we just rename the channel to be specifically for the CSR and continue discussions on creating it.
+
+You already have resource discussion to chat about big shoes or whatever else
+
+--- 2024-11-18 @acezephyr ---
+Creating a channel for CSR without similar tools for a similar purpose being discussed there feels like singling out CSR and treating it as inherently special. The fact that "CSR" is in the channel name already treats it as special from other tools that have been or could be made. If we made a channel for every such tool that exists, then we'd have the same problem that people are complaining about right now that plagues the leaderboards: many options that are barely used or feel redundant or serve little purpose (and to be honest, this feels like it's already happening in this server). Since the moderation team does not approve of the use of CSR as a version for leaderboard submissions and we don't have any plans to right now, I don't consider it appropriate to make a dedicated channel for only it.
+
+--- 2024-11-18 @acezephyr ---
+The thing I'm afraid of and don't want is for people to come and ask *us*, the moderation team, questions about or requests for CSR or other tools under the assumption that, since there's a channel for it, that we inherently support it.
+
+--- 2024-11-18 @individualcontributor ---
+Ace I understand your reasoning and respect your decision. Can you please consider removing references to the CSR from this channel's name and description. I feel very strongly about the CSR that we're making not being a practice mod or tool and would be disappointed to have it misrepresented as such.
+
+--- 2024-11-18 @acezephyr ---
+I have done so.
+
+I don't understand why, even if you consider that a misrepresentation, there is a reason to feel that strongly about that representation. I don't understand how it isn't a practice tool, but I also don't understand why it would be a problem if it was a practice tool. Just because it could be considered a tool for practice doesn't mean it can't also be a platform for competition at the same time.
+
+--- 2024-11-18 @acezephyr ---
+That's something I'm more interested in myself than something that affects my decisions as a moderator of this game.
+
+--- 2024-11-18 @.rendall ---
+"Since the moderation team does not approve of the use of CSR as a version for leaderboard submissions" <@122501498981711874> Is that subject to change in the future ?
+
+ <@183261151746850816> is working hard to make it respect : Any% 100% and more, including not removing scene for elevator manipulation to still allow runners to have time to watch rerecording in slow motion/load data in a 3rd party program to proceed. 
+
+Probably a good idea to set this straight now so he know, or does it have potential in the future given it respect every aspect of the current categories.
+
+--- 2024-11-18 @acezephyr ---
+Yes, it is open to change in the future. I had listed the reasons why it currently isn't above, so when at least most of them are mostly resolved, we can consider adding it.
+
+--- 2024-11-18 @acezephyr ---
+I, as a moderator, do not want to accept an entirely new version of the game to the leaderboards unless A. it is agreed upon by much of the community, B. it is finalized enough to not need to worry about submissions becoming obsolete, and C. that we can audit it to confirm it does what it claims to do.
+
+--- 2024-11-18 @.rendall ---
+Either way I did not meant to say he is wasting his time, I am sure a lot of peoples will run CSR even if it is un-official and simply because it is fun.
+
+--- 2024-11-18 @acezephyr ---
+I entirely agree. I think it's a good idea for this to exist and be developed and to be competed with.
+
+--- 2024-11-18 @acezephyr ---
+but this competition is subtly different from competition on the vanilla version. Consider the case where there are two options to pass through a certain segment: you can either watch a cutscene or you can bypass the cutscene using an intended or unintended method. If the bypass were faster when the cutscene was present but the CSR mod removed enough of the cutscene to make the cutscene faster than the bypass, then if this were a platform for competition entirely independent from the unmodified game, runners would never do the bypass and instead watch the shortened cutscene that was faster.
+
+Except that's not the point of CSR. The point is to do the route you would have done on the original game without the downtime present in the game. That's why I consider it a practice tool.
+
+--- 2024-11-18 @.rendall ---
+Right future potential skip, he is adjusting so these stay relevent atm.
+
+--- 2024-11-18 @lemon6559 ---
+I'm a bit confused about the evolving nature of this channel.  Is this a place for CSR discussion?
+
+--- 2024-11-18 @acezephyr ---
+I created it as such at the request of some community members including IndividualContributor and awesomewaves, but I also don't want to single out IC's CSR mod as the only thing that could be discussed here. IC then wanted CSR to be removed from the name and description.
+
+--- 2024-11-18 @lemon6559 ---
+Excluding CSR, are there any practice mods available?
+
+--- 2024-11-18 @.rendall ---
+I think initially IC wanted a place where people can give him feedback on his CSR while he is developing it, instead of the feedback being in a thread. That is the important part I guess.
+
+--- 2024-11-18 @.rendall ---
+Maybe a channel name such as : CSR  Development, would be more appropriate for what it need to be and would not be mixed with a category but still point at the fact it is for the CSR he is creating.
+
+--- 2024-11-18 @acezephyr ---
+Thinking about this whole situation a little more:
+- I don't think we actually will ever have a leaderboard for CSR. (this is a prediction, not a judgement as a leaderboard moderator) This isn't because it won't be competitively ran, but rather because that competition will inherently be based on the routes done on the vanilla version of the game, rather than determining what route is the best for any given CSR version independent of what would be fastest on vanilla, or by trying to exploit the particular manner in which some parts of CSR may be implemented, which is not what CSR exists for. Trying to legislate rules around this kind of exploitation sounds like hell, trying to keep up with development to "fix" these issues in CSR means that many different versions of CSR could exist which would be hell to moderate (either runners would choose the fastest version for their route or there would be outdated versions on the leaderboard with an advantage that is no longer fair), but developing a "final" version means that, if the vanilla speedrun route ever changes in a manner that means that updates would need to be made to CSR to account for them, then CSR would be out of date and no longer as useful.
+
+--- 2024-11-18 @acezephyr ---
+- Because of that, I think I'm actually okay with this channel existing primarily for the development of CSR, either <@183261151746850816>'s versions or anyone elses' should they wish to make a fork of it or their own implementation, precisely because it's entirely independent of the SRC leaderboard, as opposed to this "compromise" I had thought was necessary to stay in a neutral position before to treat CSR identically to any other practice tool.
+
+--- 2024-11-18 @kumatv ---
+I think the idea and the thought of many (including myself) was to try to preserve the route as much as possible while cutting down it down but maybe that's not the right approach. If it were to get a chance on the boards then it should just be cut without any of the bias of the current runs and let it become it's own thing
+
+--- 2024-11-18 @.rendall ---
+That is what I was thinking, make a complete CSR no compromise. Route and run that.
+
+--- 2024-11-18 @acezephyr ---
+if so, then perhaps CSR shouldn't even be developed as a tool "for" speedrunning at all. in that case, maybe the Qhimm discord/forums may be interested?
+
+--- 2024-11-18 @acezephyr ---
+like I think I remember from last AGDQ that the FF5PR Cutscene Remover was developed by someone with no connection to the speedrunning community at all, but it was picked up by speedrunners as a practice tool anyway. As such, decisions about what to include or not to include weren't made based on what would preserve the speedrun route.
+
+--- 2024-11-18 @acezephyr ---
+but I don't think that's what CSR is being developed to be, as far as I'm aware.
+
+--- 2024-11-18 @lemon6559 ---
+Jessie Skip might not be worth it in a true CSR
+
+--- 2024-11-18 @.rendall ---
+Nod , the 1st thing I picked on was the elevator skip in the 1st reactor, and the long cut scene with barret was in there still to preserve that 4 sec quick elev.
+
+--- 2024-11-18 @acezephyr ---
+Exactly. Things like Jesse Skip, Bar Skip, Photo Skip, or that skip in Icicle Inn may be worth it or not worth it depending on what cutscenes are implemented or not, and that would be based on whether CSR is trying to be a version of the game that removes cutscenes or a version of the game that removes downtime from a speedrun.
+
+--- 2024-11-18 @acezephyr ---
+and I don't know IC's intentions well enough to know which of those CSR is being developed to be
+
+--- 2024-11-18 @acezephyr ---
+but considering it's being developed by someone in the speedrunning community and requesting input from speedrunners in the speedrunning discord server, I'm assuming the latter
+
+--- 2024-11-18 @.rendall ---
+I have seen a few game that tried that with CSR or mods, and your prediction seem fair Ace, having to update and verify probably was a pain : v1.04 , v1.5 ....v12 . then at a point you need to delete some cause well ...
+
+--- 2024-11-18 @acezephyr ---
+anyway <@183261151746850816> if you want me to rename this channel to "csr" or "csr-development" or "cutscene-remover" and change the description, let me know.
+
+--- 2024-11-18 @individualcontributor ---
+That's great news Ace a channel would be awesome. What do people think? I kind of like "csr" but I'm open to anything really, provided it doesn't have practice or tool in there <:Kappa:1075235124200886273>
+
+--- 2024-11-18 @.rendall ---
+it's your baby pick one ! it's a CSR , it's in development ! 🙂
+
+--- 2024-11-18 @.rendall ---
+CSR dev/Feedback ? that is why you wanted a channel in the 1st place yeah ?
+
+--- 2024-11-18 @kumatv ---
+I think Cutscene-Remover is fine, newer people might not know what "CSR" is
+
+--- 2024-11-18 @kumatv ---
+Before you make anymore development to your CSR, I think the idea of the CSR needs to be changed if the end goal is a leaderboard for it
+
+--- 2024-11-18 @kumatv ---
+in short, the routes should work around CSR, and not the other way around
+
+--- 2024-11-18 @individualcontributor ---
+A leaderboard would be awesome and my understanding is that competition has to exist for a leaderboard to be created and I'm perfectly fine with that. 
+
+There are a lot of us now contributing to this CSR in one way or another and we're getting close to a final version. We'll be running and tweaking for a while yet.
+
+And I'm completely open to changes so please run it, test it, write some notes and send them in here. I'm pretty excited to see where this goes <:bauseChamp:1074812447728349205>
+
+--- 2024-11-18 @.rendall ---
+The idea is it need not to change if it get on the leaderboard, regardless of what would happen to any% 100% nms etc. Note that peoples however that are not familiar with the current category being ran might questions why some longer scene remain, if you choose to go that route.
+
+--- 2024-11-18 @acezephyr ---
+yeah, look at this in particular for why I don't think there will be an SRC leaderboard if CSR is meant to be reflective of speedrun routes https://discord.com/channels/936291902133796955/1307919162534006854/1308195333540544634
+
+--- 2024-11-18 @individualcontributor ---
+Old Discussion Thread on the CSR for anyone interested in the discussion so far https://discord.com/channels/936291902133796955/1288235003901120586
+
+## 🎮 Latest Release v0.5.4
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+- Trimmed Reno fight even more
+- Trimmed Barret throwing 1500 gil at Cloud
+- Reverted most of the Yoshiyuki man in Rocket Town interaction, scroll to see rocket remains
+
+--- 2024-11-18 @mcswirls ---
+Excited to see the channel, couldn't see the thread before.
+
+--- 2024-11-19 @lemon6559 ---
+Does CSR work with JP & JP INT?
+
+--- 2024-11-19 @individualcontributor ---
+## 🎮 Release v0.5.5 
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+- Fixed bug with the Break Scene where if you choose music option 3 to mute then if the timer runs out there is no music for Disc 2, whoopsies
+
+--- 2024-11-19 @individualcontributor ---
+I'll be making some NMS changes later tonight hopefully, although Bake Off is on so we'll see.
+
+--- 2024-11-19 @individualcontributor ---
+Do we trim this guy?
+
+--- 2024-11-19 @awesomewaves ---
+I have said we should, because the final text box take so long to populate that it's easy to see
+
+--- 2024-11-19 @awesomewaves ---
+but maybe other people feel differently
+
+--- 2024-11-19 @individualcontributor ---
+I can trim it to 1 text before the options? I'll share here in a few minutes. 
+
+Also what a stream <@248225699909861376>!! I've never had a chance to join before, holy moly. Great stuff 🎶
+
+--- 2024-11-19 @individualcontributor ---
+For me it gives me a chance to orientate, I'll remove the text box entirely and share
+
+--- 2024-11-19 @awesomewaves ---
+Yeah, be interestin to see. It's so slow to populate that I think it would be fine but maybe you'll know once you try it
+
+--- 2024-11-19 @individualcontributor ---
+I imagine this might catch some runners out though on first encountering it
+
+--- 2024-11-19 @individualcontributor ---
+gotcha makes sense I'll remove it
+
+--- 2024-11-20 @individualcontributor ---
+## 🎮 Release v0.5.6
+
+Disc 1
+- Fixed Reno glitching when he jumps over the rail after the fight on the tower
+
+Disc 2
+- Fort Condor old guy trimmed
+- Fort Condor mini-game battle guy trimmed
+- Fort Condor after mini-game battle trimmed
+- Cloud chillin' with Hojo fixed
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-20 @lemon6559 ---
+> Cloud chillin' with Hojo fixed
+<:LUL:1074811553821511800>
+
+--- 2024-11-20 @zheal ---
+so, what direction is the CSR now going? I am only following it on the side but I remember there was some discussion now about practice rom vs standalone run. Will cutscenes, that would be important for the speedrun categories, now be trimmed away or stay?
+
+--- 2024-11-20 @individualcontributor ---
+Hey Zheal, cutscenes important for skill checks will remain. I'm not sure how this is going to end up honestly but runners are really enjoying it in its current state, and I'm excited to actually play it myself properly too (too busy making changes <:KEKW:1074810897308069948> )
+
+--- 2024-11-20 @cornfed ---
+its still got some work to do on it, but its something i think <@183261151746850816> myself and a few others would like to improve on and maybe at some point . when its more polished, and maybe a few more ppl to try it out, but eventually propose it as a category would be the thought, im still new to it too, but am really enjoying
+
+--- 2024-11-20 @cornfed ---
+to finish answering the ? i think the idea is to trim non essential cutscenes and leave in the stuff that is related to tech. and skill checks
+
+--- 2024-11-20 @zheal ---
+Actually, is there any reason it couldn't be both? Other than more work obviously. But there could be a version that has everything removed and a version that is the "skill check version" basically
+
+--- 2024-11-20 @individualcontributor ---
+<@191046608064872449> your CSR does this right? Share the details of yours for people to check it out!
+
+--- 2024-11-20 @hopeproductions ---
+Mines a practice tool. You can skip chocobo racing, Priscilla is removed.
+
+--- 2024-11-20 @hopeproductions ---
+You can choose how much of saucer to skip
+
+--- 2024-11-20 @hopeproductions ---
+That said ex-soldier is apparently incapable of equipping materia.... had to change screens for materia module to work even when turned on
+
+--- 2024-11-20 @cornfed ---
+i think it would be extremely lame to cut out skill checks and scenes used for tech, this would cut out elevator manip, and fd manip right out the get go, among many other things, ff7 is a special beast in my eye for this. as we have so much that goes along with the run that isnt just normal game stuff. i.e igts,cutscene skips, abuse of in game ram values, all of these things are core to the run itself, and if you remove them, in my eyes, its a major "boner killer"
+
+--- 2024-11-20 @cornfed ---
+that being said, hopes version would def cater to what elliot mentioned.
+
+--- 2024-11-20 @zheal ---
+and it's not like ele or fd manip would not be possible anymore. You'd have to do arm swings for ele manip and just make a different FD manip for the missing cutscenes
+
+--- 2024-11-20 @zheal ---
+But that's obviously just how I see it. If all people want is "same run but shorter <a:bauserHypers:1229739259129233488> " then I mean, that's cool ofc
+
+--- 2024-11-20 @cornfed ---
+but i am just one person. and dont wanna sway the whole thing. im def for what the majority wants at the end of the day
+
+--- 2024-11-20 @cornfed ---
+now that i think about it tho, maybe we make it how we want, and than we can see about a completely trimmed version. and have a "competition" or vote on it. but i think most would side with having the same tech translate to full runs. but that does imply practice mod, so i get the other side of the coin
+
+--- 2024-11-20 @cornfed ---
+i would like to think about would be "cut out" on a trimmed version. and i think it would be damning. jessie skip, elevator manip, playground skip, junon fmv, corel skip, fd manip, parachute skip, midgar raid skip would be included in this too i spose. am i missing anything lol?
+
+--- 2024-11-20 @cornfed ---
+imagine a world where oceanfly works , and you do the skip, and have to sit through midgar return LUL
+
+--- 2024-11-20 @doumeis ---
+only gripe i have with the csr atm is that some dialogue choices appear in different ways than the original
+
+--- 2024-11-20 @individualcontributor ---
+I want to know about the queues for these so I can fix them, send them in here if you can?
+
+--- 2024-11-20 @individualcontributor ---
+If anyone gets caught by surprise then I need to fix it, so do let me know the details
+
+--- 2024-11-20 @individualcontributor ---
+I fixed something in there, hopefully that issue, in the latest patch
+
+--- 2024-11-20 @awesomewaves ---
+Finished my run of 0.5.6 earlier. Nothing major to note except also the guys in Junon. I noticed that I'm always terrified of over/undermashing there because I don't know the queue. Could be the I'm not familar with any% and what the queue should be, but it feels odd.
+
+--- 2024-11-20 @awesomewaves ---
+Other things to note is that I believe there's still more cutting that could be done in some areas, even on Disc 1 which were deemed complete. I'll try skim the VOD and send you some details
+
+--- 2024-11-20 @individualcontributor ---
+Something else I need to figure out is if we need to make duplicate trims on multiple discs in case stuff is done in a different order, maybe someone works on a new route and notices a cutscene still exists or something.
+
+Each disc has full game code, but I'm not sure what's possible on each disc.
+
+--- 2024-11-20 @individualcontributor ---
+I had a ton of D2 stuff done originally but then started focusing on D1. Recent additional D2 work has started to trim even further. So at this point jumping around and making the final trims is the plan.
+
+--- 2024-11-20 @awesomewaves ---
+It might actually be normal behaviour, I'm just not too familar. it seemed like I could have exited before the Red guy
+
+--- 2024-11-20 @awesomewaves ---
+Sorry I meant that you had returned to Disc 2. There had already been a lot of content removed.
+
+--- 2024-11-20 @individualcontributor ---
+Cool just highlighting for others, D2 is trimmed too so go play it! 😄
+
+--- 2024-11-20 @awesomewaves ---
+as in, I learned that before using CSR
+
+--- 2024-11-20 @individualcontributor ---
+I'm strimming for a few hours working on this if anyone wants to chat about this stuff
+
+--- 2024-11-20 @lemon6559 ---
+I think this channel needs a pin mentioning where to download the latest CSR
+
+--- 2024-11-20 @lemon6559 ---
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-20 @individualcontributor ---
+<@122501498981711874> any chance you could pin this link in the channel?
+
+--- 2024-11-21 @individualcontributor ---
+## 🎮 Release v0.5.7
+
+- Start of Disc 2 Sephiroth walking north cut
+- After snowboarding landing in snow trimmed
+- Big Shoes field walking in trimmed
+- After Big Shoes field misty floor scene trimmed
+- Trains, after fight with two guards at the entrance trimmed
+- Trains section trimmed
+- Cloud's dream trimmed a bit more
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-21 @individualcontributor ---
+💡Rename some random character after DG to "Chuck Norris" and when you talk to him he gives you a Mastered Enemy Away and Mastered Preemptive and says "Take these, I've no use for them".
+
+Using these invalidates the run but runners could finish for fun if they bork steps by avoiding tons of encounters.  <:Kappa:1075235124200886273>
+
+--- 2024-11-21 @hopeproductions ---
+You can add materia with any set amount of ap i think
+
+--- 2024-11-21 @individualcontributor ---
+Nice! <@289891674660929538> did you say your Duckstation crashed at heligunner? can you share the details of your setup? Duckstation version and CSR version?
+
+--- 2024-11-21 @teeejj0102 ---
+using newest csr version
+
+--- 2024-11-22 @individualcontributor ---
+## 🎮 Release v0.5.8
+
+Disc 1
+- Speed up entering Gold Saucer for the first time
+
+Disc 2
+- Trains, trimmed small animations by party before fighting two guards
+- Flashback after JenovaDeath with Sephrioth burning down Nibelheim, added some text boxes back in
+- Trimmed Carry Armor
+- Trimmed Submarine before mini-game and getting Key of the Ancients
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-22 @individualcontributor ---
+---
+Not sure who submitted this feature request, but it's a question and in here is the only place I can think to answer it <:KEKW:1074810897308069948> 
+
+> "Did the "looking up to rocket" together with old man, which got removed in 0.5.3, does not roll over to 0.5.4 onwards ?"
+
+No I reverted that change so the scroll up to the rocket is still in the CSR.
+
+--- 2024-11-22 @individualcontributor ---
+---
+
+For this suggestion
+
+> The UWR section before and after Carry Armor can be trimmed down more. Also the rocket town fmv can be further trimmed down
+
+Got Carry Armor done in the latest release above, thank you for the suggestion! keep 'em coming. For rocket town FMV do you mean inside the rocket with Cid at the controls?
+
+--- 2024-11-23 @awesomewaves ---
+Some IGTs for CSR if anyone needs them
+
+--- 2024-11-23 @awesomewaves ---
+I'm gonna just run with these for now until the CSR and my times settle, then add Icicle etc
+
+--- 2024-11-23 @individualcontributor ---
+Nice I need to learn how to use IGTs
+
+--- 2024-11-23 @awesomewaves ---
+feel free to but again, it's subject to everyones individual pace/route and any changes made the CSR 😅
+
+--- 2024-11-23 @awesomewaves ---
+Dash released the full chocobo list a few weeks ago and I used that to get the chocobo times, which is more important than the other IGT manips imo so maybe add that for now?
+
+--- 2024-11-23 @individualcontributor ---
+Nice I'll add that later
+
+--- 2024-11-23 @individualcontributor ---
+I have a few hours to work on the CSR what am I doing? I don't think I have any more notes or suggestions in the Google sheet. Is there anything anyone wants done? I'll be streaming so we can chat in more detail in a bit.
+
+--- 2024-11-23 @individualcontributor ---
+## 🎮 Release v0.6.0
+
+Disc 1
+- No changes
+
+Disc 2
+- Rocket town cutscenes trimmed even further
+- Highwind before Cosmo Canyon trimmed down a bit more
+- Fixed an issue with FD manip on Hojo skip cutscene where 55 wait frames were missing compared to original disc 2
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-24 @cornfed ---
+<@158301632776503296> maybe worth adding these to the one stop shop
+
+--- 2024-11-24 @cornfed ---
+dash has too add them in, its his sheet
+
+--- 2024-11-24 @cornfed ---
+i suggest something and you come in with a half cocked snippity remark
+
+--- 2024-11-24 @awesomewaves ---
+Ah ok, I recall you finished stream when you got the submarine but maybe I'm mistaken
+
+--- 2024-11-24 @individualcontributor ---
+Might be worth quickly checking on emulator beforehand but I'm almost certain because we did UWR and Carry Armor and the Sub mini game and then the Key and maybe called it there.
+
+--- 2024-11-24 @luzbel ---
+Is it possible somehow to add a cheat for noencounters in the wm?
+
+--- 2024-11-24 @luzbel ---
+Doing the oceanskip with superlow igts is gonna be bad, I was wondering how feasible is to trigger a noenka cheat in wm after zolom
+
+--- 2024-11-24 @individualcontributor ---
+Yeah Makou Reactor for some reason doesn't expose the WM the same as it does normal Fields, I'm sure there are probably ways to set RAM values to disable encounters but I don't know at the moment how to do it unfortunately
+
+--- 2024-11-24 @cornfed ---
+<@183261151746850816> im replying to your @ in the general.  i appreciate your work with even adding nms stuff in ❤️ and no rush i know your one guy, and when its ready i will do more runs of it. i just didnt wanna get a "good" time , with an untrimmed product. and no slots getting done is def the prio here
+
+--- 2024-11-24 @awesomewaves ---
+if you can patch out Super Nova though please
+
+--- 2024-11-24 @cornfed ---
+i will say now after playing ff9 csr, which is much more polished. that over trimming, can take away from some of the learning, i like how ff7 csr has momments where the txt boxes arent playing, but the scene kinda plays out. in ff9 im constantly caught off guard by being warped around and such, but im still really enjoying it, its just a dif experience for sure
+
+--- 2024-11-24 @awesomewaves ---
+FF8 CSR also plays out most of the scenes in a way that you're always clued into whats going on.
+
+--- 2024-11-24 @awesomewaves ---
+I've made notes of things I noticed today that I sent to IC but the first thing that came up in my notes is the 'Fast Elevator'. Originally I considered it as a skill check but at the moment, it's the only text section slowing down the early game
+
+--- 2024-11-24 @awesomewaves ---
+so I'm kind of pushing towards it being removed to be honest. Just throwing it out there to see what you guys think
+
+--- 2024-11-24 @cornfed ---
+does it count as a skip?
+
+--- 2024-11-24 @awesomewaves ---
+it's not that it's not something that needs to be performed, more that it has less merit in the CSR
+
+--- 2024-11-24 @cornfed ---
+and csr , means no boxes, and the otherside of the coin is that it does save 4 secs
+
+--- 2024-11-24 @awesomewaves ---
+Back to the IGT thing, I might send you a save Corn and see if it works for you. I can't get it working on CSR through Duck with the IGTs I have for it
+
+--- 2024-11-24 @individualcontributor ---
+On the elevator, I understand your perspective <@248225699909861376> but I feel pretty strongly about leaving that as it is. Fast elevator is something I always try to get, mashing or turbo, I know turbo is free but I still feel good when I get it if that makes sense. Removing it would just feel wrong or something so I hope you don't mind.
+
+--- 2024-11-24 @awesomewaves ---
+just thought of an extra few seconds removed 😅
+
+--- 2024-11-24 @.okamikaze ---
+I know when I first patched Hope's original CSR I got to the elevator and without the text boxes it just felt weird, even with me using turbo
+
+--- 2024-11-24 @individualcontributor ---
+I've been trying to figure out how we get this to sub 4 hours without ruining the "feel" in some parts, e.g. gold saucer cart thing, I could try just fade to black when you step in and same on the other side
+
+--- 2024-11-24 @awesomewaves ---
+the notes I've sent you (I know they're brief as I was trying to type them and play) mention some scenes like that where you could maybe do harder cuts
+
+--- 2024-11-24 @cornfed ---
+gold saucer return date scene, you could save a few secs there by trimming it more
+
+--- 2024-11-24 @awesomewaves ---
+Reno/Bottomswell/Dyne all the precursor scenes to those fights could be cut imo
+
+--- 2024-11-24 @individualcontributor ---
+The Gondala part has an option iirc, they walk in Gondala moves, black screen, gondala moves, option, go.  Could see about removing the Gondala animations
+
+--- 2024-11-24 @awesomewaves ---
+so you could remvoe it
+
+--- 2024-11-24 @awesomewaves ---
+i.e. even if someone learns with the CSR, they won't be learning the 'skill check' incorrectly
+
+--- 2024-11-24 @cornfed ---
+also while we are talking about gold saucer, it hasnt been removed i dont think, but barret 2nd option in hotel is faster
+
+--- 2024-11-24 @individualcontributor ---
+It's a slippery slope and sets precedence and I don't want to argue against this kind of stuff later for stuff I feel weird about removing. I can see removing any type of player input coming back to bite me in the ass.
+
+--- 2024-11-24 @cornfed ---
+barret shakes his shoulders, than 1 box 2nd option next
+
+--- 2024-11-24 @cornfed ---
+o man im on a roll, if you have tifa in your party leaving hotel for temple. theres 1 txt box at the door for whatever reason that doesnt proc with cait LUL this could get tifa temple users for no slots and nms
+
+--- 2024-11-24 @cornfed ---
+you could just leave the txt box withe the dialouge and trim everything else around it, idk if its possible just a thought
+
+--- 2024-11-24 @cornfed ---
+ff9 csr has momments like that , dagger has a 2nd option that stayed in when shes talking the queen, that turbo runners wouldnt have known about. and also amarant has one in disc 3 too. sso i get it
+
+--- 2024-11-24 @individualcontributor ---
+This I can definitely take a look at to see if it can be trimmed even further
+
+--- 2024-11-24 @individualcontributor ---
+Is this CSR only? Do I need to fix it?
+
+--- 2024-11-24 @cornfed ---
+well idk if its trimmed is why i mention, its just 1 random txt box haha
+
+--- 2024-11-24 @awesomewaves ---
+`old lady after sleeping in lower junon` is one of my notes from earlier also that probably needs some background.
+
+After you get Shiva from Priscilla, you run down towards the beach again. However, because maybe the time it takes for the conversation to play out is shorter, you bonk into the old lady when you're running down.
+
+I never recall that happening in Any%
+
+--- 2024-11-24 @individualcontributor ---
+Ok cool I can fix that
+
+--- 2024-11-24 @awesomewaves ---
+so you leave the house, you need to go down and around her
+
+--- 2024-11-24 @individualcontributor ---
+Oh entering the house I think I trimmed or sped her up
+
+--- 2024-11-24 @cornfed ---
+the only diff is talking to her while holding x, because cloud runs in the house, vs walking in, ff7 be weird like that , if your holding run , cloud runs during dialougue momments, if not he walks all slow. not sure what we should do about that, but it doesnt seem to relavant
+
+--- 2024-11-24 @individualcontributor ---
+This is what I'm thinking too, speeding up the granny shouldn't affect Cloud running or walking because of X being held or not
+
+--- 2024-11-24 @cornfed ---
+i just wanted to make sure you were aware of it
+
+--- 2024-11-24 @awesomewaves ---
+so from my understanding, it hasn't changed for CSR at all
+
+--- 2024-11-24 @individualcontributor ---
+So I feel like fixing this in places where it's significant won't have any affect to runners, not fixing means it goes unnoticed but is now free time save for all?
+
+--- 2024-11-24 @individualcontributor ---
+Oooh ok sorry yeah I misunderstood, I don't think that would be affected by changes in CSR then, I think.
+
+--- 2024-11-24 @cornfed ---
+yeah i didnt think so, just wanted to bring it up
+
+--- 2024-11-24 @individualcontributor ---
+I need to also investigate the graphic glitches that Corn and Expanse saw on Emu
+
+--- 2024-11-24 @cornfed ---
+oo in kalm, after photoskip, when you fall off the bridge, the txt boxes that follow when the soldier walks up need to stay, mashging there results in a softlock, and its a skill check
+
+--- 2024-11-25 @phek1200 ---
+i estimated this run to be about 6h35m run without CSR, so we can say  v0.6.0 saves about 2h 24m ish
+
+--- 2024-11-25 @individualcontributor ---
+That is wild, GG. So we need to trim ~12 minutes for sub 4 hours, maybe ~15 minutes for sub 4 on PSX?
+
+--- 2024-11-25 @awesomewaves ---
+there's maybe 4 minutes on D3 alone
+
+--- 2024-11-25 @individualcontributor ---
+I think D3 should be super quick if it's just the text boxes at the end and stuff
+
+--- 2024-11-25 @individualcontributor ---
+I suspect it's something to do with graphics settings in Duckstation because I can't reproduce them, specifically making the models look like the PC with smooth edges, no pixels.
+
+--- 2024-11-25 @lemon6559 ---
+I don't think I have any settings to make models look smooth in my duckstation
+
+--- 2024-11-25 @awesomewaves ---
+So maybe worth checking those settings (namely the 1x, 2x, 3x etc) next time you're testing IC
+
+--- 2024-11-25 @individualcontributor ---
+I thought your stream the other day had smooth models? And it had the graphics issue? I'm likely mistaken though.
+
+--- 2024-11-25 @individualcontributor ---
+I'm using the latest Duckstation because of SRC ruleset for Digital, and I don't think it has that Enhancements section. I'll check again in a bit. But I couldn't replicate the settings exactly or configure the latest Duckstation to reproduce the graphics glitches.
+
+--- 2024-11-25 @awesomewaves ---
+Sorry yeah, my version is long outdated. I stopped updating when I hooked up Big Shoes to it ages ago. The same setting should still be available though to increase the internal resolution, just in a different menu.
+
+--- 2024-11-25 @individualcontributor ---
+Ok on the Junon section, the first scene in the locker rooms is exactly the same as original in the CSR, it's the second scene that is different. The Rufus mood mini-game tutorial scene in the locker room is different. In original you have to see the tutorial at least once, whereas in the CSR I've cut out the mandatory first viewing. I'm thinking this is the difference you mentioned <@248225699909861376> ?
+
+--- 2024-11-26 @phek1200 ---
+Not at all. I didn't use any graphic enhancement on duckstation. Could be the 1x 2x 3x setting yeah, but can't confirm...
+
+--- 2024-11-26 @individualcontributor ---
+## 🎮 Release v0.6.1
+
+Disc 1
+- Updates to Barret throwing gil at Cloud in 7th Heaven
+- Sped up the granny in Junon after Bottomswell
+- Put back in some of the Rufus mini-game tutorial in the locker room to provide a queue before the options
+- Trimmed Sample fight a bit more
+
+Disc 2
+- No changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-26 @phek1200 ---
+In disc 2 rocket town, after exiting the escape pod where cid says "so long shinra no.26", can the scene be trimmed? All the way to the part where the team said let's go to visit bugenhagen. That's about 2 min timesave I think 
+
+I'm not sure if this will have any effect on 0fd manip
+
+--- 2024-11-26 @awesomewaves ---
+Is that with all the stuff on the highwind bridge also?
+
+--- 2024-11-26 @phek1200 ---
+In proper run u can actually take a break from when the escape pot detaches from rocket. The dialogue boxes where cid admires the outer spaces does not matter, the cutscene will advance
+
+--- 2024-11-26 @individualcontributor ---
+Highwind bridge was updated. There shouldn't be any rocket or space cutscenes
+
+--- 2024-11-26 @uzuki7777 ---
+has the code been gone over with a fine-toothed comb to know for sure there aren't any junon weapon or midgar skip where you control an invisible character?
+
+--- 2024-11-26 @awesomewaves ---
+Are you wondering if they still function as normal? Because those skips still need to performed in the CSR
+
+--- 2024-11-26 @awesomewaves ---
+or do you want to know if creating the CSR could find more? 😅
+
+--- 2024-11-26 @uzuki7777 ---
+oh wait this a channel about a program that removes cutscenes not a channel about removing cutscenes? <:LUL:1074811553821511800>
+
+--- 2024-11-26 @individualcontributor ---
+Hey <@1202784191473786920> I'm removing cutscenes with Makou Reactor
+
+--- 2024-11-26 @awesomewaves ---
+This is a channel for work/discussion on the Cuscene-remover mod
+
+--- 2024-11-26 @uzuki7777 ---
+aaah a mod for the pc version
+
+--- 2024-11-26 @uzuki7777 ---
+oh so you could burn it onto a disc and play it on console? or does it need the emulator?
+
+--- 2024-11-26 @awesomewaves ---
+Softmodded PS2 or Emulator
+
+--- 2024-11-26 @individualcontributor ---
+2.5 hours cut so far is wild
+
+--- 2024-11-26 @uzuki7777 ---
+how do you decide what cutscenes to remove? can you just remove almost every textbox and fmv? like you select new game and suddenly you're cloud ready to run forward to fight the 2 guards?
+
+--- 2024-11-26 @awesomewaves ---
+Almost every FMV is removed (except for ones like elevators in Junon) or ones related to background RNG progressing
+
+--- 2024-11-26 @awesomewaves ---
+Most text boxes are removed but replaced with one just text box, so you still have to close a text box like you would in a run
+
+--- 2024-11-26 @awesomewaves ---
+animations are trimmed in sections where there's no user input etc
+
+--- 2024-11-26 @awesomewaves ---
+and for <@183261151746850816> the section immediately afterwards, once you spawn on the Highwind bridge is the section I think could be vastly trimmed. 
+
+You could maybe just have the camera pan to red, him running up, mentioning Cosmo Canyon and then go.
+
+--- 2024-11-26 @uzuki7777 ---
+you could run to the oxygen tank and as it explodes suddenly you're on the world map again lol
+
+--- 2024-11-26 @awesomewaves ---
+there's still user input before that though, you have to actually run to the pilot on the highwind etc
+
+--- 2024-11-26 @uzuki7777 ---
+oh yeah it's been a while >< way too long lol oh ok then you teleport to the highwind?
+
+--- 2024-11-26 @individualcontributor ---
+Probably no CSR work tonight, Bake Off is on
+
+--- 2024-11-26 @individualcontributor ---
+I do like Breaking Bad too, although the fly episode was awful and the director should be ashamed of themselves.
+
+--- 2024-11-26 @individualcontributor ---
+Better call Saul is also excellent I need to rewatch these
+
+--- 2024-11-26 @individualcontributor ---
+Ozymandias is the big shootout? I really need to watch BB again
+
+--- 2024-11-26 @individualcontributor ---
+I've trimmed the scene before hojo skip, this seems fine to to me, the queues are Reeves turning and using the phone a second time right? you hold run + right for the skip before then
+
+--- 2024-11-27 @phek1200 ---
+Huh wow this one skipped what I was referring to. My run didnt, that's weird <:baHmm:1074812804747497503>
+
+--- 2024-11-27 @individualcontributor ---
+Did your disc 2 have other CSR edits? Is it possible the patching tool held onto the disc 1 patch and so you ended up patching disc 2 with the disc 1 patch?
+
+It's happened to me a couple times where the patching tool web app does this. I refresh the page after each patch now.
+
+--- 2024-11-27 @individualcontributor ---
+Trimmed the rocket scenes to highwind so that Cloud is already standing up at the top of the bridge and Red runs up immediatly, there is no music in the section originally before the "planet screaming" sounds
+
+--- 2024-11-27 @awesomewaves ---
+awesome, that was certainly a place where the CSR dragged for a moment
+
+--- 2024-11-27 @awesomewaves ---
+is the camera pan a bit abrupt maybe? That's the only feedback I'd have for that
+
+--- 2024-11-27 @awesomewaves ---
+or if the camera started on red and followed him up maybe/
+
+--- 2024-11-27 @individualcontributor ---
+the first text box appears up with Cloud from Red, then camera pan. And that text box I think should stay in, so would look weird I think if the text box was in a different position
+
+--- 2024-11-27 @individualcontributor ---
+The long delay from the rocket to the highwind is just a result of all the fields being loaded, no wait frames to remove. But I think there should be music playing in the rocket at that field, but because I skipped over Cid getting trapped under the steel thing it's just silent for a bit
+
+--- 2024-11-27 @individualcontributor ---
+I could try to put the music back in but it would only be there for like 5 seconds I think which would be more noticable
+
+--- 2024-11-27 @individualcontributor ---
+I'll take a look at the remaining disc 1 suggestions now in here https://docs.google.com/spreadsheets/d/19y6yHtODjS5R-VyvtHUKjAo3FL9Fif56p1REQsUzGWg
+
+Once these disc 1 changes are done I'll do some NMS and then Disc 3
+
+--- 2024-11-27 @awesomewaves ---
+if he stood up, gives it. then received, Aerith and go maybe
+
+--- 2024-11-27 @individualcontributor ---
+Clothes shop trim, now they are running around instead of walking, sped up the movement speed.
+
+--- 2024-11-27 @individualcontributor ---
+So if I remove the text boxes the siren will play for a second and will sound weird
+
+--- 2024-11-27 @individualcontributor ---
+But I have sped up Barret and removed some text boxes, I think it's pretty quick now
+
+--- 2024-11-27 @individualcontributor ---
+I've trimmed off the bits where Cloud runs from one tube to another, so the date scene is just the scenes now. I've sped up Cloud and (insert person on date) so they run here. I'm going to look at the gondola thing to see if I can speed that up too
+
+--- 2024-11-27 @individualcontributor ---
+Pre-Jessie skip update. Cloud closes the door himself
+
+--- 2024-11-27 @individualcontributor ---
+Credit to <@248225699909861376> for these little nuggets, if anyone has any suggestions get them onto this list https://docs.google.com/spreadsheets/d/19y6yHtODjS5R-VyvtHUKjAo3FL9Fif56p1REQsUzGWg
+
+Use this form https://docs.google.com/forms/d/e/1FAIpQLSfcZVrLn6QF7-WJVihUU1IwoTfz8Q3eBKBbDSBJ5ez1Q8nWBA/viewform
+
+--- 2024-11-27 @individualcontributor ---
+## 🎮 Release v0.6.2 (this is a beefy one)
+
+Disc 1
+- Trimmed getting the Diamond Tiara a bit more
+- Trimmed the clothes shop a bit more
+- Trimmed Barret text boxes and animations on the Jenova boat where he is looking in at Rufus and Heidegger
+- Trimmed pre-Jessie skip scene more
+- Trimmed Don Corneo picking a girl a bit more
+
+Disc 2
+- Big shoes screen party split and join slowed down a little to be less weird
+- Scene before Hojo skip trimmed with Reeves on the phone 
+- Trimmed scenes between Rocket town rocket and the Highwind again (the planet screaming bit)
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-27 @awesomewaves ---
+but I've never used a brook adapter for turbo so maybe I'm misunderstanding the issue
+
+--- 2024-11-27 @individualcontributor ---
+I may have skipped the start and left the last text box? Which may also have skipped the animations
+
+--- 2024-11-27 @individualcontributor ---
+I can fix that tomorrow 👍
+
+--- 2024-11-27 @awesomewaves ---
+on kiwami i have turbo push-to-turbo from the end of the soldiers encounter
+
+--- 2024-11-27 @awesomewaves ---
+there's no reason to remove it
+
+--- 2024-11-27 @individualcontributor ---
+I'll put the start of that bit back in and then skip the rest
+
+--- 2024-11-28 @individualcontributor ---
+I might have some time later to work on this, there are no more suggestions in the list https://docs.google.com/forms/d/e/1FAIpQLSfcZVrLn6QF7-WJVihUU1IwoTfz8Q3eBKBbDSBJ5ez1Q8nWBA/viewform so I'll move on to NMS specific changes.
+
+--- 2024-11-28 @awesomewaves ---
+Could I suggest doing D3 next? If that's completed then you could actually have a full finished version 0.7.0 for No-Slots .
+
+--- 2024-11-28 @cornfed ---
+screen after save crystal with up down options should be fully intact for fd reasons
+
+--- 2024-11-28 @awesomewaves ---
+I think the only things removed will be the stuff around/between the final boss fights
+
+--- 2024-11-28 @individualcontributor ---
+I think trimming only the end would be enough?
+
+--- 2024-11-28 @individualcontributor ---
+Cool I'll share as I'm trimming or maybe strim so we can chat about it
+
+--- 2024-11-28 @cornfed ---
+scene that plays in return to junon , in the middle of the road otw to under water reactor. is that trimmed?
+
+--- 2024-11-29 @individualcontributor ---
+## 🎮 Release v0.7.0 🏁 any% no slots route done?
+
+Disc 1
+- no changes
+
+Disc 2
+- no changes
+
+Disc 3
+- Trimmed text boxes before Jenova fight
+- Trimmed after Jenova where Cloud is doing a base jump
+- Trimmed Sephiroth pushing the party with green awesome waves
+- Removed the FMV of Cloud flying down to fight naked Sephiroth
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-11-29 @individualcontributor ---
+<@170713534726930432> that Barret change I'll do in 0.7.1 completely forgot. And there was something in Don's basement too that you mentioned I'll need to get more details on.
+
+--- 2024-11-30 @.rendall ---
+<@183261151746850816>  Weird model not rendering properly , patch 0.7 , duckstation 0.1-6292-g0bc42c38 (dev)
+
+--- 2024-11-30 @.rendall ---
+Texture/model rendering issue as well in the shinra HQ store FMV
+
+--- 2024-11-30 @individualcontributor ---
+I'm unfamiliar with the HQ store FMV I'll have to check it out and remove it.
+
+--- 2024-11-30 @.rendall ---
+I could but not sure I want to unless I can preserve that version. As for the setting it's those Kuma recommended for ff7 emu standard. These graphic issue do not happen with the OG bin files.
+
+--- 2024-11-30 @individualcontributor ---
+Thanks Rendall no worries I think given the rules of SRC are to use the latest Duckstation (I think) and I'm pretty sure these graphical issues don't occur on the latest version, this might be something we can ignore. It's also something I can't effectively debug because I couldn't reproduce on previous attempts and it's not happening on PSX. 
+
+The FMV in the Shinra HQ store I can see about fixing though.
+
+--- 2024-11-30 @uzuki7777 ---
+that looks like Cloud! I think you accidently typed "psychedelic" instead of "disappear" in your code for the field models <:LUL:1074811553821511800>
+
+--- 2024-11-30 @individualcontributor ---
+## 🎮 Release v0.7.1
+
+Disc 1
+- Fixed queue at Barret and Biggs opening the first reactor 1 gate
+- Sped up Aerith in clothes shop before wig
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-01 @individualcontributor ---
+Thanks Corn! If you have any written notes send them in here, I'll be reviewing your VODs for the changes for dlc content. I'm unfamiliar with NMS so need to play through it myself to understand the scenes and dialogue. But it's next on the list now that no slots is "done" (might be tiny changes here and there)
+
+--- 2024-12-01 @cornfed ---
+theres not much in reactor 5, i think the train scene is mostly trimmed already? aeris church is the big one. and a bit in aeris house. i dont think its a time save but 2nd option for aeris in her house is widely joked to be "girlfriend skip" , up to you guys, upstairs aeris house, everything can go except the last txt box before getting control of cloud. as we can do a 1 sec para dodge there called grounded skip, by talking to the item sack and bed together
+
+--- 2024-12-01 @cornfed ---
+reactor 5 notes, train section can be trimmed, car 1 run to tifa right away, 2nd car, 1 box to start timer, this is a skill check this timer start might not be needed rlly. but a thought, as you need hi pot from weird guy, (which he can just give in 1 box , than your menuing to remove ice and maybe back row barret, or if your swag, change menu color , than little dialouge at the end with barret and tifa. in train tunnel, dialouge after jumping off, there is some dialougue at the end of the tunnel, you want option 2 there, not sure how that looks with trim or not, prob can be trimmed a bit. reactor 5 inside reactor scene at bottom when planting bomb, button mini game, 1 box prompt to start game is enough. air buster scene. church, 2nd option after moving right to talk to aeris, after that she can just run up to be named, than it gets a bit weird, you normally look for "sorry i just" from aeris to know to run to reno, but honestly, can just run to him and back. than to barrels, not much here camera pans to first barrel choice might be needed , 2nd barrel is just mash (unless you get short barrel) which idk than, 3rd barrel is 3rd otpion, but its got camera pan to alert the runner. 1 box after barrels on next screen from aeris can go, outside church can be trimmed completely, til g/f skip at aeris house, which is 1 box , than upstairs, grounded skip starts when cloud walks to door,
+
+--- 2024-12-01 @cornfed ---
+than pg skip we need to wait for the vote , so id just leave that
+
+--- 2024-12-01 @cornfed ---
+entering kalm, small scene to start, can be trimmed. run up stairs, 1 box at stairs can go, run down, skip to green dragon, than you get some scene, where cloud can just run up to next scene instead of the scene, next screen is sephiroth telling cloud to visit his family before entering the inn, trim that, run into in, 1 box from sephy, 2nd option, than photo skip happens. can trim til run up to tifa on bridge, fall . when cloud wakes up its a skill check to not mash the first box until the blue soldier gets into place, mashing results in a softlock. so that can just be 1 box, than run through to next screen, small trim inside mines. warp to cloud running into reactor, inside reactor, you can flash the room to remove sephy from blocking you, but this isnot a timesave on psx, pc only as load times. so nothing til you enter the room that houses all the body pods or idk what you call them, cloud runs up, cloud runs to work on a "pod" than runs right to sephy, talks to sephy, than you warp to mansion, run to basement, can trim the txt from the library here, cloud wakes up in bedge, run back downstairs, deeper library txt can be trimmed. run down as sephy walks way, drop the  mic sephy, than proceed to outside, weird hero guy can be trimmed, than run into h ouse, trim everything after til barret 2nd option in the inn at stairs trim txt after that , red fascinating story txt gotta go sadge, run down stairs and get the phs from barret or red, depending on what route your u sing, than leave SMILERS, also somewhere later in an inn txt sequence barret has an option, 1st is timeloss because it prompts you to save. 2nd option is proper. there, but would require a small scene in the inn that i suggested we bypass altogether but obv thats just my thought
+
+--- 2024-12-01 @cornfed ---
+ooo i forgot a sequence, cloud return to reactor after the town burns, cloud runs to tifa, txt trim there, cloud runs to tifa again inside, 1 box can get trimmed, than run into main door up the stairs and trim it all til you get the barret 2nd option
+
+--- 2024-12-01 @cornfed ---
+cosmo notes, enter cosmo, 1 box 2nd option from the gate keeper, than can trim all stairs convo, and store prompts , run up to boogs, trim all that inside boogs, run to cait , than back to boogs for the big scene, which can obv be trimmed. than campfire , tricky one, one box for barret , aeris, red , and tifa. as a perfect candle is a skill check. but this still trims alot of it. now to cave of gi, talking otw to stinger skip can be trimmed, but the triggers for them should remain,  especially the 2nd boog coming out to talk before stinger ., as its part of the setup. post stinger skip, small talk with the crew can be trimmed, than the big scene, which is already trimmed iirc
+
+--- 2024-12-01 @cornfed ---
+after that, campfire can get trimmed, small talk with red and boog before you leave can get trimmed, and thats it
+
+--- 2024-12-01 @cornfed ---
+midgar return, ship dialouge can just skip til 2nd option before the parachute scene, skip the parachute scene, this gets a bit weird cuz of parachute skip, but when cloud deploys his chute, you can hold right run, i think up run too, and it skips a few secs. idk if we just trim the whole fmv. or try to leave that somehow,. but it does allow the runner to have 1-2 secs running at the LAMP to set list. which could make or break a fast lamp.no trim needed at the ladder. as you can just squeeze by cait and get on the ladder. so not doing that should result in getting txt. okay, turks fight. small talk with them leading to fight. easy trim. but cloud needs to be able to run to the proper spot to trigger fight, as we setup  PE on it. and just as important hes in the spot after the fight too . proud clod can be full trimmed once you hit the trigger for him. than hojo remains normal for fd
+
+--- 2024-12-01 @lemon6559 ---
+If I recall correctly there's stuff to trim in Raid on Midgar.
+
+--- 2024-12-02 @phek1200 ---
+late to this. i finally got to try it again, pretty sure i've patched it correctly but it still doesnt cut out this part.
+thinking if Duckstation version has something to do with this....?
+
+--- 2024-12-02 @phek1200 ---
+the rest of the d2 and newly trimmed d3 are working properly
+
+--- 2024-12-02 @individualcontributor ---
+<@385844703091884033> I'm seeing slight differences between my current patched D2 and your D2 .bin you sent me. I'm going to patch a D2 now using the latest patch for D2 and see what the result is. 
+
+Are you re-patching the same D2? or are you using an original .bin when patching? you'll need to use an original .bin every time you want to use a new patch, you are likely using a new .bin each time but just want to confirm.
+
+--- 2024-12-02 @individualcontributor ---
+So I've tried re-patching an already patch .bin and it makes the changes, but if you try to make further changes and save the .bin it crashes Makou Reactor, and from previous testing the .bin won't work correctly. So it seems a .bin can only be patched a single time, which means if you were able to play your D2 .bin then you didn't re-patch it. 
+
+I'm actually not sure what could be the cause of your D2 being different to mine after a patch. Let me know when you get a chance to re-patch an original D2 and I'll check it again if you can upload and send me the link. 
+
+Just to make sure our envs are the same:
+- Patcher app https://www.romhacking.net/patch/
+- D2 patch https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/Final%20Fantasy%20VII%20(Disc%202)%20CSR%20Patch%20v0.7.1.ppf
+
+--- 2024-12-02 @phek1200 ---
+Thanks! definitely in the sub4 region now when i get the d2 rocket scene trimmed. and also faster IGTs 
+We need faster IGT timing for midgar -> ranch and also MK -> rocket town <:SMILERS:1074813154770558976>  
+my MB split is 1:00:58 with 4 encounter yolovator, this can be faster by 1.5~2m i think with better rng + elevator manip
+and MK split is 1:44:18, i think this can be faster by 3~4m with better rng + execution
+
+--- 2024-12-02 @.okamikaze ---
+I generated these yesterday, hope it helps
+
+--- 2024-12-02 @cornfed ---
+<@158301632776503296> hate to  ping you again, but can we add this to the 1 stop shop lol ^
+
+--- 2024-12-02 @individualcontributor ---
+There is also a scene in Reactor 5 of Cloud falling on the floor and a ringing sound that I've trimmed down
+
+--- 2024-12-03 @individualcontributor ---
+Some stuff from just watching back the recording there:
+- train choo choo noise missing, put it back
+- cut to tunnel when Barret jumps out of moving train like a mad lad
+- speed up Barret walking in tunnel
+- try to speed up Cloud falling on floor in Reactor scene
+- Aerith fixing flowers speed it up
+
+--- 2024-12-03 @individualcontributor ---
+Aerith's church trimmed a bit more
+https://youtu.be/JQaSuPUMClw
+
+--- 2024-12-03 @individualcontributor ---
+And as for these:
+- train choo choo noise missing, put it back
+There is no choo choo, it's earlier when the guard starts animating, so nothing to put back
+- cut to tunnel when Barret jumps out of moving train like a mad lad
+There is a ton of stuff happening in Clouds script and I don't want to move it to Barrets in case something breaks, not worth the risk for 1 sec save?
+- speed up Barret walking in tunnel
+Speeding up Barret creates a weird glitch where Tifa just stays there, not sure why
+- try to speed up Cloud falling on floor in Reactor scene
+Can't speed this up because of loading scenes just takes time
+- Aerith fixing flowers speed it up
+Did this one
+
+--- 2024-12-03 @cornfed ---
+1 box after talking to tifa in 1st car of train still there, b and t can prob just run insde cloud after cloud hits the trigger ther, this one might need some. not sure if you were just mashing in 2nd car start, but i saw 2 boxes there ? lmk what you think bout those, def keep the bum guys box tho, hes tech a skil check i guess haha , but talking to hi pot guy , can be just the box that gives you the item. thoughts on that anyone? PROPS ON THE MENU COLOR SWAG once timer ticks and you run down to proc the scene to jump off 1 box there can go, when im mentioning these boxes, im not smart enough about csr to know if they need to stay in certain circumstances or can be trimmed. train tunnels, cloud tifa run into barret and there is a box, prob could cut that to, plenty of time to see them running to b. , end of train tunnel, can trim box where cloud hits trigger before holding left, than after doing left by the vent, 1 box , than the 2nd is the option 2, anything after that can go. you skipped passed button, for that the first txt should stay and the rest after go, and air b has 1 txt box at the beginning that cou ld go. lmk what you think , or if leaving some of those boxes is needed, cuz like i said idk haha,
+
+--- 2024-12-03 @individualcontributor ---
+> not sure if you were just mashing in 2nd car start, but i saw 2 boxes there 
+I was turboing and talked to the guy accidentally
+
+> 1 box after talking to tifa in 1st car of train still there, b and t can prob just run insde cloud after cloud hits the trigger ther, 
+This whole scene I've trimmed alot and that last bit with the sirens and them joining is more of a queue to run down + right for hundo that I would use, but we can revisit this if it's annoying during a run to see if we can avoid breaking queues and stuff
+
+Alot of the other changes are either queues or turbo/mashing checks. I'll leave as is for now so far and we can review each one individually to see if it can be trimmed even more after a few runs. 
+
+> you skipped passed button, for that the first txt should stay and the rest after go, 
+What button did I skip? 😬
+
+--- 2024-12-03 @individualcontributor ---
+---
+From after Air Buster to PG Skip currently
+https://youtu.be/reqdmywTzjM
+
+--- 2024-12-03 @cornfed ---
+church post air b, 1st two txts can go, cloud runs right and the choice box for 2nd option, after this option, can just run up, and get an insta aeris naming, than when you come out of it , you run to reno and back to her. some ppl use the "im sorry" box to know to run to reno, than return to aeris and the scene can play out without txt until  your upstairs in the church, cloud can run to the trigger . the scene can play, and for triggers, cloud does 2 boxes before the 1st set of options, can prob pan til there and skip the soliders and aeris talking
+
+--- 2024-12-03 @individualcontributor ---
+## 🎮 Release v0.7.2
+
+Disc 1
+- 7th Heaven train to Reactor 5 trimmed
+- Reactor 5 tunnels and reactor scene trimmed
+- Airbuster trimmed
+- Aerith's church trimmed
+- Aerith's house trimmed up to Playground Skip
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-03 @individualcontributor ---
+Thanks Corn! yes all this is up for review in a bit I'll get through the full NMS and when NMS folk get a chance to play through it and get a feel for it we'll go back and do some more trimmings.
+
+--- 2024-12-04 @awesomewaves ---
+It's almost at a stable point where they shouldn't be moving too much after that point. The only issue is they're don't suit NMS I guess
+
+--- 2024-12-04 @awesomewaves ---
+<@385844703091884033> hopefully they help you out
+
+--- 2024-12-05 @individualcontributor ---
+<@201151418579550208> do a run, write some notes on what could be trimmed, and send them in here! I'll be doing All Bosses after NMS.
+
+--- 2024-12-05 @awesomewaves ---
+Updated the midgar-choco 1enc script. removed the duplicate IGTs
+
+--- 2024-12-05 @individualcontributor ---
+No order needed I can jump around and make edits, testing afterwards does require that a single run be used, i.e. don't use save states from other runs because RAM values may end up being different between OG and CSR because of skipping stuff.
+
+But anything you can think of that might be a bit boring to mash through or FMVs specifically in All Bosses would be super helpful
+
+--- 2024-12-07 @individualcontributor ---
+Version #1 keeps some of the cutscene before entering the reactor to allow for input buffering (Run + Up + Right) when the reactor field loads. Version #2 just skips from the stairs straight into the reactor. 
+
+I'm curious which do you prefer?
+
+--- 2024-12-08 @individualcontributor ---
+## 🎮 Release v0.7.3
+
+Disc 1
+- First half of Kalm trimmed
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://youtu.be/T0ir8eW9m8M
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-08 @individualcontributor ---
+Things I need to go back and do after reviewing these changes:
+- 1 text box entering Kalm add back in
+- speed up Sephi walking into Nibelheim
+- speed up Cloud and camera guy running up to Sephi
+- test photo skip
+- bonking Sephi in the reactor? speed him up so no bonking
+- speed up scroll to Cloud before looking into Pod
+- can't remove text boxes before being asked to save, code is weird
+
+--- 2024-12-11 @individualcontributor ---
+No more free timesave now Waves, all the trimming is done <:Kappa:1075235124200886273>
+
+--- 2024-12-12 @awesomewaves ---
+So I noticed something today from having done a full run yesterday.
+
+After the Junon escape once you're back on the Highwind Bridge. You talk to Red then run and talk to the pilot. There's some inconsistency with how Cid moves. It's not the same on CSR and the base game.
+
+--- 2024-12-12 @muttski ---
+lmao--what does he do in CSR?
+
+--- 2024-12-12 @muttski ---
+you should hear my thoughts when he talks about N64 games
+
+--- 2024-12-12 @awesomewaves ---
+He's already in position beside the pilot on the Base Game but not in CSR
+
+--- 2024-12-12 @awesomewaves ---
+it's minor, but this is the kind of feedback you want
+
+--- 2024-12-12 @awesomewaves ---
+on CSR right now, you can kind of just go directly to the pilot
+
+--- 2024-12-12 @awesomewaves ---
+I meant to take more notes today on the CSR as I feel there is more trimming that could be done to knock off maybe another minute across the run. Just small things that add up.
+
+The scene where you meet Rufus on the Shinra HQ for example. No purpose to it. The scene where Cait gives the Keystone to the turks helicopter in the Gold Saucer also.
+
+--- 2024-12-12 @awesomewaves ---
+Those 2 scenes alone, maybe 20s or so saved
+
+--- 2024-12-13 @individualcontributor ---
+Nice! thanks Waves, I've been moving house the last week and won't have my stuff set up until the end of next week probably, sorry about the lack of updates. Keep them coming! Could you put these on the list using the feedback form? Or just manually write into the sheet? I tend to check that first then dig around in here.
+
+--- 2024-12-14 @individualcontributor ---
+Anything that feels even remotely weird or strange should be fixed I think so post them in here big or small, or even better use the feedback form https://forms.gle/dW9rMCD9kQ3eBPSM8
+
+--- 2024-12-14 @primitivedeath ---
+someone may want to pin that
+
+--- 2024-12-19 @thebroodles ---
+Some awesome work going into this 🎉 ! I think I already know the answer but does oceanfly happen to brick the csr mod at all?
+
+--- 2024-12-26 @individualcontributor ---
+## 🎮 Release v0.7.4
+
+Disc 1
+- Added a text box back in after blowing up reactor 1 and meeting Aerith
+- (NMS) Fixed bug in Aerith's house for boyfriend skip, choosing option 1 triggers a loop you can't get out of
+- Sped up the restaurant scene in Wall Market
+- Removed meeting Rufus scene after President Shinra found dead
+- Removed scene where Cait gives the Keystone to the turks helicopter in the Gold Saucer
+- (NMS) 1 text box entering Kalm added back in
+
+Disc 2
+- Fixed issue on Highwind after Junon escape where Cid is not in position quick enough after talking to Red
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-26 @individualcontributor ---
+I'll be picking this back up a little more now, made a few changes as suggested in this thread. 
+
+⭐  Use this form to submit change requests to the CSR and be as description as possible, include a link to a clip if possible, If I can find where to make the changes in the code quickly I can get more done in a session so every little bit of information helps! https://forms.gle/dW9rMCD9kQ3eBPSM8
+
+--- 2024-12-26 @individualcontributor ---
+I'm using v0.1-7878 of Duckstation to play and test this CSR https://github.com/stenzek/duckstation/releases/tag/v0.1-7878
+
+There seems to be a few glitches and weird stuff being found by people using older versions of Duckstation. I would suggest using this v7878 version to play the CSR so that if anymore issues are found we are all on the same version of Duckstation and it might be easier for me to reproduce and fix.
+
+--- 2024-12-26 @individualcontributor ---
+For the NMS runners, is Photo Skip allowed? and is it still possible in this CSR? I'm not familiar with the setup.
+
+--- 2024-12-26 @individualcontributor ---
+I should have a patch update for the second half of NMS Kalm later today.
+
+--- 2024-12-26 @awesomewaves ---
+Ah ok, I don't know enough about how that would potentially change the Diner Skip. I don't know anyone who does it on PSX though or how much it's supposed to save. I learned it when I originally learned PC and I've been doing the same movement since. If I trigger the paralysis I go for it still though
+
+--- 2024-12-26 @individualcontributor ---
+I had no idea there was a diner skip, can it still be done given the changes I wonder?
+
+--- 2024-12-26 @awesomewaves ---
+I'll find the Phrayse video I learned it from. I think it might still be okay, even if you do the skip because if I recall most of the time save is distance to the door.
+
+--- 2024-12-26 @awesomewaves ---
+as in, you still save time doing the 'skip' in the current CSR changes
+
+--- 2024-12-26 @individualcontributor ---
+I have accidentally caused an issue where NOT doing Photo skip is faster 😄 I'm reverting to put the photo scene back in so it can be skipped
+
+--- 2024-12-26 @individualcontributor ---
+Ok Photo skip is now possible again
+
+--- 2024-12-26 @individualcontributor ---
+Photo skip (top), talking directly to Sephi (bottom)
+
+--- 2024-12-26 @individualcontributor ---
+## 🎮 Release v0.8.0
+
+Disc 1
+- (NMS) Kalm visit done
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-26 @individualcontributor ---
+I think the CSR changes cut the NMS Kalm visit from ~19m12s to ~8m30s, so almost 8 minutes trimmed ✂️
+
+--- 2024-12-26 @individualcontributor ---
+Oh Waves I made those changes you suggested a while back in the thread too, skip meeting Rufus and Cait throwing the keystone to the choppa
+
+--- 2024-12-26 @individualcontributor ---
+We still need to trim a bit more to get you sub 4 though <:Kappa:1075235124200886273>
+
+--- 2024-12-26 @awesomewaves ---
+I think you'd have to cut out a disc for me to get sub 4 man
+
+--- 2024-12-26 @katombaz ---
+hey ic , ill post some of the issues i had doing nms csr
+
+--- 2024-12-26 @katombaz ---
+This happened stright after mighty guards upon entering the elevator (a soft reset didnt fix it, a hard reset did)
+
+--- 2024-12-27 @individualcontributor ---
+Thanks Kato! Those are some weird glitches. I'm going to download that version of Duckstation later and see if I can reproduce them. 
+
+I did fix the Aerith's house issue in the latest patch, that was a bug I introduced with the CSR changes.
+
+Do you use any specific settings in Duckstation that are not default?
+
+If you want a more stable experience playing the CSR can you try Duckstation version 7878? I'm using that for play testing and haven't seen any glitches at all, using default settings except for the load speed ones.
+
+--- 2024-12-27 @individualcontributor ---
+I've tried to reproduce that big Barret and Cloud on Reno's tower glitch using Duckstation v0.1-7928 using the CSR but I can't. I've shown the settings I used which are mostly default
+
+--- 2024-12-27 @individualcontributor ---
+Also burning the  CSR to disc and playing on console hardware does not have any glitches. 
+
+There is another weird glitch that Phek is seeing with a patched Disc 2, in Rocket Town the escape pod cutscene is still playing even though the CSR skips it. I can't reproduce that one either. This suggests that the issue may be related to Duckstation version + PC specs.
+
+<@934998544971079710> <@385844703091884033> <@266664783502245888> can you share some of your PC specs like OS, RAM installed, Graphics Card, etc? Mine look like this, I'm on Windows 10
+
+--- 2024-12-27 @individualcontributor ---
+<@544242471496974347> mentioned to me that for FF9 CSR two different patches need to be created, for Greatest Hits and Black Label. 
+
+If you guys seeing glitches could share the specific version of FF7 you are using that might also help to find and fix these.
+
+--- 2024-12-27 @individualcontributor ---
+About the "big Barret model after Reno fight" glitch that a couple of runners have seen while playing the CSR, I'm trying to reproduce the glitch using fresh rips of my Greatest Hits and Black Label discs patched with the latest CSR (v0.8.0) on Duckstation v0.1-7878. 
+
+So far Greatest Hits works as expected, no glitching. I'm testing the Black Label rip now.
+
+--- 2024-12-27 @individualcontributor ---
+New rip of Black Label discs patched and it's working as expected. So I still can't reproduce the big model glitch after Reno with either GH or BL discs
+
+--- 2024-12-27 @individualcontributor ---
+Ducktation v0.1-7878 https://github.com/stenzek/duckstation/releases/tag/v0.1-7878
+FF7 CSR patches https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-27 @individualcontributor ---
+Oh nice! did you use Mechapwn to softmod your PS2?
+
+--- 2024-12-27 @katombaz ---
+yeah , i got a spare ps2 ive soft modded
+
+--- 2024-12-27 @individualcontributor ---
+You shouldn't have any issues then, hopefully <:KEKW:1074810897308069948>
+
+--- 2024-12-28 @phek1200 ---
+So yeah even with the 7878 version I still couldn't skip the Disc 2 rocket town scene, seems like PC might be the issue here. I'll post my PC spec here in a while
+
+--- 2024-12-28 @individualcontributor ---
+Thanks Phek, yes please do send me your PC specs and I'll dig around in the Duckstation stuff to see if it behaves differently between our setups.
+
+--- 2024-12-28 @phek1200 ---
+i guess a 1:40:00 or 1:39:00 onwards should be future proof (for no slots) assuming no more major trimming before MK
+
+--- 2024-12-28 @individualcontributor ---
+Ok making some progress on the weird graphics glitches, MuscleBelt has been testing and figured out that it's an NMS specific thing. Not doing Guard skip will cause the issue, meaning I borked something between Guard skip and Wall Market (where routes sync up). This might also highlight some other weird issues on the NMS side of things, and at least rules out PC specs and Duckstation being the root cause. Progress!
+
+--- 2024-12-28 @individualcontributor ---
+🐛 Another bug Kato found in Wall Market dress shop first visit, A gets stuck leaving C's pocket to talk to the Dress shop lady
+
+--- 2024-12-28 @individualcontributor ---
+I fixed the weird model glitchyness after the Reno fight on the tower. Well I think I did, it's fixed on my machine <:KEKW:1074810897308069948>
+
+--- 2024-12-28 @individualcontributor ---
+Setting "Camera Movie" to 0 did the trick. I think this sets the camera depth or something so that "movies" will play in front of the field and models. The issue seemed to be that the movie of the pillar collapsing was playing in front of the field but behind the models, so you end up seeing the models while the movie is playing.
+
+--- 2024-12-28 @individualcontributor ---
+I suspect it was related to the Air Buster fight, but haven't confirmed. When you fight Air Buster in NMS there is a scene afterwards of the bridge exploding and Cloud grabbing onto the edge, before he falls into Aerith's church. The explosion here plays behind the models and I think this is where the camera is being set to 1 (play movies behind models). So when you do Guard Skip this isn't set and the camera movie value is 0 (play movies in front of the models)
+
+--- 2024-12-28 @individualcontributor ---
+I'll be looking into the Rocket town FMV glitch after I fix these, and one other bug where Aerith gets stuck in the Dress shop.
+
+--- 2024-12-28 @individualcontributor ---
+I'm able to reproduce the Aerith getting stuck glitch, you need to be either walking up and turboing to talk to the Dress shop lady, or be running up but talk to her on a specific frame it seems. So when runners are buffering Up + Turbo it might only happen randomly depending on the frame they talk to her on 🤦‍♂️
+
+--- 2024-12-29 @individualcontributor ---
+I've fixed all of the above issues and am working on Cosmo Canyon trims right now, some tricky bits in here that will need testing but so far so good.
+
+--- 2024-12-29 @individualcontributor ---
+CC edits done for CSR, will share a recording soon, first one had no sound 😑
+
+--- 2024-12-29 @individualcontributor ---
+I've trimmed Bugen out completely in this scene because it was too awkward to keep him in and have the animations be correct, e.g. he walks in, says something, then leaves again. This was being interrupted because all the dialogue was cut and so he would just stay standing there. Sorry Boog
+
+--- 2024-12-30 @individualcontributor ---
+## 🎮 Release v0.9.0
+
+Disc 1
+- Fixed model glitches after Reno fight on the tower
+- Fixed bug with Aerith getting stuck in Dress shop
+- Fixed graphics glitch after Mighty Grunts when Cloud leaves elevators
+- (NMS) Cosmo Canyon trimmed ⭐ 
+
+Disc 2
+- Trimmed before J-Death fight
+- Fixed issue with Rocket Town escape pod FMVs and cutscene playing
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2024-12-30 @individualcontributor ---
+Run killer bug reported by Phek where Disc 2 won't load on disc swap, I'm going to look at it later tonight and release a fix hopefully. Hold off burning this new version to disc.
+
+Workaround is to put in original disc 2 to load then swap in CSR disc 2 to continue
+
+--- 2024-12-30 @doumeis ---
+will wait for the fix and try a NMS run🫡
+
+--- 2024-12-30 @individualcontributor ---
+<@246736771067543552> It might be very useful if you could do a run on v0.9.0 with the expectation that Disc 2 might not load and do the workaround if it happens. I'm doing a run myself of no slots now to try and reproduce but it's difficult to rule anything out with a single data point. No worries if you'd rather wait, the workaround shouldn't take any time at all, and you can swap in Disc 2 of the CSR immediately once it loads correctly on the disc swap.
+
+--- 2024-12-31 @doumeis ---
+Sure, I could try a run on 0.9.0 no problem
+
+--- 2024-12-31 @doumeis ---
+maybe I can bring a notebook and sneak a test run during the night <:KEKW:1074810897308069948>
+
+--- 2024-12-31 @individualcontributor ---
+Who needs sleep, testing the CSR is more important for sure <:KEKW:1074810897308069948>
+
+--- 2024-12-31 @individualcontributor ---
+This is interesting, I've only used 7878 for testing and never had any issues. But I don't do full runs to test each change so I'm likely missing these issues that you see when doing a full run. However, I do sometimes get a black screen with music playing usually after battles but only when I'm fast forwarding through stuff when testing. I just reload the save state and not fast forward that bit and it works every time. It seems DS does have some unique issues that are not present on console, which I guess is to be expected.
+
+--- 2024-12-31 @individualcontributor ---
+Stuff like this I'm pretty sure is just Duckstation and not related to CSR changes. It's difficult to know if glitches are CSR or Duckstation so I think the gold standard should be 100% based on PSX console hardware and Duckstation be used as an alternative with the expectation that your run is at risk if you use Duckstation. Very frustrating and I will of course investigate all issues and glitches runners find to determine if it's the CSR or Duckstation, just keep in mind Duckstation is a not very stable it seems.
+
+--- 2025-01-04 @individualcontributor ---
+Update on the latest patch. It's stable for me start to finish, but not for Phek. We've both tested on different Duckstation versions and in each case Phek can reproduce and I can't. So if anyone gets a chance to do a run and verify that v0.9.0 is either stable or broken that would great. The latest changes include Cosmo Canyon trims that are not visited during any%, but in NMS they are. Phek is running any%, but verifying either/both routes would be super useful. 
+
+I don't want to continue making additional changes until I'm certain v0.9.0, the latest version, is stable for Duckstation and PSX.
+
+i.e. 📢  requesting more runners to run any route on the latest patch v0.9.0 using Duckstation or PSX to verify that it is working as expected.
+
+--- 2025-01-05 @individualcontributor ---
+<@934998544971079710> v0.9.0 fails to load on disc 2 swap for PSX, I've just encountered it. + <@385844703091884033> ok so it's not just your emulator or PC setup now. 
+
+I'm going to test a run of disc 1 v0.8.0 into a disc 2 swap of v0.9.0 to figure out which disc is the problem. If anyone else has tried this test already let me know.
+
+--- 2025-01-05 @individualcontributor ---
+## 🎮 Release v0.9.1
+
+Disc 1
+- no changes
+
+Disc 2
+- (Revert) Trimmed before J-Death fight
+- (Revert) Fixed issue with Rocket Town escape pod FMVs and cutscene playing
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-01-05 @individualcontributor ---
+I'll release each of the reverted changes separately, starting with the "Trimmed before J-Death fight" which are very minor.
+
+--- 2025-01-05 @individualcontributor ---
+<@934998544971079710> if I'm correct, you only need to burn a new disc 2 using the latest v0.9.1 patch, your disc 1 and 3 of v0.9.0 are fine.
+
+--- 2025-01-05 @individualcontributor ---
+## 🎮 Release v0.9.2
+
+Disc 1
+- no changes
+
+Disc 2
+- Fixed issue with Rocket Town escape pod FMVs and cutscene playing
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-01-05 @individualcontributor ---
+This release fixes the Rocket Town issue you were having <@385844703091884033> and I've tested it with the disc 1 -> disc 2 swap save from the run I did earlier on PSX, and all is working as expected 🎉 
+
+I'm hoping this release is now stable, i.e. disc 1 to disc 2 swap should work as expected and the Rocket Town FMVs and cutscenes on disc 2 should not play.
+
+Let me know if you find any issues with this latest release.
+
+--- 2025-01-05 @individualcontributor ---
+Also just to highlight, the edits for "Trimmed before J-Death fight" are still reverted, they were very minor so I might do them in a later release again.
+
+--- 2025-01-05 @individualcontributor ---
+So the root cause of this issue, I think, was a corrupt base Disc 2. When I re-patched my "Original Disc 2" and tried to edit it in Makou Reactor I was getting an "Invalid archive error." The edits were very trivial, moving scripts around in the field, and majority of the edits I tried resulted in this error. So I fetched a known working "Original Disc 2" from my server and patched that one. Then opened it up in Makou Reactor and could edit as normal, no "Invalid archive error." when I tried to save.
+
+Duckstation was somehow able to error correct resulting in Phek being able to reproduce the issue but I could not. I don't know what I missed trying to align our setups for testing but I suspect the error correction capability is PC spec related, not confirmed.
+
+--- 2025-01-07 @awesomewaves ---
+Yo <@183261151746850816> I'll be able to give the latest version a run today also. It won't be NMS but it should help hopefully.
+
+--- 2025-01-07 @individualcontributor ---
+Thanks Waves, yes no changes to disc 3. Hope you had a good break and happy new year!
+
+--- 2025-01-08 @individualcontributor ---
+## 🎮 Release v0.9.3
+
+Disc 1
+- Sped up Don Corneo's a bit more
+- Removed old woman walking really slowly in the Junon house after Bottomswell
+- Added back in 1 text box entering Rocket Town for the first time
+
+Disc 2
+- Sped up before Jenova Death fight
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-01-08 @individualcontributor ---
+Some minor changes in this one but wanted to push it out before starting on the Midgar Raid stuff for NMS
+
+--- 2025-01-08 @individualcontributor ---
+## 🎮 Release v0.10.0
+
+Disc 1
+- no changes
+
+Disc 2
+- (NMS) Midgar Raid trimmed
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-01-08 @individualcontributor ---
+Midgar Raid trimmed alot, the FMV of the crew jumping off the Highwind and the parachuting down has to stay in there because there is movement during the video that plays, I can't remove it unfortunately.
+
+--- 2025-01-08 @individualcontributor ---
+Nice glad to hear there were no issues! v0.10.0 is the latest with mostly NMS stuff but there are some other minor trims for no slots.
+
+I've nothing explicitly planned for the next release so I'm open to suggestions, waiting for NMS feedback before continuing there.
+
+--- 2025-01-08 @awesomewaves ---
+3 things off the top of my head though,
+* Maybe remove some of the text outside the Honey Bee Inn again. When it was removed it felt odd, but since then other text has similarly been removed so it's actually probably ok to cut down the text there.
+* The door in Shinra HQ when you follow Hojo up from the meeting doesn't make a noise. I think I mentioned that when you were in stream before, but I recalled it today.
+* After Red Dragon I think the text before you interact with the black materia can be reduced. The easier queue is Aerith shakes her head -> 2 text boxes -> "Leave it"
+
+--- 2025-01-08 @individualcontributor ---
+I was thinking about the Honey bee inn today too, I'll make a few changes and see how it feels.
+
+Yes the door needs fixing good shout.
+
+I left in all the black materia stuff because it's kind of a meme in the run, but it can be trimmed.
+
+--- 2025-01-10 @phek1200 ---
+Thanks to IC + everyone's contribution, presenting to you the first sub4 No Slots on CSR (emulator)
+CSR v0.10.0 all good ✅ 
+this run had 2 mins lost on Palmer for no poison stick <:Sadge:1074826312767778950> and 1min on Aqualung recovery
+skipped Omniswag for the sake of sub 4, we'll do it again on the next pb
+
+--- 2025-01-10 @phek1200 ---
+The long awaited RT cutscene to be removed <:KEKW:1074810897308069948>
+
+--- 2025-01-10 @katombaz ---
+<@183261151746850816> just ran nms to the end, only bug was a music bug after jumping out the the highwind into return to midgar the music keeps playing which in turn dosnt play the correct music or battle music it gets to turks and the music stops till hojo
+
+--- 2025-01-11 @individualcontributor ---
+Nice thanks Kato! I'll look into those issues ASAP, they are likely caused by me skipping over some volume settings in the code.
+
+--- 2025-01-11 @individualcontributor ---
+#todo test the CSR on RetroArch
+
+--- 2025-01-15 @jayrod316 ---
+I may be a version or two behind on my practice pc I think all the reactor 5 has been trimmed but the church dialogue and aeriths house are still in
+
+--- 2025-01-15 @awesomewaves ---
+The latest version had trimmed all the way up through Raid on Midgar. Along with all the Any% stuff trimmed, it should be pretty much complete as far as I know
+
+--- 2025-01-15 @awesomewaves ---
+Aeriths House isn't going to be trimmed, as it's for elevator manip
+
+--- 2025-01-15 @awesomewaves ---
+You can skim the changelog here: https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/CHANGELOG.md
+
+--- 2025-01-15 @jayrod316 ---
+Ok I looked through it, my version must be old haha I’ll fix it tonight
+
+--- 2025-01-15 @individualcontributor ---
+If you have any suggestions after you play through let me know in this channel, big or small. I'm trying to catch all the skill checks and anything that feels "odd" with muscle memory and stuff.
+
+--- 2025-01-16 @phek1200 ---
+there is also a minor 1 upon entering Nibel. this is exactly like the grandma situation at corel where she moved slow
+u would have longer textboxes without CSR when entering nibel, by the time you can move you should be able to run through the yellow line here because the black caped person would've moved to the right
+
+however the challenge is, this is assuming you dont pick up the elixir in the item shop (i didnt for this screenshot below)
+if you do pick up the elixir, the position will reset and you will need run around the right side instead
+so, not sure how to fix this.. 🤔
+
+--- 2025-01-16 @individualcontributor ---
+Thanks Jayrod I'll take a look at this. I'm trying to remember if I made any trims on that field, I have encountered that "glitch" before on the original where I had to wiggle Cloud to trigger him to jump out the hole in the roof.
+
+--- 2025-01-16 @individualcontributor ---
+Thanks Phek, I can likely reposition the cape guy to compensate for the text box trims. The elixir strat is tricky though as you said. Maybe I can check what the previous field Id was and conditionally change the cape guys position.
+
+--- 2025-01-16 @jayrod316 ---
+Also the Turks conversation in the mines could be shortened if possible.
+
+--- 2025-01-16 @individualcontributor ---
+Nice thank you! Yeah the Turks convo is something I missed I'll do that no problem. 
+
+And that stairs at the reactor is a tricky one, I'll review it and see if I can maybe put some of the scene prior to it back in.
+
+--- 2025-01-16 @jayrod316 ---
+It’s wierd how you get accustomed to certain loads and things haha, if it can’t be fixed it’s not a big deal.
+
+--- 2025-01-17 @cornfed ---
+i got the new csr downloaded, hopefully i dont have emu issues
+
+--- 2025-01-17 @individualcontributor ---
+https://discord.com/channels/936291902133796955/944289296066691182/1329642356743340184
+
+CSR is working on RetroArch 🥳 thanks Jayrod!
+
+--- 2025-01-17 @jayrod316 ---
+Could just be a duckstation thing too
+
+--- 2025-01-20 @musclebelt ---
+I changed TMD's .asl to start on hitting New Game, and changed it to work with emu-help-v2 (I think).  Everything else is TMD's work still.
+Only tested the auto start and GS split (on Duckstation), but with emu-help-v2 I believe it should work with other emulators too, and someone else (Elliot?) edited in a pause for the CSR break.
+
+--- 2025-01-23 @individualcontributor ---
+I should have some time to work on this CSR tomorrow, if you want something prioritized put it in the sheet pinned to this channel using the form. I'll be scrolling through here anyway to collect the recent stuff.
+
+--- 2025-01-26 @phek1200 ---
+I thought about this the other day, why not just de-CSR this part 🤔 it isn't really a long cutscene tbh, less than 10s for sure. Solves the problem without a doubt
+
+--- 2025-01-28 @doumeis ---
+I messed up doing a savestate with a wrong stinger skip setup <:KEKW:1074810897308069948> will try again tomorrow
+
+--- 2025-01-28 @doumeis ---
+but I have a few things to suggest cutting out already
+
+--- 2025-01-30 @jayrod316 ---
+<@183261151746850816> I’ve finished making NMS save states on retroarch. 
+
+1) I had the same music glitch as kato described after the parachute scene in midgar. 
+
+2) Turks cutscene in Mythril mines needs trimming. 
+
+3) The return to midgar can be trimmed down more, specifically the dialogue before Turks and Proud Clod. 
+
+Other than that, I can’t think of anything major.
+
+--- 2025-01-30 @individualcontributor ---
+Thanks Jayrod I appreciate it. I'm going to work on it today and will hopefully have a new release later.
+
+--- 2025-01-30 @individualcontributor ---
+Ah ok I have it now, I'm able to reproduce if I play through the lifestream, so I borked some audio settings in there that I need to fix at the end of the lifestream section
+
+--- 2025-01-30 @individualcontributor ---
+Phek I've increased the cloaked guys speed only slightly and left in the trims, so now you can run along the optimal path, and if getting the elixir strat you still bonk him, I think this might work for both strats?
+
+--- 2025-01-30 @awesomewaves ---
+I'll add them to the sheet
+
+--- 2025-01-30 @individualcontributor ---
+## 🎮 Release v0.11.0
+
+Disc 1
+- Fixed door when first seeing Hojo in Shinra HQ
+- Trimmed text boxes at Honey Bee Inn
+- Trimmed "Black Materia!" section after Red Dragon
+- Fixed issue in Nibel where the black cloak dude is in the way
+- (NMS) Trimmed Turks in Mythril Mines
+
+Disc 2
+- Trimmed Guards in UWR elevator
+- Fixed audio issues in UWR after Cloud's dream section
+- (NMS) Fixed audio issues during Raid on Midgar
+- (NMS) Trimmed Raid on Midgar Turks
+- (NMS) Trimmed Raid on Midgar Proud Clod
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-01-30 @awesomewaves ---
+there's another not very important thing I noticed, so I'm not even going to add it to the main list
+
+--- 2025-01-30 @awesomewaves ---
+but in CSR it just stops, then starts again.
+
+--- 2025-01-30 @individualcontributor ---
+Thank you! hopefully I haven't borked anything in this new release 🤞
+
+--- 2025-01-30 @individualcontributor ---
+I've marked NMS as being "Done" now, would that be correct to say? 
+
+There are going to be more changes but I think the bulk of those categories are done now. 
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR?tab=readme-ov-file#final-fantasy-7-psx-cutscenes-removed
+
+--- 2025-01-31 @individualcontributor ---
+Waves I've tried to cut the pre-Reno fight scene but it's too much messing around here post-fight to put all the characters and stuff in the right places. I've already made a ton of changes here and it's a tricky bit of the code to work in so I'm going to leave it as it is right now.
+
+--- 2025-01-31 @awesomewaves ---
+Another one that sprung to mind today was the scene with Pricilla in Lower Junon, after you sleep. There's a lot of long animations there I bet you could just speed up and trim some time.
+
+--- 2025-01-31 @awesomewaves ---
+She runs, stops and turns (could be removed) and speed the running up
+
+--- 2025-01-31 @individualcontributor ---
+## Release v0.11.1 🚀 
+
+Disc 1
+- Added back in 1 text box when entering Wall Market
+- Removed Cloud bending down at vending machine in the Wall Market Inn
+- Trimmed Don's basement again
+- Sped up Don's choice
+- Trimmed Don's bedroom a bit more
+- Fixed bug in Costa Del Sol first visit where you could run back into the boat scene and re-trigger the crew getting off the boat 
+- Fixed the music in Costa to not stop and start on boat scene exit
+- (NMS) Aerith's church scene before beams in attic put back in for timing
+- Trimmed Pricilla scene in Junon getting Shiva materia
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-01-31 @individualcontributor ---
+I think I've made all the changes requested in this thread and in the [Google sheet](https://docs.google.com/spreadsheets/d/19y6yHtODjS5R-VyvtHUKjAo3FL9Fif56p1REQsUzGWg/edit?gid=1468535119#gid=1468535119). If you have any other suggestions for changes use [this form](https://docs.google.com/forms/d/e/1FAIpQLSfcZVrLn6QF7-WJVihUU1IwoTfz8Q3eBKBbDSBJ5ez1Q8nWBA/viewform) to submit them to the sheet, please and thanks ❤️
+
+--- 2025-01-31 @individualcontributor ---
+I think we're close to getting you sub 4 now Waves with all these new trims <:Kappa:1075235124200886273>
+
+--- 2025-01-31 @individualcontributor ---
+<@538796370975260763> I've fixed the Aerith's church attic beams thing you mentioned by putting the previous scene back in, is this what you meant? and also any chance you have a Duckstation save state for the Flashback reactor stuff? ideally a save state that is at least 1 scene away from the reactor. I don't have any NMS ones
+
+--- 2025-02-01 @doumeis ---
+and I have some things I could see being cut off
+
+--- 2025-02-01 @doumeis ---
+some of them are very nitpicky so its not like we NEED to change, its just a preference <:emptysGuy:742324145785929789>
+
+--- 2025-02-01 @doumeis ---
+1 - Reno stepping on church flowers - can remove, no inputs there
+2 - Wall Market pink guy - either 4 boxes after the option or none, I feel like 2 creates bad muscle memory
+3 - Cut Shinra stairs down, Hope's CSR did this, it was like the elixir floor and a couple more only
+4 - Inn break textboxes during Kalm - keep it 4 boxes before the option, muscle memory again
+5 - Turks in mines - Cloud ends in wrong position? I might be wrong, gonna double check
+6 - Granny house Under Junon - can cut the dream dialogue and Tifa's dialogue to maybe 1 box only
+7 - Boat - cut Tifa Red and Aerith dialogue (Aerith option doesnt matter) - not sure about this one, maybe keeping the whole thing is good for muscle memory, but I feel like it could be cut
+8 - After Jbirth - either all 7 boxes or only 1, might be only me but I always count the 7 textboxes to choose the option, so having only 3~4 feels weird
+9 - Remove the second boat animation, the "parking"
+10 - Costa del sol landing dialogue can be cut as well (option doesn't matter AFAIK)
+11 - Dyne's dialogue, could jump straight to the fight when you transition the screen
+12 - Jlife - Cloud swinging his sword straight to the fight, no need to have Aerith falling there imo
+14 - Slap Fight - no category wants to beat this, so theres no input, could remove it
+15 - Submarine friends - either all 11 textboxes or only 1, again for the muscle memory thing, feels weird
+16 - Rocket - can remove Cid asking you to go to the materia
+17 - Revisit cutscenes on CC - this is a funny one, if you go to CC the first time, theres no overview cutscene neither the sign telling you to sleep there, but when you revisit it after UWR those cutscenes play
+
+--- 2025-02-01 @doumeis ---
+all the rest of the mod feels amazing, the cuts are great and intuitive, really well done
+
+--- 2025-02-01 @individualcontributor ---
+Thanks Doumeis this is great! I'll go through each of them and provide some additional context where I can, e.g. the boat parking in Costa if you cut that scene Cloud ends up on a Chocobo on the world map and you're stuck in place. 
+
+I really appreciate the thorough list 🫡 
+
+Would love to hear what others think about these too so I'll hold off until we discuss them a bit.
+
+--- 2025-02-01 @awesomewaves ---
+2- Wall Market Pink Guy.  
+That's the guy outside the Honey Bee Inn I guess? That was cut, then returned and now cut again. I'm not sure what would make sense there as a happy medium
+
+--- 2025-02-01 @awesomewaves ---
+if there's a text box you guys look for when mashing, maybe that box could be left in after the option?
+
+--- 2025-02-01 @awesomewaves ---
+3- Shinra Stairs
+pretty sure this won't change as the CSR plans to keep the difference from Elevator manip to Stairs intact. Same reason Aeriths House scene still plays
+
+--- 2025-02-01 @awesomewaves ---
+6- Grannys House in Lower Junon
+That is cut? you walk in, 1 text box. Sleep. 
+Wake up maybe 1 text box with Tifa and run out. Perhaps there's an NMS specific issue there?
+
+--- 2025-02-01 @awesomewaves ---
+7- Boat
+I'd be in favor of leaving it as is. As far as I know the 2nd option with Tifa is faster also? maybe someone can confirm that
+
+--- 2025-02-01 @awesomewaves ---
+11+12 Dyne and J-Life, I agree. Both scenes before the fights could be trimmed imo
+
+--- 2025-02-01 @awesomewaves ---
+14- Slap Fight. 
+I feel it's still a consideration to stop mashing and then start mashing as soon as you lose?
+
+--- 2025-02-01 @awesomewaves ---
+15- Submarine Friends
+This one was my suggestion. I've always looked for the soldier swinging his sword. Then it's 2 text boxes and 2nd option.
+
+--- 2025-02-01 @awesomewaves ---
+IC can explain further, just that I've been here while he was doing some of those changes so hopefully that helps his workload in explaining also
+
+--- 2025-02-01 @awesomewaves ---
+I skipped point 10. After the Boat arrives in Costa del Sol.
+ I was told 2nd option was faster here also? Maybe it's not true. If it's not true, then it should be cut I guess. It is a lot of text right now
+
+--- 2025-02-01 @jayrod316 ---
+Making stairs shorter will not work if people ever want to compete with CSR. The stairs being longer than elevator manip needs to be preserved if it’s going to eventually be used for competition.
+
+--- 2025-02-01 @awesomewaves ---
+I think you replied to a different bit than I meant. When you climb up the ladder on the boat, it's 4 then 2nd option. Which is the same in CSR
+
+--- 2025-02-01 @doumeis ---
+cloud should move to confront tseng before the cutscene ends, and in the CSR he doesn't
+
+--- 2025-02-01 @doumeis ---
+also I have an idea of what mightve caused the full dream in under junon
+
+--- 2025-02-01 @doumeis ---
+that could be the issue, I'll test it again later
+
+--- 2025-02-02 @individualcontributor ---
+Ok so the edits I made for the CSR were to speed up the scrolling and have Cloud run into that scene. I've revert this back to normal. So now the scrolling is slower and Cloud walks, right before you need to do that up + right onto the stairs. 
+
+Hopefully this fixes the muscle memory, but if not I can put the previous scene back in too.
+
+--- 2025-02-02 @individualcontributor ---
+1 - Reno stepping on church flowers - can remove, no inputs there
+    Todo
+
+2 - Wall Market pink guy - either 4 boxes after the option or none, I feel like 2 creates bad muscle memory
+    Todo (cut to 4)
+
+3 - Cut Shinra stairs down, Hope's CSR did this, it was like the elixir floor and a couple more only
+    Waves, Jayrod replied
+
+4 - Inn break textboxes during Kalm - keep it 4 boxes before the option, muscle memory again
+    Todo
+
+5 - Turks in mines - Cloud ends in wrong position? I might be wrong, gonna double check
+    Fixed in 0.11.2
+
+6 - Granny house Under Junon - can cut the dream dialogue and Tifa's dialogue to maybe 1 box only
+    Todo (this is likely a bug)
+
+7 - Boat - cut Tifa Red and Aerith dialogue (Aerith option doesnt matter)
+    Keeping all options but will check the dialogue again, todo
+
+8 - After Jbirth - either all 7 boxes or only 1, might be only me but I always count the 7 textboxes to choose the option, so having only 3~4 feels weird
+    Todo
+
+9 - Remove the second boat animation, the "parking"
+    Cloud becomes a Chocobo if this is cut, so leaving as is
+
+10 - Costa del sol landing dialogue
+    Todo 
+
+11 - Dyne's dialogue, could jump straight to the fight when you transition the screen
+    Todo
+
+12 - Jlife - Cloud swinging his sword straight to the fight, no need to have Aerith falling there imo
+    Todo
+
+14 - Slap Fight - no category wants to beat this, so theres no input, could remove it
+    Leaving as is because player input required
+
+15 - Submarine friends - either all 11 textboxes or only 1, again for the muscle memory thing, feels weird
+    Todo
+
+16 - Rocket - can remove Cid asking you to go to the materia
+    Todo
+
+17 - Revisit cutscenes on CC
+    Todo (oops this is likely a bug)
+
+Once I make these changes we can test and review again 🚀
+
+--- 2025-02-02 @individualcontributor ---
+# Latest leaderboards
+
+### CSR No Slots
+🏆 (WR) Phek w/ 3:59:46
+
+### CSR No Major Skips
+🏆 (WR) ?? 
+
+Get your VODs [submitted](https://docs.google.com/forms/d/e/1FAIpQLSd0GWzCxWHQn-881TKnZPckH87L7CHteM8Fep2hWeGSgHkurQ/viewform)!
+
+--- 2025-02-02 @individualcontributor ---
+## Release v0.11.2 🚀 
+
+Disc 1
+- (NMS) Reverted changes to Reactor scene during Kalm flashback
+- (NMS) Fixed Mythril Mines Turks scene
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-02-02 @awesomewaves ---
+so i guess it's just finding the cues that people use and trimming to that. Most are really good right now, but I agree that after J-Life and outside the boat when you arrive at Costa are a little iffy right now
+
+--- 2025-02-02 @awesomewaves ---
+so from what I can tell outside the boat in Costa, red appears and has 1 text box. Then there's 2 more and then option. Perhaps that could be where the text starts in that scene?
+
+--- 2025-02-02 @individualcontributor ---
+Cool let's figure out the cues then for those sections you've mentioned and I'll put them on the todo list
+
+--- 2025-02-02 @individualcontributor ---
+## Release v0.11.3 🚀 
+
+Disc 1
+- (NMS) Reno stepping on flowers in Aerith's church cut
+- Wall Market outside Honey Bee Inn reverted to original (4 text boxes after talking to pink guy)
+- (NMS) Kalm flashback break, 4 text boxes before save option
+- Junon Granny's house, fixed bug if you leave and go back in to rest triggers the dream dialogue
+- After JBirth fight, put 7 text boxes in before option choice
+- Reverted boat docking in Costa scene to original (under review)
+- Dyne fight trimmed even more
+- Trimmed before JLife fight
+- Reverted Submarine friends to include 11 text boxes before the menu (under review)
+
+Disc 2
+- Trimmed the Rocket cockpit scene after Rude where Cid mentions the huge materia
+- Trimmed Cosmo Canyon revisit after UWR
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-02-02 @individualcontributor ---
+I think I covered everything up-to-date in the new release. The bits that need us to figure out the cues I've reverted to original, so only the Costa boat and Submarine friends parts. But everything is still up for review even if we've cut, reverted, cut, reverted. So don't be afraid to voice your suggestions related to muscle memory or timing or anything at all, it's all great feedback.
+
+--- 2025-02-02 @individualcontributor ---
+https://tenor.com/view/that70s-show-eric-foreman-light-bulb-idea-gif-4680281
+
+--- 2025-02-02 @individualcontributor ---
+I've also had an idea, I'd like to add an easter egg for each of the contributors. 
+
+I'm thinking renaming a character in the game for each contributor and have them say something when you talk to them. I'd even go as far as animating them a bit if I can. So have a think and let me know if you want something like that added in. 
+
+Not something in the critical path of a run, but some other NPCs would be fine.
+
+--- 2025-02-02 @individualcontributor ---
+Just had a run end because I was 20 gil short for Chocobo Lure, not sure how that happened <:YEP:1074813056045039688>  but I did notice that I can trim just before the Motorcycle game. When Aerith leaves the elevator you run left and down to trigger Tifa running down the stairs, hitting that trigger can just skip to the bike game starting.
+
+--- 2025-02-02 @.okamikaze ---
+Hmm, maybe. But afaik some routes involve making use of the menu before the mini-game starts. Last I saw I think even Any% does that now?
+
+--- 2025-02-02 @individualcontributor ---
+Ah I just mean skip to that menu at the start of the mini game. When you hit the trigger it takes a while for Tifa to run down the stairs and for the crew to run up into the  building.
+
+--- 2025-02-02 @individualcontributor ---
+I was buying 49 but reduced to 46 now, I need to verify my Gil route because my notes might be based on doing elevator
+
+--- 2025-02-02 @awesomewaves ---
+Not sure of your route but I was originally buying 19+43 I think, but 46 should be fine
+
+--- 2025-02-03 @phek1200 ---
+I've had enjoyable days off from Lunar New Year holidays, and now I'm back.
+Great job everyone for the contribution and new version releases. Think I'll get some NMS csr runs going these few days <:SMILERS:1074813154770558976>
+
+--- 2025-02-03 @doumeis ---
+I think I'll want to burn the discs at some point
+
+--- 2025-02-03 @awesomewaves ---
+but for PSX you've really got no consistent option other than letting the entire time expire naturally and that amount, can be timed and removed consistently
+
+--- 2025-02-03 @doumeis ---
+would be like waiting on a cutscene
+
+--- 2025-02-03 @individualcontributor ---
+## Release v0.11.4
+
+Disc 1
+- Trimmed post Jessie skip Cloud and Barret on train scene
+- Junon Granny's speed reverted back to original to avoid bonking her with latest trims
+- Trimmed before Bike minigame in Shinra HQ
+- Trimmed old man carrying Priscilla to house after Bottomswell
+
+Disc 2
+- Trimmed Cait Sith on Highwind after Cloud's dream section
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-02-04 @individualcontributor ---
+#todo trim before JLife before hopping on pillars in the water, animations mostly
+
+--- 2025-02-04 @awesomewaves ---
+when you enter Corneos for the first time there's a noise that happens that takes about 1s before the guy leaves. Could be trimmed
+
+--- 2025-02-10 @individualcontributor ---
+It's been pretty quiet here, I'm hoping it's because the CSR is perfect and working as expected.
+
+If anyone has any suggestions they want ASAP shout in here.
+
+--- 2025-02-12 @phek1200 ---
+ok, surely next one is gonna be NMS CSR <:Kappa:1075235124200886273>
+
+--- 2025-02-12 @phek1200 ---
+1. i agree that the part post j-death has too little textboxes as indication of when to move, maybe it'd be good to put some back in
+2. the part after exiting COTA, getting into Highwind and trigger Diamond weapon appearance, can that be cut down further? or are those necessary to advance List for 0FD manip ?
+
+--- 2025-02-12 @phek1200 ---
+i recorded down important details of all my CSR runs so far, and for this one:
+Failed elevator manip - 3 encounters
+No. of tries - Bottomswell 1st, MK 1st, Palmer 1st, Deathclaw 1st, Beachplug 2nd, Spiderweb steal 2nd
+Great fights - MK, Palmer, RD, DG, 3 Icicles, CA, DW, Hojo (Good)
+Average Schizo, J-Death
+RA steal
+Got Egged twice - 1 cancels out the RA timesaves
+Above average WM traversal (except Midgar -> Ranch and MK -> Rocket Town with IGT manip)
+
+I'd say this is a solid sub 640 run in console, but probably just around 6:39 or high 6:38-ish
+
+--- 2025-02-12 @individualcontributor ---
+So sub 4 CSR is an easy sub 7 non-CSR. This makes me giddy.
+
+--- 2025-02-14 @jayrod316 ---
+When updating to a newer version of csr can you just patch the previous image or do you have to start with the original every time?
+
+--- 2025-02-15 @snake1982 ---
+got a nice 7:46 nms run thanks to CSR appreciate all the hardwork
+
+--- 2025-02-16 @jayrod316 ---
+Idk if this has anything to do with csr but this happened lol
+
+--- 2025-02-16 @awesomewaves ---
+Maybe it was introduced then?
+
+--- 2025-02-16 @individualcontributor ---
+😬 Sorry about that, I'll check it out today. I did a full run through the other day and didn't get this but is very likely a CSR thing with all the stuff that is skipped in RT
+
+--- 2025-02-19 @individualcontributor ---
+I can't reproduce the issue you encountered on Duckstation <@538796370975260763> I'll try testing RetroArch now
+
+--- 2025-02-19 @jayrod316 ---
+I’m going to update to the latest version and burn my discs at 1x and hope for the best
+
+--- 2025-02-19 @individualcontributor ---
+The latest is 0.11.4 and there were no changes to RT stuff so it's likely on 0.11.3 and the latest 0.11.4. Hopefully I can reproduce this and push a fix before you burn discs.
+
+--- 2025-02-19 @individualcontributor ---
+I'm wondering if I'm moving on one of the skipped scenes and initiating a trigger or dialogue with something.
+
+--- 2025-02-19 @individualcontributor ---
+Some scenes are not entirely skipped, they are initialised and then I immediately jump to another field/scene. So it could be that during the initialisation of one of these scenes something is getting borked.
+
+--- 2025-02-19 @jayrod316 ---
+Oh wow making progress! Have you tried any tests on the base game? It could be something that can always happen
+
+--- 2025-02-19 @individualcontributor ---
+Ok so it's not existing, holding Left and letting the whole escape pod scene play out all the way up to the highwind and I can move Cloud
+
+--- 2025-02-19 @individualcontributor ---
+So 100% a CSR thing, something I skipped over unintentionally like Cloud being "auto moved" a tiny bit out of the way of some field object boundary or something. 
+
+I did notice a little tiny walk in the original there so I'll see if I skipped over that in the CSR
+
+--- 2025-02-19 @individualcontributor ---
+I think that was it, I've found a tiny walk the Cloud normally does that I skipped over and it seems to have fixed the issue putting it back in
+
+--- 2025-02-19 @individualcontributor ---
+Wait no it wasn't that specifically, but moving him a bit does fix it. I'll keep looking
+
+--- 2025-02-19 @individualcontributor ---
+Ok I've tested a bunch of inputs, Left, Left + Down, Up + Left, with and without Turbo I think it's fixed. Pushing a new patch now
+
+--- 2025-02-19 @individualcontributor ---
+>i agree that the part post j-death has too little textboxes as indication of when to move, maybe it'd be good to put some back in
+
+I'll fix this while I'm at it in the same patch
+
+--- 2025-02-19 @individualcontributor ---
+## Release v0.11.5 🚀 
+
+Disc 1
+- no changes
+
+Disc 2
+- Added text boxes back in after JDeath fight where Cloud picks up the Black Materia
+- Fixed Cloud getting stuck on Highwind cockpit after Rocket Town escape pod scene skips
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-02-19 @jayrod316 ---
+Thanks so much for fixing for researching and fixing that!
+
+--- 2025-02-20 @katombaz ---
+Any chance someone could link me CSR psx chocobo igts and midgar igts if possible?
+
+--- 2025-02-21 @individualcontributor ---
+Not the CSR igts Kato but we should add them to the One Stop Shop IGT sheet https://docs.google.com/spreadsheets/d/1vUXxWHt6pCq0O7CLcTWyXLu2Wwe8CoqNrx_w4ilgp8E/edit?usp=sharing
+
+--- 2025-02-21 @awesomewaves ---
+Sorry for the 5 text files, but here's my CSR IGTs
+
+--- 2025-02-21 @cornfed ---
+i dont have access, jayrod made all the ones for nms last night. maybe get em al together and send em to dash all at once
+
+--- 2025-02-21 @awesomewaves ---
+so you could make 45 mins - 2.5 hours Midgar to Choco manip sheet, that would work for everything and then people can pick the ranges they want from that text sheet
+
+--- 2025-02-22 @zheal ---
+and in case you wonder about the next column too, that's the number of frames for the encounter. 1:02:46 and 03:03 in this picture are very slow ones for example
+
+--- 2025-02-23 @phek1200 ---
+Personally I will also look at the list and remove any unoptimal IGTs.
+Example an IGT that is 3 secs later have lesser frames and/or better formation (PE, therefore no need to set ATB wait) and/or no mc special menu required
+
+--- 2025-02-27 @cornfed ---
+everything looking pretty good, theres prob a few more boxes, scenes , and things generally being sped up to go with the csr, but its really coming along nicely.
+
+--- 2025-02-27 @cornfed ---
+so after tiny bronco crashes, it could just be clouds final txt box
+
+--- 2025-02-27 @individualcontributor ---
+Ok cool I'll add the scene back in with a few text boxes. It's the one where they're standing on it in the water?
+
+--- 2025-02-27 @cornfed ---
+ive had crashes with it on csr a few times, but today i had nothing, i was taking save states every so often to prevent not being able to finish
+
+--- 2025-02-27 @cornfed ---
+i considered it, but all the save state work ive done would all have to be redone
+
+--- 2025-02-27 @individualcontributor ---
+The IGT timer diff would be interesting to know for RetroArch too. I wonder could I set up the timer and just let it run for a few hours to check
+
+--- 2025-02-27 @cornfed ---
+maybe after i move ill look into mechaponing a ps2 , but until than this is fine
+
+--- 2025-02-27 @cornfed ---
+could just let the timer run yeah
+
+--- 2025-02-27 @individualcontributor ---
+I could use your settings for it and see how far off the variance gets
+
+--- 2025-02-27 @cornfed ---
+yeah for sure, emulator is in a really sadge place rn with normal speed, so ithink a bit of testing and maybe talk to the mods about the 2x thing
+
+--- 2025-02-27 @cornfed ---
+should be tuned for ps2 already
+
+--- 2025-02-27 @individualcontributor ---
+So the x2 configuration plus maybe a few additional trims accumulated to -12 minutes time save!?
+
+--- 2025-02-27 @individualcontributor ---
+That time, given the igt is very close to PSX, means NMS on CSR is roughly ~50 minutes longer?
+
+--- 2025-02-27 @cornfed ---
+i could push a sub 40 out of this run prob fairly easily if i grinded it and was more prepared with igts, i used jayrods sheet tonight which is rock solid, im just not used to it lmao
+
+--- 2025-02-27 @individualcontributor ---
+Did you record the run and call out the trims? If so I can watch it and make a list
+
+--- 2025-02-27 @cornfed ---
+i did , ill highlight it tomorrow, i called out what i saw, and just general pointing things out that could even maybe be talked about
+
+--- 2025-02-27 @cornfed ---
+you kill dg, and get prompted with the menu to feed aeris planet protector, and as soon as you close it, you wake up in gongaga, that would cater to all categories and trime a nice bit
+
+--- 2025-02-27 @cornfed ---
+in that case we could leave a gap for the hundo player to press triangle. and still skip the phsyco cloud and  young cloud stuffs
+
+--- 2025-02-27 @awesomewaves ---
+It's closer to where I want to be for sure, but with the silly stuff that happened like the Pincer outside Temple. There's plenty scope for improvement too 🤞
+
+--- 2025-02-27 @individualcontributor ---
+I actually removed the whole scene with kid Cloud but we put it back in because that's also a skill check, you have to move the kid out of the way to avoid talking to Cloud while he's running and slowing down that part
+
+--- 2025-02-27 @.okamikaze ---
+I used to remove Fire Ring and Fury Ring at this point when my menu route was a lot worse, so I like having it in for no slots too
+
+--- 2025-02-28 @.okamikaze ---
+This isn't CSR specific, merely noting that my first time witnessing this was on CSR
+
+--- 2025-02-28 @cornfed ---
+okami and i were just discussing too, we should probably fix the karen and kevin skill check after vent in shinra
+
+--- 2025-02-28 @awesomewaves ---
+Yeah that's been on my radar to mention also. They need to be sped up a little bit because they rarely get in your way in CSR
+
+--- 2025-02-28 @individualcontributor ---
+Can someone put that on the todo list using the form pinned to the channel?
+
+--- 2025-02-28 @awesomewaves ---
+so just giving them a little more walking speed should adjust it
+
+--- 2025-02-28 @individualcontributor ---
+The thing is if I increase their speed it stays increased so they just run all the time which is worse. This way the guy at least, runs to an initial spot and then as soon as you get control again it lines up with non-CSR
+
+--- 2025-02-28 @individualcontributor ---
+So by making the guy run and then walk it's almost aligned with a no-CSR scenario
+
+--- 2025-02-28 @individualcontributor ---
+so no need to speed her up and change position.
+
+--- 2025-02-28 @individualcontributor ---
+I need to check some other vods
+
+--- 2025-02-28 @awesomewaves ---
+Yeah I felt it was random. Maybe just reduce how long they wait and it might all work as intended
+
+--- 2025-02-28 @individualcontributor ---
+This means there is a chance the guy could just not do anything for the whole scene
+
+--- 2025-02-28 @individualcontributor ---
+Given a choice between 1) this skill check being included or 2) not included based on RNG, I think for CSR it makes sense to ensure it is always there, i.e. force the skill check.
+
+I can't remove it so this needs to be fixed, but the only reasonable solution I can think of is the have the guy be in the way all the time, the RNG then determines where along the hallway he ends up being.
+
+--- 2025-02-28 @individualcontributor ---
+If the majority of the time runners buffer Up + Right at the point then I think the guy should in the way. 
+
+And the 82% chance of 30 wait frames being added every loop of that code means it's more likely the encounter the guy in the hallway, requiring the skill check (hold Up + Right to avoid the bonk)
+
+--- 2025-02-28 @individualcontributor ---
+So what I've done so far is only speed up the guys movement speed to compensate for the camera panning being removed. So essentially is closer to non-CSR now.
+
+--- 2025-02-28 @individualcontributor ---
+Ok I'll speed them both up for a section of the movement and then revert to their original speeds to compensate for the trims and we'll test it for a while. If it's still weird or annoying in a few weeks we can take another look.
+
+--- 2025-03-01 @individualcontributor ---
+Waves on 
+
+"Can remove text outside Honey Bee Inn again. i think we're all in agreement now finally."
+
+What did everyone agree on? it's currently 4 text boxes after the menu, should it be cut to 1?
+
+--- 2025-03-01 @awesomewaves ---
+Yeah last I heard from Jayrod, it was fine to cut again to one.
+
+--- 2025-03-01 @individualcontributor ---
+I'm not sure what is was before, I'll trim to 1 anyway, it's an easy change if it needs move text boxes.
+
+--- 2025-03-01 @individualcontributor ---
+On this one
+
+"Before Climbing the Plate, if you turbo and run up on Non-CSR you interact with the NPC. However it doesnt happen in CSR. Perhaps there's some small movement missing?"
+
+I can interact with the NPC in both CSR and non-CSR by holding Run+Up+Turbo
+
+--- 2025-03-01 @awesomewaves ---
+no I meant before going up the 'Shiny Wire of Hope'
+
+--- 2025-03-01 @awesomewaves ---
+on CSR I can hold turbo and run up, never talks to the kid
+
+--- 2025-03-01 @awesomewaves ---
+because I'm used to CSR now ha
+
+--- 2025-03-01 @individualcontributor ---
+ok lemme check that, although I don't remember trimming that
+
+--- 2025-03-01 @individualcontributor ---
+ok so you can't talk to the kid at all in CSR lol
+
+--- 2025-03-01 @individualcontributor ---
+the music was borked here too, when you talk to the kid first the music dies off and a new track plays on non-CSR, in CSR the music doesn't change at all
+
+--- 2025-03-01 @individualcontributor ---
+## Release v0.11.6 <:POGGIES:1074812242836603032> 
+
+Disc 1
+- Sped up NPCs in Shinra HQ after vent scene where Hojo walks up the stairs to compensate for trims
+- Trim between Don's bedroom and Aps fight more to remove long wait
+- Trimmed Don's basement a bit more
+- Cut text boxes outside Honey Bee Inn pink guy to 1 after menu
+- Fixed talking to the kid at the "Shiny Wire of Hope" (climbing up to Shinra HQ) and the music transition
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-03-01 @cornfed ---
+i think dash tested the kevin karen thing a time ago, and if you dont bonk along the way to hojo you should always get around them , even if they are in the way you can weezle passed them with good inputs. but yeha is a diffecult sequence to reproduce
+
+--- 2025-03-01 @cornfed ---
+ill prob do a csr tonight since i ran psx last night, 3rd 42 in 2 weeks KEK
+
+--- 2025-03-01 @cornfed ---
+https://www.twitch.tv/zheal/clip/FaintAmazingStinkbugThisIsSparta-8dipyO9tWcV-RYnu this what it look like when karen in the way and you have good movement
+
+--- 2025-03-01 @individualcontributor ---
+corn can you send me the vod of your last run with the nms trim suggestions you were calling out?
+
+--- 2025-03-01 @individualcontributor ---
+or a list of recent trim suggestions that you can remember from the last run?
+
+--- 2025-03-01 @awesomewaves ---
+If someone knows any more info on the HQ NPCs it would be nice to have an accurate csr to full run equivalent
+
+--- 2025-03-01 @awesomewaves ---
+it's almost there though for sure, very ittle left to trim
+
+--- 2025-03-01 @individualcontributor ---
+we just need to figure out a good solution given the RNG, Kevin has that 82% chance of 30 wait frames repeated, and Karen's RNG is more complex, it looks like she can do a bunch of stuff but either way they both have different RNG scenarios, and multiple at that, making it difficult to replicate. 
+
+The current solution let's the RNG happen but then speeds up their initial movement to compensate for the trims, but there is not enough movement to fully compensate. Kevin and Karen both end up behind where they would normally be as a result.
+
+--- 2025-03-01 @individualcontributor ---
+I also found that Kevin's movement algorithm starts when you hit the trigger on the corner, but the code says otherwise. I need to investigate this a bit more to figure out when exactly they both get initialized and start their movement cycles.
+
+--- 2025-03-01 @individualcontributor ---
+The difficulty to importance ratio is way off on this one 😄 but still I'd like to get it aligned with a non-CSR too
+
+--- 2025-03-01 @awesomewaves ---
+I'm maybe a few small versions back at this point
+
+--- 2025-03-02 @cornfed ---
+after jessie skip when you get off the train, and barret tells everyone to meet up at the hideout, he runs left, it would prob feel smoother to move the txt to that last box or 2 after he runs left
+
+--- 2025-03-02 @individualcontributor ---
+Yeah that train scene is off a bit I'll take another look at it.
+
+I'm thinking about just reverting Hojo HQ scene back to original. The Kevin and Karen RNG is too variable to replicate correctly if any time is trimmed there.
+
+--- 2025-03-02 @phek1200 ---
+I plan to run all bosses CSR so will have more inputs on what to trim. From my limited experience here is what I remember
+- Gongaga before Turks fight
+- Wutai story section + pagoda
+- Gelnika before Turks fight
+- Old man at Kalm
+
+--- 2025-03-02 @phek1200 ---
+Ran on RetroSwan, 2x (Quad speed) and Infinite/Instantaneous setting
+A decent run could've been around 4:26-27 ish
+
+--- 2025-03-02 @individualcontributor ---
+GG Phek! An All Bosses run would be cool and thank you for offering the feedback. 
+
+How did that NMS run go? Anything obvious to trim or is it fine?
+
+--- 2025-03-02 @phek1200 ---
+i liked it, nothing major to trim imo. i am ok with everything
+
+--- 2025-03-02 @cornfed ---
+was just talking to zheal about the csr , and he was saying how we should maybe try to separate the idea of having it be as transparent with no slots and nms hundo etc. as a practice mod, and try to make csr its own identity. i.e. not having the scene at aeriths house, and trimming almost everything to 1 box  or no boxes. eliminating scenes like the disc 2 cota scene. and i tend to agree with im on that. doing that would give csr its own identity. and doing that would make it closer to its own category. we could have 2 versions, the version that is as close as we can get to rta full runs, and the csr. its own identity? lets discuss?
+
+--- 2025-03-02 @cornfed ---
+than everyone who wants to gear up for full runs rocks the practice mod, and if your just wanting pure csr. thats there too. we would have to reroute many things. ram values. elevator vs stair strats. but in the end it would def be unique
+
+--- 2025-03-02 @cornfed ---
+if i were to be playing csr id def rock a version that wouldnt wreck my cosnole muscle memory
+
+--- 2025-03-02 @awesomewaves ---
+I think all that would be removed extra is maybe 4 minutes? Aeriths and Final Descent related scenes.
+
+--- 2025-03-02 @individualcontributor ---
+This has come up before and honestly I like the idea of a run that hardcore trims a bunch of stuff resulting in an entirely new experience that needs to be routed with new manips etc. I'd actually love to see all the work that would go into it by runners.
+
+But it's not something I'm interested in working on personally. The CSR we're making at the moment will be as per the original definition, essentially to keep all skill checks and avoid causing any muscle memory issues for categories if you go back to a non-CSR run. The tech, skips, manips, etc. is what I love about the game and the only way I can run it is to make it shorter, and thus this CSR was born.
+
+I think what we're creating right now does provide it's own experience, it's more intense with less breaks and down time. This intensity adds a significant challenge to runs compared to non-CSR runs. Maybe leaning into this intensity a bit more would be desirable? trimming some of the Elevator Manip cutscene so you have to do your calculations quicker, or reducing the time you have to prep for a manip like the Tiny Bronco one? 
+
+There may be some things we can fundamentally change in the CSR to create more of a new experience without damaging it's integrity and staying true to the original definition. If you've got any ideas fire them into this channel so we can chat about them.
+
+--- 2025-03-02 @chuky500 ---
+Just let people do what they want. There's no need to rush any change again.
+
+--- 2025-03-03 @rjthedestroyer ---
+Just wanted to say I finally tried out the CSR and it seems really nice! I've just been using it for a casual thing I've been doing where I randomize the steproute at the start of the game and can't flee from any encounters and this makes that much more enjoyable lol, so thanks!
+
+--- 2025-03-03 @dylwingo ---
+On a serious note, I do want to try CSR someday. It seems like a good way to do practice runs for No Slots, but that will be whenever I get back on the No Slots grind and idk when that will be lmfao
+
+--- 2025-03-05 @individualcontributor ---
+So what's still an issue in the CSR? 
+
+- Bronco manip, not enough time?
+- ?
+
+--- 2025-03-05 @jayrod316 ---
+The Bronco manip I had to adjust by one second because of the extra load time but that was an easy fix
+
+--- 2025-03-05 @jayrod316 ---
+-Can we shorten the scene before sample even more?
+-possible to shorten aerith church scene more? Maybe speed up the movements of the soldiers shooting at aerith, etc.
+
+--- 2025-03-05 @individualcontributor ---
+Nice I'll add the Bronco scene back in and take a look at Sample and Aerith's church again
+
+--- 2025-03-15 @individualcontributor ---
+## <:POGGIES:1074812242836603032> Release v0.11.7 
+
+Disc 1
+- (NMS) Increased movement speed of guards and Aerith in Aerith's Church
+- Removed text boxes and movement coming out of the elevator before Sample Fight
+- Added Tiny Bronco scene after it crashes for Bronco manip
+
+Disc 2
+- no changes
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-03-15 @individualcontributor ---
+Sorry this one took so long, some small changes to disc 1. Can't remember if there were any other high priority fixes?
+
+--- 2025-03-15 @individualcontributor ---
+I tried to shorten the before and after scenes of the Sample fight but I would need to figure out all of the character positions right before the options and move everyone into position as the scene loads in. This is a big pain in the ass and would take more time than it's worth at this point, I think it might save 10 secs but might take me several hours to get right. We can revisit this later if we can't find any better trims. I did however trim the scene where you come out of the elevator, instead of the party walking to rail and saying "Aerith" it just loads the next scene when you hit the trigger, so maybe 3 seconds trimmed, and it was trivial. 
+
+The Aerith church scene is also a tricky one, but I did remove a couple text boxes and increased everyone's movement speed. The waiting for Aerith to get into position each time you have to choose an option is still the same. I'm afraid if I make these shorter then it would throw people off. This is also something we can revisit later and I think would be trivial with a bit of testing.
+
+--- 2025-03-15 @doumeis ---
+I'll do a run with it tomorrow or monday to test it out, let you know if I find anything broken
+
+--- 2025-03-22 @phek1200 ---
+Lots of execution error, but I'll just blame Hojo for causing the loss of sub 30
+
+--- 2025-03-22 @individualcontributor ---
+Any issues with the CSR?
+
+--- 2025-03-22 @phek1200 ---
+I didn't change, still going at it no slots style on NMS run. Purely for gambling capsule skip and fast kill on the 3rd form
+In this run, I got capsule skip but 2nd form crit and killed Tifa -> lost vaccine -> got slowed by 3rd form (after re big guard) -> watched the entire hell combo twice 
+Guess I am using Mystile in the future <:KEKW:1074810897308069948>
+
+--- 2025-03-28 @Deleted User ---
+Hey guys, is there a preferred emulator for running CSR on? I'm using the latest version of Duck at 2x Read Speed but it crashed in Corel during my first attempt at a run. Also had a few issues during practice states.
+
+--- 2025-03-28 @Deleted User ---
+Thank you! I have Swan set-up now (I think). I just need to do this ^
+
+--- 2025-03-29 @individualcontributor ---
+## Release v0.11.8 <:SMILERS:1074813154770558976> 
+
+Disc 1
+- Fixed train scene before 7th Heaven, last text box is on Barret
+- Reverted some animation trims for Barret after reactor explodes
+- Fixed Aerith movement when talking to the Don Corneo guard for the first time
+- Trimmed 7th Heaven Cloud and Tifa dialogue a bit more
+
+Disc 2
+- After Big shoes added a fade to black and back again when the Highwind scene is meant to play. (previously just regained control of Cloud and no fade in/out)
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-04-05 @individualcontributor ---
+## Release v0.11.9 <:SMILERS:1074813154770558976> 
+
+Disc 1
+- no changes
+
+Disc 2
+- Schizo fight starts immediately
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-04-19 @individualcontributor ---
+My first ever CSR run finished in a single session. I swapped to emulator after failing the Rufus mood mini-game and used save states throughout to redo fights. But I'm very happy with this and the fact I was finally able to finish a full run in one sitting KEKW.
+
+--- 2025-04-20 @phek1200 ---
+Huge GGs, IC. Only a matter of time before you know you're chasing the sub4 then bopping me, I believe you can do it
+
+Please let me know if you have any questions at all or need help on this, happy to help you improve
+
+--- 2025-04-20 @.okamikaze ---
+My first ever run finished on steps (that I didn't have to cheat and skip Water Ring to accomplish)
+
+--- 2025-05-12 @individualcontributor ---
+Phek is this equivalent to sub 6:40:xx non-CSR no slots?
+
+--- 2025-05-12 @individualcontributor ---
+Also Leaderboards are here, submit your runs please 🙏
+
+https://docs.google.com/spreadsheets/d/19y6yHtODjS5R-VyvtHUKjAo3FL9Fif56p1REQsUzGWg
+
+--- 2025-05-13 @phek1200 ---
+Waves asked the same question before, i relook into the execution + RNG in the run and made educated guess that this run is probably equivalent of about 6:39, 6:40 in PSX disc
+
+--- 2025-05-23 @individualcontributor ---
+## Release v0.12.0 <:SMILERS:1074813154770558976> 
+
+Disc 1
+- Before elevator fights, sped up Tifa running to Aerith
+- Trimmed the dolphin before jumping up to Junon
+- Trimmed after Force Stealer mini-game
+- Added some text boxes back into scene before Red Dragon
+- Trimmed the scene between the Break scene and end of disc 1, now Jenova Life is end of the disc 1 (similar to Hojo)
+
+Disc 2
+- Added text boxes back in for Scarlet getting gased in Escape from Junon section
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-05-23 @individualcontributor ---
+End of disc 1 is now Jenova fight -> Break 5 mins -> Disc swap. Previously there was a tiny scene where Cloud tells the crew "Let's go!", I've removed this and just go straight to "Save game?" out of the break.
+
+--- 2025-05-23 @individualcontributor ---
+And there were a few places where I've been mashing or holding turbo for no reason because text boxes were trimmed, I've put a few text boxes back in because if running non-CSR you would be turbo'n or mashing in these parts.
+
+--- 2025-05-23 @individualcontributor ---
+Lastly just some more QoL trims like removing the dolphin jumping up part before talking to Priscilla
+
+--- 2025-06-01 @lemon6559 ---
+Just FYI, several of the recordings on the CSR leaderboard pointing to twitch.tv are now dead links 😦
+
+--- 2025-06-03 @hopeproductions ---
+I've been running the past week or so and noticed a few things.
+To cut:
+Theres only mashing for this entire clip so idk why its even in:
+<https://www.twitch.tv/hopedrg/clip/RoughDirtyLadiesCoolCat-gGVzFcvaZtjoZs6w>
+Could cut a couple:
+<https://www.twitch.tv/hopedrg/clip/ExuberantGlutenFreeSlothTebowing-5A0RzlQlzaT8G3Sy>
+Could cut the airplane, also the reeve seen is very long when you can/should jsut be holding right x the entire time. It's a cutscene left in:
+<https://www.twitch.tv/hopedrg/clip/GiftedSassyJalapenoKappaRoss-d6Nc6eZzaWdJUk0v>
+Oh also there is a conversation in the stairs that is just mashing I think should be removed. I understand there is a concern about it affecting what option is fastest. Personally I think a CSR should remove cutscenes and whatever is fastest is fastest. That's just my opinion and why I'm stating this. Optionally there is a small section at the top of the stairs too that could be cut.
+To add:
+Oh also think when wedge falls need to add a text box back. If you overpass there I think it's extra text boxes?
+Also there is some general places where it feels inconsistent what to expect
+Like 1 to 3 text boxes on no choice dialogues. My suggestions is some standard of probably 1 text box after a choice, 1 textbox on just mashing npcs.
+Also there is ultra minor thing, last time for dons quest you talk to door guard of Don's mansion. It's missing a cloud run which time is based on where you talked to him.
+And in leaving midgar aerith takes a step at walking speed that you optimize for but is cut out in the csr.
+
+--- 2025-06-15 @individualcontributor ---
+## Release v0.13.0 <:POGGIES:1074812242836603032> 
+
+Disc 1
+- Trimmed after Jenova-Life fight
+- Moved break scene to start of disc 2
+
+Disc 2
+- Break scene added to start of this disc
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2025-06-15 @individualcontributor ---
+I've moved the break scene to the start of disc 2 instead of at the end of the Jenova-Life fight. This let's you fight Jenova and disc 2 swap, then chill for 5 minutes. Previously you had to fight Jenova, then chill, and when you were coming back had to deal with disc swap. I feel this way gives you more of a relaxed start into Disc 2.
+
+Caution: I haven't tested this on disc yet but will ASAP, I mention this because there have been issues previously related to the break scene and the disc swap failing. So it's working fine on emulator but maybe wait until I test on disc to burn new discs.
+
+--- 2025-07-30 @zheal ---
+<@183261151746850816> how's the CSR coming along? I'd like to dive into it soon. Can you do an All Bosses run with it?
+
+--- 2025-07-30 @individualcontributor ---
+I haven't checked the All Bosses route yet Zheal but you can do a run without issues. Mainly because nobody has run All Bosses on the CSR yet so I don't have a VOD to review for trims. 
+
+
+I'd recommend using RetroArch or console hardware to avoid Duckstation's glitches and other issues.
+
+--- 2025-07-30 @individualcontributor ---
+I hope you enjoy it. If you have any suggestions on trims, or reverting stuff, call them out and I'll catch them on the VOD.
+
+--- 2025-08-18 @.okamikaze ---
+When's CB skip and resetting for right arm? <:dummiPepega:1065334259008680016>
+
+--- 2025-11-06 @doumeis ---
+CSR is a blessing for nms practice
+
+--- 2026-04-11 @individualcontributor ---
+**Release v0.13.2** <:POGGIES:1074812242836603032> 
+
+Disc 1
+- Fixed the Don Corneo Doorman interaction, now Cloud and Aerith will walk to the spot before the next scene loads
+- Updated "Daddy Pedro Pascal" to "Mango Mussolini" because the original text is a slur meant to be offensive, and Pedro is nice.
+
+Disc 2
+- No changes
+
+Disc 3
+- No changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR
+
+--- 2026-04-11 @individualcontributor ---
+I'm going to try pick this up again, need to review some VODs for changes
+
+--- 2026-04-29 @.theretrojay ---
+can you do the return to midgar skip with CSR?
+
+--- 2026-04-29 @blake.is.blue ---
+Should be able to iirc
+
+--- 2026-04-29 @.okamikaze ---
+Yes you can. In addition to that, upon being successful Cloud's character model is added back in and the track plays out as intended
+
+--- 2026-07-06 @individualcontributor ---
+When did our CSR get ported to PC!?!? This is awesome
+
+--- 2026-07-06 @petfriendamy ---
+Me who made a PC CSR back in 2020
+
+--- 2026-07-06 @petfriendamy ---
+Anyway, nice to have a proper CSR on PC
+
+--- 2026-07-07 @individualcontributor ---
+I was so happy to see the break scene and timer working! And is the music still fixed post Hojo fight?
+
+--- 2026-07-07 @primitivedeath ---
+Is there a link to said pc csr?
+
+--- 2026-07-07 @themattdavis ---
+current version - work in progress - may still be bugs
+
+--- 2026-07-07 @themattdavis ---
+Differences in PC CSR:
+
+No FMV after naming Barret
+No Elmyra cutscene since waterfall isn't needed for pc ele manip
+Rotating blade after placing battery is sped up - since list doesn't matter there for pc ele manip
+No boat world map cutscene after Jenova Birth
+Added the 3/4 extra text boxes before Black materia selection (just personal preference)
+Diamond Weapon world map walk is super speedy - I used this by mav https://github.com/maciej-trebacz/ff7-landscaper (not sure if there is a psx alternative)
+
+--- 2026-07-07 @individualcontributor ---
+Nice, some of these are impossible, I think, on PSX, e.g. if you remove the boat scene to Costa del Sol after Jenova fight, when Cloud leaves there he is a Chocobo and stuck on the world map lol
+
+--- 2026-07-07 @themattdavis ---
+I had a similar thing when I first removed it - when I left Costa del sol Cloud's model was replaced by the ancient forest  🤣 
+I moved this bit below the map jump and the problem went away, maybe it would work on psx too?
+
+--- 2026-07-09 @kleinestennis ---
+Played PC CSR and made it to Mt. Corel without any issues. Fantastic work <@521419888959684659>! Thank you so much! Will continue playing and testing soon.
+
+--- 2026-07-16 @kleinestennis ---
+Finished first time the CSR on PC. Really great work for playing and practicing No Slots on PC! Thanks <@521419888959684659>! 
+2 minor things... I could not grab the Elixir in the Gold Saucer Hotel after Cait had stolen the black materia.
+And is there a reason that the FMV of Sister Ray guarded by helicopters in Midgar is shown?
+
+--- 2026-07-17 @cornfed ---
+making a csr catered around no slots is fine, with the scenes intact for fd and stuff, but what if someone wants to run all bosses csr, or nms csr? i ask this not to argue but to just bring to the table that other categories would just lose time there being forced to watch a cutscene that doesnt do them any good. just little things like that we should probably discuss. ff7 isnt like ff8, or ff9, wher eu can just make a csr and call it good,  csr could be used for nms, all bosses,  slots and hundo.  so we should really talk about how making it as close to no slots having an impact on the other categories
+
+--- 2026-07-17 @cornfed ---
+i just dont want alot of effort to go into it, and we have this talk at the end about it. when its trying to become a category
+
+--- 2026-07-17 @cornfed ---
+is there a way to enable or disable the scene ? depending ont he category you want to run?
+
+--- 2026-07-17 @hopeproductions ---
+I think you technically can but it would be a bit convoluted. Probably easier to make different versions of the csr if you went that route. Where as if you just make it agnostic to route/type and just remove all the cutscenes instead of leaving stuff in to preserve things about a route you dont have to worry about that and make a new experience that just is what it is and works for all routes.
+
+--- 2026-07-17 @petfriendamy ---
+In my CSR, I made an NPC you had to talk to to skip certain things (namely the Kalm flashback) specifically because I wanted to be able to do speedrun tricks
+
+--- 2026-07-17 @petfriendamy ---
+Could theoretically do something similar?
+
+--- 2026-07-17 @petfriendamy ---
+(Maybe just a menu so it doesn't mess with steps)
+
+--- 2026-07-17 @themattdavis ---
+On pc this would be super easy since you could have different flevel files for each category and choose which category you were planning to run when installing the csr mod.
+For psx you could potentially add a variable after an nms specific section, then set it up to skip the cutscene if the variable matches a specific value, I think that would work.
+
+--- 2026-07-17 @cornfed ---
+yeah , lets definately keep our minds open for ideas on this issue, i would really love to find something that works for all partys and categories
+
+--- 2026-07-21 @individualcontributor ---
+<@521419888959684659> can I link to your installer for this CSR on PC? 
+
+And just curious, do you apply a patch on top of this to make the PC specific changes? or how does work for the installer?
+
+--- 2026-07-21 @individualcontributor ---
+I would also like to test using this https://github.com/maciej-trebacz/ff7-landscaper to modify the PSX map for the Diamond weapon speed up thing, or use it to at least figure out the diff that would be needed to make the change on disc binary using something like Ghidra. Although burning this afterwards and running on hardware is very unlikely to work.
+
+--- 2026-07-21 @individualcontributor ---
+📢 Release v0.14.0 <:POGGIES:1074812242836603032> 
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/csr/CHANGELOG.md#v0140
+
+Disc 1
+- Removed boat trip to Costa Del Sol after Jenova fight
+- (also removes scene after naming Barret at the start of the game)
+
+Disc 2
+- No changes
+
+Disc 3
+- no changes
+
+--- 2026-07-21 @individualcontributor ---
+With 5 days to go there is a clear winner, "Why not both?"....great. Now I have to create two more versions of this lol. 
+
+My plan is to consider all the feedback that I've received while creating the original CSR, e.g. removing every cutscene even if it impacts existing skips. I'm also going to make another version that goes ham 🐷  on all the nonsense (well what I consider nonsense) to make the game even shorter and moar hard 🍆 while speedrunning. 
+
+The CSR versions can now be described as follows:
+- **CSR (original)** Keeps all "skill checks" in the game and can also be described as "Same as the original only shorter"
+- **CSR+** Same as CSR but removes all cutscenes regardless of impact on existing strats and skips
+- **CSR++** Same as CSR+ with alot of "nonsense" removed like mashing through a dialogue only to select the first option, meeting Aerith for the first time after blowing up Reactor 1, Jessie getting her leg stuck and having to help her to progress, etc. Boring filler stuff basically.  
+
+I will admit CSR++ will be heavily opinionated and there will be some plot holes but I aim to still provide a nice experience for speedrunning.
+
+I won't be modifying anything beyond cutscenes, text boxes, and boring shite in any of these new versions because at the heart of each I still want some of the skills and muscle memory to transfer between them. So no boss fight manipulations, no new items or tweaks to stats, just pure surgical shite removal to create a nice action packed experience. 
+
+Also this might take a while so shout at me if you want something prioritised. ❤️
+
+--- 2026-07-21 @individualcontributor ---
+Honestly I had not considered the cutscenes that remained and their irrelevance to some of the other categories, this is an interesting point thanks Cornfed. For context on this, I did want the CSR to be playable across all categories and I think we succeeded in that, at least compared to the original it is shorter across all categories with no time losses as a result of the CSR itself. I believe you are referring to those scenes that could be removed without impacting to the strats and skips of a specific category, but this would however impact other categories then which I consider a net negative. 
+
+CSR+ seems like it would be better suited for those categories like NMS that rely less on the skips so the removal of all cutscenes would be beneficial, which I'm super excited for honestly. 
+
+Hopefully the new CSR+ and CSR++ versions will cater for a larger quantity of the community and will make each category a little more challenging overall. 
+
+I'm excited but also, why the f*ck am I giving myself so much work to do... 😭 
+
+Please post your suggestions and feedback in this channel, I will try to track and implement it all (within reason).
+
+--- 2026-07-21 @individualcontributor ---
+I like this idea and have experimented with providing additional options for NPCs like the random sick guy in the tube before Aerith's house. Talk to him to have predictable elevator manips (this didn't work out because I'm too dumb to figure out how to lock RNG using Makou Reactor that works on console hardware). 
+
+But providing some kind of mechanism to toggle certain things on/off I think would be cool for the Elmyra cutscene to allow for NMS to skip it in the original CSR, so they wouldn't have to settle for CSR+ if it did not suit perfectly.
+
+--- 2026-07-21 @individualcontributor ---
+> I could not grab the Elixir in the Gold Saucer Hotel after Cait had stolen the black materia.
+I need to check this out, hadn't noticed before. Keep the bugs coming!
+
+--- 2026-07-22 @phek1200 ---
+IC, please don't stress about this. You don't owe us anything at all pertaining to this CSR. In fact we're the ones to be grateful to have this tool
+
+--- 2026-07-22 @dylwingo ---
+couldnt have said it better
+
+--- 2026-07-22 @kleinestennis ---
+Played yesterday a second time the whole CSR for PC. This time no bug in Gold Saucer, don't know what happened first time. Overall great to practice and for me perfect. I had to minor things which where strange during playing, but forget about it, obv not important!
+
+--- 2026-07-22 @individualcontributor ---
+Share the link here to the installer and I'll add it to the github for the CSR. I wonder can I apply your changes then check makou reactor to see if there was a diff? although I thnk the PC files and the PSX binaries don't overlap in away meaningful way that I can use.
+
+--- 2026-07-22 @cornfed ---
+i also have another topic that could be discussed , ff9 psx csr has cut out the fan fares, and boss death animations to save even more time. sorry for the delayed response hehe, but yeah <@183261151746850816> your work on this has been invaluable . as phek said above ❤️
+
+--- 2026-07-22 @cornfed ---
+as it stands, the csr is in a completely runnable state, so for now, nothing needs to be done , but discussing things and maybe holding some in house voting on what the community wants csr to be, would further its track to becoming a category one daay
+
+--- 2026-07-22 @individualcontributor ---
+So far it tends to be folks posting in here and discussing suggestions which seems to work well for this CSR I think, but if there is a significant change that elicits strong opinions one way or another then a vote is a great idea! iirc there have only been a couple of these instances to date, e.g. removing all cutscenes instead of leaving those required for existing skips/manips, and removing dialogues with options that are not used and can be mashed through. I think the CSR+ and CSR++ addresses both of those preferences, albeit the CSR++ will also elliminate other such things that are deemed "filler". I will prioritise the CSR+ given that it will be the quickest to complete to the same standard as the existing CSR. CSR++ will be a labour of love that unltimately will let me do some speedruns and maybe stream consistently! 
+
+All suggestions and ideas are welcome don't be reluctant to share even if your not sure if its already been discussed.
+
+--- 2026-07-22 @.okamikaze ---
+Tbf, I think specifically for FF9's case the removed fight ends is mostly to make up for how long each encounter takes to "start" compared to HD
+
+--- 2026-07-22 @cornfed ---
+<@183261151746850816>  do you have a save state with the cutscene cut out of city of the ancients? i was wondering this so i could test the list value with the scene, vs without having it, there is a slim chance , very slim, that it still lines up hehe
+
+--- 2026-07-22 @individualcontributor ---
+Do you mean the waterfall scene? not yet just finished cutting Aerith's house and the Hojo FD manip scenes. I would have to release a patch and you would have to apply it to test these changes though, save states won't store the changes themselves unfortunately.
+
+--- 2026-07-22 @cornfed ---
+there is a small chance that it could line up or be close to lining up, which in that case nothing or just  small edit would need to be made
+
+--- 2026-07-22 @individualcontributor ---
+oh yeah sorry I meant waterfall with Bugen and the gang inside
+
+--- 2026-07-22 @cornfed ---
+hojo requires talking to him well, after midgar skip, and good mashing. all the magic happens when u you leave the room where the scene plays in city of ancients
+
+--- 2026-07-22 @cornfed ---
+cutting that too would have to be factored in
+
+--- 2026-07-22 @individualcontributor ---
+right but now you don't talk to him at all in CSR+ with all the cutscenes removed so list won't advance like it did before. You can still hold Run + Right and fight him to skip return to migdar, or not and just continue playing for NMS
+
+--- 2026-07-22 @cornfed ---
+i will also do a csr runs soon
+
+--- 2026-07-22 @individualcontributor ---
+📢 Release v0.1.0 CSR+ 
+
+## v0.1.0
+- Created FF7 CSR+ based on FF7 CSR v0.14.0
+
+Disc 1
+- Aerith's house cutscene removed
+
+Disc 2
+- Hojo FD manip cutscene removed
+
+Disc 3
+- no changes
+
+https://github.com/individualcontributordev/Final-Fantasy-7-CSR/tree/main/csr%2B
+
+First release of the new CSR+, built on CSR v0.14.0 with the above changes for the first release.
+
+--- 2026-07-23 @individualcontributor ---
+Quick note on the encounters, I can't modify them for PSX using Makou Reactor. I imagine a more invasive change would be needed to the disc binary, however I'm looking at ways to translate the changes made to PC using existing tools to PSX disc but it's not looking good 😄
+
+--- 2026-07-23 @individualcontributor ---
+Some technical context; these CSRs are primarily for PSX disc and should run on hardware after burning to disc. Binary on disc is not the same as RAM in Emulators/PC. Binary contains instructions for the console engine or Emu about how to organize RAM and the values that should be stored there. It's not possible to apply the same changes done to RAM in Emu/PC directly to disc binary and have it work on console hardware.
+
+--- 2026-07-23 @.okamikaze ---
+Goddamn, for FPGA the last 2 CSR releases didn't seem to work but the CSR+ does. This is already very promising
+
+--- 2026-07-24 @individualcontributor ---
+Is there an issue with the latest CSR releases?
+
+--- 2026-07-24 @phek1200 ---
+If CSR+ and CSR++ is a considerably huge project, I think that removing the fan fare, entering battle animation and boss death animation is probably the last one to do. These animations in ff9 are long as what Okami said, so it makes sense to remove
+
+--- 2026-07-24 @individualcontributor ---
+<@170713534726930432> does CSR just not load? How might I reproduce FPGA issues?
+
+It should work if CSR+ does which worries me
+
+--- 2026-07-24 @.okamikaze ---
+I guess maybe some Linux/pi thing? Idk
+
+--- 2026-07-26 @individualcontributor ---
+I you get a chance can you test v0.13.3 https://github.com/individualcontributordev/Final-Fantasy-7-CSR/blob/main/csr/CHANGELOG.md#v0133 on you SuperOne console to eliminate the latest change (remove boat trip to Sol) which I think might be causing it
+
+--- 2026-07-26 @individualcontributor ---
+Yes if you have time, this is the latest CSR version that you mentioned did not work correctly on your FPGA console right?
+
+--- 2026-07-26 @individualcontributor ---
+FPGA Console test:
+- CSR v0.14.0 - not working
+- CSR v0.13.3 - working
+- CSR v0.13.0 - working
+
+is this correct?
+
+--- 2026-07-26 @.okamikaze ---
+FPGA Console test:
+CSR v0.14.0 - pending
+CSR v0.13.3 - working
+CSR v0.13.0 - not working
+
+--- 2026-07-26 @individualcontributor ---
+And if you have time a test of the CSR+ v0.14.0 would be great too
+
+--- 2026-07-26 @individualcontributor ---
+:thread: CSR+ changes
+
+--- 2026-07-26 @.okamikaze ---
+https://youtube.com/live/3PoBi0IraWA
+Did a small test of the first CSR+ patch the other day (with my hands slipping off the steering wheel)
+
+--- 2026-07-26 @individualcontributor ---
+No this is great, and if you call out suggestions while you're playing I catch them, or have a reference if you suggest something in the thread.
+
+--- 2026-07-26 @individualcontributor ---
+^ I made a mod for the psx disc for fun to have random encounters like in FF9, but kept the pre-empt boss stuff so you can route the pre-empts but not the encounters
+
+--- 2026-07-26 @individualcontributor ---
+I'm going to make it available for CSR++ as another patch, and can do for CSR and CSR+ too if people are interested.
+
+--- 2026-07-26 @.okamikaze ---
+Random encounters with a chance of pincer 😨
+
+--- 2026-07-26 @individualcontributor ---
+Yes! I'm still testing but it follows the same vanilla increments of formation, stepid, offset, etc. So I'm not sure how this would affect specific formations. e.g. you might get 0 encounters running through the entire Great Glacier, or you could get > 0, so no predictable stilva etc.
+
+--- 2026-07-26 @.okamikaze ---
+So forcing encs to setup for pre-emps will take the same amount of time as normal? (excluding encounter variance)
+
+--- 2026-07-26 @individualcontributor ---
+The pre-empts are based on stepid offset, so as long as you create a (use an existing) route you can hit the pre-empts on the boss fights as usual, but you will get different encounters while on your route.
+
+--- 2026-07-26 @individualcontributor ---
+Well this is interesting, we force fights to figure out what stepid/offset we're on and then route from there. There won't be a reliable way to know what stepid/offset your on by forcing a fight with this. The encounter is not based on a danger value hitting an encounter threshold. 
+
+I don't even know how you would route in the pre-empts or get required fights actually.
+
+--- 2026-07-26 @individualcontributor ---
+How does this type of stuff work in FF9? I'll need to check
+
+--- 2026-07-26 @individualcontributor ---
+I might make some of the more obvious changes to the CSR+ then burn to disc and test on console.
+
+--- 2026-07-27 @individualcontributor ---
+I made a builder for these CSR and mod patches. Use your original .bin files and then pick what you want. I've tested the CSR+ burn to disc and run on my 77003 mechapwnd console and it seems fine. I haven't done a full run with it but i'm testing some other stuff and should get a full run done soon. https://individualcontributor.dev/builder/
+
+--- 2026-07-27 @individualcontributor ---
+Also you can play a demo of the CSR++, its available from the builder. And I would recommend the 25% encounter mod first, its the closest in "feel" to a step routed run (light encounters because of intentional routing), but it is random so don't be angry with me if you have bad luck 😄
+
+Oh and CSR++ is not like the original in terms of order of execution, and some stuff is re-worked (hint Jessie does not get her leg stuck in reator 1 😉 )
+
+--- 2026-07-27 @individualcontributor ---
+My random encounter mod is working on ps2 slim console 🤯 I used CSR++ with the random encounter add-on, burn the disc, and played through guard scorpion. I'm very surprised this worked and adds promise for <@266664783502245888> 's suggestion of shortening the battle death animations, and speeding up Diamond weapon for console now that I think of it.
+
+--- 2026-07-27 @individualcontributor ---
+This is the 25% encounter rate (light, step route feel), 50% being equivalent to vanilla (no step route), and 75% being dense encounters.
+
+--- 2026-07-27 @individualcontributor ---
+I'll continue to update the CSR and I'm building add-ons for it for the CSR+ experience, plus some other fun mods when I find time. Get them all here https://individualcontributor.dev/builder/
+
+CSR — skill checks kept; FMVs and long sequences cut or shortened.
+CSR+ — more aggressive cutscene removal.
+
+--- 2026-07-29 @individualcontributor ---
+I'm reducing the scope of what I had planned to work on here, removed the CSR++, and the plan for CSR+ is to provide "add-ons" for the CSR base experience, e.g. Aerith's house, Hojo FD manip scenes, etc. 
+
+So if you want to play the CSR just use the builder and patch your .bins. If you want CSR+ then pick the CSR base experience and enable the add-ons you want. Check the builder UI for context. This allows players to choose the add-ons they want, etc. you could also test out the random encounter "add-ons" I've made for fields and the world map 😉
+
+FYI some add-ons only apply to certain discs, e.g. Aerith's house on disc 1, Hojo on disc 2, etc. So in the builder when you load your disc .bin file it will show you the compatible add-ons for that disc.
+
+There are also "presets", so for CSR+ pick that preset and it will automatically enable the add-ons across all discs for this preset.
+
+--- 2026-07-29 @individualcontributor ---
+The CSR++ experience I'm building I'm just calling it the "Highwind" mod (start to finish speedrun reduced as much as possible without breaking the game too much) A.K.A Dad mode, Very little time mod, Too many things to do IRL mod. It will also be on the builder for anyone interested.
+
+--- 2026-07-29 @.okamikaze ---
+That's what I imagine CSR++ as anyway
+
+--- 2026-07-29 @individualcontributor ---
+I've actually done very little to the "Highwind" mod but I think I understand what you mean. I'm removing some of the "filler" stuff like e.g. maybe making stairs shorter, Shinra prison scene shortened, wall market can be done in any order. i.e. stuff that just feels a bit forced or trivial
+
+--- 2026-07-29 @individualcontributor ---
+Some of the cuts to Highwind may end up as "add-ons"
+
+--- 2026-07-29 @individualcontributor ---
+Just to clarify the CSR+ add-ons are specifically for the current CSR. The field and world map random encounter add-ons are for any base, e.g. unmodified, CSR, Highwind.
+
+Highwind will be a single base version.
+
+I plan to create CSR specific add-ons and general add-ons so people can build whatever experience they want.
+
+And all for PSX disc! That will run on hardware when burned to disc.
+
