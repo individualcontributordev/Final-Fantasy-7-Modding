@@ -1,14 +1,14 @@
 # No-disc-swap (full-run)
 
 Single-disc play: no Ask-for-disc, Supernova on D1, multi-disc field FMV handled
-by script trims (optional CSR manip-movie pack).
+by script trims (CSR-base required manip-movie pack).
 
 ## Supported bases (builder)
 
 | Base | no-disc-swap? | Notes |
 |------|---------------|--------|
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs (e.g. encounter rates). |
-| CSR base | YES | Keeps manip-critical FMVs. Core no-disc-swap-on-csr + optional manip-movie D2/D3 copies on D1. |
+| CSR base | YES | Keeps manip-critical FMVs. Core no-disc-swap-on-csr + **required** manip-movie D2/D3 copies on D1. |
 | CSR + CSR+ scene packs | YES | CSR+ removes/skips field FMVs. Core no-disc-swap only; no manip-movie pack. |
 | Highwind | YES | Cutscene trims; no field movie copy. Separate pack vs Highwind baseline. |
 

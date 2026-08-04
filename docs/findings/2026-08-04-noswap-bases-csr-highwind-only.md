@@ -7,7 +7,7 @@
 
 no-disc-swap may be applied only to:
 
-- CSR base (keeps manip-critical FMVs)
+- CSR base (keeps manip-critical FMVs; manip-movie pack **required** with no-disc-swap)
 - CSR + CSR+ scene stacks (CSR+ removes field FMVs; no movie-copy pack)
 - Highwind base (cutscene trims; no movie-copy pack)
 
@@ -23,8 +23,8 @@ for unmodified.
 ## Builder
 
 - no-disc-swap-clean-v0.1.1 (and any clean-only ids): enabled false + retired blurb
-- Next packs: no-disc-swap-on-csr-v*, no-disc-swap-on-highwind-v*, optional
-  no-disc-swap-csr-manip-movies-v*
+- Next packs: no-disc-swap-on-csr-v* + no-disc-swap-csr-manip-movies-v* (required pair on CSR base),
+  no-disc-swap-on-highwind-v*
 
 ## Related
 

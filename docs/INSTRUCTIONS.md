@@ -2,7 +2,7 @@
 
 ## Policy (locked)
 
-- CSR base: keeps certain FMVs for manips - optional D2/D3 movie copies on D1
+- CSR base: keeps certain FMVs for manips - D2/D3 movie pack **required** with no-disc-swap
 - CSR+: removes field FMVs - no manip-movie pack
 - Highwind: trims - no manip-movie pack
 - Unmodified: no no-disc-swap
@@ -28,7 +28,8 @@ Build no-disc-swap-on-csr-v0.1.1 (or next version):
 2. Makou Ask + movie trims on CSR FIELD
 3. SNOVA + BATTLE.X inject (always with no-disc-swap)
 4. Layer vs CSR baseline; compatibleBases live csr-v*
-5. Optional later: manip-movies pack; Highwind pack
+5. CSR-base manip-movies pack (required with CSR no-disc-swap)
+6. Highwind pack later
 
 ## After Pages deploy
 
