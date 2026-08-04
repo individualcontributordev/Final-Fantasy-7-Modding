@@ -1,101 +1,130 @@
-# Task: CSR single-disc — full build / Makou / verify / playtest / publish
+# Task: CSR single-disc — correct baselines + playtest / publish
 
-End-to-end for CSR alone (no CSR+ scenes):
+## Do not confuse these images
 
-1. Core pack: Ask trims + field movie crawl trims + SNOVA (BLACKBGB Makou still open)
-2. Movie seed pack: 4 multi-disc movies by PMVIE id onto D1
-3. After BLACKBGB: rebuild core, then rebuild movies, push, playtest from builder
+| Image | Baseline | What it is | Use for CSR pack? |
+|-------|----------|------------|-------------------|
+| Clean single-disc work (old noswap_work / clean console burn) | **Clean / Unmodified D1** | Ask + crawl movie trims + SNOVA validated on console | **NO** — wrong base |
+| ff7_d1_csr_base.bin | Pristine + **csr-v0.14.1** only | CSR routing, no single-disc | Diff **against** this for core pack |
+| CSR single-disc core work | **CSR base** + field Ask/crawl trims + SNOVA | Core single-disc content | YES — pack input |
+| CSR + movie seed work | Core applied + 4 movies by id | CSR-alone playtest | YES — movie pack input |
 
-## Paths (gitignored bins — do not commit)
+**Clean console bin is a recipe source for which FIELD maps to trim, not a binary to layer onto CSR.**
 
-| Path | Role |
-|------|------|
-| workspace/pristine/FINALFANTASY7_D1.bin | Retail D1 |
-| workspace/pristine/FINALFANTASY7_D2.bin | Retail D2 (movie source) |
-| workspace/pristine/FINALFANTASY7_D3.bin | Retail D3 (movie + SNOVA source) |
-| workspace/iso-extract/ff7_d1_csr_base.bin | CSR base only (layer apply) |
-| workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin | Core work (Makou + SNOVA) |
-| workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin | Pristine+CSR+core layer apply |
-| workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin | Core + movie seed |
-| Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json | CSR disc1 layer |
-
-If you still have ff7_d1_csr_noswap_work.bin, that is the same role as core work (copy/rename optional).
-
-## Packs (builder)
-
-| Pack id | Role |
-|---------|------|
-| single-disc-on-csr-v0.1.1 | Core vs csr-v0.14.1 |
-| single-disc-csr-manip-movies-v0.1.0 | Movies vs (CSR + core) |
-
-Stack for CSR-alone single-disc:
-
-    Base: csr-v0.14.1
-    + single-disc-on-csr-v0.1.1
-    + single-disc-csr-manip-movies-v0.1.0
-    CSR+ scenes: OFF
+BLACKBGB on Clean must not be pasted over CSR (CSR already edited that hub).
 
 ---
 
-## Phase A — baselines
+## Correct product model
+
+### Pack 1 — single-disc-on-csr (core)
+
+    Start:  CSR base (not Clean)
+    Edit:   Ask removals + crawl Set/Play trims on maps CSR did not own
+            + Makou BLACKBGB on **CSR** script
+            + SNOVA/BATTLE.X
+    Layer:  (that work bin) minus (CSR base) 
+    Id:     single-disc-on-csr-v0.1.1
+
+### Pack 2 — single-disc-csr-manip-movies (optional for CSR-alone)
+
+    Start:  CSR base + core pack applied
+    Edit:   overwrite D1 movie **ids** with seed list (LASTFLOR, …)
+    Layer:  (movies work) minus (CSR + core applied)
+    Id:     single-disc-csr-manip-movies-v0.1.0
+
+### Playtest stack
+
+    Base: csr-v0.14.1
+    + single-disc-on-csr
+    + single-disc-csr-manip-movies   (CSR-alone only; omit if using CSR+)
+    CSR+ scenes: off for this stack
+
+You do **not** take Clean console .bin, drop movies in, and call that the CSR mod.
+
+---
+
+## What is already done in repo
+
+| Step | Status |
+|------|--------|
+| Core pack vs CSR (field trims from Clean **recipe**, not Clean bin; BLACKBGB still CSR) | Published single-disc-on-csr-v0.1.1 |
+| Movie seed pack (4 files by id) | Published single-disc-csr-manip-movies-v0.1.0 |
+| Clean console validation | Informs which trims matter; Unmodified pack retired |
+| BLACKBGB Ask on CSR core | **Your Makou next** |
+| Rebuild core + movies after BLACKBGB | After Makou |
+| Expand movie list after playtest | Later |
+
+---
+
+## Paths (gitignored — never commit)
+
+| Path | Role |
+|------|------|
+| workspace/pristine/FINALFANTASY7_D{1,2,3}.bin | Retail |
+| workspace/iso-extract/ff7_d1_csr_base.bin | CSR only |
+| workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin | CSR + core single-disc edits |
+| workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin | Pristine+CSR+core layers |
+| workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin | Core applied + movies |
+| Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json | CSR layer |
+
+Ignore Clean-named bins (ff7_d1_noswap_work.bin, clean_noswap built, etc.) for CSR packaging.
+
+---
+
+## Phase A — CSR baseline
 
     cd /path/to/Final-Fantasy-7-Modding
     git pull --ff-only
-
-Apply CSR base if ff7_d1_csr_base.bin missing or stale (run in repo root):
 
     python3 scripts/apply_layer.py workspace/pristine/FINALFANTASY7_D1.bin \
       /Users/david.morton/Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
       -o workspace/iso-extract/ff7_d1_csr_base.bin
 
-If apply_layer.py CLI differs, use:
-
-    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from apply_layer import apply_layer; pr=Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes(); layer=json.loads(Path("/Users/david.morton/Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()); img=bytearray(pr); apply_layer(img, layer); Path("workspace/iso-extract/ff7_d1_csr_base.bin").write_bytes(bytes(img)); print(len(img))"
-
-Core work — pick one:
-
-    # Fresh from CSR base (then you must re-do ALL core Makou + SNOVA; rare)
-    cp -f workspace/iso-extract/ff7_d1_csr_base.bin workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin
-
-    # Preferred if you already have core work (field trims + SNOVA):
-    cp -f workspace/iso-extract/ff7_d1_csr_noswap_work.bin workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin
-
 ---
 
-## Phase B — Makou BLACKBGB (required for complete core)
+## Phase B — core work on CSR (not Clean)
 
-Open: workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin
+### B1. Start core work from CSR base
 
-1. Field blackbgb
-2. Remove every Ask for disc (DSKCG)
-3. Keep CSR jumps, bit clears, conditions, map jumps
-4. Do NOT paste Clean BLACKBGB over CSR (wipes CSR hub)
-5. Save FIELD into the same work bin
+If you do not already have a CSR-based core work bin from the agent build:
 
----
+    cp -f workspace/iso-extract/ff7_d1_csr_base.bin \
+          workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin
 
-## Phase C — SNOVA (only if this work bin never had SNOVA)
+Then you need the core field trims + SNOVA on this file (agent already produced a CSR-based work as
+ff7_d1_csr_noswap_work.bin earlier — **that** one is CSR-based despite the old name). Prefer:
 
-Skip if size already about 748775664 and SNOVA was injected earlier.
+    # Only if this file is the CSR+trims+SNOVA build (not Clean):
+    cp -f workspace/iso-extract/ff7_d1_csr_noswap_work.bin \
+          workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin
+
+**Never** cp Clean console noswap_work.bin into csr_single_disc_core_work.
+
+### B2. Makou BLACKBGB on CSR core work
+
+Open: ff7_d1_csr_single_disc_core_work.bin
+
+1. blackbgb — remove Ask for disc only
+2. Keep CSR jumps / bits
+3. Save into same bin
+
+### B3. SNOVA if this core work lacks it
 
     python3 mods/single-disc/scripts/inject_snova_d3_to_d1.py \
       --d1 workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin \
       --d3 workspace/pristine/FINALFANTASY7_D3.bin \
       --in-place
 
-Expect: raw-copy + BATTLE.X LBA patch v3; 17 LBA entries; SNOVA verify OK.
+Skip if already injected on this file.
 
 ---
 
-## Phase D — rebuild core pack layer
+## Phase C — rebuild + verify core pack
 
-Diff core work vs CSR base (not pristine Clean):
+Layer = core work minus CSR base:
 
-    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_base.bin"); work=Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin"); out=Path("builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-on-csr-v0.1.1-disc1", description="Single-disc on CSR D1 after BLACKBGB Makou"); out.parent.mkdir(parents=True, exist_ok=True); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
-
----
-
-## Phase E — verify core alone
+    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_base.bin"); work=Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_work.bin"); out=Path("builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-on-csr-v0.1.1-disc1", description="Single-disc on CSR after BLACKBGB"); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
 
     python3 scripts/verify_builder_config.py \
       --pristine workspace/pristine/FINALFANTASY7_D1.bin \
@@ -103,11 +132,11 @@ Diff core work vs CSR base (not pristine Clean):
       --addon single-disc-on-csr-v0.1.1 \
       --csr-root /Users/david.morton/Final-Fantasy-7-CSR
 
-Must print PASS.
+Must PASS.
 
 ---
 
-## Phase F — movie seed on top of new core
+## Phase D — movies on CSR+core (not on Clean)
 
     python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from apply_layer import apply_layer; pr=Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes(); csr=json.loads(Path("/Users/david.morton/Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()); core=json.loads(Path("builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json").read_text()); img=bytearray(pr); apply_layer(img,csr); apply_layer(img,core); Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin").write_bytes(bytes(img)); print(len(img))"
 
@@ -119,28 +148,13 @@ Must print PASS.
       --manifest mods/single-disc/patches/csr-manip-movie-seed.txt \
       --in-place
 
-Expect four OK lines (ids 36, 34, 37, 7).
+Rebuild movie pack (movies work minus core applied):
+
+    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin"); work=Path("workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin"); out=Path("builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-csr-manip-movies-v0.1.0-disc1", description="CSR manip movie seed"); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
 
 ---
 
-## Phase G — rebuild movie pack layer
-
-    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin"); work=Path("workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin"); out=Path("builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-csr-manip-movies-v0.1.0-disc1", description="CSR single-disc manip movie seed"); out.parent.mkdir(parents=True, exist_ok=True); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
-
----
-
-## Phase H — verify full stack
-
-    python3 scripts/verify_builder_config.py \
-      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-      --disc 1 --base csr-v0.14.1 \
-      --addon single-disc-on-csr-v0.1.1 \
-      --addon single-disc-csr-manip-movies-v0.1.0 \
-      --csr-root /Users/david.morton/Final-Fantasy-7-CSR
-
-Must print PASS.
-
-Optional built image for DuckStation:
+## Phase E — verify full stack + optional built bin
 
     python3 scripts/verify_builder_config.py \
       --pristine workspace/pristine/FINALFANTASY7_D1.bin \
@@ -150,80 +164,48 @@ Optional built image for DuckStation:
       --csr-root /Users/david.morton/Final-Fantasy-7-CSR \
       -o workspace/iso-extract/ff7_d1_csr_single_disc_full_built.bin
 
----
-
-## Phase I — playtest
-
-### Local bin
-
-DuckStation: ff7_d1_csr_single_disc_full_built.bin or ff7_d1_csr_single_disc_movies_work.bin (Disc 1 only).
-
-### Site builder (after Phase J Pages deploy)
-
-https://individualcontributor.dev/builder/
-
-1. Load pristine NTSC-U Disc 1 .bin
-2. Base: CSR v0.14.1
-3. Enable: Single-disc on CSR v0.1.1 + CSR manip movies seed v0.1.0
-4. CSR+ scenes: all off
-5. Build; smoke emulator (EDC repair before optical burn as usual)
-
-### Checks
-
-- Boot / early game OK
-- blackbgb: no Ask for disc
-- Supernova OK
-- Seed movies if you reach those scenes
-- Other wrong/crawl FMV: note name + map in mods/single-disc/patches/csr-manip-movie-whitelist.md
+Must PASS.
 
 ---
 
-## Phase J — publish
+## Phase F — playtest
 
-    git pull --ff-only
+DuckStation: ff7_d1_csr_single_disc_full_built.bin (Disc 1 only).
+
+Or builder after push: CSR + both single-disc packs, no CSR+.
+
+Checks: boot, blackbgb no Ask, Supernova, seed FMVs, note other crawls for later movies.
+
+---
+
+## Phase G — publish
+
     git add builder/single-disc-on-csr-v0.1.1 \
             builder/single-disc-csr-manip-movies-v0.1.0 \
-            builder/manifest.json \
-            mods/single-disc/ \
-            docs/
-    git status
-    git commit -m "single-disc: CSR core after BLACKBGB + refresh movie seed pack"
+            builder/manifest.json docs/ mods/single-disc/
+    git commit -m "single-disc: CSR core after BLACKBGB + movie seed refresh"
     git push
 
-Do not commit workspace/**/*.bin.
+No .bin files.
+
+Say **check** — agent re-verifies packs from repo.
 
 ---
 
-## Phase K — agent check
+## Minimal mental model
 
-Say check and paste evidence. Agent pulls and re-verifies full stack against the repo packs.
+    Clean console bin  →  proof that trims/SNOVA work (history only)
+    CSR base           →  required baseline for CSR packs
+    CSR + core edits   →  single-disc-on-csr pack
+    CSR + core + movies →  single-disc-csr-manip-movies pack + playtest image
 
 ---
-
-## Checklist
-
-- [ ] A baselines
-- [ ] B Makou BLACKBGB
-- [ ] C SNOVA if needed
-- [ ] D rebuild core layer
-- [ ] E verify core PASS
-- [ ] F inject movies
-- [ ] G rebuild movie layer
-- [ ] H verify full stack PASS
-- [ ] I playtest
-- [ ] J commit push
-- [ ] K say check
 
 ## Evidence
 
-    git pull:
-    BLACKBGB Makou:
-    SNOVA skipped or ran:
-    core layer stats:
+    Used CSR base (not Clean bin): yes/no
+    BLACKBGB Makou on CSR core work:
     verify core:
-    movies inject lines:
-    movie layer stats:
     verify full:
-    -o built path:
-    playtest notes:
+    playtest:
     push:
