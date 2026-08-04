@@ -1,58 +1,129 @@
-# Task: Finish single-disc-on-csr BLACKBGB; then Highwind
+# Task: Inventory CSR single-disc manip movies (whitelist)
 
-## Done (agent)
+## Goal
 
-- Partial pack: builder/single-disc-on-csr-v0.1.1 vs csr-v0.14.1
-- 17 FIELD maps from Clean recipe + SNOVA/BATTLE.X LBA v3
-- FIELD.BIN left as CSR (no Clean engine delta)
-- BLACKBGB left as CSR (cannot paste Clean file - CSR hub conflict)
-- Work: workspace/iso-extract/ff7_d1_csr_single_disc_work.bin
-- CSR base: workspace/iso-extract/ff7_d1_csr_base.bin
-- Finding: docs/findings/2026-08-04-single-disc-on-csr-build-status.md
+List the exact D2/D3 MOVIE files that must live on Disc 1 when:
 
-## Now (operator Makou)
+    Base: CSR (csr-v0.14.1)
+    single-disc core: on
+    CSR+ scenes: none
 
-1. Open ff7_d1_csr_single_disc_work.bin in Makou Reactor
-2. Field blackbgb - remove all Ask for disc; keep CSR jumps/bits
-3. Save FIELD into the same work bin
-4. Rebuild layer vs CSR base (script below)
-5. verify_builder_config vs csr-v0.14.1 + pack
-6. DuckStation CSR + CSR+ + single-disc-on-csr smoke
+Those files become pack single-disc-csr-manip-movies later.
+CSR + CSR+ single-disc does not use this pack.
 
-### Rebuild layer after Makou
+Budget after SNOVA on an 80-min CD: about 93 MB raw free. Prefer a tight list.
 
-python3 -c "
-import json, sys
-from pathlib import Path
-sys.path.insert(0, \"scripts\")
-from bin_diff_to_layer import build_layer
-base = Path(\"workspace/iso-extract/ff7_d1_csr_base.bin\")
-work = Path(\"workspace/iso-extract/ff7_d1_csr_single_disc_work.bin\")
-out = Path(\"builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json\")
-layer = build_layer(base, work, layer_id=\"single-disc-on-csr-v0.1.1-disc1\",
-    description=\"Single-disc on CSR D1 after BLACKBGB Makou\")
-out.write_text(json.dumps(layer, indent=2) + chr(10))
-print(layer[\"stats\"])
-"
+## Do not (this task)
 
-### Verify
+- Do not inject movies into a layer yet
+- Do not rebuild single-disc-on-csr for this task
+- Do not copy all D2/D3 movies
+- Do not touch Unmodified / Highwind packs
 
-python3 scripts/verify_builder_config.py \\
-  --pristine workspace/pristine/FINALFANTASY7_D1.bin \\
-  --disc 1 --base csr-v0.14.1 \\
-  --addon single-disc-on-csr-v0.1.1
+## Background (already in repo)
 
-## After CSR pack complete
+| Doc | Use |
+|-----|-----|
+| docs/findings/2026-08-04-single-disc-csr-manip-movies-pack-split.md | Why core vs movie pack is split |
+| docs/findings/2026-08-04-single-disc-csrplus-fmv-deduce-manip-movies.md | CSR+ COTA/endgame diffs |
+| mods/single-disc/patches/csr-manip-movie-whitelist.md | Working list (edit this) |
+| mods/single-disc/patches/field-movie-d2d3-missing-on-d1.md | All D2/D3-only refs (too big to copy) |
 
-- single-disc-on-highwind-v0.1.1 (same core recipe vs highwind-v0.2.0)
-- Defer CSR-alone manip-movie pack (disc size)
+Automated CSR+ endgame seed: LASTFLOR.MOV (~3 MB) + small BIN stubs.
+COTA pack did not add a CSR-only movie (CANONON already cut on CSR base).
+Hojo CSR+ may imply CANONHT2.MOV (~5 MB) if that FMV still matters for CSR manips.
+
+## Step 0 — setup
+
+    cd /path/to/Final-Fantasy-7-Modding
+    git pull --ff-only
+
+Optional size dump:
+
+    python3 mods/single-disc/scripts/list_d2d3_only_movies.py
+
+## Step 1 — seed the working list
+
+Open mods/single-disc/patches/csr-manip-movie-whitelist.md.
+
+Start from Seed (from repo) rows. Keep columns filled as you go.
+
+## Step 2 — CSR multi-disc reference (what still plays)
+
+Need CSR without CSR+ and without single-disc, normal D1/D2/D3:
+
+- Builder: base csr-v0.14.1, no single-disc, no CSR+ scenes
+- Or known-good CSR multi-disc set
+
+Play manip-critical scenes only (not full story), especially:
+
+1. Final Descent / List-related FMVs still on CSR
+2. Hojo FD path (if you care about that FMV timing)
+3. Any other CSR-kept FMV runners rely on (note map + movie filename)
+
+For each FMV that must look/time correctly on single-disc:
+
+1. Note map / field (Makou name or DAT)
+2. On the correct retail disc for that map (D2 or D3), Makou: Find Set next movie / Play movie
+3. Read the movie name Makou shows for that disc
+4. Confirm file is missing from pristine D1 MOVIE/:
+
+       python3 mods/single-disc/scripts/list_d2d3_only_movies.py --check NAME.MOV
+
+5. Add/update a row in the whitelist with status candidate and size from the script
+
+If CSR already removed the FMV (no Play), skip — no copy needed.
+
+## Step 3 — optional: CSR+ cross-check
+
+If a scene is trimmed by a CSR+ pack you use for manips on multi-disc CSR without that pack,
+the movie may still be required for CSR-alone.
+
+Diff method is only a hint (see csrplus-fmv finding). Trust play + Makou over auto scan.
+
+## Step 4 — budget gate
+
+    python3 mods/single-disc/scripts/list_d2d3_only_movies.py --sum-whitelist
+
+Keep raw total of include rows under ~80 MB if possible (leave headroom under ~93 MB).
+
+If over: drop largest non-essential, or accept wrong FMV / duration-only for that site (document why).
+
+## Step 5 — mark decisions
+
+For each row set status to one of:
+
+- include — copy onto D1 in movie pack; keep Play on CSR single-disc
+- exclude-csr-already-cut — CSR base has no Play
+- exclude-wrong-fmv-ok — crawls not an issue / wrong stream OK
+- exclude-csr-plus-only — only matters when CSR+ off and you do not need it
+- deferred — need another session
+
+## Step 6 — commit evidence
+
+    git add mods/single-disc/patches/csr-manip-movie-whitelist.md
+    git commit -m "single-disc: CSR manip movie whitelist progress"
+    git push
+
+## Done when
+
+- Every known CSR manip FMV has a whitelist row with status
+- Sum of include sizes fits budget (script --sum-whitelist)
+- No plan to ship endings (ENDING2E etc.) on D1
+- Notes list which manips were checked
+
+## After this task (not now)
+
+Build single-disc-csr-manip-movies-v* ISO inject from include rows only;
+stack with single-disc-on-csr for CSR-alone single-disc. Finish BLACKBGB on core pack separately.
 
 ## Evidence
 
-BLACKBGB Makou done:
-Layer rebuild:
-verify_builder_config:
-CSR+ smoke:
-Notes:
+    Whitelist path: mods/single-disc/patches/csr-manip-movie-whitelist.md
+    include count / MB:
+    Manips checked:
+    Not checked yet:
+    Budget OK:
+    Push:
 
-Say check when BLACKBGB is done, or want Highwind next without waiting.
+Say check when the whitelist has real include decisions.
