@@ -7,9 +7,9 @@
 
 no-disc-swap may be applied only to:
 
-- CSR base
-- CSR + CSR+ scene add-on stacks
-- Highwind base
+- CSR base (keeps manip-critical FMVs)
+- CSR + CSR+ scene stacks (CSR+ removes field FMVs; no movie-copy pack)
+- Highwind base (cutscene trims; no movie-copy pack)
 
 Unmodified (clean) is out of scope for no-disc-swap.
 

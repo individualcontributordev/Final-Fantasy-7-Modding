@@ -8,9 +8,9 @@ by script trims (optional CSR manip-movie pack).
 | Base | no-disc-swap? | Notes |
 |------|---------------|--------|
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs (e.g. encounter rates). |
-| CSR | YES | Primary target; optional manip-movie add-on |
-| CSR + CSR+ scene packs | YES | Core no-disc-swap-on-csr; omit manip-movie pack |
-| Highwind | YES | Separate pack vs Highwind baseline |
+| CSR base | YES | Keeps manip-critical FMVs. Core no-disc-swap-on-csr + optional manip-movie D2/D3 copies on D1. |
+| CSR + CSR+ scene packs | YES | CSR+ removes/skips field FMVs. Core no-disc-swap only; no manip-movie pack. |
+| Highwind | YES | Cutscene trims; no field movie copy. Separate pack vs Highwind baseline. |
 
 Clean pack no-disc-swap-clean-v0.1.1 is retired (enabled false in builder manifest).
 
