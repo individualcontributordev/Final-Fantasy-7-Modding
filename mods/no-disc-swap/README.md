@@ -1,18 +1,24 @@
 # No-disc-swap (full-run)
 
 Single-disc play: no Ask-for-disc, Supernova on D1, multi-disc field FMV handled
-by script trims (CSR-base required manip-movie pack).
+by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR base later.
 
 ## Supported bases (builder)
 
 | Base | no-disc-swap? | Notes |
 |------|---------------|--------|
-| Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs (e.g. encounter rates). |
-| CSR base | YES | Keeps manip-critical FMVs. Core no-disc-swap-on-csr + **required** manip-movie D2/D3 copies on D1. |
-| CSR + CSR+ scene packs | YES | CSR+ removes/skips field FMVs. Core no-disc-swap only; no manip-movie pack. |
-| Highwind | YES | Cutscene trims; no field movie copy. Separate pack vs Highwind baseline. |
+| Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs. |
+| CSR base (alone) | LATER | Needs manip-movie copies on D1; disc space tight (~93 MB free after SNOVA). Deferred. |
+| CSR + CSR+ scene packs | YES (next) | CSR+ removes field FMVs - no movie pack. Core no-disc-swap + SNOVA only. |
+| Highwind | YES (next) | Cutscene trims - no movie pack. Core no-disc-swap + SNOVA only. |
 
 Clean pack no-disc-swap-clean-v0.1.1 is retired (enabled false in builder manifest).
+
+## Shipping order
+
+1. **now:** no-disc-swap for **CSR+ stacks** and **Highwind** (Ask + field movie trims + SNOVA; no FMV file copies)
+2. **later:** CSR base alone + manip-movie pack (whitelist only; watch ~93 MB free on 80-min CD)
+
 
 Players: https://individualcontributor.dev/builder/
 
@@ -111,7 +117,7 @@ See docs/findings/2026-08-04-noswap-csr-manip-movies-pack-split.md
   field wait still spans the original duration → List/manip timers that
   key off that wait still line up. See
   docs/findings/2026-08-03-noswap-fmv-wait-vs-stream.md.
-- CSR base: required manip-critical movie whitelist pack (D2/D3 inject) with no-disc-swap-on-csr;
+- CSR base alone (later): required manip-movie pack when that stack ships; deferred for size.
 
 ## Layout
 

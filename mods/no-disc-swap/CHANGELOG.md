@@ -4,9 +4,9 @@ Newest at top.
 
 ## Unreleased
 
-- Policy: no-disc-swap only on CSR, CSR+ stacks, and Highwind - not Unmodified/clean
-  (keep Unmodified free of field/FMV changes). Clean builder pack disabled.
-- CSR base: manip-movie pack is **required** (not optional); omit only with CSR+
+- Policy: no-disc-swap not on Unmodified. Clean pack disabled.
+- **Ship first:** CSR+ stacks + Highwind (core + SNOVA; no manip-movie pack).
+- **Defer:** CSR base alone + required manip-movie copies (disc space).
 
 ## 0.1.1
 
