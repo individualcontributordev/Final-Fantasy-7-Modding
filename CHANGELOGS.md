@@ -41,3 +41,7 @@ Same git push as `builder/` for that release.
 ## History
 
 - [https://individualcontributor.dev/history/](https://individualcontributor.dev/history/)
+
+## single-disc
+
+See [mods/single-disc/CHANGELOG.md](mods/single-disc/CHANGELOG.md).
