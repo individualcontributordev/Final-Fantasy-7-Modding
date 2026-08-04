@@ -18,6 +18,8 @@ Clean pack single-disc-clean-v0.1.1 is retired (enabled false in builder manifes
 
 1. **now:** single-disc for **CSR+ stacks** and **Highwind** (Ask + field movie trims + SNOVA; no FMV file copies)
 2. **later:** CSR base alone + manip-movie pack (whitelist only; watch ~93 MB free on 80-min CD)
+   - Working list: mods/single-disc/patches/csr-manip-movie-whitelist.md
+   - Operator task: docs/INSTRUCTIONS.md (inventory only; no inject yet)
 
 
 Players: https://individualcontributor.dev/builder/

@@ -29,3 +29,5 @@ scripts/stub_field_movie_dskcg.py kept for RE only.
 - SNOVA/BATTLE: docs/findings/2026-08-03-single-disc-snova-injector.md
 - Combined DS: docs/findings/2026-08-03-single-disc-combined-ds-pass.md
 - FMV wait: docs/findings/2026-08-03-single-disc-fmv-wait-vs-stream.md
+
+- csr-manip-movie-whitelist.md — CSR-alone single-disc D2/D3 movie copy list (working)

@@ -4,6 +4,8 @@ Newest at top.
 
 ## Unreleased
 
+- CSR manip movie whitelist starter + list_d2d3_only_movies.py (inventory task)
+
 - Renamed mod id/path from no-disc-swap to **single-disc** (builder packs,
   exclusiveGroup, docs). Same tech; player-facing name is Single-disc.
 
