@@ -1,137 +1,128 @@
-# Task: CSR single-disc — what is done vs what you do
+# Task: CSR single-disc — after blackbgb edit (rebuild packs)
 
-## Already done (use the builder — do not rebuild these)
+## Why only blackbgb?
 
-On the website builder, enabled and ready:
+The core pack already fixed **Ask for disc** (and freeze-on-missing-video) on every other map we needed by copying those map files from the proven Clean single-disc work.
 
-| What you pick | Pack name in the list |
-|---------------|------------------------|
-| CSR base | CSR v0.14.1 |
-| Single disc core | Single-disc (on CSR) v0.1.1 |
-| Extra cutscene videos for CSR | Single-disc CSR manip movies v0.1.0 (seed) |
+**blackbgb is different:** CSR itself already changed that map (hub / routing). We could not drop the Clean file on top without wiping CSR. So blackbgb was left as the CSR version, which still had **Ask for disc**.
 
-**Core pack already includes:**
-- Stops the game asking you to insert Disc 2 or 3
-- Stops freezes when a cutscene video is missing on Disc 1 (on the maps we already fixed)
-- Makes the Supernova boss fight work on Disc 1
-
-**Movie pack already includes** these videos on Disc 1 (for CSR without the CSR+ scene packs):
-- LASTFLOR.MOV
-- LAST4_3.BIN
-- LASTMAP.BIN
-- CANONHT2.MOV
-
-**Still not finished in the core pack:**
-- The blackbgb map may still ask for another disc (needs a Makou edit on the CSR version of that map — see Later, only if needed)
-
-Clean / Unmodified single-disc pack is turned off on purpose. Do not use it for CSR.
+Your Makou edit is only for that leftover: remove Ask on **blackbgb** on a CSR + single-disc image. You do not need to re-edit the other maps.
 
 ---
 
-## What you do now
+## Already done before your edit
 
-1. Open https://individualcontributor.dev/builder/
-2. Load a normal NTSC-U Disc 1 .bin
-3. Choose:
-   - Base: **CSR v0.14.1**
-   - **Single-disc (on CSR) v0.1.1**
-   - **Single-disc CSR manip movies seed v0.1.0**
-   - Do **not** turn on CSR+ scene packs for this test
-4. Build and download the zip (it will be outside this project folder; the name comes from the base and mods)
-5. Play that Disc 1 image in DuckStation (or burn later if you want)
+| Pack | Status |
+|------|--------|
+| single-disc-on-csr-v0.1.1 | Published (other maps + Supernova; blackbgb was still CSR) |
+| single-disc-csr-manip-movies-v0.1.0 | Published (4 videos) |
 
-You do **not** need to rebuild or publish packs for this step. They are already published.
+Playtest stack you used:
 
----
-
-## What to watch for while playing
-
-- Does the game boot and play normally?
-- Does it still stop and ask for Disc 2 or 3? Which map?
-- Does Supernova work?
-- Do the four added videos look OK if you reach those scenes?
-- Anywhere the game freezes or crawls on a cutscene? Note the map name and, if you know it, the video file name.
-
-When you are done testing, say **check** and paste short notes.
+    CSR v0.14.1
+    + Single-disc (on CSR) v0.1.1
+    + Movies seed v0.1.0
+    + No CSR+
 
 ---
 
-## Later, only if needed
+## Done by you
 
-### A. blackbgb still asks for a disc
-
-Only then edit and update the **existing** core pack (not a brand new mod from scratch).
-
-1. Build a zip: CSR + Single-disc on CSR only (movie pack optional).
-2. Open that Disc 1 .bin in Makou.
-3. On map **blackbgb**, delete **Ask for disc** only. Leave CSR jumps and flags alone. Do not paste the Clean map over CSR.
-4. Save into the same .bin.
-5. Rebuild the core pack layer from that .bin against CSR base, verify, then put the four videos back on top and rebuild the movie pack, verify, commit and push.
-6. Build a **new** zip from the website and test again.
-
-Full commands for that rebuild are at the bottom under Rebuild commands.
-
-### B. You need more cutscene videos on Disc 1
-
-1. Write down map + video name from your playtest.
-2. Add a line to mods/single-disc/patches/csr-manip-movie-seed.txt
-3. Re-run the movie inject and rebuild only the movie pack (commands below).
-4. Push, then a new builder zip.
+- [x] Makou on that same playtest Disc 1: blackbgb — remove Ask for disc; keep CSR jumps/flags
 
 ---
 
-## Simple picture
+## What you do next (update the published packs)
 
-    Website builder zip  =  how you play
-    Packs in git         =  already made for CSR + single disc (+ optional videos)
-    Makou / rebuild      =  only when something is still wrong after playtest
+You edited a builder zip .bin. That file is not in git. Rebuild the pack layers from it, then push, then a **new** builder zip to play.
 
-    Clean disc you burned before  =  old test on normal game, not the CSR pack baseline
+### 1. Paths
 
----
+    WORK = full path to your Makoued Disc 1 .bin (the one you just saved)
+    CSR repo layer = /Users/david.morton/Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json
 
-## Rebuild commands (only after Makou or more videos)
+### 2. CSR base (comparison only)
 
-Set WORK to your edited Disc 1 .bin path.
-
-CSR base image (for comparison only):
+    cd /path/to/Final-Fantasy-7-Modding
+    git pull --ff-only
 
     python3 scripts/apply_layer.py workspace/pristine/FINALFANTASY7_D1.bin \
       /Users/david.morton/Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
       -o workspace/iso-extract/ff7_d1_csr_base.bin
 
-Update core pack after blackbgb edit (WORK = your Makoued file):
+### 3. Rebuild core pack from your WORK bin
 
-    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_base.bin"); work=Path("WORK"); out=Path("builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-on-csr-v0.1.1-disc1", description="Single-disc on CSR after blackbgb edit"); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
+    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_base.bin"); work=Path("WORK"); out=Path("builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-on-csr-v0.1.1-disc1", description="Single-disc on CSR after blackbgb Ask removed"); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
 
-    python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin --disc 1 --base csr-v0.14.1 --addon single-disc-on-csr-v0.1.1 --csr-root /Users/david.morton/Final-Fantasy-7-CSR
+Replace WORK with your real path in quotes.
 
-Refresh videos on top of the new core:
+### 4. Check core
 
-    python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin --disc 1 --base csr-v0.14.1 --addon single-disc-on-csr-v0.1.1 --csr-root /Users/david.morton/Final-Fantasy-7-CSR -o workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin
+    python3 scripts/verify_builder_config.py \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+      --disc 1 --base csr-v0.14.1 \
+      --addon single-disc-on-csr-v0.1.1 \
+      --csr-root /Users/david.morton/Final-Fantasy-7-CSR
 
-    cp -f workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin
+Must say PASS.
 
-    python3 mods/single-disc/scripts/inject_movies_by_disc_id.py --d1 workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin --manifest mods/single-disc/patches/csr-manip-movie-seed.txt --in-place
+### 5. Put the four videos back on the new core
 
-    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin"); work=Path("workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin"); out=Path("builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-csr-manip-movies-v0.1.0-disc1", description="CSR single-disc extra videos"); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
+(Your WORK bin may already include the movie seed if you edited the full playtest image. Rebuilding the movie pack still needs a clean "core only" image + inject, or diff WORK against core-applied if WORK is core+movies+blackbgb.)
 
-    python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin --disc 1 --base csr-v0.14.1 --addon single-disc-on-csr-v0.1.1 --addon single-disc-csr-manip-movies-v0.1.0 --csr-root /Users/david.morton/Final-Fantasy-7-CSR
+**If WORK is the full playtest image (core + movies + your blackbgb edit):**
 
-    git add builder/single-disc-on-csr-v0.1.1 builder/single-disc-csr-manip-movies-v0.1.0 builder/manifest.json
-    git commit -m "single-disc: update CSR core and video pack after edits"
+    # Image with new core only (no movies), for movie pack baseline
+    python3 scripts/verify_builder_config.py \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+      --disc 1 --base csr-v0.14.1 \
+      --addon single-disc-on-csr-v0.1.1 \
+      --csr-root /Users/david.morton/Final-Fantasy-7-CSR \
+      -o workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin
+
+    # Rebuild movie pack: full WORK minus new core-only image
+    python3 -c "import json,sys; from pathlib import Path; sys.path.insert(0,"scripts"); from bin_diff_to_layer import build_layer; base=Path("workspace/iso-extract/ff7_d1_csr_single_disc_core_applied.bin"); work=Path("WORK"); out=Path("builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"); layer=build_layer(base, work, layer_id="single-disc-csr-manip-movies-v0.1.0-disc1", description="CSR single-disc extra videos (unchanged seed)"); out.write_text(json.dumps(layer, indent=2)+chr(10)); print(layer["stats"])"
+
+Again replace WORK with your Makoued .bin path.
+
+**If WORK is core-only (no movies):** inject movies after step 4 onto a copy of core-applied, then diff that against core-applied (same as before).
+
+### 6. Check full stack
+
+    python3 scripts/verify_builder_config.py \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+      --disc 1 --base csr-v0.14.1 \
+      --addon single-disc-on-csr-v0.1.1 \
+      --addon single-disc-csr-manip-movies-v0.1.0 \
+      --csr-root /Users/david.morton/Final-Fantasy-7-CSR
+
+Must say PASS.
+
+### 7. Publish
+
+    git add builder/single-disc-on-csr-v0.1.1 \
+            builder/single-disc-csr-manip-movies-v0.1.0 \
+            builder/manifest.json \
+            docs/INSTRUCTIONS.md
+    git commit -m "single-disc: CSR core after blackbgb Ask removed"
     git push
 
-Do not commit .bin files or builder zips.
+Do not commit .bin or builder zips.
+
+### 8. New builder zip and play again
+
+Same stack as before. Confirm blackbgb no longer asks for a disc.
+
+Say **check** when pushed (or paste verify output if something fails).
 
 ---
 
 ## Notes for check
 
-    Built zip with CSR + core + movies: yes/no
-    Boot OK:
-    Still asks for another disc? where:
-    Supernova:
-    Videos OK / wrong:
-    Freeze or crawl (map + video if known):
-    blackbgb edit done: no / yes and pushed:
+    WORK bin was: full playtest (core+movies) / core only
+    Core layer rebuild stats:
+    Movie layer rebuild stats:
+    verify core:
+    verify full:
+    push:
+    blackbgb ask gone on new zip:
