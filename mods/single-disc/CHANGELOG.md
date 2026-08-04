@@ -4,6 +4,9 @@ Newest at top.
 
 ## Unreleased
 
+- Builder: single-disc movies pack uiHidden; auto-applied with CSR single-disc when no CSR+ scenes
+
+
 - single-disc-on-csr: merge all CSR D2+D3 changed FIELD maps onto D1 (keep CSR D1 FIELD.BIN)
 - blackbgb Ask nop + LOST2 D2 break retained; movie seed rebuilt
 

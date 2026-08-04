@@ -24,6 +24,8 @@ Clean pack single-disc-clean-v0.1.1 is retired (enabled false in builder manifes
 
 Players: https://individualcontributor.dev/builder/
 
+Builder UI: one **Single-disc** option on CSR. The manip-movies pack is uiHidden and auto-applied with core when base is CSR and no CSR+ scene packs are selected (manifest autoIncludeWhen).
+
 ## What works (DuckStation, 2026-08-03)
 
 | Piece | Method | Status |
