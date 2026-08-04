@@ -92,6 +92,8 @@ FIELD movie trims (optional polish): patches/field-movie-trims.md + field-movie-
 
 ## FMV policy (Clean)
 
+CSR manip movie copies: optional second pack (see findings noswap-csr-manip-movies-pack-split).
+
 - Do not stub MOVIE; do not import full D2/D3 movies for Clean.
 - Wrong FMV may play at multi-disc moments; often not full length while the
   field wait still spans the original duration → List/manip timers that
