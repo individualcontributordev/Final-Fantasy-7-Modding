@@ -70,7 +70,7 @@ FIELD MOVIE/DSKCG engine stubs abandoned for playable builds.
 
 | Stack | Ask disc | Field Play movie | Extra media on D1 image |
 |-------|----------|------------------|-------------------------|
-| **Unmodified + no-disc-swap** | Makou delete all DSKCG | **Leave** (wrong FMV for D2/D3 spots OK) | No manip-movie import; Supernova still needs `SNOVA/` or battle fix if final battle is reached |
+| **Unmodified + no-disc-swap** | **Retired** - do not ship | - | Keep Unmodified free of field/FMV no-disc-swap; use CSR or Highwind |
 | **CSR + no-disc-swap** (base only) | Makou delete all DSKCG (vs CSR baseline) | **Leave** | **Copy manip-critical MOVIE files from D2/D3 onto D1** so CSR manips (FD/List, etc.) keep correct streams |
 | **CSR + CSR+ scene packs + no-disc-swap** | Same Asks | Scenes that would play those FMVs are **already trimmed** by CSR+ | **No movie copy for CSR+** — wrong PMVIE/set-movie values are irrelevant because the packs do not play those FMVs |
 | **Highwind + no-disc-swap** | Makou vs Highwind baseline | Trims remove the play paths | **No movie copy** — wrong set-movie values not a concern |

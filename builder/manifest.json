@@ -486,7 +486,7 @@
       "id": "no-disc-swap-clean-v0.1.1",
       "name": "No-disc-swap (Clean D1) v0.1.1",
       "kind": "mod",
-      "blurb": "Disc-1 only: skip Ask-for-disc, Supernova on D1. Multi-disc FMVs trimmed.",
+      "blurb": "RETIRED for Clean/Unmodified. no-disc-swap is CSR/Highwind only so Unmodified stays field/FMV-vanilla. Use CSR or Highwind base.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "no-disc-swap",
       "compatibleBases": [
@@ -495,7 +495,7 @@
       "discs": {
         "1": "./no-disc-swap-clean-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "groupLabel": "No-disc-swap",
       "optionLabel": "Clean D1 v0.1.1"
     }
