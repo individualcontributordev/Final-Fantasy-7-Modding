@@ -13,31 +13,32 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
-| 2026-08-04 | [noswap-csrplus-fmv-deduce-manip-movies](2026-08-04-noswap-csrplus-fmv-deduce-manip-movies.md) | COTA+endgame CSR+ diffs: only small endgame movies for CSR-alone |
-| 2026-08-04 | [noswap-on-csr-build-status](2026-08-04-noswap-on-csr-build-status.md) | CSR no-disc-swap pack v0.1.1 partial; BLACKBGB Makou pending |
-| 2026-08-04 | [noswap-ship-csrplus-highwind-first](2026-08-04-noswap-ship-csrplus-highwind-first.md) | Ship CSR+/HW no-disc-swap first; defer CSR manip movies |
-| 2026-08-04 | [noswap-bases-csr-highwind-only](2026-08-04-noswap-bases-csr-highwind-only.md) | no-disc-swap CSR/HW only; Clean retired |
-| 2026-08-04 | [noswap-imgburn-edc-warn-console-ok](2026-08-04-noswap-imgburn-edc-warn-console-ok.md) | ImgBurn EDC warn but console play OK v0.1.1 |
-| 2026-08-04 | [noswap-csr-manip-movies-pack-split](2026-08-04-noswap-csr-manip-movies-pack-split.md) | CSR manip FMV optional pack; not auto-off with CSR+ |
-| 2026-08-04 | [noswap-fr-e-blin70-movie-trims](2026-08-04-noswap-fr-e-blin70-movie-trims.md) | fr_e #347 + blin70_4 #269 Set+Play trims |
-| 2026-08-04 | [noswap-d2d3-movie-trims-unblock](2026-08-04-noswap-d2d3-movie-trims-unblock.md) | D2/D3 Set+Play trims unblocked playtest |
-| 2026-08-04 | [noswap-load-save-asks-disc2](2026-08-04-noswap-load-save-asks-disc2.md) | Load save asks disc 2: save disc id vs field Ask |
-| 2026-08-03 | [noswap-field-movie-scan](2026-08-03-noswap-field-movie-scan.md) | D1 PMVIE scan Tier1 crawl candidates |
-| 2026-08-03 | [noswap-ioslake3-missing-fmv](2026-08-03-noswap-ioslake3-missing-fmv.md) | ioslake3 missing FMV (Bugenhagen idle); not freeze |
-| 2026-08-03 | [noswap-console-boot-pass](2026-08-03-noswap-console-boot-pass.md) | no-disc-swap burned CD: title/new game/first field PASS |
-| 2026-08-03 | [noswap-imgburn-verify-pass](2026-08-03-noswap-imgburn-verify-pass.md) | no-disc-swap CD-R ImgBurn verify PASS; console pending |
-| 2026-08-03 | [noswap-fmv-wait-vs-stream](2026-08-03-noswap-fmv-wait-vs-stream.md) | Wrong FMV often ends early; wait/manip time may still match |
-| 2026-08-03 | [noswap-combined-ds-pass](2026-08-03-noswap-combined-ds-pass.md) | Ask+SNOVA combined D1 work bin DS PASS |
-| 2026-08-03 | [noswap-supernova-ds-pass](2026-08-03-noswap-supernova-ds-pass.md) | Supernova DS PASS after BATTLE.X LBA remap v3 |
-| 2026-08-03 | [noswap-snova-injector](2026-08-03-noswap-snova-injector.md) | D3 SNOVA/ inject onto D1; offline OK; DS playtest pending |
-| 2026-08-03 | [noswap-makou-ask-ds-pass](2026-08-03-noswap-makou-ask-ds-pass.md) | Makou all Ask-for-disc removed; DuckStation PASS; console untested | confirmed |
-| 2026-08-03 | [noswap-field-movie-dskcg-stub](2026-08-03-noswap-field-movie-dskcg-stub.md) | FIELD DSKCG+MOVIE handlers; jr ra stub plan; tool under mods/no-disc-swap | likely |
-| 2026-08-03 | [noswap-full-run-scope](2026-08-03-noswap-full-run-scope.md) | No ship until full-run safe; SNOVA/movies/Asks all required | confirmed |
-| 2026-08-02 | [noswap-blackbgb-ask-skip-proto](2026-08-02-noswap-blackbgb-ask-skip-proto.md) | blackbgb: Ask skipped via Goto OK; gate Bit OFF accidentally skipped — fix | confirmed |
-| 2026-08-02 | [noswap-blackbgb-hub-branches](2026-08-02-noswap-blackbgb-hub-branches.md) | blackbgb S0: 4 asks → las0_1#744 / lost2#634; save bits 5/2 + Var[13][0] | confirmed |
-| 2026-08-02 | [noswap-ask-for-disc-inventory](2026-08-02-noswap-ask-for-disc-inventory.md) | D1 Ask for disc: 19 hits in blackbgb/e/3 only; hub=blackbgb #103 | confirmed |
-| 2026-08-02 | [noswap-disc-change-pristine](2026-08-02-noswap-disc-change-pristine.md) | D1: DISK0001 + MOVIE/DISKn.LZS; swap = Makou Ask for disc N then map jump | confirmed |
-| 2026-08-02 | [disc-cross-compare](2026-08-02-disc-cross-compare.md) | D1/D2/D3: code+FIELD identical; diffs are FMV + disc-id; single-disc no-disc-swap plausible without full movies | confirmed |
+| 2026-08-04 | [single-disc-rename-from-no-disc-swap](2026-08-04-single-disc-rename-from-no-disc-swap.md) | Rename no-disc-swap → single-disc |
+| 2026-08-04 | [single-disc-csrplus-fmv-deduce-manip-movies](2026-08-04-single-disc-csrplus-fmv-deduce-manip-movies.md) | COTA+endgame CSR+ diffs: only small endgame movies for CSR-alone |
+| 2026-08-04 | [single-disc-on-csr-build-status](2026-08-04-single-disc-on-csr-build-status.md) | CSR single-disc pack v0.1.1 partial; BLACKBGB Makou pending |
+| 2026-08-04 | [single-disc-ship-csrplus-highwind-first](2026-08-04-single-disc-ship-csrplus-highwind-first.md) | Ship CSR+/HW single-disc first; defer CSR manip movies |
+| 2026-08-04 | [single-disc-bases-csr-highwind-only](2026-08-04-single-disc-bases-csr-highwind-only.md) | single-disc CSR/HW only; Clean retired |
+| 2026-08-04 | [single-disc-imgburn-edc-warn-console-ok](2026-08-04-single-disc-imgburn-edc-warn-console-ok.md) | ImgBurn EDC warn but console play OK v0.1.1 |
+| 2026-08-04 | [single-disc-csr-manip-movies-pack-split](2026-08-04-single-disc-csr-manip-movies-pack-split.md) | CSR manip FMV optional pack; not auto-off with CSR+ |
+| 2026-08-04 | [single-disc-fr-e-blin70-movie-trims](2026-08-04-single-disc-fr-e-blin70-movie-trims.md) | fr_e #347 + blin70_4 #269 Set+Play trims |
+| 2026-08-04 | [single-disc-d2d3-movie-trims-unblock](2026-08-04-single-disc-d2d3-movie-trims-unblock.md) | D2/D3 Set+Play trims unblocked playtest |
+| 2026-08-04 | [single-disc-load-save-asks-disc2](2026-08-04-single-disc-load-save-asks-disc2.md) | Load save asks disc 2: save disc id vs field Ask |
+| 2026-08-03 | [single-disc-field-movie-scan](2026-08-03-single-disc-field-movie-scan.md) | D1 PMVIE scan Tier1 crawl candidates |
+| 2026-08-03 | [single-disc-ioslake3-missing-fmv](2026-08-03-single-disc-ioslake3-missing-fmv.md) | ioslake3 missing FMV (Bugenhagen idle); not freeze |
+| 2026-08-03 | [single-disc-console-boot-pass](2026-08-03-single-disc-console-boot-pass.md) | single-disc burned CD: title/new game/first field PASS |
+| 2026-08-03 | [single-disc-imgburn-verify-pass](2026-08-03-single-disc-imgburn-verify-pass.md) | single-disc CD-R ImgBurn verify PASS; console pending |
+| 2026-08-03 | [single-disc-fmv-wait-vs-stream](2026-08-03-single-disc-fmv-wait-vs-stream.md) | Wrong FMV often ends early; wait/manip time may still match |
+| 2026-08-03 | [single-disc-combined-ds-pass](2026-08-03-single-disc-combined-ds-pass.md) | Ask+SNOVA combined D1 work bin DS PASS |
+| 2026-08-03 | [single-disc-supernova-ds-pass](2026-08-03-single-disc-supernova-ds-pass.md) | Supernova DS PASS after BATTLE.X LBA remap v3 |
+| 2026-08-03 | [single-disc-snova-injector](2026-08-03-single-disc-snova-injector.md) | D3 SNOVA/ inject onto D1; offline OK; DS playtest pending |
+| 2026-08-03 | [single-disc-makou-ask-ds-pass](2026-08-03-single-disc-makou-ask-ds-pass.md) | Makou all Ask-for-disc removed; DuckStation PASS; console untested | confirmed |
+| 2026-08-03 | [single-disc-field-movie-dskcg-stub](2026-08-03-single-disc-field-movie-dskcg-stub.md) | FIELD DSKCG+MOVIE handlers; jr ra stub plan; tool under mods/single-disc | likely |
+| 2026-08-03 | [single-disc-full-run-scope](2026-08-03-single-disc-full-run-scope.md) | No ship until full-run safe; SNOVA/movies/Asks all required | confirmed |
+| 2026-08-02 | [single-disc-blackbgb-ask-skip-proto](2026-08-02-single-disc-blackbgb-ask-skip-proto.md) | blackbgb: Ask skipped via Goto OK; gate Bit OFF accidentally skipped — fix | confirmed |
+| 2026-08-02 | [single-disc-blackbgb-hub-branches](2026-08-02-single-disc-blackbgb-hub-branches.md) | blackbgb S0: 4 asks → las0_1#744 / lost2#634; save bits 5/2 + Var[13][0] | confirmed |
+| 2026-08-02 | [single-disc-ask-for-disc-inventory](2026-08-02-single-disc-ask-for-disc-inventory.md) | D1 Ask for disc: 19 hits in blackbgb/e/3 only; hub=blackbgb #103 | confirmed |
+| 2026-08-02 | [single-disc-disc-change-pristine](2026-08-02-single-disc-disc-change-pristine.md) | D1: DISK0001 + MOVIE/DISKn.LZS; swap = Makou Ask for disc N then map jump | confirmed |
+| 2026-08-02 | [disc-cross-compare](2026-08-02-disc-cross-compare.md) | D1/D2/D3: code+FIELD identical; diffs are FMV + disc-id; single-disc single-disc plausible without full movies | confirmed |
 | 2026-07-30 | [verify-built-disc-stacking](2026-07-30-verify-built-disc-stacking.md) | Zip verify: match APPLIED ids; ignore EDC/ECC + base bytes addons overwrite | confirmed |
 | 2026-07-30 | [world-light-runtime-verify](2026-07-30-world-light-runtime-verify.md) | Builder zip PASS; stub live; danger 0/FFFF; 0x40 not FORCE; DS/CE watches | confirmed |
 | 2026-07-28 | [world-light-dense-feel](2026-07-28-world-light-dense-feel.md) | Light≈Standard short walk; Dense clearly higher; ship all three | likely |
