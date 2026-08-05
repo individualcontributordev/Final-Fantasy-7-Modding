@@ -1,7 +1,7 @@
 # CSR D2/D3 field merge onto D1 (single-disc core)
 
 Note: FIELD.BIN from D2/D3 was **not** kept on D1 (use CSR D1 FIELD.BIN).
-blackbgb Ask replaced with JMPF+0 after merge. LOST2 = CSR D2.
+blackbgb: DELETE four Ask-for-disc ops only (do NOT use JMPF+0 / forward 1 byte). LOST2 = CSR D2.
 Maps that CSR D2/D3 changed may undo earlier Clean-style freeze trims; playtest.
 
 Copied: 76  Already matched: 1  Fail: 0
