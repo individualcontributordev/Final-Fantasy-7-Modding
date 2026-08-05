@@ -541,6 +541,32 @@
         "unlessAddonIdPrefix": "csr-plus-scene-"
       },
       "version": "0.1.0"
+    },
+    {
+      "id": "single-disc-csr-manip-movies-v0.1.1",
+      "name": "Single-disc CSR movies LBA alias",
+      "kind": "mod",
+      "blurb": "Hidden in UI. Stack on manip-movies v0.1.0. Writes CANONON at ISO LBA 250450 so LOSLAKE1 D2-style seek hits the right stream (not mid-RCKTFAIL).",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "single-disc-csr-movies-alias",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./single-disc-csr-manip-movies-v0.1.1/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Single-disc CSR movies LBA alias (auto)",
+      "optionLabel": "v0.1.1 LBA 250450",
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.1",
+        "bases": [
+          "csr-v0.14.1"
+        ],
+        "unlessAddonIdPrefix": "csr-plus-scene-"
+      },
+      "version": "0.1.1"
     }
   ],
   "bases": [],
