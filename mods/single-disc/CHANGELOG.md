@@ -1,5 +1,9 @@
 # Single-disc changelog
 
+## Unreleased
+
+- blackbgb (#103): remove bad JMPF+0 (forward 1 byte) Ask stand-ins; **delete** the four Ask-for-disc ops instead (fixes post-Hojo las0_1 load).
+
 Newest at top.
 
 ## Unreleased
