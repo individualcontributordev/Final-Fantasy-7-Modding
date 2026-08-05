@@ -112,13 +112,9 @@ def _find_dirent(img: bytes, path: str):
     raise FileNotFoundError(path)
 
 
-def _set_file_size(img: bytearray, path: str, new_size: int) -> None:
+def _patch_dirent_lba_size(img: bytearray, path: str, new_lba: int, new_size: int) -> None:
+    """Rewrite ISO9660 directory record LBA + size for path (both endian fields)."""
     dir_lba, dir_size, pos, _ = _find_dirent(bytes(img), path)
-    meta = find_file(img, path)
-    old_sec = (meta.size + USER - 1) // USER
-    new_sec = (new_size + USER - 1) // USER
-    if new_sec > old_sec:
-        raise ValueError("%s needs more sectors" % path)
     remaining = dir_size
     sector = dir_lba
     data = bytearray()
@@ -129,6 +125,9 @@ def _set_file_size(img: bytearray, path: str, new_size: int) -> None:
         data.extend(_user(img, sector)[:take])
         remaining -= take
         sector += 1
+    # LBA at +2 LE / +6 BE; size at +10 LE / +14 BE
+    struct.pack_into("<I", data, pos + 2, new_lba)
+    struct.pack_into(">I", data, pos + 6, new_lba)
     struct.pack_into("<I", data, pos + 10, new_size)
     struct.pack_into(">I", data, pos + 14, new_size)
     off = 0
@@ -144,8 +143,48 @@ def _set_file_size(img: bytearray, path: str, new_size: int) -> None:
             _write_user(img, s, chunk)
         off += take
         rem -= take
-    if find_file(img, path).size != new_size:
-        raise RuntimeError("size patch failed for %s" % path)
+    meta = find_file(img, path)
+    if meta.lba != new_lba or meta.size != new_size:
+        raise RuntimeError(
+            "dirent patch failed for %s (got lba=%s size=%s)"
+            % (path, meta.lba, meta.size)
+        )
+
+
+def _set_file_size(img: bytearray, path: str, new_size: int) -> None:
+    meta = find_file(img, path)
+    old_sec = (meta.size + USER - 1) // USER
+    new_sec = (new_size + USER - 1) // USER
+    if new_sec > old_sec:
+        raise ValueError("%s needs more sectors" % path)
+    _patch_dirent_lba_size(img, path, meta.lba, new_size)
+
+
+def _append_file_grow(img: bytearray, path: str, data: bytes) -> int:
+    """Place data at end of image (MODE2/2352 sectors), point dirent at new LBA/size.
+
+    Returns new LBA. Used when source movie is larger than the D1 slot.
+    PMVIE id stays the same (sorted name index); only the file body moves.
+    """
+    from psx_mode2_iso import SECTOR, USER_OFF  # local to avoid top churn
+
+    new_sec = (len(data) + USER - 1) // USER
+    # Align image to whole sectors
+    if len(img) % SECTOR:
+        img.extend(b"\x00" * (SECTOR - (len(img) % SECTOR)))
+    new_lba = len(img) // SECTOR
+    # Build raw MODE2 Form1-ish sectors: keep existing sector template from LBA 0
+    template = bytes(img[0:SECTOR])
+    for i in range(new_sec):
+        chunk = data[i * USER : (i + 1) * USER]
+        if len(chunk) < USER:
+            chunk = chunk + b"\x00" * (USER - len(chunk))
+        sec = bytearray(template)
+        # rewrite sector address in header if present (bytes 12-14 BCD) — skip; emulators OK
+        sec[USER_OFF : USER_OFF + USER] = chunk
+        img.extend(sec)
+    _patch_dirent_lba_size(img, path, new_lba, len(data))
+    return new_lba
 
 
 def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict:
@@ -162,15 +201,17 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict
     data = extract_file(src_img, "MOVIE/" + src_name)
     if len(data) != src_size:
         raise RuntimeError("extract size mismatch")
-    if len(data) > d1_size:
-        raise SystemExit(
-            "%s (%d bytes) does not fit D1 id %d slot %s (%d bytes)"
-            % (movie, len(data), mid, d1_name, d1_size)
-        )
     path = "MOVIE/" + d1_name
-    if len(data) != d1_size:
-        _set_file_size(d1, path, len(data))
-    replace_file_padded(d1, path, data)
+    grew = False
+    if len(data) > d1_size:
+        new_lba = _append_file_grow(d1, path, data)
+        grew = True
+        note_lba = new_lba
+    else:
+        if len(data) != d1_size:
+            _set_file_size(d1, path, len(data))
+        replace_file_padded(d1, path, data)
+        note_lba = find_file(d1, path).lba
     return {
         "movie": movie.upper(),
         "src_disc": src_disc,
@@ -178,6 +219,8 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict
         "d1_slot": d1_name,
         "src_bytes": len(data),
         "old_slot_bytes": d1_size,
+        "grew": grew,
+        "lba": note_lba,
     }
 
 
@@ -236,8 +279,9 @@ def main() -> int:
                 raise SystemExit("missing D%d: %s" % (disc, src_path))
             cache[disc] = src_path.read_bytes()
         info = inject_one(d1, cache[disc], movie, disc)
+        extra = " [GREW lba=%s]" % info["lba"] if info.get("grew") else ""
         print(
-            "OK id=%d %s <- D%d %s (%d bytes; was %d)"
+            "OK id=%d %s <- D%d %s (%d bytes; was %d)%s"
             % (
                 info["id"],
                 info["d1_slot"],
@@ -245,6 +289,7 @@ def main() -> int:
                 info["movie"],
                 info["src_bytes"],
                 info["old_slot_bytes"],
+                extra,
             )
         )
 

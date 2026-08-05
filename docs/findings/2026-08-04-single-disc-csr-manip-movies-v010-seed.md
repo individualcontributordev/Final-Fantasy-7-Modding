@@ -29,3 +29,13 @@ point at the old D1 file.
 ## Next
 
 Playtest; extend seed list / whitelist; rebuild pack.
+
+## Update — JUNSEA for LOSLAKE1 (#637)
+
+| Movie | Disc | Id | D1 slot overwritten |
+|-------|:----:|---:|---------------------|
+| JUNSEA.STR | 2 | 47 | MK8.STR (grew; appended LBA) |
+
+LOSLAKE1 keeps Play (manip). Do **not** paste Clean Set+Play delete for #637.
+Injector now appends MODE2 sectors when source is larger than D1 slot.
+

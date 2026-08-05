@@ -17,6 +17,16 @@ When Makou is required: edit on a fresh CSR base + pack layer apply; avoid repea
 
 ---
 
+## LOSLAKE1 (#637) manip FMV
+
+Wrong FMV was **not** fixed by deleting Set+Play (that would break the manip).
+
+**Fix:** movie seed pack injects D2 **JUNSEA.STR** into D1 PMVIE **id 47** (overwrites MK8.STR; slot grown).
+
+Stack: CSR + Single-disc + manip movies (auto when no CSR+). New builder zip after Pages.
+Do not Clean-trim LOSLAKE1 Play.
+
+
 # Task: publish Makou-fixed single-disc-on-csr pack
 
 Your edits are on the other machine. Put the fixed work bin here, rebuild the layer, verify, push. Then rebuild a zip on the site and keep playtesting.
