@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- manip-movies: LOSLAKE1 (#637) multi-disc Set movie uses JAIROFAL on D1; inject D2 CANONON.MOV into JAIROFAL.MOV slot (grow + MOVIE_ID). Drop JUNSEA/LASTFLOR id36 clash.
 - manip-movies: patch MINT/MOVIE_ID.BIN when growing a slot (LOSLAKE1 #637 still played old MK8/rocket stream).
 - manip-movies: add JUNSEA.STR (D2) for LOSLAKE1 (#637) manip; injector grows D1 id-47 slot when source is larger.
 - WHITE2 (#643): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D2 merge).

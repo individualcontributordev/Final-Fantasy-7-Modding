@@ -19,9 +19,13 @@ When Makou is required: edit on a fresh CSR base + pack layer apply; avoid repea
 
 ## LOSLAKE1 (#637) manip FMV
 
-Wrong FMV was **not** fixed by deleting Set+Play (that would break the manip).
+Makou triplet: Set next movie **jairofal (D1), canonon (D2), No47 (D3)**.
+Single-disc runs as disc 1, so Play uses **JAIROFAL.MOV**.
 
-**Fix:** movie seed pack injects D2 **JUNSEA.STR** into D1 PMVIE **id 47** (overwrites MK8.STR; slot grown) and patches **MINT/MOVIE_ID.BIN** so the engine uses the new LBA (ISO dirent alone is not enough).
+**Correct stream for the manip:** D2 **CANONON.MOV** (not JUNSEA, not vanilla JAIROFAL).
+
+**Fix:** movie pack injects CANONON into the D1 **JAIROFAL.MOV** slot (grow ISO + patch **MINT/MOVIE_ID.BIN**).
+LASTFLOR (also wanted id 36) is deferred while CANONON owns that slot.
 
 Stack: CSR + Single-disc + manip movies (auto when no CSR+). New builder zip after Pages.
 Do not Clean-trim LOSLAKE1 Play.
