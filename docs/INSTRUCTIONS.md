@@ -52,62 +52,26 @@ python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bi
 ---
 
 
-# DuckStation — LOSLAKE1 (#637)
+# LOSLAKE1 (#637) — RESOLVED from CD logs
 
-Bin: `ff7_d1_playtest_csr_sd_movies.cue` only (**766084032** bytes).
+Logs: `docs/logs single disc 1.txt`, `docs/logs real disc 2.txt`
+Finding: `docs/findings/2026-08-05-loslake1-cdrom-d1-vs-d2.md`
 
-```bash
-git pull --ff-only
-python3 mods/single-disc/scripts/build_playtest_bin.py
-```
+DuckStation `Read sector N` = ISO LBA + 150.
 
-## Captured (d94915c screenshots)
+| | Single-disc D1 playtest | Real Disc 2 |
+|--|-------------------------|-------------|
+| FMV stream DS sectors | **250600–252128** | **250600–257296** |
+| File on that disc | **RCKTFAIL.MOV** (mid-file) | **CANONON.MOV** (from start) |
+| MOVIE_ID slot 47 | 318357 (CANONON in JAIROFAL) | 250450 (CANONON) |
 
-| Item | Value |
-|------|-------|
-| Bin size | 766084032 (image.png) |
-| BP | 0x800CCE94 hit |
-| P = *(u32*)0x8009C6E0 | **0x8009ABF4** (bytes `F4 AB 09 80`) |
-| u16 at P+2 | **`2F 00` = movie id 47** |
-| Entity @ P | `00 00 2F 00 01 ...` |
+Both discs seek absolute **250600** (= LBA **250450**). That is D2 CANONON. On D1 layout LBA 250450 sits inside RCKTFAIL → rocket pad.
 
-Id **47** confirmed in RAM. Pack/script target is correct.
+Inject + MOVIE_ID[47]=318357 are fine; **CD never reads 318357**. Stream uses D2-style absolute LBA.
 
-## DO NOW — active stream (not table presence)
+## Next (engine / seek path)
 
-### Why all three hit is useless
-
-MOVIE_ID (and copies) sits in RAM with every movie LBA. Searching for:
-
-- 95 DB 04 00 (318357 CANONON)
-- 51 F1 03 00 (258385 vanilla jairofal)
-- BB BE 03 00 (245435 rcktfail)
-
-will all hit. That only means the table is loaded. It does not say which stream is playing.
-
-### What you want
-
-One LBA: the sector the CD is reading for this FMV right now.
-
-### Do one of these
-
-A. CD-ROM log (best)
-   DuckStation log CD-ROM/ISO reads. Play bad FMV. Note sector/LBA during movie.
-
-B. Same scene on CSR Disc 2
-   If D2 looks the same as single-disc, pack is fine (canonon just looks like that).
-   If D2 looks different, single-disc is still wrong.
-
-### Send back (only one)
-
-1. CD log LBA during FMV, or
-2. D2 same as SD / D2 different
-
-| LBA | Meaning |
-|----:|---------|
-| 318357 | pack CANONON |
-| 258385 | vanilla jairofal |
-| 245435 | rcktfail |
+Find what sets the FMV seek to **250450** and make D1 use MOVIE_ID[47] (**318357**), or alias that LBA to CANONON without breaking real RCKTFAIL if needed.
 
 ---
 
