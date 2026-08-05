@@ -1,65 +1,139 @@
-# Task: blackbgb (#103) - DELETE Ask-for-disc (no JMPF / forward)
+# Task: publish Makou-fixed single-disc-on-csr pack
 
-## Bug
+Your edits are on the other machine. Put the fixed work bin here, rebuild the layer, verify, push. Then rebuild a zip on the site and keep playtesting.
 
-Field **103 / BLACKBGB** (post-Hojo disc hub) used a bad single-disc edit:
+## 0. What this pack is
 
-- **Wrong:** replace Ask-for-disc with **JMPF+0** (Makou shows this as **forward 1 byte(s)**)
-- That is not a real NOP. Script flow breaks - disc 3 field (las0_1 #744) fails to load after Hojo.
+- Repo: Final-Fantasy-7-Modding
+- Pack id: single-disc-on-csr-v0.1.1
+- Layer: builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json
+- Diff baseline: CSR D1 only (not pristine Clean)
+- Site CDN: this repo GitHub Pages (builder loads remote Modding manifest)
 
-## Correct edit (Makou)
+## 1. Copy the work bin onto this machine
 
-Open the CSR single-disc work image (or CSR D1 base + rebuild pack after):
+Expected path (gitignored):
 
-1. Field map **blackbgb** (#103)
-2. Group **init** - script **S0 - Main**
-3. Find All: **Ask for disc**
-4. There should be **four** asks (2x disc 2, 2x disc 3)
-5. For **each** of the four:
-   - Select the **Ask for disc N** instruction only
-   - **Delete** it (do **not** insert JMPF / forward N bytes)
-6. **Keep** everything else in those branches:
-   - Bit ON/OFF gates
-   - Wait
-   - **Play music**
-   - Jump to map (**lost2 #634** or **las0_1 #744**)
-   - Optional save-menu setup on the save branches
+    workspace/iso-extract/ff7_d1_csr_single_disc_playtest_work.bin
 
-### Good shape (each disc branch)
+That file must already include:
 
-    ... gate / Bit OFF ...
-    Wait ...
-    # Ask for disc  - DELETED (gone, not replaced)
-    Play music ...
-    ...
-    Jump to map las0_1 or lost2 ...
+- CSR base
+- Single-disc field work (D2/D3 CSR field merge, SNOVA if kept in the same bin)
+- Latest Makou edits (blackbgb Ask deleted, no forward/JMPF; LAS4_2 etc. Set+Play as needed)
 
-### Bad shape (what we shipped by mistake)
+If the file has another name, copy/rename to the path above or change WORK in the commands below.
 
-    ... gate ...
-    forward 1 byte(s)     # JMPF+0 - REMOVE THIS
-    Play music ...          # may never run correctly
+Also ensure CSR baseline exists:
 
-7. Save the map in Makou.
-8. Rebuild / refresh the single-disc-on-csr pack layer for FIELD/BLACKBGB.DAT (same process as other field ships).
-9. Playtest: after Hojo -> hub -> should land **las0_1** (Northern Cave) with music, no insert-disc, no freeze.
+    workspace/iso-extract/ff7_d1_csr_base.bin
 
-## Do not
+Rebuild CSR base if missing:
 
-- Do **not** leave forward 1 byte(s) / JMPF+0 anywhere in this script.
-- Do **not** delete Bit OFF / Play music / Jump.
-- Do **not** use FIELD.BIN DSKCG engine stubs (abandoned).
+    python3 scripts/apply_layer.py \
+      workspace/pristine/FINALFANTASY7_D1.bin \
+      ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
+      -o workspace/iso-extract/ff7_d1_csr_base.bin
 
-## Reference
+Pristine D1 must exist at workspace/pristine/FINALFANTASY7_D1.bin.
 
-- Hub branches: docs/findings/2026-08-02-single-disc-blackbgb-hub-branches.md
-- Correct prototype: docs/findings/2026-08-02-single-disc-blackbgb-ask-skip-proto.md (prefer **delete** Ask)
-- Past DS pass: docs/findings/2026-08-03-single-disc-makou-ask-ds-pass.md
+## 2. Rebuild the builder layer
+
+From Final-Fantasy-7-Modding root:
+
+    git pull --ff-only
+
+    python3 scripts/bin_diff_to_layer.py \
+      workspace/iso-extract/ff7_d1_csr_base.bin \
+      workspace/iso-extract/ff7_d1_csr_single_disc_playtest_work.bin \
+      -o builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
+      --id single-disc-on-csr-v0.1.1-disc1 \
+      --description "Single-disc on CSR D1: Ask delete, field merges, movie trims, SNOVA"
+
+Do not diff against pristine Clean. Baseline is always ff7_d1_csr_base.bin.
+
+## 3. Verify (required)
+
+    python3 scripts/verify_builder_config.py \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+      --disc 1 \
+      --base csr-v0.14.1 \
+      --addon single-disc-on-csr-v0.1.1
+
+Optional (CSR + single-disc + movie seed, no CSR+):
+
+    python3 scripts/verify_builder_config.py \
+      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+      --disc 1 \
+      --base csr-v0.14.1 \
+      --addon single-disc-on-csr-v0.1.1 \
+      --addon single-disc-csr-manip-movies-v0.1.0
+
+Must print PASS.
+
+## 4. Changelog + commit + push
+
+Edit mods/single-disc/CHANGELOG.md (Unreleased or new section), e.g.:
+
+- blackbgb (#103): delete four Ask-for-disc ops (remove bad JMPF/forward stubs)
+- LAS4_2 (#765) / other maps: delete Set+Play where wrong FMV on D1
+- (list anything else you fixed in Makou)
+
+Then:
+
+    git add builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
+            mods/single-disc/CHANGELOG.md \
+            docs/INSTRUCTIONS.md
+
+    git commit -m "single-disc-on-csr: publish Makou field fixes (blackbgb, movies)"
+    git pull --rebase
+    git push
+
+Wait for GitHub Pages on this repo (often 1-2 minutes).
+
+## 5. New zip + continue testing
+
+1. Hard-refresh https://individualcontributor.dev/builder/
+2. Base: CSR · Mods: Single-disc (movie pack auto if no CSR+)
+3. Build zip from a clean pristine D1 .bin (not the old work bin)
+4. Playtest; next Makou pass: edit a fresh apply (CSR base + new pack layer), not a sick re-saved grown bin
+
+### Fresh Makou source next time (avoid invalid archive)
+
+    python3 scripts/apply_layer.py \
+      workspace/pristine/FINALFANTASY7_D1.bin \
+      ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
+      -o workspace/iso-extract/ff7_d1_csr_base.bin
+
+    python3 scripts/apply_layer.py \
+      workspace/iso-extract/ff7_d1_csr_base.bin \
+      builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
+      -o workspace/iso-extract/ff7_d1_csr_single_disc_makou_work.bin
+
+Open ff7_d1_csr_single_disc_makou_work.bin in Makou once, edit, save once, then repeat steps 2-4.
+
+## Makou checklist (already partly done)
+
+| ID | Map | Edit |
+|---:|-----|------|
+| 103 | BLACKBGB | Delete four Ask-for-disc; remove any forward/JMPF; keep music + jumps |
+| 765 | LAS4_2 | Delete Set next movie + Play movie if wrong FMV |
+| 763/766/767/768 | LAS4_* / LASTMAP | Same movie trim if wrong/crawl |
+| 95/106 | BLACKBG3/E | Delete Ask if still present |
+
+Keep Wait / Execute / Jump / bits. Do not use FIELD.BIN DSKCG stubs.
+
+## Priority field ids (spot-check)
+
+95 BLACKBG3 · 103 BLACKBGB · 106 BLACKBGE · 67 FSHIP_12 · 68 FSHIP_2 · 269 BLIN70_4 · 347 FR_E · 634 LOST2 · 637 LOSLAKE1 · 643 WHITE2 · 695 GAIA_32 · 725-727 ZMIND* · 744 LAS0_1 · 751 LAS0_8 · 763/765/766/767 LAS4_* · 768 LASTMAP · 777 LAS4_42 · 779 MD8_52
 
 ## Notes for check
 
-    After Hojo hub:
-    las0_1 loads:
-    Music:
-    Ask for disc:
-    Other maps:
+    Work bin path:
+    bin_diff:
+    verify PASS:
+    commit:
+    Builder zip:
+    After Hojo / las0_1:
+    LAS4_2 FMV:
+    Other:
