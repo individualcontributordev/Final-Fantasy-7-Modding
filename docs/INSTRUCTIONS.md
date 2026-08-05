@@ -52,54 +52,154 @@ python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bi
 ---
 
 
-# DuckStation — LOSLAKE1 (#637) — DO THIS
+# DuckStation — LOSLAKE1 (#637)
 
-Bin must be **766084032** bytes. Open only:
-
-    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
-
-Rebuild if needed:
+Bin: `ff7_d1_playtest_csr_sd_movies.cue` only (**766084032** bytes).
 
 ```bash
 git pull --ff-only
 python3 mods/single-disc/scripts/build_playtest_bin.py
 ```
 
-## Known (done)
+## Captured (d94915c screenshots)
 
-- Script (Makou): **Set next movie jairofal/canonon/No47** then Play — id **47**
-- Host pack: JAIROFAL slot = CANONON @ LBA **318357**
-- BP `0x800CCE94` is correct; `800722C4` is **not** movie id
+| Item | Value |
+|------|-------|
+| Bin size | 766084032 (image.png) |
+| BP | 0x800CCE94 hit |
+| P = *(u32*)0x8009C6E0 | **0x8009ABF4** (bytes `F4 AB 09 80`) |
+| u16 at P+2 | **`2F 00` = movie id 47** |
+| Entity @ P | `00 00 2F 00 01 ...` |
 
-## DO NOW (paused on bad FMV at 0x800CCE94)
+Id **47** confirmed in RAM. Pack/script target is correct.
 
-### 1. Memory goto `8009C6E0`
+## DO NOW — LBA only
 
-- Screenshot 16 bytes
-- Write the 4-byte LE pointer **P** (first 4 bytes)
+Paused on bad FMV. Memory **Search** (hex, little-endian).
 
-### 2. Memory goto **P**
+Search each pattern. Reply with **hit or no hit** only:
 
-- Screenshot 16 bytes
-- Movie id = bytes at **P+2** and **P+3** (LE u16)
-  - `2F 00` = 47
-  - `2D 00` = 45
-
-### 3. Memory Search (LE hex) — which hits?
-
-| Bytes | LBA | Stream |
-|-------|----:|--------|
+| Search | LBA | Stream |
+|--------|----:|--------|
 | `95 DB 04 00` | 318357 | CANONON (pack) |
 | `51 F1 03 00` | 258385 | vanilla jairofal |
 | `BB BE 03 00` | 245435 | rcktfail |
 
-### 4. Send back
+How: bytes `b0 b1 b2 b3` → LBA = b0 + b1*256 + b2*65536 + b3*16777216.
 
-Only these:
+Example: `95 DB 04 00` → 0x0004DB95 = 318357.
 
-1. P (from step 1)
-2. 16 bytes at P (step 2)
-3. Which search row(s) hit (step 3)
-4. Screenshot of game FMV if easy
+Do **not** re-dump 8009C6E0 / P.
 
-Do **not** re-dump 8009D820 / 800722C4 / 800716CC.
+---
+
+# Windows disk cleanup (Git Bash) — low free space can break Makou
+
+Makou ISO save writes a full-size temp (`*.makoutemp`, ~0.7 GB for D1) next to the
+work `.bin`. If **C:** (or the drive holding the bin / `%TEMP%`) is nearly full,
+save can fail with **invalid archive** even when the script edit is fine.
+
+Use **Git Bash** below. Paths are typical Windows; adjust if your drive letter
+or user name differs.
+
+## Free space
+
+```bash
+# C: free/used (Git Bash)
+df -h /c/
+
+# TEMP location (Makou/OS temp often lands here)
+echo "TEMP=$TEMP"
+echo "TMP=$TMP"
+df -h "$TEMP" 2>/dev/null || df -h /c/Users/"$USER"/AppData/Local/Temp
+```
+
+Aim for several free GB on the drive where the `.bin` lives and on TEMP.
+
+## Largest top-level dirs on C:
+
+```bash
+# Slow but useful overview (may need a minute)
+du -h -d 1 /c/ 2>/dev/null | sort -hr | head -25
+```
+
+## Common hogs (faster)
+
+```bash
+du -h -d 0 \
+  /c/Users \
+  /c/Users/"$USER" \
+  /c/Users/"$USER"/AppData/Local \
+  /c/Users/"$USER"/AppData/Roaming \
+  /c/Users/"$USER"/Downloads \
+  /c/Windows/Temp \
+  /c/Users/"$USER"/AppData/Local/Temp \
+  "/c/Program Files" \
+  "/c/Program Files (x86)" \
+  2>/dev/null | sort -hr
+```
+
+## Largest files under your profile (>200 MB)
+
+```bash
+find /c/Users/"$USER" -type f -size +200M 2>/dev/null \
+  -printf '%s\t%p\n' | sort -nr | head -40 | awk '{printf "%.2f GB\t%s\n", $1/1024/1024/1024, $2}'
+```
+
+## FF7 / project bins and builder leftovers
+
+```bash
+# Adjust roots to your clone locations
+find /c/Users/"$USER" /d/projects /c/projects \
+  \( -name '*.bin' -o -name '*.iso' -o -name '*.img' -o -name '*.makoutemp' -o -name '*.zip' \) \
+  -type f 2>/dev/null -printf '%s\t%p\n' | sort -nr | head -40 \
+  | awk '{printf "%.2f GB\t%s\n", $1/1024/1024/1024, $2}'
+```
+
+## Repo workspace junk (safe candidates after you are done testing)
+
+From a Modding clone (example):
+
+```bash
+cd /d/projects/Final-Fantasy-7-Modding   # or your path
+
+# Work bins (gitignored) — each ~0.7 GB
+du -h workspace/iso-extract/*.bin 2>/dev/null | sort -hr
+
+# List only; delete what you do not need (keep pristine/)
+ls -lh workspace/iso-extract/*.bin 2>/dev/null
+ls -lh workspace/pristine/ 2>/dev/null
+```
+
+Do **not** delete `workspace/pristine/FINALFANTASY7_D*.bin` (retail masters).
+
+Optional cleanup examples (only if you are sure):
+
+```bash
+# Old playtest / work bins (examples — edit names first)
+# rm -f workspace/iso-extract/ff7_d1_*_work.bin
+# rm -f workspace/iso-extract/ff7_d1_*_playtest*.bin
+
+# Makou leftover temps next to a bin
+# find workspace -name '*.makoutemp' -ls
+# rm -f workspace/iso-extract/*.makoutemp
+
+# User TEMP (closes apps using temp first)
+# rm -rf /c/Users/"$USER"/AppData/Local/Temp/*
+```
+
+## PowerShell alternatives (if preferred)
+
+```powershell
+Get-PSDrive C | Format-List Used,Free
+Get-ChildItem $env:USERPROFILE -Recurse -File -Force -ErrorAction SilentlyContinue |
+  Where-Object { $_.Length -gt 200MB } |
+  Sort-Object Length -Descending |
+  Select-Object -First 40 @{N='GB';E={[math]::Round($_.Length/1GB,2)}}, FullName
+```
+
+## After cleanup
+
+1. Confirm `df -h /c/` shows comfortable free space.
+2. Prefer Makou on a **fresh** CSR+pack apply bin, not a pile of old grown copies.
+3. New builder zip from pristine D1 when testing published packs.
