@@ -25,6 +25,12 @@ def apply_layer(image: bytearray, layer: dict) -> None:
         if end > len(image):
             image.extend(b"\x00" * (end - len(image)))
         image[offset:end] = data
+    # Grown images: trailing zeros often match zero-pad of a shorter original and
+    # are omitted from records. Honor stats.modifiedBytes so size/alignment match.
+    stats = layer.get("stats") or {}
+    target = stats.get("modifiedBytes")
+    if isinstance(target, int) and target > len(image):
+        image.extend(b"\x00" * (target - len(image)))
 
 
 def main() -> int:
