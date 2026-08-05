@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""Build CSR + single-disc core + manip-movies playtest .bin (and .cue).
+
+Always writes:
+  workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
+
+Fails unless JAIROFAL.MOV body == pristine D2 CANONON.MOV.
+
+  python3 mods/single-disc/scripts/build_playtest_bin.py
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from apply_layer import apply_layer  # noqa: E402
+from psx_mode2_iso import extract_file, find_file  # noqa: E402
+
+
+def main() -> int:
+    pristine = ROOT / "workspace/pristine/FINALFANTASY7_D1.bin"
+    d2 = ROOT / "workspace/pristine/FINALFANTASY7_D2.bin"
+    csr_layer = ROOT.parent / "Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
+    if not csr_layer.is_file():
+        csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
+    csr_layer = csr_layer.resolve()
+    core_layer = ROOT / "builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
+    movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
+    out_dir = ROOT / "workspace/iso-extract"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
+    out_cue = out_dir / "ff7_d1_playtest_csr_sd_movies.cue"
+
+    for p, label in [
+        (pristine, "pristine D1"),
+        (d2, "pristine D2"),
+        (csr_layer, "CSR layer"),
+        (core_layer, "single-disc core layer"),
+        (movie_layer, "manip-movies layer"),
+    ]:
+        if not p.is_file():
+            print("MISSING", label, p, file=sys.stderr)
+            return 1
+
+    print("1/3 CSR base...")
+    img = bytearray(pristine.read_bytes())
+    apply_layer(img, json.loads(csr_layer.read_text(encoding="utf-8")))
+    print("   ", len(img), "bytes")
+
+    print("2/3 single-disc core...")
+    apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))
+    print("   ", len(img), "bytes")
+    j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
+    van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")
+    # after core, may equal pristine jairofal
+    print("   JAIROFAL after core size", len(j_core), "(still D1-family until movies)")
+
+    print("3/3 manip-movies (CANONON -> JAIROFAL)...")
+    apply_layer(img, json.loads(movie_layer.read_text(encoding="utf-8")))
+    print("   ", len(img), "bytes")
+
+    j = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
+    c = extract_file(d2.read_bytes(), "MOVIE/CANONON.MOV")
+    meta = find_file(bytes(img), "MOVIE/JAIROFAL.MOV")
+    print("JAIROFAL ISO", meta)
+    print("size", len(j), "CANONON", len(c), "vanilla_d1", len(van))
+    print("==CANONON", j == c)
+    print("==vanilla_jairofal", j == van)
+    print("sha", hashlib.sha256(j).hexdigest()[:16], "canon", hashlib.sha256(c).hexdigest()[:16])
+    if j != c:
+        print("FAIL: movies layer did not install CANONON into JAIROFAL", file=sys.stderr)
+        return 2
+
+    out_bin.write_bytes(img)
+    out_cue.write_text(
+        'FILE "%s" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' % out_bin.name,
+        encoding="utf-8",
+    )
+    print("WROTE", out_bin)
+    print("WROTE", out_cue)
+    print("Open the .cue in DuckStation.")
+    print("Do NOT open other ff7_d1_*_work.bin files in iso-extract (many are core-only ~714MB).")
+    print("This playtest bin must be ~731MB (766084032 bytes if current packs).")
+    print("actual", out_bin.stat().st_size)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
