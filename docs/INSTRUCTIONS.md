@@ -17,6 +17,23 @@ When Makou is required: edit on a fresh CSR base + pack layer apply; avoid repea
 
 ---
 
+
+## LOSLAKE1 (#637) — engine id vs filename (important)
+
+PMVIE stores **one** byte id. Makou labels it as three disc names for that id:
+
+  id 47 = jairofal (D1) / canonon (D2) / No47 (D3)
+
+Single-disc runs as **disc 1**, so the player loads D1 movie **id 47** =
+file **JAIROFAL.MOV** (engine table / MOVIE_ID.BIN), which vanilla is the Jairo/rocket clip.
+
+**Manip needs the D2 stream:** put **CANONON.MOV** bytes into the **JAIROFAL.MOV** slot
+and point **MOVIE_ID** eng row 47 at the new LBA/size (movies pack does this).
+
+**Core pack must NOT inject movies.** Older core accidentally shrunk JAIROFAL to LASTFLOR;
+that is cleaned out. Rebuild zip with CSR + Single-disc (**movies auto if no CSR+**).
+If you enable any CSR+ scene pack, movies pack is skipped — you will get vanilla JAIROFAL (rocket) again.
+
 ## LOSLAKE1 (#637) manip FMV
 
 Makou triplet: Set next movie **jairofal (D1), canonon (D2), No47 (D3)**.
