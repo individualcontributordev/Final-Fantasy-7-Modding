@@ -63,7 +63,7 @@ D2 = CANONON start. Old D1 pack = mid-RCKTFAIL (rocket). MOVIE_ID[47] was alread
 
 **Fix (single-disc-csr-manip-movies-v0.1.1):**
 - Still CANONON → JAIROFAL + MOVIE_ID[47]
-- **Also** write CANONON bytes at LBA **250450** (D2 seek target)
+- **Also** raw-copy CANONON Form2 sectors at LBA **250450** (D2 seek target; not 2048-only)
 - Relocate JAIROFLY/LASTMAP off that range
 
 ## Playtest now

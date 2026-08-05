@@ -82,13 +82,18 @@ def main() -> int:
         return 2
 
     # LOSLAKE1 CD path seeks ISO LBA 250450 (D2 CANONON); alias must match.
-    from psx_mode2_iso import _user  # noqa: E402
+    from psx_mode2_iso import SECTOR  # noqa: E402
 
-    alias = _user(bytes(img), 250450)
-    if alias != c[:2048]:
-        print("FAIL: LBA 250450 is not CANONON (D2-style seek would miss)", file=sys.stderr)
+    raw0 = bytes(img[250450 * SECTOR : (250450 + 1) * SECTOR])
+    d2meta = find_file(d2.read_bytes(), "MOVIE/CANONON.MOV")
+    d2raw0 = d2.read_bytes()[d2meta.lba * SECTOR : (d2meta.lba + 1) * SECTOR]
+    if raw0 != d2raw0:
+        print("FAIL: LBA 250450 raw sector != D2 CANONON sector0 (need Form2 2352 copy)", file=sys.stderr)
         return 3
-    print("LBA250450 alias == CANONON sector0 OK")
+    if raw0[18] != 0x42:
+        print("FAIL: LBA 250450 submode 0x%02x want Form2 0x42" % raw0[18], file=sys.stderr)
+        return 3
+    print("LBA250450 raw Form2 sector0 == D2 CANONON OK")
 
 
     out_bin.write_bytes(img)
