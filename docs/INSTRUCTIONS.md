@@ -1,3 +1,22 @@
+# Task: LAS4_2 movie trim shipped without Makou
+
+## Done just now
+
+Field 765 / LAS4_2 wrong FMV on CSR+single-disc: Makou invalid archive when deleting Set movie on grown single-disc bins.
+
+Fix published in pack: reused Clean single-disc pre-trimmed FIELD/LAS4_2.DAT (Set+Play already removed) onto single-disc-on-csr-v0.1.1 via ISO pad-replace + layer rebuild. CSR D1 never edits this map (bytes match pristine), so Clean trim is safe.
+
+- Verify: PASS (csr-v0.14.1 + single-disc-on-csr-v0.1.1)
+- Do not need Makou for 765 anymore on a new builder zip.
+
+## Still use Makou only for CSR-unique maps
+
+e.g. BLACKBGB (#103) Ask deletes — CSR edits that hub; cannot paste Clean.
+
+When Makou is required: edit on a fresh CSR base + pack layer apply; avoid repeated save on SNOVA-grown playtest bins.
+
+---
+
 # Task: publish Makou-fixed single-disc-on-csr pack
 
 Your edits are on the other machine. Put the fixed work bin here, rebuild the layer, verify, push. Then rebuild a zip on the site and keep playtesting.
