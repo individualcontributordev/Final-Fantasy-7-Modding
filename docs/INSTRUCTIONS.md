@@ -76,7 +76,7 @@ Open **only**:
 Host LBA check:
 
 ```bash
-python3 -c "
+python3 -c '
 from pathlib import Path; import sys; sys.path.insert(0, "scripts")
 from psx_mode2_iso import find_file
 b = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
@@ -84,6 +84,18 @@ print("JAIROFAL", find_file(b, "MOVIE/JAIROFAL.MOV"))
 print("RCKTFAIL", find_file(b, "MOVIE/RCKTFAIL.MOV"))
 '
 ```
+
+output 
+
+ python3 -c '
+from pathlib import Path; import sys; sys.path.insert(0, "scripts")
+from psx_mode2_iso import find_file
+b = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
+print("JAIROFAL", find_file(b, "MOVIE/JAIROFAL.MOV"))
+print("RCKTFAIL", find_file(b, "MOVIE/RCKTFAIL.MOV"))
+'
+JAIROFAL IsoFile(path='MOVIE/JAIROFAL.MOV', lba=318357, size=15071232)
+RCKTFAIL IsoFile(path='MOVIE/RCKTFAIL.MOV', lba=245435, size=13154304)
 
 Current packs (verified):
 
