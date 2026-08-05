@@ -79,7 +79,7 @@ Do **not** open other workspace/iso-extract/ff7_d1_*.bin files.
 Host-side LBA check (optional):
 
 ```bash
-python3 -c "
+python3 -c '
 from pathlib import Path
 import sys
 sys.path.insert(0, "scripts")
@@ -87,7 +87,7 @@ from psx_mode2_iso import find_file
 b = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
 print("JAIROFAL", find_file(b, "MOVIE/JAIROFAL.MOV"))
 print("RCKTFAIL", find_file(b, "MOVIE/RCKTFAIL.MOV"))
-"
+'
 ```
 
 On current packs expect JAIROFAL **LBA=318357 size=15071232** (CANONON body).
