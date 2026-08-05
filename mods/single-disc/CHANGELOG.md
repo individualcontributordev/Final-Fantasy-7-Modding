@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- LAS4_2 (#765): ship Clean single-disc Set+Play removal onto CSR pack (Makou hits invalid archive on grown SNOVA bins).
 - Operator publishes Makou-fixed work bin via docs/INSTRUCTIONS.md (bin_diff vs CSR base -> single-disc-on-csr-v0.1.1 layer).
 - blackbgb (#103): remove bad JMPF+0 (forward 1 byte) Ask stand-ins; **delete** the four Ask-for-disc ops instead (fixes post-Hojo las0_1 load).
 
