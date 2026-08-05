@@ -30,7 +30,8 @@ def main() -> int:
         csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
     csr_layer = csr_layer.resolve()
     core_layer = ROOT / "builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
-    movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
+    movie_v010 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
+    movie_alias = ROOT / "builder/single-disc-csr-manip-movies-v0.1.1/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
@@ -41,27 +42,31 @@ def main() -> int:
         (d2, "pristine D2"),
         (csr_layer, "CSR layer"),
         (core_layer, "single-disc core layer"),
-        (movie_layer, "manip-movies layer"),
+        (movie_v010, "manip-movies v0.1.0"),
+        (movie_alias, "manip-movies alias v0.1.1"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
             return 1
 
-    print("1/3 CSR base...")
+    print("1/4 CSR base...")
     img = bytearray(pristine.read_bytes())
     apply_layer(img, json.loads(csr_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("2/3 single-disc core...")
+    print("2/4 single-disc core...")
     apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
     j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
     van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")
-    # after core, may equal pristine jairofal
     print("   JAIROFAL after core size", len(j_core), "(still D1-family until movies)")
 
-    print("3/3 manip-movies (CANONON -> JAIROFAL)...")
-    apply_layer(img, json.loads(movie_layer.read_text(encoding="utf-8")))
+    print("3/4 manip-movies v0.1.0 (CANONON -> JAIROFAL)...")
+    apply_layer(img, json.loads(movie_v010.read_text(encoding="utf-8")))
+    print("   ", len(img), "bytes")
+
+    print("4/4 alias v0.1.1 (CANONON at LBA 250450)...")
+    apply_layer(img, json.loads(movie_alias.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
     j = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
@@ -75,6 +80,16 @@ def main() -> int:
     if j != c:
         print("FAIL: movies layer did not install CANONON into JAIROFAL", file=sys.stderr)
         return 2
+
+    # LOSLAKE1 CD path seeks ISO LBA 250450 (D2 CANONON); alias must match.
+    from psx_mode2_iso import _user  # noqa: E402
+
+    alias = _user(bytes(img), 250450)
+    if alias != c[:2048]:
+        print("FAIL: LBA 250450 is not CANONON (D2-style seek would miss)", file=sys.stderr)
+        return 3
+    print("LBA250450 alias == CANONON sector0 OK")
+
 
     out_bin.write_bytes(img)
     out_cue.write_text(

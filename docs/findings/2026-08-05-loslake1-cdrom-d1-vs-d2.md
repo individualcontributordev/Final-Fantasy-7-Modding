@@ -47,10 +47,12 @@ Likely causes to check next:
 2. Movie id used at stream start is not 47 (e.g. 45) despite earlier entity dump.
 3. Separate movie LBA path ignores MINT/MOVIE_ID.BIN.
 
-## Fix direction (not done yet)
+## Fix shipped (v0.1.1)
 
-- Ensure #637 stream uses **disc-local** MOVIE_ID[47] (318357 on pack D1), **or**
-- Place CANONON bytes at D1 ISO LBA **250450** (overwrite RCKTFAIL region) so the D2-style seek hits CANONON, **or**
-- Patch whatever writes the seek target from 250450 → 318357 on D1.
+**Pack:** `builder/single-disc-csr-manip-movies-v0.1.1`
+**Tool:** `mods/single-disc/scripts/alias_d2_seek_lba_on_d1.py`
 
-Prefer (1)/(3) over destroying RCKTFAIL if id 45 is still needed.
+Chose absolute-LBA alias: write CANONON at ISO **250450**, relocate overlapping JAIROFLY to EOF + MOVIE_ID patch.
+Keeps JAIROFAL inject for id-47 path. Overwrites RCKTFAIL tail (accepted CSR manip tradeoff until engine seek uses MOVIE_ID[47]).
+
+Playtest: `build_playtest_bin.py` checks `_user(img, 250450) == CANONON[:2048]`.
