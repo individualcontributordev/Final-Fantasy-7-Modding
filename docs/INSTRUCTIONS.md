@@ -257,6 +257,54 @@ Host playtest already has JAIROFAL body == CANONON at LBA 318357. Then either
 DuckStation is not on that .cue, or the player is not using that MOVIE_ID row —
 send LBA.
 
+
+## 6c. Captured dumps round 2 (image8-13, commit 78e6448)
+
+| File | Content |
+|------|---------|
+| image8/9 | mem 8009D820 — u8=0x00 (same) |
+| image10 | mem 800722C0 — u8[722C4]=0x02 (entity index, not movie id) |
+| image11 | mem 800716CC — 0x00 |
+| image12 | mem 80071C10 — starts 05 00 00 00 00 FF ... |
+| image13 | Makou on playtest bin ff7_d1_playtest_csr_sd_movies.bin |
+
+### Makou (image13) — definitive for script
+
+Field loslake1 / Cloud script:
+
+- Set next movie: jairofal (disc 1), canonon (disc 2), No47 (disc 3)
+- then Play movie
+
+So the field asks for engine id 47 (triplet). Injecting D2 CANONON into D1
+JAIROFAL slot is the correct target. This is not an id-45 script.
+
+Dialog just above is the cannon-moved / Mako scene line, then that PMVIE+Play.
+
+### Still missing from RAM
+
+Pointer dump at 8009C6E0 was not in this batch (same panes as before).
+
+### Fastest next check — search RAM for stream LBA bytes
+
+While paused on the bad FMV (BP 0x800CCE94), DuckStation Memory Search
+little-endian:
+
+| Search bytes (hex) | LBA | Meaning if found in RAM |
+|--------------------|----:|-------------------------|
+| 95 DB 04 00 | 318357 | CANONON / grown id47 (pack OK path) |
+| 51 F1 03 00 | 258385 | vanilla JAIROFAL (old slot; inject not used) |
+| BB BE 03 00 | 245435 | RCKTFAIL id45 |
+
+Also still do:
+
+1. Goto 8009C6E0 — 4-byte pointer P
+2. Goto P — u16 at P+2 should be 0x002F (47) per Makou
+
+If search finds 95 DB 04 00 and the picture still looks like Rocket Town tower,
+the stream is CANONON and the manip clip may simply look that way — compare to
+CSR Disc 2 loslake1. If search finds 51 F1 03 00, playback is still vanilla jairofal.
+
+
 ### If movie id is 45 (rcktfail)
 
 Wrong opcode target; CANONON->JAIROFAL will not fix it — need id 45 mapping
