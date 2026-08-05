@@ -84,6 +84,24 @@ Optional CD log check: long stream starts DS **250600** and stays on CANONON-len
 
 ---
 
+
+## Next manip-movies candidates (after LOSLAKE1)
+
+Headroom ~77 MB raw on current playtest bin (80-min CD).
+
+| Priority | Movie | Disc | MB | Notes |
+|---------:|-------|:----:|---:|-------|
+| 1 | LOSLAKE1.MOV + LSLMV.STR | D2 | ~7.5 | ioslake3 Bugenhagen; or trim Set+Play |
+| 2 | CANONHT2 playtest | D2 | (seeded) | Hojo CANON_2 — confirm stream |
+| 3 | LAST* endgame stubs | D3 | (seeded) | LAST4_3/LASTMAP on GOLD7_2/JAIROFLY |
+| 4 | PHOENIX.MOV | D2 | ~8.3 | BLIN70_4 if CSR still plays |
+| - | LASTFLOR.MOV | D3 | ~3 | deferred — id clash with CANONON/JAIROFAL |
+
+Rebuild playtest:
+
+    git pull --ff-only
+    python3 mods/single-disc/scripts/build_playtest_bin.py
+
 # Windows disk cleanup (Git Bash) — low free space can break Makou
 
 Makou ISO save writes a full-size temp (`*.makoutemp`, ~0.7 GB for D1) next to the

@@ -18,14 +18,20 @@ User MB = ISO file size / 1024^2. Raw on disc is about user x 1.15.
 | CANONHT2.MOV | D2 | 5.00 | CSR+ Hojo removes; CSR CANON_2 still has Play | CANON_2 | include | Playtest seed — D1 id 7 (CAR_1209.STR) |
 | JUNSEA.STR | D2 | 1.21 | LOSLAKE1 (#637) Costa lake / manip | include | Playtest — D1 id 47 (MK8.STR); grew ISO slot |
 
-**Not seeded:** CANONON.MOV — CSR base already removed from LOSLAKE1 (COTA FMV).
+**Seeded (current pack):** CANONON.MOV via JAIROFAL + LBA 250450 Form2 alias (LOSLAKE1 #637).
+**Not in seed:** LASTFLOR.MOV — id-slot clash with CANONON/JAIROFAL.
 **Never include:** ENDING2E.MOV (~156 MB), other full endings — will not fit.
 
 ## Candidates (fill from CSR multi-disc play + Makou)
 
 | Movie file | Disc | User MB | Field / map | Manip / reason | Status | Notes |
 |------------|:----:|--------:|-------------|----------------|--------|-------|
-| | | | | | | |
+| LOSLAKE1.MOV | D2 | 5.78 | ioslake3 #639 | Bugenhagen lake FMV | candidate | + LSLMV; or trim Set+Play |
+| LSLMV.STR | D2 | 1.73 | ioslake3 #639 | lake FMV pair | candidate | with LOSLAKE1.MOV |
+| PHOENIX.MOV | D2 | 8.28 | BLIN70_4 | CSR still plays; D2-only | candidate | space ~8 MB |
+| DUMCRUSH.MOV | D2 | 8.04 | LOSLAKE1 CSR path | still on CSR after COTA | candidate | may be intentional keep |
+| WHITE2.BIN | D3 | 0.24 | CANON_2 / Hojo | CSR+ removes; CSR may play | candidate | tiny |
+| LASTFLOR.MOV | D3 | 2.98 | LAS0_3 | endgame; clashes JAIROFAL | deferred | need free D1 slot |
 
 ## Decisions — include (ship in movie pack)
 
@@ -56,6 +62,7 @@ Update after edits:
 
 | Date | What checked | Result |
 |------|--------------|--------|
+| 2026-08-06 | LOSLAKE1 CD logs + Form2 inject | CANONON alias @250450 works; seed injects now raw Form2 |
 | | | |
 
 

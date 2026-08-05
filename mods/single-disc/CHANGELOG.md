@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- manip-movies inject: always raw MODE2/2352 copy from source (Form2 FMV-safe). Rebuild v0.1.0+v0.1.1 layers.
 - manip-movies **v0.1.1**: alias D2 seek LBA **250450** to CANONON on D1 via **raw MODE2 Form2 2352** sector copy (2048-only write broke FMV start/audio). Relocate JAIROFLY. Tool: alias_d2_seek_lba_on_d1.py. RCKTFAIL tail clobbered.
 - core: strip accidental MOVIE injects (LASTFLOR had overwritten JAIROFAL); movies only in manip-movies pack.
 - manip-movies: CANONON -> JAIROFAL for LOSLAKE1 eng id 47; verify MOVIE_ID row 47 LBA/size.
