@@ -1,5 +1,7 @@
 # Single-disc changelog
 
+- manual edits on top of csr base + single-disc mod
+
 ## Unreleased
 
 - Operator publishes Makou-fixed work bin via docs/INSTRUCTIONS.md (bin_diff vs CSR base -> single-disc-on-csr-v0.1.1 layer).
