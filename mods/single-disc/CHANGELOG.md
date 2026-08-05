@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- manip-movies **v0.1.1**: alias D2 seek LBA **250450** to CANONON on D1 (LOSLAKE1 CD logs showed D1 still read mid-RCKTFAIL while MOVIE_ID[47]/JAIROFAL inject was already correct). Relocate JAIROFLY. Tool: `alias_d2_seek_lba_on_d1.py`. RCKTFAIL tail clobbered.
 - core: strip accidental MOVIE injects (LASTFLOR had overwritten JAIROFAL); movies only in manip-movies pack.
 - manip-movies: CANONON -> JAIROFAL for LOSLAKE1 eng id 47; verify MOVIE_ID row 47 LBA/size.
 - manip-movies: LOSLAKE1 (#637) multi-disc Set movie uses JAIROFAL on D1; inject D2 CANONON.MOV into JAIROFAL.MOV slot (grow + MOVIE_ID). Drop JUNSEA/LASTFLOR id36 clash.

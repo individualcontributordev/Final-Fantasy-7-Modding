@@ -12,12 +12,13 @@ python3 mods/single-disc/scripts/build_playtest_bin.py
 
 Output (must both exist):
 
-    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin   # ~731 MB / 766084032 bytes
+    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin   # ~731 MB / ~766340400 bytes (v0.1.1)
     workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
 
 Open the **.cue** in DuckStation.
 
-The script **fails** unless MOVIE/JAIROFAL.MOV is byte-identical to D2 CANONON.MOV.
+The script **fails** unless MOVIE/JAIROFAL.MOV is byte-identical to D2 CANONON.MOV
+and ISO LBA 250450 starts with CANONON (D2-style seek alias).
 
 ## Critical: do not open the wrong .bin
 
@@ -27,7 +28,7 @@ workspace/iso-extract/ has many old work bins (~714 MB). Those are often **core-
 | File | Approx size | #637 movie |
 |------|-------------|------------|
 | *_core_*.bin / playtest_work.bin / noswap work | ~714 MB | vanilla jairofal (wrong for manip) |
-| **ff7_d1_playtest_csr_sd_movies.bin** | **~731 MB (766084032)** | **CANONON (correct)** |
+| **ff7_d1_playtest_csr_sd_movies.bin** | **~731 MB (~766340400 v0.1.1)** | **CANONON + LBA250450 alias** |
 
 If the file you open is not ~731 MB, you are not testing movies.
 
@@ -52,26 +53,34 @@ python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bi
 ---
 
 
-# LOSLAKE1 (#637) — RESOLVED from CD logs
+# LOSLAKE1 (#637) — FIX in pack v0.1.1
 
 Logs: `docs/logs single disc 1.txt`, `docs/logs real disc 2.txt`
 Finding: `docs/findings/2026-08-05-loslake1-cdrom-d1-vs-d2.md`
 
-DuckStation `Read sector N` = ISO LBA + 150.
+**Root cause:** both discs CD-seek ISO **LBA 250450** (DS sector 250600).
+D2 = CANONON start. Old D1 pack = mid-RCKTFAIL (rocket). MOVIE_ID[47] was already correct; player did not use it.
 
-| | Single-disc D1 playtest | Real Disc 2 |
-|--|-------------------------|-------------|
-| FMV stream DS sectors | **250600–252128** | **250600–257296** |
-| File on that disc | **RCKTFAIL.MOV** (mid-file) | **CANONON.MOV** (from start) |
-| MOVIE_ID slot 47 | 318357 (CANONON in JAIROFAL) | 250450 (CANONON) |
+**Fix (single-disc-csr-manip-movies-v0.1.1):**
+- Still CANONON → JAIROFAL + MOVIE_ID[47]
+- **Also** write CANONON bytes at LBA **250450** (D2 seek target)
+- Relocate JAIROFLY/LASTMAP off that range
 
-Both discs seek absolute **250600** (= LBA **250450**). That is D2 CANONON. On D1 layout LBA 250450 sits inside RCKTFAIL → rocket pad.
+## Playtest now
 
-Inject + MOVIE_ID[47]=318357 are fine; **CD never reads 318357**. Stream uses D2-style absolute LBA.
+```bash
+git pull --ff-only
+python3 mods/single-disc/scripts/build_playtest_bin.py
+```
 
-## Next (engine / seek path)
+Open `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue` only.
+Expect bin size **~766340400** (slightly larger than 766084032).
 
-Find what sets the FMV seek to **250450** and make D1 use MOVIE_ID[47] (**318357**), or alias that LBA to CANONON without breaking real RCKTFAIL if needed.
+LOSLAKE1 FMV should match real D2 (CANONON), not rocket pad.
+
+Optional CD log check: long stream starts DS **250600** and stays on CANONON-length read (~6697 sectors), not 1529 mid-RCKTFAIL.
+
+**Tradeoff:** tail of RCKTFAIL.MOV on D1 is overwritten by the alias.
 
 ---
 
