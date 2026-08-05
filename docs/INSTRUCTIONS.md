@@ -51,6 +51,144 @@ python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bi
 
 ---
 
+
+---
+
+# DuckStation debugger — LOSLAKE1 wrong FMV (#637)
+
+Use this when the local playtest bin still shows the rocket/launch-pad clip.
+Goal: capture movie id and which ISO LBA is read when the bad FMV starts.
+
+## 0. Only debug the movies playtest bin
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+git pull --ff-only
+python3 mods/single-disc/scripts/build_playtest_bin.py
+ls -lh workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
+```
+
+Must be **766084032 bytes** (~731 MB). If ~714 MB, movies were not applied — stop.
+
+Open in DuckStation:
+
+    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
+
+Do **not** open other workspace/iso-extract/ff7_d1_*.bin files.
+
+Host-side LBA check (optional):
+
+```bash
+python3 -c "
+from pathlib import Path
+import sys
+sys.path.insert(0, "scripts")
+from psx_mode2_iso import find_file
+b = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
+print("JAIROFAL", find_file(b, "MOVIE/JAIROFAL.MOV"))
+print("RCKTFAIL", find_file(b, "MOVIE/RCKTFAIL.MOV"))
+"
+```
+
+On current packs expect JAIROFAL **LBA=318357 size=15071232** (CANONON body).
+Vanilla jairofal LBA was **258385**. RCKTFAIL is **245435**.
+
+## 1. DuckStation setup
+
+1. Enable debugger (Settings / Tools — Enable debugging).
+2. Boot the playtest **.cue** above.
+3. Reach LOSLAKE1 (#637). Pause **as the wrong FMV starts** (frame-advance helps).
+
+## 2. Breakpoint — Play movie handler
+
+FIELD load base **0x800A0000**. MOVIE opcode handler entry:
+
+```text
+CPU Execute breakpoint: 0x800CCE94
+```
+
+When it hits during the bad cutscene, dump the memory below.
+
+Related known addrs (from field movie RE):
+
+| Addr | Role |
+|------|------|
+| 0x800CCE94 | MOVIE (0xF9) handler entry |
+| 0x800722C4 | u8 field index (script entity index area) |
+| 0x80071C1C | flag cleared in abandoned movie stubs |
+| 0x801144D4 | related flag |
+
+## 3. Memory to dump (screenshot or hex paste)
+
+While FMV is playing / at breakpoint:
+
+### 3a. Small RAM dumps
+
+```text
+0x800722C0  length 32 bytes
+0x80071C00  length 64 bytes
+0x801144D0  length 16 bytes
+```
+
+Note especially **u8 at 0x800722C4**.
+
+### 3b. Best signal — ISO LBA being read
+
+If DuckStation can log CD/ISO reads or break on sector read, note the **LBA** when the pad FMV starts:
+
+| LBA (playtest pack) | Meaning |
+|--------------------:|---------|
+| **318357** | CANONON stream (pack installed; inject path OK) |
+| **258385** | Vanilla JAIROFAL (old slot — wrong bin or MOVIE_ID not used) |
+| **245435** | RCKTFAIL (rocket pad family — likely PMVIE id 45, not 47) |
+| other | paste the number |
+
+### 3c. Host confirm open file
+
+```bash
+ls -lh workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
+# must show 766084032 (or matching current pack size)
+```
+
+## 4. Makou cross-check (same scene)
+
+On the **same** playtest .bin in Makou:
+
+1. Field **loslake1** / #637
+2. Find the **Play movie** that matches what you see
+3. Note full **Set next movie** line and **id** (e.g. 47 jairofal/canonon vs 45 rcktfail)
+
+Makou list order is **engine id**, not ISO A-Z. Disc 1 examples:
+
+| Id | Disc 1 name |
+|---:|-------------|
+| 45 | rcktfail |
+| 46 | jairofly |
+| 47 | jairofal |
+| 48 | gold7 |
+| ... | ... |
+| 54+ | No54, No55, ... |
+
+Id **47** on D1 = jairofal; on D2 = canonon (same PMVIE byte).
+
+## 5. What to send back
+
+1. Full path of .bin/.cue DuckStation opened
+2. Size of that .bin
+3. u8 **0x800722C4** (and dump 0x800722C0-0x800722DF)
+4. Movie **LBA read** if available (318357 / 258385 / 245435 / other)
+5. Makou Set next movie line + id for that Play
+
+## 6. How we interpret
+
+| Result | Meaning |
+|--------|---------|
+| LBA 318357, still looks wrong | Content/scene mismatch; id may still be wrong scene |
+| LBA 258385 | Still vanilla jairofal — wrong image or MOVIE_ID not applied |
+| LBA 245435 | Playing **rcktfail (id 45)** — different fix than id 47 CANONON |
+| Bin size ~714MB | Core-only build; rerun build_playtest_bin.py |
+
+
 # Windows disk cleanup (Git Bash) — low free space can break Makou
 
 Makou ISO save writes a full-size temp (`*.makoutemp`, ~0.7 GB for D1) next to the
