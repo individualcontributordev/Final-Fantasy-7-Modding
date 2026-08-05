@@ -16,6 +16,7 @@ User MB = ISO file size / 1024^2. Raw on disc is about user x 1.15.
 | LAST4_3.BIN | D3 | 0.24 | same endgame diff | LAS0_3 | include | Playtest seed — D1 id 34 (GOLD7_2.MOV) |
 | LASTMAP.BIN | D3 | 0.21 | same endgame diff | LAS0_3 | include | Playtest seed — D1 id 37 (JAIROFLY.MOV) |
 | CANONHT2.MOV | D2 | 5.00 | CSR+ Hojo removes; CSR CANON_2 still has Play | CANON_2 | include | Playtest seed — D1 id 7 (CAR_1209.STR) |
+| JUNSEA.STR | D2 | 1.21 | LOSLAKE1 (#637) Costa lake / manip | include | Playtest — D1 id 47 (MK8.STR); grew ISO slot |
 
 **Not seeded:** CANONON.MOV — CSR base already removed from LOSLAKE1 (COTA FMV).
 **Never include:** ENDING2E.MOV (~156 MB), other full endings — will not fit.
