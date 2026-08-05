@@ -218,7 +218,52 @@ Id 47 D1=jairofal / D2=canonon. Single-disc uses D1 slot; pack puts CANONON byte
 | Size ~714MB | Core-only; rebuild playtest bin |
 | BP hit, mem at 0x0 only | Right BP, wrong memory pane — fix goto |
 
+## 6b. Captured dumps (operator screenshots 2026-08-05)
+
+Files in docs/: image2.png … image5.png, 6.png, image7.png (commit 2ea6d87).
+
+| Capture | Value | Meaning |
+|---------|-------|---------|
+| BP 0x800CCE94 | correct | MOVIE entry (image2/5/7) |
+| Status Hit Count | 1–4 while FMV up (6.png / image7) | Handler runs during the clip |
+| Memory at 0x0 | image2 only | Ignore — wrong pane |
+| u8[0x8009D820] | 0x00 (image5: addr=0x8009d820 [0x00]) | Movie state low bits; not disc id |
+| u8[0x800722C4] | 0x02 (image3) | Entity script INDEX, NOT movie id |
+| u8[0x800716CC] | 0x00 (image4) | Early handler flag |
+| On-screen (6.png) | Rocket Town tower, leaning rocket | Rocket-town family look |
+
+### Important RE correction
+
+- 0x800722C4 = index into script-PC table at 0x800831FC (u16 per entity).
+- PMVIE (0xF8 at 0x800CCD54) writes the movie id as u16 at *(0x8009C6E0)+2
+  (entity struct field +2).
+- Dumping only 800722C4 cannot distinguish id 45 vs 47.
+
+### Still needed (next while paused on the bad FMV)
+
+1. Memory goto 8009C6E0 — read 4 bytes little-endian pointer P.
+2. Memory goto P — dump 16 bytes.
+3. Movie id = u16 little-endian at P+2:
+   - 0x002F = 47 (jairofal / CANONON slot)
+   - 0x002D = 45 (rcktfail)
+4. Optional: 8009C6DC (4 bytes script base).
+5. Best: CD/ISO LBA when FMV streams (318357 / 258385 / 245435).
+
+Paste: P, u16[P+2], hex at P, and LBA if available.
+
+### If movie id is 47 but picture is still rocket town
+
+Host playtest already has JAIROFAL body == CANONON at LBA 318357. Then either
+DuckStation is not on that .cue, or the player is not using that MOVIE_ID row —
+send LBA.
+
+### If movie id is 45 (rcktfail)
+
+Wrong opcode target; CANONON->JAIROFAL will not fix it — need id 45 mapping
+or field script change.
+
 ## 7. Playtest image sanity (agent/host)
+
 
 After git pull, agent or operator can re-check:
 
