@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- WHITE2 (#643): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D2 merge).
 - LASTMAP (#768): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D3 merge).
 - LAS4_2 (#765): ship Clean single-disc Set+Play removal onto CSR pack (Makou hits invalid archive on grown SNOVA bins).
 - Operator publishes Makou-fixed work bin via docs/INSTRUCTIONS.md (bin_diff vs CSR base -> single-disc-on-csr-v0.1.1 layer).
