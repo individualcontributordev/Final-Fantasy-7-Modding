@@ -1,15 +1,23 @@
 {
   "format": "ic-layer-v1",
   "id": "single-disc-csr-manip-movies-v0.1.0-disc1",
-  "description": "CSR single-disc manip movies: LASTFLOR/LAST4_3/LASTMAP/CANONHT2 + JUNSEA (LOSLAKE1 #637 id47)",
+  "description": "CSR single-disc manip movies + JUNSEA id47; patch MOVIE_ID.BIN on grow",
   "target": "disc-image",
   "stats": {
     "originalBytes": 748775664,
     "modifiedBytes": 750233904,
-    "changedBytes": 1264228,
-    "records": 41605
+    "changedBytes": 1264233,
+    "records": 41607
   },
   "records": [
+    {
+      "offset": 298608032,
+      "hex": "95db04"
+    },
+    {
+      "offset": 298608037,
+      "hex": "6013"
+    },
     {
       "offset": 298615558,
       "hex": "95db04"

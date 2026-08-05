@@ -187,6 +187,42 @@ def _append_file_grow(img: bytearray, path: str, data: bytes) -> int:
     return new_lba
 
 
+
+def _patch_movie_id_bin(img: bytearray, old_lba: int, old_size: int, new_lba: int, new_size: int) -> int:
+    """Update MINT/MOVIE_ID.BIN engine table (20-byte rows: ... lba, size, ...).
+
+    The field movie player resolves streams via this table, not only ISO9660
+    dirents. Growing a MOVIE slot without patching leaves the engine on the
+    old LBA (wrong/short clip).
+    Returns number of LBA fields patched.
+    """
+    path = "MINT/MOVIE_ID.BIN"
+    meta = find_file(img, path)
+    blob = bytearray(extract_file(img, path))
+    old_lba_b = struct.pack("<I", old_lba)
+    patched = 0
+    start = 0
+    while True:
+        pos = blob.find(old_lba_b, start)
+        if pos < 0:
+            break
+        # Prefer rows where size follows LBA (common layout)
+        if pos + 8 <= len(blob):
+            cur_sz = struct.unpack_from("<I", blob, pos + 4)[0]
+            # Always update LBA when this exact old LBA is found.
+            struct.pack_into("<I", blob, pos, new_lba)
+            # Size field matches ISO size for stream rows (not always for every entry).
+            if cur_sz == old_size:
+                struct.pack_into("<I", blob, pos + 4, new_size)
+            patched += 1
+        start = pos + 1
+    if patched:
+        # write back (same size file)
+        if len(blob) != meta.size:
+            raise RuntimeError("MOVIE_ID size changed unexpectedly")
+        replace_file_padded(img, path, bytes(blob))
+    return patched
+
 def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict:
     src_ents = _movie_entries(src_img)
     d1_ents = _movie_entries(bytes(d1))
@@ -203,15 +239,31 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict
         raise RuntimeError("extract size mismatch")
     path = "MOVIE/" + d1_name
     grew = False
+    movie_id_patches = 0
+    old_meta = find_file(d1, path)
+    old_lba, old_sz = old_meta.lba, old_meta.size
     if len(data) > d1_size:
         new_lba = _append_file_grow(d1, path, data)
         grew = True
         note_lba = new_lba
+        movie_id_patches = _patch_movie_id_bin(
+            d1, old_lba, old_sz, new_lba, len(data)
+        )
+        if movie_id_patches < 1:
+            raise SystemExit(
+                "MOVIE_ID.BIN has no LBA entry for %s (old_lba=%s); engine would keep old stream"
+                % (d1_name, old_lba)
+            )
     else:
         if len(data) != d1_size:
             _set_file_size(d1, path, len(data))
         replace_file_padded(d1, path, data)
         note_lba = find_file(d1, path).lba
+        # shrunk/same slot in place: LBA unchanged; still refresh size in MOVIE_ID if present
+        if len(data) != old_sz:
+            movie_id_patches = _patch_movie_id_bin(
+                d1, note_lba, old_sz, note_lba, len(data)
+            )
     return {
         "movie": movie.upper(),
         "src_disc": src_disc,
@@ -221,6 +273,7 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict
         "old_slot_bytes": d1_size,
         "grew": grew,
         "lba": note_lba,
+        "movie_id_patches": movie_id_patches,
     }
 
 
@@ -279,7 +332,11 @@ def main() -> int:
                 raise SystemExit("missing D%d: %s" % (disc, src_path))
             cache[disc] = src_path.read_bytes()
         info = inject_one(d1, cache[disc], movie, disc)
-        extra = " [GREW lba=%s]" % info["lba"] if info.get("grew") else ""
+        extra = ""
+        if info.get("grew"):
+            extra += " [GREW lba=%s]" % info["lba"]
+        if info.get("movie_id_patches"):
+            extra += " [MOVIE_ID x%s]" % info["movie_id_patches"]
         print(
             "OK id=%d %s <- D%d %s (%d bytes; was %d)%s"
             % (

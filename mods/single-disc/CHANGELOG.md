@@ -4,6 +4,7 @@
 
 ## Unreleased
 
+- manip-movies: patch MINT/MOVIE_ID.BIN when growing a slot (LOSLAKE1 #637 still played old MK8/rocket stream).
 - manip-movies: add JUNSEA.STR (D2) for LOSLAKE1 (#637) manip; injector grows D1 id-47 slot when source is larger.
 - WHITE2 (#643): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D2 merge).
 - LASTMAP (#768): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D3 merge).

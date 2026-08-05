@@ -39,3 +39,12 @@ Playtest; extend seed list / whitelist; rebuild pack.
 LOSLAKE1 keeps Play (manip). Do **not** paste Clean Set+Play delete for #637.
 Injector now appends MODE2 sectors when source is larger than D1 slot.
 
+## Bugfix — MOVIE_ID.BIN on grow (2026-08-05)
+
+Injecting JUNSEA into D1 id 47 required growing past MK8.STR ISO size. ISO9660
+dirent LBA/size were updated, but the engine uses **MINT/MOVIE_ID.BIN** (20-byte
+rows containing stream LBA + size). Without patching that table, play still used
+the old MK8 LBA (wrong clip / rocket-adjacent data).
+
+injector: grow slot + patch MOVIE_ID LBA/size for the old LBA.
+
