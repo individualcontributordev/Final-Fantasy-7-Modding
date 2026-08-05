@@ -160,30 +160,61 @@ def _set_file_size(img: bytearray, path: str, new_size: int) -> None:
     _patch_dirent_lba_size(img, path, meta.lba, new_size)
 
 
-def _append_file_grow(img: bytearray, path: str, data: bytes) -> int:
-    """Place data at end of image (MODE2/2352 sectors), point dirent at new LBA/size.
+def _raw_sectors(img: bytes | bytearray, lba: int, size: int) -> bytes:
+    """Full MODE2/2352 slice for an ISO file (Form1 or Form2)."""
+    from psx_mode2_iso import SECTOR
 
-    Returns new LBA. Used when source movie is larger than the D1 slot.
-    PMVIE id stays the same (sorted name index); only the file body moves.
-    """
-    from psx_mode2_iso import SECTOR, USER_OFF  # local to avoid top churn
+    nsec = (size + USER - 1) // USER
+    off = lba * SECTOR
+    return bytes(img[off : off + nsec * SECTOR])
+
+
+def _write_raw_sectors(img: bytearray, dest_lba: int, raw: bytes) -> None:
+    from psx_mode2_iso import SECTOR
+
+    if len(raw) % SECTOR:
+        raise ValueError("raw length not multiple of 2352")
+    nsec = len(raw) // SECTOR
+    need = (dest_lba + nsec) * SECTOR
+    if need > len(img):
+        if len(img) % SECTOR:
+            img.extend(b"\x00" * (SECTOR - (len(img) % SECTOR)))
+        img.extend(b"\x00" * (need - len(img)))
+    off = dest_lba * SECTOR
+    img[off : off + len(raw)] = raw
+
+
+def _append_file_grow(img: bytearray, path: str, data: bytes) -> int:
+    """Deprecated Form1 path — use _append_raw_grow for FMV."""
+    from psx_mode2_iso import SECTOR, USER_OFF
 
     new_sec = (len(data) + USER - 1) // USER
-    # Align image to whole sectors
     if len(img) % SECTOR:
         img.extend(b"\x00" * (SECTOR - (len(img) % SECTOR)))
     new_lba = len(img) // SECTOR
-    # Build raw MODE2 Form1-ish sectors: keep existing sector template from LBA 0
     template = bytes(img[0:SECTOR])
     for i in range(new_sec):
         chunk = data[i * USER : (i + 1) * USER]
         if len(chunk) < USER:
             chunk = chunk + b"\x00" * (USER - len(chunk))
         sec = bytearray(template)
-        # rewrite sector address in header if present (bytes 12-14 BCD) — skip; emulators OK
         sec[USER_OFF : USER_OFF + USER] = chunk
         img.extend(sec)
     _patch_dirent_lba_size(img, path, new_lba, len(data))
+    return new_lba
+
+
+def _append_raw_grow(img: bytearray, path: str, raw: bytes, size: int) -> int:
+    """Append raw 2352 sectors and point dirent at them (Form2-safe FMV grow)."""
+    from psx_mode2_iso import SECTOR
+
+    if len(raw) % SECTOR:
+        raise ValueError("raw length not multiple of 2352")
+    if len(img) % SECTOR:
+        img.extend(b"\x00" * (SECTOR - (len(img) % SECTOR)))
+    new_lba = len(img) // SECTOR
+    img.extend(raw)
+    _patch_dirent_lba_size(img, path, new_lba, size)
     return new_lba
 
 
@@ -251,12 +282,17 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
     movie_id_patches = 0
     old_meta = find_file(d1, path)
     old_lba, old_sz = old_meta.lba, old_meta.size
-    if len(data) > d1_size:
-        new_lba = _append_file_grow(d1, path, data)
+    # Always copy full MODE2/2352 sectors from source (Form2 FMV-safe).
+    src_meta = find_file(src_img, "MOVIE/" + src_name)
+    raw = _raw_sectors(src_img, src_meta.lba, src_meta.size)
+    src_nsec = (src_size + USER - 1) // USER
+    dst_nsec = (d1_size + USER - 1) // USER
+    if src_nsec > dst_nsec:
+        new_lba = _append_raw_grow(d1, path, raw, src_size)
         grew = True
         note_lba = new_lba
         movie_id_patches = _patch_movie_id_bin(
-            d1, old_lba, old_sz, new_lba, len(data)
+            d1, old_lba, old_sz, new_lba, src_size
         )
         if movie_id_patches < 1:
             raise SystemExit(
@@ -264,14 +300,13 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
                 % (d1_name, old_lba)
             )
     else:
-        if len(data) != d1_size:
-            _set_file_size(d1, path, len(data))
-        replace_file_padded(d1, path, data)
+        if src_size != d1_size:
+            _set_file_size(d1, path, src_size)
+        _write_raw_sectors(d1, old_lba, raw)
         note_lba = find_file(d1, path).lba
-        # shrunk/same slot in place: LBA unchanged; still refresh size in MOVIE_ID if present
-        if len(data) != old_sz:
+        if src_size != old_sz:
             movie_id_patches = _patch_movie_id_bin(
-                d1, note_lba, old_sz, note_lba, len(data)
+                d1, note_lba, old_sz, note_lba, src_size
             )
     return {
         "movie": movie.upper(),
