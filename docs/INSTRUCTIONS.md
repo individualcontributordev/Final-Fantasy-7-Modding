@@ -47,6 +47,101 @@ LASTFLOR (also wanted id 36) is deferred while CANONON owns that slot.
 Stack: CSR + Single-disc + manip movies (auto when no CSR+). New builder zip after Pages.
 Do not Clean-trim LOSLAKE1 Play.
 
+---
+
+# Local build (no website / no CDN cache)
+
+Use this to test CSR + single-disc + manip movies without the builder UI.
+Needs sibling Final-Fantasy-7-CSR and pristine D1.
+
+## Pristine D1 vs D2 baseline (LOSLAKE1 movie)
+
+Retail is intentional:
+
+| Disc | PMVIE id 47 label | File played |
+|------|-------------------|-------------|
+| D2 | canonon | CANONON.MOV (manip clip) |
+| D1 | jairofal | JAIROFAL.MOV (Jairo/rocket family) |
+
+So pristine D1 matching the "wrong" clip is normal. Single-disc only matches D2
+when **single-disc-csr-manip-movies** is applied (replaces JAIROFAL body + MOVIE_ID).
+
+## Build .bin with repo scripts
+
+From Final-Fantasy-7-Modding root (Git Bash or macOS). Paths assume CSR is a sibling:
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+git pull --ff-only
+# git -C ../Final-Fantasy-7-CSR pull --ff-only
+
+PRISTINE=workspace/pristine/FINALFANTASY7_D1.bin
+CSR_LAYER=../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json
+CORE_LAYER=builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json
+MOVIE_LAYER=builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json
+OUT=workspace/iso-extract/ff7_d1_local_csr_sd_movies.bin
+
+python3 scripts/apply_layer.py \
+  "$PRISTINE" \
+  "$CSR_LAYER" \
+  -o workspace/iso-extract/ff7_d1_csr_base_local.bin
+
+python3 scripts/apply_layer.py \
+  workspace/iso-extract/ff7_d1_csr_base_local.bin \
+  "$CORE_LAYER" \
+  -o workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
+
+# Required for #637 CANONON (skip this step => vanilla D1 jairofal / "rocket")
+python3 scripts/apply_layer.py \
+  workspace/iso-extract/ff7_d1_csr_sd_core_local.bin \
+  "$MOVIE_LAYER" \
+  -o "$OUT"
+
+ls -lh "$OUT"
+```
+
+Optional .cue next to the bin:
+
+```bash
+BIN=ff7_d1_local_csr_sd_movies.bin
+printf 'FILE "%s" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' "$BIN" \
+  > workspace/iso-extract/ff7_d1_local_csr_sd_movies.cue
+```
+
+## Prove JAIROFAL slot is CANONON (local)
+
+```bash
+python3 << 'PY'
+from pathlib import Path
+import sys, hashlib
+sys.path.insert(0, "scripts")
+from psx_mode2_iso import extract_file
+
+out = Path("workspace/iso-extract/ff7_d1_local_csr_sd_movies.bin").read_bytes()
+d2 = Path("workspace/pristine/FINALFANTASY7_D2.bin").read_bytes()
+d1 = Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes()
+j = extract_file(out, "MOVIE/JAIROFAL.MOV")
+c = extract_file(d2, "MOVIE/CANONON.MOV")
+v = extract_file(d1, "MOVIE/JAIROFAL.MOV")
+print("size", len(j), "CANONON", len(c), "vanilla", len(v))
+print("local==CANONON", j == c)
+print("local==vanilla_jairofal", j == v)
+print("sha local ", hashlib.sha256(j).hexdigest()[:16])
+print("sha CANONON", hashlib.sha256(c).hexdigest()[:16])
+PY
+```
+
+Expect: `local==CANONON True`, size 15071232, not vanilla jairofal.
+
+Core-only control (should match pristine D1 movie):
+
+    workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
+
+## Builder / CDN note
+
+The site can serve stale layer.json (browser or Pages cache). Local apply_layer only
+reads your clone. For site zips, APPLIED.txt must list both single-disc-on-csr and
+single-disc-csr-manip-movies when testing #637 without CSR+.
 
 # Task: publish Makou-fixed single-disc-on-csr pack
 
