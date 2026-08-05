@@ -1,7 +1,10 @@
-# CSR single-disc playtest seed — inject by disc-local PMVIE id into D1 slots
-# format: <2|3> <FILENAME>
-3 LASTFLOR.MOV
+# CSR single-disc manip movie inject by disc-local id into D1 slots
+# format: <2|3> <SOURCE_ON_THAT_DISC> [->D1_NAME_OR_ID]
+# Multi-disc Set next movie on D1 uses the *disc 1* name of the triplet.
+# LOSLAKE1 (#637): jairofal (D1) / canonon (D2) / No47 (D3) -> need CANONON bytes in JAIROFAL slot.
 3 LAST4_3.BIN
 3 LASTMAP.BIN
 2 CANONHT2.MOV
-2 JUNSEA.STR
+2 CANONON.MOV ->JAIROFAL.MOV
+# LASTFLOR.MOV also wants D1 id 36 (JAIROFAL); deferred — conflicts with CANONON for #637.
+# JUNSEA.STR was wrong for #637 multi-disc triplet (not used when disc id = 1).

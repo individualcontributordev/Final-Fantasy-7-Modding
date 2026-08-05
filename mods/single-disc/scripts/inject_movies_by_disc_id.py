@@ -208,12 +208,12 @@ def _patch_movie_id_bin(img: bytearray, old_lba: int, old_size: int, new_lba: in
             break
         # Prefer rows where size follows LBA (common layout)
         if pos + 8 <= len(blob):
-            cur_sz = struct.unpack_from("<I", blob, pos + 4)[0]
             # Always update LBA when this exact old LBA is found.
+            # Size field is not always equal to ISO size (JAIROFAL row used a
+            # different length) — still set it to the new stream byte length so
+            # the player reads the full grown movie.
             struct.pack_into("<I", blob, pos, new_lba)
-            # Size field matches ISO size for stream rows (not always for every entry).
-            if cur_sz == old_size:
-                struct.pack_into("<I", blob, pos + 4, new_size)
+            struct.pack_into("<I", blob, pos + 4, new_size)
             patched += 1
         start = pos + 1
     if patched:
@@ -223,20 +223,29 @@ def _patch_movie_id_bin(img: bytearray, old_lba: int, old_size: int, new_lba: in
         replace_file_padded(img, path, bytes(blob))
     return patched
 
-def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict:
+def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_d1=None) -> dict:
     src_ents = _movie_entries(src_img)
     d1_ents = _movie_entries(bytes(d1))
-    mid = _id_for_name(src_ents, movie)
-    if mid >= len(d1_ents):
-        raise SystemExit(
-            "%s id %d on D%d but D1 only has %d movies"
-            % (movie, mid, src_disc, len(d1_ents))
-        )
-    src_name, _slba, src_size = src_ents[mid]
-    d1_name, _dlba, d1_size = d1_ents[mid]
+    # Always locate source file by name on the source disc (correct bytes).
+    src_mid = _id_for_name(src_ents, movie)
+    src_name, _slba, src_size = src_ents[src_mid]
     data = extract_file(src_img, "MOVIE/" + src_name)
     if len(data) != src_size:
         raise RuntimeError("extract size mismatch")
+
+    # Destination on D1: explicit target (name or id), else same id as source disc.
+    if target_d1 is None or target_d1 == "":
+        mid = src_mid
+    elif str(target_d1).isdigit():
+        mid = int(target_d1)
+    else:
+        mid = _id_for_name(d1_ents, str(target_d1))
+    if mid < 0 or mid >= len(d1_ents):
+        raise SystemExit(
+            "%s target D1 id %s invalid (D1 has %d movies)"
+            % (movie, target_d1, len(d1_ents))
+        )
+    d1_name, _dlba, d1_size = d1_ents[mid]
     path = "MOVIE/" + d1_name
     grew = False
     movie_id_patches = 0
@@ -278,17 +287,32 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int) -> dict
 
 
 def parse_manifest(path: Path):
+    """Manifest lines:
+
+      2 CANONON.MOV
+      3 LASTFLOR.MOV
+      2 CANONON.MOV ->JAIROFAL.MOV
+      2 CANONON.MOV ->36
+
+    Optional -> target is D1 movie name or PMVIE id (sorted MOVIE/ index on D1).
+    Default target id = source movie id on that disc (legacy).
+    """
     rows = []
     for line in path.read_text(encoding="utf-8").splitlines():
         line = line.split("#", 1)[0].strip()
         if not line:
             continue
+        target = None
+        if "->" in line:
+            left, right = line.split("->", 1)
+            line = left.strip()
+            target = right.strip()
         parts = line.split()
         if len(parts) == 1:
-            rows.append((None, parts[0]))
+            rows.append((None, parts[0], target))
         elif len(parts) >= 2 and parts[0] in ("2", "3", "D2", "D3"):
             d = 2 if str(parts[0]).endswith("2") else 3
-            rows.append((d, parts[1]))
+            rows.append((d, parts[1], target))
         else:
             raise SystemExit("bad manifest line: %r" % line)
     return rows
@@ -310,14 +334,14 @@ def main() -> int:
     for m in args.movie:
         if not args.from_disc:
             raise SystemExit("--from-disc required with --movie")
-        jobs.append((args.from_disc, m))
+        jobs.append((args.from_disc, m, None))
     if args.manifest:
-        for d, m in parse_manifest(args.manifest):
+        for d, m, target in parse_manifest(args.manifest):
             if d is None:
                 if not args.from_disc:
                     raise SystemExit("manifest line without disc needs --from-disc")
                 d = args.from_disc
-            jobs.append((d, m))
+            jobs.append((d, m, target))
     if not jobs:
         raise SystemExit("provide --movie and/or --manifest")
 
@@ -325,20 +349,20 @@ def main() -> int:
         raise SystemExit("missing d1: %s" % args.d1)
     d1 = bytearray(args.d1.read_bytes())
     cache = {}
-    for disc, movie in jobs:
+    for disc, movie, target in jobs:
         if disc not in cache:
             src_path = args.d2 if disc == 2 else args.d3
             if not src_path.is_file():
                 raise SystemExit("missing D%d: %s" % (disc, src_path))
             cache[disc] = src_path.read_bytes()
-        info = inject_one(d1, cache[disc], movie, disc)
+        info = inject_one(d1, cache[disc], movie, disc, target_d1=target)
         extra = ""
         if info.get("grew"):
             extra += " [GREW lba=%s]" % info["lba"]
         if info.get("movie_id_patches"):
             extra += " [MOVIE_ID x%s]" % info["movie_id_patches"]
         print(
-            "OK id=%d %s <- D%d %s (%d bytes; was %d)%s"
+            "OK D1 id=%d %s <- D%d %s (%d bytes; was %d)%s"
             % (
                 info["id"],
                 info["d1_slot"],

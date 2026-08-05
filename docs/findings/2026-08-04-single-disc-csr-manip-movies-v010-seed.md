@@ -48,3 +48,17 @@ the old MK8 LBA (wrong clip / rocket-adjacent data).
 
 injector: grow slot + patch MOVIE_ID LBA/size for the old LBA.
 
+## Update — CANONON for LOSLAKE1 (#637) multi-disc Set movie
+
+User-confirmed Makou line:
+  Set next movie: jairofal (disc 1), canonon (disc 2), No47 (disc 3)
+
+Single-disc disc id = 1 => plays JAIROFAL slot. Inject:
+
+| Source | D1 slot | Id |
+|--------|---------|---:|
+| D2 CANONON.MOV | JAIROFAL.MOV | 36 |
+
+Grow + MOVIE_ID.BIN LBA/size. LASTFLOR no longer injected (id 36 clash).
+JUNSEA removed from seed (wrong for this triplet).
+
