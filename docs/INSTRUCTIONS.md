@@ -73,23 +73,41 @@ python3 mods/single-disc/scripts/build_playtest_bin.py
 
 Id **47** confirmed in RAM. Pack/script target is correct.
 
-## DO NOW — LBA only
+## DO NOW — active stream (not table presence)
 
-Paused on bad FMV. Memory **Search** (hex, little-endian).
+### Why all three hit is useless
 
-Search each pattern. Reply with **hit or no hit** only:
+MOVIE_ID (and copies) sits in RAM with every movie LBA. Searching for:
 
-| Search | LBA | Stream |
-|--------|----:|--------|
-| `95 DB 04 00` | 318357 | CANONON (pack) |
-| `51 F1 03 00` | 258385 | vanilla jairofal |
-| `BB BE 03 00` | 245435 | rcktfail |
+- 95 DB 04 00 (318357 CANONON)
+- 51 F1 03 00 (258385 vanilla jairofal)
+- BB BE 03 00 (245435 rcktfail)
 
-How: bytes `b0 b1 b2 b3` → LBA = b0 + b1*256 + b2*65536 + b3*16777216.
+will all hit. That only means the table is loaded. It does not say which stream is playing.
 
-Example: `95 DB 04 00` → 0x0004DB95 = 318357.
+### What you want
 
-Do **not** re-dump 8009C6E0 / P.
+One LBA: the sector the CD is reading for this FMV right now.
+
+### Do one of these
+
+A. CD-ROM log (best)
+   DuckStation log CD-ROM/ISO reads. Play bad FMV. Note sector/LBA during movie.
+
+B. Same scene on CSR Disc 2
+   If D2 looks the same as single-disc, pack is fine (canonon just looks like that).
+   If D2 looks different, single-disc is still wrong.
+
+### Send back (only one)
+
+1. CD log LBA during FMV, or
+2. D2 same as SD / D2 different
+
+| LBA | Meaning |
+|----:|---------|
+| 318357 | pack CANONON |
+| 258385 | vanilla jairofal |
+| 245435 | rcktfail |
 
 ---
 
