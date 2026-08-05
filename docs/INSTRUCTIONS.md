@@ -1,131 +1,52 @@
 # Task: build playtest .bin (CSR + single-disc + movies)
 
-This is the full stack for LOSLAKE1 (#637) manip FMV and general single-disc CSR playtest.
-**Movies pack is required.** Core-only plays pristine D1 jairofal (rocket family) at #637.
-
-Needs:
-
-- This repo (Final-Fantasy-7-Modding) on latest main
-- Sibling repo Final-Fantasy-7-CSR (csr-v0.14.1 base layer)
-- Pristine NTSC-U Disc 1: workspace/pristine/FINALFANTASY7_D1.bin
-- Pristine Disc 2 (for prove script only): workspace/pristine/FINALFANTASY7_D2.bin
-
-## 1. Pull
+**One command** (preferred). Writes the only bin you should open in DuckStation.
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 git pull --ff-only
 git -C ../Final-Fantasy-7-CSR pull --ff-only
+
+python3 mods/single-disc/scripts/build_playtest_bin.py
 ```
 
-## 2. Build the playtest image (three layers)
+Output (must both exist):
+
+    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin   # ~731 MB / 766084032 bytes
+    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
+
+Open the **.cue** in DuckStation.
+
+The script **fails** unless MOVIE/JAIROFAL.MOV is byte-identical to D2 CANONON.MOV.
+
+## Critical: do not open the wrong .bin
+
+workspace/iso-extract/ has many old work bins (~714 MB). Those are often **core-only**
+(no movies) and will play pristine D1 jairofal / rocket standing on launch pad at LOSLAKE1 (#637).
+
+| File | Approx size | #637 movie |
+|------|-------------|------------|
+| *_core_*.bin / playtest_work.bin / noswap work | ~714 MB | vanilla jairofal (wrong for manip) |
+| **ff7_d1_playtest_csr_sd_movies.bin** | **~731 MB (766084032)** | **CANONON (correct)** |
+
+If the file you open is not ~731 MB, you are not testing movies.
+
+## Why pristine D1 matches the rocket/jairo clip
+
+Retail: PMVIE id 47 is jairofal on D1 and canonon on D2. Single-disc uses disc-1 rules.
+Only the manip-movies layer replaces JAIROFAL data with CANONON + patches MOVIE_ID.
+
+## Manual three-step (same as the script)
 
 ```bash
-cd /path/to/Final-Fantasy-7-Modding
-
 PRISTINE=workspace/pristine/FINALFANTASY7_D1.bin
 CSR_LAYER=../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json
 CORE_LAYER=builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json
 MOVIE_LAYER=builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json
 OUT=workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
-
-# Layer 1: pristine D1 -> CSR base
-python3 scripts/apply_layer.py \
-  "$PRISTINE" \
-  "$CSR_LAYER" \
-  -o workspace/iso-extract/ff7_d1_csr_base_local.bin
-
-# Layer 2: + single-disc core (fields/SNOVA/asks — NOT movies)
-python3 scripts/apply_layer.py \
-  workspace/iso-extract/ff7_d1_csr_base_local.bin \
-  "$CORE_LAYER" \
-  -o workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
-
-# Layer 3: + manip movies (CANONON into JAIROFAL for #637)
-# SKIP THIS => same wrong D1 jairofal clip as pristine disc 1
-python3 scripts/apply_layer.py \
-  workspace/iso-extract/ff7_d1_csr_sd_core_local.bin \
-  "$MOVIE_LAYER" \
-  -o "$OUT"
-
-ls -lh "$OUT"
-```
-
-## 3. Make a .cue (DuckStation)
-
-```bash
-cd workspace/iso-extract
-BIN=ff7_d1_playtest_csr_sd_movies.bin
-printf 'FILE "%s" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' "$BIN" \
-  > ff7_d1_playtest_csr_sd_movies.cue
-```
-
-Open the .cue (or .bin) in DuckStation. Playtest file is:
-
-    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
-
-## 4. Prove movies pack applied (before playtest)
-
-```bash
-cd /path/to/Final-Fantasy-7-Modding
-python3 << 'PY'
-from pathlib import Path
-import sys, hashlib
-sys.path.insert(0, "scripts")
-from psx_mode2_iso import extract_file, find_file
-
-out = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
-d2 = Path("workspace/pristine/FINALFANTASY7_D2.bin").read_bytes()
-d1 = Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes()
-j = extract_file(out, "MOVIE/JAIROFAL.MOV")
-c = extract_file(d2, "MOVIE/CANONON.MOV")
-v = extract_file(d1, "MOVIE/JAIROFAL.MOV")
-m = find_file(out, "MOVIE/JAIROFAL.MOV")
-print("OUT bytes", len(out))
-print("JAIROFAL ISO", m)
-print("size", len(j), "CANONON", len(c), "vanilla_d1", len(v))
-print("playtest==CANONON", j == c)
-print("playtest==vanilla_jairofal", j == v)
-print("sha playtest", hashlib.sha256(j).hexdigest()[:16])
-print("sha CANONON ", hashlib.sha256(c).hexdigest()[:16])
-if j != c:
-    raise SystemExit("FAIL: movies pack missing or wrong — do not playtest yet")
-print("OK — playtest bin has CANONON in JAIROFAL slot")
-PY
-```
-
-Expect: playtest==CANONON True, size 15071232.
-
-## 5. What each intermediate bin is
-
-| File | Stack | Movies |
-|------|-------|--------|
-| ff7_d1_csr_base_local.bin | CSR only | vanilla |
-| ff7_d1_csr_sd_core_local.bin | CSR + single-disc core | vanilla D1 (jairofal at #637) |
-| **ff7_d1_playtest_csr_sd_movies.bin** | CSR + core + **manip-movies** | **CANONON at #637 — use this** |
-
-## 6. LOSLAKE1 (#637) short reminder
-
-- Pristine D2 plays CANONON; pristine D1 plays jairofal. Retail is intentional.
-- Single-disc uses disc-1 rules. Movies pack copies CANONON into JAIROFAL.MOV + MOVIE_ID.
-- Site builder can cache old layers. Local apply_layer only uses your git clone.
-
-## 7. Optional: site builder instead of local
-
-1. Hard-refresh https://individualcontributor.dev/builder/
-2. Base: CSR; Single-disc: on; **no** CSR+ scene packs
-3. Build zip from pristine D1
-4. APPLIED.txt must list both single-disc-on-csr and single-disc-csr-manip-movies
-
-## 8. Verify config (optional)
-
-```bash
-python3 scripts/verify_builder_config.py \
-  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-  --disc 1 \
-  --base csr-v0.14.1 \
-  --addon single-disc-on-csr-v0.1.1 \
-  --addon single-disc-csr-manip-movies-v0.1.0
+python3 scripts/apply_layer.py "$PRISTINE" "$CSR_LAYER" -o workspace/iso-extract/ff7_d1_csr_base_local.bin
+python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_base_local.bin "$CORE_LAYER" -o workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
+python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bin "$MOVIE_LAYER" -o "$OUT"
 ```
 
 ---
