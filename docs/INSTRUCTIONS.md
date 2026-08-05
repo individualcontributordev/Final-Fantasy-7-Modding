@@ -2,12 +2,12 @@
 
 ## Done just now
 
-Field 765 / LAS4_2 wrong FMV on CSR+single-disc: Makou invalid archive when deleting Set movie on grown single-disc bins.
+Field 765 / LAS4_2 and field 768 / LASTMAP wrong FMV on CSR+single-disc after D3 field merge.
 
-Fix published in pack: reused Clean single-disc pre-trimmed FIELD/LAS4_2.DAT (Set+Play already removed) onto single-disc-on-csr-v0.1.1 via ISO pad-replace + layer rebuild. CSR D1 never edits this map (bytes match pristine), so Clean trim is safe.
+Fix published in pack: reused Clean single-disc pre-trimmed FIELD/LAS4_2.DAT and FIELD/LASTMAP.DAT (Set+Play already removed) onto single-disc-on-csr-v0.1.1 via ISO pad-replace + layer rebuild. CSR D1 never edits these maps (bytes match pristine), so Clean trims are safe.
 
 - Verify: PASS (csr-v0.14.1 + single-disc-on-csr-v0.1.1)
-- Do not need Makou for 765 anymore on a new builder zip.
+- Do not need Makou for 765 or 768 on a new builder zip.
 
 ## Still use Makou only for CSR-unique maps
 
