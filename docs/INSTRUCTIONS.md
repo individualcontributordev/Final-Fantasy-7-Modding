@@ -52,12 +52,11 @@ python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bi
 ---
 
 
----
-
 # DuckStation debugger — LOSLAKE1 wrong FMV (#637)
 
-Use this when the local playtest bin still shows the rocket/launch-pad clip.
-Goal: capture movie id and which ISO LBA is read when the bad FMV starts.
+Use when playtest still shows rocket/launch-pad clip. Capture movie path (id + LBA).
+
+**Always put new debugger findings back into this file** when the procedure changes.
 
 ## 0. Only debug the movies playtest bin
 
@@ -68,21 +67,17 @@ python3 mods/single-disc/scripts/build_playtest_bin.py
 ls -lh workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
 ```
 
-Must be **766084032 bytes** (~731 MB). If ~714 MB, movies were not applied — stop.
+Must be **766084032 bytes** (~731 MB). If ~714 MB, movies missing — stop.
 
-Open in DuckStation:
+Open **only**:
 
     workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
 
-Do **not** open other workspace/iso-extract/ff7_d1_*.bin files.
-
-Host-side LBA check (optional):
+Host LBA check:
 
 ```bash
-python3 -c '
-from pathlib import Path
-import sys
-sys.path.insert(0, "scripts")
+python3 -c "
+from pathlib import Path; import sys; sys.path.insert(0, "scripts")
 from psx_mode2_iso import find_file
 b = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
 print("JAIROFAL", find_file(b, "MOVIE/JAIROFAL.MOV"))
@@ -90,104 +85,137 @@ print("RCKTFAIL", find_file(b, "MOVIE/RCKTFAIL.MOV"))
 '
 ```
 
-On current packs expect JAIROFAL **LBA=318357 size=15071232** (CANONON body).
-Vanilla jairofal LBA was **258385**. RCKTFAIL is **245435**.
+Current packs (verified):
 
-## 1. DuckStation setup
+| File | LBA | Size | Content on playtest |
+|------|----:|-----:|---------------------|
+| JAIROFAL.MOV (eng id 47) | **318357** | **15071232** | **CANONON** (not vanilla jairofal) |
+| RCKTFAIL.MOV (eng id 45) | **245435** | 13154304 | vanilla rcktfail (unchanged) |
+| vanilla jairofal (reference) | 258385 | 4700160 | only if movies pack missing |
 
-1. Enable debugger (Settings / Tools — Enable debugging).
-2. Boot the playtest **.cue** above.
-3. Reach LOSLAKE1 (#637). Pause **as the wrong FMV starts** (frame-advance helps).
+Image on disk is correct for id 47 if size is 766084032 and JAIROFAL==CANONON.
 
-## 2. Breakpoint — Play movie handler
+## 1. Setup
 
-FIELD load base **0x800A0000**. MOVIE opcode handler entry:
-
-```text
-CPU Execute breakpoint: 0x800CCE94
-```
-
-When it hits during the bad cutscene, dump the memory below.
-
-Related known addrs (from field movie RE):
-
-| Addr | Role |
-|------|------|
-| 0x800CCE94 | MOVIE (0xF9) handler entry |
-| 0x800722C4 | u8 field index (script entity index area) |
-| 0x80071C1C | flag cleared in abandoned movie stubs |
-| 0x801144D4 | related flag |
-
-## 3. Memory to dump (screenshot or hex paste)
-
-While FMV is playing / at breakpoint:
-
-### 3a. Small RAM dumps
+1. Enable debugger.
+2. Boot playtest .cue.
+3. Set execute breakpoint:
 
 ```text
-0x800722C0  length 32 bytes
-0x80071C00  length 64 bytes
-0x801144D0  length 16 bytes
+0x800CCE94
 ```
 
-Note especially **u8 at 0x800722C4**.
+MOVIE (0xF9) handler entry. FIELD base 0x800A0000.
 
-### 3b. Best signal — ISO LBA being read
+4. Reach LOSLAKE1. When the **wrong FMV starts**, the breakpoint should hit
+   (Hit count >= 1). Leave it **paused**.
 
-If DuckStation can log CD/ISO reads or break on sector read, note the **LBA** when the pad FMV starts:
+## 2. You are paused at the right place when
 
-| LBA (playtest pack) | Meaning |
-|--------------------:|---------|
-| **318357** | CANONON stream (pack installed; inject path OK) |
-| **258385** | Vanilla JAIROFAL (old slot — wrong bin or MOVIE_ID not used) |
-| **245435** | RCKTFAIL (rocket pad family — likely PMVIE id 45, not 47) |
-| other | paste the number |
+| UI | Good | Bad |
+|----|------|-----|
+| PC / highlight | **0x800CCE94** (lui / first MOVIE ops) | random addr |
+| Breakpoint list | 0x800CCE94 Execute, Hit count **>= 1** | Hit count 0 |
+| Memory pane | address **8009D820** or **800722C0** | **00000000** (useless) |
 
-### 3c. Host confirm open file
+First instructions at entry (for sanity):
 
-```bash
-ls -lh workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
-# must show 766084032 (or matching current pack size)
+```text
+0x800CCE94  lui  v0, 0x800A
+0x800CCE98  lbu  v0, -0x27E0(v0)   # loads *0x8009D820
+0x800CCE9C  addiu sp, sp, -24
+0x800CCEA0  andi  v0, v0, 3
 ```
 
-## 4. Makou cross-check (same scene)
+So **u8[0x8009D820] & 3** is a **movie state**, not the disc movie id.
+Movie **id (45 vs 47)** is usually set earlier by PMVIE; dump RAM below + CD LBA.
 
-On the **same** playtest .bin in Makou:
+## 3. While still paused — dump these (required)
 
-1. Field **loslake1** / #637
-2. Find the **Play movie** that matches what you see
-3. Note full **Set next movie** line and **id** (e.g. 47 jairofal/canonon vs 45 rcktfail)
+### 3a. Memory goto (do not leave memory at 0x0)
 
-Makou list order is **engine id**, not ISO A-Z. Disc 1 examples:
+```text
+8009D820     # first byte handler reads (state); dump 16+ bytes
+800722C0     # 32 bytes (includes 0x800722C4)
+800716CC     # 16 bytes (loaded early in this handler)
+80071C10     # 32 bytes
+```
 
-| Id | Disc 1 name |
-|---:|-------------|
-| 45 | rcktfail |
+Record:
+
+- u8 **0x8009D820**
+- u8 **0x800722C4**
+- hex **800722C0-800722DF**
+- hex around **800716CC**
+
+### 3b. Registers
+
+Screenshot register panel is fine. At bare entry, v0 often still looks like
+0x800CCE94 (lui of handler). a0 may be entity-related later — id is in RAM/CD.
+
+### 3c. Best signal — ISO LBA of the stream
+
+If DS logs CD/ISO sector reads, note LBA when FMV data streams:
+
+| LBA | Meaning |
+|----:|---------|
+| **318357** | CANONON (id 47 pack) — inject OK |
+| **258385** | vanilla JAIROFAL — wrong bin / MOVIE_ID not used |
+| **245435** | RCKTFAIL (id 45) — different movie than 47 |
+| other | send the number |
+
+### 3d. Optional step further
+
+Step Over a few times deeper into the handler, dump 8009D820 + 800722C0 again.
+
+## 4. Makou on the same playtest .bin
+
+1. Field loslake1 / #637
+2. Play movie that matches on-screen clip
+3. Note **Set next movie** full line + **id**
+
+Makou order = engine id (not ISO A-Z). Disc 1:
+
+| Id | Name |
+|---:|------|
+| 45 | rcktfail (rocket fail / pad family) |
 | 46 | jairofly |
-| 47 | jairofal |
+| 47 | jairofal (triplet with D2 canonon) |
 | 48 | gold7 |
-| ... | ... |
 | 54+ | No54, No55, ... |
 
-Id **47** on D1 = jairofal; on D2 = canonon (same PMVIE byte).
+Id 47 D1=jairofal / D2=canonon. Single-disc uses D1 slot; pack puts CANONON bytes there.
 
 ## 5. What to send back
 
-1. Full path of .bin/.cue DuckStation opened
-2. Size of that .bin
-3. u8 **0x800722C4** (and dump 0x800722C0-0x800722DF)
-4. Movie **LBA read** if available (318357 / 258385 / 245435 / other)
-5. Makou Set next movie line + id for that Play
+1. Path of .bin/.cue DS opened
+2. Bin size (must be 766084032 for current packs)
+3. u8 0x8009D820, u8 0x800722C4
+4. Hex dumps 800722C0-800722DF, 8009D820-8009D82F
+5. Movie LBA if available (318357 / 258385 / 245435 / other)
+6. Makou Set next movie line + id
+7. Screenshot OK if memory address bar shows 8009D820 or 800722C0 (not 00000000)
 
-## 6. How we interpret
+## 6. Interpretation
 
 | Result | Meaning |
 |--------|---------|
-| LBA 318357, still looks wrong | Content/scene mismatch; id may still be wrong scene |
-| LBA 258385 | Still vanilla jairofal — wrong image or MOVIE_ID not applied |
-| LBA 245435 | Playing **rcktfail (id 45)** — different fix than id 47 CANONON |
-| Bin size ~714MB | Core-only build; rerun build_playtest_bin.py |
+| LBA 318357 | Pack stream (CANONON) is what CD read |
+| LBA 258385 | Vanilla jairofal still read |
+| LBA 245435 | rcktfail id 45 — not fixed by CANONON->JAIROFAL |
+| Size ~714MB | Core-only; rebuild playtest bin |
+| BP hit, mem at 0x0 only | Right BP, wrong memory pane — fix goto |
 
+## 7. Playtest image sanity (agent/host)
+
+After git pull, agent or operator can re-check:
+
+```bash
+python3 mods/single-disc/scripts/build_playtest_bin.py
+# must print playtest==CANONON True
+```
+
+---
 
 # Windows disk cleanup (Git Bash) — low free space can break Makou
 
