@@ -1,97 +1,48 @@
-# Task: LAS4_2 movie trim shipped without Makou
+# Task: build playtest .bin (CSR + single-disc + movies)
 
-## Done just now
+This is the full stack for LOSLAKE1 (#637) manip FMV and general single-disc CSR playtest.
+**Movies pack is required.** Core-only plays pristine D1 jairofal (rocket family) at #637.
 
-Fields 765 / LAS4_2, 768 / LASTMAP, 643 / WHITE2 wrong FMV on CSR+single-disc after D2/D3 field merge.
+Needs:
 
-Fix published in pack: reused Clean single-disc pre-trimmed FIELD/LAS4_2.DAT, FIELD/LASTMAP.DAT, FIELD/WHITE2.DAT (Set+Play already removed) onto single-disc-on-csr-v0.1.1 via ISO pad-replace + layer rebuild. CSR D1 never edits these maps (bytes match pristine), so Clean trims are safe.
+- This repo (Final-Fantasy-7-Modding) on latest main
+- Sibling repo Final-Fantasy-7-CSR (csr-v0.14.1 base layer)
+- Pristine NTSC-U Disc 1: workspace/pristine/FINALFANTASY7_D1.bin
+- Pristine Disc 2 (for prove script only): workspace/pristine/FINALFANTASY7_D2.bin
 
-- Verify: PASS (csr-v0.14.1 + single-disc-on-csr-v0.1.1)
-- Do not need Makou for 765, 768, or 643 on a new builder zip.
-
-## Still use Makou only for CSR-unique maps
-
-e.g. BLACKBGB (#103) Ask deletes — CSR edits that hub; cannot paste Clean.
-
-When Makou is required: edit on a fresh CSR base + pack layer apply; avoid repeated save on SNOVA-grown playtest bins.
-
----
-
-
-## LOSLAKE1 (#637) — engine id vs filename (important)
-
-PMVIE stores **one** byte id. Makou labels it as three disc names for that id:
-
-  id 47 = jairofal (D1) / canonon (D2) / No47 (D3)
-
-Single-disc runs as **disc 1**, so the player loads D1 movie **id 47** =
-file **JAIROFAL.MOV** (engine table / MOVIE_ID.BIN), which vanilla is the Jairo/rocket clip.
-
-**Manip needs the D2 stream:** put **CANONON.MOV** bytes into the **JAIROFAL.MOV** slot
-and point **MOVIE_ID** eng row 47 at the new LBA/size (movies pack does this).
-
-**Core pack must NOT inject movies.** Older core accidentally shrunk JAIROFAL to LASTFLOR;
-that is cleaned out. Rebuild zip with CSR + Single-disc (**movies auto if no CSR+**).
-If you enable any CSR+ scene pack, movies pack is skipped — you will get vanilla JAIROFAL (rocket) again.
-
-## LOSLAKE1 (#637) manip FMV
-
-Makou triplet: Set next movie **jairofal (D1), canonon (D2), No47 (D3)**.
-Single-disc runs as disc 1, so Play uses **JAIROFAL.MOV**.
-
-**Correct stream for the manip:** D2 **CANONON.MOV** (not JUNSEA, not vanilla JAIROFAL).
-
-**Fix:** movie pack injects CANONON into the D1 **JAIROFAL.MOV** slot (grow ISO + patch **MINT/MOVIE_ID.BIN**).
-LASTFLOR (also wanted id 36) is deferred while CANONON owns that slot.
-
-Stack: CSR + Single-disc + manip movies (auto when no CSR+). New builder zip after Pages.
-Do not Clean-trim LOSLAKE1 Play.
-
----
-
-# Local build (no website / no CDN cache)
-
-Use this to test CSR + single-disc + manip movies without the builder UI.
-Needs sibling Final-Fantasy-7-CSR and pristine D1.
-
-## Pristine D1 vs D2 baseline (LOSLAKE1 movie)
-
-Retail is intentional:
-
-| Disc | PMVIE id 47 label | File played |
-|------|-------------------|-------------|
-| D2 | canonon | CANONON.MOV (manip clip) |
-| D1 | jairofal | JAIROFAL.MOV (Jairo/rocket family) |
-
-So pristine D1 matching the "wrong" clip is normal. Single-disc only matches D2
-when **single-disc-csr-manip-movies** is applied (replaces JAIROFAL body + MOVIE_ID).
-
-## Build .bin with repo scripts
-
-From Final-Fantasy-7-Modding root (Git Bash or macOS). Paths assume CSR is a sibling:
+## 1. Pull
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 git pull --ff-only
-# git -C ../Final-Fantasy-7-CSR pull --ff-only
+git -C ../Final-Fantasy-7-CSR pull --ff-only
+```
+
+## 2. Build the playtest image (three layers)
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
 
 PRISTINE=workspace/pristine/FINALFANTASY7_D1.bin
 CSR_LAYER=../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json
 CORE_LAYER=builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json
 MOVIE_LAYER=builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json
-OUT=workspace/iso-extract/ff7_d1_local_csr_sd_movies.bin
+OUT=workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
 
+# Layer 1: pristine D1 -> CSR base
 python3 scripts/apply_layer.py \
   "$PRISTINE" \
   "$CSR_LAYER" \
   -o workspace/iso-extract/ff7_d1_csr_base_local.bin
 
+# Layer 2: + single-disc core (fields/SNOVA/asks — NOT movies)
 python3 scripts/apply_layer.py \
   workspace/iso-extract/ff7_d1_csr_base_local.bin \
   "$CORE_LAYER" \
   -o workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
 
-# Required for #637 CANONON (skip this step => vanilla D1 jairofal / "rocket")
+# Layer 3: + manip movies (CANONON into JAIROFAL for #637)
+# SKIP THIS => same wrong D1 jairofal clip as pristine disc 1
 python3 scripts/apply_layer.py \
   workspace/iso-extract/ff7_d1_csr_sd_core_local.bin \
   "$MOVIE_LAYER" \
@@ -100,188 +51,82 @@ python3 scripts/apply_layer.py \
 ls -lh "$OUT"
 ```
 
-Optional .cue next to the bin:
+## 3. Make a .cue (DuckStation)
 
 ```bash
-BIN=ff7_d1_local_csr_sd_movies.bin
+cd workspace/iso-extract
+BIN=ff7_d1_playtest_csr_sd_movies.bin
 printf 'FILE "%s" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' "$BIN" \
-  > workspace/iso-extract/ff7_d1_local_csr_sd_movies.cue
+  > ff7_d1_playtest_csr_sd_movies.cue
 ```
 
-## Prove JAIROFAL slot is CANONON (local)
+Open the .cue (or .bin) in DuckStation. Playtest file is:
+
+    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
+
+## 4. Prove movies pack applied (before playtest)
 
 ```bash
+cd /path/to/Final-Fantasy-7-Modding
 python3 << 'PY'
 from pathlib import Path
 import sys, hashlib
 sys.path.insert(0, "scripts")
-from psx_mode2_iso import extract_file
+from psx_mode2_iso import extract_file, find_file
 
-out = Path("workspace/iso-extract/ff7_d1_local_csr_sd_movies.bin").read_bytes()
+out = Path("workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes()
 d2 = Path("workspace/pristine/FINALFANTASY7_D2.bin").read_bytes()
 d1 = Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes()
 j = extract_file(out, "MOVIE/JAIROFAL.MOV")
 c = extract_file(d2, "MOVIE/CANONON.MOV")
 v = extract_file(d1, "MOVIE/JAIROFAL.MOV")
-print("size", len(j), "CANONON", len(c), "vanilla", len(v))
-print("local==CANONON", j == c)
-print("local==vanilla_jairofal", j == v)
-print("sha local ", hashlib.sha256(j).hexdigest()[:16])
-print("sha CANONON", hashlib.sha256(c).hexdigest()[:16])
+m = find_file(out, "MOVIE/JAIROFAL.MOV")
+print("OUT bytes", len(out))
+print("JAIROFAL ISO", m)
+print("size", len(j), "CANONON", len(c), "vanilla_d1", len(v))
+print("playtest==CANONON", j == c)
+print("playtest==vanilla_jairofal", j == v)
+print("sha playtest", hashlib.sha256(j).hexdigest()[:16])
+print("sha CANONON ", hashlib.sha256(c).hexdigest()[:16])
+if j != c:
+    raise SystemExit("FAIL: movies pack missing or wrong — do not playtest yet")
+print("OK — playtest bin has CANONON in JAIROFAL slot")
 PY
 ```
 
-Expect: `local==CANONON True`, size 15071232, not vanilla jairofal.
+Expect: playtest==CANONON True, size 15071232.
 
-Core-only control (should match pristine D1 movie):
+## 5. What each intermediate bin is
 
-    workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
+| File | Stack | Movies |
+|------|-------|--------|
+| ff7_d1_csr_base_local.bin | CSR only | vanilla |
+| ff7_d1_csr_sd_core_local.bin | CSR + single-disc core | vanilla D1 (jairofal at #637) |
+| **ff7_d1_playtest_csr_sd_movies.bin** | CSR + core + **manip-movies** | **CANONON at #637 — use this** |
 
-## Builder / CDN note
+## 6. LOSLAKE1 (#637) short reminder
 
-The site can serve stale layer.json (browser or Pages cache). Local apply_layer only
-reads your clone. For site zips, APPLIED.txt must list both single-disc-on-csr and
-single-disc-csr-manip-movies when testing #637 without CSR+.
+- Pristine D2 plays CANONON; pristine D1 plays jairofal. Retail is intentional.
+- Single-disc uses disc-1 rules. Movies pack copies CANONON into JAIROFAL.MOV + MOVIE_ID.
+- Site builder can cache old layers. Local apply_layer only uses your git clone.
 
-# Task: publish Makou-fixed single-disc-on-csr pack
-
-Your edits are on the other machine. Put the fixed work bin here, rebuild the layer, verify, push. Then rebuild a zip on the site and keep playtesting.
-
-## 0. What this pack is
-
-- Repo: Final-Fantasy-7-Modding
-- Pack id: single-disc-on-csr-v0.1.1
-- Layer: builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json
-- Diff baseline: CSR D1 only (not pristine Clean)
-- Site CDN: this repo GitHub Pages (builder loads remote Modding manifest)
-
-## 1. Copy the work bin onto this machine
-
-Expected path (gitignored):
-
-    workspace/iso-extract/ff7_d1_csr_single_disc_playtest_work.bin
-
-That file must already include:
-
-- CSR base
-- Single-disc field work (D2/D3 CSR field merge, SNOVA if kept in the same bin)
-- Latest Makou edits (blackbgb Ask deleted, no forward/JMPF; LAS4_2 etc. Set+Play as needed)
-
-If the file has another name, copy/rename to the path above or change WORK in the commands below.
-
-Also ensure CSR baseline exists:
-
-    workspace/iso-extract/ff7_d1_csr_base.bin
-
-Rebuild CSR base if missing:
-
-    python3 scripts/apply_layer.py \
-      workspace/pristine/FINALFANTASY7_D1.bin \
-      ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
-      -o workspace/iso-extract/ff7_d1_csr_base.bin
-
-Pristine D1 must exist at workspace/pristine/FINALFANTASY7_D1.bin.
-
-## 2. Rebuild the builder layer
-
-From Final-Fantasy-7-Modding root:
-
-    git pull --ff-only
-
-    python3 scripts/bin_diff_to_layer.py \
-      workspace/iso-extract/ff7_d1_csr_base.bin \
-      workspace/iso-extract/ff7_d1_csr_single_disc_playtest_work.bin \
-      -o builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
-      --id single-disc-on-csr-v0.1.1-disc1 \
-      --description "Single-disc on CSR D1: Ask delete, field merges, movie trims, SNOVA"
-
-Do not diff against pristine Clean. Baseline is always ff7_d1_csr_base.bin.
-
-## 3. Verify (required)
-
-    python3 scripts/verify_builder_config.py \
-      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-      --disc 1 \
-      --base csr-v0.14.1 \
-      --addon single-disc-on-csr-v0.1.1
-
-Optional (CSR + single-disc + movie seed, no CSR+):
-
-    python3 scripts/verify_builder_config.py \
-      --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-      --disc 1 \
-      --base csr-v0.14.1 \
-      --addon single-disc-on-csr-v0.1.1 \
-      --addon single-disc-csr-manip-movies-v0.1.0
-
-Must print PASS.
-
-## 4. Changelog + commit + push
-
-Edit mods/single-disc/CHANGELOG.md (Unreleased or new section), e.g.:
-
-- blackbgb (#103): delete four Ask-for-disc ops (remove bad JMPF/forward stubs)
-- LAS4_2 (#765) / other maps: delete Set+Play where wrong FMV on D1
-- (list anything else you fixed in Makou)
-
-Then:
-
-    git add builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
-            mods/single-disc/CHANGELOG.md \
-            docs/INSTRUCTIONS.md
-
-    git commit -m "single-disc-on-csr: publish Makou field fixes (blackbgb, movies)"
-    git pull --rebase
-    git push
-
-Wait for GitHub Pages on this repo (often 1-2 minutes).
-
-## 5. New zip + continue testing
+## 7. Optional: site builder instead of local
 
 1. Hard-refresh https://individualcontributor.dev/builder/
-2. Base: CSR · Mods: Single-disc (movie pack auto if no CSR+)
-3. Build zip from a clean pristine D1 .bin (not the old work bin)
-4. Playtest; next Makou pass: edit a fresh apply (CSR base + new pack layer), not a sick re-saved grown bin
+2. Base: CSR; Single-disc: on; **no** CSR+ scene packs
+3. Build zip from pristine D1
+4. APPLIED.txt must list both single-disc-on-csr and single-disc-csr-manip-movies
 
-### Fresh Makou source next time (avoid invalid archive)
+## 8. Verify config (optional)
 
-    python3 scripts/apply_layer.py \
-      workspace/pristine/FINALFANTASY7_D1.bin \
-      ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
-      -o workspace/iso-extract/ff7_d1_csr_base.bin
-
-    python3 scripts/apply_layer.py \
-      workspace/iso-extract/ff7_d1_csr_base.bin \
-      builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
-      -o workspace/iso-extract/ff7_d1_csr_single_disc_makou_work.bin
-
-Open ff7_d1_csr_single_disc_makou_work.bin in Makou once, edit, save once, then repeat steps 2-4.
-
-## Makou checklist (already partly done)
-
-| ID | Map | Edit |
-|---:|-----|------|
-| 103 | BLACKBGB | Delete four Ask-for-disc; remove any forward/JMPF; keep music + jumps |
-| 765 | LAS4_2 | Delete Set next movie + Play movie if wrong FMV |
-| 763/766/767/768 | LAS4_* / LASTMAP | Same movie trim if wrong/crawl |
-| 95/106 | BLACKBG3/E | Delete Ask if still present |
-
-Keep Wait / Execute / Jump / bits. Do not use FIELD.BIN DSKCG stubs.
-
-## Priority field ids (spot-check)
-
-95 BLACKBG3 · 103 BLACKBGB · 106 BLACKBGE · 67 FSHIP_12 · 68 FSHIP_2 · 269 BLIN70_4 · 347 FR_E · 634 LOST2 · 637 LOSLAKE1 · 643 WHITE2 · 695 GAIA_32 · 725-727 ZMIND* · 744 LAS0_1 · 751 LAS0_8 · 763/765/766/767 LAS4_* · 768 LASTMAP · 777 LAS4_42 · 779 MD8_52
-
-## Notes for check
-
-    Work bin path:
-    bin_diff:
-    verify PASS:
-    commit:
-    Builder zip:
-    After Hojo / las0_1:
-    LAS4_2 FMV:
-    Other:
+```bash
+python3 scripts/verify_builder_config.py \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 \
+  --base csr-v0.14.1 \
+  --addon single-disc-on-csr-v0.1.1 \
+  --addon single-disc-csr-manip-movies-v0.1.0
+```
 
 ---
 
