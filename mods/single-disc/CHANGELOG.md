@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+- core: strip accidental MOVIE injects (LASTFLOR had overwritten JAIROFAL); movies only in manip-movies pack.
+- manip-movies: CANONON -> JAIROFAL for LOSLAKE1 eng id 47; verify MOVIE_ID row 47 LBA/size.
 - manip-movies: LOSLAKE1 (#637) multi-disc Set movie uses JAIROFAL on D1; inject D2 CANONON.MOV into JAIROFAL.MOV slot (grow + MOVIE_ID). Drop JUNSEA/LASTFLOR id36 clash.
 - manip-movies: patch MINT/MOVIE_ID.BIN when growing a slot (LOSLAKE1 #637 still played old MK8/rocket stream).
 - manip-movies: add JUNSEA.STR (D2) for LOSLAKE1 (#637) manip; injector grows D1 id-47 slot when source is larger.
