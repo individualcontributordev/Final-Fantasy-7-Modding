@@ -21,7 +21,7 @@ When Makou is required: edit on a fresh CSR base + pack layer apply; avoid repea
 
 Wrong FMV was **not** fixed by deleting Set+Play (that would break the manip).
 
-**Fix:** movie seed pack injects D2 **JUNSEA.STR** into D1 PMVIE **id 47** (overwrites MK8.STR; slot grown).
+**Fix:** movie seed pack injects D2 **JUNSEA.STR** into D1 PMVIE **id 47** (overwrites MK8.STR; slot grown) and patches **MINT/MOVIE_ID.BIN** so the engine uses the new LBA (ISO dirent alone is not enough).
 
 Stack: CSR + Single-disc + manip movies (auto when no CSR+). New builder zip after Pages.
 Do not Clean-trim LOSLAKE1 Play.
