@@ -1,0 +1,6 @@
+# D3 MOVIE_ID ids for endings -> same id on D1 (table has 54 rows on D1).
+# D3: id25 ENDING01, id26 ENDING3E, id29 ENDING2E
+# D1 same ids currently: SMK.STR, SOUTHMK.MOV, MONITOR.STR (will GREW + MOVIE_ID patch)
+3 ENDING01.MOV ->SMK.STR
+3 ENDING3E.MOV ->SOUTHMK.MOV
+3 ENDING2E.MOV ->MONITOR.STR
