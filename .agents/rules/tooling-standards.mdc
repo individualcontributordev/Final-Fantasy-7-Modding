@@ -1,0 +1,45 @@
+---
+description: Build small SRP tools with --help and docs; prefer tools over one-off chat scripts
+alwaysApply: true
+---
+
+# Tooling standards (SRP + developer-friendly)
+
+When solving a problem that will run more than once, **add or extend a repo tool**
+instead of leaving only chat paste or a disposable `workspace/tmp_*.py`.
+
+## Single responsibility
+
+- **One job per CLI script** (compare ≠ extract ≠ put ≠ build layer).
+- Share logic in **importable libraries** with no required main (e.g. `field_dat.py`,
+  `disc_sources.py`, `lzs.py`).
+- Do not grow a mega-script that builds, diffs, injects, and publishes in one file.
+- Mod **build entrypoints** stay under `mods/<name>/scripts/`; generic ISO/FIELD
+  helpers stay under root `scripts/`.
+
+## Every new or touched CLI must have
+
+1. Module docstring: **what**, **when to use**, **not for**, **examples**
+2. `argparse` with `-h` / `--help` (RawDescriptionHelpFormatter OK)
+3. Plain-English errors to stderr; meaningful exit codes when useful
+4. No hardcoded `/Users/...` paths — use repo-relative paths or env
+   (`FF7_PRISTINE_DIR`, `FF7_CSR_ROOT`, etc. via `disc_sources.py`)
+5. A row in **`scripts/README.md`** (or `mods/<name>/README.md` for mod tools)
+
+## Libraries
+
+- Docstring + typed public functions; no bare magic numbers without names
+- Safe to import from multiple CLIs
+
+## Agent workflow
+
+- Prefer calling existing tools from `docs/INSTRUCTIONS.md` COPY-PASTE
+- If a gap appears mid-task: implement the small tool + help + README row **in
+  the same change** as the fix, then point instructions at it
+- Update rules/skills when a new **class** of tool appears (not every flag)
+
+## Discovery
+
+Index: `scripts/README.md`. Field maps: `compare_field_dat`, `extract_field_dat`,
+`put_field_dat`. Layers: `apply_layer`, `bin_diff_to_layer`. Publish checks:
+`verify_builder_config`, `verify_built_disc`.
