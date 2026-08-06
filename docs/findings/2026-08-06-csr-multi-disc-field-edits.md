@@ -51,3 +51,6 @@ Lower risk for single-disc merge: any disc copy is the same CSR result.
 - DEL1.DAT is the known bad case: CSR D1 removes jump to DEL2; CSR D2 keeps a jump.
 - FIELD.BIN excluded from this DAT list (engine overlay, handled separately).
 
+## Follow-up
+
+Prefer D1/D2 triage: 2026-08-06-csr-multi-disc-field-prefer.md
