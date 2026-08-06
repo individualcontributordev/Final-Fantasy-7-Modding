@@ -103,6 +103,12 @@ PY
 **Pass:** `OK — single-disc BLACKBGB keeps Ask removal (not raw CSR)`  
 **Fail:** paste full output (do not re-copy CSR BLACKBGB over core without re-doing Ask removal).
 
+PY
+core DSKCG count: 0
+core == CSR Disc 1? False
+CSR D1 vs core: scripts script_diffs 1
+OK — single-disc BLACKBGB keeps Ask removal (not raw CSR)
+
 ---
 
 ## 3. Rebuild playtest
