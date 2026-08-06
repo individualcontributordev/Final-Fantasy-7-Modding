@@ -31,7 +31,11 @@ Exactly one operational task per agent turn.
 
 ## `docs/INSTRUCTIONS.md` layout (markdown)
 
-`# Task`, `## Goal`, `## Steps`, `## Copy-paste`, `## Evidence`. Idle = short status.
+`# Task`, `## Why`, `## What you do`, numbered steps with COPY-PASTE blocks, what to paste back.
+Idle = short status. Overwrite each run.
+
+**Writing:** plain English (file names, which disc’s CSR file, why). No jargon like “stem”.
+Prefer “put X on the image because …” over long “do not use” lists. One atomic ops task per file.
 
 ## Human loop
 

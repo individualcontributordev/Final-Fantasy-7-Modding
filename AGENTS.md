@@ -2,7 +2,7 @@
 
 Part of the IndividualContributor FF7 stack. Players use **https://individualcontributor.dev/builder/** only. This repo publishes **mod** `ic-layer-v1` packs (CDN via GitHub Pages). CSR bases live in **Final-Fantasy-7-CSR**.
 
-**Makou `FIELD/*.DAT` add-ons and CSR+ scene packs** live in the CSR repo (`ship-makou-addon`, `ship-csr-plus-scene`). **This repo** = engine/RE + encounter density packs (`research-new-mod`, `ship-field-encounters`, `ship-world-encounters`).
+**Makou `FIELD/*.DAT` add-ons and CSR+ scene packs** live in the CSR repo (`ship-makou-addon`, `ship-csr-plus-scene`). **This repo** = engine/RE + encounter density packs + **single-disc** (`research-new-mod`, `ship-field-encounters`, `ship-world-encounters`, `ship-single-disc`).
 
 ## How we work
 
@@ -11,6 +11,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 - User says **check** → Agent pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
 - Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/agent-human-workflow.mdc`).
+- **INSTRUCTIONS / chat:** plain English (what + why); no “stem”; one atomic ops task. Rule: `single-disc-fields.mdc` when touching single-disc fields/movies.
 - **Before publish:** `python scripts/verify_builder_config.py --pristine … --disc N --base … --addon …` (stacks layers like the site; required in ship skills).
 - Optional built-zip smoke: `python scripts/verify_built_disc.py path/to/extract-or.bin` — config **only** from `APPLIED.txt` next to the image (no pack-id flags). Ignores EDC/ECC and base bytes later addons overwrite — `docs/findings/2026-07-30-verify-built-disc-stacking.md`.
 
@@ -21,7 +22,9 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 | Homepage builder | UI; loads local Unmodified + remote CSR/Modding manifests |
 | This repo Pages | Silent CDN: `builder/manifest.json` + pack JSON (+ redirect `index.html`) |
 | `mods/<name>/` | Source of truth for a mod (VERSION, CHANGELOG, patches, **scripts/**) |
-| `scripts/` (root) | Shared ISO/layer/verify only — **not** mod build entrypoints |
+| `scripts/` (root) | Shared ISO/layer/verify + field compare — **not** mod build entrypoints |
+| `mods/single-disc/` | Single-disc on CSR/Highwind (prefer list, inject/playtest scripts) |
+
 - No PPF / RomPatcher / full-disc patcher UI.
 - Field/World encounter rates are **mods** with named presets (`light` / `standard` / `dense`), not free-form `%`. Pack ids still embed `25`/`50`/`75`.
 - Add-ons use `exclusiveGroup: field-encounter-rate` and `compatibleBases` matching live CSR base ids.
@@ -58,9 +61,11 @@ should still ship `-on-highwind-*` variants since Highwind is a live base.
 | Findings index | `docs/findings/README.md` |
 | Ghidra | `docs/05-ghidra-guide.md` |
 | Disc / Makou | `docs/02-disc-format.md` |
+| **Single-disc** | `mods/single-disc/`, rule `single-disc-fields`, skill `ship-single-disc` |
+| Field DAT compare | `python3 scripts/compare_field_dat.py` |
 | **PS2 burn / MiSTer / hardware** | `docs/07-hardware-burn.md` |
 
-New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters`.
+New findings: `docs/findings/YYYY-MM-DD-slug.md` + row in findings README. Skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters`, `ship-single-disc`.
 
 When RE gets faster or a new surface unlocks, update `docs/06-new-mod-research.md` (Capabilities table) in the same session — rule `evolve-re-process`.
 

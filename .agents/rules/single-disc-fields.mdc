@@ -1,0 +1,49 @@
+---
+description: Single-disc FIELD/MOVIE rules — multi-disc CSR collisions, compare tool, plain instructions
+alwaysApply: true
+---
+
+# Single-disc fields and movies
+
+Single-disc ships as **one Disc 1 image**. CSR (and other multi-disc sources) can
+still have **different** `FIELD/*.DAT` on Disc 1 vs Disc 2 for the same map name.
+
+## Never assume byte size or compressed diff = gameplay change
+
+- Always **LZS-decompress** FIELD DATs before judging content.
+- Use `python3 scripts/compare_field_dat.py` (opcodes, sections, dialog content vs padding).
+- Classifications that matter: `identical` | `pad-only` (safe) vs `scripts` | `sections` | `mixed` (real).
+- Compressed-layer hunks alone are noise (see DEL1 D2 pad-only false alarm).
+
+## Multi-disc CSR map names (as of 2026-08-06)
+
+Ten maps edited on both CSR D1 and D2 with **different** CSR bytes — all ten are
+real script diffs D1 vs D2. Prefer list: `mods/single-disc/patches/csr-field-disc-prefer.txt`.
+
+Batch: `python3 scripts/compare_field_dat.py --batch-collisions`  
+Reports: `docs/findings/field-collisions-2026-08-06/`.
+
+When building the Disc 1 image, **choose which disc’s CSR file** lands for each
+shared map (or hand-merge). Do not let a later D2/D3 copy silently overwrite a
+D1 CSR trim (DEL1 #441 regression).
+
+## Known hard picks
+
+| File | Keep from | Why |
+|------|-----------|-----|
+| `FIELD/DEL1.DAT` | CSR Disc 1 | Removes jump to DEL2 #442 |
+| `FIELD/BLACKBGB.DAT` | CSR Disc 1 | Hub / ask routing |
+| `FIELD/LOST2.DAT` | CSR Disc 2 | Intentional D2 break on single-disc |
+
+## Movies / CD seeks
+
+- Some FMV paths seek **absolute ISO LBA**, not only `MOVIE_ID` (LOSLAKE1 → LBA 250450).
+- FMV inject: prefer **raw Mode2 Form2 (2352)** sectors when stream must match hardware/DS.
+- Playtest entry: `python3 mods/single-disc/scripts/build_playtest_bin.py` → only open
+  `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue`.
+
+## Instructions language
+
+In `docs/INSTRUCTIONS.md` and chat: **plain English** — map file name, which disc’s
+CSR file, why. No jargon like “stem”. No “do not use X” lists when “put Y on the
+image because …” is enough. One field (or one atomic ops task) per instructions pass.
