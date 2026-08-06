@@ -1,72 +1,35 @@
 # Single-disc changelog
 
-- manual edits on top of csr base + single-disc mod
-
-## Unreleased
-
-- single-disc-on-csr: restore CSR **DEL1** (#441). Core had reintroduced pristine MAPJUMP to DEL2 (#442); CSR trim removes that jump.
-- manip-movies inject: always raw MODE2/2352 copy from source (Form2 FMV-safe). Rebuild v0.1.0+v0.1.1 layers.
-- manip-movies **v0.1.1**: alias D2 seek LBA **250450** to CANONON on D1 via **raw MODE2 Form2 2352** sector copy (2048-only write broke FMV start/audio). Relocate JAIROFLY. Tool: alias_d2_seek_lba_on_d1.py. RCKTFAIL tail clobbered.
-- core: strip accidental MOVIE injects (LASTFLOR had overwritten JAIROFAL); movies only in manip-movies pack.
-- manip-movies: CANONON -> JAIROFAL for LOSLAKE1 eng id 47; verify MOVIE_ID row 47 LBA/size.
-- manip-movies: LOSLAKE1 (#637) multi-disc Set movie uses JAIROFAL on D1; inject D2 CANONON.MOV into JAIROFAL.MOV slot (grow + MOVIE_ID). Drop JUNSEA/LASTFLOR id36 clash.
-- manip-movies: patch MINT/MOVIE_ID.BIN when growing a slot (LOSLAKE1 #637 still played old MK8/rocket stream).
-- manip-movies: add JUNSEA.STR (D2) for LOSLAKE1 (#637) manip; injector grows D1 id-47 slot when source is larger.
-- WHITE2 (#643): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D2 merge).
-- LASTMAP (#768): ship Clean single-disc Set+Play removal onto CSR pack (wrong FMV on D1 after D3 merge).
-- LAS4_2 (#765): ship Clean single-disc Set+Play removal onto CSR pack (Makou hits invalid archive on grown SNOVA bins).
-- Operator publishes Makou-fixed work bin via docs/INSTRUCTIONS.md (bin_diff vs CSR base -> single-disc-on-csr-v0.1.1 layer).
-- blackbgb (#103): remove bad JMPF+0 (forward 1 byte) Ask stand-ins; **delete** the four Ask-for-disc ops instead (fixes post-Hojo las0_1 load).
-
 Newest at top.
 
-## Unreleased
+## 0.1.2
 
-- Builder: single-disc movies pack uiHidden; auto-applied with CSR single-disc when no CSR+ scenes
-
-
-- single-disc-on-csr: merge all CSR D2+D3 changed FIELD maps onto D1 (keep CSR D1 FIELD.BIN)
-- blackbgb Ask nop + LOST2 D2 break retained; movie seed rebuilt
-
-
-- single-disc-on-csr: blackbgb Ask no-op (keep Play music); LOST2 from CSR D2 (break scene)
-- movie seed pack rebuilt on that core
-
-
-- Operator: blackbgb Ask removed on CSR core (rebuild pack next).
-
-- single-disc-csr-manip-movies-v0.1.0 seed: LASTFLOR, LAST4_3, LASTMAP, CANONHT2
-  (id-slot overwrite on D1). inject_movies_by_disc_id.py + csr-manip-movie-seed.txt.
-
-- CSR manip movie whitelist starter + list_d2d3_only_movies.py (inventory task)
-
-- Renamed mod id/path from no-disc-swap to **single-disc** (builder packs,
-  exclusiveGroup, docs). Same tech; player-facing name is Single-disc.
-
-- builder: single-disc-on-csr-v0.1.1 (csr-v0.14.1) - Clean field trims + SNOVA;
-  BLACKBGB Ask still CSR/Makou; FIELD.BIN left as CSR.
-
-- Policy: single-disc not on Unmodified. Clean pack disabled.
-- **Ship first:** CSR+ stacks + Highwind (core + SNOVA; no manip-movie pack).
-- **Defer:** CSR base alone + required manip-movie copies (disc space).
+- **DEL1 (#441):** main pack keeps CSR Disc 1 file (removes jump to DEL2 #442). Confirmed vs CSR Disc 1.
+- **BLACKBGB (#103):** keeps single-disc Ask removal (zero DSKCG); not raw CSR.
+- **LOST2 (#634):** main pack matches CSR Disc 2 break scene (already on pack).
+- **Movies (unchanged stack):** manip-movies v0.1.0 seed + v0.1.1 LBA 250450 CANONON Form2 alias for LOSLAKE1.
+- Field tools: compare_field_dat / extract_field_dat / put_field_dat for multi-disc map checks.
+- Prefer list: mods/single-disc/patches/csr-field-disc-prefer.txt (seven maps still review for later).
+- Builder id: single-disc-on-csr-v0.1.2 (v0.1.1 main pack disabled; movies auto-include follows 0.1.2).
 
 ## 0.1.1
 
-- More FIELD Set next movie + Play movie trims from playtest (D2/D3-range sites,
-  fr_e #347 after Diamond Weapon, blin70_4 #269 GameMoment>=1572, descent/lake, etc.)
-- Rebuild Clean D1 builder layer from combined work bin
-- Prior: Ask-for-disc removal, SNOVA + BATTLE.X LBA v3
+- Restore CSR DEL1 on main pack (no jump to DEL2); prior merge had regressed.
+- BLACKBGB: delete four Ask-for-disc ops (not JMPF+0 stand-ins).
+- LOST2 from CSR Disc 2 break scene retained.
+- manip-movies v0.1.0 seed (CANONON to JAIROFAL, CANONHT2, LAST4_3, LASTMAP) + MOVIE_ID patches.
+- manip-movies v0.1.1: raw Form2 CANONON at ISO LBA 250450 (LOSLAKE1 D2-style seek).
+- Field Set+Play movie trims (fr_e, blin70_4, WHITE2, LASTMAP, LAS4_2, etc.).
+- SNOVA + BATTLE.X LBA inject; Ask-for-disc Makou removal.
+- Movies pack uiHidden; auto-applied with Single-disc on CSR when no CSR+ scenes.
+- Policy: single-disc for CSR/Highwind, not Unmodified (clean pack retired).
 
 ## 0.1.0-dev
 
-- FIELD movie trims: remove Set next movie + Play movie on crawl / missing-FMV sites
-  (Tier 1 inventory + operator playtest on DuckStation)
-- Keep Ask-for-disc Makou removal + SNOVA/BATTLE.X LBA v3
-- Rebuild Clean D1 builder layer from combined work bin before burn
+- FIELD movie trims on crawl / missing-FMV sites.
+- Ask-for-disc removal + SNOVA/BATTLE.X LBA v3.
+- Clean D1 builder layer scaffold.
 
-## Unreleased (0.0.0-dev)
+## 0.0.0-dev
 
-- Clean D1 recipe: Makou Ask removal + SNOVA/BATTLE.X inject v3
-- DuckStation: Ask PASS, Supernova PASS, combined PASS
-- Builder: layer build script scaffold; pack not public-enabled
-- Document FMV wait vs stream length (manip timing note)
+- Clean D1 recipe scaffold; DuckStation Ask/SNOVA/combined PASS notes.

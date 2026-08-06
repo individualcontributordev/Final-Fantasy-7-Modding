@@ -29,7 +29,7 @@ def main() -> int:
     if not csr_layer.is_file():
         csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
     csr_layer = csr_layer.resolve()
-    core_layer = ROOT / "builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
+    core_layer = ROOT / "builder/single-disc-on-csr-v0.1.2/layers/disc1.layer.json"
     movie_v010 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
     movie_alias = ROOT / "builder/single-disc-csr-manip-movies-v0.1.1/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
