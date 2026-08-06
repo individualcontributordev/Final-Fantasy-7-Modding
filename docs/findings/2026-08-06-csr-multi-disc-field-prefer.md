@@ -182,3 +182,25 @@ Policy file: mods/single-disc/patches/csr-field-disc-prefer.txt
 - BLACKBGB / LOST2 from single-disc design notes.
 - review rows: raw 0x60 MAPJUMP scan has false positives; decide in Makou.
 - Size deltas still prove CSR D1 and CSR D2 are different authentic edits.
+
+## Structured verification (2026-08-06)
+
+Tool: python3 scripts/compare_field_dat.py --batch-collisions
+
+Reports: field-collisions-2026-08-06/README.md
+
+| Stem | CSR D1 vs D2 class | script slot diffs | pad-only? |
+|------|--------------------|------------------:|-----------|
+| BLACKBGB | scripts | 1 | no |
+| BUGIN1A | scripts | 3 | no |
+| COS_BTM | scripts | 3 | no |
+| COS_BTM2 | mixed | 14 (+1 text) | no |
+| DEL1 | scripts | 5 | no (D2 alone vs pris was pad-only; D1 vs D2 is real) |
+| JUNAIR2 | scripts | 1 | no |
+| LOST2 | scripts | 22 | no |
+| NIVGATE | scripts | 18 | no |
+| RCKTIN2 | scripts | 2 | no |
+| RCKTIN7 | scripts | 1 | no |
+
+None of the 10 multi-disc collisions are padding-only. Prefer-D1 / prefer-D2 / review policy still required for each stem.
+
