@@ -219,12 +219,46 @@ def _append_raw_grow(img: bytearray, path: str, raw: bytes, size: int) -> int:
 
 
 
-def _patch_movie_id_bin(img: bytearray, old_lba: int, old_size: int, new_lba: int, new_size: int) -> int:
-    """Update MINT/MOVIE_ID.BIN engine table (20-byte rows: ... lba, size, ...).
+def _movie_id_meta_by_lba(img: bytes | bytearray, lba: int):
+    """Return (size, a, b, c) from the first MOVIE_ID row with this LBA, or None.
+
+    Rows are 20 bytes: LBA(4), size(4), auxA(4), auxB(4), auxC(4).
+    For Form2 FMVs, size is usually sectors*2336 (not ISO 2048*sectors).
+    """
+    blob = extract_file(img, "MINT/MOVIE_ID.BIN")
+    want = struct.pack("<I", lba)
+    start = 0
+    while True:
+        pos = blob.find(want, start)
+        if pos < 0:
+            return None
+        # Align to 20-byte records when possible
+        if pos % 20 == 0 and pos + 20 <= len(blob):
+            _l, size, a, b, c = struct.unpack_from("<IIIII", blob, pos)
+            return (size, a, b, c)
+        start = pos + 1
+
+
+def _form2_size_field(iso_size: int) -> int:
+    """Engine length used by most Form2 streams: nsec * 2336."""
+    nsec = (iso_size + USER - 1) // USER
+    return nsec * 2336
+
+
+def _patch_movie_id_bin(
+    img: bytearray,
+    old_lba: int,
+    new_lba: int,
+    new_size: int,
+    aux: tuple[int, int, int] | None = None,
+) -> int:
+    """Update MINT/MOVIE_ID.BIN engine table (20-byte rows: lba, size, a, b, c).
 
     The field movie player resolves streams via this table, not only ISO9660
     dirents. Growing a MOVIE slot without patching leaves the engine on the
-    old LBA (wrong/short clip).
+    old LBA (wrong/short clip). Size must be the engine length (often
+    sectors*2336), not the ISO9660 byte size — copy from source MOVIE_ID when
+    injecting cross-disc Form2 streams or the player freezes mid-play.
     Returns number of LBA fields patched.
     """
     path = "MINT/MOVIE_ID.BIN"
@@ -237,22 +271,20 @@ def _patch_movie_id_bin(img: bytearray, old_lba: int, old_size: int, new_lba: in
         pos = blob.find(old_lba_b, start)
         if pos < 0:
             break
-        # Prefer rows where size follows LBA (common layout)
         if pos + 8 <= len(blob):
-            # Always update LBA when this exact old LBA is found.
-            # Size field is not always equal to ISO size (JAIROFAL row used a
-            # different length) — still set it to the new stream byte length so
-            # the player reads the full grown movie.
             struct.pack_into("<I", blob, pos, new_lba)
             struct.pack_into("<I", blob, pos + 4, new_size)
+            if aux is not None and pos + 20 <= len(blob) and pos % 20 == 0:
+                a, b, c = aux
+                struct.pack_into("<III", blob, pos + 8, a, b, c)
             patched += 1
         start = pos + 1
     if patched:
-        # write back (same size file)
         if len(blob) != meta.size:
             raise RuntimeError("MOVIE_ID size changed unexpectedly")
         replace_file_padded(img, path, bytes(blob))
     return patched
+
 
 def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_d1=None) -> dict:
     src_ents = _movie_entries(src_img)
@@ -285,6 +317,14 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
     # Always copy full MODE2/2352 sectors from source (Form2 FMV-safe).
     src_meta = find_file(src_img, "MOVIE/" + src_name)
     raw = _raw_sectors(src_img, src_meta.lba, src_meta.size)
+    # Engine MOVIE_ID size/aux: prefer source-disc table (Form2-correct).
+    src_mid_meta = _movie_id_meta_by_lba(src_img, src_meta.lba)
+    if src_mid_meta is not None:
+        eng_size, eng_a, eng_b, eng_c = src_mid_meta
+        eng_aux: tuple[int, int, int] | None = (eng_a, eng_b, eng_c)
+    else:
+        eng_size = _form2_size_field(src_size)
+        eng_aux = None
     src_nsec = (src_size + USER - 1) // USER
     dst_nsec = (d1_size + USER - 1) // USER
     if src_nsec > dst_nsec:
@@ -292,7 +332,7 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
         grew = True
         note_lba = new_lba
         movie_id_patches = _patch_movie_id_bin(
-            d1, old_lba, old_sz, new_lba, src_size
+            d1, old_lba, new_lba, eng_size, aux=eng_aux
         )
         if movie_id_patches < 1:
             raise SystemExit(
@@ -304,10 +344,10 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
             _set_file_size(d1, path, src_size)
         _write_raw_sectors(d1, old_lba, raw)
         note_lba = find_file(d1, path).lba
-        if src_size != old_sz:
-            movie_id_patches = _patch_movie_id_bin(
-                d1, note_lba, old_sz, note_lba, src_size
-            )
+        # LBA usually unchanged; always refresh engine size/aux from source.
+        movie_id_patches = _patch_movie_id_bin(
+            d1, old_lba, note_lba, eng_size, aux=eng_aux
+        )
     return {
         "movie": movie.upper(),
         "src_disc": src_disc,
@@ -318,6 +358,7 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
         "grew": grew,
         "lba": note_lba,
         "movie_id_patches": movie_id_patches,
+        "engine_size": eng_size,
     }
 
 
@@ -397,7 +438,7 @@ def main() -> int:
         if info.get("movie_id_patches"):
             extra += " [MOVIE_ID x%s]" % info["movie_id_patches"]
         print(
-            "OK D1 id=%d %s <- D%d %s (%d bytes; was %d)%s"
+            "OK D1 id=%d %s <- D%d %s (%d bytes; was %d; eng_size=%d)%s"
             % (
                 info["id"],
                 info["d1_slot"],
@@ -405,6 +446,7 @@ def main() -> int:
                 info["movie"],
                 info["src_bytes"],
                 info["old_slot_bytes"],
+                info.get("engine_size", 0),
                 extra,
             )
         )

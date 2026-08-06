@@ -103,7 +103,7 @@ def apply_alias(img: bytearray, d2_img: bytes) -> list[str]:
         notes.append("relocate raw %s LBA %d (%d sec) -> EOF" % (name, old.lba, file_nsec))
         new_lba = _append_raw_sectors(img, body_raw)
         _patch_dirent_lba_size(img, path, new_lba, old.size)
-        n = _patch_movie_id_bin(img, old.lba, old.size, new_lba, old.size)
+        n = _patch_movie_id_bin(img, old.lba, new_lba, old.size)
         notes.append("  new LBA %d MOVIE_ID patches %d" % (new_lba, n))
 
     _write_raw_sectors(img, D2_CANONON_LBA, raw)
