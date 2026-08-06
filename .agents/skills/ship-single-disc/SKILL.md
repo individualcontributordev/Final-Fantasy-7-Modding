@@ -59,7 +59,7 @@ Core layer is **diff vs CSR Disc 1 base**, not vs pristine.
 
 ```bash
 python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-  --disc 1 --base csr-v0.14.1 --addon single-disc-on-csr-v0.1.1
+  --disc 1 --base csr-v0.14.1 --addon single-disc-on-csr-v0.1.2
 # stack movies pack if shipping manip
 ```
 
