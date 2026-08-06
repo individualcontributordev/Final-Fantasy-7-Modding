@@ -22,7 +22,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 | Homepage builder | UI; loads local Unmodified + remote CSR/Modding manifests |
 | This repo Pages | Silent CDN: `builder/manifest.json` + pack JSON (+ redirect `index.html`) |
 | `mods/<name>/` | Source of truth for a mod (VERSION, CHANGELOG, patches, **scripts/**) |
-| `scripts/` (root) | Shared ISO/layer/verify + field compare — **not** mod build entrypoints |
+| `scripts/` (root) | Shared ISO/layer/verify + field tools — index **`scripts/README.md`** (not mod entrypoints) |
 | `mods/single-disc/` | Single-disc on CSR/Highwind (prefer list, inject/playtest scripts) |
 
 - No PPF / RomPatcher / full-disc patcher UI.

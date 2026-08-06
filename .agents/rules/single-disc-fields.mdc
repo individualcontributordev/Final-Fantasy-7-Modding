@@ -12,8 +12,10 @@ still have **different** `FIELD/*.DAT` on Disc 1 vs Disc 2 for the same map name
 
 - Always **LZS-decompress** FIELD DATs before judging content.
 - Use `python3 scripts/compare_field_dat.py` (opcodes, sections, dialog content vs padding).
-- Classifications that matter: `identical` | `pad-only` (safe) vs `scripts` | `sections` | `mixed` (real).
+- Extract/install maps: `extract_field_dat.py` / `put_field_dat.py` (not one-off ISO code).
+- Classifications: `identical` | `pad-only` (safe) vs `scripts` | `sections` | `mixed` (real).
 - Compressed-layer hunks alone are noise (see DEL1 D2 pad-only false alarm).
+- Tool index: `scripts/README.md`. Tooling rule: `tooling-standards.mdc`.
 
 ## Multi-disc CSR map names (as of 2026-08-06)
 
