@@ -41,6 +41,10 @@ D1 CSR trim (DEL1 #441 regression).
 
 - Some FMV paths seek **absolute ISO LBA**, not only `MOVIE_ID` (LOSLAKE1 → LBA 250450).
 - FMV inject: prefer **raw Mode2 Form2 (2352)** sectors when stream must match hardware/DS.
+- **Manip-movies packs:** each new version is **cumulative** (includes all prior movie work).
+  Only the **latest** id is `enabled` + `autoIncludeWhen`. Older versions may remain in
+  `builder/` / manifest but disabled, same `exclusiveGroup` (`single-disc-csr-movies`).
+  Never stack two movie pack versions on one build.
 - Playtest entry: `python3 mods/single-disc/scripts/build_playtest_bin.py` → only open
   `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue`.
 

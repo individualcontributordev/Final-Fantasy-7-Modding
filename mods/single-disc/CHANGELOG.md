@@ -7,10 +7,13 @@ Newest at top.
 - **DEL1 (#441):** main pack keeps CSR Disc 1 file (removes jump to DEL2 #442). Confirmed vs CSR Disc 1.
 - **BLACKBGB (#103):** keeps single-disc Ask removal (zero DSKCG); not raw CSR.
 - **LOST2 (#634):** main pack matches CSR Disc 2 break scene (already on pack).
-- **Movies (unchanged stack):** manip-movies v0.1.0 seed + v0.1.1 LBA 250450 CANONON Form2 alias for LOSLAKE1.
+- **Movies policy:** latest pack is cumulative. `single-disc-csr-manip-movies-v0.1.2` =
+  previous seed (v0.1.0) + LBA 250450 alias (v0.1.1) in **one** layer. Only 0.1.2 is
+  enabled/auto-included. Older 0.1.0 and 0.1.1 stay in the repo/manifest but
+  disabled (same exclusive group; do not stack two movie packs).
 - Field tools: compare_field_dat / extract_field_dat / put_field_dat for multi-disc map checks.
 - Prefer list: mods/single-disc/patches/csr-field-disc-prefer.txt (seven maps still review for later).
-- Builder id: single-disc-on-csr-v0.1.2 (v0.1.1 main pack disabled; movies auto-include follows 0.1.2).
+- Builder id: single-disc-on-csr-v0.1.2 (v0.1.1 main pack disabled).
 
 ## 0.1.1
 

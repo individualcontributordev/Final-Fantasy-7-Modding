@@ -10,7 +10,7 @@ Builder pack ids live in `builder/manifest.json`. Notes go next to the mod sourc
 |---------|-----------|---------------------------|
 | Field random encounters | [mods/field-random-encounters/CHANGELOG.md](mods/field-random-encounters/CHANGELOG.md) | `field-encounter-*-v…`, `field-encounter-on-*-v…` |
 | World map random encounters | [mods/world-map-random-encounters/CHANGELOG.md](mods/world-map-random-encounters/CHANGELOG.md) | `world-encounter-*-v…`, `world-encounter-on-*-v…` |
-| Single-disc | [mods/single-disc/CHANGELOG.md](mods/single-disc/CHANGELOG.md) | `single-disc-on-csr-v0.1.2`, manip-movies v0.1.0+v0.1.1 |
+| Single-disc | [mods/single-disc/CHANGELOG.md](mods/single-disc/CHANGELOG.md) | `single-disc-on-csr-v0.1.2`, movies `…-manip-movies-v0.1.2` (cumulative) |
 | Builder presets (this repo) | note under the mod(s) that own the packs | e.g. preset `random-encounters-light` |
 
 ```text

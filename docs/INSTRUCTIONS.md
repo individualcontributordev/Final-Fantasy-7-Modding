@@ -1,27 +1,24 @@
-# Task: single-disc v0.1.2 published — rebuild playtest and smoke
+# Task: movies pack is one cumulative latest (v0.1.2)
 
-## What shipped
+## What changed
 
-Builder main pack: **single-disc-on-csr-v0.1.2** (v0.1.1 main pack disabled).
+Before: builder auto-applied two movie packs (v0.1.0 seed + v0.1.1 LBA alias).
 
-Movies auto-stack still:
+Now:
 
-- single-disc-csr-manip-movies-v0.1.0
-- single-disc-csr-manip-movies-v0.1.1
+- Latest only: single-disc-csr-manip-movies-v0.1.2 = seed + LBA alias in one layer
+- Only 0.1.2 is enabled and auto-included with Single-disc on CSR
+- v0.1.0 and v0.1.1 stay in repo/manifest but disabled (same exclusive group)
+- Byte-identical to the old two-pack stack (verified)
 
-Locked in this release:
-
-- DEL1 = CSR Disc 1 (no jump to field 442)
-- BLACKBGB = asks removed (zero disc-change ops)
-- LOST2 = CSR Disc 2
-- LOSLAKE1 movie LBA alias (movies pack)
+Main single-disc pack is still single-disc-on-csr-v0.1.2.
 
 ## What you do
 
 1. Pull
-2. Rebuild playtest
-3. Open the new cue in DuckStation
-4. Reply: build size + any smoke notes
+2. Rebuild playtest (one movies layer)
+3. Optional verify
+4. Reply with sizes / PASS
 
 ---
 
@@ -47,9 +44,11 @@ Open only:
 workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
 ```
 
-Expect bin size about **766340400** bytes.
+Expect bin about 766340400 bytes.
 
-Optional stack check:
+---
+
+## 2. Optional stack check
 
 ```bash
 python3 scripts/verify_builder_config.py \
@@ -57,37 +56,18 @@ python3 scripts/verify_builder_config.py \
   --disc 1 \
   --base csr-v0.14.1 \
   --addon single-disc-on-csr-v0.1.2 \
-  --addon single-disc-csr-manip-movies-v0.1.0 \
-  --addon single-disc-csr-manip-movies-v0.1.1
+  --addon single-disc-csr-manip-movies-v0.1.2
 ```
 
-Expect: PASS — builder config applies cleanly
-
----
-
-## 2. Smoke (as far as you can)
-
-- Boots to title / new game or load
-- Costa / DEL1 path does not jump into DEL2 (#442)
-- If you reach blackbg hub: no insert-disc prompts on those four routes
-- LOSLAKE1 FMV matches Disc 2 cannon scene if you get there
+Expect PASS. Only one movies addon (not 0.1.0 + 0.1.1).
 
 ---
 
 ## 3. Reply
 
-Paste:
+Paste playtest last lines + verify PASS if run.
 
-1. Playtest build last lines (size OK or fail)
-2. verify PASS if you ran it
-3. Short smoke notes
+## Policy
 
----
-
-## After this release
-
-Seven multi-disc field maps still marked review in
-mods/single-disc/patches/csr-field-disc-prefer.txt
-(BUGIN1A, COS_BTM, COS_BTM2, JUNAIR2, NIVGATE, RCKTIN2, RCKTIN7).
-
-Those are the next merge train (new version after 0.1.2).
+Each new manip-movies version includes all previous movie work. Ship the new
+id as the only enabled/auto pack; leave older ids disabled for history.

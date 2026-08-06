@@ -50,8 +50,8 @@ Open only `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue`.
 
 | Pack | Role |
 |------|------|
-| `single-disc-on-csr-v*` | Core (fields, SNOVA, asks, trims) on CSR D1 |
-| `single-disc-csr-manip-movies-v*` | Movie body + LBA aliases (may split base/delta) |
+| `single-disc-on-csr-v*` | Main pack (fields, SNOVA, asks, trims) on CSR D1 |
+| `single-disc-csr-manip-movies-v*` | Movies on D1. **Latest is cumulative** (includes prior movie work). Only latest enabled + auto-include; older ids stay disabled in same exclusive group. |
 
 Core layer is **diff vs CSR Disc 1 base**, not vs pristine.
 
@@ -59,8 +59,10 @@ Core layer is **diff vs CSR Disc 1 base**, not vs pristine.
 
 ```bash
 python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-  --disc 1 --base csr-v0.14.1 --addon single-disc-on-csr-v0.1.2
-# stack movies pack if shipping manip
+  --disc 1 --base csr-v0.14.1 \
+  --addon single-disc-on-csr-v0.1.2 \
+  --addon single-disc-csr-manip-movies-v0.1.2
+# only latest movies pack (cumulative) — do not stack 0.1.0+0.1.1
 ```
 
 Update `mods/single-disc/CHANGELOG.md` (newest top), `VERSION`, `builder/manifest.json`.
