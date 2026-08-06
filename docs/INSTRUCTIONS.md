@@ -1,20 +1,19 @@
-# Task: first field on single-disc — DEL1 (field #441)
+# Task: put CSR Disc 1 DEL1 on the single-disc image
 
-Single-disc is **one Disc 1 image**. CSR keeps **different** copies of some field
-maps on Disc 1 vs Disc 2. We put the right CSR file onto the Disc 1 image, then
-rebuild playtest / publish.
+## Why
 
-## First map: DEL1
+Single-disc ships as **one Disc 1 image**. CSR’s trim on **DEL1** (field #441)
+is on **CSR Disc 1**: it removes the map jump to DEL2 (field #442). That is the
+file that belongs on the single-disc image so Costa keeps the CSR cut.
 
-| | |
-|--|--|
-| File | `FIELD/DEL1.DAT` |
-| Use | **CSR Disc 1** (removes jump to DEL2, field #442) |
-| Do not use | CSR Disc 2 DEL1 (still jumps to 442; smaller size is mostly text padding) |
-| Pack status | `single-disc-on-csr-v0.1.1` core should already equal CSR Disc 1 DEL1 |
+## What you do this pass
 
-This pass: **pull → compare → confirm pack → rebuild playtest**.
-If confirm fails, force-copy CSR Disc 1 DEL1 (section 4).
+1. Pull
+2. Confirm the published single-disc core already has that CSR Disc 1 DEL1
+3. Rebuild playtest and spot-check Costa / DEL1
+
+If step 2 fails, section 4 copies CSR Disc 1’s `FIELD/DEL1.DAT` onto a work image
+and rebuilds the core layer.
 
 Repos layout:
 
@@ -33,29 +32,21 @@ git pull --ff-only
 git -C ../Final-Fantasy-7-CSR pull --ff-only
 ```
 
-Need: `workspace/pristine/FINALFANTASY7_D1.bin` and `..._D2.bin`.
+Need: `workspace/pristine/FINALFANTASY7_D1.bin` (and D2 only if you re-run optional compares).
 
 ---
 
-## 1. Compare CSR Disc 1 vs CSR Disc 2 (DEL1)
+## 1. (Optional) See CSR Disc 1 vs CSR Disc 2 scripts for DEL1
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 
 python3 scripts/compare_field_dat.py csr:1 csr:2 --field DEL1 \
   -o workspace/iso-extract/del1-csr-d1-vs-d2.md
-
-python3 scripts/compare_field_dat.py pristine:2 csr:2 --field DEL1 \
-  -o workspace/iso-extract/del1-pris-d2-vs-csr-d2.md
 ```
 
-| Compare | Expect |
-|---------|--------|
-| CSR D1 vs CSR D2 | `scripts` — real differences |
-| pristine D2 vs CSR D2 | `pad-only` — no real script change on D2 |
-
-Open `workspace/iso-extract/del1-csr-d1-vs-d2.md`. Look at entity `border1`:
-CSR Disc 2 still MAPJUMPs toward field **442**; CSR Disc 1 does not.
+Report shows the script gaps (including `border1` / jump to 442). You can skip
+this if you only want the pack check.
 
 ---
 
@@ -114,7 +105,7 @@ workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
 
 (size about **766340400** bytes).
 
-In-game: Costa boat / DEL1 path must **not** jump into DEL2 (#442).
+In-game check: Costa boat / DEL1 keeps the CSR cut (no jump into DEL2 #442).
 
 Optional playtest file check:
 
@@ -227,27 +218,21 @@ Then re-run **section 2** and **section 3**.
 
 ---
 
-## 5. When DEL1 is OK — reply and stop
+## 5. When DEL1 is done — reply
 
 Paste:
 
 1. Section 2 result (`OK` or `FAIL` + text)
 2. Optional playtest DEL1 check
-3. Short play note (442 jump gone or not)
+3. Short play note (Costa / DEL1 → 442 jump fixed or not)
 
-**Do not start the next field until DEL1 is OK.**
-
-Next after DEL1:
-
-| File | Use version from |
-|------|------------------|
-| `FIELD/BLACKBGB.DAT` | CSR Disc 1 |
-| `FIELD/LOST2.DAT` | CSR Disc 2 |
-| seven other shared maps | still need a rule each |
+After DEL1 is confirmed, the next maps get their own instruction pass
+(`BLACKBGB` from CSR Disc 1, `LOST2` from CSR Disc 2, then the other shared maps).
 
 ---
 
-## Archive below
+## Archive (older notes)
+
 # LOSLAKE1 (#637) — FIX in pack v0.1.1
 
 Logs: `docs/logs single disc 1.txt`, `docs/logs real disc 2.txt`
