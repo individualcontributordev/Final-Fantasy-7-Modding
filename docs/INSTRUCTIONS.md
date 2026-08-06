@@ -1,26 +1,27 @@
-# Task: put CSR Disc 1 DEL1 on the single-disc image
+# Task: confirm BLACKBGB on single-disc (field #103)
 
-## Why
+## Done last pass
 
-Single-disc ships as **one Disc 1 image**. CSR’s trim on **DEL1** (field #441)
-is on **CSR Disc 1**: it removes the map jump to DEL2 (field #442). That is the
-file that belongs on the single-disc image so Costa keeps the CSR cut.
+- **DEL1:** section 2 confirm OK — CSR Disc 1 DEL1 is on the single-disc core.
 
-## What you do this pass
+## Why this map is different
 
-1. Pull
-2. Confirm the published single-disc core already has that CSR Disc 1 DEL1
-3. Rebuild playtest and spot-check Costa / DEL1
+`FIELD/BLACKBGB.DAT` is the mid-game hub that **asks which disc** to insert.
 
-If step 2 fails, section 4 copies CSR Disc 1’s `FIELD/DEL1.DAT` onto a work image
-and rebuilds the core layer.
+| Copy | What it is |
+|------|------------|
+| CSR Disc 1 / CSR Disc 2 | Still has **four** disc-change ops (`DSKCG`) in `init` |
+| Single-disc core | Those four asks **removed** (required for one-disc play) |
 
-Repos layout:
+CSR D1 vs D2 also differ by **one** `MAPJUMP` order in `init`. The file we keep is
+**single-disc’s edited BLACKBGB** (asks gone), not a raw CSR re-copy.
 
-```text
-Final-Fantasy-7-Modding/
-Final-Fantasy-7-CSR/          (sibling)
-```
+## What you do
+
+1. Pull  
+2. Confirm core BLACKBGB has **zero** `DSKCG`  
+3. Confirm it is not identical to raw CSR Disc 1 (asks would come back)  
+4. Rebuild playtest (optional Costa already OK; hub smoke if you can)
 
 ---
 
@@ -32,25 +33,21 @@ git pull --ff-only
 git -C ../Final-Fantasy-7-CSR pull --ff-only
 ```
 
-Need: `workspace/pristine/FINALFANTASY7_D1.bin` (and D2 only if you re-run optional compares).
-
 ---
 
-## 1. (Optional) See CSR Disc 1 vs CSR Disc 2 scripts for DEL1
+## 1. Optional — see CSR Disc 1 vs Disc 2
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
-
-python3 scripts/compare_field_dat.py csr:1 csr:2 --field DEL1 \
-  -o workspace/iso-extract/del1-csr-d1-vs-d2.md
+python3 scripts/compare_field_dat.py csr:1 csr:2 --field BLACKBGB \
+  -o workspace/iso-extract/blackbgb-csr-d1-vs-d2.md
 ```
 
-Report shows the script gaps (including `border1` / jump to 442). You can skip
-this if you only want the pack check.
+Expect: `scripts`, one differing slot (`init`).
 
 ---
 
-## 2. Confirm published core layer has CSR Disc 1 DEL1
+## 2. Confirm single-disc core BLACKBGB (must pass)
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
@@ -60,33 +57,51 @@ from pathlib import Path
 import json, sys
 sys.path.insert(0, "scripts")
 from apply_layer import apply_layer
-from psx_mode2_iso import extract_file
+from disc_sources import load_csr_image, load_pristine_image
 from field_compare import compare_bytes
+from field_dat import load_field_dat, decode_ops, fmt_op
+from psx_mode2_iso import extract_file
 
-root = Path(".")
-pristine = (root / "workspace/pristine/FINALFANTASY7_D1.bin").read_bytes()
-csr_layer = Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json")
-core_layer = root / "builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
+def core_blackbgb() -> bytes:
+    img = load_pristine_image(1)
+    apply_layer(
+        img,
+        json.loads(Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()),
+    )
+    apply_layer(
+        img,
+        json.loads(Path("builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json").read_text()),
+    )
+    return extract_file(bytes(img), "FIELD/BLACKBGB.DAT")
 
-img = bytearray(pristine)
-apply_layer(img, json.loads(csr_layer.read_text()))
-csr_del1 = extract_file(bytes(img), "FIELD/DEL1.DAT")
+def count_dskcg(dat: bytes) -> list:
+    hits = []
+    f = load_field_dat(dat)
+    for s in f.scripts:
+        for raw, name in decode_ops(s.raw):
+            if name == "DSKCG":
+                hits.append((s.entity, s.slot, fmt_op(raw, name)))
+    return hits
 
-apply_layer(img, json.loads(core_layer.read_text()))
-core_del1 = extract_file(bytes(img), "FIELD/DEL1.DAT")
-
-diff = compare_bytes(csr_del1, core_del1, a_label="CSR_D1_DEL1", b_label="core_layer_DEL1")
-print("classification:", diff.classification)
-print("script slots differ:", len(diff.script_diffs))
-print("same bytes:", csr_del1 == core_del1)
-if csr_del1 != core_del1:
-    raise SystemExit("FAIL: core DEL1 is not CSR Disc 1 — do section 4")
-print("OK — single-disc core DEL1 == CSR Disc 1 DEL1")
+core = core_blackbgb()
+csr1 = extract_file(bytes(load_csr_image(1)), "FIELD/BLACKBGB.DAT")
+hits = count_dskcg(core)
+print("core DSKCG count:", len(hits))
+for h in hits:
+    print(" ", h)
+print("core == CSR Disc 1?", core == csr1)
+d = compare_bytes(csr1, core, a_label="CSR_D1", b_label="core")
+print("CSR D1 vs core:", d.classification, "script_diffs", len(d.script_diffs))
+if hits:
+    raise SystemExit("FAIL: core still has disc-change asks — blackbg hub broken for single-disc")
+if core == csr1:
+    raise SystemExit("FAIL: core BLACKBGB is raw CSR (asks would still be present)")
+print("OK — single-disc BLACKBGB keeps Ask removal (not raw CSR)")
 PY
 ```
 
-**Pass:** `OK — single-disc core DEL1 == CSR Disc 1 DEL1`
-**Fail:** section 4.
+**Pass:** `OK — single-disc BLACKBGB keeps Ask removal (not raw CSR)`  
+**Fail:** paste full output (do not re-copy CSR BLACKBGB over core without re-doing Ask removal).
 
 ---
 
@@ -97,118 +112,33 @@ cd /path/to/Final-Fantasy-7-Modding
 python3 mods/single-disc/scripts/build_playtest_bin.py
 ```
 
-Open **only**:
+Open: `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue`
 
-```text
-workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
-```
-
-(size about **766340400** bytes).
-
-In-game check: Costa boat / DEL1 keeps the CSR cut (no jump into DEL2 #442).
-
-Optional playtest file check:
-
-```bash
-python3 << 'PY'
-from pathlib import Path
-import json, sys
-sys.path.insert(0, "scripts")
-from apply_layer import apply_layer
-from psx_mode2_iso import extract_file
-from field_compare import compare_bytes
-
-root = Path(".")
-img = bytearray((root / "workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
-apply_layer(
-    img,
-    json.loads(Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()),
-)
-ref = extract_file(bytes(img), "FIELD/DEL1.DAT")
-play = extract_file(
-    (root / "workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes(),
-    "FIELD/DEL1.DAT",
-)
-d = compare_bytes(ref, play, a_label="CSR_D1", b_label="playtest")
-print("playtest DEL1 vs CSR D1:", d.classification, "same", ref == play)
-if ref != play:
-    raise SystemExit("FAIL playtest DEL1")
-print("OK")
-PY
-```
+If you reach blackbg hub: **no** “insert disc 2/3” prompt on those four routes.
 
 ---
 
-## 4. Only if step 2/3 failed — force CSR Disc 1 DEL1 in
-
-Tool index: `scripts/README.md` (`extract_field_dat`, `put_field_dat`).
-
-### 4a. Export CSR Disc 1 DEL1
-
-```bash
-cd /path/to/Final-Fantasy-7-Modding
-mkdir -p workspace/iso-extract/field-merge
-
-python3 scripts/extract_field_dat.py --from csr:1 --field DEL1 \
-  -o workspace/iso-extract/field-merge/DEL1_csr_d1.DAT
-```
-
-### 4b. CSR work image + inject
-
-```bash
-cd /path/to/Final-Fantasy-7-Modding
-
-python3 scripts/apply_layer.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_csr_work.bin
-
-python3 scripts/put_field_dat.py \
-  --bin workspace/iso-extract/ff7_d1_csr_work.bin \
-  --field DEL1 \
-  --dat workspace/iso-extract/field-merge/DEL1_csr_d1.DAT
-```
-
-### 4c. Diff work bin into core layer (on top of CSR base)
-
-```bash
-cd /path/to/Final-Fantasy-7-Modding
-
-python3 scripts/apply_layer.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_csr_base_for_diff.bin
-
-# Work bin must include ALL single-disc core edits (not only DEL1) before a
-# full re-diff. If unsure, paste FAIL output in chat instead of re-diffing alone.
-
-python3 scripts/bin_diff_to_layer.py \
-  workspace/iso-extract/ff7_d1_csr_base_for_diff.bin \
-  workspace/iso-extract/ff7_d1_csr_work.bin \
-  -o builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
-  --id single-disc-on-csr-v0.1.1-disc1 \
-  --description "single-disc on CSR D1 (FIELD/DEL1.DAT = CSR Disc 1)"
-```
-
-Then re-run **section 2** and **section 3**.
-
----
-
-## 5. When DEL1 is done — reply
+## 4. Reply when done
 
 Paste:
 
-1. Section 2 result (`OK` or `FAIL` + text)
-2. Optional playtest DEL1 check
-3. Short play note (Costa / DEL1 → 442 jump fixed or not)
+1. Section 2 full output (`OK` or `FAIL`)
+2. Playtest build OK if you ran it
 
-After DEL1 is confirmed, the next maps get their own instruction pass
-(`BLACKBGB` from CSR Disc 1, `LOST2` from CSR Disc 2, then the other shared maps).
+---
+
+## Queue after this
+
+| Map | Intent |
+|-----|--------|
+| LOST2 | Put **CSR Disc 2** file on the single-disc image (break scene) |
+| Remaining 7 | Still need a real merge rule each |
+
+Tools: `scripts/README.md`
 
 ---
 
 ## Archive (older notes)
-
 # LOSLAKE1 (#637) — FIX in pack v0.1.1
 
 Logs: `docs/logs single disc 1.txt`, `docs/logs real disc 2.txt`
