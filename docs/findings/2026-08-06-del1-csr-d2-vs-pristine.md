@@ -1,5 +1,8 @@
 # DEL1 (#441) CSR Disc2 vs pristine Disc2
 
+> **Superseded for interpretation:** compressed-byte hunks below are LZS noise.
+> Opcode-level compare: [2026-08-06-del1-d2-pristine-vs-csr-opcodes.md](2026-08-06-del1-d2-pristine-vs-csr-opcodes.md) — scripts identical; text pad only.
+
 | | Size |
 |--|--:|
 | Pristine D2 | 21700 |
