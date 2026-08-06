@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-06 | [del1-d2-pristine-vs-csr-opcodes](2026-08-06-del1-d2-pristine-vs-csr-opcodes.md) | DEL1 D2: scripts identical; CSR only strips dialog padding (−444) | confirmed |
 | 2026-08-04 | [single-disc-csr-manip-movies-v010-seed](2026-08-04-single-disc-csr-manip-movies-v010-seed.md) | Seed movie pack: 4 files id-slot overwrite |
 | 2026-08-04 | [single-disc-rename-from-no-disc-swap](2026-08-04-single-disc-rename-from-no-disc-swap.md) | Rename no-disc-swap → single-disc |
 | 2026-08-04 | [single-disc-csrplus-fmv-deduce-manip-movies](2026-08-04-single-disc-csrplus-fmv-deduce-manip-movies.md) | COTA+endgame CSR+ diffs: only small endgame movies for CSR-alone |
