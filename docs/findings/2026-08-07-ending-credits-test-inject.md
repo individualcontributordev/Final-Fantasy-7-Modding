@@ -1,68 +1,42 @@
 # Ending credits test inject (DuckStation oversize bin)
 
 **Date:** 2026-08-07  
-**Status:** test image built; not a CD-sized pack
+**Status:** v2 — field scripts restored + D3 streams on MOVIE_ID rows
 
-## Approach
+## Why inject-only failed
 
-PMVIE uses **`MINT/MOVIE_ID.BIN` row index** (D1 has 54 rows), not ISO filename sort order.
+1. Single-disc **LASTMAP.DAT** removed ending **MOVIE** / PMVIE setup (pristine has
+   PMVIE 23, 24, and MOVIE). Result: no correct stream → garbage / black silence.
+2. Single-disc **LAS4_0.DAT** inserts **JMPF** before PMVIE 25 + MOVIE.
+3. PMVIE uses **MOVIE_ID.BIN row index**, not ISO name order.
 
-On **Disc 3** the ending streams are:
+## v2 fix (test bin only)
 
-| MOVIE_ID id | File |
-|------------:|------|
-| 25 | ENDING01.MOV |
-| 26 | ENDING3E.MOV |
-| 29 | ENDING2E.MOV |
+1. Base: normal playtest (CSR + main 0.1.2 + movies 0.1.2).
+2. Restore **pristine** FIELD/LASTMAP.DAT and FIELD/LAS4_0.DAT.
+3. Inject D3 files into D1 slots for MOVIE_ID ids:
 
-On **current single-disc D1 playtest** those same ids pointed at small files:
+| id | D3 source | D1 slot file |
+|---:|-----------|--------------|
+| 23 | LASTMAP.BIN | ONTRAIN.MOV |
+| 24 | LASTFLOR.MOV | MAINPLR.MOV |
+| 25 | ENDING01.MOV | SMK.STR (grew) |
+| 26 | ENDING3E.MOV | SOUTHMK.MOV (grew) |
+| 29 | ENDING2E.MOV | MONITOR.STR (grew) |
 
-| id | Was | Now (test) |
-|---:|-----|------------|
-| 25 | SMK.STR (~0.6 MiB) | ENDING01 bytes |
-| 26 | SOUTHMK.MOV (~5.7 MiB) | ENDING3E bytes |
-| 29 | MONITOR.STR (~2.2 MiB) | ENDING2E bytes |
+Manifest: `mods/single-disc/patches/ending-credits-test-manifest.txt`
 
-Injection: `inject_movies_by_disc_id.py` with  
-`mods/single-disc/patches/ending-credits-test-manifest.txt`  
-(grow Form2 raw + patch MOVIE_ID LBA/size).
+Verified: D3 payload match; LASTMAP has PMVIE 23/24 + MOVIE; LAS4_0 has PMVIE 25 + MOVIE.
 
-Verified: sector0 and full payload match pristine D3 for all three.
+## Play
 
-## Image size
-
-| Bin | Bytes | Notes |
-|-----|------:|-------|
-| Normal playtest | 766340400 | CD-oriented |
-| **ending test** | **1008274176** (~1008 MB) | ~429k sectors; **over** 80-min CD (~−69k sectors) |
-
-No pure “reclaim on CD” yet: slots were too small, so streams were **appended** (grow). True CD fit still needs cutting other data first.
-
-## How to playtest
-
-```bash
-# already produced locally as:
+```text
 workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-Open that **.cue** in DuckStation (not the normal movies cue).  
-After final battle, ids 25/26/29 should stream real D3 endings instead of garbage/black.
-
-Rebuild from scratch:
-
-```bash
-python3 mods/single-disc/scripts/build_playtest_bin.py
-cp -f workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin \
-      workspace/iso-extract/ff7_d1_playtest_ending_test.bin
-python3 mods/single-disc/scripts/inject_movies_by_disc_id.py \
-  --d1 workspace/iso-extract/ff7_d1_playtest_ending_test.bin \
-  --manifest mods/single-disc/patches/ending-credits-test-manifest.txt \
-  --in-place
-# write cue if missing (FILE name = bin name)
-```
+Size **1008274176** bytes — DuckStation only, not CD/builder.
 
 ## Caveats
 
-- Overwrites D1 movie ids 25/26/29 — anything on D1 that legitimately used SMK/SOUTHMK/MONITOR streams will show ending video instead.
-- Not for burn/CDN until size is solved.
-- Not in builder packs yet.
+Overwrites movie ids 23–26, 29; restores pristine last-map field scripts (drops
+those single-disc trims on this test image only).
