@@ -18,7 +18,9 @@ Ask removal, SNOVA, optional manip-movies, playtest bin.
 
 ## Field maps shared across CSR discs
 
-1. List collisions: finding `docs/findings/2026-08-06-csr-multi-disc-field-edits.md`
+Tools index: `scripts/README.md`. Prefer listed CLIs over ad-hoc Python.
+
+1. List collisions: `docs/findings/2026-08-06-csr-multi-disc-field-edits.md`
 2. Structured compare (not size alone):
 
 ```bash
@@ -26,15 +28,15 @@ python3 scripts/compare_field_dat.py csr:1 csr:2 --field DEL1 -o /tmp/del1.md
 python3 scripts/compare_field_dat.py --batch-collisions
 ```
 
-3. Put the correct CSR disc’s `FIELD/<NAME>.DAT` on the D1 work image
-   (`replace_file_padded` / layer rebuild). Enforce prefer file; never overwrite
-   a `d1` pick with a D2 copy by accident.
-4. Verify:
+3. Install the correct CSR disc’s map on the D1 work image:
 
 ```bash
-# example: core stack DEL1 == CSR D1 DEL1
-python3 scripts/compare_field_dat.py  # or INSTRUCTIONS confirm snippet
+python3 scripts/extract_field_dat.py --from csr:1 --field DEL1 -o /tmp/DEL1.DAT
+python3 scripts/put_field_dat.py --bin work.bin --field DEL1 --dat /tmp/DEL1.DAT
 ```
+
+Enforce `mods/single-disc/patches/csr-field-disc-prefer.txt` (d1/d2/review).
+4. Verify with `compare_field_dat.py` (paths or csr:N sides) or INSTRUCTIONS confirm snippet.
 
 ## Playtest bin
 

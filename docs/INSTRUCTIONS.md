@@ -141,30 +141,16 @@ PY
 
 ## 4. Only if step 2/3 failed — force CSR Disc 1 DEL1 in
 
+Tool index: `scripts/README.md` (`extract_field_dat`, `put_field_dat`).
+
 ### 4a. Export CSR Disc 1 DEL1
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 mkdir -p workspace/iso-extract/field-merge
 
-python3 << 'PY'
-from pathlib import Path
-import json, sys
-sys.path.insert(0, "scripts")
-from apply_layer import apply_layer
-from psx_mode2_iso import extract_file
-
-root = Path(".")
-out = root / "workspace/iso-extract/field-merge/DEL1_csr_d1.DAT"
-img = bytearray((root / "workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
-apply_layer(
-    img,
-    json.loads(Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()),
-)
-data = extract_file(bytes(img), "FIELD/DEL1.DAT")
-out.write_bytes(data)
-print("wrote", out, len(data), "bytes")
-PY
+python3 scripts/extract_field_dat.py --from csr:1 --field DEL1 \
+  -o workspace/iso-extract/field-merge/DEL1_csr_d1.DAT
 ```
 
 ### 4b. CSR work image + inject
@@ -177,20 +163,10 @@ python3 scripts/apply_layer.py \
   ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
   -o workspace/iso-extract/ff7_d1_csr_work.bin
 
-python3 << 'PY'
-from pathlib import Path
-import sys
-sys.path.insert(0, "scripts")
-from psx_mode2_iso import replace_file_padded, extract_file
-
-work = Path("workspace/iso-extract/ff7_d1_csr_work.bin")
-dat = Path("workspace/iso-extract/field-merge/DEL1_csr_d1.DAT").read_bytes()
-img = bytearray(work.read_bytes())
-replace_file_padded(img, "FIELD/DEL1.DAT", dat)
-work.write_bytes(img)
-assert extract_file(bytes(img), "FIELD/DEL1.DAT") == dat
-print("injected FIELD/DEL1.DAT OK", len(dat))
-PY
+python3 scripts/put_field_dat.py \
+  --bin workspace/iso-extract/ff7_d1_csr_work.bin \
+  --field DEL1 \
+  --dat workspace/iso-extract/field-merge/DEL1_csr_d1.DAT
 ```
 
 ### 4c. Diff work bin into core layer (on top of CSR base)
