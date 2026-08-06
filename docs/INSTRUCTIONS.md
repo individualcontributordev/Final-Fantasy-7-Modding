@@ -1,58 +1,253 @@
-# Task: build playtest .bin (CSR + single-disc + movies)
+# Task: first field on single-disc — DEL1 (field #441)
 
-**One command** (preferred). Writes the only bin you should open in DuckStation.
+Single-disc is **one Disc 1 image**. CSR keeps **different** copies of some field
+maps on Disc 1 vs Disc 2. We put the right CSR file onto the Disc 1 image, then
+rebuild playtest / publish.
+
+## First map: DEL1
+
+| | |
+|--|--|
+| File | `FIELD/DEL1.DAT` |
+| Use | **CSR Disc 1** (removes jump to DEL2, field #442) |
+| Do not use | CSR Disc 2 DEL1 (still jumps to 442; smaller size is mostly text padding) |
+| Pack status | `single-disc-on-csr-v0.1.1` core should already equal CSR Disc 1 DEL1 |
+
+This pass: **pull → compare → confirm pack → rebuild playtest**.
+If confirm fails, force-copy CSR Disc 1 DEL1 (section 4).
+
+Repos layout:
+
+```text
+Final-Fantasy-7-Modding/
+Final-Fantasy-7-CSR/          (sibling)
+```
+
+---
+
+## 0. Update
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 git pull --ff-only
 git -C ../Final-Fantasy-7-CSR pull --ff-only
+```
 
+Need: `workspace/pristine/FINALFANTASY7_D1.bin` and `..._D2.bin`.
+
+---
+
+## 1. Compare CSR Disc 1 vs CSR Disc 2 (DEL1)
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+
+python3 scripts/compare_field_dat.py csr:1 csr:2 --field DEL1 \
+  -o workspace/iso-extract/del1-csr-d1-vs-d2.md
+
+python3 scripts/compare_field_dat.py pristine:2 csr:2 --field DEL1 \
+  -o workspace/iso-extract/del1-pris-d2-vs-csr-d2.md
+```
+
+| Compare | Expect |
+|---------|--------|
+| CSR D1 vs CSR D2 | `scripts` — real differences |
+| pristine D2 vs CSR D2 | `pad-only` — no real script change on D2 |
+
+Open `workspace/iso-extract/del1-csr-d1-vs-d2.md`. Look at entity `border1`:
+CSR Disc 2 still MAPJUMPs toward field **442**; CSR Disc 1 does not.
+
+---
+
+## 2. Confirm published core layer has CSR Disc 1 DEL1
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+
+python3 << 'PY'
+from pathlib import Path
+import json, sys
+sys.path.insert(0, "scripts")
+from apply_layer import apply_layer
+from psx_mode2_iso import extract_file
+from field_compare import compare_bytes
+
+root = Path(".")
+pristine = (root / "workspace/pristine/FINALFANTASY7_D1.bin").read_bytes()
+csr_layer = Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json")
+core_layer = root / "builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
+
+img = bytearray(pristine)
+apply_layer(img, json.loads(csr_layer.read_text()))
+csr_del1 = extract_file(bytes(img), "FIELD/DEL1.DAT")
+
+apply_layer(img, json.loads(core_layer.read_text()))
+core_del1 = extract_file(bytes(img), "FIELD/DEL1.DAT")
+
+diff = compare_bytes(csr_del1, core_del1, a_label="CSR_D1_DEL1", b_label="core_layer_DEL1")
+print("classification:", diff.classification)
+print("script slots differ:", len(diff.script_diffs))
+print("same bytes:", csr_del1 == core_del1)
+if csr_del1 != core_del1:
+    raise SystemExit("FAIL: core DEL1 is not CSR Disc 1 — do section 4")
+print("OK — single-disc core DEL1 == CSR Disc 1 DEL1")
+PY
+```
+
+**Pass:** `OK — single-disc core DEL1 == CSR Disc 1 DEL1`
+**Fail:** section 4.
+
+---
+
+## 3. Rebuild playtest
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
 python3 mods/single-disc/scripts/build_playtest_bin.py
 ```
 
-Output (must both exist):
+Open **only**:
 
-    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin   # ~731 MB / ~766340400 bytes (v0.1.1)
-    workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
+```text
+workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
+```
 
-Open the **.cue** in DuckStation.
+(size about **766340400** bytes).
 
-The script **fails** unless MOVIE/JAIROFAL.MOV is byte-identical to D2 CANONON.MOV
-and ISO LBA 250450 starts with CANONON (D2-style seek alias).
+In-game: Costa boat / DEL1 path must **not** jump into DEL2 (#442).
 
-## Critical: do not open the wrong .bin
-
-workspace/iso-extract/ has many old work bins (~714 MB). Those are often **core-only**
-(no movies) and will play pristine D1 jairofal / rocket standing on launch pad at LOSLAKE1 (#637).
-
-| File | Approx size | #637 movie |
-|------|-------------|------------|
-| *_core_*.bin / playtest_work.bin / noswap work | ~714 MB | vanilla jairofal (wrong for manip) |
-| **ff7_d1_playtest_csr_sd_movies.bin** | **~731 MB (~766340400 v0.1.1)** | **CANONON + LBA250450 alias** |
-
-If the file you open is not ~731 MB, you are not testing movies.
-
-## Why pristine D1 matches the rocket/jairo clip
-
-Retail: PMVIE id 47 is jairofal on D1 and canonon on D2. Single-disc uses disc-1 rules.
-Only the manip-movies layer replaces JAIROFAL data with CANONON + patches MOVIE_ID.
-
-## Manual three-step (same as the script)
+Optional playtest file check:
 
 ```bash
-PRISTINE=workspace/pristine/FINALFANTASY7_D1.bin
-CSR_LAYER=../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json
-CORE_LAYER=builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json
-MOVIE_LAYER=builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json
-OUT=workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin
-python3 scripts/apply_layer.py "$PRISTINE" "$CSR_LAYER" -o workspace/iso-extract/ff7_d1_csr_base_local.bin
-python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_base_local.bin "$CORE_LAYER" -o workspace/iso-extract/ff7_d1_csr_sd_core_local.bin
-python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_csr_sd_core_local.bin "$MOVIE_LAYER" -o "$OUT"
+python3 << 'PY'
+from pathlib import Path
+import json, sys
+sys.path.insert(0, "scripts")
+from apply_layer import apply_layer
+from psx_mode2_iso import extract_file
+from field_compare import compare_bytes
+
+root = Path(".")
+img = bytearray((root / "workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
+apply_layer(
+    img,
+    json.loads(Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()),
+)
+ref = extract_file(bytes(img), "FIELD/DEL1.DAT")
+play = extract_file(
+    (root / "workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin").read_bytes(),
+    "FIELD/DEL1.DAT",
+)
+d = compare_bytes(ref, play, a_label="CSR_D1", b_label="playtest")
+print("playtest DEL1 vs CSR D1:", d.classification, "same", ref == play)
+if ref != play:
+    raise SystemExit("FAIL playtest DEL1")
+print("OK")
+PY
 ```
 
 ---
 
+## 4. Only if step 2/3 failed — force CSR Disc 1 DEL1 in
 
+### 4a. Export CSR Disc 1 DEL1
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+mkdir -p workspace/iso-extract/field-merge
+
+python3 << 'PY'
+from pathlib import Path
+import json, sys
+sys.path.insert(0, "scripts")
+from apply_layer import apply_layer
+from psx_mode2_iso import extract_file
+
+root = Path(".")
+out = root / "workspace/iso-extract/field-merge/DEL1_csr_d1.DAT"
+img = bytearray((root / "workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
+apply_layer(
+    img,
+    json.loads(Path("../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json").read_text()),
+)
+data = extract_file(bytes(img), "FIELD/DEL1.DAT")
+out.write_bytes(data)
+print("wrote", out, len(data), "bytes")
+PY
+```
+
+### 4b. CSR work image + inject
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+
+python3 scripts/apply_layer.py \
+  workspace/pristine/FINALFANTASY7_D1.bin \
+  ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
+  -o workspace/iso-extract/ff7_d1_csr_work.bin
+
+python3 << 'PY'
+from pathlib import Path
+import sys
+sys.path.insert(0, "scripts")
+from psx_mode2_iso import replace_file_padded, extract_file
+
+work = Path("workspace/iso-extract/ff7_d1_csr_work.bin")
+dat = Path("workspace/iso-extract/field-merge/DEL1_csr_d1.DAT").read_bytes()
+img = bytearray(work.read_bytes())
+replace_file_padded(img, "FIELD/DEL1.DAT", dat)
+work.write_bytes(img)
+assert extract_file(bytes(img), "FIELD/DEL1.DAT") == dat
+print("injected FIELD/DEL1.DAT OK", len(dat))
+PY
+```
+
+### 4c. Diff work bin into core layer (on top of CSR base)
+
+```bash
+cd /path/to/Final-Fantasy-7-Modding
+
+python3 scripts/apply_layer.py \
+  workspace/pristine/FINALFANTASY7_D1.bin \
+  ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
+  -o workspace/iso-extract/ff7_d1_csr_base_for_diff.bin
+
+# Work bin must include ALL single-disc core edits (not only DEL1) before a
+# full re-diff. If unsure, paste FAIL output in chat instead of re-diffing alone.
+
+python3 scripts/bin_diff_to_layer.py \
+  workspace/iso-extract/ff7_d1_csr_base_for_diff.bin \
+  workspace/iso-extract/ff7_d1_csr_work.bin \
+  -o builder/single-disc-on-csr-v0.1.1/layers/disc1.layer.json \
+  --id single-disc-on-csr-v0.1.1-disc1 \
+  --description "single-disc on CSR D1 (FIELD/DEL1.DAT = CSR Disc 1)"
+```
+
+Then re-run **section 2** and **section 3**.
+
+---
+
+## 5. When DEL1 is OK — reply and stop
+
+Paste:
+
+1. Section 2 result (`OK` or `FAIL` + text)
+2. Optional playtest DEL1 check
+3. Short play note (442 jump gone or not)
+
+**Do not start the next field until DEL1 is OK.**
+
+Next after DEL1:
+
+| File | Use version from |
+|------|------------------|
+| `FIELD/BLACKBGB.DAT` | CSR Disc 1 |
+| `FIELD/LOST2.DAT` | CSR Disc 2 |
+| seven other shared maps | still need a rule each |
+
+---
+
+## Archive below
 # LOSLAKE1 (#637) — FIX in pack v0.1.1
 
 Logs: `docs/logs single disc 1.txt`, `docs/logs real disc 2.txt`
