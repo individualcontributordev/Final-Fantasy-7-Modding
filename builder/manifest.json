@@ -537,44 +537,56 @@
       "id": "single-disc-csr-manip-movies-v0.1.0",
       "name": "Single-disc CSR movies",
       "kind": "mod",
-      "blurb": "Hidden in UI. Auto-applied with Single-disc on CSR when no CSR+ scenes. Seed videos on D1 (LASTFLOR, LAST4_3, LASTMAP, CANONHT2).",
+      "blurb": "Hidden in UI. Auto-applied with Single-disc on CSR when no CSR+ scenes. Seed videos on D1 (LASTFLOR, LAST4_3, LASTMAP, CANONHT2). Superseded by single-disc-csr-manip-movies-v0.1.2 (cumulative).",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "single-disc-csr-movies-auto",
+      "exclusiveGroup": "single-disc-csr-movies",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
       "discs": {
         "1": "./single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "groupLabel": "Single-disc CSR movies (auto)",
       "optionLabel": "Seed v0.1.0",
       "uiHidden": true,
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
-        "bases": [
-          "csr-v0.14.1"
-        ],
-        "unlessAddonIdPrefix": "csr-plus-scene-"
-      },
       "version": "0.1.0"
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.1",
       "name": "Single-disc CSR movies LBA alias",
       "kind": "mod",
-      "blurb": "Hidden in UI. Stack on manip-movies v0.1.0. Writes CANONON at ISO LBA 250450 so LOSLAKE1 D2-style seek hits the right stream (not mid-RCKTFAIL).",
+      "blurb": "Hidden in UI. Stack on manip-movies v0.1.0. Writes CANONON at ISO LBA 250450 so LOSLAKE1 D2-style seek hits the right stream (not mid-RCKTFAIL). Superseded by single-disc-csr-manip-movies-v0.1.2 (cumulative).",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "single-disc-csr-movies-alias",
+      "exclusiveGroup": "single-disc-csr-movies",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
       "discs": {
         "1": "./single-disc-csr-manip-movies-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "groupLabel": "Single-disc CSR movies LBA alias (auto)",
       "optionLabel": "v0.1.1 LBA 250450",
+      "uiHidden": true,
+      "version": "0.1.1"
+    },
+    {
+      "id": "single-disc-csr-manip-movies-v0.1.2",
+      "name": "Single-disc CSR movies",
+      "kind": "mod",
+      "blurb": "Hidden in UI. Auto-applied with Single-disc on CSR when no CSR+ scenes. Cumulative: seed FMVs on D1 (CANONON into JAIROFAL, CANONHT2, LAST4_3, LASTMAP, MOVIE_ID) plus Form2 CANONON at ISO LBA 250450 (LOSLAKE1).",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "single-disc-csr-movies",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./single-disc-csr-manip-movies-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Single-disc CSR movies (auto)",
+      "optionLabel": "v0.1.2 cumulative",
       "uiHidden": true,
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.2",
@@ -583,7 +595,7 @@
         ],
         "unlessAddonIdPrefix": "csr-plus-scene-"
       },
-      "version": "0.1.1"
+      "version": "0.1.2"
     }
   ],
   "bases": [],

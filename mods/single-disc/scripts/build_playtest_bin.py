@@ -30,8 +30,8 @@ def main() -> int:
         csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
     csr_layer = csr_layer.resolve()
     core_layer = ROOT / "builder/single-disc-on-csr-v0.1.2/layers/disc1.layer.json"
-    movie_v010 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.0/layers/disc1.layer.json"
-    movie_alias = ROOT / "builder/single-disc-csr-manip-movies-v0.1.1/layers/disc1.layer.json"
+    # Cumulative movies pack only (latest = seed + LBA alias).
+    movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v0.1.2/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
@@ -41,32 +41,27 @@ def main() -> int:
         (pristine, "pristine D1"),
         (d2, "pristine D2"),
         (csr_layer, "CSR layer"),
-        (core_layer, "single-disc core layer"),
-        (movie_v010, "manip-movies v0.1.0"),
-        (movie_alias, "manip-movies alias v0.1.1"),
+        (core_layer, "single-disc main pack"),
+        (movie_layer, "manip-movies cumulative v0.1.2"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
             return 1
 
-    print("1/4 CSR base...")
+    print("1/3 CSR base...")
     img = bytearray(pristine.read_bytes())
     apply_layer(img, json.loads(csr_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("2/4 single-disc core...")
+    print("2/3 single-disc main pack...")
     apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
     j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
     van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")
-    print("   JAIROFAL after core size", len(j_core), "(still D1-family until movies)")
+    print("   JAIROFAL after main size", len(j_core), "(still D1-family until movies)")
 
-    print("3/4 manip-movies v0.1.0 (CANONON -> JAIROFAL)...")
-    apply_layer(img, json.loads(movie_v010.read_text(encoding="utf-8")))
-    print("   ", len(img), "bytes")
-
-    print("4/4 alias v0.1.1 (CANONON at LBA 250450)...")
-    apply_layer(img, json.loads(movie_alias.read_text(encoding="utf-8")))
+    print("3/3 manip-movies v0.1.2 cumulative (seed + LBA 250450)...")
+    apply_layer(img, json.loads(movie_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
     j = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
