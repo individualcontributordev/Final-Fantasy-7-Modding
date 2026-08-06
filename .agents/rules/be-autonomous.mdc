@@ -12,7 +12,8 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 - Commit/push docs, rules, scripts, builder JSON (`auto-commit-push.mdc`)
 - On **check results**: pull, analyze evidence, record findings, continue
 - Reply with the **next single complete operational task in chat**
-- Prefer skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters` when those tasks apply
+- Prefer skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters`, `ship-single-disc` when those tasks apply
+- Single-disc FIELD/movie work: follow rule `single-disc-fields.mdc` (compare tool before size-based merges)
 
 ## operational task quality bar
 

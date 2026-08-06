@@ -83,6 +83,10 @@ Living list — add a row when a capability is **repeatably** usable (see skill 
 | ImgBurn EDC verify fail can still boot on MechaPwn PS2 | 2026-07 | CSR `notes/2026-07-27-imgburn-verify-yamada.md` |
 | MiSTer PSX as pre-burn behavioral gate (Ghidra/Makou) | 2026-07 | `docs/07-hardware-burn.md` |
 | Builder EDC repair → ImgBurn → PS2 fields load (CSR+ D1) | 2026-07 | CSR `notes/2026-07-27-imgburn-verify-yamada.md` |
+| Single-disc on CSR (Ask + SNOVA + field trims + manip movies) | 2026-08 | `mods/single-disc/`, skill `ship-single-disc` |
+| FIELD DAT structured compare (LZS, opcodes, text pad vs content) | 2026-08 | `scripts/compare_field_dat.py` |
+| Multi-disc CSR FIELD collisions catalogued (10 D1+D2) | 2026-08 | `docs/findings/field-collisions-2026-08-06/` |
+| Absolute CD LBA movie seek (LOSLAKE1 / CANONON alias) | 2026-08 | `docs/findings/2026-08-05-loslake1-cdrom-d1-vs-d2.md` |
 
 ## Keep the process honest
 
