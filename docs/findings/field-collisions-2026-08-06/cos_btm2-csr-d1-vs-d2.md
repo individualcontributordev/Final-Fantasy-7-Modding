@@ -1,0 +1,378 @@
+# Field compare: csr:D1:COS_BTM2 vs csr:D2:COS_BTM2
+
+**Classification:** `mixed` (meaningful)
+
+| | csr:D1:COS_BTM2 | csr:D2:COS_BTM2 | delta |
+|--|--:|--:|--:|
+| compressed | 17572 | 17558 | -14 |
+| decompressed | 32676 | 32672 | -4 |
+| script slots | 143 | 143 | |
+| text entries | 58 | 58 | |
+| text padding | 3 | 2 | -1 |
+
+## Sections
+
+- `scripts`: 16804 → 16800 (**DIFF**)
+- `walkmesh`: 5704 → 5704 (same)
+- `background`: 9228 → 9228 (same)
+- `camera`: 40 → 40 (same)
+- `inf`: 740 → 740 (same)
+- `encounter`: 48 → 48 (same)
+- `model_loader`: 84 → 84 (same)
+
+Scripts identical: **False** (14 differing slots)
+Text content identical: **False** (diff ids: [15])
+AKAO identical: **True**
+
+## Script `AD` slot 0
+
+bytes 312 → 308
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -23,14 +23,13 @@
+ JOIN 0832
+ UC 3300
+ MENU2 4a00
+-JMPFL 11e000
+-IFSW 1620000002020091
++JMPFL 11dc00
++IFSW 162000000202008d
+ FADE 6b0000000000010400
+ WAIT 241400
+ FADE 6b00000000000401ff
+ REQ 0107d4
+ FADEW 6c
+-JMPF 1004
+ WAIT 243c00
+ IFUB 1430cf020623
+ IFUB 1430b9080610
+@@ -56,7 +55,6 @@
+ REQ 010ea6
+ REQ 010aa8
+ REQ 010da8
+-JMPF 1004
+ WAIT 247800
+ REQEW 0307d6
+ BITON 8230cf01
+```
+
+## Script `BALLET` slot 1
+
+bytes 308 → 304
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -22,13 +22,13 @@
+ REQ 010dc6
+ FADE 6b00000000001001ff
+ FADEW 6c
+-JMPFL 11dc00
++JMPFL 11d800
+ IFUB 1430ab010614
+ UC 3301
+ MENU2 4a01
+ WSIZW 2f000a000a00e9003900
+ MESSAGE 400005
+-JMPF 10c2
++JMPF 10be
+ SETBYTE 80500301
+ BITON 8230ab00
+ UC 3301
+@@ -38,7 +38,6 @@
+ REQEW 0307c3
+ JMPF 1004
+ REQEW 0307c4
+-JMPF 106d
+ WSIZW 2f000a000a00fc004900
+ MESSAGE 400001
+ WAIT 241e00
+@@ -67,7 +66,6 @@
+ MESSAGE 400004
+ WSIZW 2f000a000a00e9003900
+ MESSAGE 400005
+-JMPF 1006
+ CANM!1 b103001d01
+ IFUB 145002800506
+ REQEW 0307c9
+```
+
+## Script `BALLET` slot 6
+
+bytes 18 → 18
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,5 +1,5 @@
+ ANIMW ac
+ ANIM!1 af0501
+-RET 00
+ WSIZW 2f0178001000d8003900
+ MESSAGE 40012a
++RET 00
+```
+
+## Script `BALLET` slot 7
+
+bytes 48 → 44
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,5 +1,4 @@
+ SOLID c701
+-MSPED b2000008
+ IFPRTYQ cb0115
+ MOVE a80053ff7df9
+ MOVE a8007bff1cfa
+```
+
+## Script `BUGEN` slot 3
+
+bytes 36 → 36
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,6 +1,6 @@
+ XYZI a5000070fd56fbecf56c00
+ VISI a401
+-MSPED b2000210
++MSPED b2000004
+ MOVE a800f2feb0fb
+ MOVE a80056ff5ffb
+ TURNGEN b40000010601
+```
+
+## Script `CLOUD` slot 22
+
+bytes 32 → 26
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,12 +1,9 @@
+-JMPF 1004
+ WAIT 241e00
+ ANIME1 a30601
+ DIR b30060
+-JMPF 1004
+ WAIT 242d00
+ ANIMW ac
+ ANIM!2 ba0701
+-JMPF 1004
+ WAIT 241e00
+ ANIME1 a30601
+ DIR b300e0
+```
+
+## Script `EARITH` slot 1
+
+bytes 304 → 302
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -20,15 +20,15 @@
+ REQ 010dc6
+ FADE 6b00000000001001ff
+ FADEW 6c
+-JMPFL 11dc00
++JMPFL 11da00
+ IFUB 145005020304
+-JMPFL 11d300
++JMPFL 11d100
+ IFUB 1430ab040616
+ ANIMW ac
+ CANM!1 b105000901
+ WSIZW 2f001e00960089002900
+ MESSAGE 400014
+-JMPF 10b7
++JMPF 10b5
+ SETBYTE 80500301
+ BITON 8230ab02
+ GETDIR b7050702
+@@ -38,7 +38,6 @@
+ REQEW 0307ce
+ WSIZW 2f011e008700f2003900
+ MESSAGE 40010f
+-JMPF 105e
+ CANM!1 b105000901
+ WSIZW 2f011e0087008e003900
+ MESSAGE 400110
+```
+
+## Script `EARITH` slot 7
+
+bytes 24 → 24
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,6 +1,6 @@
+ ANIMW ac
+ SETBYTE 80500301
+ CANM!1 b1031d3b01
+-RET 00
+ WSIZW 2f02100010009b003900
+ MESSAGE 400229
++RET 00
+```
+
+## Script `EARITH` slot 30
+
+bytes 42 → 38
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,5 +1,4 @@
+ SOLID c701
+-MSPED b2000008
+ IFPRTYQ cb030f
+ MOVE a8007bff1cfa
+ TLKON 7e01
+```
+
+## Script `KETCY` slot 6
+
+bytes 42 → 38
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,5 +1,4 @@
+ SOLID c701
+-MSPED b2000008
+ IFPRTYQ cb0615
+ MOVE a800dafe91fa
+ MOVE a8007bff1cfa
+```
+
+## Script `RED` slot 1
+
+bytes 373 → 366
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -6,7 +6,7 @@
+ INC 950504
+ IFUB 1430ab040604
+ INC 950504
+-IFUBL 15500403043701
++IFUBL 15500403043001
+ SETBYTE 80500301
+ GETDIR b7050702
+ IFUB 145002600411
+@@ -16,7 +16,6 @@
+ REQEW 0307d0
+ JMPF 1004
+ REQEW 0307d0
+-JMPF 105c
+ WSIZW 2f005a00960089002900
+ MESSAGE 400017
+ CANM!2 bc04000401
+@@ -33,7 +32,7 @@
+ WSIZW 2f0050008c00eb003900
+ MESSAGE 40001b
+ WAIT 243c00
+-REQEW 0311c3
++REQ 0111c3
+ CANM!2 bc06000901
+ IFUB 14500260040e
+ IFUB 145002e00503
+@@ -41,7 +40,6 @@
+ REQ 0107d1
+ JMPF 1004
+ REQ 0107d1
+-JMPF 104b
+ WSIZW 2f021000960007012900
+ MESSAGE 40021c
+ WAIT 240a00
+@@ -58,7 +56,6 @@
+ CANM!2 bc06000901
+ WSIZW 2f006400960089002900
+ MESSAGE 400020
+-JMPFL 111200
+ REQ 0111c4
+ WSIZW 2f0210008c0027012900
+ MESSAGE 400221
+```
+
+## Script `TIFA` slot 1
+
+bytes 589 → 586
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -32,9 +32,9 @@
+ REQ 010dc6
+ FADE 6b00000000001001ff
+ FADEW 6c
+-JMPFL 11ce01
++JMPFL 11cb01
+ IFUB 145005020304
+-JMPFL 11c501
++JMPFL 11c201
+ IFUBL 1530ab02065a00
+ GETDIR b7050702
+ IFUB 145002400417
+@@ -59,7 +59,7 @@
+ JMPF 1007
+ ANIMW ac
+ CANM!2 bc052c3b01
+-JMPFL 116601
++JMPFL 116301
+ SETBYTE 80500301
+ BITON 8230ab01
+ GETDIR b7050702
+@@ -70,7 +70,6 @@
+ REQEW 0307cb
+ JMPF 1004
+ REQEW 0307cb
+-JMPFL 110201
+ WAIT 241400
+ WSIZW 2f001e009600e0002900
+ MESSAGE 400006
+```
+
+## Script `TIFA` slot 8
+
+bytes 42 → 38
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,5 +1,4 @@
+ SOLID c701
+-MSPED b2000008
+ IFPRTYQ cb020f
+ MOVE a8007bff1cfa
+ TLKON 7e01
+```
+
+## Script `YUFI` slot 8
+
+bytes 48 → 44
+
+```diff
+--- csr:D1:COS_BTM2
++++ csr:D2:COS_BTM2
+@@ -1,5 +1,4 @@
+ SOLID c701
+-MSPED b2000008
+ IFPRTYQ cb051b
+ MOVE a800ecfd34fa
+ MOVE a800b9fe75fa
+```
+
+
+## vs pristine (same disc)
+
+- pristine D1 vs CSR D1: `mixed` (scripts_id=False, text_content=False, pad 2→3)
+- pristine D2 vs CSR D2: `mixed` (scripts_id=False, text_content=False, pad 2→2)
