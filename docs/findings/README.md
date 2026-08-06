@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-07 | [ending-credits-d3-fit-on-d1](2026-08-07-ending-credits-d3-fit-on-d1.md) | D3 ENDING2E ~156 MiB will not fit on current single-disc D1 (~77 MiB free) | confirmed |
 | 2026-08-06 | [field-collisions-2026-08-06](field-collisions-2026-08-06/README.md) | Tool + batch: all 10 D1/D2 CSR stems are real script collisions (not pad-only) | confirmed |
 | 2026-08-06 | [del1-d2-pristine-vs-csr-opcodes](2026-08-06-del1-d2-pristine-vs-csr-opcodes.md) | DEL1 D2: scripts identical; CSR only strips dialog padding (−444) | confirmed |
 | 2026-08-04 | [single-disc-csr-manip-movies-v010-seed](2026-08-04-single-disc-csr-manip-movies-v010-seed.md) | Seed movie pack: 4 files id-slot overwrite |
