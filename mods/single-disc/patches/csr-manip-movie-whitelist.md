@@ -69,7 +69,7 @@ Update after edits:
 ## Playtest pack (v0.1.0)
 
 - Pack: single-disc-csr-manip-movies-v0.1.0
-- Stack: csr-v0.14.1 + single-disc-on-csr-v0.1.1 + this pack (no CSR+ scenes)
+- Stack: csr-v0.14.1 + single-disc-on-csr-v0.1.2 + this pack (no CSR+ scenes)
 - Method: overwrite D1 MOVIE id (sorted name index), shrink ISO size to source length
 - Work bin: workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin
 - Re-inject: python3 mods/single-disc/scripts/inject_movies_by_disc_id.py --d1 WORK.bin --manifest mods/single-disc/patches/csr-manip-movie-seed.txt --in-place

@@ -504,7 +504,7 @@
       "id": "single-disc-on-csr-v0.1.1",
       "name": "Single-disc",
       "kind": "mod",
-      "blurb": "Whole-game option (not Disc 1 only): play the full run from one Disc 1 image. On CSR, also adds cutscene videos needed without CSR+ scene packs. Turn this on only if you want a single physical/ISO disc.",
+      "blurb": "Whole-game option (not Disc 1 only): play the full run from one Disc 1 image. On CSR, also adds cutscene videos needed without CSR+ scene packs. Turn this on only if you want a single physical/ISO disc. Superseded by single-disc-on-csr-v0.1.2.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -512,9 +512,26 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.1/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hint": "Applies to the whole game \u2014 use one Disc 1 image only.",
       "layout": "global"
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.2",
+      "name": "Single-disc",
+      "kind": "mod",
+      "blurb": "Whole-game option (not Disc 1 only): play the full run from one Disc 1 image. On CSR, also adds cutscene videos needed without CSR+ scene packs. Turn this on only if you want a single physical/ISO disc.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.2/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hint": "Applies to the whole game \u2014 use one Disc 1 image only.",
+      "layout": "global",
+      "version": "0.1.2"
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.0",
@@ -534,7 +551,7 @@
       "optionLabel": "Seed v0.1.0",
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -560,7 +577,7 @@
       "optionLabel": "v0.1.1 LBA 250450",
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
           "csr-v0.14.1"
         ],
