@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""Build oversize DuckStation ending-credits test bin (v5).
-
-Not for CD burn or builder packs.
-See docs/findings/2026-08-07-ending-credits-test-inject.md
+"""Build DuckStation ending-credits test bin (v6 — D3 absolute LBAs).
 
   python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
 """
@@ -25,23 +22,19 @@ def main() -> int:
     base_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
     out_bin = out_dir / "ff7_d1_playtest_ending_test.bin"
     out_cue = out_dir / "ff7_d1_playtest_ending_test.cue"
-    manifest = _ROOT / "mods/single-disc/patches/ending-credits-test-manifest.txt"
     lastmap_patch = _ROOT / "mods/single-disc/patches/ending-lastmap-v5.DAT"
-    inject = _ROOT / "mods/single-disc/scripts/inject_movies_by_disc_id.py"
     build = _ROOT / "mods/single-disc/scripts/build_playtest_bin.py"
+    alias = _ROOT / "mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py"
 
-    print("1/4 normal playtest stack...")
+    print("1/4 playtest stack...")
     r = subprocess.run([sys.executable, str(build)], cwd=str(_ROOT))
-    if r.returncode != 0:
+    if r.returncode:
         return r.returncode
-    if not base_bin.is_file():
-        print("missing", base_bin, file=sys.stderr)
-        return 1
-    if not lastmap_patch.is_file():
-        print("missing", lastmap_patch, file=sys.stderr)
+    if not base_bin.is_file() or not lastmap_patch.is_file():
+        print("missing base or LASTMAP patch", file=sys.stderr)
         return 1
 
-    print("2/4 fields: LASTMAP v5 (no early MOVIE) + pristine LAS4_0...")
+    print("2/4 LASTMAP v5 + pristine LAS4_0...")
     img = bytearray(base_bin.read_bytes())
     d1p = bytes(load_pristine_image(1))
     las4 = extract_file(d1p, "FIELD/LAS4_0.DAT")
@@ -51,26 +44,18 @@ def main() -> int:
     ):
         meta = find_file(img, f"FIELD/{name}")
         if len(data) > meta.size:
-            print(f"{name} {len(data)} > slot {meta.size}", file=sys.stderr)
+            print(name, "too big", file=sys.stderr)
             return 2
         replace_file_padded(img, f"FIELD/{name}", data)
-        print(f"   FIELD/{name} ({len(data)} bytes)")
+        print(f"   FIELD/{name}")
     out_bin.write_bytes(img)
 
-    print("3/4 inject D3 streams (id23 camera BIN + Form2 24/25/26/29)...")
+    print("3/4 alias D3 ending LBAs (raw Form2 + MOVIE_ID)...")
     r = subprocess.run(
-        [
-            sys.executable,
-            str(inject),
-            "--d1",
-            str(out_bin),
-            "--manifest",
-            str(manifest),
-            "--in-place",
-        ],
+        [sys.executable, str(alias), "--d1", str(out_bin), "--in-place"],
         cwd=str(_ROOT),
     )
-    if r.returncode != 0:
+    if r.returncode:
         return r.returncode
 
     out_cue.write_text(
@@ -79,10 +64,8 @@ def main() -> int:
         "    INDEX 01 00:00:00\n",
         encoding="utf-8",
     )
-    print("4/4 done")
-    print("WROTE", out_bin, out_bin.stat().st_size, "bytes")
-    print("WROTE", out_cue)
-    print("Open ending_test .cue in DuckStation (oversize).")
+    print("4/4 done", out_bin, out_bin.stat().st_size)
+    print("Open", out_cue)
     return 0
 
 
