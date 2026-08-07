@@ -1,10 +1,8 @@
-# Ending credits test v4 — Form2 streams only (no LASTMAP.BIN Form1)
-# MOVIE_ID rows used by Disc 3 endgame field scripts (PMVIE index == row):
-#   24 LASTFLOR.MOV  (LASTMAP final MOVIE)
-#   25 ENDING01.MOV  (LAS4_0)
-#   26 ENDING3E.MOV
-#   29 ENDING2E.MOV  (long credits)
-# Skip id 23 LASTMAP.BIN — Form1 camera data, MDEC-crashes if played as FMV.
+# Ending credits test v5
+# MOVIE_ID row == PMVIE index (NOT ISO name sort).
+# id 23 LASTMAP.BIN = Form1 camera data (D3); must not be MDEC-played.
+# id 24+ = Form2 FMVs. Field: AD S31 MOVIE removed; AD3 final MOVIE after PMVIE 24.
+3 LASTMAP.BIN ->ONTRAIN.MOV
 3 LASTFLOR.MOV ->MAINPLR.MOV
 3 ENDING01.MOV ->SMK.STR
 3 ENDING3E.MOV ->SOUTHMK.MOV
