@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""Build CD-sized single-disc image: endings + LOSLAKE1 CANONON.
+"""Build CD-sized single-disc image: ending streams + LOSLAKE1 CANONON.
 
-Stack: CSR + single-disc core + manip-movies 0.1.2 + LASTMAP/LAS4_0
-  + D3 ending streams at Disc 3 LBAs
-  + Form2 CANONON punch at ISO LBA 250450 (LOSLAKE1 required path)
+Stack (fields untouched after manip-movies):
+  CSR D1 + single-disc core + manip-movies 0.1.2
+  + D3 ending streams at Disc 3 absolute LBAs
+  + Form2 CANONON punch at ISO LBA 250450 (LOSLAKE1)
+  + LAST4_3 re-punch into GOLD7_2 (stomped by ENDING2E)
 
-ENDING2E spans 197242..277346 and includes 250450. After placing endings we
-overwrite that mid-window with CANONON so LOSLAKE1 works. Credits may glitch
-for ~7359 sectors mid-ENDING2E; start of ENDING2E and other endings stay
-intact. Image stays ~766340400 B (fits 80-min CD).
+Does NOT replace LAS4_0/LASTMAP with pristine — CSR/SD Play skips stay.
+
+ENDING2E spans 197242..277346 and includes 250450. After endings we rewrite
+that mid-window with CANONON so the lake works; long credits may glitch there.
+Image stays ~766340400 B (80-min CD).
 
   python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
 """
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -23,14 +27,7 @@ sys.path.insert(0, str(_ROOT / "scripts"))
 sys.path.insert(0, str(_ROOT / "mods/single-disc/scripts"))
 
 from alias_d2_seek_lba_on_d1 import D2_CANONON_LBA  # noqa: E402
-from disc_sources import load_pristine_image  # noqa: E402
-from psx_mode2_iso import (  # noqa: E402
-    SECTOR,
-    USER,
-    extract_file,
-    find_file,
-    replace_file_padded,
-)
+from psx_mode2_iso import SECTOR, USER, extract_file, find_file  # noqa: E402
 
 CD80_SECTORS = 360000
 
@@ -57,36 +54,24 @@ def main() -> int:
     base_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
     out_bin = out_dir / "ff7_d1_playtest_ending_test.bin"
     out_cue = out_dir / "ff7_d1_playtest_ending_test.cue"
-    lastmap_patch = _ROOT / "mods/single-disc/patches/ending-lastmap-v5.DAT"
     build = _ROOT / "mods/single-disc/scripts/build_playtest_bin.py"
     alias_end = _ROOT / "mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py"
     d2_path = _ROOT / "workspace/pristine/FINALFANTASY7_D2.bin"
+    d3_path = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
 
-    print("1/6 playtest stack (CSR + core + movies 0.1.2)...")
+    print("1/5 playtest stack (CSR + core + movies 0.1.2)...")
     r = subprocess.run([sys.executable, str(build)], cwd=str(_ROOT))
     if r.returncode:
         return r.returncode
-    if not base_bin.is_file() or not lastmap_patch.is_file() or not d2_path.is_file():
-        print("missing base, LASTMAP patch, or D2 pristine", file=sys.stderr)
+    if not base_bin.is_file() or not d2_path.is_file() or not d3_path.is_file():
+        print("missing playtest bin or pristine D2/D3", file=sys.stderr)
         return 1
 
-    print("2/6 LASTMAP v5 + pristine LAS4_0...")
-    img = bytearray(base_bin.read_bytes())
-    d1p = bytes(load_pristine_image(1))
-    las4 = extract_file(d1p, "FIELD/LAS4_0.DAT")
-    for name, data in (
-        ("LASTMAP.DAT", lastmap_patch.read_bytes()),
-        ("LAS4_0.DAT", las4),
-    ):
-        meta = find_file(img, f"FIELD/{name}")
-        if len(data) > meta.size:
-            print(name, "too big for slot", file=sys.stderr)
-            return 2
-        replace_file_padded(img, f"FIELD/{name}", data)
-        print(f"   FIELD/{name}")
-    out_bin.write_bytes(img)
+    print("2/5 copy playtest -> ending bin (keep CSR/SD fields)...")
+    shutil.copyfile(base_bin, out_bin)
+    print(f"   {out_bin.name} = {base_bin.name} (no LAS4_0/LASTMAP overwrite)")
 
-    print("3/6 D3 ending streams at Disc 3 absolute LBAs...")
+    print("3/5 D3 ending streams at Disc 3 absolute LBAs...")
     r = subprocess.run(
         [sys.executable, str(alias_end), "--d1", str(out_bin), "--in-place"],
         cwd=str(_ROOT),
@@ -94,11 +79,10 @@ def main() -> int:
     if r.returncode:
         return r.returncode
 
-    print("4/6 restore CANONON Form2 @ LBA 250450 (LOSLAKE1)...")
+    print("4/5 restore CANONON Form2 @ LBA 250450 (LOSLAKE1)...")
     img = bytearray(out_bin.read_bytes())
     d2 = d2_path.read_bytes()
     nsec = _punch_canonon(img, d2)
-    out_bin.write_bytes(img)
     c0 = d2[find_file(d2, "MOVIE/CANONON.MOV").lba * SECTOR :][:SECTOR]
     if img[D2_CANONON_LBA * SECTOR : (D2_CANONON_LBA + 1) * SECTOR] != c0:
         print("FAIL CANONON punch", file=sys.stderr)
@@ -106,8 +90,7 @@ def main() -> int:
     print(f"   OK CANONON nsec={nsec} submode=0x{img[D2_CANONON_LBA * SECTOR + 18]:02x}")
     print(f"   NOTE: mid-ENDING2E LBA {D2_CANONON_LBA}..{D2_CANONON_LBA + nsec - 1} = CANONON")
 
-    print("5/6 restore LAST4_3 -> GOLD7_2 (manip seed; was under ENDING2E)...")
-    d3_path = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
+    print("5/5 restore LAST4_3 -> GOLD7_2 (manip seed under ENDING2E)...")
     d3 = d3_path.read_bytes()
     from inject_movies_by_disc_id import (  # noqa: E402
         _movie_id_meta_by_lba,
@@ -140,8 +123,7 @@ def main() -> int:
     sz = out_bin.stat().st_size
     nsec_img = sz // SECTOR
     free = CD80_SECTORS - nsec_img
-    print("6/6 CD budget")
-    print(f"   size {sz}  sectors {nsec_img}  free80={free}")
+    print(f"CD budget size={sz} sectors={nsec_img} free80={free}")
     if nsec_img > CD80_SECTORS:
         print("FAIL: over 80-min sector budget", file=sys.stderr)
         return 3
@@ -154,6 +136,7 @@ def main() -> int:
     )
     print("WROTE", out_bin)
     print("WROTE", out_cue)
+    print("Fields: CSR/SD (ENDING01 still JMPF-skipped on LAS4_0). Streams at D3 LBAs.")
     return 0
 
 
