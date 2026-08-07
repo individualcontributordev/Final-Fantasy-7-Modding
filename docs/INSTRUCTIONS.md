@@ -1,21 +1,21 @@
-# Status: Highwind presets fixed
+# Status: Ending credits is an on/off mod now
 
-## What was wrong
+## Why you could not toggle it before
 
-Encounter presets still listed base id **highwind-v0.1.1**.  
-Live Highwind (and the Highwind encounter packs) use **highwind-v0.2.0**.  
-The builder only shows a preset when the selected base id matches — so Highwind showed **no presets**.
+It was published **hidden** and only auto-applied (like the CSR speedrun movies glue). That was wrong for something you want to choose.
 
-## Fix (pushed with this file)
+## What it is now
 
-All four random-encounter presets now include **highwind-v0.2.0**:
+| In the builder | Role |
+|----------------|------|
+| **Ending credits (single-disc)** | Normal mod — **enable / disable** |
+| Hidden parts 2–7 | Apply automatically **only while** that option is on (file size split) |
 
-- Off / Light / Standard / Dense  
+Works on CSR and Highwind base lists. Use it **with Single-disc** when you burn a one-disc image that should include ending movies.
 
 ## Check
 
-1. Hard-refresh https://individualcontributor.dev/builder/ (after Pages updates).  
-2. Select **Highwind** (current).  
-3. Confirm encounter presets appear again.
-
-Then continue your CSR single-disc burn when ready.
+1. Hard-refresh the builder after Pages updates.  
+2. Pick CSR (or Highwind).  
+3. You should see **Ending credits (single-disc)** and be able to turn it on or off.  
+4. With Single-disc + Ending credits on, download and burn when ready.
