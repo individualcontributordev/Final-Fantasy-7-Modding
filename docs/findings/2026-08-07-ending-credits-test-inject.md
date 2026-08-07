@@ -1,60 +1,44 @@
 # Ending credits test inject
 
 **Date:** 2026-08-07  
-**Status:** v4 — Form2 streams only; no LASTMAP.BIN
+**Status:** v5 — Form1 camera id23 + no early MOVIE; Form2 24+
 
-## Pointer model (confirmed)
+## Pointer model
 
-- Field **PMVIE n** → `MINT/MOVIE_ID.BIN` **row n** (20-byte records).
-- Row is **not** ISO `MOVIE/` alphabetical index (that mismatches on every disc).
-- D1 and D3 share the same early row layout for ending ids; D3 has fewer total rows.
-- Engine **size** for Form2 is usually `sectors * 2336`, plus aux a/b/c from source disc.
+- **PMVIE n** → `MINT/MOVIE_ID.BIN` **row n** (not ISO name sort).
+- Form2 engine size ≈ `sectors * 2336` + source a/b/c.
+- Some rows are **Form1 `.BIN`** (camera / non-MDEC). Aux often  
+  `b=0x00e00140`, high `c` (`0x200xx`). **Must not** be MDEC-played.
 
-| id | Disc 3 file | Sector form |
-|---:|-------------|-------------|
-| 23 | LASTMAP.BIN | **Form1** (submode 0x08) — **not** playable as FMV |
-| 24 | LASTFLOR.MOV | Form2 |
-| 25 | ENDING01.MOV | Form2 |
-| 26 | ENDING3E.MOV | Form2 |
-| 29 | ENDING2E.MOV | Form2 |
+| id | Disc 3 | Form | Role |
+|---:|--------|------|------|
+| 23 | LASTMAP.BIN | Form1 | camera preset |
+| 24 | LASTFLOR.MOV | Form2 | LASTMAP final FMV |
+| 25 | ENDING01.MOV | Form2 | LAS4_0 |
+| 26 | ENDING3E.MOV | Form2 | ending |
+| 29 | ENDING2E.MOV | Form2 | long credits |
 
 ## Failure ladder
 
-| Ver | Symptom | Root cause |
-|-----|---------|------------|
-| v0 | Random clip / black | Single-disc stripped LASTMAP/LAS4_0 MOVIE ops |
-| v2 | LASTMAP freeze | MOVIE_ID size = ISO 2048×sec, not D3 2336×sec |
-| v3 | MDEC invalid + null fault | Injected **LASTMAP.BIN** into id 23; first `MOVIE` plays Form1 as MDEC |
-| v4 | (test) | Form2 only on 24/25/26/29; id 23 left as D1 ONTRAIN FMV |
+| Ver | Failure | Cause |
+|-----|---------|--------|
+| v0 | black / random | field stripped MOVIE ops |
+| v2 | freeze | MOVIE_ID size 2048× not 2336× |
+| v3 | MDEC crash | Form1 LASTMAP.BIN fed as FMV |
+| v4 | MDEC crash @ ONTRAIN LBA | id23 left as FMV; AD MOVIE still plays id23 |
+| v5 | (test) | id23=D3 BIN; AD S31 MOVIE nop; FMV via PMVIE24+AD3 MOVIE |
 
-## v4 build
+## v5 artifacts
 
-1. Playtest base (CSR + main 0.1.2 + movies 0.1.2).  
-2. Pristine FIELD/LASTMAP.DAT + LAS4_0.DAT.  
-3. Manifest (no LASTMAP.BIN):
+- `mods/single-disc/patches/ending-lastmap-v5.DAT` — pristine LASTMAP LZS  
+  with AD S31 `F9`→`00` (surgical compress byte).  
+- Manifest injects LASTMAP.BIN + LASTFLOR + ENDING01/3E/2E.  
+- Builder: `build_ending_credits_test_bin.py`
+
+## Play
 
 ```text
-3 LASTFLOR.MOV ->MAINPLR.MOV
-3 ENDING01.MOV ->SMK.STR
-3 ENDING3E.MOV ->SOUTHMK.MOV
-3 ENDING2E.MOV ->MONITOR.STR
+workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-Tool copies D3 MOVIE_ID size/aux; keeps grown D1 LBA.
-
-```bash
-python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
-# workspace/iso-extract/ff7_d1_playtest_ending_test.cue
-```
-
-Size **1008274176**. DuckStation only.
-
-## Note on single-disc core
-
-Ship pack **zeros** LASTMAP AD PMVIE/MOVIE (avoids missing D3 streams).  
-This test restores them on purpose.
-
-## Caveats
-
-- Id 23 may flash ONTRAIN once before LASTFLOR if the early PMVIE 23 path runs.
-- Not CD-sized; not in builder packs.
+~1008274176 bytes. DuckStation only. Not in builder packs.
