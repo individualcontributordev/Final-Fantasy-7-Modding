@@ -6,9 +6,10 @@ Newest at top.
 
 - **Ending credits pack (own mod):** `single-disc-endings-v0.1.0-part1` … `part7`
   (7 layers so each file stays under GitHub’s size limit). Puts ending/credits
-  movies on the one Disc 1 image. Hidden; **auto-applied with Single-disc on CSR**
-  (including when CSR+ scene packs are on). Also listed for **Highwind** for when
-  single-disc ships there (not auto until a Highwind single-disc option exists).
+  movies on the one Disc 1 image.
+- **UI:** Part 1 is visible **Ending credits (single-disc)** — turn on/off.
+  Parts 2–7 stay hidden and apply only while part 1 is on. Compatible with CSR
+  and Highwind (Highwind still needs a single-disc main option for a full stack).
 - **CSR manip movies stay separate:** still only auto on **CSR alone** + Single-disc
   (not CSR+, not Highwind).
 - DuckStation playtest of local ending image: lake + credits OK (user).
