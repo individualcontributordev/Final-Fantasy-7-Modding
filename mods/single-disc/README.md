@@ -8,9 +8,17 @@ by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR
 | Base | single-disc? | Notes |
 |------|---------------|--------|
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs. |
-| CSR base (alone) | PLAYTEST | single-disc-on-csr + single-disc-csr-manip-movies (latest cumulative, currently v0.1.2). Expand after play. |
-| CSR + CSR+ scene packs | YES (partial) | Pack single-disc-on-csr-v0.1.2: field trims + SNOVA; BLACKBGB asks already removed. |
-| Highwind | YES (next) | Cutscene trims - no movie pack. Core single-disc + SNOVA only. |
+| CSR base (alone) | YES | Single-disc + CSR movies (auto) + ending credits (auto, 7 parts). |
+| CSR + CSR+ scene packs | YES | Single-disc + ending credits (auto). No CSR manip-movies pack. |
+| Highwind | NEXT | Endings pack listed for Highwind; needs a Highwind single-disc main option before auto. No manip-movies. |
+
+### Three pack families (do not merge)
+
+| Pack | Who gets it |
+|------|-------------|
+| Single-disc (single-disc-on-csr-v*) | Main one-disc option |
+| CSR manip movies (single-disc-csr-manip-movies-v*) | CSR alone only (hidden auto; skipped if CSR+ scenes) |
+| Ending credits (single-disc-endings-v0.1.0-part1 through part7) | Own mod; auto with Single-disc on CSR (with or without CSR+). Compatible with Highwind when single-disc exists there. |
 
 Clean pack single-disc-clean-v0.1.1 is retired (enabled false in builder manifest).
 
