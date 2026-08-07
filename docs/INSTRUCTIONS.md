@@ -1,21 +1,19 @@
-# Status: Ending credits is an on/off mod now
+# Status: Ending credits always on with Single-disc
 
-## Why you could not toggle it before
+## Change
 
-It was published **hidden** and only auto-applied (like the CSR speedrun movies glue). That was wrong for something you want to choose.
+Ending credits is **not** a player on/off mod anymore.
 
-## What it is now
+- All 7 ending parts are **hidden**
+- They **always apply** when you turn on **Single-disc** on CSR (including CSR+ scenes)
+- No separate toggle to disable endings for that stack
 
-| In the builder | Role |
-|----------------|------|
-| **Ending credits (single-disc)** | Normal mod — **enable / disable** |
-| Hidden parts 2–7 | Apply automatically **only while** that option is on (file size split) |
+CSR **speedrun movies** stay separate and still only auto on **CSR alone** (not CSR+).
 
-Works on CSR and Highwind base lists. Use it **with Single-disc** when you burn a one-disc image that should include ending movies.
+## Burn
 
-## Check
+1. Builder → CSR → **Single-disc** on  
+2. Ending data is included automatically  
+3. Download Disc 1 → burn → console test  
 
-1. Hard-refresh the builder after Pages updates.  
-2. Pick CSR (or Highwind).  
-3. You should see **Ending credits (single-disc)** and be able to turn it on or off.  
-4. With Single-disc + Ending credits on, download and burn when ready.
+Hard-refresh the builder after Pages updates so the old “toggle” listing is gone.

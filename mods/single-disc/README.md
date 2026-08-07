@@ -18,7 +18,7 @@ by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR
 |------|-------------|
 | Single-disc (single-disc-on-csr-v*) | Main one-disc option |
 | CSR manip movies (single-disc-csr-manip-movies-v*) | CSR alone only (hidden auto; skipped if CSR+ scenes) |
-| Ending credits (part1 on/off; parts 2-7 hidden) | Own on/off mod. Turn on with Single-disc when you want credits movies. CSR and Highwind listed. |
+| Ending credits (7 hidden parts) | **Always on** with Single-disc (CSR, including CSR+). Not a player toggle. Highwind listed for later. |
 
 Clean pack single-disc-clean-v0.1.1 is retired (enabled false in builder manifest).
 
