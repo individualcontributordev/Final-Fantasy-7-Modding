@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-07 | [ending-credits-cd-playtest-pass](2026-08-07-ending-credits-cd-playtest-pass.md) | User: ending test bin lake+credits OK (CSR/SD fields kept) | confirmed |
 | 2026-08-07 | [post-manip-movies-todo-triage](2026-08-07-post-manip-movies-todo-triage.md) | After manip-movies: drop intentional CSR/SD skips; keep seed+LBA fixes | confirmed |
 | 2026-08-07 | [sd-core-play-skips-vs-ending](2026-08-07-sd-core-play-skips-vs-ending.md) | After SD core: report JMPF/Play skips; fix ending streams not unskip | confirmed |
 | 2026-08-07 | [csr-base-vs-d3-ending-skips](2026-08-07-csr-base-vs-d3-ending-skips.md) | D1 CSR base has no end skips; CSR D3 does; SD core brings LAS4_0 skip | confirmed |

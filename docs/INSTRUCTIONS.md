@@ -1,36 +1,29 @@
-# Your turn: build and test the credits disc image
+# Status: ending credits disc image — playtest pass
 
-## Goal
+## Result
 
-Put the ending / credits movies on the single-disc image and try them in DuckStation.  
-Lake movie stays working. Long credits may still show broken name text in the middle (known tradeoff).
+User tested `ff7_d1_playtest_ending_test` (built with the ending-credits script after the manip stack).
 
-Map scripts stay as after the speedrun + single-disc stack (no “restore vanilla maps” step).
+**All worked fine** — lake cutscene and ending/credits path.
 
-## Build
+Note on file: `docs/findings/2026-08-07-ending-credits-cd-playtest-pass.md`
+
+## What that image is
+
+1. Speedrun base + single-disc + manip movies  
+2. Ending/credits movies written onto the disc where the game looks for them  
+3. Lake movie put back on its fixed disc spot  
+4. Small speedrun movies put back if the long credits had covered them  
+5. Map scripts left as the mod already had them (skipped movies stay skipped on purpose)
+
+## Rebuild (if needed)
 
 ```bash
-cd /path/to/Final-Fantasy-7-Modding
-git pull --ff-only
 python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
+# workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-Open:
+## Possible next (no step assigned yet)
 
-```text
-workspace/iso-extract/ff7_d1_playtest_ending_test.cue
-```
-
-## What to check
-
-1. **Lake cutscene** — still plays with picture and sound.  
-2. **After the final battle** — ending / credits movies run enough to finish.  
-3. **Rolling names** — fine if some names look like noise for a while; the scroll can still be OK. Say if the run hard-stops or never starts.
-
-## Reply with
-
-- Lake: OK / fail  
-- Credits: OK / fail / OK but messy names  
-- Anything that hard-crashed or softlocked  
-
-Push logs into the repo only if you want them reviewed on **check**.
+- Fold this ending step into the normal single-disc ship/build so a release disc includes credits without a separate test script  
+- Or leave the test script as the way to make a credits burn until you ask to ship it  
