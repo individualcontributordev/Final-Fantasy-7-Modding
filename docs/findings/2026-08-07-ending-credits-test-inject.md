@@ -62,6 +62,15 @@ build, LOSLAKE1 sought **55:41:25** (LBA **250450**) and read ENDING2E
 
 Builder: `build_ending_credits_test_bin.py`. Not a CDN layer (~200 MiB delta).
 
+## v7 playtest log (ending skip)
+
+`docs/findings/2026-08-07-ending-v7-skip-log.txt` (from user paste):
+
+- Only ~3 s of CD activity: ISO **250017–250470** mid-ENDING2E.
+- At ISO **250450**, submode switches **0x48 → 0x42** (ENDING2E → CANONON punch).
+- Then CDROM Pause. No LASTFLOR/ENDING01/ENDING3E seeks in this clip.
+- Matches report: jump into scrolling credits / glitch when roll hits the hole.
+
 ## Play / burn
 
 ```text
