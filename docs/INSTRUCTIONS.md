@@ -1,36 +1,21 @@
-# Your turn: builder burn + console playtest (endings shipped)
+# Status: Highwind presets fixed
 
-## What we published
+## What was wrong
 
-Three separate mods (not one blob):
+Encounter presets still listed base id **highwind-v0.1.1**.  
+Live Highwind (and the Highwind encounter packs) use **highwind-v0.2.0**.  
+The builder only shows a preset when the selected base id matches — so Highwind showed **no presets**.
 
-| Mod | When the site adds it |
-|-----|------------------------|
-| **Single-disc** | You turn it on |
-| **CSR speedrun movies** | Auto only on **CSR alone** + Single-disc (not if CSR+ scenes are on) |
-| **Ending credits** (7 hidden parts) | Auto with Single-disc on **CSR** (alone **or** CSR+). Also marked for Highwind later |
+## Fix (pushed with this file)
 
-Verify locally already **PASS** for CSR + Single-disc + speedrun movies + all 7 ending parts.
+All four random-encounter presets now include **highwind-v0.2.0**:
 
-## Build a disc on the site
+- Off / Light / Standard / Dense  
 
-1. Open https://individualcontributor.dev/builder/  
-2. Base: **CSR** (try CSR alone first; later CSR+ if you want).  
-3. Turn on **Single-disc**.  
-4. Do not hunt for movies/endings in the list — they auto-add when hidden rules match.  
-5. Download the Disc 1 image, burn, play on console.
+## Check
 
-Expected size class stays a full one-disc image (~731 MiB range after movies/endings).
+1. Hard-refresh https://individualcontributor.dev/builder/ (after Pages updates).  
+2. Select **Highwind** (current).  
+3. Confirm encounter presets appear again.
 
-## What to check on console
-
-1. Game boots, New Game / load OK.  
-2. A mid-game path you care about (optional).  
-3. **Lake cutscene** if you reach it — picture + sound.  
-4. **Ending / credits** after the final fight — should run; some credit **names** may look noisy mid-roll (known).  
-
-## Reply with
-
-Boot OK/fail, anything broken, credits OK/messy/fail.  
-
-If the site did not pull new packs yet, wait for GitHub Pages after this push, or hard-refresh the builder.
+Then continue your CSR single-disc burn when ready.
