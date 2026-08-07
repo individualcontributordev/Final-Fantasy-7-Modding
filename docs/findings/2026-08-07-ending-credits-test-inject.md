@@ -1,7 +1,7 @@
 # Ending credits test inject
 
-**Date:** 2026-08-07  
-**Status:** v6 — D3 absolute LBA placement
+**Date:** 2026-08-07
+**Status:** v6 **verified** (DuckStation) — D3 absolute LBA placement
 
 ## Evidence (v5 post-battle black screen)
 
@@ -26,7 +26,7 @@ LBA stored only in a rewritten table and respected everywhere.”
 | v0–v2 | no credits / freeze | field ops / 2048 size field |
 | v3–v4 | MDEC crash | id23 wrong stream type / early MOVIE |
 | v5 | LASTMAP OK; black after battle | ENDING01 sought at D3 LBA, empty |
-| v6 | (test) | raw D3 sectors + MOVIE_ID at D3 LBAs |
+| v6 | **works** (user DS) | raw D3 sectors + MOVIE_ID at D3 LBAs |
 
 ## v6 layout
 
