@@ -1,29 +1,36 @@
-# Status: ending credits disc image — playtest pass
+# Your turn: builder burn + console playtest (endings shipped)
 
-## Result
+## What we published
 
-User tested `ff7_d1_playtest_ending_test` (built with the ending-credits script after the manip stack).
+Three separate mods (not one blob):
 
-**All worked fine** — lake cutscene and ending/credits path.
+| Mod | When the site adds it |
+|-----|------------------------|
+| **Single-disc** | You turn it on |
+| **CSR speedrun movies** | Auto only on **CSR alone** + Single-disc (not if CSR+ scenes are on) |
+| **Ending credits** (7 hidden parts) | Auto with Single-disc on **CSR** (alone **or** CSR+). Also marked for Highwind later |
 
-Note on file: `docs/findings/2026-08-07-ending-credits-cd-playtest-pass.md`
+Verify locally already **PASS** for CSR + Single-disc + speedrun movies + all 7 ending parts.
 
-## What that image is
+## Build a disc on the site
 
-1. Speedrun base + single-disc + manip movies  
-2. Ending/credits movies written onto the disc where the game looks for them  
-3. Lake movie put back on its fixed disc spot  
-4. Small speedrun movies put back if the long credits had covered them  
-5. Map scripts left as the mod already had them (skipped movies stay skipped on purpose)
+1. Open https://individualcontributor.dev/builder/  
+2. Base: **CSR** (try CSR alone first; later CSR+ if you want).  
+3. Turn on **Single-disc**.  
+4. Do not hunt for movies/endings in the list — they auto-add when hidden rules match.  
+5. Download the Disc 1 image, burn, play on console.
 
-## Rebuild (if needed)
+Expected size class stays a full one-disc image (~731 MiB range after movies/endings).
 
-```bash
-python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
-# workspace/iso-extract/ff7_d1_playtest_ending_test.cue
-```
+## What to check on console
 
-## Possible next (no step assigned yet)
+1. Game boots, New Game / load OK.  
+2. A mid-game path you care about (optional).  
+3. **Lake cutscene** if you reach it — picture + sound.  
+4. **Ending / credits** after the final fight — should run; some credit **names** may look noisy mid-roll (known).  
 
-- Fold this ending step into the normal single-disc ship/build so a release disc includes credits without a separate test script  
-- Or leave the test script as the way to make a credits burn until you ask to ship it  
+## Reply with
+
+Boot OK/fail, anything broken, credits OK/messy/fail.  
+
+If the site did not pull new packs yet, wait for GitHub Pages after this push, or hard-refresh the builder.
