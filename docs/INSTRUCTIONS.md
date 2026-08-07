@@ -1,49 +1,36 @@
-# Your turn: manip-movies playtest (credits on CD is next track)
+# Your turn: build and test the credits disc image
 
-## Product
+## Goal
 
-- **Credits on CD** — yes (ending LBA builder keeps streams; no field unskip).
-- **Now** — playtest **manip-movies** on the normal stack.
+Put the ending / credits movies on the single-disc image and try them in DuckStation.  
+Lake movie stays working. Long credits may still show broken name text in the middle (known tradeoff).
 
-## Build / open (manip playtest)
+Map scripts stay as after the speedrun + single-disc stack (no “restore vanilla maps” step).
+
+## Build
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 git pull --ff-only
-python3 mods/single-disc/scripts/build_playtest_bin.py
+python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
 ```
 
-Open in DuckStation:
+Open:
 
 ```text
-workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue
+workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-Expect ~731 MiB class size; builder fails if CANONON seed or LBA 250450 Form2 is wrong.
+## What to check
 
-## Check (manip)
+1. **Lake cutscene** — still plays with picture and sound.  
+2. **After the final battle** — ending / credits movies run enough to finish.  
+3. **Rolling names** — fine if some names look like noise for a while; the scroll can still be OK. Say if the run hard-stops or never starts.
 
-| Scene | Expect |
-|-------|--------|
-| LOSLAKE1 lake | CANONON video+audio (seek 250450) |
-| CANON_2 / Hojo path | CANONHT2 still usable |
-| Any path needing LAST4_3 / LASTMAP.BIN bodies | seed slots (GOLD7_2 / JAIROFLY) |
+## Reply with
 
-Do **not** treat CSR/SD skipped Plays (e.g. LAS4_0 ENDING01 JMPF) as failures.
+- Lake: OK / fail  
+- Credits: OK / fail / OK but messy names  
+- Anything that hard-crashed or softlocked  
 
-Paste DuckStation notes / OK-fail. Push if you drop logs in-repo.
-
-## Credits CD (after manip OK)
-
-```bash
-python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
-# workspace/iso-extract/ff7_d1_playtest_ending_test.cue
-```
-
-- Keeps CSR/SD fields (no pristine LAS4_0).
-- Puts ending streams at D3 LBAs; re-punches CANONON@250450 + LAST4_3.
-- Mid-ENDING2E may glitch where CANONON sits (lake priority).
-
-## Builder change (this commit)
-
-`build_ending_credits_test_bin.py` no longer overwrites LAS4_0/LASTMAP.
+Push logs into the repo only if you want them reviewed on **check**.
