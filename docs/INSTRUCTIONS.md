@@ -1,65 +1,51 @@
-# Task: burn CD-sized ending credits image
+# Task: retest LOSLAKE1 + endings (CD image v7)
 
-## Size (already CD-safe)
+## Why LOSLAKE1 broke
 
-Verified layout does **not** grow the image past an 80-min disc:
+Your DS log (recovered from git; saved as
+`docs/findings/2026-08-07-loslake1-ending-cd-log.txt`):
 
-| | |
-|--|--|
-| Bin size | **766340400** bytes (~**730.8 MiB**) |
-| Sectors | **325825** |
-| 80-min budget | 360000 sectors (~807 MiB) |
-| Free | **~34175** sectors (~**76.7 MiB**) |
+```text
+setloc (55, 41, 25)   → ISO LBA 250450
+Read sector 250600 … submode 0x48
+```
 
-"Reclaim" is not shrinking further — v6 already fits. Endings sit at Disc 3
-LBAs **inside** the existing image (no ~200 MiB EOF append).
+LOSLAKE1 **must** read Form2 **CANONON** at LBA **250450** (CSR / manip-movies).  
+Placing continuous **ENDING2E** at Disc 3 LBAs overwrote that range with
+ending stream (`0x48`), so the lake FMV stopped playing.
 
-## Build (local only — not a builder pack)
+## What v7 does
 
-Delta ~200 MiB raw → layer JSON would blow GitHub 100 MB. Build on a machine
-with pristine D1–D3:
+Same CD-sized build as before, then **punch CANONON** raw sectors back at
+250450 after endings:
+
+1. CSR + core + movies 0.1.2  
+2. LASTMAP v5 + LAS4_0  
+3. D3 endings at D3 LBAs (163608 ENDING01, etc.)  
+4. **CANONON Form2 @ 250450** (LOSLAKE1)
+
+Still **766340400** bytes — 80-min CD OK.
+
+**Tradeoff:** mid-ENDING2E (LBA 250450–257808, ~7359 sec) is CANONON, not
+credits. Ending **start** and other ending streams stay correct.
+
+## What you do
 
 ```bash
 cd /path/to/Final-Fantasy-7-Modding
 git pull --ff-only
 python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
+# open:
+# workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-Open / burn:
+Test:
 
-```text
-workspace/iso-extract/ff7_d1_playtest_ending_test.cue
-```
-
-**MODE2/2352** raw from the .cue (ImgBurn / CDRWIN style).
-
-## What the build does
-
-1. CSR + single-disc core + manip-movies **0.1.2**
-2. LASTMAP v5 (no early MDEC MOVIE) + pristine LAS4_0
-3. alias_d3_ending_lbas_on_d1.py — D3 streams at **D3 LBAs**
-
-| id | Stream | LBA |
-|---:|--------|----:|
-| 23 | LASTMAP.BIN | 161972 |
-| 24 | LASTFLOR.MOV | 162081 |
-| 25 | ENDING01.MOV | 163608 |
-| 26 | ENDING3E.MOV | 172631 |
-| 29 | ENDING2E.MOV | 197242 |
-
-## Tradeoffs on this burn
-
-- Overwrites mid-disc D1 movies under those LBA ranges.
-- **ENDING2E includes LBA 250450** → stomps **CANONON / LOSLAKE1** absolute
-  seek (DS log: setloc 55:41:25 = 250450). Credits stay continuous;
-  lake FMV may glitch. Not in CDN/builder packs yet.
-
-## Smoke
-
-1. Bin size **766340400**
-2. LASTMAP / post-final → ending FMV + audio
-3. Optional: note LOSLAKE1
+1. **LOSLAKE1** lake FMV (should play again)  
+2. Post-final **endings** (may glitch mid long credits)  
 
 ## Reply
 
-Burn OK? endings OK on disc? anything broken mid-game?
+1. LOSLAKE1 OK?  
+2. Endings OK / mid-credit glitch?  
+3. Bin size  
