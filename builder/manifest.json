@@ -520,7 +520,7 @@
       "id": "single-disc-on-csr-v0.1.2",
       "name": "Single-disc",
       "kind": "mod",
-      "blurb": "Whole-game option: full run from one Disc 1 image. On CSR alone, auto-adds speedrun movies. On CSR (with or without CSR+ scenes), auto-adds ending/credits movies (multi-part). Turn on only for a single physical/ISO disc.",
+      "blurb": "Whole-game option: full run from one Disc 1 image. Always includes ending/credits movies. On CSR alone (no CSR+ scenes), also auto-adds speedrun movies. Turn on only for a single physical/ISO disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -599,9 +599,9 @@
     },
     {
       "id": "single-disc-endings-v0.1.0-part1",
-      "name": "Ending credits (single-disc)",
+      "name": "Single-disc ending credits",
       "kind": "mod",
-      "blurb": "Ending and long credits movies on the one-disc image. Turn this on together with Single-disc when you want credits on the burn. May briefly mess up some credit names where the lake cutscene shares disc space. Extra data parts apply automatically while this is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 1/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -611,16 +611,22 @@
         "1": "./single-disc-endings-v0.1.0-part1/layers/disc1.layer.json"
       },
       "enabled": true,
-      "uiHidden": false,
+      "uiHidden": true,
       "version": "0.1.0",
-      "layout": "global",
-      "hint": "For single-disc burns that should include the ending/credits movies."
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.2",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 1/7"
     },
     {
       "id": "single-disc-endings-v0.1.0-part2",
-      "name": "Ending credits (single-disc) data 2/7",
+      "name": "Single-disc ending credits (part 2)",
       "kind": "mod",
-      "blurb": "Hidden data part 2/7 for Ending credits (single-disc). Applies automatically when that option is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 2/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -632,21 +638,20 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-endings-v0.1.0-part1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1",
-          "highwind-v0.2.0"
+          "csr-v0.14.1"
         ]
       },
       "version": "0.1.0",
-      "groupLabel": "Ending credits data (auto)",
+      "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 2/7"
     },
     {
       "id": "single-disc-endings-v0.1.0-part3",
-      "name": "Ending credits (single-disc) data 3/7",
+      "name": "Single-disc ending credits (part 3)",
       "kind": "mod",
-      "blurb": "Hidden data part 3/7 for Ending credits (single-disc). Applies automatically when that option is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 3/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -658,21 +663,20 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-endings-v0.1.0-part1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1",
-          "highwind-v0.2.0"
+          "csr-v0.14.1"
         ]
       },
       "version": "0.1.0",
-      "groupLabel": "Ending credits data (auto)",
+      "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 3/7"
     },
     {
       "id": "single-disc-endings-v0.1.0-part4",
-      "name": "Ending credits (single-disc) data 4/7",
+      "name": "Single-disc ending credits (part 4)",
       "kind": "mod",
-      "blurb": "Hidden data part 4/7 for Ending credits (single-disc). Applies automatically when that option is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 4/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -684,21 +688,20 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-endings-v0.1.0-part1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1",
-          "highwind-v0.2.0"
+          "csr-v0.14.1"
         ]
       },
       "version": "0.1.0",
-      "groupLabel": "Ending credits data (auto)",
+      "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 4/7"
     },
     {
       "id": "single-disc-endings-v0.1.0-part5",
-      "name": "Ending credits (single-disc) data 5/7",
+      "name": "Single-disc ending credits (part 5)",
       "kind": "mod",
-      "blurb": "Hidden data part 5/7 for Ending credits (single-disc). Applies automatically when that option is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 5/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -710,21 +713,20 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-endings-v0.1.0-part1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1",
-          "highwind-v0.2.0"
+          "csr-v0.14.1"
         ]
       },
       "version": "0.1.0",
-      "groupLabel": "Ending credits data (auto)",
+      "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 5/7"
     },
     {
       "id": "single-disc-endings-v0.1.0-part6",
-      "name": "Ending credits (single-disc) data 6/7",
+      "name": "Single-disc ending credits (part 6)",
       "kind": "mod",
-      "blurb": "Hidden data part 6/7 for Ending credits (single-disc). Applies automatically when that option is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 6/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -736,21 +738,20 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-endings-v0.1.0-part1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1",
-          "highwind-v0.2.0"
+          "csr-v0.14.1"
         ]
       },
       "version": "0.1.0",
-      "groupLabel": "Ending credits data (auto)",
+      "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 6/7"
     },
     {
       "id": "single-disc-endings-v0.1.0-part7",
-      "name": "Ending credits (single-disc) data 7/7",
+      "name": "Single-disc ending credits (part 7)",
       "kind": "mod",
-      "blurb": "Hidden data part 7/7 for Ending credits (single-disc). Applies automatically when that option is on.",
+      "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 7/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1",
@@ -762,14 +763,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-endings-v0.1.0-part1",
+        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1",
-          "highwind-v0.2.0"
+          "csr-v0.14.1"
         ]
       },
       "version": "0.1.0",
-      "groupLabel": "Ending credits data (auto)",
+      "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 7/7"
     }
   ],
