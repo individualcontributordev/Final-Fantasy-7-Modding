@@ -1,23 +1,24 @@
-# Status: CSR D3 ending movie skips vs ending-v7
+# Status: CSR base (D1) vs CSR D3 ending skips
 
-## What CSR D3 actually does
+## Name note
 
-Skips are **JMPF over Play Movie**, not deleted ops. Makou shows them; opcode-count misses them.
+Playtest/ending builders do **not** write `ff7_d1_csr_base_local.bin`.  
+Step 1 of the stack is pristine D1 + CSR **disc1** layer = same as:
 
-| Field | CSR D3 skip | ending_v7 |
-|-------|-------------|-----------|
-| **LAS4_0** | `JMPF` jumps over **PMVIE 25 + MOVIE** (ENDING01) before final battle | **No skip** — pristine path, ENDING01 **plays** |
-| **LASTMAP** | Start of AD3 S31: `JMPF +0x36` skips early block including **REQ→AD S3** (PMVIE 23 setup) | **No CSR jump** — pristine start; separate v5 **NOP** on AD S31 MOVIE only |
+`workspace/iso-extract/ff7_d1_csr_base.bin`
 
-So: CSR left those end movies “present but unreached.” ending_v7 does **not** carry those CSR jumps (LAS4_0 was replaced with pristine for ending work).
+## Answer
 
-## Not the same edit
+**CSR base (D1) does not have the ending movie skips you see in Makou on CSR D3.**
 
-- CSR LASTMAP: skip via early JMPF (AD S31 MOVIE still in file).  
-- ending_v7 LASTMAP: AD S31 MOVIE NOP’d (Form1 crash); no CSR JMPF.
+| | LAS4_0 skip ENDING01 | LASTMAP early JMPF |
+|--|----------------------|--------------------|
+| Makou CSR **D3** | Yes | Yes |
+| `ff7_d1_csr_base.bin` (CSR D1 only) | **No** (still pristine fields) | **No** |
+| After **single-disc core** on D1 | **Yes** (file == CSR D3 LAS4_0) | **No** (SD LASTMAP trim, different from CSR) |
+| ending_v7 | **No** (pris LAS4_0 put back) | **No** (+ our AD S31 MOVIE NOP) |
 
-Detail: `docs/findings/2026-08-07-csr-d3-ending-movie-jumps.md`
+CSR **disc1** layer never patches LASTMAP/LAS4_*. Those JMPF skips live on **CSR disc3**.  
+Single-disc core is what first pulls CSR-like LAS4_0 (with ENDING01 skip) onto the D1 image; ending build then overwrites LAS4_0 with pristine so ENDING01 can play.
 
-## If you want CSR skips on the single-disc ending bin
-
-Re-apply CSR D3 `LAS4_0.DAT` + CSR D3 `LASTMAP.DAT` (or only the two JMPFs), and keep the AD S31 MOVIE NOP if id23 is still not a real stream on D1.
+Detail: `docs/findings/2026-08-07-csr-base-vs-d3-ending-skips.md`
