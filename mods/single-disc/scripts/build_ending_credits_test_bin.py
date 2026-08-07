@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
-"""Build oversize DuckStation ending-credits test bin (v4).
+"""Build oversize DuckStation ending-credits test bin (v5).
 
 Not for CD burn or builder packs.
 See docs/findings/2026-08-07-ending-credits-test-inject.md
-
-Key rules:
-  - PMVIE uses MINT/MOVIE_ID.BIN **row index** (not ISO name sort order).
-  - Inject **Form2** D3 streams only (LASTFLOR / ENDING*). Never LASTMAP.BIN
-    (Form1 camera data; MDEC-crashes if treated as FMV).
-  - MOVIE_ID size/aux must match Disc 3 (usually sectors*2336).
 
   python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
 """
@@ -32,6 +26,7 @@ def main() -> int:
     out_bin = out_dir / "ff7_d1_playtest_ending_test.bin"
     out_cue = out_dir / "ff7_d1_playtest_ending_test.cue"
     manifest = _ROOT / "mods/single-disc/patches/ending-credits-test-manifest.txt"
+    lastmap_patch = _ROOT / "mods/single-disc/patches/ending-lastmap-v5.DAT"
     inject = _ROOT / "mods/single-disc/scripts/inject_movies_by_disc_id.py"
     build = _ROOT / "mods/single-disc/scripts/build_playtest_bin.py"
 
@@ -42,21 +37,27 @@ def main() -> int:
     if not base_bin.is_file():
         print("missing", base_bin, file=sys.stderr)
         return 1
+    if not lastmap_patch.is_file():
+        print("missing", lastmap_patch, file=sys.stderr)
+        return 1
 
-    print("2/4 copy + restore pristine LASTMAP / LAS4_0 (movie ops)...")
+    print("2/4 fields: LASTMAP v5 (no early MOVIE) + pristine LAS4_0...")
     img = bytearray(base_bin.read_bytes())
     d1p = bytes(load_pristine_image(1))
-    for name in ("LASTMAP.DAT", "LAS4_0.DAT"):
-        pris = extract_file(d1p, f"FIELD/{name}")
+    las4 = extract_file(d1p, "FIELD/LAS4_0.DAT")
+    for name, data in (
+        ("LASTMAP.DAT", lastmap_patch.read_bytes()),
+        ("LAS4_0.DAT", las4),
+    ):
         meta = find_file(img, f"FIELD/{name}")
-        if len(pris) > meta.size:
-            print(f"{name} pris {len(pris)} > slot {meta.size}", file=sys.stderr)
+        if len(data) > meta.size:
+            print(f"{name} {len(data)} > slot {meta.size}", file=sys.stderr)
             return 2
-        replace_file_padded(img, f"FIELD/{name}", pris)
-        print(f"   restored FIELD/{name} ({len(pris)} bytes)")
+        replace_file_padded(img, f"FIELD/{name}", data)
+        print(f"   FIELD/{name} ({len(data)} bytes)")
     out_bin.write_bytes(img)
 
-    print("3/4 inject D3 Form2 ending streams (MOVIE_ID rows 24/25/26/29)...")
+    print("3/4 inject D3 streams (id23 camera BIN + Form2 24/25/26/29)...")
     r = subprocess.run(
         [
             sys.executable,
@@ -78,12 +79,10 @@ def main() -> int:
         "    INDEX 01 00:00:00\n",
         encoding="utf-8",
     )
-    sz = out_bin.stat().st_size
     print("4/4 done")
-    print("WROTE", out_bin, sz, "bytes")
+    print("WROTE", out_bin, out_bin.stat().st_size, "bytes")
     print("WROTE", out_cue)
-    print("Open the ending_test .cue in DuckStation (oversize; not for burn).")
-    print("Do NOT expect id23=LASTMAP.BIN (Form1); that was the v3 MDEC freeze.")
+    print("Open ending_test .cue in DuckStation (oversize).")
     return 0
 
 
