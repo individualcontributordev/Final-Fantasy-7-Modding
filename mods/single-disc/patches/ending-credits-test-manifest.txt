@@ -1,9 +1,10 @@
-# D3 MOVIE_ID rows for last-dungeon + ending streams -> D1 files currently
-# occupying those same MOVIE_ID row indices (via inject by D1 name).
-# LASTMAP field: PMVIE 23 then 24 then MOVIE; later MOVIE uses preset id.
-# LAS4_0: PMVIE 25 + MOVIE (ENDING01 on D3).
-# Also wire 26 + 29 for ENDING3E / ENDING2E.
-3 LASTMAP.BIN ->ONTRAIN.MOV
+# Ending credits test v4 — Form2 streams only (no LASTMAP.BIN Form1)
+# MOVIE_ID rows used by Disc 3 endgame field scripts (PMVIE index == row):
+#   24 LASTFLOR.MOV  (LASTMAP final MOVIE)
+#   25 ENDING01.MOV  (LAS4_0)
+#   26 ENDING3E.MOV
+#   29 ENDING2E.MOV  (long credits)
+# Skip id 23 LASTMAP.BIN — Form1 camera data, MDEC-crashes if played as FMV.
 3 LASTFLOR.MOV ->MAINPLR.MOV
 3 ENDING01.MOV ->SMK.STR
 3 ENDING3E.MOV ->SOUTHMK.MOV
