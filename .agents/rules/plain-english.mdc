@@ -1,36 +1,42 @@
 ---
-description: Speak plain English in chat and INSTRUCTIONS — no unexplained jargon
+description: Chat and INSTRUCTIONS — no jargon; plain English only
 alwaysApply: true
 ---
 
-# Plain English
+# Plain English — no jargon
 
-## Default
+## Rule
 
-Talk so a non-RE player can follow. Prefer short sentences and everyday words.
+In **chat** and **`docs/INSTRUCTIONS.md`**, do **not** use jargon.
 
-## Do
+Write like you are explaining to someone who has never opened the findings folder or a disc tool.
 
-- Say what something **does** for the game/disc before the technical name.
-- Expand acronyms and file/engine terms on first use in a reply when they matter.
-- In `docs/INSTRUCTIONS.md` and chat: goal and steps in plain English; commands can stay exact.
-- If a term is unavoidable (LBA, Form2, JMPF), add a one-line meaning next to it.
+## Use
 
-## Don't
+- Everyday words: movie, cutscene, disc image, fixed place on the disc, jump in the script, copy over, break, fix, test, rebuild.
+- What the player or burner sees: which scene, what goes wrong, what to click or run.
+- Exact file paths and shell commands when the human must run them (paths are not “explaining”).
 
-- Stack jargon without explanation ("non-hardcoded lake seek", "Mode2 Form2 stride") as if the human already knows.
-- Use RE-only shorthand as the only description of a problem or next step.
-- Write status updates that only make sense if you already read the findings folder.
+## Do not use (in chat / INSTRUCTIONS)
 
-## Examples
+Technical nicknames, engine opcodes, disc-format labels, and research shorthand as wording, including but not limited to short codes and lab terms for disc layout, movie tables, script ops, and inject steps.
 
-| Avoid as the only wording | Prefer |
-|---------------------------|--------|
-| non-hardcoded lake seek | Change the game so the lake cutscene can play its movie from a free disc spot, not one fixed address |
-| mid-ENDING2E hole @ 250450 | A stretch of the long credits is overwritten by the lake movie at a fixed disc location |
-| JMPF over PMVIE 25 | A jump in the field script skips the first ending movie on purpose |
-| seed host GOLD7_2 | A small endgame movie was copied into the GOLD7_2 file slot for speedrun timing |
+Say what happened instead of naming the mechanism:
 
-## Repo docs
+| Do not write | Write |
+|--------------|--------|
+| fixed address seek for the lake movie | the lake cutscene always reads one fixed place on the disc |
+| script jump skips the play-movie op | a jump in the map script skips that movie on purpose |
+| put lake movie bytes back on that spot | we put the real lake movie back on top of that part of the disc |
+| hole in the long credits stream | a stretch of the long credits is overwritten by another movie |
+| speedrun movie pack required files | the few movies the speedrun pack must keep on the disc |
 
-Findings and code comments may stay technical. **Chat and INSTRUCTIONS** stay plain. When both are needed: plain summary first, then optional detail.
+## Allowed elsewhere
+
+Code, script names, tool-facing commits, and `docs/findings/` may use precise terms.
+
+**Chat and INSTRUCTIONS:** plain words only. If a path or command contains a technical filename, keep the filename; do not decorate the explanation with more technical talk.
+
+## Fail test
+
+Before sending: if a non-modder would need a glossary, rewrite.
