@@ -1,47 +1,33 @@
-# Status: v7 log analyzed (ending skip)
+# Status: CSR manip vs ending overwrites (audit)
 
-## What your DuckStation log shows
+## Short answer
 
-Saved: `docs/findings/2026-08-07-ending-v7-skip-log.txt`
+**Required CSR manip-movies are OK** on the ending CD image, after a small fix:
 
-| | |
-|--|--|
-| Capture window | ~3 s wall, DS **250167–250620** only |
-| ISO LBAs | **250017–250470** |
-| File | Mid **ENDING2E** (starts 197242) |
-| Offset into ENDING2E | ~**52775** of 80104 (~**66%**) |
-| Transition | ISO **250450**: submode **0x48/0x64 → 0x42** |
-| Meaning | Credits stream hits the **CANONON hole**, then Pause |
+| Required manip | Status on ending v7 bin |
+|----------------|-------------------------|
+| CANONON in JAIROFAL | OK (high LBA, not stomped) |
+| CANONON @ LBA 250450 (LOSLAKE1) | OK (re-punched after endings) |
+| CANONHT2 in CAR_1209 | OK (outside ending ranges) |
+| LASTMAP.BIN in JAIROFLY | OK |
+| LAST4_3.BIN in GOLD7_2 | **Was stomped** by ENDING2E → **restored** |
 
-There are **no** reads of LASTFLOR / ENDING01 / ENDING3E starts (**162081 / 163608 / 172631**) in this paste. Either those already finished before logging, or the log was started mid-roll.
+Local bin already has LAST4_3 restored. Rebuild script now does it every time
+(step 5/6).
 
-That matches: **short first bit → jump into scrolling credits → rest including stars**, with a glitch when the roll crosses **250450**.
+## Collateral (stock D1 FMVs, not manip seeds)
 
-## Cause (expected on v7)
+Ending LBA layout overwrites ~20 D1 movie files under those addresses
+(plate fall, rocket fail, gold/boog chunks, junon, etc.). Full list:
+`docs/findings/2026-08-07-ending-overwrite-csr-manip-audit.md`
 
-CANONON is punched at **250450–257808** for LOSLAKE1.  
-ENDING2E must occupy that range on Disc 3 layout → **cannot be continuous** while lake works.
+RCKTFAIL was already compromised by CANONON@250450 on the normal movies pack.
 
-## What to do next (pick one)
+## Rebuild (optional)
 
-**A. Confirm LOSLAKE1** still plays full on this same v7 cue (main v7 goal).
-
-**B. Prioritize clean long credits** — burn/test build **without** the CANONON punch  
-(endings continuous; lake will break again until hard-seek is RE’d).
-
-**C. Full ending CDROM log** from **before** the first ending FMV through stars  
-(enable logging earlier; we need setlocs at 162081 / 163608 / 172631 / 197242).
-
-## Current test image
-
-```text
-workspace/iso-extract/ff7_d1_playtest_ending_test.cue
+```bash
+python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
+# workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-Rebuild: `python3 mods/single-disc/scripts/build_ending_credits_test_bin.py`
-
-## Reply
-
-1. LOSLAKE1 OK on v7?  
-2. Prefer clean credits (B) or lake (current A)?  
-3. Optional: fuller ending log (C)  
+Still: mid-ENDING2E can glitch where CANONON sits; size **766340400**.
