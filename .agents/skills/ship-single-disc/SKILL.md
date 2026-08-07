@@ -46,12 +46,13 @@ python3 mods/single-disc/scripts/build_playtest_bin.py
 
 Open only `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue`.
 
-## Packs
+## Packs (three families — do not merge)
 
 | Pack | Role |
 |------|------|
 | `single-disc-on-csr-v*` | Main pack (fields, SNOVA, asks, trims) on CSR D1 |
-| `single-disc-csr-manip-movies-v*` | Movies on D1. **Latest is cumulative** (includes prior movie work). Only latest enabled + auto-include; older ids stay disabled in same exclusive group. |
+| `single-disc-csr-manip-movies-v*` | **CSR alone** speedrun movies. Latest cumulative; auto only without CSR+ scenes. |
+| `single-disc-endings-v0.1.0-part1`…`part7` | **Own mod:** ending/credits on D1. Auto with Single-disc on CSR (with or without CSR+). Multi-part for size. Also `compatibleBases` Highwind for later. |
 
 Core layer is **diff vs CSR Disc 1 base**, not vs pristine.
 
@@ -61,8 +62,16 @@ Core layer is **diff vs CSR Disc 1 base**, not vs pristine.
 python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin \
   --disc 1 --base csr-v0.14.1 \
   --addon single-disc-on-csr-v0.1.2 \
-  --addon single-disc-csr-manip-movies-v0.1.2
-# only latest movies pack (cumulative) — do not stack 0.1.0+0.1.1
+  --addon single-disc-csr-manip-movies-v0.1.2 \
+  --addon single-disc-endings-v0.1.0-part1 \
+  --addon single-disc-endings-v0.1.0-part2 \
+  --addon single-disc-endings-v0.1.0-part3 \
+  --addon single-disc-endings-v0.1.0-part4 \
+  --addon single-disc-endings-v0.1.0-part5 \
+  --addon single-disc-endings-v0.1.0-part6 \
+  --addon single-disc-endings-v0.1.0-part7
+# CSR alone stack. CSR+: omit manip-movies, keep endings parts.
+# Rebuild endings layers: build_ending_credits_test_bin.py && build_ending_credits_layers.py
 ```
 
 Update `mods/single-disc/CHANGELOG.md` (newest top), `VERSION`, `builder/manifest.json`.
@@ -70,8 +79,8 @@ Update `mods/single-disc/CHANGELOG.md` (newest top), `VERSION`, `builder/manifes
 ## Findings to keep in mind
 
 - DEL1: CSR D1 has 442 trim; CSR D2 vs pris can be pad-only — still D1≠D2 scripts
-- LOSLAKE1: absolute LBA 250450 needs CANONON Form2 alias on D1
-- See rule `single-disc-fields.mdc`
+- Lake cutscene needs lake movie bytes at one fixed disc place; endings pack restores that after writing long credits
+- See rule `single-disc-fields.mdc` and `plain-english.mdc` for chat
 
 ## Human ops
 

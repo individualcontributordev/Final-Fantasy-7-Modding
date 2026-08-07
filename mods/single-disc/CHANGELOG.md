@@ -2,13 +2,23 @@
 
 Newest at top.
 
+## 0.1.3 (endings as separate builder mod)
+
+- **Ending credits pack (own mod):** `single-disc-endings-v0.1.0-part1` … `part7`
+  (7 layers so each file stays under GitHub’s size limit). Puts ending/credits
+  movies on the one Disc 1 image. Hidden; **auto-applied with Single-disc on CSR**
+  (including when CSR+ scene packs are on). Also listed for **Highwind** for when
+  single-disc ships there (not auto until a Highwind single-disc option exists).
+- **CSR manip movies stay separate:** still only auto on **CSR alone** + Single-disc
+  (not CSR+, not Highwind).
+- DuckStation playtest of local ending image: lake + credits OK (user).
+- Rebuild layers: `build_ending_credits_test_bin.py` then `build_ending_credits_layers.py`.
+- Long credits may show messy name text where the lake movie shares disc space
+  (known tradeoff). Map skips (e.g. first ending clip jump) stay intentional.
+
 ## 0.1.2 (tools note — endings CD recipe)
 
-- **Ending credits (local burn):** `build_ending_credits_test_bin.py` +
-  `alias_d3_ending_lbas_on_d1.py` place D3 endings at Disc 3 LBAs on the
-  playtest stack. Image **766340400** B fits 80‑min CD; not a builder layer
-  (delta too large for GitHub). Stomps LBA 250450 CANONON alias (LOSLAKE1).
-  Finding: `docs/findings/2026-08-07-ending-credits-test-inject.md`.
+- Local ending burn recipe only (before builder multi-part pack).
 
 ## 0.1.2
 
