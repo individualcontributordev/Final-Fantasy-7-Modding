@@ -1,7 +1,7 @@
 # Ending credits test inject
 
 **Date:** 2026-08-07
-**Status:** v6 **verified** (DuckStation) + **CD-sized** (~731 MiB / 325825 sec)
+**Status:** v7 — CD-sized + CANONON@250450 restored for LOSLAKE1
 
 ## Evidence (v5 post-battle black screen)
 
@@ -44,12 +44,23 @@ Overwrites D1 movies under those LBA ranges (~17 full + partials).
 **CD size:** image stays **766340400** B (325825 sec) — **fits 80‑min**
 (~360000 sec) with ~76 MiB free. No EOF grow.
 
-**CANONON clash:** ENDING2E range includes LBA **250450**. Continuous credits
-⇒ LOSLAKE1 absolute CANONON alias is stomped on this image. JAIROFAL id‑47
-bytes may still be CANONON; the hard seek path is not.
+## v7: LOSLAKE1 + endings (CD)
 
-Builder: `build_ending_credits_test_bin.py` + `ending-lastmap-v5.DAT` +
-`alias_d3_ending_lbas_on_d1.py`. **Not** a CDN layer (delta ~200 MiB).
+Log `docs/findings/2026-08-07-loslake1-ending-cd-log.txt`: after v6 CD
+build, LOSLAKE1 sought **55:41:25** (LBA **250450**) and read ENDING2E
+(`submode 0x48`) instead of CANONON Form2 (`0x42`).
+
+**Fix:** after D3 ending alias, punch full D2 CANONON raw sectors at
+250450 again (builder step 4). No image grow.
+
+| Range | Content |
+|-------|---------|
+| 163608+ | ENDING01 (intact) |
+| 197242..250449 | start of ENDING2E (intact) |
+| **250450..257808** | **CANONON** (LOSLAKE1; holes mid-credits) |
+| 257809..277345 | rest of ENDING2E (restored after punch window) |
+
+Builder: `build_ending_credits_test_bin.py`. Not a CDN layer (~200 MiB delta).
 
 ## Play / burn
 
@@ -57,4 +68,4 @@ Builder: `build_ending_credits_test_bin.py` + `ending-lastmap-v5.DAT` +
 workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-MODE2/2352. Local build from pristine D1–D3; not in builder packs.
+MODE2/2352. Local build from pristine D1–D3.
