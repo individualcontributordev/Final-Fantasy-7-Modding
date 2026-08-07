@@ -1,7 +1,7 @@
 # Ending credits test inject
 
 **Date:** 2026-08-07
-**Status:** v6 **verified** (DuckStation) — D3 absolute LBA placement
+**Status:** v6 **verified** (DuckStation) + **CD-sized** (~731 MiB / 325825 sec)
 
 ## Evidence (v5 post-battle black screen)
 
@@ -40,13 +40,21 @@ Tool: `mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py`
 | 26 | ENDING3E.MOV | 172631 |
 | 29 | ENDING2E.MOV | 197242 |
 
-Overwrites whatever D1 movies previously occupied those LBA ranges.  
-Builder: `build_ending_credits_test_bin.py` + `ending-lastmap-v5.DAT`.
+Overwrites D1 movies under those LBA ranges (~17 full + partials).
+**CD size:** image stays **766340400** B (325825 sec) — **fits 80‑min**
+(~360000 sec) with ~76 MiB free. No EOF grow.
 
-## Play
+**CANONON clash:** ENDING2E range includes LBA **250450**. Continuous credits
+⇒ LOSLAKE1 absolute CANONON alias is stomped on this image. JAIROFAL id‑47
+bytes may still be CANONON; the hard seek path is not.
+
+Builder: `build_ending_credits_test_bin.py` + `ending-lastmap-v5.DAT` +
+`alias_d3_ending_lbas_on_d1.py`. **Not** a CDN layer (delta ~200 MiB).
+
+## Play / burn
 
 ```text
 workspace/iso-extract/ff7_d1_playtest_ending_test.cue
 ```
 
-DuckStation only; not CD/builder pack.
+MODE2/2352. Local build from pristine D1–D3; not in builder packs.

@@ -2,7 +2,16 @@
 
 Newest at top.
 
+## 0.1.2 (tools note — endings CD recipe)
+
+- **Ending credits (local burn):** `build_ending_credits_test_bin.py` +
+  `alias_d3_ending_lbas_on_d1.py` place D3 endings at Disc 3 LBAs on the
+  playtest stack. Image **766340400** B fits 80‑min CD; not a builder layer
+  (delta too large for GitHub). Stomps LBA 250450 CANONON alias (LOSLAKE1).
+  Finding: `docs/findings/2026-08-07-ending-credits-test-inject.md`.
+
 ## 0.1.2
+
 
 - **DEL1 (#441):** main pack keeps CSR Disc 1 file (removes jump to DEL2 #442). Confirmed vs CSR Disc 1.
 - **BLACKBGB (#103):** keeps single-disc Ask removal (zero DSKCG); not raw CSR.
