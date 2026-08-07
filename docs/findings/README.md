@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-07 | [csr-d3-ending-movie-jumps](2026-08-07-csr-d3-ending-movie-jumps.md) | CSR D3 JMPF-skips ENDING01 + LASTMAP early play; absent on ending-v7 | confirmed |
 | 2026-08-07 | [last-fields-csr-d3-vs-ending-v7](2026-08-07-last-fields-csr-d3-vs-ending-v7.md) | LAS0 match CSR D3; LASTMAP/LAS4_* movie ops differ (SD skips LAS4_2/3) | confirmed |
 | 2026-08-07 | [ending-overwrite-csr-manip-audit](2026-08-07-ending-overwrite-csr-manip-audit.md) | Ending LBA alias vs manip seeds; LAST4_3 restore | confirmed |
 | 2026-08-07 | [ending-credits-test-inject](2026-08-07-ending-credits-test-inject.md) | Oversize DS test: D3 ENDING01/2E/3E into D1 MOVIE_ID ids 25/26/29 | confirmed |
