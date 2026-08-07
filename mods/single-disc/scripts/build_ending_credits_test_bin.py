@@ -62,7 +62,7 @@ def main() -> int:
     alias_end = _ROOT / "mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py"
     d2_path = _ROOT / "workspace/pristine/FINALFANTASY7_D2.bin"
 
-    print("1/5 playtest stack (CSR + core + movies 0.1.2)...")
+    print("1/6 playtest stack (CSR + core + movies 0.1.2)...")
     r = subprocess.run([sys.executable, str(build)], cwd=str(_ROOT))
     if r.returncode:
         return r.returncode
@@ -70,7 +70,7 @@ def main() -> int:
         print("missing base, LASTMAP patch, or D2 pristine", file=sys.stderr)
         return 1
 
-    print("2/5 LASTMAP v5 + pristine LAS4_0...")
+    print("2/6 LASTMAP v5 + pristine LAS4_0...")
     img = bytearray(base_bin.read_bytes())
     d1p = bytes(load_pristine_image(1))
     las4 = extract_file(d1p, "FIELD/LAS4_0.DAT")
@@ -86,7 +86,7 @@ def main() -> int:
         print(f"   FIELD/{name}")
     out_bin.write_bytes(img)
 
-    print("3/5 D3 ending streams at Disc 3 absolute LBAs...")
+    print("3/6 D3 ending streams at Disc 3 absolute LBAs...")
     r = subprocess.run(
         [sys.executable, str(alias_end), "--d1", str(out_bin), "--in-place"],
         cwd=str(_ROOT),
@@ -94,7 +94,7 @@ def main() -> int:
     if r.returncode:
         return r.returncode
 
-    print("4/5 restore CANONON Form2 @ LBA 250450 (LOSLAKE1)...")
+    print("4/6 restore CANONON Form2 @ LBA 250450 (LOSLAKE1)...")
     img = bytearray(out_bin.read_bytes())
     d2 = d2_path.read_bytes()
     nsec = _punch_canonon(img, d2)
@@ -106,10 +106,41 @@ def main() -> int:
     print(f"   OK CANONON nsec={nsec} submode=0x{img[D2_CANONON_LBA * SECTOR + 18]:02x}")
     print(f"   NOTE: mid-ENDING2E LBA {D2_CANONON_LBA}..{D2_CANONON_LBA + nsec - 1} = CANONON")
 
+    print("5/6 restore LAST4_3 -> GOLD7_2 (manip seed; was under ENDING2E)...")
+    d3_path = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
+    d3 = d3_path.read_bytes()
+    from inject_movies_by_disc_id import (  # noqa: E402
+        _movie_id_meta_by_lba,
+        _patch_dirent_lba_size,
+        _patch_movie_id_bin,
+    )
+
+    m3 = find_file(d3, "MOVIE/LAST4_3.BIN")
+    gmeta = find_file(img, "MOVIE/GOLD7_2.MOV")
+    nsec_g = (m3.size + USER - 1) // USER
+    raw_g = d3[m3.lba * SECTOR : (m3.lba + nsec_g) * SECTOR]
+    if m3.size > gmeta.size:
+        print("GOLD7_2 slot too small for LAST4_3", file=sys.stderr)
+        return 5
+    off_g = gmeta.lba * SECTOR
+    img[off_g : off_g + len(raw_g)] = raw_g
+    _patch_dirent_lba_size(img, "MOVIE/GOLD7_2.MOV", gmeta.lba, m3.size)
+    sm = _movie_id_meta_by_lba(d3, m3.lba)
+    if sm:
+        eng, a, b, c = sm
+        _patch_movie_id_bin(img, gmeta.lba, gmeta.lba, eng, aux=(a, b, c))
+    else:
+        _patch_movie_id_bin(img, gmeta.lba, gmeta.lba, m3.size)
+    out_bin.write_bytes(img)
+    if extract_file(bytes(img), "MOVIE/GOLD7_2.MOV") != extract_file(d3, "MOVIE/LAST4_3.BIN"):
+        print("FAIL LAST4_3 restore", file=sys.stderr)
+        return 5
+    print(f"   OK GOLD7_2 LBA={gmeta.lba} = LAST4_3 ({m3.size} bytes)")
+
     sz = out_bin.stat().st_size
     nsec_img = sz // SECTOR
     free = CD80_SECTORS - nsec_img
-    print("5/5 CD budget")
+    print("6/6 CD budget")
     print(f"   size {sz}  sectors {nsec_img}  free80={free}")
     if nsec_img > CD80_SECTORS:
         print("FAIL: over 80-min sector budget", file=sys.stderr)
