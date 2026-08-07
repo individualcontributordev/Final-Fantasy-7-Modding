@@ -782,7 +782,7 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "addons": [
         "field-encounter-0-v0.2.0",
@@ -801,7 +801,7 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "addons": [
         "field-encounter-25-v0.1.2",
@@ -820,7 +820,7 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "addons": [
         "field-encounter-50-v0.1.2",
@@ -839,7 +839,7 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.1.1"
+        "highwind-v0.2.0"
       ],
       "addons": [
         "field-encounter-75-v0.1.2",
