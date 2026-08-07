@@ -1,35 +1,23 @@
-# Status: last fields CSR D3 vs ending-v7 scripts
+# Status: CSR D3 ending movie skips vs ending-v7
 
-## Short answer
+## What CSR D3 actually does
 
-**Not the same** for the ending-related maps. Most Northern Cave (`LAS0_*`) match CSR D3; the crater/ending fields differ.
+Skips are **JMPF over Play Movie**, not deleted ops. Makou shows them; opcode-count misses them.
 
-Detail: `docs/findings/2026-08-07-last-fields-csr-d3-vs-ending-v7.md`
+| Field | CSR D3 skip | ending_v7 |
+|-------|-------------|-----------|
+| **LAS4_0** | `JMPF` jumps over **PMVIE 25 + MOVIE** (ENDING01) before final battle | **No skip** — pristine path, ENDING01 **plays** |
+| **LASTMAP** | Start of AD3 S31: `JMPF +0x36` skips early block including **REQ→AD S3** (PMVIE 23 setup) | **No CSR jump** — pristine start; separate v5 **NOP** on AD S31 MOVIE only |
 
-## Same as CSR D3
+So: CSR left those end movies “present but unreached.” ending_v7 does **not** carry those CSR jumps (LAS4_0 was replaced with pristine for ending work).
 
-`LAS4_1`, `LAS0_1` … `LAS0_8` — full decoded match.
+## Not the same edit
 
-## Different (movies)
+- CSR LASTMAP: skip via early JMPF (AD S31 MOVIE still in file).  
+- ending_v7 LASTMAP: AD S31 MOVIE NOP’d (Form1 crash); no CSR JMPF.
 
-| Field | CSR D3 | ending_v7 D1 | Meaning |
-|-------|--------|--------------|---------|
-| LASTMAP | plays id **23** (LASTMAP.BIN) + id **24** (LASTFLOR) | id23 **setup only** (MOVIE NOP’d); id24 path still has MOVIE | Intentional v5 — id23 is Form1 data, not a movie |
-| LAS4_0 | ENDING01 (id **25**) + CSR JMPFs | ENDING01 plays; **vanilla** script (no CSR jumps) | Movie restored to default; CSR routing extras dropped |
-| LAS4_2 | LAST4_2 (id **20**) plays | **movie skipped** | Still SD-core strip — not restored |
-| LAS4_3 | LAST4_3 (id **21**) plays | **movie skipped** | Still SD-core strip — not restored |
-| LAS4_4 | id **21** + CSR mapjumps | id21 plays; SD jump layout | Movie on; routing ≠ CSR D3 |
+Detail: `docs/findings/2026-08-07-csr-d3-ending-movie-jumps.md`
 
-## Your hypothesis
+## If you want CSR skips on the single-disc ending bin
 
-- **CSR base skips end movies?** On Disc 3, **no** — CSR D3 keeps 20/21/23/24/25.
-- **D1 ending work restored defaults?** **Partly:**
-  - LAS4_0 → pristine (ENDING01 back to vanilla path) ✓  
-  - LASTMAP early MOVIE still NOP (needed)  
-  - LAS4_2 / LAS4_3 still **skipped** (single-disc core, not CSR)
-
-Single-disc core is more aggressive than CSR D3 (it had stripped LASTMAP movies entirely). Ending work put PMVIE 23/24 back but kept the early MOVIE NOP.
-
-## Optional next
-
-Restore CSR/pris movie ops on **LAS4_2** + **LAS4_3** if you want those short crater FMVs (ids 20/21). LAST4_3 body already in GOLD7_2 for manips.
+Re-apply CSR D3 `LAS4_0.DAT` + CSR D3 `LASTMAP.DAT` (or only the two JMPFs), and keep the AD S31 MOVIE NOP if id23 is still not a real stream on D1.
