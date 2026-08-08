@@ -35,7 +35,6 @@ WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_victory_skip"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
 BATTLE_PATH = "BATTLE/BATTLE.X"
-EXCLUSIVE_GROUP = "victory-skip"
 DEFAULT_CSR_MANIFEST = (
 	"https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
 )
@@ -194,11 +193,8 @@ def write_pack_json(
 		"version": version,
 		"blurb": blurb,
 		"format": "ic-layer-v1",
-		"exclusiveGroup": EXCLUSIVE_GROUP,
 		"compatibleBases": compatible,
 		"discs": {str(d): f"./layers/disc{d}.layer.json" for d in discs},
-		"groupLabel": "Victory Skip",
-		"optionLabel": "On",
 	}
 	pack_dir.mkdir(parents=True, exist_ok=True)
 	(pack_dir / "pack.json").write_text(
@@ -222,14 +218,11 @@ def update_manifest(
 		"kind": "mod",
 		"blurb": blurb,
 		"format": "ic-layer-v1",
-		"exclusiveGroup": EXCLUSIVE_GROUP,
 		"compatibleBases": compatible,
 		"discs": {
 			str(d): f"./{pack_id}/layers/disc{d}.layer.json" for d in discs
 		},
 		"enabled": True,
-		"groupLabel": "Victory Skip",
-		"optionLabel": "On",
 	}
 	addons = data.setdefault("addons", [])
 	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
@@ -254,7 +247,7 @@ def build_one(
 		cfg["compatible"] = [base_id]
 
 	pack_id = f"{cfg['prefix_stem']}-v{version}"
-	display = f"Victory Skip{cfg['on_label']}"
+	display = "Victory Skip"
 	blurb = "No victory song or win poses after battles (train-style)."
 
 	pristine = PRISTINE_DIR / f"FINALFANTASY7_D{disc}.bin"
