@@ -1,70 +1,85 @@
 # Battle victory sequence skip — mod feasibility
 
-**Date:** 2026-08-08 (updated same day)  
-**Ask:** After the last enemy falls, skip victory **song and win animations**. End the fight
-**before** those start (straight back to field / next step).  
-**Status:** feasible as optional battle-engine mod; mute-only is **not** enough; not implemented
+**Date:** 2026-08-08 (updated)  
+**Ask:** End every battle before victory song + win poses (like train fights).  
+**Status:** game already has this mode; best path is force those flags globally
 
-## Goal (player-facing)
+## What you noticed (train battles)
 
-Normal win today: last hit → party victory poses + fanfare → then leave battle.
+Train fights skip the celebration on purpose. Square set **battle mode** bits from
+field scripts, not a one-off train hack.
 
-Wanted: last hit → **leave battle immediately** (no poses, no fanfare wait).
+### Official flags (field opcodes)
 
-Silencing `ENEMY6/FAN2.SND` alone is **out of scope as the product** — music can stop
-while poses/wait still burn time.
+**BTLMD (0x72)** — one-byte bitfield (wiki):
 
-## What the game does today (rough)
+| Bit | Effect when set |
+|-----|-----------------|
+| 0x20 | Do not play battle victory music |
+| 0x80 | Do not show AP/EXP/Gil/item receive screens |
 
-1. Battle decides “all enemies dead / win.”
-2. Enters a **victory state**: play win animations on party; start fanfare AKAO.
-3. Fanfare asset: `ENEMY6/FAN2.SND` (~2420 bytes), AKAO **song id 47**.
-4. After that sequence finishes (or is dismissed), tear down battle and return to field.
+**BTMD2 (0x22)** — extended bitfield (wiki), includes e.g.:
 
-Product fix must interrupt or never enter step 2 — jump to teardown.
+| Bit | Effect when set |
+|-----|-----------------|
+| 0x20 | Do not play victory music (same idea) |
+| 0x01 | Party does **not** perform victory celebrations |
 
-## Why not file-mute only
+Combine **no music + no victory poses** for “leave like the train.”
 
-| Approach | Music | Poses / wait | Matches ask? |
-|----------|-------|--------------|--------------|
-| Silent / short `FAN2.SND` | Gone/short | **Still there** | **No** |
-| Patch battle win state in `BATTLE/BATTLE.X` | Skipped if never started | Skipped if state jumped | **Yes** |
+### Example on Disc 1 fields (pristine scan)
 
-## Recommended approach
+| Field | What we saw |
+|-------|-------------|
+| `SMKIN_4.DAT` | `BTLMD` with raw `722200` (includes **0x20** — no victory music) |
+| `TRNAD_4.DAT` | `BTLMD` `720800` (no-escape style; other train maps mostly set battle music) |
 
-**Primary:** RE + patch **decompressed** `BATTLE/BATTLE.X` (8-byte header + gzip body on disc):
+Not every train map sets the same bits; the **engine support** for skip-music /
+skip-poses is what matters. Train sequence uses that machinery.
 
-1. Find win-state entry (fanfare play + victory anim setup).
-2. Branch straight to battle-exit / return-to-field path used after a normal win.
-3. Must still run reward grants (exp/AP/gil/items) on the success path — only skip
-   the **presentation** (poses + song + wait).
-4. Preserve lose / game-over; test bosses and scripted wins after v1 hook.
+## Product goal
 
-Repack: strip/restore BATTLE.X header, gzip `-n` (known qhimm procedure).
+Last enemy dies → **no fanfare, no win poses** → exit battle (rewards still apply).
 
-## Risks
+Mute-only `ENEMY6/FAN2.SND` is **not** enough.
 
-| Risk | Notes |
-|------|--------|
-| Softlock if exit skips cleanup | Rewards must still apply |
-| Boss / scripted battles | May assume win length; test carefully |
-| Escape / lose | Must not touch lose path (`OVER2.SND`) |
-| Level-up UI | Confirm when it queues vs after fanfare |
+## Best implementation paths
 
-## Shipping shape (if spike works)
+| Path | Idea | Pros | Cons |
+|------|------|------|------|
+| **A. Force battle-mode bits in engine** | When any battle starts (or when win is decided), OR in 0x20 + pose-skip bits as if field set BTMD2/BTLMD | One hook; matches retail train behavior | Need RAM address of battle mode + where field copies it into battle |
+| **B. Jump win-state in `BATTLE.X`** | Skip victory state → teardown after rewards | Full control | Heavier RE; same as earlier plan |
+| **C. Patch every field** | Inject BTLMD/BTMD2 before every BATTLE | No battle binary | Huge, miss world-map / randoms |
 
-- Optional builder mod on clean / CSR / Highwind.
-- Name sketch: “Skip battle victory” / `battle-victory-skip-v0.1.0`.
-- Independent of single-disc.
+**Prefer A**, then B if the mode bits only kill music/poses but still wait.
 
-## Spike plan
+## Rewards / UI
 
-1. DuckStation + Ghidra on decompressed `BATTLE.X`: win state / song 47 / victory anim.
-2. Force jump from “start victory sequence” → “finish battle success” (after rewards).
-3. Verify exp/AP/items; field return; normal + boss fights.
-4. Layer + ship only after that.
+Flag 0x80 skips **reward screens** — that may speed more but changes UX (no loot
+popup). Product default should probably:
+
+- skip music + poses  
+- **keep** exp/AP/gil/item grants and screens unless we offer a second “turbo” option  
+
+Confirm train fights: do they still give rewards quietly? (usually yes, with 0x80).
+
+## Fanfare asset (secondary)
+
+`ENEMY6/FAN2.SND` AKAO id **47** — only needed if something still starts the song.
+
+## Shipping
+
+Optional builder mod: “Skip battle victory (train-style)” on clean/CSR/Highwind.  
+Independent of single-disc.
+
+## Spike
+
+1. Document battle-mode RAM / load from field → battle (Ghidra).  
+2. Force pose-skip + no-victory-music bits for all battles on a work bin.  
+3. DuckStation: randoms, bosses, train (idempotent), arena.  
+4. If wait remains, add BATTLE.X exit jump.
 
 ## Related
 
-- `docs/SUGGESTIONS.md` — battle pacing  
-- Asset only (not full fix): `ENEMY6/FAN2.SND` id 47  
+- Wiki: BTLMD 0x72, BTMD2 0x22  
+- `docs/SUGGESTIONS.md` battle pacing  
