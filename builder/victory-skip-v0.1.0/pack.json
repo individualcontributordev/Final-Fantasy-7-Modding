@@ -1,0 +1,19 @@
+{
+  "id": "victory-skip-v0.1.0",
+  "name": "Victory Skip",
+  "kind": "mod",
+  "version": "0.1.0",
+  "blurb": "No victory song or win poses after battles (train-style).",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "victory-skip",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "groupLabel": "Victory Skip",
+  "optionLabel": "On"
+}

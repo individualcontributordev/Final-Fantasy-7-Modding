@@ -771,6 +771,63 @@
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
       "optionLabel": "part 7/7"
+    },
+    {
+      "id": "victory-skip-v0.1.0",
+      "name": "Victory Skip v0.1.0",
+      "kind": "mod",
+      "blurb": "No victory song or win poses after battles (train-style).",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "victory-skip",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./victory-skip-v0.1.0/layers/disc1.layer.json",
+        "2": "./victory-skip-v0.1.0/layers/disc2.layer.json",
+        "3": "./victory-skip-v0.1.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Victory Skip",
+      "optionLabel": "On"
+    },
+    {
+      "id": "victory-skip-on-csr-v0.1.0",
+      "name": "Victory Skip (on CSR) v0.1.0",
+      "kind": "mod",
+      "blurb": "No victory song or win poses after battles (train-style).",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "victory-skip",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./victory-skip-on-csr-v0.1.0/layers/disc1.layer.json",
+        "2": "./victory-skip-on-csr-v0.1.0/layers/disc2.layer.json",
+        "3": "./victory-skip-on-csr-v0.1.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Victory Skip",
+      "optionLabel": "On"
+    },
+    {
+      "id": "victory-skip-on-highwind-v0.1.0",
+      "name": "Victory Skip (on Highwind) v0.1.0",
+      "kind": "mod",
+      "blurb": "No victory song or win poses after battles (train-style).",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "victory-skip",
+      "compatibleBases": [
+        "highwind-v0.2.0"
+      ],
+      "discs": {
+        "1": "./victory-skip-on-highwind-v0.1.0/layers/disc1.layer.json",
+        "2": "./victory-skip-on-highwind-v0.1.0/layers/disc2.layer.json",
+        "3": "./victory-skip-on-highwind-v0.1.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Victory Skip",
+      "optionLabel": "On"
     }
   ],
   "bases": [],

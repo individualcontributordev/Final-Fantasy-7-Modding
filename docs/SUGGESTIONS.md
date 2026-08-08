@@ -27,17 +27,13 @@ https://individualcontributor.dev/history/
 
 ### Battle pacing (entry / win-death / fanfare)
 
-Request: shorten battle entry, win/death, and/or fanfare where safe on PSX
-disc (same class of time-save runners know from other CSR games).
+**Partial ship (2026-08-08):** optional Victory Skip mod
+(mods/victory-skip/, builder packs) forces the official no-victory-music
+battle-mode bit in BATTLE.X so fights exit without fanfare/win poses
+(train-style). Playtest still open.
 
-Context: cornfed pointed at FF9 PSX CSR cutting fanfares and boss death
-anims (2026-07). phek / okamikaze discussed priority - often last after big
-cutscene work, and FF9 fight ends are longer than FF7 so the win may be
-smaller here; still wanted as an optional mod. Encounter mods working on
-console made related battle binary work more plausible than when everything
-was Makou-only fields.
-
-Separate from cutscene packs: lives in this repo as engine layers.
+Still open: battle entry length, death anims, broader win/death pacing if
+Victory Skip is not enough on hardware.
 
 ### Super Nova / long forced-battle stretches
 

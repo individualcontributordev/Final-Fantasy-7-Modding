@@ -25,6 +25,7 @@ builder/<pack-id>/          layers only — no long prose
 ## vX.Y.Z (YYYY-MM-DD)
 
 - One line per player-visible or ship-visible change.
+- [Victory Skip](mods/victory-skip/CHANGELOG.md) — v0.1.0
 - Mention bases (clean / csr / highwind) and densities when relevant.
 ```
 

@@ -4,6 +4,17 @@
 **Ask:** End every battle before victory song + win poses (like train fights).  
 **Status:** game already has this mode; best path is force those flags globally
 
+
+## Implementation (v0.1.0)
+
+Shipped as optional builder mod **Victory Skip**:
+
+- mods/victory-skip/ — apply + pack build scripts
+- Packs: victory-skip-v0.1.0, victory-skip-on-csr-v0.1.0, victory-skip-on-highwind-v0.1.0
+- Technique: in decompressed BATTLE.X, 22 sites load RAM halfwords 0x80062D7E / 0x80062D7C and test bit 0x20 (no victory music). Each delay-slot nop after the load is replaced with ori rT, rT, 0x20 so the bit always reads set.
+- Not field patches. Rewards screens unchanged (bit 0x80 not forced).
+- Playtest needed: randoms, bosses, train (should stay fine), arena, level-up still shows.
+
 ## What you noticed (train battles)
 
 Train fights skip the celebration on purpose. Square set **battle mode** bits from
