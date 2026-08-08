@@ -5,6 +5,11 @@
 **Status:** game already has this mode; best path is force those flags globally
 
 
+## Implementation (v0.1.1)
+
+v0.1.0 killed fanfare only. v0.1.1 also forces no-pose bit 0x100 and the
+9da0 victory-anim gate so win poses should not play.
+
 ## Implementation (v0.1.0)
 
 Shipped as optional builder mod **Victory Skip**:

@@ -45,10 +45,19 @@ def discover_sites(dec: bytes) -> list[tuple[int, int, int]]:
 		andi = struct.unpack_from("<I", dec, i + 8)[0]
 		if nop != 0:
 			continue
-		if (andi >> 26) != 0x0C or (andi & 0xFFFF) != 0x20:
+		if (andi >> 26) != 0x0C:
 			continue
-		ori = (0x0D << 26) | (rt << 21) | (rt << 16) | 0x0020
-		sites.append((i + 4, 0, ori))
+		mask = andi & 0xFFFF
+		if mask == 0x20:
+			ori = (0x0D << 26) | (rt << 21) | (rt << 16) | 0x0120
+			sites.append((i + 4, 0, ori))
+		elif mask == 0x100:
+			ori = (0x0D << 26) | (rt << 21) | (rt << 16) | 0x0100
+			sites.append((i + 4, 0, ori))
+	# 9da0 victory-anim gate (fixed offset on NTSC-U)
+	if len(dec) > 0x5480 and struct.unpack_from("<I", dec, 0x547C)[0] == 0:
+		ori = (0x0D << 26) | (0 << 21) | (2 << 16) | 0x0020
+		sites.append((0x547C, 0, ori))
 	return sites
 
 
