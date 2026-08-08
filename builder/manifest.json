@@ -778,7 +778,6 @@
       "kind": "mod",
       "blurb": "No victory song or win poses after battles (train-style).",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "victory-skip",
       "compatibleBases": [
         "clean"
       ],
@@ -787,17 +786,14 @@
         "2": "./victory-skip-v0.1.0/layers/disc2.layer.json",
         "3": "./victory-skip-v0.1.0/layers/disc3.layer.json"
       },
-      "enabled": true,
-      "groupLabel": "Victory Skip",
-      "optionLabel": "On"
+      "enabled": true
     },
     {
       "id": "victory-skip-on-csr-v0.1.0",
-      "name": "Victory Skip (on CSR) v0.1.0",
+      "name": "Victory Skip v0.1.0",
       "kind": "mod",
       "blurb": "No victory song or win poses after battles (train-style).",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "victory-skip",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
@@ -806,17 +802,14 @@
         "2": "./victory-skip-on-csr-v0.1.0/layers/disc2.layer.json",
         "3": "./victory-skip-on-csr-v0.1.0/layers/disc3.layer.json"
       },
-      "enabled": true,
-      "groupLabel": "Victory Skip",
-      "optionLabel": "On"
+      "enabled": true
     },
     {
       "id": "victory-skip-on-highwind-v0.1.0",
-      "name": "Victory Skip (on Highwind) v0.1.0",
+      "name": "Victory Skip v0.1.0",
       "kind": "mod",
       "blurb": "No victory song or win poses after battles (train-style).",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "victory-skip",
       "compatibleBases": [
         "highwind-v0.2.0"
       ],
@@ -825,9 +818,7 @@
         "2": "./victory-skip-on-highwind-v0.1.0/layers/disc2.layer.json",
         "3": "./victory-skip-on-highwind-v0.1.0/layers/disc3.layer.json"
       },
-      "enabled": true,
-      "groupLabel": "Victory Skip",
-      "optionLabel": "On"
+      "enabled": true
     }
   ],
   "bases": [],
