@@ -773,8 +773,8 @@
       "optionLabel": "part 7/7"
     },
     {
-      "id": "victory-skip-v0.1.0",
-      "name": "Victory Skip v0.1.0",
+      "id": "victory-skip-v0.1.1",
+      "name": "Victory Skip v0.1.1",
       "kind": "mod",
       "blurb": "No victory song or win poses after battles (train-style).",
       "format": "ic-layer-v1",
@@ -782,15 +782,15 @@
         "clean"
       ],
       "discs": {
-        "1": "./victory-skip-v0.1.0/layers/disc1.layer.json",
-        "2": "./victory-skip-v0.1.0/layers/disc2.layer.json",
-        "3": "./victory-skip-v0.1.0/layers/disc3.layer.json"
+        "1": "./victory-skip-v0.1.1/layers/disc1.layer.json",
+        "2": "./victory-skip-v0.1.1/layers/disc2.layer.json",
+        "3": "./victory-skip-v0.1.1/layers/disc3.layer.json"
       },
       "enabled": true
     },
     {
-      "id": "victory-skip-on-csr-v0.1.0",
-      "name": "Victory Skip v0.1.0",
+      "id": "victory-skip-on-csr-v0.1.1",
+      "name": "Victory Skip v0.1.1",
       "kind": "mod",
       "blurb": "No victory song or win poses after battles (train-style).",
       "format": "ic-layer-v1",
@@ -798,15 +798,15 @@
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./victory-skip-on-csr-v0.1.0/layers/disc1.layer.json",
-        "2": "./victory-skip-on-csr-v0.1.0/layers/disc2.layer.json",
-        "3": "./victory-skip-on-csr-v0.1.0/layers/disc3.layer.json"
+        "1": "./victory-skip-on-csr-v0.1.1/layers/disc1.layer.json",
+        "2": "./victory-skip-on-csr-v0.1.1/layers/disc2.layer.json",
+        "3": "./victory-skip-on-csr-v0.1.1/layers/disc3.layer.json"
       },
       "enabled": true
     },
     {
-      "id": "victory-skip-on-highwind-v0.1.0",
-      "name": "Victory Skip v0.1.0",
+      "id": "victory-skip-on-highwind-v0.1.1",
+      "name": "Victory Skip v0.1.1",
       "kind": "mod",
       "blurb": "No victory song or win poses after battles (train-style).",
       "format": "ic-layer-v1",
@@ -814,9 +814,9 @@
         "highwind-v0.2.0"
       ],
       "discs": {
-        "1": "./victory-skip-on-highwind-v0.1.0/layers/disc1.layer.json",
-        "2": "./victory-skip-on-highwind-v0.1.0/layers/disc2.layer.json",
-        "3": "./victory-skip-on-highwind-v0.1.0/layers/disc3.layer.json"
+        "1": "./victory-skip-on-highwind-v0.1.1/layers/disc1.layer.json",
+        "2": "./victory-skip-on-highwind-v0.1.1/layers/disc2.layer.json",
+        "3": "./victory-skip-on-highwind-v0.1.1/layers/disc3.layer.json"
       },
       "enabled": true
     }
