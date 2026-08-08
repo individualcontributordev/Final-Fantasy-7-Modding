@@ -13,7 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
-| 2026-08-08 | [battle-fanfare-mod-feasibility](2026-08-08-battle-fanfare-mod-feasibility.md) | Skip full victory sequence (poses+song); BATTLE.X hook, not mute-only | likely |
+| 2026-08-08 | [battle-fanfare-mod-feasibility](2026-08-08-battle-fanfare-mod-feasibility.md) | Train-style win skip via BTLMD/BTMD2 flags; force globally for mod | likely |
 | 2026-08-07 | [ending-credits-cd-playtest-pass](2026-08-07-ending-credits-cd-playtest-pass.md) | User: ending test bin lake+credits OK (CSR/SD fields kept) | confirmed |
 | 2026-08-07 | [post-manip-movies-todo-triage](2026-08-07-post-manip-movies-todo-triage.md) | After manip-movies: drop intentional CSR/SD skips; keep seed+LBA fixes | confirmed |
 | 2026-08-07 | [sd-core-play-skips-vs-ending](2026-08-07-sd-core-play-skips-vs-ending.md) | After SD core: report JMPF/Play skips; fix ending streams not unskip | confirmed |
