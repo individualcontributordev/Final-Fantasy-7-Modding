@@ -11,6 +11,7 @@ Tools and notes for modifying **Final Fantasy VII** PlayStation disc images (har
 |-----|------|---------|-----------|
 | Field random encounters | [mods/field-random-encounters/](mods/field-random-encounters/) | Light / Standard / Dense | [CHANGELOG](mods/field-random-encounters/CHANGELOG.md) |
 | World map random encounters | [mods/world-map-random-encounters/](mods/world-map-random-encounters/) | Light / Standard / Dense | [CHANGELOG](mods/world-map-random-encounters/CHANGELOG.md) |
+| Victory Skip | [mods/victory-skip/](mods/victory-skip/) | Train-style (no song/poses) | [CHANGELOG](mods/victory-skip/CHANGELOG.md) |
 
 Release notes index: **[CHANGELOGS.md](CHANGELOGS.md)** (newest entry at the **top** of each file).
 
