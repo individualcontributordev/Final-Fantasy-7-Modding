@@ -68,3 +68,6 @@ We still need the **pose** controller. This flag function mutates win-state (inc
 ## When done
 
 Push screenshots under docs/ or paste the block in chat.
+
+first break after kill, game moment right after the enemey kill animation ends and before and fanfair animations start
+after the 7th I just hit unpause 3 more times for a total of 10 and immediatly after the breaks stopped the fanfair animation starts with no more breaks all the way into the rewards and beyond
