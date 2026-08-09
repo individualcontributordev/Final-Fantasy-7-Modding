@@ -73,3 +73,8 @@ fun_800A1158 win_transition
 2. BP those jals live; note a0-a3 + whether fanfare/pose already started.
 3. Static: name **800A6000** in BATTLE_X (already at file+0x6000).
 4. Static: follow **800DCF94** / **800B1060** for audio.
+
+## Live follow-up
+
+Late BPs + frozen battle tone:
+[2026-08-09-batres-late-jals-stuck-tone](2026-08-09-batres-late-jals-stuck-tone.md).
