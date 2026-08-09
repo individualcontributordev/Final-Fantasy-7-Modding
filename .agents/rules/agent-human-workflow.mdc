@@ -46,6 +46,21 @@ Idle = short status. **Overwrite each run.**
 **Writing:** plain English (file names, which disc, why). No jargon like stem.
 Prefer put X on the image because over long do-not-use lists. One atomic ops task per file.
 
+## Hard rule: every shell step is COPY-PASTE
+
+**Never** tell the human to use their "usual builder", "normal flow", "same as last time", or any implied prior knowledge for applying layers, building discs, launching DuckStation, packing, or git.
+
+For **every** operational step that needs the keyboard:
+
+1. Put the **exact command(s)** in a fenced code block in `docs/INSTRUCTIONS.md`.
+2. Use real paths under the repo (e.g. `builder/fanfare-skip-stub-only-v0.1.4/layers/disc1.layer.json`).
+3. If a version/id is dynamic, either pin it in the file after build docs or use a one-liner that resolves it (`ls` / `$(…)` shown in full).
+4. Include output paths (`-o workspace/iso-extract/...bin`) and what to open in DuckStation.
+
+**Forbidden phrases** in ops instructions (not exhaustive): "usual builder", "your normal flow", "as before", "apply the layer somehow", "however you usually…".
+
+DuckStation / Ghidra UI steps still need exact addresses/menus — but shell/build/apply is always full commands.
+
 ## Human loop
 
 ```bash
