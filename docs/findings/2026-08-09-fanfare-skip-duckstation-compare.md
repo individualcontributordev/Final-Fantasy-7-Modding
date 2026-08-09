@@ -54,6 +54,15 @@ If `0x800A2974` never hits on a normal win, live load base may differ — search
 - Skip/NOP pose path at `0x54A0` / gate at `0x5484` **without** global mode-bit force.
 - Stop requesting song id `0x2F` (stuck audio) rather than only silencing `FAN2.SND`.
 
+## Memory map cross-ref (2026-08-09 import)
+
+Community list in `docs/reference/ff7-psx-memory/`:
+
+- `62D78` / `62D7A` = **battle controller inputs**, not BTLMD mode bits
+- Battle-end status candidate: `F83C6` (`0x800F83C6`) — Exit Battle Status (`1=Victory`, …)
+
+Query: `python3 docs/reference/ff7-psx-memory/query_memory.py --tag battle-end`
+
 ## Human task
 
 See `docs/INSTRUCTIONS.md` — execute BPs on the addresses above during a normal win.

@@ -59,6 +59,7 @@ should still ship `-on-highwind-*` variants since Highwind is a live base.
 | **New mod (idea → builder)** | `docs/06-new-mod-research.md` |
 | Encounter system | `docs/01-encounter-system.md` |
 | Findings index | `docs/findings/README.md` |
+| **PSX RAM map (query)** | `docs/reference/ff7-psx-memory/` — `python3 docs/reference/ff7-psx-memory/query_memory.py …` |
 | Ghidra | `docs/05-ghidra-guide.md` |
 | Disc / Makou | `docs/02-disc-format.md` |
 | **Single-disc** | `mods/single-disc/`, rule `single-disc-fields`, skill `ship-single-disc` |
