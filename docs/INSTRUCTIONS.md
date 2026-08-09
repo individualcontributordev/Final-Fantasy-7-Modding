@@ -51,6 +51,8 @@ Same steps as Fight A on a train battle (or any fight that already cuts out with
 
 **Write down the same list**, especially the value at `80062D7C` right after the kill.
 
+
+
 ## What “good notes” look like
 
 Paste something like this in chat (or commit under `docs/playtest/` if you prefer):
@@ -79,3 +81,5 @@ train:
 ## When you’re done
 
 Paste the notes here. Next patch will target only the win-show path from those addresses.
+
+check the screenshots for each requested item
