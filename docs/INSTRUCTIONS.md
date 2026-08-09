@@ -1,15 +1,14 @@
-# Task: Bisect freeze — stub-only vs fan2-only discs
+# Task: Verify Fanfare Skip 0.1.5 (stub only, no quiet FAN2)
 
 ## Why
 
-Freeze is a **0.1.4 regression** (stock ISO clean). Window: after **801B0278**, before **801B0458**.
+Bisect result:
 
-Two independent patches:
+- **stub only** → no freeze; regular fanfare can still be heard
+- **fan2 only** → held tone freeze
 
-1. BATTLE.X victory-queue stub at **800A2974**
-2. Quiet **ENEMY6/FAN2.SND**
-
-Build A = stub only. Build B = FAN2 only. Which freezes decides the fix.
+0.1.5 default build **drops quiet FAN2** and ships **BATTLE.X victory-queue stub
+only**. Confirm: no freeze, and note poses/fanfare behaviour for the next music fix.
 
 Finding: docs/findings/2026-08-09-batres-late-jals-stuck-tone.md
 
@@ -22,24 +21,16 @@ cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
-### 2. Build both bisect packs (Disc 1, clean base)
+### 2. Build 0.1.5 Disc 1 (clean)
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
-
-python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1 --skip-fan2
-
-python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1 --fan2-only
+python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
 ```
 
-Expected packs (VERSION 0.1.4):
+Expect: builder/fanfare-skip-v0.1.5/layers/disc1.layer.json
 
-- builder/fanfare-skip-stub-only-v0.1.4/layers/disc1.layer.json
-- builder/fanfare-skip-fan2-only-v0.1.4/layers/disc1.layer.json
-
-### 3. Make playtest disc images
-
-Needs workspace/pristine/FINALFANTASY7_D1.bin.
+### 3. Make playtest image
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
@@ -47,47 +38,27 @@ mkdir -p workspace/iso-extract
 
 python scripts/apply_layer.py \
   workspace/pristine/FINALFANTASY7_D1.bin \
-  builder/fanfare-skip-stub-only-v0.1.4/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_fanfare_stub_only.bin
-
-python scripts/apply_layer.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  builder/fanfare-skip-fan2-only-v0.1.4/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_fanfare_fan2_only.bin
+  builder/fanfare-skip-v0.1.5/layers/disc1.layer.json \
+  -o workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
 ```
 
-### 4. Playtest in DuckStation
+### 4. DuckStation playtest
 
-No breakpoints. Same save / last-hit fight for both.
+1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
+2. Same save / last-hit fight as bisect.
+3. Listen victory → field/world map.
+4. Fill Evidence (freeze + fanfare + poses).
 
-**Build A — stub only**
-
-1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_stub_only.bin
-2. Load save, kill last enemy, listen through victory → field/world map.
-3. Fill Evidence A.
-
-**Build B — fan2 only**
-
-1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_fan2_only.bin
-2. Same fight path.
-3. Fill Evidence B.
+No breakpoints required.
 
 ## Evidence
 
 ```
-Build A (stub only, stock FAN2) — ff7_d1_fanfare_stub_only.bin
-  held tone: YES/NO
-  fanfare heard: YES/NO/quiet
-  poses: YES/NO
-  notes:
-
-Build B (fan2 only, stock BATTLE) — ff7_d1_fanfare_fan2_only.bin
-  held tone: YES/NO
-  fanfare heard: YES/NO/quiet
-  poses: YES/NO
-  notes:
-
-Verdict: freeze caused by STUB / FAN2 / BOTH / UNSURE
+held tone freeze: YES/NO
+fanfare heard: YES/NO/partial
+win poses: YES/NO/partial
+loot/exp screens still OK: YES/NO
+notes:
 ```
 
 ## When done
@@ -95,7 +66,7 @@ Verdict: freeze caused by STUB / FAN2 / BOTH / UNSURE
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: bisect freeze stub vs FAN2"
+git commit -m "ops: verify fanfare-skip 0.1.5 no freeze"
 git push
 ```
 
