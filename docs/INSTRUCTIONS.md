@@ -1,18 +1,25 @@
-# Task: First steps inside victory overlay 801B0000
+# Task: Break on late BATRES jals (music/pose candidates)
 
 ## Why
 
-Handoff is confirmed live:
+Your step pack (`cf52ba3`) + offline decode show:
 
-- **800A16F4**: s1 = 0xFFFF (wait done, no loop)
-- **800A1700**: fall-through in win_transition
-- **801B0000**: **ra = 800A1734** (called from win fn); real function, prologue addiu sp,sp,-136
+- **801B0000** = start of **`BATTLE__BATRES.X.dec`** (victory results overlay)
+- First work is a **10x** loop: `jal **800A6000**` with `a1=a2=6` (actor slots, stride 0x68)
+- After ~30 steps you were still inside that loop (PC ~801B0088, s1=1)
+- Fanfare/pose is **later** in the same function. Static candidates:
 
-Poses/fanfare setup almost certainly live in this overlay. BATTLE_X_dec.bin does not contain it.
-We need the first control flow inside 801B0000 after the post-kill jal.
+| VA | Call | Why interesting |
+|----|------|-----------------|
+| **801B0278** | jal **801B0E20** | BATRES-internal after flag merge |
+| **801B02FC** | jal **800B1060**(a0=8) | optional path — music-ish |
+| **801B0458** | jal **800A31A0** | pose-ish candidate |
+| **801B051C** | jal **800A3354** | repeated with waits |
+| **801B0558** | jal **800DCF94**(a0=-1) | strong fanfare/SND candidate |
 
-Shots already in repo: docs/800A16F4.png, docs/800A1700.png, docs/801B0000.png
-Finding: docs/findings/2026-08-09-win-transition-fn-800a1158.md
+Finding: `docs/findings/2026-08-09-batres-801b0000-victory-entry.md`
+
+You do **not** need another 30-step photo dump of the prologue loop.
 
 ## What you do
 
@@ -23,67 +30,54 @@ cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
-### 2. DuckStation breakpoints
+### 2. Breakpoints (clean set)
 
-1. **Remove** execute BPs on **800A16F4** and **800A1700** (done).
-2. Keep or re-add execute **801B0000** (enable only after last kill if it fires mid-fight).
-3. Add execute BPs on the first real body instructions (from your 801B0000 shot):
-   - **801B0008** — early body (after sw s2 / before halfword load)
-   - **801B000C** — lhu from s2 path (flag-ish)
-4. Optional if those spam: only **801B0000**, then single-step 10-20 instructions and note each jal target.
-5. Still **do not** enable 800D3098 or 800A54A0.
+**Remove:** 801B0008, 801B000C (spam / early).
+
+**Keep optional:** 801B0000 only if you want one shot to arm the rest (or arm before last hit).
+
+**Add execute BPs:**
+
+1. **801B0278**
+2. **801B02FC**
+3. **801B0458**
+4. **801B0558**
+5. Optional: **800DCF94**, **800B1060**, **800A31A0** (callees)
+
+Still **do not** enable 800D3098 / 800A54A0 unless a BP never hits and you need a safety net.
+
+If a late BP never hits on a kill, note which flag bits you had (s2 / F83C6) — paths are flag-gated.
 
 ### 3. Fight
 
 - Fanfare Skip 0.1.4, HUD up, save before last kill
 - Kill last enemy
-- Stop on **801B0000** (confirm ra still ~800A1734)
-- Continue / step until **801B0008** or **801B000C** (or step manually if those never hit)
+- For **each** BP that hits: one screenshot (or fill Evidence). Note if fanfare/pose already audible/visible.
 
-### 4. Dump (important)
+### 4. Optional rename shots
 
-While stopped inside 801B with code visible:
-
-1. DuckStation memory view at **801B0000**
-2. Dump or screenshot enough bytes to cover ~0x200 (or full if easy)
-3. If you can export: save as `docs/801B0000-dump.bin` (or paste hex range in Evidence)
-4. Screenshot full debugger for first interesting jal / branch
+Prefer names like `docs/801B0278.png` so we are not guessing `image copy N`.
 
 ## Evidence
 
-### A. 801B0000 (post-kill)
-
 ```
-801B0000:
-  ra:
-  a0 a1 a2 a3:
-  s5 / any 800F83xx:
-  game moment:
-```
+BP hit list (in order):
+801B0278: HIT/MISS  ra=  a0= a1= a2= a3=  s2=  moment:
+801B02FC: HIT/MISS  ra=  a0= ...  moment:
+801B0458: HIT/MISS  ...
+801B0558: HIT/MISS  ...
+800DCF94 (if used): ...
+800B1060 (if used): ...
 
-### B. First body stop (0008 / 000C / stepped PC)
-
-```
-pc:
-  ra:
-  notable regs:
-  first jal targets seen (addresses):
-  game moment: (still pre-pose? pose start?)
-  screenshot path:
-```
-
-### C. Dump
-
-```
-dump path or NEVER:
-size / range:
+Which BP is first AFTER fanfare becomes audible? (or NEVER sure)
+Which BP is first AFTER victory pose starts? (or NEVER sure)
 ```
 
 ## When done
 
 ```bash
-git add docs/INSTRUCTIONS.md docs/*.png docs/*dump* 2>/dev/null || git add docs/INSTRUCTIONS.md
-git commit -m "ops: 801B0000 victory overlay first steps"
+git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
+git commit -m "ops: BATRES late jal BP evidence (music/pose)"
 git push
 ```
 
