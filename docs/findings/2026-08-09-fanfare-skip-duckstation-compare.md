@@ -34,20 +34,23 @@
    That is main/kernel-style code (loads around `0x2D78` / store `0x2D7C`), **not** `BATTLE.X` at `0x800Axxxx`.
 4. Code at `0x8001CC1C` **computes** a store to `0x2D7C` from halfwords at `0x2D78`/`0x2D7A` — not a plain field flag dump. Hit Count 0 means that write did not run while the BP was armed (or freezes are not during a write).
 
-**Conclusion:** Next useful breakpoint is **execute** on battle poses/music, not only a write on `0x2D7C`.
+**Conclusion (updated):** Execute breaks at file+`0x800A0000` for pose sites are **wrong in practice**.
 
-## BATTLE.X runtime addresses (base `0x800A0000`)
+Human report: those `800A…` execute breaks **do not hit during battle**; they **spam on the world map** (must pause every frame) and only catch after rewards when the world/field overlay is loading again.
 
-| Role | File off | Break (execute) |
-|------|----------|-----------------|
-| Victory queue (v0.1.4 stub) | `0x2974` | `0x800A2974` |
-| Only `jal` to that queue | `0xBE4C` | `0x800ABE4C` |
-| Pose gate (bit `0x20`) | `0x5484` | `0x800A5484` |
-| Write win anim index `7` | `0x54A0` | `0x800A54A0` |
-| Anim setup function | `0x5250` | `0x800A5250` |
-| Fanfare song id `0x2F` | `0x1CE0`, `0x2ADC`, `0x8658` | same + base |
+### Why
 
-If `0x800A2974` never hits on a normal win, live load base may differ — search RAM for stub bytes.
+FIELD, WORLD, and BATTLE **share the same overlay load slot** (~`0x800A0000`). Addresses like `0x800A54A0` are **field/world code** while idling on the map, not a stable “BATTLE pose PC.” Mid-battle PC from earlier shots (`0x800D3074`) is consistent with battle code running **elsewhere in that large overlay**, not at our guessed file offsets under a frozen `800A` label.
+
+### File offsets still matter for patching
+
+Static patches stay on **BATTLE.X file offsets** (`0x2974`, `0x54A0`, …). Live DuckStation PCs must be **read from a pause at pose start**, then mapped back — do not assume `PC = 0x800A0000 + file_off` for breakpoints until a hit confirms it.
+
+### Next breakpoints (see INSTRUCTIONS)
+
+1. **Pause at pose start** → record `pc` / `ra`
+2. **Write** break on exit status `0x800F83C6` (byte; notes say `1 = Victory`)
+3. Clear all old `800A54A0` / `800A5484` / `800A2974` / `800ABE4C` execute breaks
 
 ## Patch direction (after hits)
 

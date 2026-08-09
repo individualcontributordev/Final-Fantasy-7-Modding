@@ -20,7 +20,9 @@ For main RAM watches we use **`0x80000000 + offset`** (matches fanfare RE).
 
 DuckStation screenshots paused at `0x8001CC20` (loads `0x2D78`/`0x2D7A`, store `0x2D7C`) match **input copy/XOR logic**, not BTLMD mode bits.
 
-A write-break only on `80062D7C` is a poor fanfare/pose hook. Prefer execute breaks in `BATTLE.X` (`0x800A…`) or named battle-end RAM below.
+A write-break only on `80062D7C` is a poor fanfare/pose hook.
+
+**Do not** put long-lived execute breaks on guessed `0x800A…` battle file offsets — FIELD/WORLD/BATTLE share that overlay slot, so those PCs spam on the world map and miss the win pose. Prefer: pause at pose start and read `pc`, and/or write-break battle-end RAM below.
 
 ## Battle-end related (from list)
 
