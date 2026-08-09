@@ -61,13 +61,46 @@ Static patches stay on **BATTLE.X file offsets** (`0x2974`, `0x54A0`, …). Live
 - `ra = 0x8003CF98` — callee return into low/system region
 - Code at `pc` loads **`0x80051568`** (global frame counter) then branches
 
-**Note:** Those instruction bytes are **not** at `BATTLE.X_file + 0x800A0000` in our extract (same address space as battle overlay data, but base/mapping still open). Static file offsets for pose/music patches remain valid; live hook uses **`0x800D3098`**.
+**Note:** Those instruction bytes are **not** at `BATTLE.X_file + 0x800A0000` in our extract (same address space as battle overlay data, but base/mapping still open). Static file offsets for pose/music patches remain valid; live **0x800D3098** was tested and is a per-frame renderer (see below), not the pose hook.
 
 ### Next breakpoints (see INSTRUCTIONS)
 
-1. Execute **`0x800D3098`** once per win (confirm hit count / ra / stack)
-2. Optional write on **`0x800F83C6`**
+1. **Off:** execute `0x800D3098` (every-frame GTE)
+2. **On:** write `0x800F83C6` — capture **first** hit after last kill
 3. Keep `800A…` pose guesses **off**
+
+
+## Live pass: 800D3098 every-frame (disproven as pose hook)
+
+**Human (550d529):** 800D3098 hits **every battle frame**. Write activity on 800F83C6 goes quiet once EXP/rewards is open.
+
+### Screenshots
+
+| File | Moment | pc | D3098 hit count (status) | Notes |
+|------|--------|-----|--------------------------|-------|
+| docs/before last.png | Before last kill | 800D3098 | 53 | Same GTE loop |
+| docs/after last, before animations.png | After kill, before win anim | 800D3098 | 54 | +1 only → still per-frame |
+| docs/mid animations.png | Mid win anims | 800D3098 | 76 | Still same PC |
+| docs/read value.png | Battle-end RAM view | pc 800D3098 | — | **F83C6 = 0x00** at that pause |
+
+### What 800D3098 actually is
+
+Disassembly is a **GTE / mesh transform loop** (mfc2/swc2/lwc2, vector loads, bne t8).  
+ra stays **8008A9CC** (renderer caller).
+
+**Not** victory control. Earlier "pose start" pause landed on the busy renderer by chance. **Disable execute BP 800D3098.**
+
+### 800F83C6 (exit status)
+
+- Early win window (read value.png): byte **0** (not Victory=1 yet).
+- Human: break goes idle after rewards UI → writes are in the **kill → rewards** handoff; need **first write** pc.
+
+### Next hook strategy
+
+1. No execute on 800D3098 / 800A pose guesses.
+2. **Write** break on 800F83C6 (1 byte) armed **before last kill**; screenshot **first** hit (pc, ra, value).
+3. Backup: write on last enemy HP to 0 for kill timing only.
+4. If first F83C6 write is already rewards-only, manual pause at first pose frame with D3098 off.
 
 ## Patch direction (after hits)
 
