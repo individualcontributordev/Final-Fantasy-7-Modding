@@ -11,7 +11,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 - User says **check** → Agent pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
 - Commits: author `individualcontributordev <contributorindividual@gmail.com>`; no trailers; auto commit/push when work lands (see `.agents/rules/agent-human-workflow.mdc`).
-- **INSTRUCTIONS / chat:** plain English (what + why); no “stem”; one atomic ops task. Rule: `single-disc-fields.mdc` when touching single-disc fields/movies.
+- **INSTRUCTIONS / chat:** plain English (what + why); no “stem”; one atomic ops task. **Every shell/build/apply step is full COPY-PASTE commands** — never “use your usual builder/flow”. Rule: `.agents/rules/agent-human-workflow.mdc`. Also `single-disc-fields.mdc` when touching single-disc fields/movies.
 - **Before publish:** `python scripts/verify_builder_config.py --pristine … --disc N --base … --addon …` (stacks layers like the site; required in ship skills).
 - Optional built-zip smoke: `python scripts/verify_built_disc.py path/to/extract-or.bin` — config **only** from `APPLIED.txt` next to the image (no pack-id flags). Ignores EDC/ECC and base bytes later addons overwrite — `docs/findings/2026-07-30-verify-built-disc-stacking.md`.
 
