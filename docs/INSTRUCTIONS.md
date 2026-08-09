@@ -39,17 +39,27 @@ git pull --ff-only
 - Enable only **801B0278**
 - Kill last enemy; when it hits: listen 1–2s while **paused**, then note if freeze already started **before** this stop (i.e. during run-up after kill). Continue; listen after resume.
 
+not before 801B0278
+freeze happens after continuing from here 801B0278
+
 **Mode B — stop at 0458**
 - Only **801B0458**
 - Same listen: freeze already on when you land? or only after continue past 0458?
+
+sound freeze happens before 801B0458 bp hits
 
 **Mode C — stop at 0558**
 - Only **801B0558** (jal 800DCF94 -1)
 - Freeze already on at arrival? or only after stepping the jal / continuing?
 
+freeze already on here at 801B0558
+
 **Mode D — optional control (if time)**
 - Same fight on **stock** ISO (no fanfare-skip) OR disable 800A2974 patch only if you know how — write NEVER if skip.
 - Does the held-tone still happen?
+
+using stock ISO the sound does not freeze at all verified
+
 
 Do **not** need 801B0000 BP for A–C (lets audio run). Optional safety: 801B0000 disabled.
 
