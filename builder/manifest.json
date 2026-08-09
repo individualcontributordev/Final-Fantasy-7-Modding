@@ -773,8 +773,8 @@
       "optionLabel": "part 7/7"
     },
     {
-      "id": "fanfare-skip-v0.1.2",
-      "name": "Fanfare Skip v0.1.2",
+      "id": "fanfare-skip-v0.1.3",
+      "name": "Fanfare Skip v0.1.3",
       "kind": "mod",
       "blurb": "After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
@@ -783,15 +783,15 @@
         "clean"
       ],
       "discs": {
-        "1": "./fanfare-skip-v0.1.2/layers/disc1.layer.json",
-        "2": "./fanfare-skip-v0.1.2/layers/disc2.layer.json",
-        "3": "./fanfare-skip-v0.1.2/layers/disc3.layer.json"
+        "1": "./fanfare-skip-v0.1.3/layers/disc1.layer.json",
+        "2": "./fanfare-skip-v0.1.3/layers/disc2.layer.json",
+        "3": "./fanfare-skip-v0.1.3/layers/disc3.layer.json"
       },
       "enabled": true
     },
     {
-      "id": "fanfare-skip-on-csr-v0.1.2",
-      "name": "Fanfare Skip v0.1.2",
+      "id": "fanfare-skip-on-csr-v0.1.3",
+      "name": "Fanfare Skip v0.1.3",
       "kind": "mod",
       "blurb": "After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
@@ -800,15 +800,15 @@
         "csr-v0.14.1"
       ],
       "discs": {
-        "1": "./fanfare-skip-on-csr-v0.1.2/layers/disc1.layer.json",
-        "2": "./fanfare-skip-on-csr-v0.1.2/layers/disc2.layer.json",
-        "3": "./fanfare-skip-on-csr-v0.1.2/layers/disc3.layer.json"
+        "1": "./fanfare-skip-on-csr-v0.1.3/layers/disc1.layer.json",
+        "2": "./fanfare-skip-on-csr-v0.1.3/layers/disc2.layer.json",
+        "3": "./fanfare-skip-on-csr-v0.1.3/layers/disc3.layer.json"
       },
       "enabled": true
     },
     {
-      "id": "fanfare-skip-on-highwind-v0.1.2",
-      "name": "Fanfare Skip v0.1.2",
+      "id": "fanfare-skip-on-highwind-v0.1.3",
+      "name": "Fanfare Skip v0.1.3",
       "kind": "mod",
       "blurb": "After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
@@ -817,9 +817,9 @@
         "highwind-v0.2.0"
       ],
       "discs": {
-        "1": "./fanfare-skip-on-highwind-v0.1.2/layers/disc1.layer.json",
-        "2": "./fanfare-skip-on-highwind-v0.1.2/layers/disc2.layer.json",
-        "3": "./fanfare-skip-on-highwind-v0.1.2/layers/disc3.layer.json"
+        "1": "./fanfare-skip-on-highwind-v0.1.3/layers/disc1.layer.json",
+        "2": "./fanfare-skip-on-highwind-v0.1.3/layers/disc2.layer.json",
+        "3": "./fanfare-skip-on-highwind-v0.1.3/layers/disc3.layer.json"
       },
       "enabled": true
     }

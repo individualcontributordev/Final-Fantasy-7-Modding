@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3 — 2026-08-09
+
+- Fix poses still playing: skip the victory anim/fanfare queue in BATTLE.X.
+- Remove bit 0x100 force (was flipping end-battle UI: auto-confirm / context bar).
+- Keep only no-music bit 0x20 for the fanfare song.
+
+
 ## 0.1.2 — 2026-08-09
 
 - Rename to Fanfare Skip (clearer name).

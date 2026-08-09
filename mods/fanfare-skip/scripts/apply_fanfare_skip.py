@@ -45,19 +45,18 @@ def discover_sites(dec: bytes) -> list[tuple[int, int, int]]:
 		andi = struct.unpack_from("<I", dec, i + 8)[0]
 		if nop != 0:
 			continue
-		if (andi >> 26) != 0x0C:
+		if (andi >> 26) != 0x0C or (andi & 0xFFFF) != 0x20:
 			continue
-		mask = andi & 0xFFFF
-		if mask == 0x20:
-			ori = (0x0D << 26) | (rt << 21) | (rt << 16) | 0x0120
-			sites.append((i + 4, 0, ori))
-		elif mask == 0x100:
-			ori = (0x0D << 26) | (rt << 21) | (rt << 16) | 0x0100
-			sites.append((i + 4, 0, ori))
-	# 9da0 victory-anim gate (fixed offset on NTSC-U)
-	if len(dec) > 0x5480 and struct.unpack_from("<I", dec, 0x547C)[0] == 0:
-		ori = (0x0D << 26) | (0 << 21) | (2 << 16) | 0x0020
-		sites.append((0x547C, 0, ori))
+		ori = (0x0D << 26) | (rt << 21) | (rt << 16) | 0x0020
+		sites.append((i + 4, 0, ori))
+	# Always skip victory anim/fanfare queue (NTSC-U file 0x2A08)
+	if len(dec) > 0x2A0C:
+		old = struct.unpack_from("<I", dec, 0x2A08)[0]
+		# bne r2,r0,imm expected; replace with beq r0,r0,same imm
+		if (old >> 26) == 0x05:
+			imm16 = old & 0xFFFF
+			new = 0x10000000 | imm16
+			sites.append((0x2A08, old, new))
 	return sites
 
 
