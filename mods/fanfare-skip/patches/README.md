@@ -1,42 +1,35 @@
 # Fanfare-skip battle patches
 
-## Idea
+## What
 
-Retail battle-mode flags live in RAM halfwords:
+Skip victory fanfare music and win poses after battles (train-style), without
+hiding loot/exp screens.
 
-- 0x80062D7E
-- 0x80062D7C
+## Technique (NTSC-U BATTLE.X, decompressed)
 
-Relevant bits (BTMD2 / BTLMD wiki):
+1. **Music bit (BTLMD 0x20)**  
+   At each load of battle-mode halfword 0x80062D7E / 0x80062D7C that tests bit 0x20,
+   replace the delay-slot nop with:
+       ori rT, rT, 0x20
+   so the official "no victory music" switch always reads on.
 
-- 0x20 — do not play victory music
-- 0x100 — party does not do victory celebrations (poses)
+2. **Win pose / fanfare queue**  
+   At file offset 0x2A08, the win path does:
+       andi r2, r2, 0x1
+       bne  r2, r0, skip   ; if already flagged, skip
+       ... queue victory anim + fanfare id 47 ...
+   Replace that bne with always-branch (beq r0,r0,skip) so the queue never runs.
+   That stops party win poses (and a second fanfare path).
 
-Also: scene flag byte 0x80109DA0 bit 0x20 skips writing victory anim index 7
-into per-action tables (pose timing path).
+## What we do NOT force
 
-## Patches (decompressed BATTLE.X)
+- Bit 0x100 ("no celebration" in BTMD2 docs) — toggling it touched end-of-battle
+  UI flags and caused auto-confirm / context-bar glitches in v0.1.1–0.1.2.
+- Reward-screen hide bit (0x80).
 
-1. After each:
-       lhu  rT, 0x2D7E/0x2D7C(rX)
-       nop
-       andi r?, rT, 0x20
-   replace nop with:
-       ori  rT, rT, 0x120
-   (music + no-pose bits).
+## Sites
 
-2. After the sole:
-       lhu  rT, 0x2D7E(rX)
-       nop
-       andi r?, rT, 0x100
-   replace nop with:
-       ori  rT, rT, 0x100
-
-3. At file 0x547C (9da0 gate):
-       nop  ->  ori r2, r0, 0x20
-   so the check that skips victory anim index 7 always passes.
-
-See force-no-victory-music-sites.txt (24 sites on NTSC-U).
+See force-no-victory-music-sites.txt.
 
 ## Apply
 
