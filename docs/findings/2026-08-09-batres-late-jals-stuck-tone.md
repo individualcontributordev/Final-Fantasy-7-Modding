@@ -55,3 +55,34 @@ Mod note (patches/README): older bit-0x20 force path was abandoned in 0.1.4; thi
 ## Next RE
 
 Isolate freeze vs 0278/0458/0558; then dump/step music transition (AKAO / track change / SPU off), not more pose jals unless pose still wrong.
+
+## Freeze timing (6fb15fb evidence)
+
+| Mode | Result |
+|------|--------|
+| A **801B0278** | Freeze **NOT** already on at hit. Freeze **starts after continue** past 0278. |
+| B **801B0458** | Freeze **already on** when BP hits. |
+| C **801B0558** | Freeze already on (downstream of B). |
+| D **stock ISO** | **No freeze at all** (verified). |
+
+**Bracket:** freeze is introduced in BATRES work **after 801B0278 returns/continues** and **before 801B0458**.
+
+**Causal class:** Fanfare Skip **0.1.4** regression (stock clean). Not debugger pause on 801B0000.
+
+### Static work in the freeze window (s2≈0x20 path)
+
+After `jal 801B0E20` @0278, before `jal 800A31A0` @0458:
+
+1. Loop **10×** `jal 800A7254` (a2=4)
+2. Mask words at 8016+0x36C0…
+3. Flag branches: bit0x2/0x4 off → 0354 path; live had **s4=0x31**
+4. Optional `jal 80014540`
+5. Loop **`jal 800A3354`** up to s4 times (0x31) + wait spin @03FC
+6. Then 0458 `800A31A0(0,0,0,0)`
+
+0.1.4 patches (either may cause hang):
+
+- BATTLE.X **800A2974** → immediate `jr ra` (victory-queue stub)
+- **ENEMY6/FAN2.SND** body zeroed (fanfare asset silent)
+
+Victory-queue is *not* in the 0278–0458 direct jal list; it is called from **800ABE4C**. Freeze may still be from FAN2 touch during this window, or from main-loop work while 800A3354 yields frames, with stubbed queue side effects.

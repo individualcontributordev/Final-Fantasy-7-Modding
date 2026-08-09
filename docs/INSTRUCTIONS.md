@@ -1,24 +1,28 @@
-# Task: When does the battle tone freeze? (relative to BATRES jals)
+# Task: Bisect freeze — 800A2974 stub vs quiet FAN2.SND
 
 ## Why
 
-Evidence from your push (`4c347fb`) is good:
+Your freeze timing (`6fb15fb`) nails it:
 
-| BP | Hit? | Meaning |
-|----|------|---------|
-| 801B0000 | yes | BATRES entry (ra=800A1734) |
-| 801B0278 | yes | jal 801B0E20; s2=**0x20** |
-| 801B02FC | **no** | expected — needs other flag bits |
-| 801B0458 | yes | jal 800A31A0(0,0,0,0); you: near end of fanfare window |
-| 801B0558 | yes | jal **800DCF94(-1)** = clear flag @800F1E4F, **not** play song |
+| Checkpoint | Freeze? |
+|------------|---------|
+| At **801B0278** | **No** — starts only after continue |
+| At **801B0458** | **Yes** already |
+| At **801B0558** | Yes already |
+| **Stock ISO** | **No freeze** (verified) |
 
-**Your audio note (accepted):** after entering victory via 801B0000, battle SFX later die into a **held single tone** until world map; **not** caused by parking on the 801B0000 BP (frames pass first).
+So: **Fanfare Skip 0.1.4 regression**, window = BATRES after 0278 → before 0458.
 
-That sounds like **BGM/SPU not torn down or not retargeted**, not FAN2 playing. Fanfare Skip 0.1.4 already stubs victory-queue **800A2974** + quiets FAN2 — freeze may be side-effect of missing stock handoff.
+0.1.4 has **two** independent changes:
+
+1. **BATTLE.X** — victory-queue at **800A2974** (file+0x2974) patched to immediate return
+2. **ENEMY6/FAN2.SND** — sequence body zeroed (quiet fanfare)
+
+We need to know **which one** (or both) causes the held tone. That decides the fix.
 
 Finding: `docs/findings/2026-08-09-batres-late-jals-stuck-tone.md`
 
-We only need **when** freeze starts vs the three hits. No giant step dumps.
+Build flags were added: `--skip-fan2` and `--fan2-only`.
 
 ## What you do
 
@@ -29,76 +33,55 @@ cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
-### 2. Breakpoints
+### 2. Build two bisect discs (Disc 1)
 
-**Remove:** 801B02FC (will miss again on this path).
+```bash
+# A) BATTLE stub ONLY (stock FAN2)
+python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1 --skip-fan2
 
-**Use one kill per mode** (reload save as needed):
+# B) FAN2 quiet ONLY (stock BATTLE victory-queue)
+python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1 --fan2-only
+```
 
-**Mode A — stop at 0278**
-- Enable only **801B0278**
-- Kill last enemy; when it hits: listen 1–2s while **paused**, then note if freeze already started **before** this stop (i.e. during run-up after kill). Continue; listen after resume.
+| Build | pack stem | BATTLE.X | FAN2 |
+|-------|-----------|----------|------|
+| **A** | fanfare-skip-**stub-only**-v* | stub 800A2974 | **stock** |
+| **B** | fanfare-skip-**fan2-only**-v* | **stock** | quiet |
 
-not before 801B0278
-freeze happens after continuing from here 801B0278
+Apply with your usual builder → DuckStation Disc 1 flow.
+Bisect packs are **not** added to the public manifest (pack folder only).
 
-**Mode B — stop at 0458**
-- Only **801B0458**
-- Same listen: freeze already on when you land? or only after continue past 0458?
+### 3. Playtest (same save / last-hit fight)
 
-sound freeze happens before 801B0458 bp hits
+No BPs required. For each build:
 
-**Mode C — stop at 0558**
-- Only **801B0558** (jal 800DCF94 -1)
-- Freeze already on at arrival? or only after stepping the jal / continuing?
-
-freeze already on here at 801B0558
-
-**Mode D — optional control (if time)**
-- Same fight on **stock** ISO (no fanfare-skip) OR disable 800A2974 patch only if you know how — write NEVER if skip.
-- Does the held-tone still happen?
-
-using stock ISO the sound does not freeze at all verified
-
-
-Do **not** need 801B0000 BP for A–C (lets audio run). Optional safety: 801B0000 disabled.
-
-### 3. Fight setup
-
-Same as always: Fanfare Skip 0.1.4 for A–C, HUD up, save before last hit.
+1. Kill last enemy
+2. Listen victory → field/world map
+3. Note held tone / fanfare / poses
 
 ## Evidence
 
 ```
-Mode A 0278:
-  freeze already when BP hit? YES/NO/UNSURE
-  freeze after continue past 0278 before next ceremony stuff? YES/NO/UNSURE
-  shot: (optional)
-
-Mode B 0458:
-  freeze already when BP hit? YES/NO/UNSURE
-  freeze only after continue? YES/NO/UNSURE
-  shot:
-
-Mode C 0558:
-  freeze already when BP hit? YES/NO/UNSURE
-  freeze only after jal 800DCF94 / continue? YES/NO/UNSURE
-  a0 still -1? 
-  shot:
-
-Mode D stock/control:
-  held tone happens? YES/NO/NEVER
+Build A (BATTLE stub only, stock FAN2):
+  held tone: YES/NO
+  fanfare heard: YES/NO/quiet
+  poses: YES/NO
   notes:
 
-Earliest BP arrival where freeze is ALREADY audible:
-  0278 / 0458 / 0558 / only AFTER 0558 / UNSURE
+Build B (FAN2 quiet only, stock BATTLE):
+  held tone: YES/NO
+  fanfare heard: YES/NO/quiet
+  poses: YES/NO
+  notes:
+
+Verdict: freeze caused by STUB / FAN2 / BOTH / UNSURE
 ```
 
 ## When done
 
 ```bash
-git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
-git commit -m "ops: freeze timing vs BATRES 0278/0458/0558"
+git add docs/INSTRUCTIONS.md
+git commit -m "ops: bisect freeze stub vs FAN2"
 git push
 ```
 
