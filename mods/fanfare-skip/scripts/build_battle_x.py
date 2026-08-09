@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Decompress BATTLE.X, apply victory-skip, recompress."""
+"""Decompress BATTLE.X, apply fanfare-skip, recompress."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
 
-from apply_victory_skip import apply_patch, verify  # noqa: E402
+from apply_fanfare_skip import apply_patch, verify  # noqa: E402
 from compress_gzipps import compress_gzipps  # noqa: E402
 from decompress_gzipps import decompress_gzipps  # noqa: E402
 
@@ -34,7 +34,7 @@ def build(src_battle_x: Path, out_new: Path | None, keep_dec: bool) -> Path:
 	raw_dec = decompress_gzipps(src_battle_x, None)
 	dec_path.write_bytes(raw_dec.read_bytes())
 
-	print("=== 2/4 apply victory-skip ===")
+	print("=== 2/4 apply fanfare-skip ===")
 	apply_patch(dec_path)
 	print(f"Wrote patches into {dec_path}")
 

@@ -5,6 +5,10 @@
 **Status:** game already has this mode; best path is force those flags globally
 
 
+## Implementation (v0.1.2)
+
+Renamed to Fanfare Skip in the builder; checkbox shows help text.
+
 ## Implementation (v0.1.1)
 
 v0.1.0 killed fanfare only. v0.1.1 also forces no-pose bit 0x100 and the
@@ -12,10 +16,10 @@ v0.1.0 killed fanfare only. v0.1.1 also forces no-pose bit 0x100 and the
 
 ## Implementation (v0.1.0)
 
-Shipped as optional builder mod **Victory Skip**:
+Shipped as optional builder mod **Fanfare Skip**:
 
-- mods/victory-skip/ — apply + pack build scripts
-- Packs: victory-skip-v0.1.0, victory-skip-on-csr-v0.1.0, victory-skip-on-highwind-v0.1.0
+- mods/fanfare-skip/ — apply + pack build scripts
+- Packs: fanfare-skip-v0.1.0, fanfare-skip-on-csr-v0.1.0, fanfare-skip-on-highwind-v0.1.0
 - Technique: in decompressed BATTLE.X, 22 sites load RAM halfwords 0x80062D7E / 0x80062D7C and test bit 0x20 (no victory music). Each delay-slot nop after the load is replaced with ori rT, rT, 0x20 so the bit always reads set.
 - Not field patches. Rewards screens unchanged (bit 0x80 not forced).
 - Playtest needed: randoms, bosses, train (should stay fine), arena, level-up still shows.

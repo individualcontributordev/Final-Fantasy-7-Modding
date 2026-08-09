@@ -27,13 +27,13 @@ https://individualcontributor.dev/history/
 
 ### Battle pacing (entry / win-death / fanfare)
 
-**Partial ship (2026-08-08):** optional Victory Skip mod
-(mods/victory-skip/, builder packs) forces the official no-victory-music
+**Partial ship (2026-08-08):** optional Fanfare Skip mod
+(mods/fanfare-skip/, builder packs) forces the official no-victory-music
 battle-mode bit in BATTLE.X so fights exit without fanfare/win poses
 (train-style). Playtest still open.
 
 Still open: battle entry length, death anims, broader win/death pacing if
-Victory Skip is not enough on hardware.
+Fanfare Skip is not enough on hardware.
 
 ### Super Nova / long forced-battle stretches
 

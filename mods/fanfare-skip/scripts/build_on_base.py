@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build victory-skip layers for clean / CSR / Highwind.
+"""Build fanfare-skip layers for clean / CSR / Highwind.
 
-  python mods/victory-skip/scripts/build_on_base.py --against clean --discs 1
-  python mods/victory-skip/scripts/build_on_base.py --against all --discs 1,2,3
+  python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
+  python mods/fanfare-skip/scripts/build_on_base.py --against all --discs 1,2,3
 """
 
 from __future__ import annotations
@@ -31,10 +31,11 @@ from build_battle_x import build as build_battle  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
 
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
-WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_victory_skip"
+WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_fanfare_skip"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
 BATTLE_PATH = "BATTLE/BATTLE.X"
+HINT = 'No victory fanfare or win poses — loot and exp still apply.'
 DEFAULT_CSR_MANIFEST = (
 	"https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
 )
@@ -42,19 +43,19 @@ DEFAULT_CSR_MANIFEST = (
 AGAINST = {
 	"clean": {
 		"base_id": "clean",
-		"prefix_stem": "victory-skip",
+		"prefix_stem": "fanfare-skip",
 		"on_label": "",
 		"compatible": ["clean"],
 	},
 	"csr": {
 		"base_id": "csr-v0.14.1",
-		"prefix_stem": "victory-skip-on-csr",
+		"prefix_stem": "fanfare-skip-on-csr",
 		"on_label": " (on CSR)",
 		"compatible": ["csr-v0.14.1"],
 	},
 	"highwind": {
 		"base_id": "highwind-v0.2.0",
-		"prefix_stem": "victory-skip-on-highwind",
+		"prefix_stem": "fanfare-skip-on-highwind",
 		"on_label": " (on Highwind)",
 		"compatible": ["highwind-v0.2.0"],
 	},
@@ -192,6 +193,7 @@ def write_pack_json(
 		"kind": "mod",
 		"version": version,
 		"blurb": blurb,
+		"hint": HINT,
 		"format": "ic-layer-v1",
 		"compatibleBases": compatible,
 		"discs": {str(d): f"./layers/disc{d}.layer.json" for d in discs},
@@ -217,6 +219,7 @@ def update_manifest(
 		"name": f"{display} v{version}",
 		"kind": "mod",
 		"blurb": blurb,
+		"hint": HINT,
 		"format": "ic-layer-v1",
 		"compatibleBases": compatible,
 		"discs": {
@@ -247,8 +250,8 @@ def build_one(
 		cfg["compatible"] = [base_id]
 
 	pack_id = f"{cfg['prefix_stem']}-v{version}"
-	display = "Victory Skip"
-	blurb = "No victory song or win poses after battles (train-style)."
+	display = "Fanfare Skip"
+	blurb = 'After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.'
 
 	pristine = PRISTINE_DIR / f"FINALFANTASY7_D{disc}.bin"
 	if not pristine.is_file():
@@ -271,12 +274,12 @@ def build_one(
 	make_base_image(pristine, layer, base_bin)
 	patched_bin = patch_and_inject(base_bin, work_dir)
 
-	print("=== diff -> victory-skip layer ===")
+	print("=== diff -> fanfare-skip layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
 	layer_id = f"{cfg['prefix_stem']}-disc{disc}-v{version}"
-	description = f"Victory skip BATTLE.X — NTSC-U Disc {disc} (against {base_id})"
+	description = f"Fanfare skip BATTLE.X — NTSC-U Disc {disc} (against {base_id})"
 	built = build_layer(
 		base_bin,
 		patched_bin,
@@ -307,7 +310,7 @@ def build_one(
 
 
 def main() -> int:
-	ap = argparse.ArgumentParser(description="Build victory-skip builder packs")
+	ap = argparse.ArgumentParser(description="Build fanfare-skip builder packs")
 	ap.add_argument("--against", default="clean", help="clean | csr | highwind | all")
 	ap.add_argument("--discs", default="1,2,3")
 	ap.add_argument("--version", default=None)
