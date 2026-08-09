@@ -103,4 +103,22 @@ DuckStation execute BPs at 800A1500/1540/1580 after final kill (user shots first
 ## Sources
 
 - `docs/first.png` … `docs/7.png`, `docs/INSTRUCTIONS.md`  
-- `workspace/iso-extract/BATTLE_X_dec.bin`  
+- `workspace/iso-extract/BATTLE_X_dec.bin`
+
+## Live handoff (cc69b9d evidence)
+
+User note: all three BPs hit; no multi-frame re-loop on this kill; s1/ra as expected.
+Shots: docs/800A16F4.png, docs/800A1700.png, docs/801B0000.png
+(Filenames may not match PC; use DuckStation status bar.)
+
+| Stop | Key regs / fact |
+|------|-----------------|
+| **800A16F4** | s1 = 0xFFFF, v0 = 0xFFFF -> bne not taken (wait done); fall through |
+| **800A1700** | Fall-through start; s5 = 800F83C6; halfword F83C6 ~0x0020 (bit 0x20) |
+| **801B0000** | **ra = 800A1734** (return after jal 801B0000 in win fn); hit once; prologue addiu sp,sp,-136 |
+
+Confirmed call chain:
+
+fun_800A1158 wait-exit -> helpers -> **jal 801B0000** -> victory phase (poses/fanfare setup).
+
+Next RE target is the **801B0000** overlay body (not in BATTLE_X_dec.bin).
