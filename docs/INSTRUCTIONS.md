@@ -1,57 +1,70 @@
-# Task: Catch the first write to exit-battle status
+# Task: Trace the F83C6 flag function (win transition)
 
-## What we learned from your last shots
+## What we learned (your 4 post-kill shots)
 
-| Shot | Result |
-|------|--------|
-| before last / after last / mid anim | Execute **800D3098** Hit Count 53 → 54 → 76 |
-| Your note | 800D3098 hits **every frame** |
-| read value.png | At **800F83C6** the byte was **00** (not Victory yet) |
-| Your note | Once EXP/rewards is open, **800F83C6** break goes quiet |
+Write BP on **800F83C6** is solved:
 
-### Verdict
+| When | What happens |
+|------|----------------|
+| Fight start / HUD loading | A few writes (init) |
+| HUD fully up, mid-fight | **Silent** |
+| After final kill | **Exactly 4 hits**, then silent through world map |
 
-**Turn OFF execute break 800D3098.**
+All 4 post-kill hits are the **same BATTLE.X function**:
 
-That address is a **3D/GTE render loop** (runs the whole fight). It is **not** the win-pose controller. Landing on it at "pose start" before was coincidence.
+| Shot | pc | Meaning |
+|------|-----|---------|
+| 1st | **800A1550** | After store that **clears** bits 0x22 (`andi … 0xFFDD`) |
+| 2nd | **800A1588** | After store that **sets bit 0x20** |
+| 3rd | **800A1550** | Clear path again; RAM halfword **0x0061** |
+| 4th | **800A1588** | Set 0x20 again |
 
-800F83C6 is still useful as a **write** watch: it can stay 0 through early win anim, then get written in the handoff into rewards.
+- **s5 = 800F83C6** every time
+- **ra = 800A1408** every time
+- Matches **BATTLE.X** file offsets **0x154C** / **0x1584** on disk
 
-## Setup
+So: this is real battle overlay code at `800A15xx` (not the bad old 54A0 guess, not the D3098 renderer).
 
-1. Delete execute break on **800D3098**.
-2. Delete any leftover **800A…** execute breaks.
-3. Add **one** breakpoint:
-   - Type: **Write** (memory), not execute
-   - Address: **800F83C6**
-   - Size: **1 byte**
-4. Optional (kill timing only): write break on **800F85AC** (enemy 1 HP). Turn it off after the last enemy dies if it is too noisy.
+Early stops before HUD = **same function initializing flags**. Expected. Ignore those.
 
-## Run
+## Setup (new)
 
-1. Normal battle, Fanfare Skip 0.1.4.
-2. Save state before last kill.
-3. Arm the **800F83C6 write** break.
-4. Kill the last enemy.
-5. When the debugger **first** stops on that write, screenshot and note:
+1. **Remove** write break on **800F83C6** (optional: leave off).
+2. **Remove** any **800D3098** execute break.
+3. Add execute breaks (code, not memory write):
+   - **800A1500** (main — start here)
+   - Optional: **800A1540**, **800A1580**
+4. Enter a normal battle with Fanfare Skip 0.1.4.
+5. Wait until **HUD is fully up**, THEN enable the execute breaks (avoids init spam).
+6. Save state before last kill.
+7. Kill last enemy.
+
+## On first stop after the kill
+
+Screenshot full debugger and note:
 
 ```
-first F83C6 write:
+post-kill execute 800A1500:
   pc: ........
   ra: ........
-  value at 800F83C6: ..
-  hit count: 1 (or ?)
-  game moment: (poses? rewards? still fighting?)
+  hit count: ..
+  game moment: (black frame / poses / rewards?)
+  s5 / any 800F83xx in regs: ........
 ```
 
-6. If it never breaks between kill and rewards, say so.
-7. If the first break is only on the rewards screen, also **manual pause** at the first win-pose frame (D3098 off) and screenshot pc.
+Press continue a few times if it re-enters; screenshot if **pc or ra changes** to a new region.
+
+If **800A1500 never hits** after kill (only earlier), say so and try execute **800A1540** only.
+
+## Why this matters
+
+We still need the **pose** controller. This flag function mutates win-state (incl. bit 0x20). Tracing it post-kill should show the call path into poses / rewards without drowning in the GTE loop.
 
 ## Do not
 
-- Do not leave **800D3098** execute on
-- Do not use old **800A54A0**-style execute breaks
+- Do not re-enable **800D3098**
+- Do not use execute **800A54A0** (old wrong guess on shared overlay)
 
 ## When done
 
-Push screenshots under docs/ or paste the pc/ra/value block in chat.
+Push screenshots under docs/ or paste the block in chat.
