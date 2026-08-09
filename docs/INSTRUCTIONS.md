@@ -1,58 +1,57 @@
-# Task: Break on victory-start PC (from your shots)
+# Task: Catch the first write to exit-battle status
 
-## What your two shots showed
+## What we learned from your last shots
 
-| File | Moment | **pc** | Notes |
-|------|--------|--------|-------|
-| docs/victory-pose-start-debugger.png | You think win pose **starts** | **800D3098** | Best hook so far |
-| docs/victory-pose-mid-anim-debugger.png | Mid animations | 800C63AC | Looks like color/GPU unpack — less useful |
+| Shot | Result |
+|------|--------|
+| before last / after last / mid anim | Execute **800D3098** Hit Count 53 → 54 → 76 |
+| Your note | 800D3098 hits **every frame** |
+| read value.png | At **800F83C6** the byte was **00** (not Victory yet) |
+| Your note | Once EXP/rewards is open, **800F83C6** break goes quiet |
 
-### Gold from the start shot (registers)
+### Verdict
 
-| Reg | Value | Meaning |
-|-----|-------|---------|
-| pc | 800D3098 | Code running as poses begin |
-| ra | 8003CF98 | Return into lower/system code |
-| s4 | **800F83C6** | **Exit Battle Status** address (same as memory map) |
-| s1 | 800F83E0 | Near battle-end block |
-| s5 | 800F836C | Near battle frame field |
-| gp | 80062D44 | Near battle globals (RNG/input block) |
+**Turn OFF execute break 800D3098.**
 
-Disassembly at that PC touches **80051568** (global frame counter) then branches — a small check/helper, not the full pose AI by itself. Still the right **time** to freeze.
+That address is a **3D/GTE render loop** (runs the whole fight). It is **not** the win-pose controller. Landing on it at "pose start" before was coincidence.
 
-## Do this next (one execute break)
+800F83C6 is still useful as a **write** watch: it can stay 0 through early win anim, then get written in the handoff into rewards.
 
-1. Clear old 800A… execute breaks (world map spam).
-2. Add **one** execute break: **800D3098**
-3. Optional write break: **800F83C6** (1 byte) — value 1 = Victory per memory map.
-4. Normal fight, save before last kill.
-5. Kill last enemy.
+## Setup
 
-When **800D3098** hits:
+1. Delete execute break on **800D3098**.
+2. Delete any leftover **800A…** execute breaks.
+3. Add **one** breakpoint:
+   - Type: **Write** (memory), not execute
+   - Address: **800F83C6**
+   - Size: **1 byte**
+4. Optional (kill timing only): write break on **800F85AC** (enemy 1 HP). Turn it off after the last enemy dies if it is too noisy.
 
-- Screenshot debugger (full registers + stack).
-- Note **Hit Count**.
-- Write down **ra** and the top few stack addresses.
-- Read byte at **800F83C6** (should often be 1 or becoming 1).
+## Run
 
-If it hits **every battle frame** forever, say so (too hot).
-If it hits **once** near pose start, perfect.
-If it never hits, pause by eye at pose start again and send the new pc.
-
-## Write down
+1. Normal battle, Fanfare Skip 0.1.4.
+2. Save state before last kill.
+3. Arm the **800F83C6 write** break.
+4. Kill the last enemy.
+5. When the debugger **first** stops on that write, screenshot and note:
 
 ```
-800D3098 hit: yes/no  count: ?
-ra: ........
-800F83C6: ..
-stack top 3: ...
+first F83C6 write:
+  pc: ........
+  ra: ........
+  value at 800F83C6: ..
+  hit count: 1 (or ?)
+  game moment: (poses? rewards? still fighting?)
 ```
+
+6. If it never breaks between kill and rewards, say so.
+7. If the first break is only on the rewards screen, also **manual pause** at the first win-pose frame (D3098 off) and screenshot pc.
 
 ## Do not
 
-- Do not re-enable 800A54A0 / 800A5484 / 800A2974 execute breaks
-- Mid-anim break on 800C63AC not needed this pass
+- Do not leave **800D3098** execute on
+- Do not use old **800A54A0**-style execute breaks
 
-800D3098 is hitting every frame
-see screenshots for other data
-when the exp and rewards page opens that break 800F83C6 no longer hits
+## When done
+
+Push screenshots under docs/ or paste the pc/ra/value block in chat.
