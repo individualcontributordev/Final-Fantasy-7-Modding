@@ -102,3 +102,5 @@ git push
 Then say **check**.
 
 Do **not** commit .bin images.
+
+fan2 only causes the freeze, regular music and no freeze with stub only
