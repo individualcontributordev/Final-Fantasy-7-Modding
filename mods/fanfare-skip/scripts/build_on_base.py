@@ -151,31 +151,40 @@ def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 	print(f"  wrote {out_bin} ({len(image)} bytes)")
 
 
-def patch_and_inject(base_bin: Path, work_dir: Path) -> Path:
-	print(f"=== extract {BATTLE_PATH} ===")
-	base_bytes = bytearray(base_bin.read_bytes())
-	meta = find_file(base_bytes, BATTLE_PATH)
-	battle = extract_file(base_bytes, BATTLE_PATH)
-	battle_path = work_dir / "BATTLE.X"
-	battle_path.write_bytes(battle)
-	print(f"  LBA={meta.lba} size={meta.size} -> {battle_path}")
-
-	print("=== patch BATTLE.X ===")
-	battle_new = build_battle(battle_path, work_dir / "BATTLE.X.new", keep_dec=False)
-	new_bytes = battle_new.read_bytes()
-	print(f"  BATTLE.X.new = {len(new_bytes)} bytes (slot {meta.size})")
-	if len(new_bytes) > meta.size:
-		raise SystemExit(
-			f"patched BATTLE.X ({len(new_bytes)}) larger than slot ({meta.size})"
-		)
-
-	print("=== pad-inject BATTLE.X.new ===")
+def patch_and_inject(
+	base_bin: Path,
+	work_dir: Path,
+	*,
+	patch_battle: bool = True,
+	replace_fan2: bool = True,
+) -> Path:
 	patched = work_dir / "patched.bin"
 	shutil.copy2(base_bin, patched)
 	img = bytearray(patched.read_bytes())
-	replace_file_padded(img, BATTLE_PATH, new_bytes)
 
-	if FAN2_QUIET.is_file():
+	if patch_battle:
+		print(f"=== extract {BATTLE_PATH} ===")
+		meta = find_file(img, BATTLE_PATH)
+		battle = extract_file(img, BATTLE_PATH)
+		battle_path = work_dir / "BATTLE.X"
+		battle_path.write_bytes(battle)
+		print(f"  LBA={meta.lba} size={meta.size} -> {battle_path}")
+
+		print("=== patch BATTLE.X ===")
+		battle_new = build_battle(battle_path, work_dir / "BATTLE.X.new", keep_dec=False)
+		new_bytes = battle_new.read_bytes()
+		print(f"  BATTLE.X.new = {len(new_bytes)} bytes (slot {meta.size})")
+		if len(new_bytes) > meta.size:
+			raise SystemExit(
+				f"patched BATTLE.X ({len(new_bytes)}) larger than slot ({meta.size})"
+			)
+
+		print("=== pad-inject BATTLE.X.new ===")
+		replace_file_padded(img, BATTLE_PATH, new_bytes)
+	else:
+		print("=== skip BATTLE.X patch (stock victory-queue) ===")
+
+	if replace_fan2 and FAN2_QUIET.is_file():
 		print(f"=== replace {FAN2_PATH} with quiet stub ===")
 		fan_meta = find_file(img, FAN2_PATH)
 		quiet = FAN2_QUIET.read_bytes()
@@ -185,8 +194,13 @@ def patch_and_inject(base_bin: Path, work_dir: Path) -> Path:
 			)
 		replace_file_padded(img, FAN2_PATH, quiet)
 		print(f"  FAN2 quiet {len(quiet)} bytes (slot {fan_meta.size})")
-	else:
+	elif replace_fan2:
 		print(f"  WARNING: missing {FAN2_QUIET}, leaving fanfare audio stock")
+	else:
+		print(f"=== skip {FAN2_PATH} (stock fanfare asset) ===")
+
+	if not patch_battle and not replace_fan2:
+		raise SystemExit("nothing to patch — enable battle and/or fan2")
 
 	patched.write_bytes(img)
 	print(f"  wrote {patched}")
@@ -249,6 +263,16 @@ def update_manifest(
 	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
+def variant_suffix(patch_battle: bool, replace_fan2: bool) -> str:
+	if patch_battle and replace_fan2:
+		return ""
+	if patch_battle and not replace_fan2:
+		return "-stub-only"
+	if replace_fan2 and not patch_battle:
+		return "-fan2-only"
+	raise SystemExit("invalid patch variant")
+
+
 def build_one(
 	*,
 	against: str,
@@ -257,6 +281,8 @@ def build_one(
 	manifest_url: str,
 	csr_manifest: dict | None,
 	keep_work: bool,
+	patch_battle: bool = True,
+	replace_fan2: bool = True,
 ):
 	cfg = dict(AGAINST[against])
 	base_id = cfg["base_id"]
@@ -265,15 +291,22 @@ def build_one(
 		cfg["base_id"] = base_id
 		cfg["compatible"] = [base_id]
 
-	pack_id = f"{cfg['prefix_stem']}-v{version}"
+	suffix = variant_suffix(patch_battle, replace_fan2)
+	pack_id = f"{cfg['prefix_stem']}{suffix}-v{version}"
 	display = "Fanfare Skip"
+	if suffix == "-stub-only":
+		display = "Fanfare Skip (BATTLE stub only)"
+	elif suffix == "-fan2-only":
+		display = "Fanfare Skip (FAN2 quiet only)"
 	blurb = 'After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.'
+	if suffix:
+		blurb = f"Bisect build{suffix}: " + blurb
 
 	pristine = PRISTINE_DIR / f"FINALFANTASY7_D{disc}.bin"
 	if not pristine.is_file():
 		raise SystemExit(f"Missing pristine: {pristine}")
 
-	work_dir = WORK_ROOT / f"{against}-d{disc}"
+	work_dir = WORK_ROOT / f"{against}{suffix}-d{disc}"
 	if work_dir.exists():
 		shutil.rmtree(work_dir)
 	work_dir.mkdir(parents=True)
@@ -288,14 +321,21 @@ def build_one(
 
 	base_bin = work_dir / "base.bin"
 	make_base_image(pristine, layer, base_bin)
-	patched_bin = patch_and_inject(base_bin, work_dir)
+	patched_bin = patch_and_inject(
+		base_bin,
+		work_dir,
+		patch_battle=patch_battle,
+		replace_fan2=replace_fan2,
+	)
 
 	print("=== diff -> fanfare-skip layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
-	layer_id = f"{cfg['prefix_stem']}-disc{disc}-v{version}"
-	description = f"Fanfare skip BATTLE.X — NTSC-U Disc {disc} (against {base_id})"
+	layer_id = f"{cfg['prefix_stem']}{suffix}-disc{disc}-v{version}"
+	description = (
+		f"Fanfare skip{suffix} — NTSC-U Disc {disc} (against {base_id})"
+	)
 	built = build_layer(
 		base_bin,
 		patched_bin,
@@ -332,7 +372,21 @@ def main() -> int:
 	ap.add_argument("--version", default=None)
 	ap.add_argument("--manifest-url", default=DEFAULT_CSR_MANIFEST)
 	ap.add_argument("--keep-work", action="store_true")
+	ap.add_argument(
+		"--skip-fan2",
+		action="store_true",
+		help="BATTLE.X stub only; leave stock FAN2.SND (freeze bisect A)",
+	)
+	ap.add_argument(
+		"--fan2-only",
+		action="store_true",
+		help="Quiet FAN2.SND only; leave stock BATTLE.X (freeze bisect B)",
+	)
 	args = ap.parse_args()
+	if args.skip_fan2 and args.fan2_only:
+		raise SystemExit("use only one of --skip-fan2 / --fan2-only")
+	patch_battle = not args.fan2_only
+	replace_fan2 = not args.skip_fan2
 
 	version = args.version or read_version()
 	discs = parse_discs(args.discs)
@@ -358,6 +412,8 @@ def main() -> int:
 				manifest_url=args.manifest_url,
 				csr_manifest=csr_manifest,
 				keep_work=args.keep_work,
+				patch_battle=patch_battle,
+				replace_fan2=replace_fan2,
 			)
 			rec = built.setdefault(
 				pack_id,
@@ -384,15 +440,19 @@ def main() -> int:
 			compatible=rec["compatible"],
 			discs=sorted(set(rec["discs"])),
 		)
-		update_manifest(
-			pack_id=pack_id,
-			version=rec["version"],
-			display=rec["display"],
-			blurb=rec["blurb"],
-			compatible=rec["compatible"],
-			discs=sorted(set(rec["discs"])),
-		)
-		print(f"Updated pack + manifest: {pack_id}")
+		# Bisect packs stay out of the public manifest by default.
+		if "-stub-only" not in pack_id and "-fan2-only" not in pack_id:
+			update_manifest(
+				pack_id=pack_id,
+				version=rec["version"],
+				display=rec["display"],
+				blurb=rec["blurb"],
+				compatible=rec["compatible"],
+				discs=sorted(set(rec["discs"])),
+			)
+			print(f"Updated pack + manifest: {pack_id}")
+		else:
+			print(f"Updated pack only (no manifest): {pack_id}")
 
 	print("\nAll done.")
 	return 0
