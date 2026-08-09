@@ -18,24 +18,33 @@ No second agent on the disc/build machine.
 
 **Never** give an operational task that only exists in chat.
 
-Before asking the human to execute:
+**Always** (no exceptions — DuckStation BPs, Ghidra Go To, shell one-liners, next playtest):
 
-1. Write **`docs/INSTRUCTIONS.md`** (Goal, steps, COPY-PASTE, empty EVIDENCE). Overwrite each run.
-2. Prefer small **scripts**. Put the exact invoke line in COPY-PASTE.
-3. **Commit + push** from the agent side.
-4. Chat: one-line goal + "pull and open `docs/INSTRUCTIONS.md`" + **check**.
+1. **Overwrite `docs/INSTRUCTIONS.md` first** with the full task (Goal/Why, steps, COPY-PASTE or exact BP addresses, empty Evidence).
+2. Prefer small **scripts** when useful; put the exact invoke line in the file.
+3. **Commit + push** from the agent side (`docs/INSTRUCTIONS.md` at minimum).
+4. Chat: **short pointer only** — one-line goal + pull and open `docs/INSTRUCTIONS.md` + say **check** when done.
+
+If you drafted steps in chat first, **stop and write/push `docs/INSTRUCTIONS.md` before the human is expected to run anything.**
+
+Do **not**:
+
+- Paste a multi-step runbook only in the chat reply
+- Say optional or if you want for the sole ops path — put it in the file
+- Leave `docs/INSTRUCTIONS.md` stale from a prior task when issuing a new one
 
 ## One atomic task per reply
 
-Exactly one operational task per agent turn.
+Exactly one operational task per agent turn (one `docs/INSTRUCTIONS.md` overwrite).
 
 ## `docs/INSTRUCTIONS.md` layout (markdown)
 
-`# Task`, `## Why`, `## What you do`, numbered steps with COPY-PASTE blocks, what to paste back.
-Idle = short status. Overwrite each run.
+`# Task`, `## Why`, `## What you do`, numbered steps with COPY-PASTE / exact addresses, `## Evidence` empty template, what to paste back and how to commit.
 
-**Writing:** plain English (file names, which disc’s CSR file, why). No jargon like “stem”.
-Prefer “put X on the image because …” over long “do not use” lists. One atomic ops task per file.
+Idle = short status. **Overwrite each run.**
+
+**Writing:** plain English (file names, which disc, why). No jargon like stem.
+Prefer put X on the image because over long do-not-use lists. One atomic ops task per file.
 
 ## Human loop
 
@@ -52,7 +61,7 @@ Then say **check**. Never commit `.bin` / `.cue` / ISO.
 
 ## On "check"
 
-Pull → review committed evidence → next task in-repo.
+Pull -> review committed evidence -> next task **written to** `docs/INSTRUCTIONS.md` + push -> short chat pointer.
 
 ## Before agent acts
 
