@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 — 2026-08-09
+
+- Rename to Fanfare Skip (clearer name).
+- Builder checkbox shows short help text (hint) plus longer tooltip (blurb).
+
+
 ## 0.1.1 — 2026-08-08
 
 - Also force no-victory-pose bit (0x100) and skip the victory anim index write

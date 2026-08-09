@@ -1,4 +1,4 @@
-# Victory-skip battle patches
+# Fanfare-skip battle patches
 
 ## Idea
 
@@ -40,5 +40,5 @@ See force-no-victory-music-sites.txt (24 sites on NTSC-U).
 
 ## Apply
 
-    python mods/victory-skip/scripts/apply_victory_skip.py path/to/BATTLE.X.dec
-    python mods/victory-skip/scripts/build_battle_x.py path/to/BATTLE.X
+    python mods/fanfare-skip/scripts/apply_fanfare_skip.py path/to/BATTLE.X.dec
+    python mods/fanfare-skip/scripts/build_battle_x.py path/to/BATTLE.X

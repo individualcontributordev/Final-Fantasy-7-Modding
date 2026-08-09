@@ -88,7 +88,7 @@ def verify(dec_path: Path) -> None:
 			raise SystemExit(
 				f"verify fail @ 0x{off:X}: got {got:08X}, expected {new:08X}"
 			)
-	print(f"Verified {len(sites)} victory-skip sites in {dec_path}")
+	print(f"Verified {len(sites)} fanfare-skip sites in {dec_path}")
 
 
 def main() -> None:
