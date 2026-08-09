@@ -1,28 +1,35 @@
 # Fanfare-skip patches
 
-## v0.1.4 approach (current)
+## v0.1.5 approach (current)
 
-Earlier builds forced battle-mode bit 0x20 globally. That killed fanfare music
-but also pushed every fight onto a special end-of-battle path that:
-- still showed win poses, and
-- left the confirm action auto-firing (held-confirm feel).
+**Ship: BATTLE.X victory-queue stub only. Leave stock FAN2.SND.**
 
-**0.1.4 does not force any battle-mode bits.**
+| Piece | Ship? | Role |
+|-------|-------|------|
+| BATTLE.X @ file+0x2974 early return | **yes** | Skips victory queue (poses / ceremony path) |
+| ENEMY6/FAN2.SND quiet (zero body) | **no** | Causes held frozen tone until field |
 
-Instead:
+### Why quiet FAN2 was removed
 
-1. **BATTLE.X** — replace the victory queue function at decompressed file
-   offset 0x2974 with an immediate return (6 words). Stock already calls this
-   for the win ceremony path; train-like early exit does not need it.
-2. **ENEMY6/FAN2.SND** — keep AKAO header / song id, zero the sequence body so
-   if anything still requests the fanfare track it is effectively silent.
+FAN2.SND.quiet keeps a 16-byte AKAO header from stock FAN2 and zeros the rest.
+As the fanfare track it does not silence cleanly — SPU hangs on a tone until
+field/world reloads audio. Stock ISO and stub-only images do not freeze.
+
+### History
+
+- 0.1.4 shipped stub + quiet FAN2 = freeze regression.
+- 0.1.3 and earlier used battle-mode bit forces (auto-confirm / pose issues).
 
 ## Files
 
-- force-no-victory-music-sites.txt — BATTLE.X word patches
-- FAN2.SND.quiet — silent-ish fanfare asset (same max size as stock FAN2)
+- force-no-victory-music-sites.txt — BATTLE.X word patches (shipped)
+- FAN2.SND.quiet — research only (reproduces freeze; not default)
+- fan2-quiet-source.txt — how quiet asset was produced
 
 ## Apply
 
-    python mods/fanfare-skip/scripts/apply_fanfare_skip.py path/to/BATTLE.X.dec
-    python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
+```bash
+python mods/fanfare-skip/scripts/apply_fanfare_skip.py path/to/BATTLE.X.dec
+python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
+# research freeze only: add --quiet-fan2 or --fan2-only
+```

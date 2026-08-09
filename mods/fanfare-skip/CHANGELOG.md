@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.5 — 2026-08-09
+
+- **Fix held battle tone:** stop replacing ENEMY6/FAN2.SND with the zero-body
+  quiet asset. Bisect proved quiet FAN2 alone freezes audio through victory;
+  BATTLE.X victory-queue stub alone does not (fanfare can still play if that
+  path is reached; stub is the pose/queue skip).
+- Default build = BATTLE.X stub only (stock FAN2). Research-only flags:
+  --quiet-fan2, --fan2-only (do not ship).
+
 ## 0.1.4 — 2026-08-09
 
 - Stop forcing battle-mode bits (fixed auto-confirm / stuck actions).

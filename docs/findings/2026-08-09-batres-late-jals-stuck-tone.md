@@ -86,3 +86,17 @@ After `jal 801B0E20` @0278, before `jal 800A31A0` @0458:
 - **ENEMY6/FAN2.SND** body zeroed (fanfare asset silent)
 
 Victory-queue is *not* in the 0278–0458 direct jal list; it is called from **800ABE4C**. Freeze may still be from FAN2 touch during this window, or from main-loop work while 800A3354 yields frames, with stubbed queue side effects.
+
+## Bisect verdict (human playtest)
+
+| Build | Held tone | Fanfare | Notes |
+|-------|-----------|---------|-------|
+| A stub only (BATTLE 800A2974 jr, stock FAN2) | **NO** | **heard** | clean audio |
+| B fan2 only (stock BATTLE, quiet FAN2) | **YES** | n/a | freeze at end of battle |
+
+**Root cause:** ENEMY6/FAN2.SND quiet asset (AKAO 16-byte header + zero body),
+not the victory-queue stub.
+
+**Fix (0.1.5):** stop shipping quiet FAN2; ship BATTLE stub only.
+Stub-only can still play stock fanfare if ceremony loads FAN2 — music mute
+needs a different approach than zeroing FAN2.
