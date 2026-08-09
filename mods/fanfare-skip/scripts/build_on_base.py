@@ -264,10 +264,11 @@ def update_manifest(
 
 
 def variant_suffix(patch_battle: bool, replace_fan2: bool) -> str:
-	if patch_battle and replace_fan2:
-		return ""
+	# Default ship product = BATTLE stub only (no quiet FAN2).
 	if patch_battle and not replace_fan2:
-		return "-stub-only"
+		return ""
+	if patch_battle and replace_fan2:
+		return "-with-quiet-fan2"
 	if replace_fan2 and not patch_battle:
 		return "-fan2-only"
 	raise SystemExit("invalid patch variant")
@@ -294,13 +295,17 @@ def build_one(
 	suffix = variant_suffix(patch_battle, replace_fan2)
 	pack_id = f"{cfg['prefix_stem']}{suffix}-v{version}"
 	display = "Fanfare Skip"
-	if suffix == "-stub-only":
-		display = "Fanfare Skip (BATTLE stub only)"
+	if suffix == "-with-quiet-fan2":
+		display = "Fanfare Skip (BATTLE + quiet FAN2 — research)"
 	elif suffix == "-fan2-only":
-		display = "Fanfare Skip (FAN2 quiet only)"
-	blurb = 'After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.'
+		display = "Fanfare Skip (FAN2 quiet only — research)"
+	blurb = (
+		"After the last enemy dies, skip the victory ceremony path "
+		"(train-style). Exp, AP, gil, and items still apply; loot/level-up "
+		"screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio)."
+	)
 	if suffix:
-		blurb = f"Bisect build{suffix}: " + blurb
+		blurb = f"Research build{suffix}: " + blurb
 
 	pristine = PRISTINE_DIR / f"FINALFANTASY7_D{disc}.bin"
 	if not pristine.is_file():
@@ -373,20 +378,33 @@ def main() -> int:
 	ap.add_argument("--manifest-url", default=DEFAULT_CSR_MANIFEST)
 	ap.add_argument("--keep-work", action="store_true")
 	ap.add_argument(
-		"--skip-fan2",
+		"--quiet-fan2",
 		action="store_true",
-		help="BATTLE.X stub only; leave stock FAN2.SND (freeze bisect A)",
+		help=(
+			"Also replace ENEMY6/FAN2.SND with the zero-body quiet asset. "
+			"KNOWN BAD: holds a frozen tone through victory (bisect 2026-08-09). "
+			"Default build leaves stock FAN2."
+		),
 	)
 	ap.add_argument(
 		"--fan2-only",
 		action="store_true",
-		help="Quiet FAN2.SND only; leave stock BATTLE.X (freeze bisect B)",
+		help=(
+			"Research only: quiet FAN2.SND without BATTLE stub "
+			"(reproduces freeze; do not ship)."
+		),
+	)
+	ap.add_argument(
+		"--skip-fan2",
+		action="store_true",
+		help=argparse.SUPPRESS,  # legacy alias: default already skips FAN2
 	)
 	args = ap.parse_args()
-	if args.skip_fan2 and args.fan2_only:
-		raise SystemExit("use only one of --skip-fan2 / --fan2-only")
+	if args.fan2_only and args.quiet_fan2:
+		raise SystemExit("use only one of --fan2-only / --quiet-fan2")
+	# Default ship path: BATTLE victory-queue stub only. Quiet FAN2 freezes audio.
 	patch_battle = not args.fan2_only
-	replace_fan2 = not args.skip_fan2
+	replace_fan2 = bool(args.quiet_fan2 or args.fan2_only)
 
 	version = args.version or read_version()
 	discs = parse_discs(args.discs)
@@ -440,8 +458,9 @@ def main() -> int:
 			compatible=rec["compatible"],
 			discs=sorted(set(rec["discs"])),
 		)
-		# Bisect packs stay out of the public manifest by default.
-		if "-stub-only" not in pack_id and "-fan2-only" not in pack_id:
+		# Research-only packs stay out of the public manifest.
+		research = ("-fan2-only" in pack_id) or ("-with-quiet-fan2" in pack_id)
+		if not research:
 			update_manifest(
 				pack_id=pack_id,
 				version=rec["version"],
