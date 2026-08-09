@@ -72,11 +72,11 @@ Image: ff7_d1_fanfare_skip_v015.bin (fanfare-skip-v0.1.5)
 
 After last kill, first hits (order matters — number them):
 
-1) address:
+1) address: 
    pc / ra:
    a0 a1 a2 a3:
    game moment (death anim / silence / fanfare starting / poses):
-   shot:
+   shot: 
 
 2) address:
    pc / ra:
@@ -110,3 +110,40 @@ git push
 Then say **check**.
 
 Do **not** commit .bin images.
+
+
+screen shots of each bp
+
+hit in this order
+
+80015248
+multiple times before last enemy death animation finihes
+
+80015248 screenshot
+
+801B0000 screenshot
+no fanfair music
+no animations
+
+800DCF94 screenshot
+
+
+80015248
+80015248
+80015248
+this hit multiple times
+
+800DCF94
+
+
+80015248
+multiple hits maybe 10
+
+800DCF94
+800DCF94
+800DCF94
+800DCF94 animations start for fanfair
+
+
+80015248
+multiple times after the battle ends
