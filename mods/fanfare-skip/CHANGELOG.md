@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4 — 2026-08-09
+
+- Stop forcing battle-mode bits (fixed auto-confirm / stuck actions).
+- Stub victory queue function in BATTLE.X (poses).
+- Quiet FAN2.SND body so fanfare audio cannot play.
+
+
 ## 0.1.3 — 2026-08-09
 
 - Fix poses still playing: skip the victory anim/fanfare queue in BATTLE.X.
