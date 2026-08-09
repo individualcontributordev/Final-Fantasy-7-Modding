@@ -1,16 +1,14 @@
-# Task: Verify Fanfare Skip 0.1.5 (stub only, no quiet FAN2)
+# Task: Smoke-test Fanfare Skip 0.1.5 play image
 
 ## Why
 
-Bisect result:
+Repo is cleaned up:
 
-- **stub only** → no freeze; regular fanfare can still be heard
-- **fan2 only** → held tone freeze
+- Bisect locked: **quiet FAN2 freezes**, **stub only does not**
+- **0.1.5** packs built for clean + CSR + Highwind, discs 1-3 (BATTLE stub only)
+- Live manifest enables **0.1.5**, disables freeze-shipping **0.1.4**
 
-0.1.5 default build **drops quiet FAN2** and ships **BATTLE.X victory-queue stub
-only**. Confirm: no freeze, and note poses/fanfare behaviour for the next music fix.
-
-Finding: docs/findings/2026-08-09-batres-late-jals-stuck-tone.md
+One DuckStation pass on the official 0.1.5 clean Disc 1 image confirms what players get.
 
 ## What you do
 
@@ -21,35 +19,25 @@ cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
-### 2. Build 0.1.5 Disc 1 (clean)
-
-```bash
-cd "$(git rev-parse --show-toplevel)"
-python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
-```
-
-Expect: builder/fanfare-skip-v0.1.5/layers/disc1.layer.json
-
-### 3. Make playtest image
+### 2. Make Disc 1 play image (pack already built)
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 mkdir -p workspace/iso-extract
 
-python scripts/apply_layer.py \
+python3 scripts/apply_layer.py \
   workspace/pristine/FINALFANTASY7_D1.bin \
   builder/fanfare-skip-v0.1.5/layers/disc1.layer.json \
   -o workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
 ```
 
-### 4. DuckStation playtest
+### 3. DuckStation
 
 1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
-2. Same save / last-hit fight as bisect.
-3. Listen victory → field/world map.
-4. Fill Evidence (freeze + fanfare + poses).
+2. Same last-hit fight as before.
+3. Fill Evidence.
 
-No breakpoints required.
+No breakpoints.
 
 ## Evidence
 
@@ -66,12 +54,10 @@ notes: both field and world map
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: verify fanfare-skip 0.1.5 no freeze"
+git commit -m "ops: smoke-test fanfare-skip 0.1.5"
 git push
 ```
 
 Then say **check**.
 
 Do **not** commit .bin images.
-
-fan2 only causes the freeze, regular music and no freeze with stub only

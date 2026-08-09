@@ -100,3 +100,10 @@ not the victory-queue stub.
 **Fix (0.1.5):** stop shipping quiet FAN2; ship BATTLE stub only.
 Stub-only can still play stock fanfare if ceremony loads FAN2 — music mute
 needs a different approach than zeroing FAN2.
+
+## Repo ship state (2026-08-09)
+
+- Source VERSION **0.1.5** = BATTLE stub only (matches stub-only bisect, no quiet FAN2).
+- Builder packs shipped: fanfare-skip-v0.1.5, -on-csr-, -on-highwind- (discs 1-3).
+- Layer size matches stub-only-v0.1.4 (129786 changed bytes); 0.1.4 full was 132146 (included FAN2).
+- Manifest: **0.1.5 enabled**, **0.1.4 fanfare packs disabled** (freeze regression must not be live).
