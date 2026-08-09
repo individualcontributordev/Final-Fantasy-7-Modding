@@ -56,7 +56,7 @@ def build(src_battle_x: Path, out_new: Path | None, keep_dec: bool) -> Path:
 
 
 def main() -> None:
-	ap = argparse.ArgumentParser(description="Patch BATTLE.X for victory skip")
+	ap = argparse.ArgumentParser(description="Patch BATTLE.X for fanfare skip")
 	ap.add_argument("battle_x", type=Path, help="Extracted BATTLE/BATTLE.X")
 	ap.add_argument("-o", "--output", type=Path, default=None)
 	ap.add_argument("--keep-dec", action="store_true")
