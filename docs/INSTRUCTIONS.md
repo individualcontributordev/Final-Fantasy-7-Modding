@@ -1,25 +1,24 @@
-# Task: Break on late BATRES jals (music/pose candidates)
+# Task: When does the battle tone freeze? (relative to BATRES jals)
 
 ## Why
 
-Your step pack (`cf52ba3`) + offline decode show:
+Evidence from your push (`4c347fb`) is good:
 
-- **801B0000** = start of **`BATTLE__BATRES.X.dec`** (victory results overlay)
-- First work is a **10x** loop: `jal **800A6000**` with `a1=a2=6` (actor slots, stride 0x68)
-- After ~30 steps you were still inside that loop (PC ~801B0088, s1=1)
-- Fanfare/pose is **later** in the same function. Static candidates:
+| BP | Hit? | Meaning |
+|----|------|---------|
+| 801B0000 | yes | BATRES entry (ra=800A1734) |
+| 801B0278 | yes | jal 801B0E20; s2=**0x20** |
+| 801B02FC | **no** | expected — needs other flag bits |
+| 801B0458 | yes | jal 800A31A0(0,0,0,0); you: near end of fanfare window |
+| 801B0558 | yes | jal **800DCF94(-1)** = clear flag @800F1E4F, **not** play song |
 
-| VA | Call | Why interesting |
-|----|------|-----------------|
-| **801B0278** | jal **801B0E20** | BATRES-internal after flag merge |
-| **801B02FC** | jal **800B1060**(a0=8) | optional path — music-ish |
-| **801B0458** | jal **800A31A0** | pose-ish candidate |
-| **801B051C** | jal **800A3354** | repeated with waits |
-| **801B0558** | jal **800DCF94**(a0=-1) | strong fanfare/SND candidate |
+**Your audio note (accepted):** after entering victory via 801B0000, battle SFX later die into a **held single tone** until world map; **not** caused by parking on the 801B0000 BP (frames pass first).
 
-Finding: `docs/findings/2026-08-09-batres-801b0000-victory-entry.md`
+That sounds like **BGM/SPU not torn down or not retargeted**, not FAN2 playing. Fanfare Skip 0.1.4 already stubs victory-queue **800A2974** + quiets FAN2 — freeze may be side-effect of missing stock handoff.
 
-You do **not** need another 30-step photo dump of the prologue loop.
+Finding: `docs/findings/2026-08-09-batres-late-jals-stuck-tone.md`
+
+We only need **when** freeze starts vs the three hits. No giant step dumps.
 
 ## What you do
 
@@ -30,54 +29,66 @@ cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
-### 2. Breakpoints (clean set)
+### 2. Breakpoints
 
-**Remove:** 801B0008, 801B000C (spam / early).
+**Remove:** 801B02FC (will miss again on this path).
 
-**Keep optional:** 801B0000 only if you want one shot to arm the rest (or arm before last hit).
+**Use one kill per mode** (reload save as needed):
 
-**Add execute BPs:**
+**Mode A — stop at 0278**
+- Enable only **801B0278**
+- Kill last enemy; when it hits: listen 1–2s while **paused**, then note if freeze already started **before** this stop (i.e. during run-up after kill). Continue; listen after resume.
 
-1. **801B0278**
-2. **801B02FC**
-3. **801B0458**
-4. **801B0558**
-5. Optional: **800DCF94**, **800B1060**, **800A31A0** (callees)
+**Mode B — stop at 0458**
+- Only **801B0458**
+- Same listen: freeze already on when you land? or only after continue past 0458?
 
-Still **do not** enable 800D3098 / 800A54A0 unless a BP never hits and you need a safety net.
+**Mode C — stop at 0558**
+- Only **801B0558** (jal 800DCF94 -1)
+- Freeze already on at arrival? or only after stepping the jal / continuing?
 
-If a late BP never hits on a kill, note which flag bits you had (s2 / F83C6) — paths are flag-gated.
+**Mode D — optional control (if time)**
+- Same fight on **stock** ISO (no fanfare-skip) OR disable 800A2974 patch only if you know how — write NEVER if skip.
+- Does the held-tone still happen?
 
-### 3. Fight
+Do **not** need 801B0000 BP for A–C (lets audio run). Optional safety: 801B0000 disabled.
 
-- Fanfare Skip 0.1.4, HUD up, save before last kill
-- Kill last enemy
-- For **each** BP that hits: one screenshot (or fill Evidence). Note if fanfare/pose already audible/visible.
+### 3. Fight setup
 
-### 4. Optional rename shots
-
-Prefer names like `docs/801B0278.png` so we are not guessing `image copy N`.
+Same as always: Fanfare Skip 0.1.4 for A–C, HUD up, save before last hit.
 
 ## Evidence
 
 ```
-BP hit list (in order):
-801B0278: HIT/MISS  ra=  a0= a1= a2= a3=  s2=  moment:
-801B02FC: HIT/MISS  ra=  a0= ...  moment:
-801B0458: HIT/MISS  hits near the end of the fanfair after the initial hit of 801B0000
-801B0558: HIT/MISS  ...
-800DCF94 (if used): ...
-800B1060 (if used): ...
+Mode A 0278:
+  freeze already when BP hit? YES/NO/UNSURE
+  freeze after continue past 0278 before next ceremony stuff? YES/NO/UNSURE
+  shot: (optional)
 
-Which BP is first AFTER fanfare becomes audible? (or NEVER sure)
-Which BP is first AFTER victory pose starts? (or NEVER sure)
+Mode B 0458:
+  freeze already when BP hit? YES/NO/UNSURE
+  freeze only after continue? YES/NO/UNSURE
+  shot:
+
+Mode C 0558:
+  freeze already when BP hit? YES/NO/UNSURE
+  freeze only after jal 800DCF94 / continue? YES/NO/UNSURE
+  a0 still -1? 
+  shot:
+
+Mode D stock/control:
+  held tone happens? YES/NO/NEVER
+  notes:
+
+Earliest BP arrival where freeze is ALREADY audible:
+  0278 / 0458 / 0558 / only AFTER 0558 / UNSURE
 ```
 
 ## When done
 
 ```bash
 git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
-git commit -m "ops: BATRES late jal BP evidence (music/pose)"
+git commit -m "ops: freeze timing vs BATRES 0278/0458/0558"
 git push
 ```
 
