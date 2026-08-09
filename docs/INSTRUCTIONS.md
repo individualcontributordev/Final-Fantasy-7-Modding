@@ -94,3 +94,5 @@ git push
 ```
 
 Then say **check** in chat.
+
+all hit, no loops, ra and s1 verify where requested
