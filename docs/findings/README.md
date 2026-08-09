@@ -13,6 +13,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-09 | [fanfare-skip-duckstation-compare](2026-08-09-fanfare-skip-duckstation-compare.md) | v0.1.4: poses + stuck audio remain; DuckStation normal vs train | waiting |
 | 2026-08-08 | [battle-fanfare-mod-feasibility](2026-08-08-battle-fanfare-mod-feasibility.md) | Victory Skip v0.1.0: force BATTLE.X bit0x20 at 22 sites | shipped |
 | 2026-08-09 | [fanfare-skip-train-sub-verify](2026-08-09-fanfare-skip-train-sub-verify.md) | Fanfare Skip v0.1.3 vs train + UJUNON/sub fields (static) | verify |
 | 2026-08-07 | [ending-credits-cd-playtest-pass](2026-08-07-ending-credits-cd-playtest-pass.md) | User: ending test bin lake+credits OK (CSR/SD fields kept) | confirmed |
