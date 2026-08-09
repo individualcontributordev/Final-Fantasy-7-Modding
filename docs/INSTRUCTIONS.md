@@ -53,3 +53,6 @@ stack top 3: ...
 - Do not re-enable 800A54A0 / 800A5484 / 800A2974 execute breaks
 - Mid-anim break on 800C63AC not needed this pass
 
+800D3098 is hitting every frame
+see screenshots for other data
+when the exp and rewards page opens that break 800F83C6 no longer hits
