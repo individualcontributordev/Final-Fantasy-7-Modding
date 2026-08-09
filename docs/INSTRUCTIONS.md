@@ -1,73 +1,96 @@
-# Task: Trace the F83C6 flag function (win transition)
+# Task: Catch fanfare/pose handoff after last kill
 
-## What we learned (your 4 post-kill shots)
+## Why
 
-Write BP on **800F83C6** is solved:
+Post-kill execute hits at 800A1500 / 1540 / 1580 all sit inside BATTLE.X
+function **800A1158..800A1790**. That function waits (loop **800A16F4 -> 800A1200**),
+then falls through and calls **801B0000** — when your triad BPs go silent, fanfare
+starts. We need one clean capture of that handoff for the pose-skip target.
 
-| When | What happens |
-|------|----------------|
-| Fight start / HUD loading | A few writes (init) |
-| HUD fully up, mid-fight | **Silent** |
-| After final kill | **Exactly 4 hits**, then silent through world map |
+Detail already in repo: `docs/findings/2026-08-09-win-transition-fn-800a1158.md`
 
-All 4 post-kill hits are the **same BATTLE.X function**:
+## What you do
 
-| Shot | pc | Meaning |
-|------|-----|---------|
-| 1st | **800A1550** | After store that **clears** bits 0x22 (`andi … 0xFFDD`) |
-| 2nd | **800A1588** | After store that **sets bit 0x20** |
-| 3rd | **800A1550** | Clear path again; RAM halfword **0x0061** |
-| 4th | **800A1588** | Set 0x20 again |
+### 1. Pull
 
-- **s5 = 800F83C6** every time
-- **ra = 800A1408** every time
-- Matches **BATTLE.X** file offsets **0x154C** / **0x1584** on disk
-
-So: this is real battle overlay code at `800A15xx` (not the bad old 54A0 guess, not the D3098 renderer).
-
-Early stops before HUD = **same function initializing flags**. Expected. Ignore those.
-
-## Setup (new)
-
-1. **Remove** write break on **800F83C6** (optional: leave off).
-2. **Remove** any **800D3098** execute break.
-3. Add execute breaks (code, not memory write):
-   - **800A1500** (main — start here)
-   - Optional: **800A1540**, **800A1580**
-4. Enter a normal battle with Fanfare Skip 0.1.4.
-5. Wait until **HUD is fully up**, THEN enable the execute breaks (avoids init spam).
-6. Save state before last kill.
-7. Kill last enemy.
-
-## On first stop after the kill
-
-Screenshot full debugger and note:
-
-```
-post-kill execute 800A1500:
-  pc: ........
-  ra: ........
-  hit count: ..
-  game moment: (black frame / poses / rewards?)
-  s5 / any 800F83xx in regs: ........
+```bash
+cd "$(git rev-parse --show-toplevel)"
+git pull --ff-only
 ```
 
-Press continue a few times if it re-enters; screenshot if **pc or ra changes** to a new region.
+### 2. DuckStation breakpoints
 
-If **800A1500 never hits** after kill (only earlier), say so and try execute **800A1540** only.
+1. **Remove** execute BPs on **800A1500**, **800A1540**, **800A1580** (done).
+2. Leave write BP on **800F83C6** off.
+3. **Do not** enable **800D3098** or **800A54A0**.
+4. Add **execute** BPs:
+   - **800A16F4** — wait branch (may hit several times)
+   - **800A1700** — fall-through right after wait ends (expect once)
+   - **801B0000** — victory overlay entry (enable only after last kill if spam)
 
-## Why this matters
+### 3. Fight
 
-We still need the **pose** controller. This flag function mutates win-state (incl. bit 0x20). Tracing it post-kill should show the call path into poses / rewards without drowning in the GTE loop.
+- Disc with **Fanfare Skip 0.1.4**
+- Enter normal battle; wait until **HUD is fully up**
+- Save state before last kill
+- Kill last enemy
+- If **801B0000** was left disabled: enable it **after** kill, before/during wait
 
-## Do not
+### 4. Optional Ghidra (read-only, same session OK)
 
-- Do not re-enable **800D3098**
-- Do not use execute **800A54A0** (old wrong guess on shared overlay)
+| | |
+|--|--|
+| File | `workspace/iso-extract/BATTLE_X_dec.bin` |
+| Format | Raw Binary |
+| Language | MIPS R3000 32 LE |
+| Base | **0x800A0000** |
+| Go To | **800A1158** — Create Function if needed; rename e.g. `win_transition` |
+| Also open | 800A16F4, 800A1700, 800A172C (jal 801B0000) |
+
+**801B0000 is not in that bin** — only DuckStation can stop there live.
+
+## Evidence (fill in, then commit)
+
+Paste under this heading (or attach screenshots under `docs/` and list paths).
+
+### A. First stop at 800A16F4 after kill
+
+```
+800A16F4:
+  pc / ra / hit count:
+  s1 (0xFFFF = wait done):
+  halfword 801083C6 (value; bits & 0x1E):
+  game moment:
+```
+
+Continue if it re-loops. Note when s1 becomes 0xFFFF or when 16F4 stops hitting.
+
+### B. First stop at 800A1700
+
+```
+800A1700:
+  ra:
+  s5 / halfword 800F83C6:
+  game moment:
+```
+
+### C. First stop at 801B0000
+
+```
+801B0000:
+  ra: (expect ~800A1734 if called from win fn)
+  a0 a1 a2 a3:
+  screenshot: (path if any)
+```
+
+If ra is not 800A1734, note the real caller. If a BP never hit, write NEVER HIT.
 
 ## When done
 
-Push screenshots under docs/ or paste the block in chat.
+```bash
+git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
+git commit -m "ops: fanfare handoff BP evidence"
+git push
+```
 
-first break after kill, game moment right after the enemey kill animation ends and before and fanfair animations start
-after the 7th I just hit unpause 3 more times for a total of 10 and immediatly after the breaks stopped the fanfair animation starts with no more breaks all the way into the rewards and beyond
+Then say **check** in chat.

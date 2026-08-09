@@ -6,7 +6,7 @@ Part of the IndividualContributor FF7 stack. Players use **https://individualcon
 
 ## How we work
 
-- **Agent (this chat):** **commits the operational task into the repo first** (`docs/INSTRUCTIONS.md` + scripts), then a short chat pointer. Never chat-only runbooks.
+- **Agent (this chat):** **always** write/overwrite + commit/push `docs/INSTRUCTIONS.md` (full ops task) **before** any human run; chat = short pointer only. Never chat-only runbooks. Rule: `.agents/rules/agent-human-workflow.mdc`.
 - **Human:** `git pull`, run COPY-PASTE from that file, paste evidence, push; discs / Ghidra / DuckStation / Git Bash.
 - User says **check** → Agent pulls and reviews **repo** evidence (not live CDN unless asked).
 - Never commit ISO/`.bin`. `git pull --ff-only` before acting.
