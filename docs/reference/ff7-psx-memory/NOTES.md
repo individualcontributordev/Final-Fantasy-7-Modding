@@ -31,6 +31,21 @@ Tag `battle-end` or description **Exit Battle Status**:
 
 Also `F83AE` (weird battle outcome / AI stall tests in notes).
 
+## Enemy current HP (playtest 2026-08-09)
+
+Live actor HP uses the **same 0x68 stride** as player battle slots:
+
+| Slot | Current HP (2 bytes) |
+|------|----------------------|
+| Enemy 1 | `F85AC` → `0x800F85AC` (confirmed) |
+| Enemy 2 | `F8614` → `0x800F8614` (confirmed) |
+| Enemy 3 | `F867C` → `0x800F867C` (confirmed) |
+| Enemy N | `F85AC + (N-1)*0x68` |
+
+Formula: **`0x800F85AC + (N-1)*0x68`**.
+
+Spreadsheet rows at `F875C` / `F87C4` etc. are a **stats-block copy** — they do **not** track on-screen HP. DB labels those `(stats block)`.
+
 ## Not imported as primary DB
 
 - **PC Addresses** / **PC Address List** — different process; add later if needed.

@@ -806,10 +806,14 @@ F859A,800F859A,2,2 Bytes,Enemy 1 Last Attacked By,,
 F859C,800F859C,2,2 Bytes,Enemy 1 Last Damaged By,,
 F859E,800F859E,2,2 Bytes,Enemy 1 Last Magic'd By,,
 F85A4,800F85A4,2,2 Bytes,Enemy 1 ID,,
-F85AC,800F85AC,2,2 Bytes,Enemy 1 Current HP,,
-F85B0,800F85B0,2,2 Bytes,Enemy 1 Max HP,,
+F85AC,800F85AC,2,2 Bytes,Enemy 1 Current HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
+F85B0,800F85B0,2,2 Bytes,Enemy 1 Max HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F860C,800F860C,2,2 Bytes,Enemy 2 ID,,
+F8614,800F8614,2,2 Bytes,Enemy 2 Current HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
+F8618,800F8618,2,2 Bytes,Enemy 2 Max HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F8674,800F8674,2,2 Bytes,Enemy 3 ID,,
+F867C,800F867C,2,2 Bytes,Enemy 3 Current HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
+F8680,800F8680,2,2 Bytes,Enemy 3 Max HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F86D1,800F86D1,1,Byte,Enemy 1 Level,,
 F86D5,800F86D5,1,Byte,Enemy 1 Strength,,
 F86D6,800F86D6,1,Byte,Enemy 1 Magic,,
@@ -820,13 +824,15 @@ F86DB,800F86DB,1,Byte,Enemy 1 Size,,
 F86DC,800F86DC,1,Byte,Enemy 1 Dexterity,,
 F86DC,800F86DC,2,2 Bytes,Enemy 4 ID,,
 F86DD,800F86DD,1,Byte,Enemy 1 Luck,,
+F86E4,800F86E4,2,2 Bytes,Enemy 4 Current HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F86E8,800F86E8,2,2 Bytes,Enemy 1 Defence,,
+F86E8,800F86E8,2,2 Bytes,Enemy 4 Max HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F86EA,800F86EA,2,2 Bytes,Enemy 1 MDefence,,
 F86EC,800F86EC,1,Byte,Enemy 1 Index ID,,
 F86F0,800F86F0,2,2 Bytes,Enemy 1 Current MP,,
 F86F2,800F86F2,2,2 Bytes,Enemy 1 Max MP,,
-F86F4,800F86F4,2,2 Bytes,Enemy 1 Current HP,,
-F86F8,800F86F8,2,2 Bytes,Enemy 1 Max HP,,
+F86F4,800F86F4,2,2 Bytes,Enemy 1 Current HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
+F86F8,800F86F8,2,2 Bytes,Enemy 1 Max HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
 F871E,800F871E,1,Byte,Enemy 1 Evade ID,,
 F8720,800F8720,4,4 Bytes,Enemy 1 Gil,rewards,
 F8724,800F8724,4,4 Bytes,Enemy 1 EXP,rewards,
@@ -840,13 +846,15 @@ F8743,800F8743,1,Byte,Enemy 2 Size,,
 F8744,800F8744,1,Byte,Enemy 2 Dexterity,,
 F8744,800F8744,2,2 Bytes,Enemy 5 ID,,
 F8745,800F8745,1,Byte,Enemy 2 Luck,,
+F874C,800F874C,2,2 Bytes,Enemy 5 Current HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F8750,800F8750,2,2 Bytes,Enemy 2 Defence,,
+F8750,800F8750,2,2 Bytes,Enemy 5 Max HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F8752,800F8752,2,2 Bytes,Enemy 2 MDefence,,
 F8754,800F8754,1,Byte,Enemy 2 Index ID,,
 F8758,800F8758,2,2 Bytes,Enemy 2 Current MP,,
 F875A,800F875A,2,2 Bytes,Enemy 2 Max MP,,
-F875C,800F875C,2,2 Bytes,Enemy 2 Current HP,,
-F8760,800F8760,2,2 Bytes,Enemy 2 Max HP,,
+F875C,800F875C,2,2 Bytes,Enemy 2 Current HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
+F8760,800F8760,2,2 Bytes,Enemy 2 Max HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
 F8786,800F8786,1,Byte,Enemy 2 Evade ID,,
 F8788,800F8788,4,4 Bytes,Enemy 2 Gil,rewards,
 F878C,800F878C,4,4 Bytes,Enemy 2 EXP,rewards,
@@ -860,13 +868,15 @@ F87AB,800F87AB,1,Byte,Enemy 3 Size,,
 F87AC,800F87AC,1,Byte,Enemy 3 Dexterity,,
 F87AC,800F87AC,2,2 Bytes,Enemy 6 ID,,
 F87AD,800F87AD,1,Byte,Enemy 3 Luck,,
+F87B4,800F87B4,2,2 Bytes,Enemy 6 Current HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F87B8,800F87B8,2,2 Bytes,Enemy 3 Defence,,
+F87B8,800F87B8,2,2 Bytes,Enemy 6 Max HP,battle,Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats-block HP near F86F4.
 F87BA,800F87BA,2,2 Bytes,Enemy 3 MDefence,,
 F87BC,800F87BC,1,Byte,Enemy 3 Index ID,,
 F87C0,800F87C0,2,2 Bytes,Enemy 3 Current MP,,
 F87C2,800F87C2,2,2 Bytes,Enemy 3 Max MP,,
-F87C4,800F87C4,2,2 Bytes,Enemy 3 Current HP,,
-F87C8,800F87C8,2,2 Bytes,Enemy 3 Max HP,,
+F87C4,800F87C4,2,2 Bytes,Enemy 3 Current HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
+F87C8,800F87C8,2,2 Bytes,Enemy 3 Max HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
 F87EE,800F87EE,1,Byte,Enemy 3 Evade ID,,
 F87F0,800F87F0,4,4 Bytes,Enemy 3 Gil,rewards,
 F87F4,800F87F4,4,4 Bytes,Enemy 3 EXP,rewards,
@@ -884,8 +894,8 @@ F8822,800F8822,2,2 Bytes,Enemy 4 MDefence,,
 F8824,800F8824,1,Byte,Enemy 4 Index ID,,
 F8828,800F8828,2,2 Bytes,Enemy 4 Current MP,,
 F882A,800F882A,2,2 Bytes,Enemy 4 Max MP,,
-F882C,800F882C,2,2 Bytes,Enemy 4 Current HP,,
-F8830,800F8830,2,2 Bytes,Enemy 4 Max HP,,
+F882C,800F882C,2,2 Bytes,Enemy 4 Current HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
+F8830,800F8830,2,2 Bytes,Enemy 4 Max HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
 F8856,800F8856,1,Byte,Enemy 4 Evade ID,,
 F8858,800F8858,4,4 Bytes,Enemy 4 Gil,rewards,
 F885C,800F885C,4,4 Bytes,Enemy 4 EXP,rewards,
@@ -903,8 +913,8 @@ F888A,800F888A,2,2 Bytes,Enemy 5 MDefence,,
 F888C,800F888C,1,Byte,Enemy 5 Index ID,,
 F8890,800F8890,2,2 Bytes,Enemy 5 Current MP,,
 F8892,800F8892,2,2 Bytes,Enemy 5 Max MP,,
-F8894,800F8894,2,2 Bytes,Enemy 5 Current HP,,
-F8898,800F8898,2,2 Bytes,Enemy 5 Max HP,,
+F8894,800F8894,2,2 Bytes,Enemy 5 Current HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
+F8898,800F8898,2,2 Bytes,Enemy 5 Max HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
 F88BE,800F88BE,1,Byte,Enemy 5 Evade ID,,
 F88C0,800F88C0,4,4 Bytes,Enemy 5 Gil,rewards,
 F88C4,800F88C4,4,4 Bytes,Enemy 5 EXP,rewards,
@@ -922,8 +932,8 @@ F88F2,800F88F2,2,2 Bytes,Enemy 6 MDefence,,
 F88F4,800F88F4,1,Byte,Enemy 6 Index ID,,
 F88F8,800F88F8,2,2 Bytes,Enemy 6 Current MP,,
 F88FA,800F88FA,2,2 Bytes,Enemy 6 Max MP,,
-F88FC,800F88FC,2,2 Bytes,Enemy 6 Current HP,,
-F8900,800F8900,2,2 Bytes,Enemy 6 Max HP,,
+F88FC,800F88FC,2,2 Bytes,Enemy 6 Current HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
+F8900,800F8900,2,2 Bytes,Enemy 6 Max HP (stats block),battle,Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-1)*0x68 instead.
 F8926,800F8926,1,Byte,Enemy 6 Evade ID,,
 F8928,800F8928,4,4 Bytes,Enemy 6 Gil,rewards,
 F892C,800F892C,4,4 Bytes,Enemy 6 EXP,rewards,

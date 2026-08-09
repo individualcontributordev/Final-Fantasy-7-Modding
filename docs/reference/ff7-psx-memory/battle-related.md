@@ -108,10 +108,14 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F859C | 0x800F859C | 2 | Enemy 1 Last Damaged By |  |
 | F859E | 0x800F859E | 2 | Enemy 1 Last Magic'd By |  |
 | F85A4 | 0x800F85A4 | 2 | Enemy 1 ID |  |
-| F85AC | 0x800F85AC | 2 | Enemy 1 Current HP |  |
-| F85B0 | 0x800F85B0 | 2 | Enemy 1 Max HP |  |
+| F85AC | 0x800F85AC | 2 | Enemy 1 Current HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
+| F85B0 | 0x800F85B0 | 2 | Enemy 1 Max HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
 | F860C | 0x800F860C | 2 | Enemy 2 ID |  |
+| F8614 | 0x800F8614 | 2 | Enemy 2 Current HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
+| F8618 | 0x800F8618 | 2 | Enemy 2 Max HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
 | F8674 | 0x800F8674 | 2 | Enemy 3 ID |  |
+| F867C | 0x800F867C | 2 | Enemy 3 Current HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
+| F8680 | 0x800F8680 | 2 | Enemy 3 Max HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
 | F86D1 | 0x800F86D1 | 1 | Enemy 1 Level |  |
 | F86D5 | 0x800F86D5 | 1 | Enemy 1 Strength |  |
 | F86D6 | 0x800F86D6 | 1 | Enemy 1 Magic |  |
@@ -121,13 +125,14 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F86DB | 0x800F86DB | 1 | Enemy 1 Size |  |
 | F86DC | 0x800F86DC | 1 | Enemy 1 Dexterity |  |
 | F86DD | 0x800F86DD | 1 | Enemy 1 Luck |  |
+| F86E4 | 0x800F86E4 | 2 | Enemy 4 Current HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
 | F86E8 | 0x800F86E8 | 2 | Enemy 1 Defence |  |
 | F86EA | 0x800F86EA | 2 | Enemy 1 MDefence |  |
 | F86EC | 0x800F86EC | 1 | Enemy 1 Index ID |  |
 | F86F0 | 0x800F86F0 | 2 | Enemy 1 Current MP |  |
 | F86F2 | 0x800F86F2 | 2 | Enemy 1 Max MP |  |
-| F86F4 | 0x800F86F4 | 2 | Enemy 1 Current HP |  |
-| F86F8 | 0x800F86F8 | 2 | Enemy 1 Max HP |  |
+| F86F4 | 0x800F86F4 | 2 | Enemy 1 Current HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
+| F86F8 | 0x800F86F8 | 2 | Enemy 1 Max HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
 | F871E | 0x800F871E | 1 | Enemy 1 Evade ID |  |
 | F8720 | 0x800F8720 | 4 | Enemy 1 Gil |  |
 | F8724 | 0x800F8724 | 4 | Enemy 1 EXP |  |
@@ -140,13 +145,14 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F8743 | 0x800F8743 | 1 | Enemy 2 Size |  |
 | F8744 | 0x800F8744 | 1 | Enemy 2 Dexterity |  |
 | F8745 | 0x800F8745 | 1 | Enemy 2 Luck |  |
+| F874C | 0x800F874C | 2 | Enemy 5 Current HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
 | F8750 | 0x800F8750 | 2 | Enemy 2 Defence |  |
 | F8752 | 0x800F8752 | 2 | Enemy 2 MDefence |  |
 | F8754 | 0x800F8754 | 1 | Enemy 2 Index ID |  |
 | F8758 | 0x800F8758 | 2 | Enemy 2 Current MP |  |
 | F875A | 0x800F875A | 2 | Enemy 2 Max MP |  |
-| F875C | 0x800F875C | 2 | Enemy 2 Current HP |  |
-| F8760 | 0x800F8760 | 2 | Enemy 2 Max HP |  |
+| F875C | 0x800F875C | 2 | Enemy 2 Current HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
+| F8760 | 0x800F8760 | 2 | Enemy 2 Max HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
 | F8786 | 0x800F8786 | 1 | Enemy 2 Evade ID |  |
 | F8788 | 0x800F8788 | 4 | Enemy 2 Gil |  |
 | F878C | 0x800F878C | 4 | Enemy 2 EXP |  |
@@ -159,13 +165,14 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F87AB | 0x800F87AB | 1 | Enemy 3 Size |  |
 | F87AC | 0x800F87AC | 1 | Enemy 3 Dexterity |  |
 | F87AD | 0x800F87AD | 1 | Enemy 3 Luck |  |
+| F87B4 | 0x800F87B4 | 2 | Enemy 6 Current HP | Live actor HP in battle (confirmed). Slot stride 0x68 from Enemy 1. Enemy N = F85AC + (N-1)*0x68. Distinct from stats... |
 | F87B8 | 0x800F87B8 | 2 | Enemy 3 Defence |  |
 | F87BA | 0x800F87BA | 2 | Enemy 3 MDefence |  |
 | F87BC | 0x800F87BC | 1 | Enemy 3 Index ID |  |
 | F87C0 | 0x800F87C0 | 2 | Enemy 3 Current MP |  |
 | F87C2 | 0x800F87C2 | 2 | Enemy 3 Max MP |  |
-| F87C4 | 0x800F87C4 | 2 | Enemy 3 Current HP |  |
-| F87C8 | 0x800F87C8 | 2 | Enemy 3 Max HP |  |
+| F87C4 | 0x800F87C4 | 2 | Enemy 3 Current HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
+| F87C8 | 0x800F87C8 | 2 | Enemy 3 Max HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
 | F87EE | 0x800F87EE | 1 | Enemy 3 Evade ID |  |
 | F87F0 | 0x800F87F0 | 4 | Enemy 3 Gil |  |
 | F87F4 | 0x800F87F4 | 4 | Enemy 3 EXP |  |
@@ -183,8 +190,8 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F8824 | 0x800F8824 | 1 | Enemy 4 Index ID |  |
 | F8828 | 0x800F8828 | 2 | Enemy 4 Current MP |  |
 | F882A | 0x800F882A | 2 | Enemy 4 Max MP |  |
-| F882C | 0x800F882C | 2 | Enemy 4 Current HP |  |
-| F8830 | 0x800F8830 | 2 | Enemy 4 Max HP |  |
+| F882C | 0x800F882C | 2 | Enemy 4 Current HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
+| F8830 | 0x800F8830 | 2 | Enemy 4 Max HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
 | F8856 | 0x800F8856 | 1 | Enemy 4 Evade ID |  |
 | F8858 | 0x800F8858 | 4 | Enemy 4 Gil |  |
 | F885C | 0x800F885C | 4 | Enemy 4 EXP |  |
@@ -202,8 +209,8 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F888C | 0x800F888C | 1 | Enemy 5 Index ID |  |
 | F8890 | 0x800F8890 | 2 | Enemy 5 Current MP |  |
 | F8892 | 0x800F8892 | 2 | Enemy 5 Max MP |  |
-| F8894 | 0x800F8894 | 2 | Enemy 5 Current HP |  |
-| F8898 | 0x800F8898 | 2 | Enemy 5 Max HP |  |
+| F8894 | 0x800F8894 | 2 | Enemy 5 Current HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
+| F8898 | 0x800F8898 | 2 | Enemy 5 Max HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
 | F88BE | 0x800F88BE | 1 | Enemy 5 Evade ID |  |
 | F88C0 | 0x800F88C0 | 4 | Enemy 5 Gil |  |
 | F88C4 | 0x800F88C4 | 4 | Enemy 5 EXP |  |
@@ -221,8 +228,8 @@ Query: python3 docs/reference/ff7-psx-memory/query_memory.py TEXT_OR_ADDR
 | F88F4 | 0x800F88F4 | 1 | Enemy 6 Index ID |  |
 | F88F8 | 0x800F88F8 | 2 | Enemy 6 Current MP |  |
 | F88FA | 0x800F88FA | 2 | Enemy 6 Max MP |  |
-| F88FC | 0x800F88FC | 2 | Enemy 6 Current HP |  |
-| F8900 | 0x800F8900 | 2 | Enemy 6 Max HP |  |
+| F88FC | 0x800F88FC | 2 | Enemy 6 Current HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
+| F8900 | 0x800F8900 | 2 | Enemy 6 Max HP (stats block) | Stats-block / secondary HP copy (spreadsheet). Not the live actor HP used for on-screen enemy health; use F85AC + (N-... |
 | F8926 | 0x800F8926 | 1 | Enemy 6 Evade ID |  |
 | F8928 | 0x800F8928 | 4 | Enemy 6 Gil |  |
 | F892C | 0x800F892C | 4 | Enemy 6 EXP |  |
