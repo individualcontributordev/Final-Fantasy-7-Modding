@@ -54,11 +54,11 @@ No breakpoints required.
 ## Evidence
 
 ```
-held tone freeze: YES/NO
-fanfare heard: YES/NO/partial
-win poses: YES/NO/partial
-loot/exp screens still OK: YES/NO
-notes:
+held tone freeze: no
+fanfare heard: yes
+win poses: yes
+loot/exp screens still OK: yes
+notes: both field and world map
 ```
 
 ## When done
