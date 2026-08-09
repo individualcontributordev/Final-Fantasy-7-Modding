@@ -122,3 +122,9 @@ Confirmed call chain:
 fun_800A1158 wait-exit -> helpers -> **jal 801B0000** -> victory phase (poses/fanfare setup).
 
 Next RE target is the **801B0000** overlay body (not in BATTLE_X_dec.bin).
+
+## Follow-on
+
+Entry body is **BATRES.X** @ 801B0000 — see
+[2026-08-09-batres-801b0000-victory-entry](2026-08-09-batres-801b0000-victory-entry.md).
+First call inside: loop `jal 800A6000` (BATTLE.X).
