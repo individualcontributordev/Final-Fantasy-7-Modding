@@ -1,72 +1,55 @@
-# Task: Catch the real win-pose code address (DuckStation)
+# Task: Break on victory-start PC (from your shots)
 
-## Why the last breaks failed
+## What your two shots showed
 
-Execute breaks at 800A54A0 / 800A5484 / 800A2974 / 800ABE4C were wrong for this job.
+| File | Moment | **pc** | Notes |
+|------|--------|--------|-------|
+| docs/victory-pose-start-debugger.png | You think win pose **starts** | **800D3098** | Best hook so far |
+| docs/victory-pose-mid-anim-debugger.png | Mid animations | 800C63AC | Looks like color/GPU unpack — less useful |
 
-- FIELD, WORLD, and BATTLE all take turns in the **same code slot** around 800A0000.
-- On the **world map**, 800A… is **world** code — so those breaks fire every frame while you idle.
-- In **battle**, different bytes sit there. Our guessed pose spots often **never run**, so nothing hits until you leave battle and world code loads again (after rewards).
+### Gold from the start shot (registers)
 
-Do **not** keep those 800A execute breaks on.
+| Reg | Value | Meaning |
+|-----|-------|---------|
+| pc | 800D3098 | Code running as poses begin |
+| ra | 8003CF98 | Return into lower/system code |
+| s4 | **800F83C6** | **Exit Battle Status** address (same as memory map) |
+| s1 | 800F83E0 | Near battle-end block |
+| s5 | 800F836C | Near battle frame field |
+| gp | 80062D44 | Near battle globals (RNG/input block) |
 
-## Goal this pass
+Disassembly at that PC touches **80051568** (global frame counter) then branches — a small check/helper, not the full pose AI by itself. Still the right **time** to freeze.
 
-When the party starts the win pose on a **normal** fight, read the yellow **PC** (code address). That is the real hook.
+## Do this next (one execute break)
 
-## Method A — pause by eye (simplest)
+1. Clear old 800A… execute breaks (world map spam).
+2. Add **one** execute break: **800D3098**
+3. Optional write break: **800F83C6** (1 byte) — value 1 = Victory per memory map.
+4. Normal fight, save before last kill.
+5. Kill last enemy.
 
-1. Turn **off** all old execute breaks on 800A…
-2. Normal battle, Fanfare Skip 0.1.4 OK.
-3. Save state before last kill.
-4. Kill last enemy.
-5. The moment win poses **start**, pause the emulator (Emulation pause), open CPU Debugger.
-6. Screenshot or write down:
-   - **pc** (yellow arrow / register pc)
-   - **ra** (return address register), if shown
-   - top few **Stack** return addresses if easy
+When **800D3098** hits:
 
-If pause is a frame late, still useful — note pc anyway.
+- Screenshot debugger (full registers + stack).
+- Note **Hit Count**.
+- Write down **ra** and the top few stack addresses.
+- Read byte at **800F83C6** (should often be 1 or becoming 1).
 
-## Method B — break when battle exit status becomes Victory
-
-RAM (not execute on 800A):
-
-| Watch | Address | Size | Why |
-|-------|---------|------|-----|
-| Exit battle status | 800F83C6 | 1 byte | Notes: 1 = Victory |
-| Enemy 1 current HP | 800F85AC | 2 bytes | Confirmed live HP |
-
-1. Clear 800A execute breaks.
-2. Add a **CPU/memory write** break on **800F83C6** (byte).
-3. Optional: write break on **800F85AC** to see last-hit timing (may fire often — disable after last enemy is low).
-4. Kill last enemy; when it breaks, check pc + whether value at 800F83C6 is 1.
-5. Screenshot debugger.
-
-If 800F83C6 never breaks during win/rewards, say so.
-
-## Method C — only if A/B need backup
-
-With debugger open mid-battle (before win), confirm you sometimes see **pc** in 800B…/800C…/800D… (battle overlay). Your earlier mid-battle shot had pc 800D3074 — that is normal for battle.
-
-Do not set a thick grid of execute breaks across all of 800A–800E (too noisy).
+If it hits **every battle frame** forever, say so (too hot).
+If it hits **once** near pose start, perfect.
+If it never hits, pause by eye at pose start again and send the new pc.
 
 ## Write down
 
 ```
-pc when poses start: ........
+800D3098 hit: yes/no  count: ?
 ra: ........
-800F83C6 value at break/pause: ..
-did write break on 800F83C6 hit: yes/no (count)
-poses still played: yes
+800F83C6: ..
+stack top 3: ...
 ```
 
 ## Do not
 
-- Do not leave execute breaks on 800A54A0 / 800A5484 / 800A2974 / 800ABE4C
-- Do not use old Fanfare Skip before 0.1.4
-- Do not poke memory by hand
+- Do not re-enable 800A54A0 / 800A5484 / 800A2974 execute breaks
+- Mid-anim break on 800C63AC not needed this pass
 
-## When done
-
-Push a screenshot under docs/ or paste the pc/ra lines in chat.

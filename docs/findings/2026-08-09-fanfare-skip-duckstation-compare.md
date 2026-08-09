@@ -46,11 +46,28 @@ FIELD, WORLD, and BATTLE **share the same overlay load slot** (~`0x800A0000`). A
 
 Static patches stay on **BATTLE.X file offsets** (`0x2974`, `0x54A0`, …). Live DuckStation PCs must be **read from a pause at pose start**, then mapped back — do not assume `PC = 0x800A0000 + file_off` for breakpoints until a hit confirms it.
 
+### Live PCs from human shots (2026-08-09)
+
+| Shot | File | pc | Use |
+|------|------|-----|-----|
+| Win pose **start** (human) | `docs/victory-pose-start-debugger.png` | **`0x800D3098`** | Primary next execute BP |
+| Mid win anim | `docs/victory-pose-mid-anim-debugger.png` | `0x800C63AC` | Render/color path — skip for control flow |
+
+**Start-shot registers (important):**
+
+- `s4 = 0x800F83C6` — Exit Battle Status (matches RAM map)
+- `s1 = 0x800F83E0`, `s5 ≈ 0x800F836C` — battle-end block
+- `gp = 0x80062D44` — near battle globals
+- `ra = 0x8003CF98` — callee return into low/system region
+- Code at `pc` loads **`0x80051568`** (global frame counter) then branches
+
+**Note:** Those instruction bytes are **not** at `BATTLE.X_file + 0x800A0000` in our extract (same address space as battle overlay data, but base/mapping still open). Static file offsets for pose/music patches remain valid; live hook uses **`0x800D3098`**.
+
 ### Next breakpoints (see INSTRUCTIONS)
 
-1. **Pause at pose start** → record `pc` / `ra`
-2. **Write** break on exit status `0x800F83C6` (byte; notes say `1 = Victory`)
-3. Clear all old `800A54A0` / `800A5484` / `800A2974` / `800ABE4C` execute breaks
+1. Execute **`0x800D3098`** once per win (confirm hit count / ra / stack)
+2. Optional write on **`0x800F83C6`**
+3. Keep `800A…` pose guesses **off**
 
 ## Patch direction (after hits)
 
