@@ -1,85 +1,60 @@
-# Task: Compare a normal win vs a train-style win (DuckStation)
+# Task: Break on battle win-pose code (DuckStation)
 
-## Why
+## What we already learned (your screenshots)
 
-Fanfare Skip **v0.1.4** already:
+Checked in repo (docs/normal *.png, docs/trains *.png):
 
-- keeps **confirm** normal (no stuck “button held”)
-- keeps **music** off most of the time
+- The **write** break on 80062D7C never hit (count stayed 0)
+- That memory stayed **00 00** on both normal and train in those pauses
+- The yellow arrow (current code) was in **main game code**, not the battle module
 
-Still wrong:
-
-- **win poses** still play on a normal fight
-- **sound can stick** until you close the rewards screen
-
-We need a live side-by-side in DuckStation so the next patch only cuts the win show — not by forcing the old global switches that broke confirm.
+So we stop watching only that memory write. Next: break when **battle code runs** the win pose.
 
 ## What you need
 
-- DuckStation with the **debug** view (breakpoints / memory)
-- One disc image with **Fanfare Skip v0.1.4** on (same pack you just tested)
-- Optional: a second run on **clean** stock if you want, but modded is enough if you can reach a train fight and a normal fight
+- Same disc with **Fanfare Skip v0.1.4**
+- DuckStation CPU debugger
+- One **normal** fight (poses still play) is enough for this pass
 
-## Setup (once)
+## Breaks to add (Execute / CPU, not memory-write)
 
-1. Open the disc in DuckStation.
-2. Turn on the debugger (or “Show debug” / CPU debugger — whatever your build calls it).
-3. Make a **save state right before the last enemy dies** for each fight type when you can.
+Clear the old write break on 80062D7C if it is still there.
 
-## Fight A — normal random
+Add **execute** breaks on:
 
-1. Get into any normal random battle.
-2. Save state just before the finishing blow.
-3. Kill the last enemy.
-4. Watch until win poses start (or until rewards).
+| What | Address |
+|------|---------|
+| Win pose write (most important) | 800A54A0 |
+| Pose gate just before that | 800A5484 |
+| Victory queue (our stub - does it ever run?) | 800A2974 |
+| Call into that queue | 800ABE4C |
 
-**Write down:**
+Optional if none of those hit: 800A5250, 800A1CE0.
 
-- Does the win pose still play? (yes/no)
-- Does music glitch or stick until rewards close? (yes/no)
-- In the debugger, as soon as the last enemy dies, open memory and note the value at:
+## Steps
 
-  `80062D7C`
+1. Enter a normal battle.
+2. Save state just before the last kill.
+3. Enable the breaks above.
+4. Kill the last enemy and let it run until a break hits **or** poses finish.
+5. Screenshot the debugger when it stops (or note which address hit and the Hit Count).
 
-  (two-byte value; paste the hex you see right after the kill and again when poses start)
-
-- If you can: the **code address** (PC) when the first party member starts the win pose. One address is enough; a short call stack is better if easy.
-
-## Fight B — train (or any fight that already skips the show)
-
-Same steps as Fight A on a train battle (or any fight that already cuts out with no poses).
-
-**Write down the same list**, especially the value at `80062D7C` right after the kill.
-
-
-
-## What “good notes” look like
-
-Paste something like this in chat (or commit under `docs/playtest/` if you prefer):
+## Write down
 
 ```
-normal:
-  poses: yes
-  stuck sound: yes/no
-  80062D7C after kill: ????
-  80062D7C when pose starts: ????
-  PC when pose starts: ????????
-
-train:
-  poses: no
-  stuck sound: n/a or no
-  80062D7C after kill: ????
-  PC after kill (first stop): ????????
+which breaks hit: (list addresses + hit counts)
+did poses still play: yes/no
+any stuck sound: yes/no
 ```
+
+If **nothing** under 800A ever hits during the win pose, say so - then the battle code is loaded at a different place and we adjust.
 
 ## Do not
 
-- Do not turn old Fanfare Skip packs (0.1.3 and earlier) back on for this test
-- Do not change code yourself for this task — notes only
-- Do not force memory bits by hand unless we ask later (that’s how confirm broke before)
+- Do not use old Fanfare Skip packs before 0.1.4
+- Do not poke memory by hand
+- Train fight not required this pass
 
-## When you’re done
+## When done
 
-Paste the notes here. Next patch will target only the win-show path from those addresses.
-
-check the screenshots for each requested item
+Push screenshots under docs/ again or paste the list above in chat.

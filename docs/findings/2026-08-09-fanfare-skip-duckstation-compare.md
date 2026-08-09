@@ -1,37 +1,59 @@
-# Fanfare Skip — live DuckStation compare (normal vs train win)
+# Fanfare Skip — DuckStation compare (normal vs train)
 
-**Date:** 2026-08-09  
-**Status:** waiting on human notes (`docs/INSTRUCTIONS.md`)  
-**Mod under test:** Fanfare Skip v0.1.4 (`0110cf4`)
+**Date:** 2026-08-09
+**Status:** screenshots reviewed (`ef0d4d0`); need execute BPs on battle code
+**Mod:** Fanfare Skip v0.1.4 (`0110cf4`)
 
-## Playtest report (v0.1.4)
+## Playtest (v0.1.4)
 
 | Item | Result |
 |------|--------|
-| Auto-confirm / stuck confirm | **Fixed** (mode-bit force removed) |
-| Victory music | **Off** (good) |
-| Win poses | **Still play** |
-| Stuck / glitched audio until rewards close | **Still happens sometimes** |
+| Auto-confirm | Fixed |
+| Victory music | Off |
+| Win poses | Still on normal |
+| Stuck audio until rewards | Still sometimes |
 
-## What v0.1.4 did
+## Screenshots in `docs/` (human, `ef0d4d0`)
 
-- No global force of battle-mode `0x20` / `0x100`
-- Stub victory-queue function at file off `0x2974` (only direct `jal` was `@0xbe4c`)
-- Quiet `ENEMY6/FAN2.SND`
+| File | Moment |
+|------|--------|
+| `normal before fanfair.png` | Normal fight, mid-battle (party ATB up) |
+| `normal fanfair start.png` | Normal, paused around fanfare/pose start |
+| `normal after fanfair rewards.png` | Normal, after rewards |
+| `trains before fanfair.png` | Train fight before win show |
+| `trains after fanfair.png` | Train after win |
 
-Stub alone is **not** enough for poses. Music request paths still exist outside that function (e.g. stores of AKAO id `0x2F` / 47 at `0x1ce0`, `0x2adc` inside the stubbed range, `0x8658`).
+## What the shots show
 
-## Static candidates (for after live compare)
+1. **Write BP on `0x80062D7C` never fired** (Hit Count **0** on every shot).
+2. **Memory at `0x80062D7C` is `00 00`** on normal *and* train (before/start/after).
+   These pauses do **not** show a train-only skip value at that halfword.
+3. **PC is not in the battle overlay.** Examples:
+   - mid-battle: `pc = 0x800D3074`
+   - fanfare start / rewards / train: `pc ≈ 0x8001CC20`
+   That is main/kernel-style code (loads around `0x2D78` / store `0x2D7C`), **not** `BATTLE.X` at `0x800Axxxx`.
+4. Code at `0x8001CC1C` **computes** a store to `0x2D7C` from halfwords at `0x2D78`/`0x2D7A` — not a plain field flag dump. Hit Count 0 means that write did not run while the BP was armed (or freezes are not during a write).
 
-| Region | Role |
-|--------|------|
-| `0x5250` | Party action / anim setup; case table around `0x5404` |
-| `0x5494–0x54a4` | When mode byte bit `0x20` clear, writes anim index `7` (win pose) |
-| `0x80062D7C` | Battle mode halfword (train sets skip bits from field) |
-| AKAO id `0x2F` | Fanfare request — engine may still “start” track even if FAN2 is silent → stuck driver until rewards UI |
+**Conclusion:** Next useful breakpoint is **execute** on battle poses/music, not only a write on `0x2D7C`.
 
-**Do not** re-force mode bits globally without checking confirm/UI. Prefer NOP/skip of pose write + never request track 47 on win.
+## BATTLE.X runtime addresses (base `0x800A0000`)
+
+| Role | File off | Break (execute) |
+|------|----------|-----------------|
+| Victory queue (v0.1.4 stub) | `0x2974` | `0x800A2974` |
+| Only `jal` to that queue | `0xBE4C` | `0x800ABE4C` |
+| Pose gate (bit `0x20`) | `0x5484` | `0x800A5484` |
+| Write win anim index `7` | `0x54A0` | `0x800A54A0` |
+| Anim setup function | `0x5250` | `0x800A5250` |
+| Fanfare song id `0x2F` | `0x1CE0`, `0x2ADC`, `0x8658` | same + base |
+
+If `0x800A2974` never hits on a normal win, live load base may differ — search RAM for stub bytes.
+
+## Patch direction (after hits)
+
+- Skip/NOP pose path at `0x54A0` / gate at `0x5484` **without** global mode-bit force.
+- Stop requesting song id `0x2F` (stuck audio) rather than only silencing `FAN2.SND`.
 
 ## Human task
 
-See root `docs/INSTRUCTIONS.md` — normal win vs train win memory/PC notes.
+See `docs/INSTRUCTIONS.md` — execute BPs on the addresses above during a normal win.
