@@ -1,75 +1,28 @@
-# Task: Confirm fanfare-skip v0.1.6 (shipped patch)
+# Fanfare-skip v0.1.6 — confirmed
 
-## Result already in (skip-setup smoke)
+## Operator result
 
-Operator on BATRES `j 801B03B0 @ 801B02E0` (+ s4=0 + nop 7254):
+Image / pack: **fanfare-skip-v0.1.6** (BATRES ceremony skip-setup)
 
-- **No** win animations  
-- **No** fanfare music  
-- Battle ends after final kill (rewards path continues)
+- Fanfare music: **none**
+- Win poses: **none**
+- Battle end / rewards / return to field: **OK**
+- Freeze: **no**
 
-That is the intended product behavior. Packaged as **fanfare-skip-v0.1.6**.
+Status: **working fine** — ship accepted.
 
-## What 0.1.6 changes
+## What shipped
 
-`BATTLE/BATRES.X` only (same bytes all discs):
+- `builder/fanfare-skip-v0.1.6` (clean)
+- `builder/fanfare-skip-on-csr-v0.1.6`
+- `builder/fanfare-skip-on-highwind-v0.1.6`
+- Manifest: 0.1.6 enabled, 0.1.5 disabled
 
-| VA | Patch |
-|----|-------|
-| **801B02E0** | force `j 801B03B0` (skip ceremony setup) |
-| 801B028C | nop `jal 800A7254` |
-| 801B02F8 / 032C / 03A0 | `ori s4,0,0` |
+Patch: BATRES.X only — force skip of ceremony setup at 801B02E0 (plus s4=0 / nop 7254).
+Does not quiet FAN2.SND.
 
-Does **not** touch FAN2.SND or BATTLE.X `800A2974` stub from 0.1.5.
+Finding: [findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md](findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md)
 
-Packs: `builder/fanfare-skip-v0.1.6` (+ on-csr / on-highwind). Manifest: 0.1.5 off, 0.1.6 on.
+## Next
 
-## Build play image
-
-```bash
-cd "$(git rev-parse --show-toplevel)"
-git pull --ff-only
-python3 scripts/apply_layer.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  builder/fanfare-skip-v0.1.6/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_fanfare_skip_v016.bin
-```
-
-## Play / confirm
-
-1. DuckStation → `workspace/iso-extract/ff7_d1_fanfare_skip_v016.bin`
-2. Win **two** normal random battles.
-3. Optionally one boss if easy.
-
-## Evidence
-
-```
-Image: ff7_d1_fanfare_skip_v016.bin  (layer fanfare-skip-v0.1.6)
-
-Battle 1:
-  fanfare: YES/NO
-  win poses: YES/NO
-  rewards/exp/items OK: YES/NO
-  return to field OK: YES/NO
-  freeze: YES/NO
-
-Battle 2:
-  same: OK / PROBLEM (notes)
-
-notes:
-ship ready?: YES/NO
-```
-
-## When done
-
-```bash
-cd "$(git rev-parse --show-toplevel)"
-git pull --ff-only
-git add docs/INSTRUCTIONS.md
-git commit -m "ops: confirm fanfare-skip v0.1.6"
-git push
-```
-
-Then say **check**.
-
-Do **not** commit .bin images.
+No operator task. Idle until a new goal.
