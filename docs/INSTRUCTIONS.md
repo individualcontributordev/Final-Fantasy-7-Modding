@@ -123,3 +123,11 @@ git push
 Then say **check**.
 
 Do **not** commit .bin images.
+
+order of hits
+80033E34
+801B0278
+80033E34
+80014540 (mid fanfair)
+80033E34 (mid fanfar)
+80033E34 (on world map loading)
