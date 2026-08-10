@@ -1,15 +1,32 @@
-# Fanfare-skip v0.1.6 — confirmed + builder checkbox
+# Single-disc + CSR+ + manip-movies (reminder)
 
-## Product
+## What you should get
 
-- **Skip victory fanfare** is a builder **checkbox** (no exclusiveGroup dropdown).
-- Tooltip/blurb: what it does for players (no BATRES/meta jargon).
+| Stack | Layers |
+|-------|--------|
+| CSR only + Single-disc | CSR + Single-disc + CSR manip movies + ending movies |
+| CSR + CSR+ + Single-disc | CSR + CSR+ scene packs + Single-disc + ending movies only (no manip-movies) |
 
-## Packs
+Manip-movies = speedrun/FMV streams CSR still plays on one disc (CANONON, LASTMAP, ...).
+CSR+ cuts those scenes, so those ISO copies are skipped on purpose.
 
-- fanfare-skip-v0.1.6 (clean / CSR / Highwind)
-- Confirmed working: no song, no poses, rewards OK.
+Ending parts always ride with Single-disc (credits), with or without CSR+.
 
-## Next
+## Manifest rule
 
-No operator task unless something on the live builder still looks wrong.
+single-disc-csr-manip-movies-v0.1.2 autoInclude:
+
+- when single-disc-on-csr-v0.1.2 is selected
+- on base csr-v0.14.1
+- unless any selected id starts with csr-plus-scene- (or CSR+ master toggle is on)
+
+## If you still see manip-movies with CSR+ on
+
+1. Hard-refresh the builder.
+2. Check APPLIED.txt / zip name - ending packs are expected; manip-movies / csr-movies are not when CSR+ is on.
+3. Say check with APPLIED.txt paste if it still lists manip-movies with CSR+.
+
+## Builder fix (site)
+
+autoIncludeMatches also suppresses manip-movies when the CSR+ master checkbox is on,
+not only when a disc-specific csr-plus-scene-* pack is in the id list.
