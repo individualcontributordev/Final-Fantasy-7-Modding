@@ -20,7 +20,7 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 | Parse field DAT sections/scripts | `field_dat.py` | Library |
 | Structured field diff objects | `field_compare.py` | Library |
 | Opcode names/sizes | `ff7_opcodes.py` | Library (Makou table) |
-| GZIPPS FIELD.BIN / WORLD.BIN | `decompress_gzipps.py` / `compress_gzipps.py` | Engine overlays |
+| GZIPPS FIELD.BIN / WORLD.BIN / **BATTLE/*.X** | `decompress_gzipps.py` / `compress_gzipps.py` | Engine overlays; Ghidra: [docs/ghidra-battle-overlays.md](../docs/ghidra-battle-overlays.md) |
 | Verify pack stack like the site | `verify_builder_config.py` | Before publish |
 | Smoke a built disc image | `verify_built_disc.py` | Needs `APPLIED.txt` beside image |
 
