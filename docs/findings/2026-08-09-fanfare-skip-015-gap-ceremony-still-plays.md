@@ -193,3 +193,55 @@ Candidates inside BATRES after 0278:
 | 801B03A0 | `s4=0x31` + set ceremony flag |
 | 801B03E0 | wait loop `800A3354` × s4 |
 | 801B042C | `jal 80014540` (post-wait; mid fanfare) |
+
+## Ghidra decompile pass (28c2c5c)
+
+Clean archive: docs/ghidra-pastes/batres-victory-path.md
+
+### Callee roles (from decompile)
+
+| VA | Ghidra | Role |
+|----|--------|------|
+| 800A7254 | FUN_800a7254(slot, type, subtype, extra) | Queues one actor anim/action if slot free. Not music. |
+| 800A3354 | FUN_800a3354 | Battle frame tick (pump, actor sync). Wait engine; not song start. |
+| 800B1060 | FUN_800b1060(p) | Thin to FUN_800a31a0(10,2,1,p). Side path only. |
+| 800A56B0 | FUN_800a56b0(id) | Drain/process queued UI ids (rewards). |
+| 80014540 | FUN_80014540 | SCUS wrapper to 80033e34(globals,0). |
+| 80033E34 | FUN_80033e34 | to FUN_80033cb8(cmd=3, ...). Global pump. |
+| 801B0E20 | batres_clear_battle_ui | Clear UI slots; not music. |
+
+### batres_victory ceremony core (annotated)
+
+After flag munging and batres_clear_battle_ui():
+
+1. for i in 0..9: FUN_800a7254(0, i, 4, 0) — queue anim type 4 on 10 slots (win pose/anim seed).
+2. Mask some battle state words with 0x1831.
+3. Branch on battle end flags (uVar4 bits):
+   - bit8 set: skip special wait setup
+   - else bit2: iVar17=0x1E; 800b1060(8); flag 80163b80=1
+   - else bit4: iVar17=8; write actor bytes 0xE
+   - else special: write actor bytes 0xC; iVar17 = 0x31; DAT_800fa6b8 = 1  (normal win path)
+4. if both ceremony flags 0: FUN_80014540() once (pre-wait pump)
+5. for i in 0..iVar17: FUN_800a3354() — blocking ceremony wait (0x31 ~ 49 frames)
+6. while flags still set: FUN_800a3354()
+7. if flags were set at entry to wait: FUN_80014540() again
+8. then rewards loops (800a56b0), 800dcf94(-1) clear, exp/items UI
+
+### Patch targets (next experiment)
+
+Ceremony length / visible win staging is dominated by:
+
+- Anim seed: 800a7254(..., 4, 0) x10 — removing may kill poses (test).
+- Wait count iVar17=0x31 (RAM: ori s4, zero, 0x31 @ 801B03A0) — set to 0 or 1 to shorten.
+- DAT_800fa6b8 = 1 — drives skip of first 14540 and the while-flag spin.
+
+Music is NOT started inside 800a7254 / 800a3354 / 80014540. Fanfare is either
+already requested before/at batres entry from BATTLE.X (0.1.5 stubs 800A2974 only),
+or triggered by anim type 4 side effects / parallel sound path still live in BATTLE.
+
+First binary experiment (BATRES only): force iVar17/s4 = 0 (patch ori s4, zero, 0x31
+to ori s4, zero, 0) so ceremony wait is skipped; smoke whether fanfare still plays
+and whether flow reaches rewards cleanly.
+
+Do NOT quiet FAN2.SND (known freeze).
+
