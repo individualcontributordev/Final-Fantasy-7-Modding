@@ -17,7 +17,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | 2026-08-09 | [win-transition-fn-800a1158](2026-08-09-win-transition-fn-800a1158.md) | win_transition handoff live: 16F4 s1=FFFF, jal 801B0000 ra=800A1734 | confirmed |
 | 2026-08-09 | [batres-801b0000-victory-entry](2026-08-09-batres-801b0000-victory-entry.md) | BATRES@801B0000: entry from win_transition; first jal 800A6000 x10 | confirmed |
 | 2026-08-09 | [batres-late-jals-stuck-tone](2026-08-09-batres-late-jals-stuck-tone.md) | freeze = quiet FAN2 only; stub-only OK (fanfare still plays) | confirmed |
-| 2026-08-09 | [fanfare-skip-015-gap-ceremony-still-plays](2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md) | 0.1.5: Ghidra batres_victory; wait s4=0x31; anim type 4 | confirmed |
+| 2026-08-09 | [fanfare-skip-015-gap-ceremony-still-plays](2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md) | 0.1.5: s4=0 skips hold only; fanfare over rewards | confirmed |
 | 2026-08-09 | [fanfare-skip-duckstation-compare](2026-08-09-fanfare-skip-duckstation-compare.md) | F83C6 writes = BATTLE.X 0x154C/1584; next exec 800A1500 | in-progress |
 | 2026-08-08 | [battle-fanfare-mod-feasibility](2026-08-08-battle-fanfare-mod-feasibility.md) | Victory Skip v0.1.0: force BATTLE.X bit0x20 at 22 sites | shipped |
 | 2026-08-09 | [fanfare-skip-train-sub-verify](2026-08-09-fanfare-skip-train-sub-verify.md) | Fanfare Skip v0.1.3 vs train + UJUNON/sub fields (static) | verify |

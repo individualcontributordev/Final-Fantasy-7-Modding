@@ -22,6 +22,7 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 | Opcode names/sizes | `ff7_opcodes.py` | Library (Makou table) |
 | GZIPPS FIELD.BIN / WORLD.BIN / **BATTLE/*.X** | `decompress_gzipps.py` / `compress_gzipps.py` | Engine overlays; Ghidra: [docs/ghidra-battle-overlays.md](../docs/ghidra-battle-overlays.md) |
 | Build BATRES s4=0 smoke image | `build_batres_s4zero_image.py` | Ceremony wait skip test disc |
+| Build BATRES ceremony smokes (s4 / anim4) | `build_batres_ceremony_smoke.py` | Fanfare wait/pose experiments |
 | Verify pack stack like the site | `verify_builder_config.py` | Before publish |
 | Smoke a built disc image | `verify_built_disc.py` | Needs `APPLIED.txt` beside image |
 
