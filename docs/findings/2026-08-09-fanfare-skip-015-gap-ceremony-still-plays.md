@@ -1,7 +1,7 @@
 # Finding: Fanfare Skip 0.1.5 still plays fanfare + poses
 
 **Date:** 2026-08-09
-**Status:** fixed in fanfare-skip-v0.1.6 (BATRES skip-setup)
+**Status:** fixed and confirmed (fanfare-skip-v0.1.6)
 **Module:** BATTLE.X + BATRES victory phase
 
 ## Smoke (0.1.5 clean D1)
@@ -307,4 +307,8 @@ s4 wait and 800A7254 type-4 seed alone were insufficient.
 
 Packaged as **fanfare-skip-v0.1.6** (BATRES GZIPPS patch only; all 3 discs;
 clean/CSR/Highwind packs). Replaces 0.1.5 in manifest (0.1.5 disabled).
+
+## v0.1.6 operator confirm
+
+**working fine** - no fanfare, no poses, battle end/rewards OK, no freeze.
 
