@@ -1,22 +1,20 @@
-# Task: Hit FAN2 id path (0x47 / 800A2CC4 / 800B1060)
+# Task: BATRES-path BPs while fanfare still in battle
 
 ## Why
 
-Your 0.1.5 BP pass (`4ff7341`) showed:
+Your 0x47 pass (`145a809`) is a clean **negative**:
 
-| BP | Useful? |
-|----|---------|
-| **800ABE4C** | Yes — **hit count 1** (stub is called) |
-| **801B0000** | Anchor — still **no** fanfare/poses at entry |
-| **800DCF94** | Clears only (`a0=-1`); not the play call |
-| **80015248** | Spam SFX (e.g. a0=5) — disable for next pass |
+| BP | During battle win ceremony |
+|----|----------------------------|
+| **801B0000** | **HIT** (only one) |
+| **800AB2AC / AB2D0 / A2CC4 / B1060** | **MISS** until **after rewards** / world map |
 
-Fanfare anims start **after** BATRES, around later DCF94 noise — still no unique play BP.
+Hits after rewards at those VAs are a **different overlay** (live code ≠ BATTLE.X).
+Discard for fanfare RE.
 
-Static: FAN2 song id **0x47** is loaded at **800AB2B0** into:
-
-- `jal 800A2CC4` @ **800AB2AC** (a0=0x47 in delay)
-- `jal 800B1060` @ **800AB2D0** same block
+So on 0.1.5, **fanfare + poses start after BATRES entry**, still in battle, **without**
+the FAN2 id `0x47` block. Next: first jals **inside** BATRES after `801B0000` before
+the rewards page.
 
 Finding: docs/findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md
 
@@ -29,7 +27,7 @@ cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 ```
 
-### 2. Play image (same 0.1.5)
+### 2. Play image
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
@@ -41,54 +39,60 @@ python3 scripts/apply_layer.py \
   -o workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
 ```
 
-### 3. DuckStation BPs
+### 3. DuckStation — Execute BPs only
 
 1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
 2. Save before last hit.
-3. **Clear all BPs.**
-4. Enable **only** these Execute BPs:
+3. **Clear all BPs** (including 800AB2AC / 800B1060 / 800A2CC4).
+4. Enable **Execute**:
 
-| Address | Role |
-|---------|------|
-| **800AB2AC** | `jal 800A2CC4` (delay sets a0=**0x47** FAN2 id) |
-| **800AB2D0** | `jal 800B1060` same victory block |
-| **800A2CC4** | callee entry (confirm a0) |
-| **800B1060** | music wrapper entry |
-| **801B0000** | optional timing only |
+| Address | Role (static BATRES) |
+|---------|----------------------|
+| **801B0000** | victory entry (anchor) |
+| **801B010C** | `jal 80014A58` (early kernel helper) |
+| **801B0278** | `jal 801B0E20` (already known live) |
+| **801B03D0** | `jal 80014540` |
+| **801B03E0** | `jal 800A3354` (wait/spin path; s4 often 0x31) |
+| **801B0458** | `jal 800A31A0` |
+| **801B0524** | `jal 800A56B0` |
+| **801B06D8** | `jal 800B0F04` |
 
-5. Do **not** arm 80015248 or 800DCF94 this pass.
+5. If one address **spam-hits every frame**, disable it and note which.
 
-### 4. One kill
+### 4. One kill — stay on victory screen
 
 1. Kill last enemy.
-2. On **first** hit of each new address: note regs + whether fanfare already audible / poses visible.
-3. Screenshot first hit of **800AB2AC** and **800B1060** into `docs/` if possible  
-   (e.g. `docs/800AB2AC.png`, `docs/800B1060.png`).
+2. Record **first hit after kill** for each address **while still in battle**
+   (before rewards page). Ignore hits after you leave victory/rewards.
+3. Note when **fanfare becomes audible** and when **win poses** appear relative
+   to those addresses.
+4. Optional shots: first **801B010C**, first **801B03E0**, first **801B06D8**
+   → `docs/801B010C.png` etc.
 
 ## Evidence
 
 ```
 Image: ff7_d1_fanfare_skip_v015.bin
 
-Hit order after last kill:
+In-battle hit order after last kill (stop at rewards — do not count world map):
 
-1) address:
-   a0 a1 a2 ra:
-   fanfare already? YES/NO
-   poses already? YES/NO
-   shot:
-
+1) address:   a0 a1 a2 ra:   fanfare already?  poses already?  shot:
 2) ...
 
-800AB2AC hit? YES/NO  count:  a0 at hit:
-800AB2D0 hit? YES/NO  count:
-800A2CC4 hit? YES/NO  a0:
-800B1060 hit? YES/NO  a0 a1 a2:
-801B0000 relative: before/after the 0x47 block?
+Table:
+801B0000 hit in battle? YES/NO
+801B010C hit in battle? YES/NO  count≈
+801B0278 hit in battle? YES/NO
+801B03D0 hit in battle? YES/NO
+801B03E0 hit in battle? YES/NO  (spam? YES/NO)
+801B0458 hit in battle? YES/NO
+801B0524 hit in battle? YES/NO
+801B06D8 hit in battle? YES/NO
 
 Fanfare first audible: BEFORE/AFTER which address?
 Win poses first visible: BEFORE/AFTER which address?
 
+Disabled for spam:
 notes:
 ```
 
@@ -97,13 +101,10 @@ notes:
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
-git commit -m "ops: FAN2 0x47 path BP hits"
+git commit -m "ops: BATRES-path BPs during in-battle fanfare"
 git push
 ```
 
 Then say **check**.
 
 Do **not** commit .bin images.
-
-only 801B0000 hit in battle, all others hit after rewards page
-loops between 800AB2D0 and 800AB2AC when loading the world map

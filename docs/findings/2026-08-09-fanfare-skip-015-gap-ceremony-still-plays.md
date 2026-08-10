@@ -74,3 +74,28 @@ FAN2 AKAO id **0x47** appears at:
 - nearby `jal 800B1060` @**800AB2D0** (same block)
 
 Do **not** keep 80015248 armed for fanfare isolation.
+
+## FAN2 0x47 BP pass (145a809) — NEGATIVE
+
+| BP | In-battle (during win ceremony)? | After rewards / world map? |
+|----|----------------------------------|----------------------------|
+| **801B0000** | **YES** (only hit in battle) | — |
+| **800AB2AC** | **NO** | YES (then loops with AB2D0) |
+| **800AB2D0** | **NO** | YES |
+| **800A2CC4** | **NO** | YES |
+| **800B1060** | **NO** | YES |
+
+User: *only 801B0000 hit in battle; all others after rewards; AB2D0/AB2AC loop loading world map.*
+
+### Overlay trap
+
+Post-rewards code at `800AB2AC` in the shot is **not** BATTLE.X (`jal 800A2CC4` /
+`ori a0,0x47`). Live disasm differs — **world map (or other) overlay reused the VA**.
+Those hit counts must **not** be treated as victory-fanfare calls.
+
+### Conclusion
+
+Victory **fanfare + poses on 0.1.5 happen without** the FAN2-id `0x47` block at
+`800AB2AC`. Ceremony audio starts on the **BATRES path after 801B0000**, still
+in battle, before rewards. Next probes = BATRES-internal jals while still on
+victory screen (not AB2*).
