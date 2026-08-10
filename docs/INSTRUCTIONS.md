@@ -104,3 +104,6 @@ git push
 Then say **check**.
 
 Do **not** commit .bin images.
+
+only 801B0000 hit in battle, all others hit after rewards page
+loops between 800AB2D0 and 800AB2AC when loading the world map
