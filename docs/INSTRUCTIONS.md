@@ -1,58 +1,60 @@
-# Task: Smoke BATRES s4=0 + nop anim type-4 seed
+# Task: Smoke BATRES skip ceremony setup block
 
-## Previous result (s4=0 only) - recorded
+## Previous results (recorded)
 
-With wait counts forced to 0 only:
+### s4=0 only
+- Fanfare + win anims still start on kill
+- Immediate black to rewards; fanfare plays over rewards page
 
-- Fanfare + win anims **still start** on kill (same as before)
-- Screen **immediately** goes black to **rewards**
-- Fanfare **plays in full on the rewards page**; rewards music after fanfare ends
+### s4=0 + nop jal 800A7254 @ 801B028C
+- **Animations still there** (operator)
+- So type-4 queue seed is **not** required for win poses (or something else re-seeds them)
 
-So `s4` only held the ceremony; it does **not** start music/poses.
 Finding: [findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md](findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md)
 
-## This smoke
+## Why this smoke
 
-Same as s4=0 **plus** nop the win-anim seed:
+Ghidra setup between `801B02E0` and `801B03B0` does more than the 7254 jal:
 
-| VA | Patch |
-|----|-------|
-| 801B02F8 / 032C / 03A0 | ori s4,0,0 (keep) |
-| **801B028C** | `jal 800A7254` to `nop` |
+- `sb` actor mode bytes **0xC** / **0xE** (pose-related)
+- sets `DAT_800fa6b8` / `DAT_80163b80`
+- sets wait s4
 
-That jal is the `FUN_800a7254(0, i, 4, 0)` x10 loop from Ghidra.
+Stock already has: if flag bit8 set, **skip that whole block** (`bne` to `801B03B0`).
 
-## Build (one command, no heredoc)
+**This patch:** force that skip always: `801B02E0` -> `j 801B03B0`  
+Also keep s4=0 + nop 7254 so wait/seed stay out of the way.
+
+## Build (no heredoc)
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-python3 scripts/build_batres_ceremony_smoke.py
+python3 scripts/build_batres_ceremony_smoke.py --skip-setup --s4-zero --no-anim4
 ```
 
-Expect: `PLAY: .../ff7_d1_batres_s4zero_noanim4.bin`
+Expect: `PLAY: .../ff7_d1_batres_skipsetup_s4zero_noanim4.bin`
 
 ## Play
 
-1. DuckStation Open Image `workspace/iso-extract/ff7_d1_batres_s4zero_noanim4.bin`
-2. Win one normal random battle (pristine path; not 0.1.5 stack).
+1. DuckStation Open Image `workspace/iso-extract/ff7_d1_batres_skipsetup_s4zero_noanim4.bin`
+2. Win one normal random battle (pristine; not 0.1.5 stack).
 
 ## Evidence (fill in)
 
 ```
-Image: ff7_d1_batres_s4zero_noanim4.bin
-Patches: s4=0 + nop jal 800A7254 @ 801B028C
+Image: ff7_d1_batres_skipsetup_s4zero_noanim4.bin
+Patches: j 801B03B0 @ 801B02E0 + s4=0 + nop 7254
 
 After last enemy dies:
   fanfare audible: YES/NO
   win poses / victory dance: YES/NO / SHORTER / NONE
   immediate black to rewards: YES/NO
   fanfare continues on rewards page: YES/NO / N/A
-  rewards BGM after fanfare: YES/NO / N/A
   freeze or hang: YES/NO
   can leave battle to field: YES/NO
 
-Compared to s4=0-only smoke:
+Compared to noanim4-only:
   poses different?:
   music different?:
 
@@ -64,9 +66,8 @@ notes:
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-# fill Evidence above, then:
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: smoke BATRES s4=0 + nop anim4 seed"
+git commit -m "ops: smoke BATRES skip-setup ceremony block"
 git push
 ```
 
