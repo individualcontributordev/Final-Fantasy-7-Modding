@@ -151,4 +151,4 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 - [2026-07-25-makou-iso-save-path](2026-07-25-makou-iso-save-path.md)
 - [2026-07-25-field-bin-extract](2026-07-25-field-bin-extract.md)
 - [2026-07-25-cdmage-field-bin-path](2026-07-25-cdmage-field-bin-path.md)
-| 2026-08-10 | [single-disc-csrplus-crater-hojo-freeze](2026-08-10-single-disc-csrplus-crater-hojo-freeze.md) | CSR+ single-disc D1 freeze crater before Hojo; Hojo pack D2-only | open |
+| 2026-08-10 | [single-disc-csrplus-crater-hojo-freeze](2026-08-10-single-disc-csrplus-crater-hojo-freeze.md) | crater freeze: cleared after DS restart; CSR+ smoke still TODO | inconclusive |
