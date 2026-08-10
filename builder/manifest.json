@@ -838,7 +838,27 @@
         "2": "./fanfare-skip-v0.1.5/layers/disc2.layer.json",
         "3": "./fanfare-skip-v0.1.5/layers/disc3.layer.json"
       },
-      "enabled": true
+      "enabled": false
+    },
+    {
+      "id": "fanfare-skip-v0.1.6",
+      "name": "Fanfare Skip v0.1.6",
+      "kind": "mod",
+      "blurb": "After the last enemy dies, skip BATRES victory ceremony (no fanfare music, no win poses). Exp/AP/gil/items still apply. Stock FAN2.SND left alone.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "fanfare-skip",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-v0.1.6/layers/disc1.layer.json",
+        "2": "./fanfare-skip-v0.1.6/layers/disc2.layer.json",
+        "3": "./fanfare-skip-v0.1.6/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Fanfare Skip",
+      "optionLabel": "On (v0.1.6)"
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.5",
@@ -855,7 +875,27 @@
         "2": "./fanfare-skip-on-csr-v0.1.5/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-csr-v0.1.5/layers/disc3.layer.json"
       },
-      "enabled": true
+      "enabled": false
+    },
+    {
+      "id": "fanfare-skip-on-csr-v0.1.6",
+      "name": "Fanfare Skip v0.1.6 (on CSR)",
+      "kind": "mod",
+      "blurb": "After the last enemy dies, skip BATRES victory ceremony (no fanfare music, no win poses). Exp/AP/gil/items still apply. Stock FAN2.SND left alone.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "fanfare-skip",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-v0.1.6/layers/disc1.layer.json",
+        "2": "./fanfare-skip-on-csr-v0.1.6/layers/disc2.layer.json",
+        "3": "./fanfare-skip-on-csr-v0.1.6/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Fanfare Skip",
+      "optionLabel": "On (v0.1.6)"
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.5",
@@ -872,7 +912,27 @@
         "2": "./fanfare-skip-on-highwind-v0.1.5/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-highwind-v0.1.5/layers/disc3.layer.json"
       },
-      "enabled": true
+      "enabled": false
+    },
+    {
+      "id": "fanfare-skip-on-highwind-v0.1.6",
+      "name": "Fanfare Skip v0.1.6 (on Highwind)",
+      "kind": "mod",
+      "blurb": "After the last enemy dies, skip BATRES victory ceremony (no fanfare music, no win poses). Exp/AP/gil/items still apply. Stock FAN2.SND left alone.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "fanfare-skip",
+      "compatibleBases": [
+        "highwind-v0.2.0"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-highwind-v0.1.6/layers/disc1.layer.json",
+        "2": "./fanfare-skip-on-highwind-v0.1.6/layers/disc2.layer.json",
+        "3": "./fanfare-skip-on-highwind-v0.1.6/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "groupLabel": "Fanfare Skip",
+      "optionLabel": "On (v0.1.6)"
     }
   ],
   "bases": [],

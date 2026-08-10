@@ -1,7 +1,7 @@
 # Finding: Fanfare Skip 0.1.5 still plays fanfare + poses
 
 **Date:** 2026-08-09
-**Status:** confirmed (smoke) / fix open
+**Status:** fixed in fanfare-skip-v0.1.6 (BATRES skip-setup)
 **Module:** BATTLE.X + BATRES victory phase
 
 ## Smoke (0.1.5 clean D1)
@@ -286,4 +286,25 @@ Win poses (and likely fanfare start) do **not** depend on the BATRES type-4
 - or start entirely before/outside this block (BATTLE.X on kill)
 
 Next: force-skip entire setup via j 801B03B0 at 801B02E0.
+
+## BATRES skip-setup smoke — SUCCESS
+
+Operator: force j 801B03B0 at 801B02E0 (+ s4=0 + nop 7254):
+
+- **No animations**
+- **No fanfare music**
+- Battle ends after final kill (continues into end/rewards flow)
+
+### Root cause (ceremony start)
+
+The BATRES block 801B02E0-801B03B0 (actor mode bytes 0xC/0xE, ceremony
+flags, wait setup) is required to **start** fanfare + win poses. Skipping it
+matches the intended mod.
+
+s4 wait and 800A7254 type-4 seed alone were insufficient.
+
+### Ship
+
+Packaged as **fanfare-skip-v0.1.6** (BATRES GZIPPS patch only; all 3 discs;
+clean/CSR/Highwind packs). Replaces 0.1.5 in manifest (0.1.5 disabled).
 

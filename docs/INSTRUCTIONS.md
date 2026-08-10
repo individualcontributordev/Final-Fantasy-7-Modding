@@ -1,64 +1,63 @@
-# Task: Smoke BATRES skip ceremony setup block
+# Task: Confirm fanfare-skip v0.1.6 (shipped patch)
 
-## Previous results (recorded)
+## Result already in (skip-setup smoke)
 
-### s4=0 only
-- Fanfare + win anims still start on kill
-- Immediate black to rewards; fanfare plays over rewards page
+Operator on BATRES `j 801B03B0 @ 801B02E0` (+ s4=0 + nop 7254):
 
-### s4=0 + nop jal 800A7254 @ 801B028C
-- **Animations still there** (operator)
-- So type-4 queue seed is **not** required for win poses (or something else re-seeds them)
+- **No** win animations  
+- **No** fanfare music  
+- Battle ends after final kill (rewards path continues)
 
-Finding: [findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md](findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md)
+That is the intended product behavior. Packaged as **fanfare-skip-v0.1.6**.
 
-## Why this smoke
+## What 0.1.6 changes
 
-Ghidra setup between `801B02E0` and `801B03B0` does more than the 7254 jal:
+`BATTLE/BATRES.X` only (same bytes all discs):
 
-- `sb` actor mode bytes **0xC** / **0xE** (pose-related)
-- sets `DAT_800fa6b8` / `DAT_80163b80`
-- sets wait s4
+| VA | Patch |
+|----|-------|
+| **801B02E0** | force `j 801B03B0` (skip ceremony setup) |
+| 801B028C | nop `jal 800A7254` |
+| 801B02F8 / 032C / 03A0 | `ori s4,0,0` |
 
-Stock already has: if flag bit8 set, **skip that whole block** (`bne` to `801B03B0`).
+Does **not** touch FAN2.SND or BATTLE.X `800A2974` stub from 0.1.5.
 
-**This patch:** force that skip always: `801B02E0` -> `j 801B03B0`  
-Also keep s4=0 + nop 7254 so wait/seed stay out of the way.
+Packs: `builder/fanfare-skip-v0.1.6` (+ on-csr / on-highwind). Manifest: 0.1.5 off, 0.1.6 on.
 
-## Build (no heredoc)
+## Build play image
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-python3 scripts/build_batres_ceremony_smoke.py --skip-setup --s4-zero --no-anim4
+python3 scripts/apply_layer.py \
+  workspace/pristine/FINALFANTASY7_D1.bin \
+  builder/fanfare-skip-v0.1.6/layers/disc1.layer.json \
+  -o workspace/iso-extract/ff7_d1_fanfare_skip_v016.bin
 ```
 
-Expect: `PLAY: .../ff7_d1_batres_skipsetup_s4zero_noanim4.bin`
+## Play / confirm
 
-## Play
+1. DuckStation → `workspace/iso-extract/ff7_d1_fanfare_skip_v016.bin`
+2. Win **two** normal random battles.
+3. Optionally one boss if easy.
 
-1. DuckStation Open Image `workspace/iso-extract/ff7_d1_batres_skipsetup_s4zero_noanim4.bin`
-2. Win one normal random battle (pristine; not 0.1.5 stack).
-
-## Evidence (fill in)
+## Evidence
 
 ```
-Image: ff7_d1_batres_skipsetup_s4zero_noanim4.bin
-Patches: j 801B03B0 @ 801B02E0 + s4=0 + nop 7254
+Image: ff7_d1_fanfare_skip_v016.bin  (layer fanfare-skip-v0.1.6)
 
-After last enemy dies:
-  fanfare audible: YES/NO
-  win poses / victory dance: YES/NO / SHORTER / NONE
-  immediate black to rewards: YES/NO
-  fanfare continues on rewards page: YES/NO / N/A
-  freeze or hang: YES/NO
-  can leave battle to field: YES/NO
+Battle 1:
+  fanfare: YES/NO
+  win poses: YES/NO
+  rewards/exp/items OK: YES/NO
+  return to field OK: YES/NO
+  freeze: YES/NO
 
-Compared to noanim4-only:
-  poses different?:
-  music different?:
+Battle 2:
+  same: OK / PROBLEM (notes)
 
 notes:
+ship ready?: YES/NO
 ```
 
 ## When done
@@ -67,15 +66,10 @@ notes:
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: smoke BATRES skip-setup ceremony block"
+git commit -m "ops: confirm fanfare-skip v0.1.6"
 git push
 ```
 
 Then say **check**.
 
-Do **not** commit the .bin image.
-
-## Refs
-
-- Builder: `scripts/build_batres_ceremony_smoke.py`
-- Pastes: [ghidra-pastes/batres-victory-path.md](ghidra-pastes/batres-victory-path.md)
+Do **not** commit .bin images.
