@@ -247,25 +247,85 @@ If you see `00000278` instead of `801B0278`, image base is still **0**.
 
 ## 7. SCUS (kernel) for `80014540` etc.
 
+`SCUS_941.63` is the main EXE (**not** GZIPPS). Do **not** run `decompress_gzipps.py`.
+
+| Field | Value (US disc) |
+|-------|-----------------|
+| Magic | `PS-X EXE` at file start |
+| Load / text address | **`0x80010000`** |
+| Entry PC | `0x800110C0` |
+| File layout | bytes **`0x000–0x7FF`** = EXE header; code/data starts at file offset **`0x800`** |
+
+### 7.1 Extract from pristine ISO
+
 ```bash
-# extract
+cd "$(git rev-parse --show-toplevel)"
+mkdir -p workspace/iso-extract/battle-raw workspace/iso-extract/battle-dec
+
 python3 << 'PY'
 from pathlib import Path
 from scripts.psx_mode2_iso import extract_file
 img = bytearray(Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
-Path("workspace/iso-extract/battle-raw").mkdir(parents=True, exist_ok=True)
 data = extract_file(img, "SCUS_941.63")
-Path("workspace/iso-extract/battle-raw/SCUS_941.63").write_bytes(data)
-print(len(data), data[:8])  # b'PS-X EXE'
+raw = Path("workspace/iso-extract/battle-raw/SCUS_941.63")
+raw.write_bytes(data)
+# Body only (strip 0x800 header) — easiest Raw Binary import in Ghidra
+body = data[0x800:]
+Path("workspace/iso-extract/battle-dec/SCUS_941.63.body").write_bytes(body)
+print("full", len(data), data[:8])   # b'PS-X EXE'
+print("body", len(body))
 PY
 ```
 
-Import options:
+Or CDMage: extract `SCUS_941.63` from disc root, then still strip header as below if using Raw Binary.
 
-- **PS-X EXE** loader if Ghidra/PSX plugin offers it (sets base for you), or
-- Raw: skip first **`0x800`** bytes of the file, load remainder at **`0x80010000`**.
+### 7.2 Import in Ghidra (recommended: body + Raw Binary)
 
-SCUS is **not** GZIPPS — do not run `decompress_gzipps.py` on it.
+Same **project** as BATRES/BATTLE (second/third program).
+
+1. **File → Import File…** →
+   `workspace/iso-extract/battle-dec/SCUS_941.63.body`
+   (the **body** file, not the full EXE, if you created it above)
+2. **Format:** **Raw Binary**
+3. **Language:** MIPS · **32-bit little-endian** (same as BATRES)
+4. Open the program when prompted.
+5. **Window → Memory Map** → set **image base** to **`0x80010000`**
+6. **Analysis → Auto Analyze…** → Analyze
+7. **G** → `80014540` → should land on code
+   First instr of wrapper is roughly `addiu sp,sp,-0x18` then loads from globals
+8. Right‑click → **Function → Create Function** (not `F`)
+   Optional name: `kernel_frame_pump_from_globals`
+
+Sanity:
+
+| Go to | Expect |
+|-------|--------|
+| `80010000` | start of loaded image (not function entry) |
+| `800110C0` | EXE entry (PC from header) |
+| `80014540` | thin wrapper → calls `80033E34` |
+| `80033E34` | frame pump (`ori a0, zero, 3` path inside) |
+
+If `80014540` is wrong or empty: image base is not `80010000`, or you imported the **full** EXE without skipping `0x800` (everything shifted).
+
+### 7.3 Alternate: full `PS-X EXE` file
+
+1. Import `workspace/iso-extract/battle-raw/SCUS_941.63` (full file).
+2. If Format list includes **PlayStation EXE** / **PS-X EXE** / PSX loader from a plugin: choose that — it should place code at `80010000` and skip the header for you.
+3. If only **Raw Binary** is available for the full file:
+   - Either switch to the **`.body`** method above, **or**
+   - In the import options / load dialog set:
+     - **File offset** / skip: **`0x800`**
+     - **Base / load address:** **`0x80010000`**
+     - **Length:** rest of file (or header `text_size` `0x60800` if offered)
+4. Confirm with **G** → `80014540`.
+
+### 7.4 Do not
+
+| Don’t | Why |
+|-------|-----|
+| `decompress_gzipps.py` on SCUS | Not GZIPPS; will error or corrupt |
+| Base `0` or `80000000` without checking | All kernel addresses wrong vs DuckStation |
+| Import full EXE as raw **with** header at `80010000` | Code starts at `80010800` in Ghidra; `jal` targets won’t match |
 
 ## 8. Existing decompressed copies
 
