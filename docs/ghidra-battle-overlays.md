@@ -144,10 +144,90 @@ exists there, or the cursor is not on an instruction (click the mnemonic column)
 
 PSX/psyq plugin: optional; helpful for `SCUS_941.63`, not required for overlays.
 
-Cross-overlay `jal 800A…` from BATRES: import BATTLE as a **second program** (or second
-block) if you need both; xrefs won’t always link automatically.
+## 4. Cross-overlay calls (BATRES → BATTLE / SCUS)
 
-## 4. Sanity checks (BATRES)
+In-game, BATRES sits at `801B0000` while **BATTLE.X** is already loaded at
+`800A0000` and **SCUS** at `80010000`. So BATRES contains real calls like:
+
+```text
+jal 0x800A7254    ; code lives in BATTLE.X, not in the BATRES file
+jal 0x80014540    ; code lives in SCUS
+```
+
+Ghidra only knows about bytes you imported. In a **BATRES-only** program those
+targets are **outside memory** — double-click / decompiler will not open them.
+
+You do **not** need one magic “link overlays” button. Pick a workflow:
+
+### Recommended: two (or three) separate programs in one project
+
+Simplest. No merged memory. You jump by address yourself.
+
+1. Same Ghidra **project** (e.g. `FF7-battle`).
+2. Import and open **BATRES.X.dec** @ `801B0000` (you may already have this) →
+   name the program something like `BATRES`.
+3. **File → Import File…** again → `BATTLE.X.dec` → Raw Binary → MIPS 32 LE →
+   open it → Memory Map image base **`0x800A0000`** → Auto Analyze →
+   program name e.g. `BATTLE`.
+4. Optional third import: `SCUS_941.63` (see §7) @ **`0x80010000`**.
+5. How to “follow” a `jal 800A7254` from BATRES:
+   - In the BATRES Listing, read the target: `800A7254`.
+   - **Window → BATRES** vs tool tabs: open the **BATTLE** CodeBrowser
+     (double-click `BATTLE` in the Project window — second tool window is fine).
+   - In **BATTLE**, press **G** → type `800A7254` → Enter.
+   - **D** if needed, then **Function → Create Function**, decompile there.
+6. Paste / compare decompiles side by side. Xrefs in BATRES will still show
+   `jal 0x800A7254` as an external-looking address; that is normal.
+
+You never merge the files. Victory flow RE is mostly reading BATRES and only
+opening BATTLE when you care what `800A7254` / `800A3354` / `800A56B0` do.
+
+### Optional advanced: both overlays in **one** program (shared Memory Map)
+
+Use this only if you want clickable `jal` inside a single Listing. Easy to get
+wrong; **two programs is enough for fanfare work.**
+
+1. Open **BATRES** (base `801B0000`) as the main program.
+2. **Window → Memory Map**.
+3. Toolbar in Memory Map: **Add Block** (“+” / green plus — label varies).
+4. Add Block dialog (typical fields):
+   - **Block Name:** `BATTLE`
+   - **Start Address:** `800A0000`
+   - **Length:** size of decompressed BATTLE (e.g. `0x538AC` / 342188)
+     or set End so length matches file size.
+   - **Read / Write / Execute:** enable at least **Read** + **Execute**.
+   - **Type:** Initialized
+   - **File offset / bytes:** map from `BATTLE.X.dec`
+     (file offset `0`, length = full file). Use **Import from file** /
+     **File Bytes** if your Ghidra build offers it when adding the block.
+5. OK → confirm Memory Map shows:
+   - block around `801B0000` (BATRES, short)
+   - block `800A0000`–… (BATTLE, long)
+   - **no overlap** (they must not occupy the same addresses).
+6. **G** → `800A7254` should land in the BATTLE block. **D** + Create Function.
+7. Re-run **Auto Analyze** if `jal` targets still look unresolved.
+8. Optional: add another block for SCUS body at `80010000` the same way.
+
+If **Add Block** has no “from file” option: **File → Add To Program…** (some
+Ghidra versions) and choose `BATTLE.X.dec` with load address `800A0000`, or
+stick to **two programs** above.
+
+### What you should *not* expect
+
+| Expectation | Reality |
+|-------------|---------|
+| Auto-analyze on BATRES alone follows `jal 800A…` | **No** — those bytes are not in the file |
+| One “link PSX overlays” checkbox | **No** (unless a custom plugin adds it) |
+| Project tree alone merges RAM | **No** — each program has its own memory |
+
+### Practical fanfare workflow
+
+1. Stay in **BATRES** / `batres_victory` for control flow (`801B0278`–`0540`).
+2. Note external targets: `800A7254`, `800A3354`, `800B1060`, `800A56B0`, `80014540`.
+3. Switch to **BATTLE** or **SCUS** program → **G** → that address → decompile.
+4. Send both decompiles when asking for patch help.
+
+## 5. Sanity checks (BATRES)
 
 | VA | Expect |
 |----|--------|
@@ -159,13 +239,35 @@ block) if you need both; xrefs won’t always link automatically.
 
 If you see `00000278` instead of `801B0278`, image base is still **0**.
 
-## 5. Useful decompile targets (fanfare)
+## 6. Useful decompile targets (fanfare)
 
 - BATRES: **`801B0000`**, especially **`801B0270`–`801B0540`**, and **`801B0E20`**
 - BATTLE: **`800A7254`**, **`800A3354`**, **`800B1060`**, **`800A56B0`**
 - SCUS: **`80014540`**, **`80033E34`**, **`80033CB8`** (note: `80033E34` is a global frame pump, not victory-only)
 
-## 6. Existing decompressed copies
+## 7. SCUS (kernel) for `80014540` etc.
+
+```bash
+# extract
+python3 << 'PY'
+from pathlib import Path
+from scripts.psx_mode2_iso import extract_file
+img = bytearray(Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
+Path("workspace/iso-extract/battle-raw").mkdir(parents=True, exist_ok=True)
+data = extract_file(img, "SCUS_941.63")
+Path("workspace/iso-extract/battle-raw/SCUS_941.63").write_bytes(data)
+print(len(data), data[:8])  # b'PS-X EXE'
+PY
+```
+
+Import options:
+
+- **PS-X EXE** loader if Ghidra/PSX plugin offers it (sets base for you), or
+- Raw: skip first **`0x800`** bytes of the file, load remainder at **`0x80010000`**.
+
+SCUS is **not** GZIPPS — do not run `decompress_gzipps.py` on it.
+
+## 8. Existing decompressed copies
 
 May already exist (same bytes, any path works for Ghidra):
 
