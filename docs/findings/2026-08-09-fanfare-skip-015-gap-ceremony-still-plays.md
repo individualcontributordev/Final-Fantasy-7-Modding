@@ -245,3 +245,30 @@ and whether flow reaches rewards cleanly.
 
 Do NOT quiet FAN2.SND (known freeze).
 
+## BATRES s4=0 smoke (48e83ca build)
+
+Image: pristine D1 + BATRES wait counts forced to 0 only (anim seed kept).
+
+Operator result:
+
+- Fanfare music + win animations **still start** at kill (same as stock timing).
+- Screen **immediately** fades black into **rewards** (ceremony hold gone).
+- Fanfare **keeps playing in full on the rewards page**; rewards BGM only after fanfare ends.
+- (Implied: no freeze; rewards reachable.)
+
+### Conclusion
+
+s4 wait loop only **holds** the victory camera/field before loot. It does **not**
+gate starting fanfare or win poses. Shortening wait is a UX partial win (faster loot)
+but **not** a fanfare/pose kill.
+
+Fanfare duration is independent of that wait (plays over rewards until song ends).
+
+### Next smoke
+
+Also **nop** jal 800A7254 at 801B028C (anim type-4 seed) while keeping s4=0:
+
+- If poses die and/or fanfare dies -> seed is the start path (or both).
+- If fanfare still plays without poses -> music starts elsewhere (before/parallel BATTLE).
+- If both still play -> start is earlier than this BATRES block.
+
