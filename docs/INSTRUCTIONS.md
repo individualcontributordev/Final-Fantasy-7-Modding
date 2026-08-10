@@ -108,3 +108,7 @@ git push
 Then say **check**.
 
 Do **not** commit .bin images.
+
+see screenshot names for order
+801B03D0 looping during fanfair music and animations
+801B0524 loops after as rewards page loading
