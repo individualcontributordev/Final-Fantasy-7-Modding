@@ -105,15 +105,47 @@ xxd -l 16 workspace/iso-extract/battle-dec/BATRES.X.dec
 1. **File → Import File…** → `workspace/iso-extract/battle-dec/BATRES.X.dec`
 2. **Format:** Raw Binary (not PS-X EXE unless it really is `SCUS`)
 3. **Language:** MIPS · default **32-bit little-endian** (PSX)
-4. **Memory Map** → set image base:
+4. After import, open the file. If **Auto Analyze** pops up, you can run it now **or**
+   fix the image base first (recommended), then analyze.
+5. **Window → Memory Map** → select the block → pencil / **Set Image Base** (or
+   right‑click block → **Set Image Base**):
    - BATRES → **`0x801B0000`**
    - BATTLE → **`0x800A0000`**
-5. **Analysis → Auto Analyze** (defaults OK)
-6. Go to **`801B0000`** → **F** create function if needed
+6. **Analysis → Auto Analyze…** → Analyze (defaults OK).
+
+### Make code + a function (do **not** rely on `F`)
+
+On many Ghidra installs / tool configs, **`F` = define float data**, not “function”.
+That matches “press F → s float”. Use the menu instead.
+
+1. **G** (or **Navigation → Go To…**) → type `801B0000` → Enter.
+   Listing should show address **`801b0000`**, not `00000000`.
+2. Click the **first byte** of that line in the Listing (left/code window).
+3. If you only see `??` or undefined bytes:
+   - Press **`D`** (**Disassemble**), **or**
+   - Right‑click → **Disassemble**.
+4. You should see MIPS, e.g. `addiu sp,sp,-0x88` (or similar). Then:
+   - Right‑click the instruction → **Function → Create Function**
+   - Menu path alternate: **Edit → Create Function** (wording varies slightly by version)
+5. Decompiler (right) should fill in `undefined FUN_801b0000(...)` or similar.
+6. Optional rename: click the function name in the Decompiler or Listing → **`L`**
+   (or right‑click → **Rename Function**).
+
+| Key | Usually means |
+|-----|----------------|
+| **`D`** | Disassemble (bytes → instructions) — use this first |
+| **`C`** | Clear code/data (undo bad disassembly) |
+| **`G`** | Go to address |
+| **`L`** | Label / rename |
+| **`F`** | Often **float** data type — **not** reliable for “create function” |
+
+If **Create Function** is greyed out: bytes are still data, or a function already
+exists there, or the cursor is not on an instruction (click the mnemonic column).
 
 PSX/psyq plugin: optional; helpful for `SCUS_941.63`, not required for overlays.
 
-Cross-overlay `jal 800A…` from BATRES: import BATTLE as a **second program** (or second block) if you need both; xrefs won’t always link automatically.
+Cross-overlay `jal 800A…` from BATRES: import BATTLE as a **second program** (or second
+block) if you need both; xrefs won’t always link automatically.
 
 ## 4. Sanity checks (BATRES)
 
