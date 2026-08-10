@@ -1,26 +1,25 @@
-# Task: First 801B03D0 / 80014540 — is fanfare already on?
+# Task: Where fanfare starts inside BATRES (0278 → 042C)
 
 ## Why
 
-Your BATRES pass (`3eff3a6`) locks the timeline:
+Your pass (`deafeab`) corrected the map:
 
-| Order | Address | When |
-|-------|---------|------|
-| 1 | **801B0000** | entry |
-| 2 | **801B0278** | then |
-| 3 | **801B03D0** | **`jal 80014540` — loops during fanfare + win anims** |
-| later | **801B0524** | rewards page (not fanfare start) |
+| Finding | Detail |
+|---------|--------|
+| **80033E34** | Hits **mid-fight** (enemies alive) — global pump. **Disable.** |
+| **801B03D0** | **HitCount 0** while ceremony plays — **skipped** when s4=0x31 path sets flag |
+| **80014540** | First hit is **mid fanfare** (poses already on) = post-wait **801B042C** |
 
-Missed in-battle: 010C, 0458, 06D8 (and 03E0 not observed in panels).
+Fanfare/poses begin **after 801B0278** and **before first 80014540**.
 
-`80014540` (SCUS) only calls `80033E34` → `80033CB8` with **a0=3**.
+Static sequence after 0278:
 
-We need one fact before patching:
-
-**At the very first 801B03D0 stop after the kill, is fanfare already audible / are poses already visible?**
-
-- If **NO** → ceremony starts inside 14540/33E34/33CB8 (or first 03E0 wait).  
-- If **YES** → music/poses were kicked earlier (between 0278 and 03D0, or before 0000); 03D0 only pumps the frame.
+1. `801B0E20` (at 0278)
+2. loop `800A7254` (028C, a2=4) ×10
+3. maybe `800B1060` (02FC)
+4. **`s4 = 0x31`** + ceremony flag (03A0)
+5. wait: `800A3354` × s4 (03E0)
+6. `80014540` at **042C** (mid fanfare)
 
 Finding: docs/findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md
 
@@ -49,65 +48,51 @@ python3 scripts/apply_layer.py \
 
 1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
 2. Save before last hit.
-3. **Clear all BPs.**
+3. **Clear all BPs.** Do **not** enable 80033E34, 801B03D0, or 800AB2*.
 4. Enable **only**:
 
 | Address | Role |
 |---------|------|
-| **801B0278** | last checkpoint before ceremony pump |
-| **801B03D0** | first ceremony `jal 80014540` |
-| **80014540** | SCUS wrapper entry |
-| **80033E34** | next hop (a0 becomes 3 inside) |
+| **801B0278** | `jal 801B0E20` — victory anchor |
+| **801B028C** | `jal 800A7254` pose/anim seed (will multi-hit; note first) |
+| **801B03A0** | sets **s4=0x31** ceremony wait |
+| **801B03E0** | first frame of wait `jal 800A3354` |
+| **801B042C** | post-wait `jal 80014540` |
 
-5. Disable everything else.
+5. If **801B028C** spam-blocks, after **first** hit disable it and continue.
 
-### 4. Kill + listen carefully
+### 4. One kill — freeze and listen at each first hit
 
-1. Kill last enemy.
-2. At **801B0278** (first hit after kill):  
-   fanfare audible? poses visible? (expect NO)  
-   Continue.
-3. At **first 801B03D0** after that (hit count → 1):  
-   **pause and listen 1–2s while frozen**  
-   fanfare already on? poses already on?  
-   Note a0/a1/a2/ra (should be thin call). Shot: `docs/801B03D0-first.png`
-4. Step into or continue to **first 80014540** if not same frame:  
-   note a0 a1 a2 (loaded from globals). Shot optional `docs/80014540-first.png`
-5. **First 80033E34**: note a0 a1 a2 a3 (expect a0=3 after shuffle).  
-   Shot optional `docs/80033E34-first.png`
-6. Resume; note roughly when fanfare **starts** if it was off at first 03D0  
-   (e.g. after N more 03D0 hits — hit count on panel).
+At **each first stop**, pause long enough to hear:
 
-Stop before rewards. Do not need 0524.
+- fanfare audible YES/NO  
+- win poses already YES/NO  
+
+Order expected: 0278 → 028C → 03A0 → 03E0 → (many 03E0) → 042C.
+
+Shots (first hit only):
+
+- `docs/801B0278.png`
+- `docs/801B028C-first.png`
+- `docs/801B03A0.png`
+- `docs/801B03E0-first.png`
+- `docs/801B042C-first.png`
 
 ## Evidence
 
 ```
 Image: ff7_d1_fanfare_skip_v015.bin
 
-At first 801B0278 after kill:
-  fanfare audible: YES/NO
-  poses visible: YES/NO
+1) 801B0278 first: fanfare? poses? a0 a1 a2 ra: shot:
+2) 801B028C first: fanfare? poses? a0 a1 a2: shot:
+3) 801B03A0 first: fanfare? poses? s4= shot:
+4) 801B03E0 first: fanfare? poses? shot:
+5) 801B042C first: fanfare? poses? shot:
 
-At first 801B03D0 (hit count 1):
-  fanfare audible: YES/NO
-  poses visible: YES/NO
-  a0 a1 a2 ra:
-  shot: docs/801B03D0-first.png
+Earliest BP where fanfare becomes YES:
+Earliest BP where poses become YES:
 
-At first 80014540:
-  a0 a1 a2:
-  shot:
-
-At first 80033E34:
-  a0 a1 a2 a3:
-  shot:
-
-If fanfare was OFF at first 03D0:
-  became audible after ~N more 03D0 hits (hit count):
-  or after 80033E34/unknown:
-
-Verdict: music starts BEFORE_FIRST_03D0 / AT_OR_INSIDE_14540_CHAIN / AFTER_SEVERAL_03D0 / UNSURE
+Disabled for spam:
 notes:
 ```
 
@@ -116,18 +101,10 @@ notes:
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
-git commit -m "ops: first 03D0 fanfare already on?"
+git commit -m "ops: BATRES 0278-042C fanfare start bracket"
 git push
 ```
 
 Then say **check**.
 
 Do **not** commit .bin images.
-
-order of hits
-80033E34
-801B0278
-80033E34
-80014540 (mid fanfair)
-80033E34 (mid fanfar)
-80033E34 (on world map loading)

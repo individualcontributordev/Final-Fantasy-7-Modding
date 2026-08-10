@@ -145,3 +145,51 @@ BATRES around it: if `s0==0` call 14540; then if `s4!=0` loop `jal 800A3354` up 
 | Rewards UI | **801B0524** |
 
 Patch target class: shorten/skip BATRES ceremony wait (03D0–0430 region / s4 loop / 14540 pump) **without** quiet FAN2. Confirm music is already requested before first 03D0 vs only sustained by the loop.
+
+## First-hit audio / 33E34 pass (deafeab)
+
+### Observed hit order (operator)
+
+1. **80033E34** — *before victory* (enemies still up; blue action menu). HitCount 5
+   already. `a0=0x801C1A` (not the 14540 globals path). **General frame pump — spam.**
+2. **801B0278** — victory path after kill (`jal 801B0E20`). 03D0 still 0. 14540 still 0.
+3. **80033E34** again
+4. **80014540** — **mid fanfare**, win poses on (`docs/80014540 fourth.png`)
+   - a0=`0x801C410`, a1=`0x8005C2C6`, a2=`0xDECC` (loaded from globals inside wrapper)
+   - **801B03D0 HitCount stayed 0** whole fight
+5. **80033E34** mid fanfare; later on world-map load
+
+### Corrections
+
+1. **`80033E34` is not victory-specific.** Drop as fanfare start probe.
+2. **Normal ceremony path often skips 801B03D0.** Static BATRES:
+
+```
+03A0: s4 = 0x31; *8010A6B8 = 1
+03C4: s0 = *A6B8 | *80163B80
+03C8: if s0 != 0 → skip 03D0
+03E0: for i in s4: jal 800A3354   # ceremony wait
+042C: if s0 != 0 → jal 80014540   # this is the 14540 that hit
+```
+
+First `80014540` = **801B042C** after wait, not 03D0. Prior "03D0 looping" was
+likely wait/re-entry confusion; this pass proves **03D0=0** while ceremony plays.
+
+3. Fanfare+poses already on at first **80014540** ⇒ start is **between 801B0278 and
+   end of s4 wait**, not inside 14540/33E34.
+
+### Bracket for start of music/poses
+
+| After | Before |
+|-------|--------|
+| 801B0278 (`jal 801B0E20`) | first mid-fanfare frame |
+
+Candidates inside BATRES after 0278:
+
+| VA | Call |
+|----|------|
+| 801B028C | `jal 800A7254` a2=4 (×10) — pose/anim seed |
+| 801B02FC | `jal 800B1060` a0=8 (conditional) |
+| 801B03A0 | `s4=0x31` + set ceremony flag |
+| 801B03E0 | wait loop `800A3354` × s4 |
+| 801B042C | `jal 80014540` (post-wait; mid fanfare) |
