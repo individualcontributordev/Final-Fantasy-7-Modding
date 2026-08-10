@@ -23,52 +23,23 @@ In `batres_victory`:
 | 801B032C | ori s4,0,0x08 | ori s4,0,**0** |
 | 801B03A0 | ori s4,0,0x31 | ori s4,0,**0** |
 
-Recompressed GZIPPS fits original slot (3539 <= 3614). Does **not** touch FAN2.SND.
+Recompressed GZIPPS fits original slot. Does **not** touch FAN2.SND.
 
 Goal: see if skipping the wait still plays fanfare, still shows poses, and still reaches loot safely.
 
-## Build play image (from repo)
+## Build play image
+
+**One command — no heredoc.** Copy-paste these two lines only:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
-mkdir -p workspace/iso-extract/battle-raw workspace/iso-extract/battle-dec
-
-python3 <<  + PY + 
-from pathlib import Path
-import struct
-from scripts.psx_mode2_iso import extract_file, replace_file_padded
-from scripts.decompress_gzipps import decompress_gzipps
-from scripts.compress_gzipps import compress_gzipps
-
-pristine = Path("workspace/pristine/FINALFANTASY7_D1.bin")
-img = bytearray(pristine.read_bytes())
-raw_path = Path("workspace/iso-extract/battle-raw/BATTLE_BATRES.X")
-raw_path.write_bytes(extract_file(img, "BATTLE/BATRES.X"))
-dec_path = Path("workspace/iso-extract/battle-dec/BATRES.X.dec")
-decompress_gzipps(raw_path, dec_path)
-
-dec = bytearray(dec_path.read_bytes())
-B = 0x801B0000
-for va in (0x801B02F8, 0x801B032C, 0x801B03A0):
-    o = va - B
-    old = struct.unpack_from("<I", dec, o)[0]
-    new = 0x34140000  # ori s4, zero, 0
-    print(hex(va), hex(old), "->", hex(new))
-    assert old in (0x3414001E, 0x34140008, 0x34140031), hex(old)
-    struct.pack_into("<I", dec, o, new)
-patched_dec = Path("workspace/iso-extract/battle-dec/BATRES.X.s4zero.dec")
-patched_dec.write_bytes(dec)
-new_bin = Path("workspace/iso-extract/battle-raw/BATTLE_BATRES.X.s4zero")
-compress_gzipps(patched_dec, raw_path, new_bin)
-assert new_bin.stat().st_size <= raw_path.stat().st_size
-
-img2 = bytearray(pristine.read_bytes())
-replace_file_padded(img2, "BATTLE/BATRES.X", new_bin.read_bytes())
-out = Path("workspace/iso-extract/ff7_d1_batres_s4zero.bin")
-out.write_bytes(img2)
-print("PLAY:", out)
-PY
+python3 scripts/build_batres_s4zero_image.py
 ```
+
+Expect last line: `PLAY: .../workspace/iso-extract/ff7_d1_batres_s4zero.bin`
+
+If it errors about missing pristine disc, ensure
+`workspace/pristine/FINALFANTASY7_D1.bin` exists.
 
 ## Play
 
@@ -113,6 +84,7 @@ Do **not** commit the .bin image.
 
 ## Refs
 
+- Builder script: `scripts/build_batres_s4zero_image.py`
 - Ghidra setup: [ghidra-battle-overlays.md](ghidra-battle-overlays.md)
 - Pastes: [ghidra-pastes/batres-victory-path.md](ghidra-pastes/batres-victory-path.md)
 
