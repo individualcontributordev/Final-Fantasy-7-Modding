@@ -520,7 +520,7 @@
       "id": "single-disc-on-csr-v0.1.2",
       "name": "Single-disc",
       "kind": "mod",
-      "blurb": "Whole-game option: full run from one Disc 1 image. Always includes ending/credits movies. On CSR alone (no CSR+ scenes), also auto-adds speedrun movies. Turn on only for a single physical/ISO disc.",
+      "blurb": "Play the whole game from one Disc 1 image. Ending and credits movies are included. On CSR (without CSR+ scene packs), speedrun movies are added automatically.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -529,7 +529,7 @@
         "1": "./single-disc-on-csr-v0.1.2/layers/disc1.layer.json"
       },
       "enabled": true,
-      "hint": "Applies to the whole game \u2014 use one Disc 1 image only.",
+      "hint": "Use one Disc 1 image for the full game.",
       "layout": "global",
       "version": "0.1.2"
     },
@@ -774,10 +774,10 @@
     },
     {
       "id": "fanfare-skip-v0.1.4",
-      "name": "Fanfare Skip v0.1.4",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "clean"
@@ -791,10 +791,10 @@
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.4",
-      "name": "Fanfare Skip v0.1.4",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -808,10 +808,10 @@
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.4",
-      "name": "Fanfare Skip v0.1.4",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory fanfare and win poses (like Midgar train fights). Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "highwind-v0.2.0"
@@ -825,10 +825,10 @@
     },
     {
       "id": "fanfare-skip-v0.1.5",
-      "name": "Fanfare Skip v0.1.5",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "clean"
@@ -842,12 +842,11 @@
     },
     {
       "id": "fanfare-skip-v0.1.6",
-      "name": "Fanfare Skip v0.1.6",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip BATRES victory ceremony (no fanfare music, no win poses). Exp/AP/gil/items still apply. Stock FAN2.SND left alone.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "fanfare-skip",
       "compatibleBases": [
         "clean"
       ],
@@ -856,16 +855,14 @@
         "2": "./fanfare-skip-v0.1.6/layers/disc2.layer.json",
         "3": "./fanfare-skip-v0.1.6/layers/disc3.layer.json"
       },
-      "enabled": true,
-      "groupLabel": "Fanfare Skip",
-      "optionLabel": "On (v0.1.6)"
+      "enabled": true
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.5",
-      "name": "Fanfare Skip v0.1.5",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -879,12 +876,11 @@
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.6",
-      "name": "Fanfare Skip v0.1.6 (on CSR)",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip BATRES victory ceremony (no fanfare music, no win poses). Exp/AP/gil/items still apply. Stock FAN2.SND left alone.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "fanfare-skip",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
@@ -893,16 +889,14 @@
         "2": "./fanfare-skip-on-csr-v0.1.6/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-csr-v0.1.6/layers/disc3.layer.json"
       },
-      "enabled": true,
-      "groupLabel": "Fanfare Skip",
-      "optionLabel": "On (v0.1.6)"
+      "enabled": true
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.5",
-      "name": "Fanfare Skip v0.1.5",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "highwind-v0.2.0"
@@ -916,12 +910,11 @@
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.6",
-      "name": "Fanfare Skip v0.1.6 (on Highwind)",
+      "name": "Skip victory fanfare",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip BATRES victory ceremony (no fanfare music, no win poses). Exp/AP/gil/items still apply. Stock FAN2.SND left alone.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+      "hint": "No victory song or win poses. Loot and exp still work.",
       "format": "ic-layer-v1",
-      "exclusiveGroup": "fanfare-skip",
       "compatibleBases": [
         "highwind-v0.2.0"
       ],
@@ -930,9 +923,7 @@
         "2": "./fanfare-skip-on-highwind-v0.1.6/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-highwind-v0.1.6/layers/disc3.layer.json"
       },
-      "enabled": true,
-      "groupLabel": "Fanfare Skip",
-      "optionLabel": "On (v0.1.6)"
+      "enabled": true
     }
   ],
   "bases": [],

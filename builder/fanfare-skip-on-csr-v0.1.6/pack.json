@@ -1,10 +1,10 @@
 {
   "id": "fanfare-skip-on-csr-v0.1.6",
-  "name": "Fanfare Skip",
+  "name": "Skip victory fanfare",
   "kind": "mod",
   "version": "0.1.6",
-  "blurb": "After the last enemy dies, skip BATRES victory ceremony setup (no fanfare music, no win poses). Exp/AP/gil/items and loot screens still apply. Stock FAN2.SND left alone.",
-  "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+  "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+  "hint": "No victory song or win poses. Loot and exp still work.",
   "format": "ic-layer-v1",
   "compatibleBases": [
     "csr-v0.14.1"

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.6 — 2026-08-10
+
+- BATRES ceremony skip-setup: no victory song, no win poses; rewards still work.
+- Builder: free checkbox (not a dropdown). Plain-language name/tooltip.
+
 ## 0.1.5 — 2026-08-09
 
 - **Fix held battle tone:** stop replacing ENEMY6/FAN2.SND with the zero-body
