@@ -1,98 +1,81 @@
-# Task: Where fanfare starts inside BATRES (0278 → 042C)
+# Task: Paste Ghidra decompiles (BATRES victory path)
 
-## Why
+You already have three programs imported (BATRES / BATTLE / SCUS).
+Setup guide: [ghidra-battle-overlays.md](ghidra-battle-overlays.md)
 
-Your pass (`deafeab`) corrected the map:
+**Put evidence in this file** under **Evidence** (paste decompiler text).
+Do not only say check with empty evidence.
 
-| Finding | Detail |
-|---------|--------|
-| **80033E34** | Hits **mid-fight** (enemies alive) — global pump. **Disable.** |
-| **801B03D0** | **HitCount 0** while ceremony plays — **skipped** when s4=0x31 path sets flag |
-| **80014540** | First hit is **mid fanfare** (poses already on) = post-wait **801B042C** |
+## Goal
 
-Fanfare/poses begin **after 801B0278** and **before first 80014540**.
+Get decompiler output so we can name what starts fanfare/poses and design the
+next skip patch. Chat-only copies get lost — **the repo is the source of truth.**
 
-Static sequence after 0278:
+## What to collect
 
-1. `801B0E20` (at 0278)
-2. loop `800A7254` (028C, a2=4) ×10
-3. maybe `800B1060` (02FC)
-4. **`s4 = 0x31`** + ceremony flag (03A0)
-5. wait: `800A3354` × s4 (03E0)
-6. `80014540` at **042C** (mid fanfare)
+### A. BATRES (base `801B0000`)
 
-Finding: docs/findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md
+| Go to | Action |
+|-------|--------|
+| **`801B0000`** | Create function if needed; name **`batres_victory`**. Copy **full** decompile. |
+| **`801B0E20`** | Own function; name e.g. **`batres_clear_battle_ui`**. Copy decompile. |
 
-## What you do
+If `batres_victory` is huge, full function is still preferred. Minimum range in
+listing terms: **`801B0270`–`801B0560`** behavior must appear in the paste.
 
-### 1. Pull
+### B. BATTLE (base `800A0000`)
 
-```bash
-cd "$(git rev-parse --show-toplevel)"
-git pull --ff-only
-```
+For each address: **G** to address, then **D** if needed, then **Function → Create Function**, then copy decompile.
 
-### 2. Play image
+| Address | Suggested name (optional) |
+|---------|---------------------------|
+| **`800A7254`** | (pose/anim candidate; called a2=4 x10) |
+| **`800A3354`** | wait-frame (ceremony x s4) |
+| **`800B1060`** | conditional a0=8 |
+| **`800A56B0`** | rewards UI |
 
-```bash
-cd "$(git rev-parse --show-toplevel)"
-mkdir -p workspace/iso-extract
+### C. SCUS (base `80010000`)
 
-python3 scripts/apply_layer.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  builder/fanfare-skip-v0.1.5/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
-```
+| Address | Suggested name (optional) |
+|---------|---------------------------|
+| **`80014540`** | thin wrapper to 33E34 |
+| **`80033E34`** | frame pump (one level deep is enough) |
 
-### 3. DuckStation — Execute BPs only
+### Minimum if short on time
 
-1. File → Open Image → workspace/iso-extract/ff7_d1_fanfare_skip_v015.bin
-2. Save before last hit.
-3. **Clear all BPs.** Do **not** enable 80033E34, 801B03D0, or 800AB2*.
-4. Enable **only**:
+Paste only these three:
 
-| Address | Role |
-|---------|------|
-| **801B0278** | `jal 801B0E20` — victory anchor |
-| **801B028C** | `jal 800A7254` pose/anim seed (will multi-hit; note first) |
-| **801B03A0** | sets **s4=0x31** ceremony wait |
-| **801B03E0** | first frame of wait `jal 800A3354` |
-| **801B042C** | post-wait `jal 80014540` |
+1. `batres_victory` (`801B0000`)
+2. `800A7254`
+3. `800A3354`
 
-5. If **801B028C** spam-blocks, after **first** hit disable it and continue.
+## How to paste
 
-### 4. One kill — freeze and listen at each first hit
+In Ghidra Decompiler window: select all text, copy, paste into **Evidence**
+below inside the fenced block. One section per function.
 
-At **each first stop**, pause long enough to hear:
-
-- fanfare audible YES/NO  
-- win poses already YES/NO  
-
-Order expected: 0278 → 028C → 03A0 → 03E0 → (many 03E0) → 042C.
-
-Shots (first hit only):
-
-- `docs/801B0278.png`
-- `docs/801B028C-first.png`
-- `docs/801B03A0.png`
-- `docs/801B03E0-first.png`
-- `docs/801B042C-first.png`
+Do **not** commit large .dec / .bin binaries. Decompiler **text** in this
+file (or docs/ghidra-pastes/*.md) is what we need.
 
 ## Evidence
 
 ```
-Image: ff7_d1_fanfare_skip_v015.bin
+### batres_victory (801B0000)
 
-1) 801B0278 first: fanfare? poses? a0 a1 a2 ra: shot:
-2) 801B028C first: fanfare? poses? a0 a1 a2: shot:
-3) 801B03A0 first: fanfare? poses? s4= shot:
-4) 801B03E0 first: fanfare? poses? shot:
-5) 801B042C first: fanfare? poses? shot:
+### batres_clear_battle_ui (801B0E20)
 
-Earliest BP where fanfare becomes YES:
-Earliest BP where poses become YES:
+### 800A7254
 
-Disabled for spam:
+### 800A3354
+
+### 800B1060
+
+### 800A56B0
+
+### 80014540
+
+### 80033E34
+
 notes:
 ```
 
@@ -100,11 +83,17 @@ notes:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
-git add docs/INSTRUCTIONS.md docs/*.png 2>/dev/null || git add docs/INSTRUCTIONS.md
-git commit -m "ops: BATRES 0278-042C fanfare start bracket"
+git pull --ff-only
+git add docs/INSTRUCTIONS.md
+# optional longer pastes:
+# mkdir -p docs/ghidra-pastes && git add docs/ghidra-pastes/
+git commit -m "ops: Ghidra decompiles for BATRES victory / fanfare path"
 git push
 ```
 
 Then say **check**.
 
-Do **not** commit .bin images.
+## Refs
+
+- Overlay import / decompress / SCUS: [ghidra-battle-overlays.md](ghidra-battle-overlays.md)
+- Fanfare finding: [findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md](findings/2026-08-09-fanfare-skip-015-gap-ceremony-still-plays.md)
