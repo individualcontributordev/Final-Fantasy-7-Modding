@@ -99,3 +99,49 @@ Victory **fanfare + poses on 0.1.5 happen without** the FAN2-id `0x47` block at
 `800AB2AC`. Ceremony audio starts on the **BATRES path after 801B0000**, still
 in battle, before rewards. Next probes = BATRES-internal jals while still on
 victory screen (not AB2*).
+
+## BATRES-path BP pass (3eff3a6)
+
+### In-battle order (screenshot names)
+
+1. **801B0000** — first hit (`docs/801B0000 first hit.png`)  
+   - ra still win_transition path; battle field visible; no ceremony yet  
+   - Hit counts at this moment: 0278/03D0/010C/0458/03E0/0524/06D8 all **0**
+2. **801B0278** — second (`docs/801B0278 second.png`) — `jal 801B0E20`  
+   - 03D0 still 0
+3. **801B03D0** — third (`docs/801B03D0 third.png`) — `jal 80014540`  
+   - User: **loops during fanfare music and animations**
+4. **801B0524** (`docs/801B0524.png`) — `jal 800A56B0`  
+   - User: **loops after, as rewards page loading** (black fade shot)
+
+### Hit / miss (in-battle)
+
+| BP | In battle? | Notes |
+|----|------------|-------|
+| 801B0000 | YES | anchor; can re-enter (hit count 2 already on first shot footer) |
+| 801B010C | **NO** (0) | not on this path |
+| 801B0278 | YES | after entry |
+| 801B03D0 | YES | **ceremony loop** ↔ fanfare + win anims |
+| 801B03E0 | 0 in panels | may still run after 03D0 return (not left running) |
+| 801B0458 | 0 | not observed |
+| 801B0524 | YES late | **rewards**, not fanfare start |
+| 801B06D8 | 0 | not observed |
+
+### Static: what 801B03D0 is
+
+`jal 80014540` (SCUS) → thin wrapper → `jal 80033E34` with globals  
+`a0=*(80071744)`, `a1=*(80095DD8)`, `a2=*(800722C8)`, `a3=0`.  
+`80033E34` → `jal 80033CB8` with **a0=3** (command class).
+
+BATRES around it: if `s0==0` call 14540; then if `s4!=0` loop `jal 800A3354` up to s4 (often 0x31); spin; optional second 14540 @042C.  
+**801B0000 re-entry** each frame explains **03D0 looping** while music/anims play.
+
+### Bracket
+
+| Phase | Marker |
+|-------|--------|
+| Before ceremony audio/anims | ≤ 801B0278 |
+| During fanfare + win poses | **801B03D0 / 80014540 loop** |
+| Rewards UI | **801B0524** |
+
+Patch target class: shorten/skip BATRES ceremony wait (03D0–0430 region / s4 loop / 14540 pump) **without** quiet FAN2. Confirm music is already requested before first 03D0 vs only sustained by the loop.
