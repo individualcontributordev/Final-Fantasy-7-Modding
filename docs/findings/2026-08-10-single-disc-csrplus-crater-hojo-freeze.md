@@ -1,7 +1,7 @@
 # Finding: Single-disc CSR+ freeze entering crater (before Hojo)
 
 **Date:** 2026-08-10
-**Status:** open — first reported CSR+ + single-disc field freeze
+**Status:** inconclusive — freeze cleared after DuckStation restart; not confirmed pack bug
 **Stack (operator):** Disc 1 — CSR + CSR+ + Single-disc + Fanfare off + Field encounters Light 25%
 
 ## Report
@@ -58,3 +58,17 @@ Note exact field name at freeze (CRATER_1, CRATER_2, BLIN*, CANON_2, …).
 - mods/single-disc/README.md
 - mods/single-disc/patches/csr-d2d3-field-merge-on-d1.md
 - CSR pack csr-plus-scene-hojo-fd-manip-v0.1.0 (disc 2 only)
+
+## Operator follow-up (same session)
+
+Retest: **both** single-disc CSR and single-disc CSR+ froze on crater entry once,
+then after **restarting DuckStation** both stacks **worked**.
+
+No standing issue to fix right now. Treat first freezes as possible emulator/session
+state (stale RAM, bad load, long session) unless it returns after a clean boot.
+
+Still want a deliberate late-game CSR+ single-disc smoke later (not emergency).
+
+Structural note (Hojo CSR+ pack is D2-only on D1 single-disc) remains true for
+future RE, but is **not** proven to cause this freeze after the restart clears it.
+
