@@ -272,3 +272,18 @@ Also **nop** jal 800A7254 at 801B028C (anim type-4 seed) while keeping s4=0:
 - If fanfare still plays without poses -> music starts elsewhere (before/parallel BATTLE).
 - If both still play -> start is earlier than this BATRES block.
 
+## BATRES s4=0 + nop anim4 smoke
+
+Operator: **animations still there** (with wait=0 and jal 800A7254 nopped).
+
+### Conclusion
+
+Win poses (and likely fanfare start) do **not** depend on the BATRES type-4
+800A7254 seed loop alone. Other candidates still in BATRES setup (02E0-03B0):
+
+- sb actor bytes 0xC / 0xE
+- DAT_800fa6b8 / DAT_80163b80 ceremony flags
+- or start entirely before/outside this block (BATTLE.X on kill)
+
+Next: force-skip entire setup via j 801B03B0 at 801B02E0.
+
