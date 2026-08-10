@@ -1,75 +1,32 @@
-# Task: Confirm fanfare-skip v0.1.6 (shipped patch)
+# Single-disc + CSR+ + manip-movies (reminder)
 
-## Result already in (skip-setup smoke)
+## What you should get
 
-Operator on BATRES `j 801B03B0 @ 801B02E0` (+ s4=0 + nop 7254):
+| Stack | Layers |
+|-------|--------|
+| CSR only + Single-disc | CSR + Single-disc + CSR manip movies + ending movies |
+| CSR + CSR+ + Single-disc | CSR + CSR+ scene packs + Single-disc + ending movies only (no manip-movies) |
 
-- **No** win animations  
-- **No** fanfare music  
-- Battle ends after final kill (rewards path continues)
+Manip-movies = speedrun/FMV streams CSR still plays on one disc (CANONON, LASTMAP, ...).
+CSR+ cuts those scenes, so those ISO copies are skipped on purpose.
 
-That is the intended product behavior. Packaged as **fanfare-skip-v0.1.6**.
+Ending parts always ride with Single-disc (credits), with or without CSR+.
 
-## What 0.1.6 changes
+## Manifest rule
 
-`BATTLE/BATRES.X` only (same bytes all discs):
+single-disc-csr-manip-movies-v0.1.2 autoInclude:
 
-| VA | Patch |
-|----|-------|
-| **801B02E0** | force `j 801B03B0` (skip ceremony setup) |
-| 801B028C | nop `jal 800A7254` |
-| 801B02F8 / 032C / 03A0 | `ori s4,0,0` |
+- when single-disc-on-csr-v0.1.2 is selected
+- on base csr-v0.14.1
+- unless any selected id starts with csr-plus-scene- (or CSR+ master toggle is on)
 
-Does **not** touch FAN2.SND or BATTLE.X `800A2974` stub from 0.1.5.
+## If you still see manip-movies with CSR+ on
 
-Packs: `builder/fanfare-skip-v0.1.6` (+ on-csr / on-highwind). Manifest: 0.1.5 off, 0.1.6 on.
+1. Hard-refresh the builder.
+2. Check APPLIED.txt / zip name - ending packs are expected; manip-movies / csr-movies are not when CSR+ is on.
+3. Say check with APPLIED.txt paste if it still lists manip-movies with CSR+.
 
-## Build play image
+## Builder fix (site)
 
-```bash
-cd "$(git rev-parse --show-toplevel)"
-git pull --ff-only
-python3 scripts/apply_layer.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  builder/fanfare-skip-v0.1.6/layers/disc1.layer.json \
-  -o workspace/iso-extract/ff7_d1_fanfare_skip_v016.bin
-```
-
-## Play / confirm
-
-1. DuckStation → `workspace/iso-extract/ff7_d1_fanfare_skip_v016.bin`
-2. Win **two** normal random battles.
-3. Optionally one boss if easy.
-
-## Evidence
-
-```
-Image: ff7_d1_fanfare_skip_v016.bin  (layer fanfare-skip-v0.1.6)
-
-Battle 1:
-  fanfare: YES/NO
-  win poses: YES/NO
-  rewards/exp/items OK: YES/NO
-  return to field OK: YES/NO
-  freeze: YES/NO
-
-Battle 2:
-  same: OK / PROBLEM (notes)
-
-notes:
-ship ready?: YES/NO
-```
-
-## When done
-
-```bash
-cd "$(git rev-parse --show-toplevel)"
-git pull --ff-only
-git add docs/INSTRUCTIONS.md
-git commit -m "ops: confirm fanfare-skip v0.1.6"
-git push
-```
-
-Then say **check**.
-
-Do **not** commit .bin images.
+autoIncludeMatches also suppresses manip-movies when the CSR+ master checkbox is on,
+not only when a disc-specific csr-plus-scene-* pack is in the id list.
