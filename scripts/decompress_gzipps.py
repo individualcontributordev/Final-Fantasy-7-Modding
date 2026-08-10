@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Decompress FF7 PS1 GZIPPS overlays (FIELD.BIN, WORLD.BIN, …) for Ghidra."""
+"""Decompress FF7 PS1 GZIPPS overlays for Ghidra.
+
+Handles FIELD.BIN, WORLD.BIN, BATTLE/BATTLE.X, BATRES.X, BATINI.X, etc.
+See docs/ghidra-battle-overlays.md for extract + image-base load addresses.
+"""
 
 from __future__ import annotations
 
