@@ -155,3 +155,4 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | 2026-08-11 | [single-disc-csrplus-early-freeze-layer-order](2026-08-11-single-disc-csrplus-early-freeze-layer-order.md) | CSR+SD early softlock; CSR+ disc1 needs apply-after-SD | open |
 | 2026-08-11 | [single-disc-cosmo-white2-hybrid](2026-08-11-single-disc-cosmo-white2-hybrid.md) | Cosmo/WHITE2 hybrid scripts; fixed SD 0.1.3 | confirmed |
 | 2026-08-11 | [single-disc-white2-movie-crawl](2026-08-11-single-disc-white2-movie-crawl.md) | WHITE2 MDEC crawl; 0.1.3 undid movie trim; fixed 0.1.4 | confirmed |
+| 2026-08-11 | [single-disc-canon2-dskcg-las0-freeze](2026-08-11-single-disc-canon2-dskcg-las0-freeze.md) | Post-Hojo freeze 744; CANON_2 DSKCG3; fixed SD 0.1.5 | confirmed |
