@@ -167,3 +167,115 @@ def replace_file_padded(img: bytearray, path: str, new_data: bytes) -> IsoFile:
         remaining -= take
         sector += 1
     return meta
+
+
+def _patch_dirent_size_only(img: bytearray, path: str, new_size: int) -> None:
+    """Update ISO9660 dirent size (LE+BE) keeping LBA. File must already exist."""
+    import struct
+
+    parts = [p for p in path.replace("\\", "/").upper().split("/") if p]
+    pvd = _user(img, 16)
+    root = pvd[156 : 156 + 34]
+    dir_lba = _u32_le(root, 2)
+    dir_size = _u32_le(root, 10)
+    target = parts[-1]
+    parent_parts = parts[:-1]
+
+    for part in parent_parts:
+        entries = _list_dir(img, dir_lba, dir_size)
+        match = next((e for e in entries if e[0] == part), None)
+        if match is None or not match[3]:
+            raise FileNotFoundError(path)
+        dir_lba, dir_size = match[1], match[2]
+
+    # load dir extent
+    remaining = dir_size
+    sector = dir_lba
+    data = bytearray()
+    secs: list[int] = []
+    while remaining > 0:
+        take = min(USER, remaining)
+        secs.append(sector)
+        data.extend(_user(img, sector)[:take])
+        remaining -= take
+        sector += 1
+
+    # find record for target
+    i = 0
+    found_pos = None
+    while i < len(data):
+        length = data[i]
+        if length == 0:
+            nxt = ((i // USER) + 1) * USER
+            if nxt <= i:
+                break
+            i = nxt
+            continue
+        if i + length > len(data):
+            break
+        rec = data[i : i + length]
+        name_len = rec[32]
+        if name_len == 1 and rec[33] in (0x00, 0x01):
+            i += length
+            continue
+        name = _iso_name(bytes(rec[33 : 33 + name_len]))
+        if name == target:
+            found_pos = i
+            break
+        i += length
+    if found_pos is None:
+        raise FileNotFoundError(path)
+
+    struct.pack_into("<I", data, found_pos + 10, new_size)
+    struct.pack_into(">I", data, found_pos + 14, new_size)
+
+    off = 0
+    rem = dir_size
+    for s in secs:
+        take = min(USER, rem)
+        chunk = bytes(data[off : off + take])
+        if take < USER:
+            user = bytearray(_user(img, s))
+            user[:take] = chunk
+            _write_user(img, s, bytes(user))
+        else:
+            _write_user(img, s, chunk)
+        off += take
+        rem -= take
+
+
+def replace_file_within_sectors(img: bytearray, path: str, new_data: bytes) -> IsoFile:
+    """Replace file; size may change if it still fits the same 2048-byte sector count.
+
+    Used for CSR+ FIELD maps a few bytes larger/smaller than the baseline slot
+    but within the same sector allocation (common after Makou edits).
+    """
+    meta = find_file(img, path)
+    old_sec = (meta.size + USER - 1) // USER
+    new_sec = (len(new_data) + USER - 1) // USER
+    if new_sec > old_sec:
+        raise ValueError(
+            f"{path}: new file needs {new_sec} sectors but slot has {old_sec} "
+            f"({len(new_data)} bytes > capacity {old_sec * USER})"
+        )
+    # Always set ISO size to payload length when sector count allows.
+    if len(new_data) != meta.size:
+        _patch_dirent_size_only(img, path, len(new_data))
+        meta = find_file(img, path)
+        if meta.size != len(new_data):
+            raise RuntimeError(f"{path}: size patch failed got {meta.size}")
+
+    # Write full sector allocation (payload + zero pad to end of last sector).
+    cap = old_sec * USER
+    payload = new_data + (b"\x00" * (cap - len(new_data)))
+    remaining = cap
+    sector = meta.lba
+    offset = 0
+    while remaining > 0:
+        take = min(USER, remaining)
+        chunk = payload[offset : offset + take]
+        _write_user(img, sector, chunk if take == USER else chunk + b"\x00" * (USER - take))
+        offset += take
+        remaining -= take
+        sector += 1
+    return find_file(img, path)
