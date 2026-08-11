@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-11 | [csr-csrplus-nmkin2-freeze-not-single-disc](2026-08-11-csr-csrplus-nmkin2-freeze-not-single-disc.md) | Field 122 freeze on CSR+CSR+ (no SD); NMKIN_2 untouched by CSR+ |
 | 2026-08-09 | [win-transition-fn-800a1158](2026-08-09-win-transition-fn-800a1158.md) | win_transition handoff live: 16F4 s1=FFFF, jal 801B0000 ra=800A1734 | confirmed |
 | 2026-08-09 | [batres-801b0000-victory-entry](2026-08-09-batres-801b0000-victory-entry.md) | BATRES@801B0000: entry from win_transition; first jal 800A6000 x10 | confirmed |
 | 2026-08-09 | [batres-late-jals-stuck-tone](2026-08-09-batres-late-jals-stuck-tone.md) | freeze = quiet FAN2 only; stub-only OK (fanfare still plays) | confirmed |
