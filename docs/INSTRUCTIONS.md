@@ -1,42 +1,32 @@
-# Task: Rebuild CSR+ single-disc after apply-order fix
+# Task: Retest Cosmo / Bugenhagen on single-disc-on-csr v0.1.3
 
-## What went wrong
+## What was wrong
 
-CSR+ disc1 layers must be applied **after** Single-disc. Older builds could apply
-CSR+ earlier and corrupt the image (glitch on early fields, softlock after elevator
-with music still playing).
+Field **642 = WHITE1** (Cosmo). WATERFALL = loslake*.  
 
-Builder now forces order: Single-disc first, CSR+ last.
+v0.1.2 left **hybrid** scripts (`WHITE2`, `LOSLAKE3`, …) that were not pure CSR D1 or D2 → glitches in that area even when early Midgar was fine.
 
-Finding: docs/findings/2026-08-11-single-disc-csrplus-early-freeze-layer-order.md
+## Fix shipped
+
+**single-disc-on-csr-v0.1.3** — Cosmo corridor maps restored from pure CSR Disc 2.  
+Hard-refresh builder. 0.1.2 is disabled.
+
+Also keep apply order: Single-disc before CSR+ (previous fix).
 
 ## What you do
 
-1. Hard-refresh https://individualcontributor.dev/builder/
-2. Rebuild Disc 1: Base CSR, mods Single-disc + CSR+ (optional enc/fanfare)
-3. Open APPLIED.txt — Single-disc should appear **before** CSR+ scene packs
-4. Fully quit DuckStation, reopen
-5. Play through first reactor / elevator stretch
-
-### Optional bisect if still broken
-
-- A: CSR only
-- B: CSR + Single-disc (no CSR+)
-- C: CSR + Single-disc + CSR+
+1. Hard-refresh builder  
+2. Rebuild Disc 1: CSR + Single-disc (+ CSR+ if you want same stack)  
+3. Confirm APPLIED.txt shows **single-disc-on-csr-v0.1.3** (not 0.1.2)  
+4. Fresh DuckStation; go to Cosmo / Bugenhagen waterfall + field 642 (WHITE1)
 
 ## Evidence
 
 ```
-Hard-refresh builder: YES/NO
-APPLIED order (after base, first few mods):
-Early fields / elevator: OK / GLITCH / FREEZE
-Softlock music continues?: YES/NO
-After full DS quit+reopen same?: YES/NO
-
-If failed:
-A CSR only:
-B CSR+SD:
-C full:
+APPLIED single-disc id:
+Cosmo waterfall: OK / GLITCH / FREEZE
+Field 642 WHITE1: OK / GLITCH / FREEZE
+CSR+ on?: YES/NO
 notes:
 ```
 
@@ -46,7 +36,7 @@ notes:
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: retest CSR+ SD after layer apply order fix"
+git commit -m "ops: retest Cosmo after single-disc 0.1.3"
 git push
 ```
 
