@@ -1,17 +1,50 @@
-# Single-disc CSR+ — no open freeze
+# Task: Retest CSR+ single-disc after D2/D3 trims on D1
 
-## Latest
+## What changed
 
-Crater-before-Hojo freezes appeared on both CSR and CSR+ single-disc, then
-**went away after restarting DuckStation**. No pack bug confirmed.
+CSR+ **Hojo / COTA / endgame** packs now ship **disc1** layers so a Disc 1
+single-disc build gets those FIELD trims (before: disc2/disc3 only).
 
-## Still good later
+Also shipped: **Single-disc on Highwind** (`single-disc-on-highwind-v0.1.0`).
 
-Casual smoke of **CSR + CSR+ + Single-disc** through late D1/crater/Hojo when convenient.
-Prefer **fresh DuckStation boot** (or hard reset) before calling a freeze real.
+Hard-refresh the builder first.
 
-If a freeze returns after a clean restart, note stack + APPLIED.txt + map name and say **check**.
+## Build A — CSR + CSR+ + Single-disc
 
-## Next
+- Base: CSR
+- Mods: CSR+, Single-disc (encounters/fanfare optional)
+- Disc 1
 
-No required operator task. Idle until a new goal or a clean-boot repro.
+Check APPLIED.txt lists CSR+ packs (hojo/cota/endgame/aerith as applicable).
+
+Play toward crater / late D1 and note if trims feel present vs earlier missing trims.
+
+## Build B — Highwind + Single-disc (smoke)
+
+- Base: Highwind
+- Mods: Single-disc
+- Confirm endings in APPLIED.txt
+- Boot + short play
+
+## Evidence
+
+```
+Build A APPLIED packs:
+Crater / late game with CSR+: OK / FAIL
+notes:
+
+Build B Highwind + SD: boot OK? YES/NO
+notes:
+```
+
+## When done
+
+```bash
+cd "$(git rev-parse --show-toplevel)"
+git pull --ff-only
+git add docs/INSTRUCTIONS.md
+git commit -m "ops: retest CSR+ SD after disc1 CSR+ layers"
+git push
+```
+
+Then say **check**.

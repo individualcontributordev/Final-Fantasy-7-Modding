@@ -534,6 +534,22 @@
       "version": "0.1.2"
     },
     {
+      "id": "single-disc-on-highwind-v0.1.0",
+      "name": "Single-disc",
+      "kind": "mod",
+      "blurb": "Play the whole game from one Disc 1 image on Highwind. Field maps from Highwind discs 2 and 3 are on Disc 1. Ending/credits movies auto-apply.",
+      "hint": "Use one Disc 1 image for the full Highwind game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind-v0.2.0"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-highwind-v0.1.0/layers/disc1.layer.json"
+      },
+      "enabled": true
+    },
+    {
       "id": "single-disc-csr-manip-movies-v0.1.0",
       "name": "Single-disc CSR movies",
       "kind": "mod",
@@ -614,9 +630,13 @@
       "uiHidden": true,
       "version": "0.1.0",
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "groupLabel": "Single-disc ending credits (always on)",
@@ -638,9 +658,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -663,9 +687,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -688,9 +716,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -713,9 +745,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -738,9 +774,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -763,9 +803,13 @@
       "enabled": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.2",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.1",
+          "highwind-v0.2.0"
+        ],
+        "addonSelectedAny": [
+          "single-disc-on-csr-v0.1.2",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",

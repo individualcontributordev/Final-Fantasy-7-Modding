@@ -10,7 +10,7 @@ by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs. |
 | CSR base (alone) | YES | Single-disc + CSR movies (auto) + ending credits (auto, 7 parts). |
 | CSR + CSR+ scene packs | YES | Single-disc + ending credits (auto). No CSR manip-movies pack. |
-| Highwind | NEXT | Endings pack listed for Highwind; needs a Highwind single-disc main option before auto. No manip-movies. |
+| Highwind | YES | single-disc-on-highwind-v0.1.0 - D2/D3 FIELD merge + SNOVA; endings auto. No manip-movies. |
 
 ### Three pack families (do not merge)
 
@@ -21,6 +21,11 @@ by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR
 | Ending credits (7 hidden parts) | **Always on** with Single-disc (CSR, including CSR+). Not a player toggle. Highwind listed for later. |
 
 Clean pack single-disc-clean-v0.1.1 is retired (enabled false in builder manifest).
+
+
+### CSR+ on single-disc Disc 1
+
+CSR+ Hojo/COTA/endgame packs now include disc1 layers. Apply order: CSR, Single-disc, then CSR+ packs. Disc 1 single-disc builds get those trims, not only Aerith.
 
 ## Shipping order
 

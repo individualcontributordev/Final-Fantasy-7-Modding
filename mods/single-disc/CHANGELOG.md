@@ -2,6 +2,12 @@
 
 Newest at top.
 
+## 0.1.4 (CSR+ D2/D3 trims on single-disc D1 + Highwind SD)
+
+- CSR+ disc1 layers (CSR repo): Hojo, COTA, endgame on Disc 1 with Single-disc.
+- single-disc-on-highwind-v0.1.0: Highwind D2/D3 FIELD merge + SNOVA; endings auto.
+- replace_file_within_sectors in scripts/psx_mode2_iso.py.
+
 ## 0.1.3 (endings as separate builder mod)
 
 - **Ending credits pack (own mod):** `single-disc-endings-v0.1.0-part1` … `part7`
