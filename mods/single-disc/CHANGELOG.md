@@ -2,6 +2,17 @@
 
 Newest at top.
 
+## 0.1.8 (undo LOST2 to cos_btm2 force — fix black break)
+
+- v0.1.6/0.1.7 forced LOST2 MAPJUMP to cos_btm2 and opened COS_BTM2 IFUW gates.
+  That path is NOT how multi-disc CSR runs the break. On normal disc1 to disc2,
+  GameMoment is never 0xa455, so LOST2 skips the cos_btm2 jump. Forcing the jump
+  lands COS_BTM2 with the wrong moment: IFSW GM >= 0x202 hits RET immediately
+  (black screen + music, no break menu).
+- Restore pure CSR Disc 2 LOST2 + COS_BTM2 bytes (no force).
+- Keep BLACKBGB Ask/DSKCG strips + disc-id SETBYTE and all 0.1.5 field Ask strips.
+- Builder: single-disc-on-csr-v0.1.8 enabled; 0.1.7/0.1.6 disabled.
+
 ## 0.1.7 (disc1-to-disc2 break choreography on COS_BTM2)
 
 - After LOST2 MAPJUMP to cos_btm2 (0.1.6), break still skipped: COS_BTM2 gates the

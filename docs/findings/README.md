@@ -15,6 +15,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
 | 2026-08-11 | [single-disc-cos-btm2-disc-id-ifuw-break](2026-08-11-single-disc-cos-btm2-disc-id-ifuw-break.md) | Build C fail: COS_BTM2 disc-id IFUW skips break; forced 0.1.7 |
+| 2026-08-11 | single-disc LOST2 force black break | `2026-08-11-single-disc-lost2-force-caused-black-break.md` |
 | 2026-08-11 | [csrplus-sd-disc2-break-and-d2-field-overwrite](2026-08-11-csrplus-sd-disc2-break-and-d2-field-overwrite.md) | CSR+SD: D2 field overwrite + movies pack suppressed under CSR+ |
 | 2026-08-11 | [csr-csrplus-nmkin2-freeze-not-single-disc](2026-08-11-csr-csrplus-nmkin2-freeze-not-single-disc.md) | Field 122 freeze on CSR+CSR+ (no SD); NMKIN_2 untouched by CSR+ |
 | 2026-08-09 | [win-transition-fn-800a1158](2026-08-09-win-transition-fn-800a1158.md) | win_transition handoff live: 16F4 s1=FFFF, jal 801B0000 ra=800A1734 | confirmed |
