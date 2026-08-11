@@ -1,51 +1,53 @@
-# Task: Disc1 to disc2 break — CSR + Single-disc without CSR+
+# Task: Disc1 to disc2 break — CSR + Single-disc only (no CSR+)
 
-## What we learned (full stack CSR + CSR+ + SD, no CE)
+## Locked in
 
-| Observation | Meaning |
-|-------------|---------|
-| Unmodified + CSR-only early path OK | CSR base OK; CE likely caused earlier Midgar freezes |
-| Slow loads around BCX (CLOUD etc.) | Long CD seeks; hitch then recover — not a hard softlock |
-| CSR trims gone after Jenova / spiral | Single-disc replaces Cosmo/LOST/WHITE with CSR Disc 2 fields by design |
-| Disc1 to disc2 black + D2 music, no break | LOST2 IFUW to cos_btm2 force is present; CSR+ turns off auto pack single-disc-csr-manip-movies |
+| Build | Disc1 to disc2 break |
+|-------|----------------------|
+| CSR multi-disc (swap D2) | **OK** — break scene as expected |
+| Unmodified / CSR early Midgar | OK |
+| CSR + CSR+ + Single-disc | black + D2 music, no break (prior report) |
 
-Manip-movies seeds D2-related FMVs on Disc 1. With CSR+ checked it is suppressed (unlessAddonIdPrefix csr-plus-scene-). Endings still auto-apply.
+CSR base is not the bug. Next isolate **Single-disc** with movies pack on.
 
-## What you do now
+## Why Build C
 
-### Build C — CSR + Single-disc only (no CSR+)
+On CSR + CSR+ + SD, auto pack `single-disc-csr-manip-movies` is **off**
+(because `unlessAddonIdPrefix: csr-plus-scene-`). That pack seeds D2 FMVs on D1.
+LOST2 force MAPJUMP to cos_btm2 is already in single-disc v0.1.6.
+
+Build C = CSR + Single-disc, **CSR+ off** so movies auto-includes.
+
+## What you do
 
 1. Hard-refresh builder
-2. Base: CSR
-3. Mods: Single-disc only (CSR+ off, Fanfare off)
+2. Base: **CSR**
+3. Mods: **Single-disc only** (CSR+ off, Fanfare off)
 4. Build Disc 1
-5. APPLIED.txt must include:
+5. APPLIED.txt must show:
    - single-disc-on-csr-v0.1.6 (or current)
-   - single-disc-csr-manip-movies (auto)
+   - **single-disc-csr-manip-movies-...** (auto)
    - endings parts OK
-   - no csr-plus-scene packs
-6. Quit DuckStation fully; no CE; no save-state for the transition
-7. From in-game save before disc1 to disc2 (or play to it), run the transition
+   - **no** csr-plus-scene-*
+6. Quit DuckStation fully; **no CE**; prefer in-game save before transition (no savestate)
+7. Run disc1 to disc2 / break path
 
-Expect: CSR Disc 2 break / cos_btm2 routing, not only black + music.
-
-### Optional Build D (only if C is OK)
-
-CSR + CSR+ + Single-disc again, same transition — confirm break still fails when movies pack is suppressed.
+**Expect:** break / cos_btm2 like multi-disc CSR, not black + music only.
 
 ## Evidence (paste)
 
 ```
-Build C APPLIED key lines (single-disc + movies present? CSR+ absent?):
+APPLIED (confirm movies pack YES, CSR+ NO):
 Disc1 to disc2: OK BREAK / BLACK+MUSIC / FREEZE / OTHER
-Break / cos_btm2 seen?: YES / NO
-Playable after?: YES / NO
-CE?: NO
+Break / cos_btm2: YES / NO
+Playable after: YES / NO
+CE: NO
 notes:
 ```
 
 ## When done
 
-Commit this file with evidence, push, say check.
+Commit this file with evidence, push, say **check**.
 
-Commit example: ops: disc1-disc2 break CSR+SD without CSR+ (movies pack on)
+If C is OK: fix is allow manip-movies with CSR+ (or equivalent FMV on full stack).
+If C still fails: bug is Single-disc core / LOST2 routing, not CSR+ gate.
