@@ -152,3 +152,4 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 - [2026-07-25-field-bin-extract](2026-07-25-field-bin-extract.md)
 - [2026-07-25-cdmage-field-bin-path](2026-07-25-cdmage-field-bin-path.md)
 | 2026-08-10 | [single-disc-csrplus-crater-hojo-freeze](2026-08-10-single-disc-csrplus-crater-hojo-freeze.md) | crater freeze: cleared after DS restart; CSR+ smoke still TODO | inconclusive |
+| 2026-08-11 | [single-disc-csrplus-early-freeze-layer-order](2026-08-11-single-disc-csrplus-early-freeze-layer-order.md) | CSR+SD early softlock; CSR+ disc1 needs apply-after-SD | open |

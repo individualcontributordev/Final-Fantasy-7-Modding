@@ -1,39 +1,42 @@
-# Task: Retest CSR+ single-disc after D2/D3 trims on D1
+# Task: Rebuild CSR+ single-disc after apply-order fix
 
-## What changed
+## What went wrong
 
-CSR+ **Hojo / COTA / endgame** packs now ship **disc1** layers so a Disc 1
-single-disc build gets those FIELD trims (before: disc2/disc3 only).
+CSR+ disc1 layers must be applied **after** Single-disc. Older builds could apply
+CSR+ earlier and corrupt the image (glitch on early fields, softlock after elevator
+with music still playing).
 
-Also shipped: **Single-disc on Highwind** (`single-disc-on-highwind-v0.1.0`).
+Builder now forces order: Single-disc first, CSR+ last.
 
-Hard-refresh the builder first.
+Finding: docs/findings/2026-08-11-single-disc-csrplus-early-freeze-layer-order.md
 
-## Build A — CSR + CSR+ + Single-disc
+## What you do
 
-- Base: CSR
-- Mods: CSR+, Single-disc (encounters/fanfare optional)
-- Disc 1
+1. Hard-refresh https://individualcontributor.dev/builder/
+2. Rebuild Disc 1: Base CSR, mods Single-disc + CSR+ (optional enc/fanfare)
+3. Open APPLIED.txt — Single-disc should appear **before** CSR+ scene packs
+4. Fully quit DuckStation, reopen
+5. Play through first reactor / elevator stretch
 
-Check APPLIED.txt lists CSR+ packs (hojo/cota/endgame/aerith as applicable).
+### Optional bisect if still broken
 
-Play toward crater / late D1 and note if trims feel present vs earlier missing trims.
-
-## Build B — Highwind + Single-disc (smoke)
-
-- Base: Highwind
-- Mods: Single-disc
-- Confirm endings in APPLIED.txt
-- Boot + short play
+- A: CSR only
+- B: CSR + Single-disc (no CSR+)
+- C: CSR + Single-disc + CSR+
 
 ## Evidence
 
 ```
-Build A APPLIED packs:
-Crater / late game with CSR+: OK / FAIL
-notes:
+Hard-refresh builder: YES/NO
+APPLIED order (after base, first few mods):
+Early fields / elevator: OK / GLITCH / FREEZE
+Softlock music continues?: YES/NO
+After full DS quit+reopen same?: YES/NO
 
-Build B Highwind + SD: boot OK? YES/NO
+If failed:
+A CSR only:
+B CSR+SD:
+C full:
 notes:
 ```
 
@@ -43,7 +46,7 @@ notes:
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: retest CSR+ SD after disc1 CSR+ layers"
+git commit -m "ops: retest CSR+ SD after layer apply order fix"
 git push
 ```
 
