@@ -1,53 +1,51 @@
-# Task: Isolate field 122 (NMKIN_2 stairs) freeze — CSR vs CSR+
+# Task: Playtest CSR + CSR+ + Single-disc (no Cheat Engine)
 
-## Why
+## Already confirmed (chat / this session)
 
-You froze on **field 122** after the elevator stairs with **CSR + CSR+** and **no Single-disc**.
+| Build | Field 122 stairs / early path | Notes |
+|-------|-------------------------------|--------|
+| Unmodified D1 | OK | Pristine baseline |
+| CSR D1 only | OK | CSR base not the early freeze |
+| Cheat Engine | off | Earlier freezes may have been CE attaching to DuckStation |
 
-Agent check:
+## What you are testing now
 
-- Field **122 = NMKIN_2** (reactor walkway after ELEVTR1).
-- **CSR+ does not modify** NMKIN_2 / ELEVTR1 at all on Disc 1.
-- **CSR base also leaves NMKIN_2 stock**, but **does trim NMKIN_1** (and other early reactor maps). Softlock may be bad state from an earlier map, not corrupted 122 data.
+**CSR + CSR+ + Single-disc** Disc 1, cold DuckStation, **no Cheat Engine**.
 
-We need one cold isolation pass.
+## Setup
 
-## What you do
-
-### Build A — CSR only (control)
-
-1. Hard-refresh the builder
+1. Hard-refresh the builder (recent fixes: disc-filtered APPLIED, no bogus size pad on CSR+)
 2. Base: **CSR**
-3. Mods: **nothing** (no CSR+, no Single-disc, no Fanfare, no encounter packs)
-4. Build Disc 1, note zip name
-5. **Quit DuckStation fully**, open the new bin (no save-state)
-6. Cold boot / new game then bomb mission then elevator then **walk down stairs on field 122**
-7. Record: OK or FREEZE
+3. Mods: **CSR+** + **Single-disc** (no Fanfare unless noted)
+4. Build Disc 1
+5. Check **APPLIED.txt**:
+   - Single-disc listed
+   - CSR+ lines only packs that apply to **this disc** (not every disc2/3-only id)
+   - Apply order intent: Single-disc before CSR+ in the stack
+6. Quit DuckStation fully; open new `.bin` + `.cue`
+7. **Do not** attach Cheat Engine
 
-### Build B — CSR + CSR+ only
+## Smoke path
 
-1. Same as A but enable **CSR+** (all-or-none)
-2. Confirm APPLIED.txt has CSR+ scene packs and **no** single-disc
-3. Same cold path to field 122 stairs
-4. Record: OK or FREEZE
+1. New game → bomb mission → elevator → **field 122 stairs**
+2. Continue → Guard Scorpion → **after battle** (back to field)
+3. Optional later: Cosmo / disc1→2 if early path is clean
 
 ## Evidence (paste below)
 
 ```
-Build A CSR-only APPLIED (paste or list lines):
-field 122 stairs: OK / FREEZE
-notes:
+APPLIED.txt (full or key lines):
+Cheat Engine attached?: NO
+Cold DuckStation quit/reopen?: YES/NO
 
-Build B CSR+CSR+ APPLIED (paste):
 field 122 stairs: OK / FREEZE
-notes:
-If freeze: music continues? YES/NO
-DuckStation FPS 0? YES/NO
-Any CD log snippet after freeze (optional):
+Guard Scorpion fight: OK / FREEZE
+After Scorpion (field return): OK / FREEZE
+notes (music continues? FPS 0? where exactly?):
 ```
 
 ## When done
 
 Commit this file with evidence, push, say **check**.
 
-Commit example: ops: isolate field 122 freeze CSR vs CSR+
+Commit example: ops: playtest CSR+CSR++SD no CE early Midgar
