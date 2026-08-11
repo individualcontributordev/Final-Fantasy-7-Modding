@@ -26,10 +26,18 @@ def apply_layer(image: bytearray, layer: dict) -> None:
             image.extend(b"\x00" * (end - len(image)))
         image[offset:end] = data
     # Grown images: trailing zeros often match zero-pad of a shorter original and
-    # are omitted from records. Honor stats.modifiedBytes so size/alignment match.
+    # are omitted from records. Honor stats.modifiedBytes ONLY when this layer was
+    # built against an image the same size as the one we are patching
+    # (stats.originalBytes == current len). Cross-baseline packs must not inflate.
     stats = layer.get("stats") or {}
+    original = stats.get("originalBytes")
     target = stats.get("modifiedBytes")
-    if isinstance(target, int) and target > len(image):
+    if (
+        isinstance(target, int)
+        and target > len(image)
+        and isinstance(original, int)
+        and original == len(image)
+    ):
         image.extend(b"\x00" * (target - len(image)))
 
 
