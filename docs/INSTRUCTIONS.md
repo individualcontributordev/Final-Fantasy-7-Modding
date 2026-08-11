@@ -29,15 +29,24 @@ Build C = CSR + Single-disc, **CSR+ off** so movies auto-includes.
    - **single-disc-csr-manip-movies-...** (auto)
    - endings parts OK
    - **no** csr-plus-scene-*
-6. Quit DuckStation fully; **no CE**; prefer in-game save before transition (no savestate)
-7. Run disc1 to disc2 / break path
+6. Quit DuckStation fully; **no CE**
+7. Start from either:
+   - an **in-game save** before the transition, or
+   - a **save-state loaded a field or two before** the scene under test
+     (not mid-cutscene / mid-transition — that can freeze on residual RAM)
+8. Walk into the disc1 to disc2 / break path from that load
 
 **Expect:** break / cos_btm2 like multi-disc CSR, not black + music only.
+
+### Save-state rule (this project)
+
+Save-states are **fine** when the state is taken **a field or two away** from the scene being tested, then you play forward into it on the **new** bin. Avoid loading a state that was saved **inside** the break / swap / softlock itself.
 
 ## Evidence (paste)
 
 ```
 APPLIED (confirm movies pack YES, CSR+ NO):
+Load method: in-game save / save-state (field or two before)
 Disc1 to disc2: OK BREAK / BLACK+MUSIC / FREEZE / OTHER
 Break / cos_btm2: YES / NO
 Playable after: YES / NO
