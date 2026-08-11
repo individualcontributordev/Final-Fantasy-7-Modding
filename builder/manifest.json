@@ -498,7 +498,10 @@
       "enabled": false,
       "groupLabel": "Single-disc",
       "optionLabel": "Clean (retired)",
-      "layout": "global"
+      "layout": "global",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-csr-v0.1.1",
@@ -514,7 +517,10 @@
       },
       "enabled": false,
       "hint": "Applies to the whole game \u2014 use one Disc 1 image only.",
-      "layout": "global"
+      "layout": "global",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-csr-v0.1.2",
@@ -531,7 +537,10 @@
       "enabled": false,
       "hint": "Use one Disc 1 image for the full game.",
       "layout": "global",
-      "version": "0.1.2"
+      "version": "0.1.2",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-csr-v0.1.3",
@@ -547,7 +556,10 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.3/layers/disc1.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-csr-v0.1.4",
@@ -563,7 +575,10 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.4/layers/disc1.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-csr-v0.1.5",
@@ -579,7 +594,10 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.5/layers/disc1.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-csr-v0.1.6",
@@ -595,7 +613,10 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.6/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-on-highwind-v0.1.0",
@@ -611,7 +632,10 @@
       "discs": {
         "1": "./single-disc-on-highwind-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.0",
@@ -630,7 +654,10 @@
       "groupLabel": "Single-disc CSR movies (auto)",
       "optionLabel": "Seed v0.1.0",
       "uiHidden": true,
-      "version": "0.1.0"
+      "version": "0.1.0",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.1",
@@ -649,7 +676,10 @@
       "groupLabel": "Single-disc CSR movies LBA alias (auto)",
       "optionLabel": "v0.1.1 LBA 250450",
       "uiHidden": true,
-      "version": "0.1.1"
+      "version": "0.1.1",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.2",
@@ -675,7 +705,10 @@
         ],
         "unlessAddonIdPrefix": "csr-plus-scene-"
       },
-      "version": "0.1.2"
+      "version": "0.1.2",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part1",
@@ -704,7 +737,10 @@
         ]
       },
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 1/7"
+      "optionLabel": "part 1/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part2",
@@ -733,7 +769,10 @@
       },
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 2/7"
+      "optionLabel": "part 2/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part3",
@@ -762,7 +801,10 @@
       },
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 3/7"
+      "optionLabel": "part 3/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part4",
@@ -791,7 +833,10 @@
       },
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 4/7"
+      "optionLabel": "part 4/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part5",
@@ -820,7 +865,10 @@
       },
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 5/7"
+      "optionLabel": "part 5/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part6",
@@ -849,7 +897,10 @@
       },
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 6/7"
+      "optionLabel": "part 6/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "single-disc-endings-v0.1.0-part7",
@@ -878,7 +929,10 @@
       },
       "version": "0.1.0",
       "groupLabel": "Single-disc ending credits (always on)",
-      "optionLabel": "part 7/7"
+      "optionLabel": "part 7/7",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "fanfare-skip-v0.1.4",
@@ -895,7 +949,10 @@
         "2": "./fanfare-skip-v0.1.4/layers/disc2.layer.json",
         "3": "./fanfare-skip-v0.1.4/layers/disc3.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.4",
@@ -912,7 +969,10 @@
         "2": "./fanfare-skip-on-csr-v0.1.4/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-csr-v0.1.4/layers/disc3.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.4",
@@ -929,7 +989,10 @@
         "2": "./fanfare-skip-on-highwind-v0.1.4/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-highwind-v0.1.4/layers/disc3.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-v0.1.5",
@@ -946,7 +1009,10 @@
         "2": "./fanfare-skip-v0.1.5/layers/disc2.layer.json",
         "3": "./fanfare-skip-v0.1.5/layers/disc3.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-v0.1.6",
@@ -963,7 +1029,10 @@
         "2": "./fanfare-skip-v0.1.6/layers/disc2.layer.json",
         "3": "./fanfare-skip-v0.1.6/layers/disc3.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.5",
@@ -980,7 +1049,10 @@
         "2": "./fanfare-skip-on-csr-v0.1.5/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-csr-v0.1.5/layers/disc3.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.6",
@@ -997,7 +1069,10 @@
         "2": "./fanfare-skip-on-csr-v0.1.6/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-csr-v0.1.6/layers/disc3.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.5",
@@ -1014,7 +1089,10 @@
         "2": "./fanfare-skip-on-highwind-v0.1.5/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-highwind-v0.1.5/layers/disc3.layer.json"
       },
-      "enabled": false
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.6",
@@ -1031,7 +1109,10 @@
         "2": "./fanfare-skip-on-highwind-v0.1.6/layers/disc2.layer.json",
         "3": "./fanfare-skip-on-highwind-v0.1.6/layers/disc3.layer.json"
       },
-      "enabled": true
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
     }
   ],
   "bases": [],

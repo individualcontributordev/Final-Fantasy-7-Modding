@@ -1,38 +1,47 @@
-# Task: Retest disc1 to disc2 (LOST2 break) on single-disc-on-csr v0.1.6
+# Task: Playtest CSR + CSR+ + Single-disc (no Cheat Engine)
 
-## What was wrong
+## Already confirmed (chat / this session)
 
-Disc 1 → “disc 2” freeze / no break scene at the start of disc 2.
+| Build | Field 122 stairs / early path | Notes |
+|-------|-------------------------------|--------|
+| Unmodified D1 | OK | Pristine baseline |
+| CSR D1 only | OK | CSR base not the early freeze |
+| Cheat Engine | off | Earlier freezes may have been CE attaching to DuckStation |
 
-**Cause:** CSR D2 **LOST2** break jumps to **cos_btm2**, but an IFUW often
-skipped that MAPJUMP on single-disc (disc-id / flag context). You landed on
-the forest without the D2 open break.
+## What you are testing now
 
-**Fix:** **single-disc-on-csr-v0.1.6** forces that MAPJUMP (IFUW else-jump 0).
-Still includes 0.1.5 post-Hojo Ask strips.
+**CSR + CSR+ + Single-disc** Disc 1, cold DuckStation, **no Cheat Engine**.
 
-## What you do
+## Setup
 
-1. Hard-refresh the builder  
-2. Rebuild Disc 1: **CSR + CSR+ + Single-disc**  
-3. Confirm APPLIED.txt shows **single-disc-on-csr-v0.1.6**  
-4. **Quit DuckStation fully**, then open the new bin (no save-state for this test)  
-5. From an **in-game save** before the disc1→2 transition, run the transition  
-6. Expect **break / cos_btm2 routing**, then LOST2 area playable  
+1. Hard-refresh the builder (recent fixes: disc-filtered APPLIED, no bogus size pad on CSR+)
+2. Base: **CSR**
+3. Mods: **CSR+** + **Single-disc** (no Fanfare unless noted)
+4. Build Disc 1
+5. Check **APPLIED.txt**:
+   - Single-disc listed
+   - CSR+ lines only packs that apply to **this disc** (not every disc2/3-only id)
+   - Apply order intent: Single-disc before CSR+ in the stack
+6. Quit DuckStation fully; open new `.bin` + `.cue`
+7. **Do not** attach Cheat Engine
 
-Also optional: cold-boot retest post-Hojo → field 744 if you have that save.
+## Smoke path
 
-## Evidence (fill in)
+1. New game → bomb mission → elevator → **field 122 stairs**
+2. Continue → Guard Scorpion → **after battle** (back to field)
+3. Optional later: Cosmo / disc1→2 if early path is clean
+
+## Evidence (paste below)
 
 ```
-APPLIED single-disc id:
-Disc1 to disc2 transition: OK / FREEZE / NO BREAK / OTHER
-Break scene / cosmo bottom2: SEEN / MISSING
-Field after transition playable?: YES / NO
-CSR+ on?: YES/NO
-Used save-state?: NO (preferred) / YES
-Cold DuckStation boot?: YES/NO
-notes:
+APPLIED.txt (full or key lines):
+Cheat Engine attached?: NO
+Cold DuckStation quit/reopen?: YES/NO
+
+field 122 stairs: OK / FREEZE
+Guard Scorpion fight: OK / FREEZE
+After Scorpion (field return): OK / FREEZE
+notes (music continues? FPS 0? where exactly?):
 ```
 
 ## When done
