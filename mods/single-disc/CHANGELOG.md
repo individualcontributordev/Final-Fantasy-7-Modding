@@ -2,6 +2,13 @@
 
 Newest at top.
 
+## 0.1.6 (disc1-to-disc2 LOST2 break)
+
+- Force CSR D2 LOST2 MAPJUMP to cos_btm2 (break scene) by clearing IFUW else-jump.
+- Fixes missing disc2 open break / freeze-like hang on single-disc.
+- Includes 0.1.5 residual Ask strips (CANON_2 post-Hojo, etc.).
+- Builder: single-disc-on-csr-v0.1.6 enabled; 0.1.5 disabled.
+
 ## 0.1.5 (post-Hojo / field 744 freeze)
 
 - Strip residual Ask-for-disc 2/3 (DSKCG) left after D2 field merge.

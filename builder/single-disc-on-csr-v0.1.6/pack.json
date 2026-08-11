@@ -1,0 +1,16 @@
+{
+  "id": "single-disc-on-csr-v0.1.6",
+  "name": "Single-disc",
+  "kind": "mod",
+  "version": "0.1.6",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. Disc1-to-disc2 LOST2 break scene forced. Prior Cosmo/post-Hojo fixes included. Endings auto-apply.",
+  "hint": "Use one Disc 1 image for the full CSR game.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  }
+}
