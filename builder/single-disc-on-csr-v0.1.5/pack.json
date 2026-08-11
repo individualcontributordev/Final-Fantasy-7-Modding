@@ -1,0 +1,16 @@
+{
+  "id": "single-disc-on-csr-v0.1.5",
+  "name": "Single-disc",
+  "kind": "mod",
+  "version": "0.1.5",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. Post-Hojo disc3 Ask strip + Cosmo movie fixes. Endings auto-apply. CSR movies auto when CSR+ is off.",
+  "hint": "Use one Disc 1 image for the full CSR game.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  }
+}

@@ -2,6 +2,14 @@
 
 Newest at top.
 
+## 0.1.5 (post-Hojo / field 744 freeze)
+
+- Strip residual Ask-for-disc 2/3 (DSKCG) left after D2 field merge.
+- CANON_2 (Sister Ray / post-Hojo) was the blocker into las0_1 (#744).
+- Also stripped: COSMIN2, FRCYO, HYOU11, MDS5_W, SHPIN_3, SUBIN_1B, WHITEBG3.
+- HYOU8_1 still has one disc-2 Ask (grew past ISO sector slot; follow-up).
+- Builder: single-disc-on-csr-v0.1.5 enabled; 0.1.4 disabled.
+
 ## 0.1.4 (WHITE2 movie crawl fix)
 
 - Restore movie-trimmed WHITE2 + LOSLAKE3 from 0.1.2 (pairs to 0).
