@@ -6,11 +6,15 @@
 
 ## Confirmed OK (this session)
 
-| Build | Early Midgar |
-|-------|----------------|
-| Unmodified D1 | OK |
-| CSR D1 only | OK |
-| CE off | earlier freezes may have been CE |
+| Build | Result |
+|-------|--------|
+| Unmodified D1 | OK early path |
+| CSR D1 only | OK early path |
+| **CSR multi-disc D1 then swap to D2** | **OK — break scene loads as expected** |
+| CE off | earlier Midgar freezes likely CE |
+
+So **CSR base disc1 to disc2 break is fine**. Failure is only on the one-disc stack (and/or CSR+ suppressing manip-movies).
+
 
 ## Report on full stack
 
