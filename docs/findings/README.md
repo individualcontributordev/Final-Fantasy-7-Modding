@@ -154,3 +154,4 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | 2026-08-10 | [single-disc-csrplus-crater-hojo-freeze](2026-08-10-single-disc-csrplus-crater-hojo-freeze.md) | crater freeze: cleared after DS restart; CSR+ smoke still TODO | inconclusive |
 | 2026-08-11 | [single-disc-csrplus-early-freeze-layer-order](2026-08-11-single-disc-csrplus-early-freeze-layer-order.md) | CSR+SD early softlock; CSR+ disc1 needs apply-after-SD | open |
 | 2026-08-11 | [single-disc-cosmo-white2-hybrid](2026-08-11-single-disc-cosmo-white2-hybrid.md) | Cosmo/WHITE2 hybrid scripts; fixed SD 0.1.3 | confirmed |
+| 2026-08-11 | [single-disc-white2-movie-crawl](2026-08-11-single-disc-white2-movie-crawl.md) | WHITE2 MDEC crawl; 0.1.3 undid movie trim; fixed 0.1.4 | confirmed |

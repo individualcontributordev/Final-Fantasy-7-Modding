@@ -2,6 +2,13 @@
 
 Newest at top.
 
+## 0.1.4 (WHITE2 movie crawl fix)
+
+- Restore movie-trimmed WHITE2 + LOSLAKE3 from 0.1.2 (pairs to 0).
+- v0.1.3 pure CSR D2 WHITE2 reintroduced PMVIE+MOVIE that play wrong streams on D1
+  (DuckStation MDEC/DMA crawl on field 643).
+- Builder: single-disc-on-csr-v0.1.4 enabled; 0.1.3 disabled.
+
 ## 0.1.4 (CSR+ D2/D3 trims on single-disc D1 + Highwind SD)
 
 - CSR+ disc1 layers (CSR repo): Hojo, COTA, endgame on Disc 1 with Single-disc.

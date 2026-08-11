@@ -36,3 +36,5 @@ WHITE1/2/IN, HEKIGA, BLUE_1/2, LOSLAKE1–3, LOST1–3, LOSIN1–3, LOSINN
 
 Shipped as `single-disc-on-csr-v0.1.3` (0.1.2 disabled). Auto-include movies/endings
 point at 0.1.3.
+
+**Update:** Hybrid bytes were the intentional movie trim. v0.1.3 pure-D2 restore caused WHITE2 crawl — see 2026-08-11-single-disc-white2-movie-crawl.md. Fixed in 0.1.4.
