@@ -2,6 +2,18 @@
 
 Newest at top.
 
+## 0.1.9 (LOSIN2 end-of-D1 must stay CSR D1)
+
+- Field #632 LOSIN2 is end of disc 1 (before BLACKBGB disc-2 ask/break hub).
+- Blind D2 FIELD merge put CSR Disc 2 LOSIN2 on the one-disc image.
+- CSR D1 LOSIN2 init sets GameMoment 0xa455 (break sentinel) then party goes to
+  BLACKBGB. CSR D2 LOSIN2 never writes 0xa455 — so LOST2/COS_BTM2 break gates
+  never open (black + regular D2 music).
+- Restore CSR D1 LOSIN2. Keep CSR D2 LOST2 + COS_BTM2 (0.1.8) and BLACKBGB
+  Ask/DSKCG strips.
+- Prefer list: LOSIN2.DAT d1 (do not overwrite with D2 on future merges).
+- Builder: single-disc-on-csr-v0.1.9 enabled; 0.1.8 and older main packs off.
+
 ## 0.1.8 (undo LOST2 to cos_btm2 force — fix black break)
 
 - v0.1.6/0.1.7 forced LOST2 MAPJUMP to cos_btm2 and opened COS_BTM2 IFUW gates.
