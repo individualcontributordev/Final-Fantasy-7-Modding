@@ -2,6 +2,17 @@
 
 Newest at top.
 
+## 0.1.7 (disc1-to-disc2 break choreography on COS_BTM2)
+
+- After LOST2 MAPJUMP to cos_btm2 (0.1.6), break still skipped: COS_BTM2 gates the
+  scene on the same disc-id IFUW (18 20 00 00 55 a4). Multi-disc sets disc=2 after
+  swap; single-disc stays disc=1 so the else branch skips to black+music.
+- Clear COS_BTM2 IFUW else-jumps >= 0x08 (keep tiny +3 music taps).
+- Includes 0.1.6 LOST2 force + 0.1.5 Ask strips.
+- Builder: single-disc-on-csr-v0.1.7 enabled; 0.1.6 disabled.
+- scripts/lzs.py: real FF7 LZS compress for size-safe FIELD rewrites.
+
+
 ## 0.1.6 (disc1-to-disc2 LOST2 break)
 
 - Force CSR D2 LOST2 MAPJUMP to cos_btm2 (break scene) by clearing IFUW else-jump.

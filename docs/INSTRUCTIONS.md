@@ -1,62 +1,42 @@
-# Task: Disc1 to disc2 break — CSR + Single-disc only (no CSR+)
+# Task: Retest disc1-to-disc2 break on single-disc-on-csr v0.1.7
 
-## Locked in
+## What was wrong
 
-| Build | Disc1 to disc2 break |
-|-------|----------------------|
-| CSR multi-disc (swap D2) | **OK** — break scene as expected |
-| Unmodified / CSR early Midgar | OK |
-| CSR + CSR+ + Single-disc | black + D2 music, no break (prior report) |
+CSR multi-disc break OK. CSR + Single-disc (no CSR+) still: black screen + music, no break.
 
-CSR base is not the bug. Next isolate **Single-disc** with movies pack on.
+Cause: LOST2 already forced MAPJUMP to cos_btm2 (v0.1.6), but COS_BTM2 gates the break
+on disc-id IFUW. Single-disc never sets disc=2, so the else branch skips the scene.
 
-## Why Build C
-
-On CSR + CSR+ + SD, auto pack `single-disc-csr-manip-movies` is **off**
-(because `unlessAddonIdPrefix: csr-plus-scene-`). That pack seeds D2 FMVs on D1.
-LOST2 force MAPJUMP to cos_btm2 is already in single-disc v0.1.6.
-
-Build C = CSR + Single-disc, **CSR+ off** so movies auto-includes.
+Fix: single-disc-on-csr-v0.1.7 clears those IFUW else-jumps on COS_BTM2.
 
 ## What you do
 
-1. Hard-refresh builder
-2. Base: **CSR**
-3. Mods: **Single-disc only** (CSR+ off, Fanfare off)
-4. Build Disc 1
-5. APPLIED.txt must show:
-   - single-disc-on-csr-v0.1.6 (or current)
-   - **single-disc-csr-manip-movies-...** (auto)
-   - endings parts OK
-   - **no** csr-plus-scene-*
-6. Quit DuckStation fully; **no CE**
-7. Start from either:
-   - an **in-game save** before the transition, or
-   - a **save-state loaded a field or two before** the scene under test
-     (not mid-cutscene / mid-transition — that can freeze on residual RAM)
-8. Walk into the disc1 to disc2 / break path from that load
+1. Hard-refresh the builder
+2. Base: CSR
+3. Mods: Single-disc only (CSR+ off)
+4. Confirm APPLIED has single-disc-on-csr-v0.1.7
+5. Build Disc 1
+6. Quit DuckStation fully; no CE
+7. Load in-game save or save-state a field or two before the transition
+8. Run disc1-to-disc2 / break
 
-**Expect:** break / cos_btm2 like multi-disc CSR, not black + music only.
-
-### Save-state rule (this project)
-
-Save-states are **fine** when the state is taken **a field or two away** from the scene being tested, then you play forward into it on the **new** bin. Avoid loading a state that was saved **inside** the break / swap / softlock itself.
+Expect: break / cos_btm2 like multi-disc CSR
 
 ## Evidence (paste)
 
 ```
-APPLIED (confirm movies pack YES, CSR+ NO):
-Load method: in-game save / save-state (field or two before)
+APPLIED single-disc id:
+movies pack auto?: YES/NO
 Disc1 to disc2: OK BREAK / BLACK+MUSIC / FREEZE / OTHER
 Break / cos_btm2: YES / NO
 Playable after: YES / NO
+Load method: in-game save / save-state (field or two before)
 CE: NO
 notes:
 ```
 
 ## When done
 
-Commit this file with evidence, push, say **check**.
+Commit this file with evidence, push, say check.
 
-If C is OK: fix is allow manip-movies with CSR+ (or equivalent FMV on full stack).
-If C still fails: bug is Single-disc core / LOST2 routing, not CSR+ gate.
+Commit example: ops: retest disc1-disc2 break after single-disc 0.1.7
