@@ -77,3 +77,7 @@ Update after edits:
 Side effect: D1 ids 7/34/36/37 no longer play original D1 clips (CAR_1209, GOLD7_2, JAIROFAL, JAIROFLY).
 
 After playtest: add more include rows and re-run inject + rebuild layer.
+
+| 2026-08-12 | Dual/flicker audio on manip movies | MOVIE_ID eng_size was ISO bytes + stale aux; CSR D2 uses nsec*2336 Form2 size. Pack v0.1.3 copies source Form2 eng size/aux. Residual zero optional (FF7_ZERO_MOVIE_RESIDUAL=1). |
+
+| 2026-08-12 | Rocket instead of waterfall | v0.1.3 dropped LBA 250450 CANONON Form2 alias; v0.1.4 restores alias + keeps Form2 MOVIE_ID |

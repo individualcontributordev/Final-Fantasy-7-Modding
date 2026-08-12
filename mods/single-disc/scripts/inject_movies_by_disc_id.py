@@ -184,6 +184,31 @@ def _write_raw_sectors(img: bytearray, dest_lba: int, raw: bytes) -> None:
     img[off : off + len(raw)] = raw
 
 
+def _zero_residual_sectors(
+    img: bytearray, lba: int, old_iso_size: int, new_iso_size: int
+) -> int:
+    """Zero leftover MODE2 sectors after shrinking a MOVIE slot.
+
+    Shrink injects leave the old stream's tail on disc. The XA player can still
+    pick up residual audio (flicker/double audio) if size/aux is wrong or the
+    decoder overruns. Always silence the abandoned tail.
+    """
+    from psx_mode2_iso import SECTOR
+
+    old_nsec = (old_iso_size + USER - 1) // USER
+    new_nsec = (new_iso_size + USER - 1) // USER
+    if new_nsec >= old_nsec:
+        return 0
+    n = old_nsec - new_nsec
+    off = (lba + new_nsec) * SECTOR
+    end = off + n * SECTOR
+    if end > len(img):
+        end = len(img)
+        n = max(0, (end - off) // SECTOR)
+    img[off:end] = b"\x00" * (end - off)
+    return n
+
+
 def _append_file_grow(img: bytearray, path: str, data: bytes) -> int:
     """Deprecated Form1 path — use _append_raw_grow for FMV."""
     from psx_mode2_iso import SECTOR, USER_OFF
@@ -340,11 +365,21 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
                 % (d1_name, old_lba)
             )
     else:
+        # Shrink or same slot: write source 2352s, then silence abandoned tail.
         if src_size != d1_size:
             _set_file_size(d1, path, src_size)
         _write_raw_sectors(d1, old_lba, raw)
+        # Residual zeroing is optional: correct Form2 eng_size is what stops
+        # the player. Zeroing abandoned tails helps safety but makes huge layers.
+        zapped = 0
+        if __import__("os").environ.get("FF7_ZERO_MOVIE_RESIDUAL", "") == "1":
+            zapped = _zero_residual_sectors(d1, old_lba, d1_size, src_size)
         note_lba = find_file(d1, path).lba
-        # LBA usually unchanged; always refresh engine size/aux from source.
+        # Engine length must be Form2-style (nsec*2336) from source table when
+        # available — ISO byte size alone leaves wrong aux and can mix streams.
+        if eng_size < _form2_size_field(src_size):
+            # Source row missing or ISO-sized; force Form2 length.
+            eng_size = _form2_size_field(src_size)
         movie_id_patches = _patch_movie_id_bin(
             d1, old_lba, note_lba, eng_size, aux=eng_aux
         )
@@ -359,6 +394,7 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
         "lba": note_lba,
         "movie_id_patches": movie_id_patches,
         "engine_size": eng_size,
+        "residual_sectors_zeroed": locals().get("zapped", 0),
     }
 
 
