@@ -7,7 +7,7 @@
   ],
   "layout": "global",
   "autoIncludeWhen": {
-    "addonSelected": "single-disc-on-csr-v0.1.20",
+    "addonSelectedPrefix": "single-disc-on-csr-v",
     "bases": [
       "csr-v0.14.1"
     ],

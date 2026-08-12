@@ -18,7 +18,8 @@ Prior Hojo/break/waterfall field fixes unchanged.
 3. Add-on: Single-disc only (CSR+ scenes off)
 4. Confirm APPLIED includes:
    - single-disc-on-csr-v0.1.21 (not 0.1.20)
-   - single-disc-csr-manip-movies-v0.1.4 (auto)
+   - single-disc-csr-manip-movies-v0.1.4 (auto, hidden)
+   - single-disc-endings-v0.1.0-part1..part7 (auto, hidden)
 5. Build Disc 1 zip and load in DuckStation.
 
 ## What to test
