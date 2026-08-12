@@ -59,10 +59,15 @@ Core layer is **diff vs CSR Disc 1 base**, not vs pristine.
 ## Before publish
 
 ```bash
+# 1) Regression suite (locks Hojo/break/waterfall/PARASHOT/MD8/EDC/apply order)
+python3 -m pytest tests/ -q -m "not integration"   # always
+python3 -m pytest tests/ -q -m integration         # needs pristine + CSR bins
+
+# 2) Layer stack applies cleanly (update addon ids to the pack you ship)
 python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin \
   --disc 1 --base csr-v0.14.1 \
-  --addon single-disc-on-csr-v0.1.2 \
-  --addon single-disc-csr-manip-movies-v0.1.2 \
+  --addon single-disc-csr-manip-movies-v0.1.4 \
+  --addon single-disc-on-csr-v0.1.24 \
   --addon single-disc-endings-v0.1.0-part1 \
   --addon single-disc-endings-v0.1.0-part2 \
   --addon single-disc-endings-v0.1.0-part3 \
@@ -75,6 +80,8 @@ python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANT
 ```
 
 Update `mods/single-disc/CHANGELOG.md` (newest top), `VERSION`, `builder/manifest.json`.
+
+**Do not ship if integration tests fail.** Suite lives in `tests/` (see `scripts/README.md`).
 
 ## Findings to keep in mind
 
