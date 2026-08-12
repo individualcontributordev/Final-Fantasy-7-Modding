@@ -15,6 +15,13 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
 | 2026-08-11 | [single-disc-cos-btm2-disc-id-ifuw-break](2026-08-11-single-disc-cos-btm2-disc-id-ifuw-break.md) | Build C fail: COS_BTM2 disc-id IFUW skips break; forced 0.1.7 |
+| 2026-08-12 | LOSLAKE1 LBA 250450 alias regressed in movies 0.1.3 | `2026-08-12-loslake1-lba-250450-alias-regressed.md` |
+| 2026-08-12 | endings+waterfall same FMV audio class | `2026-08-12-endings-waterfall-same-movie-id-audio.md` |
+| 2026-08-12 | manip-movies dual audio MOVIE_ID Form2 size | `2026-08-12-manip-movies-dual-audio-movie-id.md` |
+| 2026-08-12 | CANON_2 AKAO corrupted by DSKCG strip | `2026-08-12-single-disc-canon2-akao-dskcg-strip.md` |
+| 2026-08-12 | D1-D2 OK on SD 0.1.9; Hojo next | `2026-08-12-single-disc-d1d2-ok-hojo-next.md` |
+| 2026-08-11 | single-disc LOSIN2 must stay CSR D1 | `2026-08-11-single-disc-losin2-must-be-csr-d1.md` |
+| 2026-08-11 | single-disc LOST2 force black break | `2026-08-11-single-disc-lost2-force-caused-black-break.md` |
 | 2026-08-11 | [csrplus-sd-disc2-break-and-d2-field-overwrite](2026-08-11-csrplus-sd-disc2-break-and-d2-field-overwrite.md) | CSR+SD: D2 field overwrite + movies pack suppressed under CSR+ |
 | 2026-08-11 | [csr-csrplus-nmkin2-freeze-not-single-disc](2026-08-11-csr-csrplus-nmkin2-freeze-not-single-disc.md) | Field 122 freeze on CSR+CSR+ (no SD); NMKIN_2 untouched by CSR+ |
 | 2026-08-09 | [win-transition-fn-800a1158](2026-08-09-win-transition-fn-800a1158.md) | win_transition handoff live: 16F4 s1=FFFF, jal 801B0000 ra=800A1734 | confirmed |

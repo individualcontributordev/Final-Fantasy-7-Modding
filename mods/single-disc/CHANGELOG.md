@@ -2,6 +2,44 @@
 
 Newest at top.
 
+## 0.1.20 (CANON_2 Hojo field — undo bad DSKCG strip in AKAO)
+
+- Report: CSR + Single-disc only; CANON_2 (#741) fully glitched as soon as the
+  Hojo field loads (disc-3 path not reachable).
+- MIM/BSX match CSR D2. All script slots and texts match CSR D2.
+- Only 14 bytes differ: inside the **AKAO** block, seven times `0e 03` became
+  `10 00`. That is the old Ask/DSKCG strip pattern (NOP DSKCG disc 3) applied as
+  a raw byte search, not as a real field opcode.
+- CSR D2 CANON_2 has **zero** DSKCG/ASK opcodes; those `0e 03` bytes are music
+  data. Corrupting them glitches the field on load.
+- Restore pure CSR Disc 2 CANON_2.DAT. Prefer: CANON_2.DAT d2 (keep pure D2;
+  do not raw-strip 0e0x inside AKAO).
+- Keeps 0.1.9 LOSIN2 D1 + LOST2/COS_BTM2 D2 break path.
+- Builder: single-disc-on-csr-v0.1.20 enabled; older main packs off.
+
+## 0.1.9 (LOSIN2 end-of-D1 must stay CSR D1)
+
+- Field #632 LOSIN2 is end of disc 1 (before BLACKBGB disc-2 ask/break hub).
+- Blind D2 FIELD merge put CSR Disc 2 LOSIN2 on the one-disc image.
+- CSR D1 LOSIN2 init sets GameMoment 0xa455 (break sentinel) then party goes to
+  BLACKBGB. CSR D2 LOSIN2 never writes 0xa455 — so LOST2/COS_BTM2 break gates
+  never open (black + regular D2 music).
+- Restore CSR D1 LOSIN2. Keep CSR D2 LOST2 + COS_BTM2 (0.1.8) and BLACKBGB
+  Ask/DSKCG strips.
+- Prefer list: LOSIN2.DAT d1 (do not overwrite with D2 on future merges).
+- Builder: single-disc-on-csr-v0.1.9 enabled; 0.1.8 and older main packs off.
+
+## 0.1.8 (undo LOST2 to cos_btm2 force — fix black break)
+
+- v0.1.6/0.1.7 forced LOST2 MAPJUMP to cos_btm2 and opened COS_BTM2 IFUW gates.
+  That path is NOT how multi-disc CSR runs the break. On normal disc1 to disc2,
+  GameMoment is never 0xa455, so LOST2 skips the cos_btm2 jump. Forcing the jump
+  lands COS_BTM2 with the wrong moment: IFSW GM >= 0x202 hits RET immediately
+  (black screen + music, no break menu).
+- Restore pure CSR Disc 2 LOST2 + COS_BTM2 bytes (no force).
+- Keep BLACKBGB Ask/DSKCG strips + disc-id SETBYTE and all 0.1.5 field Ask strips.
+- Builder: single-disc-on-csr-v0.1.8 enabled; 0.1.7/0.1.6 disabled.
+
 ## 0.1.7 (disc1-to-disc2 break choreography on COS_BTM2)
 
 - After LOST2 MAPJUMP to cos_btm2 (0.1.6), break still skipped: COS_BTM2 gates the
