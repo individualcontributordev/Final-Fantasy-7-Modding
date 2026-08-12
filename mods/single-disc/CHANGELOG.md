@@ -1,3 +1,11 @@
+## 0.1.23 (FSHIP_12 PARASHOT — Cloud Highwind deck FMV)
+
+- User: CSR D2 movie PARASHOT positions Cloud; CSR+single-disc cut/broken.
+- FSHIP_12 (#67) ad/3 on CSR: PMVIE 59 PARASHOT, 50 METEOFIX, 51 METEOSKY then MAPJUMP.
+- Single-disc had stripped those Set+Play ops (movie trim).
+- Restore CSR FSHIP_12.DAT + inject D2 PARASHOT/METEOFIX/METEOSKY into D1 mids 59/50/51.
+- Keeps MD8_52 NRCRL (0.1.22) and MD8_5 NRCRLB (0.1.21). Prefer path fields unchanged.
+
 ## 0.1.22 (MD8_52 NRCRL — Cloud position FMV)
 
 - CSR multi-disc MD8_52 (#779) plays PMVIE mid=52 (NRCRL.MOV) then MAPJUMP FSHIP_25 (#72).

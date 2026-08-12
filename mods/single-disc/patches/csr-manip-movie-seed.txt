@@ -18,3 +18,8 @@
 
 # MD8_52 (#779): PMVIE mid=52 D2 NRCRL (Cloud position then FSHIP_25). Shipped v0.1.22.
 2 NRCRL.MOV ->MTNVL2.STR
+
+# FSHIP_12 (#67) ad/3: PARASHOT + meteo pair (Cloud Highwind). Shipped v0.1.23.
+2 PARASHOT.MOV ->OPENINGE.MOV
+2 METEOFIX.MOV ->MTCRL.STR
+2 METEOSKY.MOV ->MTNVL.STR
