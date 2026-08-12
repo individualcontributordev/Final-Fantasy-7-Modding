@@ -25,6 +25,32 @@ Named presets only (`light` / `standard` / `dense` ↔ 25 / 50 / 75). Never inve
 - Same-group add-ons use `exclusiveGroup: field-encounter-rate` (one density at a time).
 - After CSR releases a new base id, rebuild Field packs here.
 
+## Single-disc apply order
+
+Builder ranks (site `builder.js` `addonApplyRank` — keep in sync with tests):
+
+| Rank | Pack family |
+|------|-------------|
+| 10 | `single-disc-csr-manip-movies*` |
+| 20 | `single-disc-on-*` |
+| 30 | `single-disc-endings*` |
+| 40+ | encounters / fanfare / other gameplay |
+| 50 | `csr-plus-scene-*` |
+
+New single-disc core packs that inject path FMVs must be **bin-diffed after movies**
+(so later apply order restores unique-LBA payloads).
+
+## Regression tests
+
+After changing packs, layers, or builder contracts that affect disc output:
+
+```bash
+python3 -m pytest tests/ -q -m "not integration"
+python3 -m pytest tests/ -q -m integration   # needs discs
+```
+
+Extend `tests/` when fixing a regression so it cannot recur silently.
+
 ## Commit surface
 
 Commit JSON under `builder/` only — never `.bin` / workspace extracts.
