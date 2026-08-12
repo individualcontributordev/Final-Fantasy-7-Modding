@@ -1,3 +1,10 @@
+## 0.1.22 (MD8_52 NRCRL — Cloud position FMV)
+
+- CSR multi-disc MD8_52 (#779) plays PMVIE mid=52 (NRCRL.MOV) then MAPJUMP FSHIP_25 (#72).
+- Single-disc had stripped Set+Play (movie trim); jump ran with no FMV — Cloud mis-positioned vs CSR D2.
+- Restore CSR MD8_52.DAT (Set+Play) and inject D2 NRCRL into D1 mid52 (MTNVL2 slot, grow).
+- Keeps 0.1.21 NRCRLB mid53 (MD8_5). Prefer fields LOSIN2/LOST2/CANON_2/BLACKBGB unchanged.
+
 ## 0.1.21 (MD8_5 mid53 NRCRLB — Highwind 71 to 67 to 731)
 
 - Path without COTA/Hojo skip: FSHIP_24 (#71) to FSHIP_12 (#67) to MD8_5 (#731).

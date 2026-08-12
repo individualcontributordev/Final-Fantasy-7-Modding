@@ -1,36 +1,26 @@
-# INSTRUCTIONS — playtest single-disc v0.1.21 (MD8_5 / 71-67-731)
+# INSTRUCTIONS — playtest single-disc v0.1.22 (MD8_52 Cloud FMV)
 
 ## What changed
 
-CSR Highwind path without scene skip: field 71 (FSHIP_24) to 67 (FSHIP_12) to 731 (MD8_5)
-could hang after leaving the deck.
+Vs CSR Disc 2 multi: after Diamond Weapon approach, MD8_52 should play NRCRL
+(positions Cloud) then Highwind FSHIP_25.
 
-Cause: MD8_5 plays movie id 53. On Disc 2 that is NRCRLB; on Disc 1 it was still NIVLSFS.
-Wrong FMV blocked progress after the MAPJUMP (jump itself was fine).
+Single-disc had removed that Set+Play; jump still happened so the movie felt cut/broken.
 
-Fix: single-disc-on-csr-v0.1.21 injects D2 NRCRLB into D1 mid53.
-Prior Hojo/break/waterfall field fixes unchanged.
+v0.1.22: restore MD8_52 movie ops + inject D2 NRCRL at mid52.
+MD8_5 NRCRLB (v0.1.21) kept. Hojo/break untouched.
 
-## COPY-PASTE — rebuild + play
+## Build
 
 1. Hard-refresh https://individualcontributor.dev/builder/
-2. Base: CSR
-3. Add-on: Single-disc only (CSR+ scenes off)
-4. Confirm APPLIED includes:
-   - single-disc-on-csr-v0.1.21 (not 0.1.20)
-   - single-disc-csr-manip-movies-v0.1.4 (auto, hidden)
-   - single-disc-endings-v0.1.0-part1..part7 (auto, hidden)
-5. Build Disc 1 zip and load in DuckStation.
+2. Base CSR, Single-disc only (CSR+ off)
+3. APPLIED must include single-disc-on-csr-v0.1.22 (+ manip-movies + endings auto)
+4. Build Disc 1
 
-## What to test
+## Test
 
 | Path | Expect |
 |------|--------|
-| No-skip Highwind / DW approach | 71 to 67 deck leave to 731 MD8_5 FMV then continue |
-| Hojo CANON_2 + FMV audio | Still good (unchanged) |
-| Disc 1 to 2 break (LOSIN2/LOST2) | Still good |
-| Waterfall / LOSLAKE1 | Still good |
-
-## If 731 still fails
-
-Note whether MD8_5 loads (field art) vs black vs movie hang.
+| DW Highwind path (no skip) | MD8_5 FMV, then MD8_52 NRCRL plays fully, Cloud ends correct, to FSHIP_25 |
+| CSR D2 multi compare | Same movie/exit as multi-disc CSR |
+| Hojo / disc1 to 2 break / waterfall | Still OK |
