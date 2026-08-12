@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-13 | [fship12-parashot-cloud-position](2026-08-13-fship12-parashot-cloud-position.md) | SD missing FSHIP_12 PARASHOT (Cloud Highwind deck FMV) |
 | 2026-08-13 | [md8-52-nrcrl-cloud-position](2026-08-13-md8-52-nrcrl-cloud-position.md) | SD vs CSR D2: MD8_52 missing NRCRL FMV (Cloud position) |
 | 2026-08-12 | [fship12-md8-5-mid53-nrcrlb](2026-08-12-fship12-md8-5-mid53-nrcrlb.md) | SD: 71-67-731 hang = MD8_5 PMVIE mid53 wrong D1 movie (NRCRLB) |
 | 2026-08-12 | [csr-single-disc-field-movie-impact](2026-08-12-csr-single-disc-field-movie-impact.md) | CSR+SD offline field/movie impact vs pristine D1/D2/D3 (89 SD FIELD, 9 MOVIE slots) |
