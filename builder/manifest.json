@@ -693,7 +693,7 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.20/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
@@ -758,7 +758,7 @@
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.20",
+        "addonSelected": "single-disc-on-csr-v0.1.21",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -782,7 +782,7 @@
       },
       "enabled": false,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.20",
+        "addonSelected": "single-disc-on-csr-v0.1.21",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -831,7 +831,7 @@
       "optionLabel": "v0.1.2 cumulative",
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.20",
+        "addonSelected": "single-disc-on-csr-v0.1.21",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -1245,6 +1245,26 @@
       "beta": true,
       "status": "beta",
       "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.21",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.21",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.21: NRCRLB FMV on MD8_5 (mid53) so Highwind 71->67->731 works. Hojo CANON_2 / LOSIN2 break path unchanged.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.21/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     }
   ],
   "bases": [],
