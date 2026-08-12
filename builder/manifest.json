@@ -740,6 +740,32 @@
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
+      "id": "single-disc-csr-manip-movies-v0.1.4",
+      "name": "CSR manip movies",
+      "kind": "mod",
+      "version": "0.1.4",
+      "blurb": "D2/D3 manip FMVs on D1. v0.1.4 restores LBA 250450 CANONON Form2 alias for LOSLAKE1 waterfall seek (was rocket/RCKTFAIL). Keeps Form2 MOVIE_ID eng size/aux.",
+      "hint": "Hidden. Auto with Single-disc on CSR when CSR+ off.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.20",
+        "bases": [
+          "csr-v0.14.1"
+        ],
+        "unlessAddonIdPrefix": "csr-plus-scene-"
+      }
+    },
+    {
       "id": "single-disc-csr-manip-movies-v0.1.3",
       "name": "CSR manip movies",
       "kind": "mod",
@@ -754,7 +780,7 @@
       "discs": {
         "1": "./single-disc-csr-manip-movies-v0.1.3/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.20",
         "bases": [

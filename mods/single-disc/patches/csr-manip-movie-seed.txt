@@ -8,3 +8,6 @@
 2 CANONON.MOV ->JAIROFAL.MOV
 # LASTFLOR.MOV also wants D1 id 36 (JAIROFAL); deferred — conflicts with CANONON for #637.
 # JUNSEA.STR was wrong for #637 multi-disc triplet (not used when disc id = 1).
+
+# After inject: also run alias_d2_seek_lba_on_d1.py so ISO LBA 250450 is
+# CANONON Form2 sectors (LOSLAKE1 absolute seek). MOVIE_ID[47] alone is not enough.
