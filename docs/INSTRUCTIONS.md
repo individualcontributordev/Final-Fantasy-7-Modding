@@ -1,42 +1,46 @@
-# Task: Retest Hojo field (CANON_2) on single-disc-on-csr v0.1.20
+# Task: Retest manip-movies audio after v0.1.3 (Hojo CANONHT2)
 
-## Closed earlier
+## Closed
 
-v0.1.9: Jenova, end disc 1 trims, disc1-to-disc2, break scene OK.
+- single-disc-on-csr-v0.1.20: CANON_2 Hojo field OK (no full glitch on load)
+- D1 to D2 break OK on 0.1.9+
 
-## What was wrong on Hojo
+## Open (audio)
 
-CANON_2 (#741) glitched as soon as the field loaded (CSR + Single-disc, no CSR+).
-v0.1.5 raw DSKCG strip rewrote `0e 03` bytes inside **AKAO music data** (not real
-disc-change ops). CSR D2 CANON_2 has zero DSKCG/ASK opcodes.
+Manip-movies had real audio plus a flickering/extra sound. Shrink-inject wrote
+correct CANONHT2 bytes into CAR_1209 but left MOVIE_ID engine size as ISO
+byte length + old aux, while CSR D2 uses Form2 eng size (nsec*2336) and source
+aux. Player could mis-length the stream (dual/flicker audio).
 
 ## Fix
 
-single-disc-on-csr-v0.1.20 restores pure CSR Disc 2 CANON_2.DAT.
+single-disc-csr-manip-movies-v0.1.3 — Form2 MOVIE_ID eng size/aux from source
+disc. Auto with Single-disc when CSR+ off.
 
 ## What you do
 
-1. Hard-refresh the builder
+1. Hard-refresh builder
 2. Base: CSR
-3. Mods: Single-disc only (CSR+ off)
-4. Confirm APPLIED has single-disc-on-csr-v0.1.20
+3. Mods: Single-disc only (CSR+ off so movies auto-include)
+4. APPLIED must show:
+   - single-disc-on-csr-v0.1.20
+   - single-disc-csr-manip-movies-v0.1.3
 5. Build Disc 1
 6. Quit DuckStation fully; no CE
-7. Load save-state a field or two before Hojo (e.g. BLIN66_6 / FSHIP_24), play in
-8. Check CANON_2 on load, fight, post-fight toward BLACKBGD / disc3 if possible
+7. Save-state a field or two before Hojo; enter CANON_2 / play Hojo FMV path
+8. Listen: one clean track, no flicker/double audio
 
-Expect: Hojo field looks like multi-disc CSR (not fully glitched on entry).
+Also spot-check any other seeded FMV you notice if easy.
 
 ## Evidence (paste)
 
 ```
 APPLIED single-disc id:
-movies pack auto?: YES/NO
+APPLIED movies id:
 CSR+: OFF
-CANON_2 on load: OK / GLITCH / FREEZE
-Hojo fight: OK / GLITCH / FREEZE / NOT REACHED
-Post-Hojo / BLACKBGD: OK / GLITCH / FREEZE / NOT REACHED
-Toward disc3 / LAS0_1: OK / GLITCH / FREEZE / NOT REACHED
+Hojo field load: OK / GLITCH
+Hojo FMV/audio: CLEAN / FLICKER+DOUBLE / OTHER
+Other FMVs notes:
 Load method: in-game save / save-state (field or two before)
 CE: NO
 notes:
@@ -45,5 +49,3 @@ notes:
 ## When done
 
 Commit this file with evidence, push, say check.
-
-Commit example: ops: retest Hojo CANON_2 after single-disc 0.1.20
