@@ -673,6 +673,26 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.9/layers/disc1.layer.json"
       },
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.20",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.20",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. CANON_2 (Hojo) is pure CSR D2 again (no bad AKAO strip). LOSIN2 D1 + LOST2 D2 break path kept. Endings auto-apply.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.20/layers/disc1.layer.json"
+      },
       "enabled": true,
       "beta": true,
       "status": "beta",
@@ -759,7 +779,7 @@
       "optionLabel": "v0.1.2 cumulative",
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.9",
+        "addonSelected": "single-disc-on-csr-v0.1.20",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -792,7 +812,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
@@ -823,7 +843,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
@@ -855,7 +875,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
@@ -887,7 +907,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
@@ -919,7 +939,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
@@ -951,7 +971,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
@@ -983,7 +1003,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.9",
+          "single-disc-on-csr-v0.1.20",
           "single-disc-on-highwind-v0.1.0"
         ]
       },
