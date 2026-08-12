@@ -15,6 +15,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
 | 2026-08-11 | [single-disc-cos-btm2-disc-id-ifuw-break](2026-08-11-single-disc-cos-btm2-disc-id-ifuw-break.md) | Build C fail: COS_BTM2 disc-id IFUW skips break; forced 0.1.7 |
+| 2026-08-12 | manip-movies dual audio MOVIE_ID Form2 size | `2026-08-12-manip-movies-dual-audio-movie-id.md` |
 | 2026-08-12 | CANON_2 AKAO corrupted by DSKCG strip | `2026-08-12-single-disc-canon2-akao-dskcg-strip.md` |
 | 2026-08-12 | D1-D2 OK on SD 0.1.9; Hojo next | `2026-08-12-single-disc-d1d2-ok-hojo-next.md` |
 | 2026-08-11 | single-disc LOSIN2 must stay CSR D1 | `2026-08-11-single-disc-losin2-must-be-csr-d1.md` |
