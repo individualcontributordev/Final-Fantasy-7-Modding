@@ -2,6 +2,21 @@
 
 Newest at top.
 
+## 0.1.20 (CANON_2 Hojo field — undo bad DSKCG strip in AKAO)
+
+- Report: CSR + Single-disc only; CANON_2 (#741) fully glitched as soon as the
+  Hojo field loads (disc-3 path not reachable).
+- MIM/BSX match CSR D2. All script slots and texts match CSR D2.
+- Only 14 bytes differ: inside the **AKAO** block, seven times `0e 03` became
+  `10 00`. That is the old Ask/DSKCG strip pattern (NOP DSKCG disc 3) applied as
+  a raw byte search, not as a real field opcode.
+- CSR D2 CANON_2 has **zero** DSKCG/ASK opcodes; those `0e 03` bytes are music
+  data. Corrupting them glitches the field on load.
+- Restore pure CSR Disc 2 CANON_2.DAT. Prefer: CANON_2.DAT d2 (keep pure D2;
+  do not raw-strip 0e0x inside AKAO).
+- Keeps 0.1.9 LOSIN2 D1 + LOST2/COS_BTM2 D2 break path.
+- Builder: single-disc-on-csr-v0.1.20 enabled; older main packs off.
+
 ## 0.1.9 (LOSIN2 end-of-D1 must stay CSR D1)
 
 - Field #632 LOSIN2 is end of disc 1 (before BLACKBGB disc-2 ask/break hub).

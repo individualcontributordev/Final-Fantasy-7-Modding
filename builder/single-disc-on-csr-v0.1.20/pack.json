@@ -1,0 +1,19 @@
+{
+  "name": "Single-disc",
+  "kind": "mod",
+  "hint": "Use one Disc 1 image for the full CSR game.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "beta": true,
+  "status": "beta",
+  "id": "single-disc-on-csr-v0.1.20",
+  "version": "0.1.20",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. CANON_2 (Hojo) is pure CSR D2 again (no bad AKAO strip). LOSIN2 D1 + LOST2 D2 break path kept. Endings auto-apply.",
+  "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+}
