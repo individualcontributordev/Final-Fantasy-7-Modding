@@ -1,3 +1,35 @@
+## 0.1.24 (path FMVs after manip-movies — PARASHOT/NRCRL unique LBAs)
+
+- PARASHOT missing + MD8_5 glitch when manip-movies applied after SD core:
+  shared movie LBAs clobbered path injects.
+- Builder apply order: manip-movies then single-disc-on-csr.
+- Pack bin-diffed vs CSR+movies; path FMVs force-append at unique EOF LBAs
+  (PARASHOT, METEOFIX, METEOSKY, NRCRL, NRCRLB).
+- JAIROFAL/CANONON alias preserved. FSHIP_12/MD8_52 CSR scripts restored.
+
+## 0.1.23 (FSHIP_12 PARASHOT — Cloud Highwind deck FMV)
+
+- User: CSR D2 movie PARASHOT positions Cloud; CSR+single-disc cut/broken.
+- FSHIP_12 (#67) ad/3 on CSR: PMVIE 59 PARASHOT, 50 METEOFIX, 51 METEOSKY then MAPJUMP.
+- Single-disc had stripped those Set+Play ops (movie trim).
+- Restore CSR FSHIP_12.DAT + inject D2 PARASHOT/METEOFIX/METEOSKY into D1 mids 59/50/51.
+- Keeps MD8_52 NRCRL (0.1.22) and MD8_5 NRCRLB (0.1.21). Prefer path fields unchanged.
+
+## 0.1.22 (MD8_52 NRCRL — Cloud position FMV)
+
+- CSR multi-disc MD8_52 (#779) plays PMVIE mid=52 (NRCRL.MOV) then MAPJUMP FSHIP_25 (#72).
+- Single-disc had stripped Set+Play (movie trim); jump ran with no FMV — Cloud mis-positioned vs CSR D2.
+- Restore CSR MD8_52.DAT (Set+Play) and inject D2 NRCRL into D1 mid52 (MTNVL2 slot, grow).
+- Keeps 0.1.21 NRCRLB mid53 (MD8_5). Prefer fields LOSIN2/LOST2/CANON_2/BLACKBGB unchanged.
+
+## 0.1.21 (MD8_5 mid53 NRCRLB — Highwind 71 to 67 to 731)
+
+- Path without COTA/Hojo skip: FSHIP_24 (#71) to FSHIP_12 (#67) to MD8_5 (#731).
+- MAPJUMP 67 to 731 was already correct; MD8_5 plays PMVIE mid=53.
+- On multi-disc D2 mid53 = NRCRLB.MOV; on D1 mid53 = NIVLSFS.MOV (wrong stream).
+- Inject D2 NRCRLB Form2 into D1 NIVLSFS slot + MOVIE_ID eng size/aux.
+- Does not change LOSIN2 / LOST2 / CANON_2 / BLACKBGB / WHITE2 / FSHIP FIELD vs 0.1.20.
+
 # Single-disc changelog
 
 Newest at top.

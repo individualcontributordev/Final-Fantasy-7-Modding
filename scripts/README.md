@@ -25,8 +25,24 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 | Build BATRES ceremony smokes (s4 / anim4) | `build_batres_ceremony_smoke.py` | Fanfare wait/pose experiments |
 | Verify pack stack like the site | `verify_builder_config.py` | Before publish |
 | Smoke a built disc image | `verify_built_disc.py` | Needs `APPLIED.txt` beside image |
+| **Regression suite** | `tests/` + `pytest` | Unit (no bins) + integration (CSR stack) |
 
 Single-disc playtest / SNOVA / movies: `mods/single-disc/scripts/` (see that mod’s README + skill `ship-single-disc`).
+
+### Regression tests (prevent single-disc / builder breakage)
+
+```bash
+# Fast: apply_layer pad, builder ranks, EDC Form2 skip, prefer-list, manifest
+cd Final-Fantasy-7-Modding && python3 -m pytest tests/ -q -m "not integration"
+
+# Full stack (needs workspace/pristine + CSR cache/layers): Hojo, break,
+# waterfall LBA, PARASHOT/NRCRL, MD8_5 assets, endings non-clobber
+python3 -m pytest tests/ -q
+# or only integration:
+python3 -m pytest tests/ -q -m integration
+```
+
+Integration skips cleanly when disc images are missing. Run **full** suite before publishing a new `single-disc-on-csr-v*`.
 
 ## Quick starts
 

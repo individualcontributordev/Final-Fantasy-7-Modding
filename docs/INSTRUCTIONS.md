@@ -1,48 +1,43 @@
-# Task: Retest Bugen waterfall FMV (not rocket town)
+# INSTRUCTIONS — rebuild Disc 1 on single-disc v0.1.24 (PARASHOT playtest)
 
-## What was wrong
+## Why
 
-LOSLAKE1 (Bugenhagen / waterfall FD path) seeks absolute ISO LBA 250450.
-On CSR Disc 2 that LBA is CANONON. On stock D1 it is mid-RCKTFAIL (rocket).
+v0.1.24 + builder apply order fix path FMVs (PARASHOT / NRCRL) that movies
+used to clobber. Offline regression suite is green. You need a **new** builder
+Disc 1 image — older builds (0.1.23 and earlier) will still miss PARASHOT.
 
-manip-movies v0.1.3 fixed Form2 MOVIE_ID (id47 -> JAIROFAL=CANONON bytes) but
-dropped the v0.1.1/v0.1.2 Form2 sector alias at LBA 250450. Field code that
-seeks 250450 still hit rocket data.
+## Build (browser)
 
-## Fix
+1. Open https://individualcontributor.dev/builder/
+2. Hard-refresh (Cmd+Shift+R) so pack list + apply order update
+3. Base: **CSR**
+4. Mods: **Single-disc** only (version badge **v0.1.24**). CSR+ off for this test
+5. Confirm APPLIED (or pack list) includes:
+   - single-disc-csr-manip-movies-v0.1.4 (auto)
+   - single-disc-on-csr-v0.1.24
+   - endings parts if they auto-include (OK to leave on)
+6. Build **Disc 1** only; download zip; load the .bin/.cue in DuckStation
 
-single-disc-csr-manip-movies-v0.1.4:
-- Keeps Form2 MOVIE_ID eng size/aux (v0.1.3)
-- Restores raw CANONON copy at LBA 250450 (RCKTFAIL tail clobber tradeoff)
+## Playtest (in order if you can)
 
-Auto with Single-disc on CSR when CSR+ off. uiHidden.
+| Spot | Expect |
+|------|--------|
+| Highwind deck FSHIP_12 | Full **PARASHOT** FMV, Cloud placed correctly |
+| MD8_5 (#731) after that path | Clean NRCRLB FMV; field not glitched |
+| MD8_52 | NRCRL then Highwind |
+| Optional smoke | Hojo (CANON_2 audio OK), disc break LOSIN2 to LOST2, waterfall LOSLAKE |
 
-## What you do
+## Evidence
 
-1. Hard-refresh builder
-2. Base: CSR
-3. Mods: Single-disc only (CSR+ off)
-4. APPLIED must show:
-   - single-disc-on-csr-v0.1.20
-   - single-disc-csr-manip-movies-v0.1.4
-5. Build Disc 1; quit DuckStation; no CE
-6. Save-state a field or two before Cosmo / Bugenhagen waterfall FD scene
-7. Confirm lake/waterfall FMV (CANONON-style), NOT rocket town
+Paste into a reply (or commit under workspace/ if you prefer):
 
-## Evidence (paste)
+- APPLIED.txt contents from the zip
+- Pass/fail for PARASHOT + MD8_5
+- Any freeze/glitch notes (no Cheat Engine attached)
 
-```
-APPLIED single-disc:
-APPLIED movies:
-CSR+: OFF
-Waterfall FMV: OK LAKE / ROCKET / OTHER
-Audio: CLEAN / FLICKER / OTHER
-Load method:
-CE: NO
-notes:
-```
+## Agent note
 
-## When done
+Repo tests already cover stack invariants. From Final-Fantasy-7-Modding:
 
 Commit this file with evidence, push, say check.
 
@@ -54,3 +49,4 @@ warning in console for builder
 builder.js:468 showSaveFilePicker failed, using blob download SecurityError: Failed to execute 'showSaveFilePicker' on 'Window': Must be handling a user gesture to show a file picker.
     at saveZipDownload (builder.js:450:32)
     at applySelection (builder.js:1887:23)
+    python3 -m pytest tests/ -q

@@ -20,7 +20,8 @@
       "enabled": true,
       "rate": 25,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)"
+      "optionLabel": "Light (25%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-50-v0.1.2",
@@ -40,7 +41,8 @@
       "enabled": true,
       "rate": 50,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)"
+      "optionLabel": "Standard (50%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-75-v0.1.2",
@@ -60,7 +62,8 @@
       "enabled": true,
       "rate": 75,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)"
+      "optionLabel": "Dense (75%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-on-csr-25-v0.1.2",
@@ -80,7 +83,8 @@
       "enabled": true,
       "rate": 25,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)"
+      "optionLabel": "Light (25%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-on-csr-50-v0.1.2",
@@ -100,7 +104,8 @@
       "enabled": true,
       "rate": 50,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)"
+      "optionLabel": "Standard (50%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-on-csr-75-v0.1.2",
@@ -120,7 +125,8 @@
       "enabled": true,
       "rate": 75,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)"
+      "optionLabel": "Dense (75%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-on-highwind-25-v0.1.2",
@@ -140,7 +146,8 @@
       "enabled": true,
       "rate": 25,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)"
+      "optionLabel": "Light (25%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-on-highwind-50-v0.1.2",
@@ -160,7 +167,8 @@
       "enabled": true,
       "rate": 50,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)"
+      "optionLabel": "Standard (50%)",
+      "version": "0.1.2"
     },
     {
       "id": "field-encounter-on-highwind-75-v0.1.2",
@@ -180,7 +188,8 @@
       "enabled": true,
       "rate": 75,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)"
+      "optionLabel": "Dense (75%)",
+      "version": "0.1.2"
     },
     {
       "id": "world-encounter-25-v0.1.0",
@@ -200,7 +209,8 @@
       "enabled": true,
       "rate": 25,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)"
+      "optionLabel": "Light (25%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-50-v0.1.0",
@@ -220,7 +230,8 @@
       "enabled": true,
       "rate": 50,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)"
+      "optionLabel": "Standard (50%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-75-v0.1.0",
@@ -240,7 +251,8 @@
       "enabled": true,
       "rate": 75,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)"
+      "optionLabel": "Dense (75%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-on-csr-25-v0.1.0",
@@ -260,7 +272,8 @@
       "enabled": true,
       "rate": 25,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)"
+      "optionLabel": "Light (25%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-on-csr-50-v0.1.0",
@@ -280,7 +293,8 @@
       "enabled": true,
       "rate": 50,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)"
+      "optionLabel": "Standard (50%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-on-csr-75-v0.1.0",
@@ -300,7 +314,8 @@
       "enabled": true,
       "rate": 75,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)"
+      "optionLabel": "Dense (75%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-on-highwind-25-v0.1.0",
@@ -320,7 +335,8 @@
       "enabled": true,
       "rate": 25,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)"
+      "optionLabel": "Light (25%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-on-highwind-50-v0.1.0",
@@ -340,7 +356,8 @@
       "enabled": true,
       "rate": 50,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)"
+      "optionLabel": "Standard (50%)",
+      "version": "0.1.0"
     },
     {
       "id": "world-encounter-on-highwind-75-v0.1.0",
@@ -360,7 +377,8 @@
       "enabled": true,
       "rate": 75,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)"
+      "optionLabel": "Dense (75%)",
+      "version": "0.1.0"
     },
     {
       "id": "field-encounter-0-v0.2.0",
@@ -380,7 +398,8 @@
       "enabled": true,
       "rate": 0,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)"
+      "optionLabel": "Off (0%)",
+      "version": "0.2.0"
     },
     {
       "id": "field-encounter-on-csr-0-v0.2.0",
@@ -400,7 +419,8 @@
       "enabled": true,
       "rate": 0,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)"
+      "optionLabel": "Off (0%)",
+      "version": "0.2.0"
     },
     {
       "id": "field-encounter-on-highwind-0-v0.2.0",
@@ -420,7 +440,8 @@
       "enabled": true,
       "rate": 0,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)"
+      "optionLabel": "Off (0%)",
+      "version": "0.2.0"
     },
     {
       "id": "world-encounter-0-v0.2.0",
@@ -440,7 +461,8 @@
       "enabled": true,
       "rate": 0,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)"
+      "optionLabel": "Off (0%)",
+      "version": "0.2.0"
     },
     {
       "id": "world-encounter-on-csr-0-v0.2.0",
@@ -460,7 +482,8 @@
       "enabled": true,
       "rate": 0,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)"
+      "optionLabel": "Off (0%)",
+      "version": "0.2.0"
     },
     {
       "id": "world-encounter-on-highwind-0-v0.2.0",
@@ -480,7 +503,8 @@
       "enabled": true,
       "rate": 0,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)"
+      "optionLabel": "Off (0%)",
+      "version": "0.2.0"
     },
     {
       "id": "single-disc-clean-v0.1.1",
@@ -501,7 +525,8 @@
       "layout": "global",
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.1"
     },
     {
       "id": "single-disc-on-csr-v0.1.1",
@@ -520,7 +545,8 @@
       "layout": "global",
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.1"
     },
     {
       "id": "single-disc-on-csr-v0.1.2",
@@ -559,7 +585,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.3"
     },
     {
       "id": "single-disc-on-csr-v0.1.4",
@@ -578,7 +605,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.4"
     },
     {
       "id": "single-disc-on-csr-v0.1.5",
@@ -597,7 +625,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.5"
     },
     {
       "id": "single-disc-on-csr-v0.1.6",
@@ -616,7 +645,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.6"
     },
     {
       "id": "single-disc-on-csr-v0.1.7",
@@ -693,7 +723,7 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.20/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
@@ -715,7 +745,8 @@
       "enabled": true,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "version": "0.1.0"
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.0",
@@ -758,7 +789,7 @@
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.20",
+        "addonSelectedPrefix": "single-disc-on-csr-v",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -781,13 +812,6 @@
         "1": "./single-disc-csr-manip-movies-v0.1.3/layers/disc1.layer.json"
       },
       "enabled": false,
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.20",
-        "bases": [
-          "csr-v0.14.1"
-        ],
-        "unlessAddonIdPrefix": "csr-plus-scene-"
-      },
       "hidden": true,
       "uiHidden": true
     },
@@ -830,13 +854,6 @@
       "groupLabel": "Single-disc CSR movies (auto)",
       "optionLabel": "v0.1.2 cumulative",
       "uiHidden": true,
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.20",
-        "bases": [
-          "csr-v0.14.1"
-        ],
-        "unlessAddonIdPrefix": "csr-plus-scene-"
-      },
       "version": "0.1.2",
       "beta": true,
       "status": "beta",
@@ -863,9 +880,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "groupLabel": "Single-disc ending credits (always on)",
@@ -894,9 +911,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "version": "0.1.0",
@@ -926,9 +943,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "version": "0.1.0",
@@ -958,9 +975,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "version": "0.1.0",
@@ -990,9 +1007,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "version": "0.1.0",
@@ -1022,9 +1039,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "version": "0.1.0",
@@ -1054,9 +1071,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAny": [
-          "single-disc-on-csr-v0.1.20",
-          "single-disc-on-highwind-v0.1.0"
+        "addonSelectedAnyPrefix": [
+          "single-disc-on-csr-v",
+          "single-disc-on-highwind-v"
         ]
       },
       "version": "0.1.0",
@@ -1084,7 +1101,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.4"
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.4",
@@ -1104,7 +1122,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.4"
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.4",
@@ -1124,7 +1143,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.4"
     },
     {
       "id": "fanfare-skip-v0.1.5",
@@ -1144,7 +1164,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.5"
     },
     {
       "id": "fanfare-skip-v0.1.6",
@@ -1164,7 +1185,8 @@
       "enabled": true,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.6"
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.5",
@@ -1184,7 +1206,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.5"
     },
     {
       "id": "fanfare-skip-on-csr-v0.1.6",
@@ -1204,7 +1227,8 @@
       "enabled": true,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.6"
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.5",
@@ -1224,7 +1248,8 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.5"
     },
     {
       "id": "fanfare-skip-on-highwind-v0.1.6",
@@ -1244,7 +1269,88 @@
       "enabled": true,
       "beta": true,
       "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+      "version": "0.1.6"
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.21",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.21",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.21: NRCRLB FMV on MD8_5 (mid53) so Highwind 71->67->731 works. Hojo CANON_2 / LOSIN2 break path unchanged.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.21/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.22",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.22",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.22: MD8_52 plays NRCRL (Cloud position) then Highwind. MD8_5 NRCRLB kept. Hojo/break path unchanged.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.22/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.23",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.23",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.23: FSHIP_12 plays PARASHOT (+ meteo) like CSR D2. MD8_52 NRCRL / MD8_5 NRCRLB kept. Hojo/break unchanged.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.23/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.24",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.24",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.24: PARASHOT/NRCRL after manip-movies with unique LBAs. Hojo/break kept.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.24/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     }
   ],
   "bases": [],
