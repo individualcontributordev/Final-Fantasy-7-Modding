@@ -18,6 +18,8 @@ def apply_layer(image: bytearray, layer: dict) -> None:
         raise SystemExit("expected format ic-layer-v1")
     if layer.get("target") not in (None, "disc-image"):
         raise SystemExit(f"unsupported target: {layer.get('target')}")
+    # Capture size before records — growth pad check must use this, not post-apply len.
+    baseline_len = len(image)
     for rec in layer["records"]:
         offset = int(rec["offset"])
         data = bytes.fromhex(rec["hex"])
@@ -26,9 +28,9 @@ def apply_layer(image: bytearray, layer: dict) -> None:
             image.extend(b"\x00" * (end - len(image)))
         image[offset:end] = data
     # Grown images: trailing zeros often match zero-pad of a shorter original and
-    # are omitted from records. Honor stats.modifiedBytes ONLY when this layer was
-    # built against an image the same size as the one we are patching
-    # (stats.originalBytes == current len). Cross-baseline packs must not inflate.
+    # are omitted from records. Honor stats.modifiedBytes when this layer was
+    # built against an image the same size as our baseline (before records).
+    # Always finish on a 2352-byte boundary if we grew (Mode2 safety).
     stats = layer.get("stats") or {}
     original = stats.get("originalBytes")
     target = stats.get("modifiedBytes")
@@ -36,9 +38,12 @@ def apply_layer(image: bytearray, layer: dict) -> None:
         isinstance(target, int)
         and target > len(image)
         and isinstance(original, int)
-        and original == len(image)
+        and original == baseline_len
     ):
         image.extend(b"\x00" * (target - len(image)))
+    SECTOR = 2352
+    if len(image) > baseline_len and len(image) % SECTOR:
+        image.extend(b"\x00" * (SECTOR - (len(image) % SECTOR)))
 
 
 def main() -> int:
