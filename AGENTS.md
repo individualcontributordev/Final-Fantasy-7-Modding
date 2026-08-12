@@ -63,6 +63,7 @@ should still ship `-on-highwind-*` variants since Highwind is a live base.
 | Ghidra | `docs/05-ghidra-guide.md` |
 | Disc / Makou | `docs/02-disc-format.md` |
 | **Single-disc** | `mods/single-disc/`, rule `single-disc-fields`, skill `ship-single-disc` |
+| **Regression tests** | `tests/` — `python3 -m pytest tests/ -q` (unit always; integration needs bins) |
 | Field DAT compare | `python3 scripts/compare_field_dat.py` |
 | **PS2 burn / MiSTer / hardware** | `docs/07-hardware-burn.md` |
 

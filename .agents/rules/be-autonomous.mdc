@@ -14,6 +14,7 @@ Take the next useful action yourself. Do not ask permission for routine workflow
 - Reply with the **next single complete operational task in chat**
 - Prefer skills: `record-findings`, `research-new-mod`, `evolve-re-process`, `ship-field-encounters`, `ship-single-disc` when those tasks apply
 - Single-disc FIELD/movie work: follow rule `single-disc-fields.mdc` (compare tool before size-based merges)
+- **New fix or pack change:** add/extend `tests/` coverage for the bug, then run pytest (unit always; integration when bins exist) before publish — see `single-disc-fields.mdc` / `builder-packs.mdc`
 - New repeatable work → small SRP tool + `--help` + `scripts/README.md` row (rule `tooling-standards.mdc`); no chat-only one-offs
 
 ## operational task quality bar
