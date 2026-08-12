@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-12 | [fship12-md8-5-mid53-nrcrlb](2026-08-12-fship12-md8-5-mid53-nrcrlb.md) | SD: 71-67-731 hang = MD8_5 PMVIE mid53 wrong D1 movie (NRCRLB) |
 | 2026-08-12 | [csr-single-disc-field-movie-impact](2026-08-12-csr-single-disc-field-movie-impact.md) | CSR+SD offline field/movie impact vs pristine D1/D2/D3 (89 SD FIELD, 9 MOVIE slots) |
 | 2026-08-11 | [single-disc-cos-btm2-disc-id-ifuw-break](2026-08-11-single-disc-cos-btm2-disc-id-ifuw-break.md) | Build C fail: COS_BTM2 disc-id IFUW skips break; forced 0.1.7 |
 | 2026-08-12 | LOSLAKE1 LBA 250450 alias regressed in movies 0.1.3 | `2026-08-12-loslake1-lba-250450-alias-regressed.md` |

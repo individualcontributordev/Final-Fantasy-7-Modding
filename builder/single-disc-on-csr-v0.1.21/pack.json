@@ -1,0 +1,19 @@
+{
+  "name": "Single-disc",
+  "kind": "mod",
+  "hint": "Use one Disc 1 image for the full CSR game.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "beta": true,
+  "status": "beta",
+  "id": "single-disc-on-csr-v0.1.21",
+  "version": "0.1.21",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.21: NRCRLB FMV on MD8_5 (mid53) so Highwind 71->67->731 works. Hojo CANON_2 / LOSIN2 break path unchanged.",
+  "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+}

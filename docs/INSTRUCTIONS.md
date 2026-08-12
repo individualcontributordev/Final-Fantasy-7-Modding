@@ -1,47 +1,35 @@
-# Task: Retest Bugen waterfall FMV (not rocket town)
+# INSTRUCTIONS — playtest single-disc v0.1.21 (MD8_5 / 71-67-731)
 
-## What was wrong
+## What changed
 
-LOSLAKE1 (Bugenhagen / waterfall FD path) seeks absolute ISO LBA 250450.
-On CSR Disc 2 that LBA is CANONON. On stock D1 it is mid-RCKTFAIL (rocket).
+CSR Highwind path without scene skip: field 71 (FSHIP_24) to 67 (FSHIP_12) to 731 (MD8_5)
+could hang after leaving the deck.
 
-manip-movies v0.1.3 fixed Form2 MOVIE_ID (id47 -> JAIROFAL=CANONON bytes) but
-dropped the v0.1.1/v0.1.2 Form2 sector alias at LBA 250450. Field code that
-seeks 250450 still hit rocket data.
+Cause: MD8_5 plays movie id 53. On Disc 2 that is NRCRLB; on Disc 1 it was still NIVLSFS.
+Wrong FMV blocked progress after the MAPJUMP (jump itself was fine).
 
-## Fix
+Fix: single-disc-on-csr-v0.1.21 injects D2 NRCRLB into D1 mid53.
+Prior Hojo/break/waterfall field fixes unchanged.
 
-single-disc-csr-manip-movies-v0.1.4:
-- Keeps Form2 MOVIE_ID eng size/aux (v0.1.3)
-- Restores raw CANONON copy at LBA 250450 (RCKTFAIL tail clobber tradeoff)
+## COPY-PASTE — rebuild + play
 
-Auto with Single-disc on CSR when CSR+ off. uiHidden.
-
-## What you do
-
-1. Hard-refresh builder
+1. Hard-refresh https://individualcontributor.dev/builder/
 2. Base: CSR
-3. Mods: Single-disc only (CSR+ off)
-4. APPLIED must show:
-   - single-disc-on-csr-v0.1.20
-   - single-disc-csr-manip-movies-v0.1.4
-5. Build Disc 1; quit DuckStation; no CE
-6. Save-state a field or two before Cosmo / Bugenhagen waterfall FD scene
-7. Confirm lake/waterfall FMV (CANONON-style), NOT rocket town
+3. Add-on: Single-disc only (CSR+ scenes off)
+4. Confirm APPLIED includes:
+   - single-disc-on-csr-v0.1.21 (not 0.1.20)
+   - single-disc-csr-manip-movies-v0.1.4 (auto)
+5. Build Disc 1 zip and load in DuckStation.
 
-## Evidence (paste)
+## What to test
 
-```
-APPLIED single-disc:
-APPLIED movies:
-CSR+: OFF
-Waterfall FMV: OK LAKE / ROCKET / OTHER
-Audio: CLEAN / FLICKER / OTHER
-Load method:
-CE: NO
-notes:
-```
+| Path | Expect |
+|------|--------|
+| No-skip Highwind / DW approach | 71 to 67 deck leave to 731 MD8_5 FMV then continue |
+| Hojo CANON_2 + FMV audio | Still good (unchanged) |
+| Disc 1 to 2 break (LOSIN2/LOST2) | Still good |
+| Waterfall / LOSLAKE1 | Still good |
 
-## When done
+## If 731 still fails
 
-Commit this file with evidence, push, say check.
+Note whether MD8_5 loads (field art) vs black vs movie hang.

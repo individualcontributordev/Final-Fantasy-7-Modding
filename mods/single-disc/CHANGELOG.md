@@ -1,3 +1,11 @@
+## 0.1.21 (MD8_5 mid53 NRCRLB — Highwind 71 to 67 to 731)
+
+- Path without COTA/Hojo skip: FSHIP_24 (#71) to FSHIP_12 (#67) to MD8_5 (#731).
+- MAPJUMP 67 to 731 was already correct; MD8_5 plays PMVIE mid=53.
+- On multi-disc D2 mid53 = NRCRLB.MOV; on D1 mid53 = NIVLSFS.MOV (wrong stream).
+- Inject D2 NRCRLB Form2 into D1 NIVLSFS slot + MOVIE_ID eng size/aux.
+- Does not change LOSIN2 / LOST2 / CANON_2 / BLACKBGB / WHITE2 / FSHIP FIELD vs 0.1.20.
+
 # Single-disc changelog
 
 Newest at top.

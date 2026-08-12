@@ -11,3 +11,7 @@
 
 # After inject: also run alias_d2_seek_lba_on_d1.py so ISO LBA 250450 is
 # CANONON Form2 sectors (LOSLAKE1 absolute seek). MOVIE_ID[47] alone is not enough.
+
+# MD8_5 (#731) Diamond Weapon approach after FSHIP_12 leave: PMVIE mid=53.
+# D2=NRCRLB.MOV; D1 slot name NIVLSFS.MOV. Shipped in single-disc-on-csr-v0.1.21.
+2 NRCRLB.MOV ->NIVLSFS.MOV
