@@ -19,5 +19,6 @@
   "discs": {
     "1": "./layers/disc1.layer.json"
   },
-  "hidden": true
+  "hidden": true,
+  "uiHidden": true
 }

@@ -762,7 +762,8 @@
         ],
         "unlessAddonIdPrefix": "csr-plus-scene-"
       },
-      "hidden": true
+      "hidden": true,
+      "uiHidden": true
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.1",
