@@ -15,3 +15,6 @@
 # MD8_5 (#731) Diamond Weapon approach after FSHIP_12 leave: PMVIE mid=53.
 # D2=NRCRLB.MOV; D1 slot name NIVLSFS.MOV. Shipped in single-disc-on-csr-v0.1.21.
 2 NRCRLB.MOV ->NIVLSFS.MOV
+
+# MD8_52 (#779): PMVIE mid=52 D2 NRCRL (Cloud position then FSHIP_25). Shipped v0.1.22.
+2 NRCRL.MOV ->MTNVL2.STR
