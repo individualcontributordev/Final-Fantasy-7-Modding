@@ -1,3 +1,12 @@
+## 0.1.24 (path FMVs after manip-movies — PARASHOT/NRCRL unique LBAs)
+
+- PARASHOT missing + MD8_5 glitch when manip-movies applied after SD core:
+  shared movie LBAs clobbered path injects.
+- Builder apply order: manip-movies then single-disc-on-csr.
+- Pack bin-diffed vs CSR+movies; path FMVs force-append at unique EOF LBAs
+  (PARASHOT, METEOFIX, METEOSKY, NRCRL, NRCRLB).
+- JAIROFAL/CANONON alias preserved. FSHIP_12/MD8_52 CSR scripts restored.
+
 ## 0.1.23 (FSHIP_12 PARASHOT — Cloud Highwind deck FMV)
 
 - User: CSR D2 movie PARASHOT positions Cloud; CSR+single-disc cut/broken.

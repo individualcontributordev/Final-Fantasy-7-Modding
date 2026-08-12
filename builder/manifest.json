@@ -1327,6 +1327,26 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.23/layers/disc1.layer.json"
       },
+      "enabled": false,
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.24",
+      "name": "Single-disc",
+      "kind": "mod",
+      "version": "0.1.24",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.24: PARASHOT/NRCRL after manip-movies with unique LBAs. Hojo/break kept.",
+      "hint": "Use one Disc 1 image for the full CSR game.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.24/layers/disc1.layer.json"
+      },
       "enabled": true,
       "beta": true,
       "status": "beta",

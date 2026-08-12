@@ -311,7 +311,14 @@ def _patch_movie_id_bin(
     return patched
 
 
-def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_d1=None) -> dict:
+def inject_one(
+    d1: bytearray,
+    src_img: bytes,
+    movie: str,
+    src_disc: int,
+    target_d1=None,
+    force_append: bool = False,
+) -> dict:
     src_ents = _movie_entries(src_img)
     d1_ents = _movie_entries(bytes(d1))
     # Always locate source file by name on the source disc (correct bytes).
@@ -352,7 +359,9 @@ def inject_one(d1: bytearray, src_img: bytes, movie: str, src_disc: int, target_
         eng_aux = None
     src_nsec = (src_size + USER - 1) // USER
     dst_nsec = (d1_size + USER - 1) // USER
-    if src_nsec > dst_nsec:
+    # force_append: always new EOF LBA (avoid clobbering sibling movie slots that
+    # already own this range, e.g. JAIROFAL/CANONON vs NRCRL path injects).
+    if force_append or src_nsec > dst_nsec:
         new_lba = _append_raw_grow(d1, path, raw, src_size)
         grew = True
         note_lba = new_lba
