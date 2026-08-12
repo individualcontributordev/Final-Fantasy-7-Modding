@@ -40,3 +40,10 @@ notes:
 Commit this file with evidence, push, say check.
 
 Commit example: ops: retest disc1-disc2 break after single-disc 0.1.7
+
+
+warning in console for builder
+
+builder.js:468 showSaveFilePicker failed, using blob download SecurityError: Failed to execute 'showSaveFilePicker' on 'Window': Must be handling a user gesture to show a file picker.
+    at saveZipDownload (builder.js:450:32)
+    at applySelection (builder.js:1887:23)
