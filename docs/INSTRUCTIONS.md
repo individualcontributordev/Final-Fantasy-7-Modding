@@ -1,52 +1,62 @@
-# INSTRUCTIONS — rebuild Disc 1 on single-disc v0.1.24 (PARASHOT playtest)
+# INSTRUCTIONS — run single-disc regression tests (machine with bins)
 
 ## Why
 
-v0.1.24 + builder apply order fix path FMVs (PARASHOT / NRCRL) that movies
-used to clobber. Offline regression suite is green. You need a **new** builder
-Disc 1 image — older builds (0.1.23 and earlier) will still miss PARASHOT.
+Confirms the published CSR + movies + single-disc stack still holds prior fixes
+(PARASHOT, Hojo, break, waterfall, MD8, apply order). Needs disc images on this PC.
 
-## Build (browser)
+## One-time setup (if pytest missing)
 
-1. Open https://individualcontributor.dev/builder/
-2. Hard-refresh (Cmd+Shift+R) so pack list + apply order update
-3. Base: **CSR**
-4. Mods: **Single-disc** only (version badge **v0.1.24**). CSR+ off for this test
-5. Confirm APPLIED (or pack list) includes:
-   - single-disc-csr-manip-movies-v0.1.4 (auto)
-   - single-disc-on-csr-v0.1.24
-   - endings parts if they auto-include (OK to leave on)
-6. Build **Disc 1** only; download zip; load the .bin/.cue in DuckStation
+Open Terminal / Git Bash in the Modding repo, then COPY-PASTE:
 
-## Playtest (in order if you can)
+    cd ~/Final-Fantasy-7-Modding
+    git pull --ff-only
+    python3 -m pip install -r requirements-dev.txt
 
-| Spot | Expect |
-|------|--------|
-| Highwind deck FSHIP_12 | Full **PARASHOT** FMV, Cloud placed correctly |
-| MD8_5 (#731) after that path | Clean NRCRLB FMV; field not glitched |
-| MD8_52 | NRCRL then Highwind |
-| Optional smoke | Hojo (CANON_2 audio OK), disc break LOSIN2 to LOST2, waterfall LOSLAKE |
+(Adjust cd if your clone path differs.)
 
-## Evidence
+## Run all tests
 
-Paste into a reply (or commit under workspace/ if you prefer):
+    cd ~/Final-Fantasy-7-Modding
+    git pull --ff-only
+    python3 -m pytest tests/ -q
 
-- APPLIED.txt contents from the zip
-- Pass/fail for PARASHOT + MD8_5
-- Any freeze/glitch notes (no Cheat Engine attached)
+## Run integration only
 
-## Agent note
+    cd ~/Final-Fantasy-7-Modding
+    python3 -m pytest tests/ -q -m integration
 
-Repo tests already cover stack invariants. From Final-Fantasy-7-Modding:
+## What you need on this machine
 
-Commit this file with evidence, push, say check.
+| Path | Role |
+|------|------|
+| workspace/pristine/FINALFANTASY7_D1.bin | Pristine Disc 1 |
+| workspace/pristine/FINALFANTASY7_D2.bin | Pristine Disc 2 (path FMV sources) |
+| Sibling ../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin (and D2) | Preferred CSR images; or CSR layers + pristine |
+| builder/single-disc-on-csr-v0.1.24/ + movies pack | Published layers (from git pull) |
 
-Commit example: ops: retest disc1-disc2 break after single-disc 0.1.7
+If bins are missing, integration tests skip; unit tests still run.
 
+## Success
 
-warning in console for builder
+- Last line like: 22 passed (or 9 passed for integration-only)
+- Exit code 0 — no FAILED lines
 
-builder.js:468 showSaveFilePicker failed, using blob download SecurityError: Failed to execute 'showSaveFilePicker' on 'Window': Must be handling a user gesture to show a file picker.
-    at saveZipDownload (builder.js:450:32)
-    at applySelection (builder.js:1887:23)
+## Evidence (paste in chat or below)
+
+EXIT CODE:
+
+(pytest full output, or at least the summary line)
+
+## After tests pass — still build a playtest bin for PARASHOT in DuckStation
+
+1. Hard-refresh https://individualcontributor.dev/builder/
+2. Base CSR + Single-disc v0.1.24 (CSR+ off for this check)
+3. APPLIED should list manip-movies v0.1.4 and single-disc-on-csr-v0.1.24
+4. Build Disc 1; test Highwind deck FSHIP_12 for full PARASHOT
+
+Optional override if CSR lives elsewhere:
+
+    export FF7_CSR_ROOT=/path/to/Final-Fantasy-7-CSR
+    export FF7_PRISTINE_DIR=/path/to/pristine
     python3 -m pytest tests/ -q
