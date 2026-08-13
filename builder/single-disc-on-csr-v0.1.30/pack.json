@@ -1,0 +1,23 @@
+{
+  "id": "single-disc-on-csr-v0.1.30",
+  "version": "0.1.30",
+  "name": "Single-disc break restore (internal)",
+  "blurb": "Internal auto: restore v0.1.9 disc-break fields (undo 0.1.27-29).",
+  "hint": "Always with Single-disc.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "enabled": true,
+  "uiHidden": true,
+  "hidden": true,
+  "beta": true,
+  "status": "beta",
+  "autoIncludeWhen": {
+    "addonSelected": "single-disc-on-csr-v0.1.24"
+  }
+}
