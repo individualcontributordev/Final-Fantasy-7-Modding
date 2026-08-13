@@ -41,3 +41,31 @@ Also note whether BLACKBGB still shows **End of Disc** text / save ASK before fo
 
 - Re-enable v0.1.34
 - Expect Cosmo candle / COS ASK from 0.1.35 alone (music only this ship)
+
+Final Fantasy VII — IndividualContributor
+
+Disc: 1 (layers for this disc only)
+Base: CSR v0.14.1
+Download: ff7-d1-csr-mov-sd-end.zip
+CSR+: off (or no CSR+ layer for this disc)
+Mods on this disc:
+  - CSR manip movies v0.1.4 (single-disc-csr-manip-movies-v0.1.4)
+  - Single-disc v0.1.35 (single-disc-on-csr-v0.1.33)
+  - (auto) path FMVs v0.1.26 (single-disc-on-csr-v0.1.26)
+  - disc1→2 forest music v0.1.35 (single-disc-on-csr-v0.1.35)
+  - Single-disc ending credits v0.1.0 (single-disc-endings-v0.1.0-part1)
+  - Single-disc ending credits (part 2) v0.1.0 (single-disc-endings-v0.1.0-part2)
+  - Single-disc ending credits (part 3) v0.1.0 (single-disc-endings-v0.1.0-part3)
+  - Single-disc ending credits (part 4) v0.1.0 (single-disc-endings-v0.1.0-part4)
+  - Single-disc ending credits (part 5) v0.1.0 (single-disc-endings-v0.1.0-part5)
+  - Single-disc ending credits (part 6) v0.1.0 (single-disc-endings-v0.1.0-part6)
+  - Single-disc ending credits (part 7) v0.1.0 (single-disc-endings-v0.1.0-part7)
+EDC/ECC sectors repaired: 80468
+
+Play:
+- Keep the .bin and .cue in the same folder.
+- Open the .cue in DuckStation (or your emulator).
+- Real PS2 (MechaPwn): burn from the .cue as MODE2/2352 DAO (see Modding docs/07-hardware-burn.md).
+- Builder regenerates Mode2 Form1 EDC/ECC on patched sectors after applying layers.
+
+https://individualcontributor.dev/builder/
