@@ -1336,8 +1336,8 @@
       "id": "single-disc-on-csr-v0.1.24",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.28",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.28: disc-break scene COS_BTM2 + LOST2 music path.",
+      "version": "0.1.29",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.29: disc-break gate bit on BLACKBGB (LOST2\u2192COS_BTM2).",
       "hint": "Use one Disc 1 image for the full CSR game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1437,6 +1437,30 @@
       "layout": "global",
       "discs": {
         "1": "./single-disc-on-csr-v0.1.28/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.24"
+      }
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.29",
+      "name": "Single-disc break bit (internal)",
+      "kind": "mod",
+      "version": "0.1.29",
+      "blurb": "Internal auto: set LOST2 break gate bit on BLACKBGB; CSR D2 LOST2/COS_BTM2.",
+      "hint": "Always with Single-disc.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.29/layers/disc1.layer.json"
       },
       "enabled": true,
       "uiHidden": true,

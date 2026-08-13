@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-13 | [lost2-break-bit-bank3-84](2026-08-13-lost2-break-bit-bank3-84.md) | LOST2 break needs bank3/0x84#4; BLACKBGB BITON (v0.1.29) | shipped |
 | 2026-08-13 | [path-fmv-movies-pack-clobber](2026-08-13-path-fmv-movies-pack-clobber.md) | manip-movies clobbered PARASHOT/NRCRL after SD inject |
 | 2026-08-13 | [fship12-parashot-cloud-position](2026-08-13-fship12-parashot-cloud-position.md) | SD missing FSHIP_12 PARASHOT (Cloud Highwind deck FMV) |
 | 2026-08-13 | [md8-52-nrcrl-cloud-position](2026-08-13-md8-52-nrcrl-cloud-position.md) | SD vs CSR D2: MD8_52 missing NRCRL FMV (Cloud position) |
