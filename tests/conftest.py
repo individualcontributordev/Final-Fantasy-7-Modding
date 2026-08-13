@@ -22,6 +22,7 @@ SITE_ROOT = Path(
 SECTOR = 2352
 CSR_BASE_ID = "csr-v0.14.1"
 SD_ON_CSR_PREFIX = "single-disc-on-csr-v"
+SD_ON_CSR_DELTA_PREFIX = "single-disc-on-csr-delta-v"
 MOVIES_PREFIX = "single-disc-csr-manip-movies-v"
 ENDINGS_PREFIX = "single-disc-endings-v"
 
@@ -88,22 +89,53 @@ def _version_key(pid: str) -> tuple:
     return tuple(parts)
 
 
+def _sd_on_csr_apply_key(pid: str) -> tuple:
+    """Core single-disc-on-csr first, then path/break/delta packs (builder rank 20 then 21)."""
+    if pid.startswith(SD_ON_CSR_DELTA_PREFIX):
+        return (1, _version_key(pid))
+    # Hidden deltas still use single-disc-on-csr-v0.1.26 / v0.1.31 ids
+    if pid.startswith(SD_ON_CSR_PREFIX):
+        ver = pid.split("-v", 1)[-1]
+        # Player core is the max enabled plain on-csr id that is NOT only-path/break
+        # Stack order: core (highest non-delta on-csr that is UI core) then lower fixups.
+        # tests use: movies + sorted(on-csr) + deltas. Core should be first.
+        # Treat 0.1.26 and 0.1.31 as after-core (same as builder rank 21).
+        if ver.startswith("0.1.26") or ver.startswith("0.1.31"):
+            return (1, _version_key(pid))
+        return (0, _version_key(pid))
+    return (2, _version_key(pid))
+
+
 @pytest.fixture(scope="session")
 def latest_sd_on_csr(manifest: dict) -> str:
-    """Primary single-disc-on-csr pack (lowest enabled version = base core)."""
-    ids = _enabled_addons(manifest, SD_ON_CSR_PREFIX)
+    """Player-facing single-disc-on-csr core (not path/break deltas)."""
+    ids = [
+        a
+        for a in _enabled_addons(manifest, SD_ON_CSR_PREFIX)
+        if not a.startswith(SD_ON_CSR_DELTA_PREFIX)
+        and not a.endswith("v0.1.26")
+        and not a.endswith("v0.1.31")
+    ]
     if not ids:
-        pytest.skip("no enabled single-disc-on-csr pack in manifest")
-    return min(ids, key=_version_key)
+        pytest.skip("no enabled single-disc-on-csr core pack in manifest")
+    return max(ids, key=_version_key)
 
 
 @pytest.fixture(scope="session")
 def sd_on_csr_stack(manifest: dict) -> list[str]:
-    """All enabled single-disc-on-csr packs in apply order (base then deltas)."""
+    """Enabled single-disc-on-csr packs + csr-delta packs in apply order."""
     ids = _enabled_addons(manifest, SD_ON_CSR_PREFIX)
-    if not ids:
+    ids += _enabled_addons(manifest, SD_ON_CSR_DELTA_PREFIX)
+    # de-dupe preserve
+    seen = set()
+    out = []
+    for i in ids:
+        if i not in seen:
+            seen.add(i)
+            out.append(i)
+    if not out:
         pytest.skip("no enabled single-disc-on-csr pack in manifest")
-    return sorted(ids, key=_version_key)
+    return sorted(out, key=_sd_on_csr_apply_key)
 
 
 @pytest.fixture(scope="session")
@@ -121,17 +153,32 @@ def endings_parts(manifest: dict) -> list[str]:
 
 
 @pytest.fixture(scope="session")
-def layer_path(root: Path):
+def layer_path(root: Path, manifest: dict):
     def _lp(pack_id: str, disc: int = 1) -> Path:
         p = root / "builder" / pack_id / "layers" / f"disc{disc}.layer.json"
-        if not p.is_file():
-            # pack.json discs relative
-            pack = json.loads((root / "builder" / pack_id / "pack.json").read_text())
+        if p.is_file():
+            return p
+        # pack.json discs relative to pack dir
+        pack_json = root / "builder" / pack_id / "pack.json"
+        if pack_json.is_file():
+            pack = json.loads(pack_json.read_text(encoding="utf-8"))
             rel = (pack.get("discs") or {}).get(str(disc))
+            if rel:
+                cand = (root / "builder" / pack_id / rel).resolve()
+                if cand.is_file():
+                    return cand
+        # manifest discs paths are relative to builder/
+        for a in manifest.get("addons") or []:
+            if a.get("id") != pack_id:
+                continue
+            rel = (a.get("discs") or {}).get(str(disc))
             if not rel:
-                raise FileNotFoundError(p)
-            p = (root / "builder" / pack_id / rel).resolve()
-        return p
+                break
+            cand = (root / "builder" / rel).resolve()
+            if cand.is_file():
+                return cand
+            break
+        raise FileNotFoundError(p)
 
     return _lp
 

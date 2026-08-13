@@ -1,23 +1,20 @@
 {
   "id": "single-disc-on-csr-v0.1.32",
   "version": "0.1.32",
-  "name": "Single-disc break COS open (internal)",
-  "blurb": "Internal auto: Gate1 COS_BTM2 reach break ASK for a455.",
-  "hint": "Always with Single-disc.",
+  "name": "Single-disc",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. Path FMVs + disc1\u21922 break (COS_BTM2). Badge matches pack id.",
+  "hint": "CSR. Movies + endings auto-apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
     "csr-v0.14.1"
   ],
   "layout": "global",
-  "discs": {
-    "1": "./layers/disc1.layer.json"
-  },
   "enabled": true,
-  "uiHidden": true,
-  "hidden": true,
+  "uiHidden": false,
+  "hidden": false,
   "beta": true,
   "status": "beta",
-  "autoIncludeWhen": {
-    "addonSelected": "single-disc-on-csr-v0.1.24"
+  "discs": {
+    "1": "../single-disc-on-csr-v0.1.24/layers/disc1.layer.json"
   }
 }
