@@ -1,3 +1,14 @@
+## 0.1.29 (disc-break gate bit on BLACKBGB)
+
+- D1→D2 still skipped break scene and music: LOST2 only MAPJUMPs COS_BTM2 (#526)
+  when bank3[0x84] bit4 is set and GM==0xa455. LOSIN2 sets GM 0xa455 but BITOFFs
+  that bit; with bit clear LOST2 init RETs (no music, no break). Forcing COS_BTM2
+  via IFUW else=0 (v0.1.28) blacks the scene (v0.1.8 finding).
+- Fix: BLACKBGB before each MAPJUMP #634 sets BITON 82308404 (same encoding as
+  LOSINN). Same-length swap: WAIT04+WAIT08+BITON89 → BITON84/4+BITON89+JMPF0.
+  Restore pure CSR D2 LOST2 + COS_BTM2 (undo 0.1.27/28 script forces).
+- Hidden pack single-disc-on-csr-v0.1.29 auto with Single-disc.
+
 ## 0.1.28 (disc-break scene LOST2 to COS_BTM2)
 
 - After D1 to D2 transition, game went straight to LOST2 #634 forest with no break
@@ -5,6 +16,7 @@
   GM==0xa455 falls through; else +0x0B skips break. v0.1.6 force was lost later.
 - Restore: LOST2 IFUW else 0x0B→0 (always MAPJUMP #526 cos_btm2). COS_BTM2 clear
   large disc-id IFUW else-jumps (v0.1.7). Hidden pack v0.1.28.
+  Superseded by 0.1.29 (force blacked the break).
 
 ## 0.1.27 (LOST2 #634 music after disc break)
 
