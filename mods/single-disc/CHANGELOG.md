@@ -1,3 +1,11 @@
+## 0.1.27 (LOST2 #634 music after disc break)
+
+- No music on field 634 after D1 to D2 break. CSR D2 LOST2 runs AKAO2 cmd 0x9A
+  (resume music) then MUSIC. Multi-disc has BLACKBGB DSKCG first; single-disc
+  Ask-strip removes DSKCG so resume does nothing and music stays silent.
+- Fix: JMPF over the two AKAO2 0x9A ops in LOST2 init (keep CSR D2 otherwise).
+- Hidden pack single-disc-on-csr-v0.1.27 auto with Single-disc.
+
 ## 0.1.26 (path-engine under 80min + cache bust)
 
 - Still would not load after 0.1.25b: sticky browser layer cache on id@version

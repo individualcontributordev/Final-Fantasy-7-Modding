@@ -1336,8 +1336,8 @@
       "id": "single-disc-on-csr-v0.1.24",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.26",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.26: path-engine boot fix (under 80min CD) + PARASHOT/MD8.",
+      "version": "0.1.27",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.27: LOST2 break music fix.",
       "hint": "Use one Disc 1 image for the full CSR game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1389,6 +1389,30 @@
       "layout": "global",
       "discs": {
         "1": "./single-disc-on-csr-v0.1.26/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.24"
+      }
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.27",
+      "name": "Single-disc LOST2 music (internal)",
+      "kind": "mod",
+      "version": "0.1.27",
+      "blurb": "Internal auto: LOST2 #634 music after disc break.",
+      "hint": "Always with Single-disc.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.27/layers/disc1.layer.json"
       },
       "enabled": true,
       "uiHidden": true,

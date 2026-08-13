@@ -71,6 +71,12 @@ def test_prefer_list_fields(stacked, csr_d1_bytes, csr_d2_bytes, iso_api, root):
             assert got != extract_file(csr_d1_bytes, path)
             assert len(got) > 1000
             continue
+        if stem == "LOST2.DAT":
+            # Prefer CSR D2 body; v0.1.27 NOPs AKAO2 resume before MUSIC
+            # (decompress may differ) — assert D2 base via MUSIC count + no pure D1
+            assert got != extract_file(csr_d1_bytes, path)
+            assert len(got) > 1000
+            continue
         src = csr_d1_bytes if side == "d1" else csr_d2_bytes
         exp = extract_file(src, path)
         assert same_or_prefix(got, exp), f"{stem} prefer {side} mismatch"
@@ -204,4 +210,30 @@ def test_image_under_80_minute_cd(stacked):
     max_lba = len(stacked) // SECTOR - 1
     hard = 80 * 60 * 75 - 150  # 80:00:00
     assert max_lba < hard, max_lba
+
+def test_lost2_no_akao2_resume_before_music(stacked, iso_api, scripts_dir):
+    """LOST2 #634: AKAO2 0x9A resume before MUSIC silences audio without DSKCG."""
+    import sys
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from field_dat import load_field_dat, op_size
+    from ff7_opcodes import OPCODE_NAMES
+    extract_file, _ = iso_api
+    dat = extract_file(stacked, "FIELD/LOST2.DAT")
+    fd = load_field_dat(dat)
+    resume = bytes.fromhex("da0000009a00000000000000000000")
+    for sc in fd.scripts:
+        if sc.entity != "init" or sc.slot != 0:
+            continue
+        pos = 0
+        mus = 0
+        while pos < len(sc.raw):
+            op = sc.raw[pos]
+            sz = max(op_size(sc.raw, pos), 1)
+            name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+            assert not (name == "AKAO2" and sc.raw[pos:pos+sz] == resume)
+            if name == "MUSIC":
+                mus += 1
+            pos += sz
+        assert mus >= 2
 
