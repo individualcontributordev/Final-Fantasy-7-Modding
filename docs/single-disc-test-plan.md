@@ -29,7 +29,8 @@ internal layers (see [Pack layering](#pack-layering)).
 ## Gate 1 — Disc 1→2 transition (priority until green)
 
 **Lock after PASS:** `LOSIN2`, `BLACKBGB`, `LOST2`, `COS_BTM2`  
-Target fix: **v0.1.31** (LOST2 a455 to #526 + COS open for a455; Ask BLACKBGB).
+Reference baseline: **v0.1.33** (pure CSR D1/D2 break fields; no LOST2/COS forces).
+Prior spiral: 0.1.27–0.1.32 removed. Target fix: **v0.1.31** (LOST2 a455 to #526 + COS open for a455; Ask BLACKBGB).
 Disabled dead ends: 0.1.27-0.1.30. After PASS lock LOST2/COS_BTM2/BLACKBGB/LOSIN2.
 
 | # | Spot | PASS | Known FAIL |
