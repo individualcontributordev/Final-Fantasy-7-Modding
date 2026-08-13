@@ -1336,8 +1336,8 @@
       "id": "single-disc-on-csr-v0.1.24",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.30",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.30: restore known-good disc-break fields (v0.1.9 path).",
+      "version": "0.1.31",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.31: disc1\u21922 break scene (COS_BTM2).",
       "hint": "Use one Disc 1 image for the full CSR game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1414,14 +1414,12 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.27/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "hidden": true,
       "beta": true,
       "status": "beta",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
-      }
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.28",
@@ -1438,14 +1436,12 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.28/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "hidden": true,
       "beta": true,
       "status": "beta",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
-      }
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.29",
@@ -1462,14 +1458,12 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.29/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "hidden": true,
       "beta": true,
       "status": "beta",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
-      }
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.30",
@@ -1486,6 +1480,26 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.30/layers/disc1.layer.json"
       },
+      "enabled": false,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
+      "autoIncludeWhen": {}
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.31",
+      "name": "Single-disc break (internal)",
+      "blurb": "Internal auto: Gate1 LOST2\u2192COS_BTM2 break + open COS for a455.",
+      "hint": "Always with Single-disc.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.31/layers/disc1.layer.json"
+      },
       "enabled": true,
       "uiHidden": true,
       "hidden": true,
@@ -1493,7 +1507,9 @@
       "status": "beta",
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.24"
-      }
+      },
+      "kind": "mod",
+      "version": "0.1.31"
     }
   ],
   "bases": [],
