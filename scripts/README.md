@@ -32,6 +32,9 @@ Single-disc playtest / SNOVA / movies: `mods/single-disc/scripts/` (see that mod
 ### Regression tests (prevent single-disc / builder breakage)
 
 ```bash
+# once per machine (dev dep — see requirements-dev.txt)
+python3 -m pip install -r requirements-dev.txt
+
 # Fast: apply_layer pad, builder ranks, EDC Form2 skip, prefer-list, manifest
 cd Final-Fantasy-7-Modding && python3 -m pytest tests/ -q -m "not integration"
 
