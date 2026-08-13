@@ -1396,10 +1396,10 @@
     },
     {
       "id": "single-disc-on-csr-v0.1.26",
-      "name": "Single-disc path-engine (internal)",
+      "name": "(auto) path FMVs",
       "kind": "mod",
       "version": "0.1.26",
-      "blurb": "Internal auto: path FMVs / engine ids under 80min.",
+      "blurb": "Internal auto with Single-disc: PARASHOT/path engine under 80min. Not part of D1\u21922 break.",
       "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1423,7 +1423,7 @@
       "name": "Single-disc",
       "kind": "mod",
       "version": "0.1.33",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. Break-path fields match CSR multi-disc reference (LOSIN2 D1, LOST2+COS_BTM2 D2, no DSKCG on BLACKBGB).",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. Break path matches CSR multi-disc fields (LOSIN2 D1, LOST2+COS_BTM2 D2, Ask BLACKBGB). Path FMVs auto-apply when selected.",
       "hint": "CSR. Movies + endings auto-apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1444,7 +1444,7 @@
       "name": "Single-disc CSR field ref (internal)",
       "kind": "mod",
       "version": "0.1.33",
-      "blurb": "Internal auto: pure CSR D2 LOST2 + COS_BTM2.",
+      "blurb": "Retired: core already ships pure CSR D2 LOST2/COS_BTM2 scripts.",
       "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1454,14 +1454,12 @@
       "discs": {
         "1": "./single-disc-on-csr-ref-v0.1.33/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "hidden": true,
       "beta": true,
       "status": "beta",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.33"
-      }
+      "autoIncludeWhen": {}
     }
   ],
   "bases": [],

@@ -1,3 +1,8 @@
+## 0.1.33 (note)
+
+- CSR field-ref internal pack disabled (core already pure CSR D2 LOST2/COS scripts).
+- Path-engine remains uiHidden auto for Highwind path FMVs only — not required for D1→2 break.
+
 ## 0.1.33 (CSR D1/D2 reference reset)
 
 - Deleted spiral Gate1 packs/scripts (0.1.27–0.1.32 forces on LOST2/COS_BTM2).
