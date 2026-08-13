@@ -1,42 +1,18 @@
-# INSTRUCTIONS — Single-disc Gate1 break (v0.1.32)
-
-## Full gates
-
-See docs/single-disc-test-plan.md
-
-## This build
-
-**v0.1.32** — COS_BTM2 break ASK path actually reachable after LOST2 MAPJUMP #526.
-v0.1.31 jumped to COS but RET before break (IFSW E landing bug).
+# INSTRUCTIONS — Single-disc Gate1 (v0.1.32)
 
 ## Build
 
-1. Hard-refresh builder (badge **v0.1.32**)
-2. CSR + Single-disc only (CSR+ off)
-3. APPLIED must include:
-   - movies v0.1.4
-   - single-disc-on-csr-v0.1.24
-   - single-disc-on-csr-v0.1.26
-   - single-disc-on-csr-v0.1.31
-   - **single-disc-on-csr-v0.1.32**
-4. Must NOT list v0.1.27 / 0.1.28 / 0.1.29 / 0.1.30
-5. New Disc 1 zip; open the .cue
+1. Hard-refresh builder (badge **v0.1.32** only)
+2. CSR + Single-disc (CSR+ off)
+3. APPLIED should show **Single-disc v0.1.32 (single-disc-on-csr-v0.1.32)**
+   — same number in name and id (not v0.1.32 with id v0.1.24).
+4. Also auto: path v0.1.26, Gate1 LOST2 v0.1.31, Gate1 COS delta-v0.1.32, endings.
+5. New Disc 1 zip
 
-## Test (Gate 0 + Gate 1 only)
+## Test
 
-| Check | Expect |
-|-------|--------|
-| Boot | OK |
-| D1 to D2 transition | Completes, no black/glitch |
-| Break scene | **COS_BTM2** party/ASK (not straight silent 634) |
-| After / on path | Music present |
-| Control | Can move/menu |
+Gate 0 + Gate 1 only (boot, D1 to D2 break COS_BTM2 ASK, music, control).
 
 ## Evidence
 
-Paste full APPLIED.txt under this heading after test.
-
-## Evidence (fill in)
-
-- APPLIED:
-- PASS/FAIL break + music:
+Paste full APPLIED.txt here after test.

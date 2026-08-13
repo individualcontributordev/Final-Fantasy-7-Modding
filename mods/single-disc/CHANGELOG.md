@@ -1,4 +1,5 @@
 ## 0.1.32 (Gate1 COS_BTM2 actually reaches break ASK)
+- Pack id cleanup: player id single-disc-on-csr-v0.1.32 matches badge (no more version X with id v0.1.24 on one APPLIED line).
 
 - Playtest v0.1.31 APPLIED stack correct (movies+24+26+31+endings) but no break.
   LOST2 did MAPJUMP #526; COS_BTM2 still never ran the break ASK.

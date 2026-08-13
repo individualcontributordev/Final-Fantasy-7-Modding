@@ -530,7 +530,7 @@
     },
     {
       "id": "single-disc-on-csr-v0.1.1",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.1)",
       "kind": "mod",
       "blurb": "Whole-game option (not Disc 1 only): play the full run from one Disc 1 image. On CSR, also adds cutscene videos needed without CSR+ scene packs. Turn this on only if you want a single physical/ISO disc. Superseded by single-disc-on-csr-v0.1.2.",
       "format": "ic-layer-v1",
@@ -546,11 +546,14 @@
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
-      "version": "0.1.1"
+      "version": "0.1.1",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.2",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.2)",
       "kind": "mod",
       "blurb": "Play the whole game from one Disc 1 image. Ending and credits movies are included. On CSR (without CSR+ scene packs), speedrun movies are added automatically.",
       "format": "ic-layer-v1",
@@ -566,11 +569,14 @@
       "version": "0.1.2",
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.3",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.3)",
       "kind": "mod",
       "blurb": "Play the whole game from one Disc 1 image on CSR. Includes Cosmo Canyon / Bugenhagen field fixes. Ending movies auto-apply. CSR movies auto when CSR+ is off.",
       "hint": "Use one Disc 1 image for the full CSR game.",
@@ -586,11 +592,14 @@
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
-      "version": "0.1.3"
+      "version": "0.1.3",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.4",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.4)",
       "kind": "mod",
       "blurb": "Play the whole game from one Disc 1 image on CSR. Cosmo WHITE2 movie crawl fixed. Ending movies auto-apply. CSR movies auto when CSR+ is off.",
       "hint": "Use one Disc 1 image for the full CSR game.",
@@ -606,11 +615,14 @@
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
-      "version": "0.1.4"
+      "version": "0.1.4",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.5",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.5)",
       "kind": "mod",
       "blurb": "Play the whole game from one Disc 1 image on CSR. Post-Hojo disc3 Ask strip + Cosmo movie fixes. Endings auto-apply. CSR movies auto when CSR+ is off.",
       "hint": "Use one Disc 1 image for the full CSR game.",
@@ -626,11 +638,14 @@
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
-      "version": "0.1.5"
+      "version": "0.1.5",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.6",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.6)",
       "kind": "mod",
       "blurb": "Play the whole game from one Disc 1 image on CSR. Disc1-to-disc2 LOST2 break scene forced. Prior Cosmo/post-Hojo fixes included. Endings auto-apply.",
       "hint": "Use one Disc 1 image for the full CSR game.",
@@ -646,11 +661,14 @@
       "beta": true,
       "status": "beta",
       "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
-      "version": "0.1.6"
+      "version": "0.1.6",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.7",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.7)",
       "kind": "mod",
       "version": "0.1.7",
       "blurb": "Play the whole game from one Disc 1 image on CSR. Forces disc1-to-disc2 break (LOST2+COS_BTM2). Cosmo/post-Hojo fixes included. Endings auto-apply.",
@@ -666,11 +684,14 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.8",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.8)",
       "kind": "mod",
       "version": "0.1.8",
       "blurb": "Play the whole game from one Disc 1 image on CSR. Disc1\u21922 lands CSR D2 LOST2 (no forced cos_btm2). Cosmo/post-Hojo fixes included. Endings auto-apply.",
@@ -686,11 +707,14 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.9",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.9)",
       "kind": "mod",
       "version": "0.1.9",
       "blurb": "Play the whole game from one Disc 1 image on CSR. End-of-D1 LOSIN2 keeps CSR D1 (sets break GameMoment). D2 LOST2/COS_BTM2 kept. Endings auto-apply.",
@@ -706,11 +730,14 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.20",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.20)",
       "kind": "mod",
       "version": "0.1.20",
       "blurb": "Play the whole game from one Disc 1 image on CSR. CANON_2 (Hojo) is pure CSR D2 again (no bad AKAO strip). LOSIN2 D1 + LOST2 D2 break path kept. Endings auto-apply.",
@@ -726,7 +753,10 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-highwind-v0.1.0",
@@ -1274,7 +1304,7 @@
     },
     {
       "id": "single-disc-on-csr-v0.1.21",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.21)",
       "kind": "mod",
       "version": "0.1.21",
       "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.21: NRCRLB FMV on MD8_5 (mid53) so Highwind 71->67->731 works. Hojo CANON_2 / LOSIN2 break path unchanged.",
@@ -1290,11 +1320,14 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.22",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.22)",
       "kind": "mod",
       "version": "0.1.22",
       "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.22: MD8_52 plays NRCRL (Cloud position) then Highwind. MD8_5 NRCRLB kept. Hojo/break path unchanged.",
@@ -1310,11 +1343,14 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.23",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.23)",
       "kind": "mod",
       "version": "0.1.23",
       "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.23: FSHIP_12 plays PARASHOT (+ meteo) like CSR D2. MD8_52 NRCRL / MD8_5 NRCRLB kept. Hojo/break unchanged.",
@@ -1330,11 +1366,14 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.24",
-      "name": "Single-disc",
+      "name": "Single-disc (retired 0.1.32)",
       "kind": "mod",
       "version": "0.1.32",
       "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.32: disc1\u21922 break COS_BTM2 ASK path fixed.",
@@ -1347,10 +1386,13 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.24/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "uiHidden": true,
+      "hidden": true,
+      "autoIncludeWhen": {}
     },
     {
       "id": "single-disc-on-csr-v0.1.25",
@@ -1380,8 +1422,8 @@
       "name": "Single-disc path-engine (internal)",
       "kind": "mod",
       "version": "0.1.26",
-      "blurb": "Internal. Auto with Single-disc. Engine movie ids + fields 71/255. Under 80min.",
-      "hint": "Always included with Single-disc; not selectable.",
+      "blurb": "Internal auto: engine movie ids + fields 71/255 under 80min.",
+      "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -1396,7 +1438,7 @@
       "beta": true,
       "status": "beta",
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
+        "addonSelected": "single-disc-on-csr-v0.1.32"
       }
     },
     {
@@ -1489,8 +1531,10 @@
     },
     {
       "id": "single-disc-on-csr-v0.1.31",
-      "name": "Single-disc break (internal)",
-      "blurb": "Internal auto: Gate1 LOST2\u2192COS_BTM2 break + open COS for a455.",
+      "name": "Single-disc Gate1 LOST2 (internal)",
+      "kind": "mod",
+      "version": "0.1.31",
+      "blurb": "Internal auto: LOST2 a455 MAPJUMP COS_BTM2.",
       "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1506,17 +1550,36 @@
       "beta": true,
       "status": "beta",
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
-      },
-      "kind": "mod",
-      "version": "0.1.31"
+        "addonSelected": "single-disc-on-csr-v0.1.32"
+      }
     },
     {
       "id": "single-disc-on-csr-v0.1.32",
-      "name": "Single-disc break COS open (internal)",
+      "name": "Single-disc",
       "kind": "mod",
       "version": "0.1.32",
-      "blurb": "Internal auto: Gate1 COS_BTM2 reach break ASK for a455.",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. Path FMVs + disc1\u21922 break (COS_BTM2).",
+      "hint": "CSR. Movies + endings auto-apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.24/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": false,
+      "hidden": false,
+      "beta": true,
+      "status": "beta"
+    },
+    {
+      "id": "single-disc-on-csr-delta-v0.1.32",
+      "name": "Single-disc Gate1 COS (internal)",
+      "kind": "mod",
+      "version": "0.1.32",
+      "blurb": "Internal auto: COS_BTM2 ASK reachable for a455.",
       "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1524,7 +1587,7 @@
       ],
       "layout": "global",
       "discs": {
-        "1": "./single-disc-on-csr-v0.1.32/layers/disc1.layer.json"
+        "1": "./single-disc-on-csr-delta-v0.1.32/layers/disc1.layer.json"
       },
       "enabled": true,
       "uiHidden": true,
@@ -1532,7 +1595,7 @@
       "beta": true,
       "status": "beta",
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
+        "addonSelected": "single-disc-on-csr-v0.1.32"
       }
     }
   ],

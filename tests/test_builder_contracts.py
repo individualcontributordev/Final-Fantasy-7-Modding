@@ -36,17 +36,16 @@ def edc_js(site_root: Path) -> str:
 def test_addon_apply_rank_movies_before_single_disc(builder_js: str):
     rank = extract_addon_apply_rank_fn(builder_js)
     assert rank("single-disc-csr-manip-movies-v0.1.4") == 10
-    assert rank("single-disc-on-csr-v0.1.24") == 20
-    assert rank("single-disc-on-csr-v0.1.28") == 21
-    assert rank("single-disc-on-csr-v0.1.27") == 21
-    assert rank("single-disc-on-csr-v0.1.26") == 21
-    assert rank("single-disc-on-csr-v0.1.25") == 21  # path-engine delta after core
+    assert rank("single-disc-on-csr-v0.1.32") == 20  # player core
+    assert rank("single-disc-on-csr-v0.1.26") == 21  # path-engine delta
+    assert rank("single-disc-on-csr-v0.1.31") == 21
+    assert rank("single-disc-on-csr-delta-v0.1.32") == 21
     assert rank("single-disc-endings-v0.1.0-part1") == 30
     assert rank("field-encounter-25-v0.1.2") == 40
     assert rank("csr-plus-scene-hojo-v0.1.0") == 50
     # order invariant
     assert rank("single-disc-csr-manip-movies-v9") < rank("single-disc-on-csr-v9")
-    assert rank("single-disc-on-csr-v0.1.24") < rank("single-disc-on-csr-v0.1.28")
+    assert rank("single-disc-on-csr-v0.1.32") < rank("single-disc-on-csr-v0.1.26")
     assert rank("single-disc-on-csr-v9") < rank("single-disc-endings-v9")
     assert rank("single-disc-endings-v9") < rank("csr-plus-scene-x")
 
@@ -110,22 +109,25 @@ def test_manifest_enables_sd_core_and_optional_path_delta(manifest: dict):
     enabled = [
         a
         for a in manifest.get("addons") or []
-        if str(a.get("id", "")).startswith("single-disc-on-csr-v")
+        if (
+            str(a.get("id", "")).startswith("single-disc-on-csr-v")
+            or str(a.get("id", "")).startswith("single-disc-on-csr-delta-")
+        )
         and a.get("enabled", True)
     ]
     assert len(enabled) >= 1
-    # One visible core + any number of uiHidden auto deltas (path-engine, music, …)
+    # One visible core + any number of uiHidden auto deltas (path-engine, break, …)
     visible = [e for e in enabled if not e.get("uiHidden") and not e.get("hidden")]
     hidden = [e for e in enabled if e.get("uiHidden") or e.get("hidden")]
     assert len(visible) == 1, f"visible SD cores: {[e['id'] for e in visible]}"
     core = visible[0]
     assert core.get("version")
-    assert "v0.1.24" in core["id"] or core["id"].startswith("single-disc-on-csr-")
+    # Badge version must match id version (avoid "v0.1.32 (…v0.1.24)")
+    assert core["id"].endswith("v" + str(core["version"])), (core["id"], core["version"])
+    assert core["id"].startswith("single-disc-on-csr-v")
     for delta in hidden:
         aw = delta.get("autoIncludeWhen") or {}
-        assert aw.get("addonSelected") == core["id"] or str(
-            aw.get("addonSelected", "")
-        ).startswith("single-disc-on-csr-"), delta["id"]
+        assert aw.get("addonSelected") == core["id"], delta["id"]
 
 
 def test_manifest_movies_and_endings_enabled(manifest: dict):
