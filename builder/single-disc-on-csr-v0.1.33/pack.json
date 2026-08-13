@@ -1,8 +1,8 @@
 {
   "id": "single-disc-on-csr-v0.1.33",
-  "version": "0.1.33",
+  "version": "0.1.34",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. Break-path fields match CSR multi-disc (LOSIN2 D1, LOST2+COS_BTM2 D2, Ask BLACKBGB). Path FMVs and endings auto-apply.",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.34: disc-break scene (LOSIN2 keeps break bit; COS_BTM2 ASK).",
   "hint": "CSR. Movies + endings auto-apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
