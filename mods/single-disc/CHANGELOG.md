@@ -1,3 +1,15 @@
+## 0.1.32 (Gate1 COS_BTM2 actually reaches break ASK)
+
+- Playtest v0.1.31 APPLIED stack correct (movies+24+26+31+endings) but no break.
+  LOST2 did MAPJUMP #526; COS_BTM2 still never ran the break ASK.
+- Root cause (FFRTT): IFSW before break used E=0x05 so fail landed on RET @0x72,
+  not break IFUW @0x73. Changing only C (>= to ==) still RET on a455.
+- Fix on COS_BTM2 (from pure CSR D2):
+  1) IFSW GM 0x0202 before SETBYTE/RET: C== and **E 0x05->0x06** (fail->0x73)
+  2) Large IFUW a455 else-jumps (>=0x08) -> 0 (v0.1.7 style) so break body runs
+  3) Keep LOST2 a455->MJ526 and Ask BLACKBGB from 0.1.31
+- Stack: movies + 0.1.24 + 0.1.26 + 0.1.31 + **0.1.32** (27-30 still disabled).
+
 ## 0.1.31 (Gate1 disc-break: LOST2 to COS_BTM2)
 
 - Playtest v0.1.30: transition OK but no break scene and no music on #634.
