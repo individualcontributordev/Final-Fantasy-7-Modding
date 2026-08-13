@@ -77,23 +77,33 @@ def _enabled_addons(manifest: dict, prefix: str) -> list[str]:
     return sorted(out)
 
 
+def _version_key(pid: str) -> tuple:
+    ver = pid.split("-v", 1)[-1]
+    parts = []
+    for p in ver.replace("-", ".").split("."):
+        try:
+            parts.append(int(p))
+        except ValueError:
+            parts.append(0)
+    return tuple(parts)
+
+
 @pytest.fixture(scope="session")
 def latest_sd_on_csr(manifest: dict) -> str:
+    """Primary single-disc-on-csr pack (lowest enabled version = base core)."""
     ids = _enabled_addons(manifest, SD_ON_CSR_PREFIX)
     if not ids:
         pytest.skip("no enabled single-disc-on-csr pack in manifest")
-    # version sort: v0.1.24 > v0.1.9
-    def key(pid: str) -> tuple:
-        ver = pid.split("-v", 1)[-1]
-        parts = []
-        for p in ver.replace("-", ".").split("."):
-            try:
-                parts.append(int(p))
-            except ValueError:
-                parts.append(0)
-        return tuple(parts)
+    return min(ids, key=_version_key)
 
-    return max(ids, key=key)
+
+@pytest.fixture(scope="session")
+def sd_on_csr_stack(manifest: dict) -> list[str]:
+    """All enabled single-disc-on-csr packs in apply order (base then deltas)."""
+    ids = _enabled_addons(manifest, SD_ON_CSR_PREFIX)
+    if not ids:
+        pytest.skip("no enabled single-disc-on-csr pack in manifest")
+    return sorted(ids, key=_version_key)
 
 
 @pytest.fixture(scope="session")

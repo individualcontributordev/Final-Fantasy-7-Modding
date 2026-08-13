@@ -1,3 +1,13 @@
+## 0.1.25 (D2 engine movie IDs — PARASHOT on MD8_5; FSHIP_24/BLIN66_6 CSR D2)
+
+- MD8_5 (#731) glitched: D2 field scripts use engine MOVIE_ID indices. On D2 mid 53 is
+  PARASHOT; D1 table had only 54 rows so mids 55/59 were out of range and 50–53 still
+  meant early-game D1 streams. v0.1.24 injected file payloads but patched MOVIE_ID by
+  LBA (wrong rows).
+- Fix: grow MOVIE_ID to 61 rows; install D2 path streams at new ids 54–59; remap
+  FSHIP_12/MD8_5/MD8_52 PMVIE (53→58 PARASHOT, FSHIP_12→54–57, MD8_52→59).
+- FSHIP_24 (#71) and BLIN66_6 (#255): restore pure CSR Disc 2 (CSR trims; D1 was pristine).
+
 ## 0.1.24 (path FMVs after manip-movies — PARASHOT/NRCRL unique LBAs)
 
 - PARASHOT missing + MD8_5 glitch when manip-movies applied after SD core:
