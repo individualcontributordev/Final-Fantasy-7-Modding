@@ -39,6 +39,9 @@ Players: https://individualcontributor.dev/builder/
 
 Builder UI: one **Single-disc** option on CSR. The manip-movies pack is uiHidden and auto-applied with core when base is CSR and no CSR+ scene packs are selected (manifest autoIncludeWhen).
 
+**Playtest gates (lock fixes, avoid regressions):** [docs/single-disc-test-plan.md](../../docs/single-disc-test-plan.md).
+Delta packs (`v0.1.26`+) are internal auto layers for size/hotfix; squash into one core when a gate wave is green (see that doc).
+
 ## What works (DuckStation, 2026-08-03)
 
 | Piece | Method | Status |
