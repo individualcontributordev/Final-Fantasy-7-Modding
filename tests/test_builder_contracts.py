@@ -37,8 +37,7 @@ def test_addon_apply_rank_movies_before_single_disc(builder_js: str):
     rank = extract_addon_apply_rank_fn(builder_js)
     assert rank("single-disc-csr-manip-movies-v0.1.4") == 10
     assert rank("single-disc-on-csr-v0.1.33") == 20  # player core
-    assert rank("single-disc-on-csr-v0.1.26") == 21  # path-engine delta
-    assert rank("single-disc-on-csr-ref-v0.1.33") == 21
+    assert rank("single-disc-on-csr-v0.1.26") == 21  # path-engine auto
     assert rank("single-disc-endings-v0.1.0-part1") == 30
     assert rank("field-encounter-25-v0.1.2") == 40
     assert rank("csr-plus-scene-hojo-v0.1.0") == 50
@@ -110,7 +109,6 @@ def test_manifest_enables_sd_core_and_optional_path_delta(manifest: dict):
         for a in manifest.get("addons") or []
         if (
             str(a.get("id", "")).startswith("single-disc-on-csr-v")
-            or str(a.get("id", "")).startswith("single-disc-on-csr-ref-")
         )
         and a.get("enabled", True)
     ]

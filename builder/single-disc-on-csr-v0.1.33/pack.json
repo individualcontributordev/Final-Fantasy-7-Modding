@@ -2,7 +2,7 @@
   "id": "single-disc-on-csr-v0.1.33",
   "version": "0.1.33",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. Fields follow CSR D1/D2 reference (LOSIN2 D1, LOST2/COS_BTM2 D2, Ask-stripped BLACKBGB).",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. Break-path fields match CSR multi-disc (LOSIN2 D1, LOST2+COS_BTM2 D2, Ask BLACKBGB). Path FMVs and endings auto-apply.",
   "hint": "CSR. Movies + endings auto-apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -10,7 +10,11 @@
   ],
   "layout": "global",
   "discs": {
-    "1": "../single-disc-on-csr-v0.1.24/layers/disc1.layer.json"
+    "1": "./layers/disc1.layer.json"
   },
-  "enabled": true
+  "enabled": true,
+  "uiHidden": false,
+  "hidden": false,
+  "beta": true,
+  "status": "beta"
 }
