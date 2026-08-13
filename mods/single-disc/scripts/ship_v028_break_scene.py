@@ -38,23 +38,36 @@ PACK_ID = "single-disc-on-csr-v0.1.28"
 PAT = bytes.fromhex("1820000055a4")
 
 
-def force_lost2(dec: bytearray) -> int:
-    """IFUW GM gate before MAPJUMP cos_btm2: else 0x0B → 0."""
-    n = 0
+AKAO2_RESUME = bytes.fromhex("da0000009a00000000000000000000")
+
+
+def force_lost2(dec: bytearray) -> tuple[int, int]:
+    """IFUW else 0x0B→0 before MAPJUMP cos_btm2; JMPF over AKAO2 0x9A resume."""
+    n_ifuw = 0
     i = 0
     while True:
         j = bytes(dec).find(PAT, i)
         if j < 0:
             break
-        # full IFUW is 8 bytes; else at +7. Want the one with else 0x0B (MAPJUMP skip)
         if j + 8 <= len(dec) and dec[j + 7] == 0x0B:
-            # confirm MAPJUMP 526 follows nearby
             window = bytes(dec[j : j + 24])
             if b"\x60\x0e\x02" in window or b"\x0e\x02" in window[8:20]:
                 dec[j + 7] = 0
-                n += 1
+                n_ifuw += 1
         i = j + 1
-    return n
+    # AKAO2 resume before MUSIC (silences without DSKCG)
+    n_akao = 0
+    i = 0
+    while True:
+        j = bytes(dec).find(AKAO2_RESUME, i)
+        if j < 0:
+            break
+        dec[j] = 0x10
+        dec[j + 1] = 13
+        dec[j + 2 : j + 15] = b"\x00" * 13
+        n_akao += 1
+        i = j + 1
+    return n_ifuw, n_akao
 
 
 def force_cos_btm2(dec: bytearray) -> list[tuple[int, int]]:
@@ -99,10 +112,12 @@ def main() -> int:
     # LOST2 from pure CSR D2 + force break MAPJUMP
     lost_raw = extract_file(cd2, "FIELD/LOST2.DAT")
     lost_dec = bytearray(decompress_all_with_header(lost_raw))
-    n = force_lost2(lost_dec)
-    print("LOST2 IFUW else cleared", n)
-    if n < 1:
+    n_ifuw, n_akao = force_lost2(lost_dec)
+    print("LOST2 IFUW else cleared", n_ifuw, "AKAO2 resume JMPF", n_akao)
+    if n_ifuw < 1:
         raise SystemExit("LOST2 break IFUW not found")
+    if n_akao < 2:
+        raise SystemExit(f"LOST2 AKAO2 resume NOP count {n_akao}")
     lost_new = compress_all_with_header(bytes(lost_dec))
     reinstall(img, "FIELD/LOST2.DAT", lost_new)
 
