@@ -1,3 +1,10 @@
+## 0.1.25b (MOVIE_ID in-place — DuckStation boot)
+
+- Disc would not load: DuckStation Logical seek to [80:52:34] failed.
+  v0.1.25 had relocated MINT/MOVIE_ID.BIN to EOF LBA 363784 (past ~80min CD).
+- Rebuild path-engine layer: grow MOVIE_ID at original LBA 126959 (1220 bytes).
+- Keep PMVIE remap + CSR D2 FSHIP_24/BLIN66_6.
+
 ## 0.1.25 (D2 engine movie IDs — PARASHOT on MD8_5; FSHIP_24/BLIN66_6 CSR D2)
 
 - MD8_5 (#731) glitched: D2 field scripts use engine MOVIE_ID indices. On D2 mid 53 is

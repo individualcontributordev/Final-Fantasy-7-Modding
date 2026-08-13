@@ -188,3 +188,13 @@ def test_endings_do_not_clobber_core(build_stack, stack_ids, endings_parts, iso_
     assert extract_file(with_end, "MOVIE/OPENINGE.MOV") == extract_file(
         stacked, "MOVIE/OPENINGE.MOV"
     )
+
+def test_movie_id_stays_in_place_lba(stacked, csr_d1_bytes, iso_api):
+    """MOVIE_ID must not relocate near EOF (DuckStation seek 80:52:34 failed)."""
+    extract_file, find_file = iso_api
+    got = find_file(stacked, "MINT/MOVIE_ID.BIN")
+    csr = find_file(csr_d1_bytes, "MINT/MOVIE_ID.BIN")
+    assert got.lba == csr.lba, (got.lba, csr.lba)
+    assert got.lba < 200_000
+    assert len(extract_file(stacked, "MINT/MOVIE_ID.BIN")) // 20 >= 60
+
