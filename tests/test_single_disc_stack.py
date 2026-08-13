@@ -76,8 +76,14 @@ def test_prefer_list_fields(stacked, csr_d1_bytes, csr_d2_bytes, iso_api, root):
             assert same_or_prefix(got, exp), "LOST2 must be pure CSR D2"
             continue
         if stem == "COS_BTM2.DAT":
-            exp = extract_file(csr_d2_bytes, path)
-            assert same_or_prefix(got, exp), "COS_BTM2 must be pure CSR D2"
+            # opened for break ASK in v0.1.34 — not pure bytes
+            assert got != extract_file(csr_d1_bytes, path)
+            assert len(got) > 1000
+            continue
+        if stem == "LOSIN2.DAT":
+            # BITON break bit (v0.1.34) — still D1-based
+            assert got != extract_file(csr_d2_bytes, path)
+            assert len(got) > 1000
             continue
         src = csr_d1_bytes if side == "d1" else csr_d2_bytes
         exp = extract_file(src, path)
@@ -213,11 +219,8 @@ def test_image_under_80_minute_cd(stacked):
     hard = 80 * 60 * 75 - 150  # 80:00:00
     assert max_lba < hard, max_lba
 
-def test_break_fields_match_csr_reference(stacked, iso_api, csr_d1_bytes, csr_d2_bytes, scripts_dir):
-    """Break-path fields match CSR multi-disc reference (no spiral forces).
-
-    LOSIN2 = CSR D1; LOST2 + COS_BTM2 = CSR D2; BLACKBGB Ask-stripped (no DSKCG).
-    """
+def test_break_path_losin2_bit_lost2_cos(stacked, iso_api, csr_d2_bytes, scripts_dir):
+    """D1→2 break: LOSIN2 leaves bit4 ON; LOST2 a455+bit → #526; COS reaches ASK."""
     import sys
     if str(scripts_dir) not in sys.path:
         sys.path.insert(0, str(scripts_dir))
@@ -226,18 +229,100 @@ def test_break_fields_match_csr_reference(stacked, iso_api, csr_d1_bytes, csr_d2
     from helpers import same_or_prefix
 
     extract_file, _ = iso_api
-    assert same_or_prefix(
-        extract_file(stacked, "FIELD/LOSIN2.DAT"),
-        extract_file(csr_d1_bytes, "FIELD/LOSIN2.DAT"),
-    )
+    # LOST2 still pure CSR D2 body (gate is flags + COS open)
     assert same_or_prefix(
         extract_file(stacked, "FIELD/LOST2.DAT"),
         extract_file(csr_d2_bytes, "FIELD/LOST2.DAT"),
     )
-    assert same_or_prefix(
-        extract_file(stacked, "FIELD/COS_BTM2.DAT"),
-        extract_file(csr_d2_bytes, "FIELD/COS_BTM2.DAT"),
-    )
+    # LOSIN2 must BITON 84#4 not BITOFF
+    fd = load_field_dat(extract_file(stacked, "FIELD/LOSIN2.DAT"))
+    saw_on = False
+    for sc in fd.scripts:
+        pos = 0
+        while pos < len(sc.raw):
+            op = sc.raw[pos]
+            sz = max(op_size(sc.raw, pos), 1)
+            chunk = sc.raw[pos : pos + sz]
+            assert chunk.hex() != "83308404", "LOSIN2 still clears break bit"
+            if chunk.hex() == "82308404":
+                saw_on = True
+            pos += sz
+    assert saw_on
+
+    def sim_lost2(dat, gm=0xA455, bit84=1 << 4):
+        fd = load_field_dat(dat)
+        for sc in fd.scripts:
+            if sc.entity != "init" or sc.slot != 0:
+                continue
+            raw, pos = sc.raw, 0
+            for _ in range(80):
+                op = raw[pos]
+                sz = max(op_size(raw, pos), 1)
+                chunk = raw[pos : pos + sz]
+                name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+                if name == "IFUB":
+                    c, e, v = chunk[4], chunk[5], chunk[3]
+                    cond = bool(bit84 & (1 << v)) if c == 9 else False
+                    fail = (pos + sz - 1) + e
+                    pos = fail if not cond else pos + sz
+                    continue
+                if name == "IFUW":
+                    v = int.from_bytes(chunk[4:6], "little")
+                    c, e = chunk[6], chunk[7]
+                    table = {0: gm == v, 1: gm != v, 2: gm > v, 3: gm < v, 4: gm >= v, 5: gm <= v}
+                    cond = table.get(c, False)
+                    fail = (pos + sz - 1) + e
+                    pos = fail if not cond else pos + sz
+                    continue
+                if name == "JMPF":
+                    pos = pos + sz + chunk[1]
+                    continue
+                if name == "RET":
+                    return "RET"
+                if name.startswith("MAPJUMP"):
+                    return f"MJ{int.from_bytes(chunk[1:3], 'little')}"
+                pos += sz
+        return "miss"
+
+    assert sim_lost2(extract_file(stacked, "FIELD/LOST2.DAT")) == "MJ526"
+
+    # COS a455 reaches ASK
+    fd = load_field_dat(extract_file(stacked, "FIELD/COS_BTM2.DAT"))
+    gm = 0xA455
+    saw_ask = False
+    for sc in fd.scripts:
+        if sc.entity != "directr" or sc.slot != 0:
+            continue
+        raw, pos = sc.raw, 0
+        for _ in range(250):
+            if pos >= len(raw):
+                break
+            op = raw[pos]
+            sz = max(op_size(raw, pos), 1)
+            chunk = raw[pos : pos + sz]
+            name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+            if name == "IFUB":
+                pos = (pos + sz - 1) + chunk[5]
+                continue
+            if name in ("IFUW", "IFSW"):
+                v = int.from_bytes(chunk[4:6], "little")
+                c, e = chunk[6], chunk[7]
+                table = {0: gm == v, 1: gm != v, 2: gm > v, 3: gm < v, 4: gm >= v, 5: gm <= v}
+                cond = table.get(c, False)
+                fail = (pos + sz - 1) + e
+                pos = fail if not cond else pos + sz
+                continue
+            if name == "JMPF":
+                pos = pos + sz + chunk[1]
+                continue
+            if name == "RET":
+                break
+            if name == "ASK":
+                saw_ask = True
+                break
+            pos += sz
+    assert saw_ask
+
     fd = load_field_dat(extract_file(stacked, "FIELD/BLACKBGB.DAT"))
     for sc in fd.scripts:
         pos = 0

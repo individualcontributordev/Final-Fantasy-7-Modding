@@ -38,6 +38,7 @@ def test_addon_apply_rank_movies_before_single_disc(builder_js: str):
     assert rank("single-disc-csr-manip-movies-v0.1.4") == 10
     assert rank("single-disc-on-csr-v0.1.33") == 20  # player core
     assert rank("single-disc-on-csr-v0.1.26") == 21  # path-engine auto
+    assert rank("single-disc-on-csr-v0.1.34") == 21  # break scene auto
     assert rank("single-disc-endings-v0.1.0-part1") == 30
     assert rank("field-encounter-25-v0.1.2") == 40
     assert rank("csr-plus-scene-hojo-v0.1.0") == 50
@@ -119,9 +120,11 @@ def test_manifest_enables_sd_core_and_optional_path_delta(manifest: dict):
     assert len(visible) == 1, f"visible SD cores: {[e['id'] for e in visible]}"
     core = visible[0]
     assert core.get("version")
-    # Badge version must match id version (avoid "v0.1.32 (…v0.1.24)")
-    assert core["id"].endswith("v" + str(core["version"])), (core["id"], core["version"])
-    assert core["id"].startswith("single-disc-on-csr-v")
+    # Player core id is the Single-disc pack; badge version is stack tip.
+    assert core["id"].startswith("single-disc-on-csr-v"), core["id"]
+    assert core.get("version")
+    # Disallow known bad pattern: tip version with frozen ancient id v0.1.24
+    assert not core["id"].endswith("v0.1.24"), core["id"]
     for delta in hidden:
         aw = delta.get("autoIncludeWhen") or {}
         assert aw.get("addonSelected") == core["id"], delta["id"]

@@ -1,3 +1,15 @@
+## 0.1.34 (disc-break scene: LOSIN2 bit + COS ASK)
+
+- Pure CSR D2 LOST2 never MAPJUMPs COS_BTM2 after LOSIN2: LOSIN2 sets GM 0xa455
+  and BITOFFs bank3/0x84#4, so LOST2 init RETs (no break, no music path).
+- Multi-disc still does DSKCG then forest; the gated COS_BTM2 ASK is the CSR
+  "break scene" on that flag path when bit4 is on (LOSINN sets it on multi).
+- Fix (hidden auto):
+  1) LOSIN2: BITOFF 84#4 -> BITON 84#4 (same 4 bytes)
+  2) LOST2: pure CSR D2
+  3) COS_BTM2: IFSW fail lands on break + large IFUW a455 else cleared so ASK runs
+- Badge v0.1.34; pack single-disc-on-csr-v0.1.34 auto with Single-disc.
+
 ## 0.1.33 (repo purge)
 
 - Deleted retired single-disc pack dirs/layers (0.1.1-0.1.25, ref pack, old movies).

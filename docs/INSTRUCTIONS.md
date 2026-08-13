@@ -1,27 +1,20 @@
-# INSTRUCTIONS — Single-disc v0.1.33 (clean repo)
-
-## Live packs only
-
-Player checkbox: Single-disc v0.1.33 (single-disc-on-csr-v0.1.33).
-
-Auto (hidden, not separate mods you pick):
-- movies v0.1.4
-- path FMVs v0.1.26 (Highwind path only)
-- endings parts 1-7
-
-Old spiral / retired single-disc layers deleted from the repo (not merely disabled).
+# INSTRUCTIONS — Single-disc break scene (badge v0.1.34)
 
 ## Build
 
-1. Hard-refresh builder
-2. CSR + Single-disc (CSR+ off)
-3. APPLIED should show Single-disc v0.1.33 + autos above — nothing retired 0.1.1-0.1.32
+1. Hard-refresh builder (badge **v0.1.34**)
+2. CSR + Single-disc only
+3. APPLIED must include:
+   - movies v0.1.4
+   - single-disc-on-csr-v0.1.33
+   - path FMVs v0.1.26
+   - **single-disc-on-csr-v0.1.34** (break scene)
 4. New Disc 1 zip
 
-## Test
+## What should happen
 
-Gate 0 + Gate 1: boot, D1 to D2 transition vs multi-disc CSR expectation.
+D1 to D2: after BLACKBGB hub, LOST2 should MAPJUMP to **COS_BTM2** break/ASK (not drop straight into silent forest only).
 
 ## Evidence
 
-Paste APPLIED.txt here.
+Paste APPLIED + PASS/FAIL break scene.
