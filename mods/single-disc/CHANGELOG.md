@@ -1,5 +1,13 @@
 ## 0.1.34 (disc-break scene: LOSIN2 bit + COS ASK)
 
+## 0.1.35 — 2026-08-13
+
+- **FAIL retire v0.1.34** (LOSIN2 BITON / COS open — no music, no break in playtest).
+- **v0.1.35** auto delta: LOST2 CSR D2 init — when bank3/0x84 bit4 is OFF, fail IFUB into
+  **AKAO2 + MUSIC** instead of silent RET (1-byte E 0x1c to 0x24). No COS force.
+- Badge / core id still single-disc-on-csr-v0.1.33 with version **0.1.35**.
+
+
 - Pure CSR D2 LOST2 never MAPJUMPs COS_BTM2 after LOSIN2: LOSIN2 sets GM 0xa455
   and BITOFFs bank3/0x84#4, so LOST2 init RETs (no break, no music path).
 - Multi-disc still does DSKCG then forest; the gated COS_BTM2 ASK is the CSR
