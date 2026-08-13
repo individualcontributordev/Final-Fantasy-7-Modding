@@ -38,7 +38,7 @@ def test_addon_apply_rank_movies_before_single_disc(builder_js: str):
     assert rank("single-disc-csr-manip-movies-v0.1.4") == 10
     assert rank("single-disc-on-csr-v0.1.33") == 20  # player core
     assert rank("single-disc-on-csr-v0.1.26") == 21  # path-engine auto
-    assert rank("single-disc-on-csr-v0.1.34") == 21  # break scene auto
+    assert rank("single-disc-on-csr-v0.1.35") == 21  # LOST2 music auto
     assert rank("single-disc-endings-v0.1.0-part1") == 30
     assert rank("field-encounter-25-v0.1.2") == 40
     assert rank("csr-plus-scene-hojo-v0.1.0") == 50

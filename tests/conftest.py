@@ -89,23 +89,27 @@ def _version_key(pid: str) -> tuple:
 
 
 def _sd_on_csr_apply_key(pid: str) -> tuple:
-    """Core first (rank 20), then path auto (rank 21)."""
+    """Core first (rank 20), then path/music autos (rank 21)."""
     if pid.startswith(SD_ON_CSR_PREFIX):
         ver = pid.split("-v", 1)[-1]
-        # path FMVs + break autos after player core
-        if ver.startswith("0.1.26") or ver.startswith("0.1.34"):
+        # path FMVs + LOST2 music auto after player core
+        if ver.startswith("0.1.26") or ver.startswith("0.1.35"):
             return (1, _version_key(pid))
         return (0, _version_key(pid))
     return (2, _version_key(pid))
 
 
+def _is_sd_on_csr_auto_delta(pid: str) -> bool:
+    return pid.endswith("v0.1.26") or pid.endswith("v0.1.35")
+
+
 @pytest.fixture(scope="session")
 def latest_sd_on_csr(manifest: dict) -> str:
-    """Player-facing single-disc-on-csr core (not path/ref autos)."""
+    """Player-facing single-disc-on-csr core (not path/music autos)."""
     ids = [
         a
         for a in _enabled_addons(manifest, SD_ON_CSR_PREFIX)
-        if not a.endswith("v0.1.26") and not a.endswith("v0.1.34")
+        if not _is_sd_on_csr_auto_delta(a)
     ]
     if not ids:
         pytest.skip("no enabled single-disc-on-csr core pack in manifest")

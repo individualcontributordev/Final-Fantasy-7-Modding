@@ -1,0 +1,1 @@
+{"format":"ic-layer-v1","id":"single-disc-on-csr-v0.1.35-disc1","description":"v0.1.35: LOST2 IFUB bit4-fail E 0x1c\u21920x24 \u2014 play MUSIC on a455 silent arm. No COS force.","target":"disc-image","stats":{"originalBytes":837561312,"modifiedBytes":837561312,"changedBytes":1,"records":1},"records":[{"offset":766968878,"hex":"24"}]}
