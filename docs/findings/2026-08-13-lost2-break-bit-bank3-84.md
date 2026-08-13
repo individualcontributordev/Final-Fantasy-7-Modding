@@ -40,3 +40,9 @@ Restore pure CSR D2 LOST2 + COS_BTM2.
 
 - a455 + bit4 → MJ526  
 - a455 + no bit → RET  
+
+## Superseded
+
+v0.1.29 BITON approach caused black/glitch on playtest. Restored v0.1.8/0.1.9
+path in **v0.1.30** (pure CSR D2 LOST2/COS_BTM2 + Ask BLACKBGB, no BITON84).
+See CHANGELOG 0.1.8 / 0.1.30.

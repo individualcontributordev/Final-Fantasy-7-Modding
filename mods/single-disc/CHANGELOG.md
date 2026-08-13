@@ -1,3 +1,11 @@
+## 0.1.30 (restore known-good disc-break fields)
+
+- v0.1.27–0.1.29 broke D1→D2 again: AKAO2/IFUW forces and BLACKBGB BITON 0x84#4
+  caused black/glitch transition (same failure as v0.1.6/0.1.7 → fixed in 0.1.8).
+- Restore v0.1.8/0.1.9 path: Ask-stripped BLACKBGB (no BITON84), pure CSR D2
+  LOST2 + COS_BTM2 (IFUW else stays 0x0B; no AKAO2 JMPF).
+- Hidden pack single-disc-on-csr-v0.1.30 auto with Single-disc.
+
 ## 0.1.29 (disc-break gate bit on BLACKBGB)
 
 - D1→D2 still skipped break scene and music: LOST2 only MAPJUMPs COS_BTM2 (#526)

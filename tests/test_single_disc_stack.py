@@ -72,9 +72,13 @@ def test_prefer_list_fields(stacked, csr_d1_bytes, csr_d2_bytes, iso_api, root):
             assert len(got) > 1000
             continue
         if stem == "LOST2.DAT":
-            # v0.1.29+: pure CSR D2 (break gate is BLACKBGB bit, not LOST2 force)
+            # v0.1.8/0.1.9/0.1.30+: pure CSR D2 (no force / AKAO2 hacks)
             exp = extract_file(csr_d2_bytes, path)
             assert same_or_prefix(got, exp), "LOST2 must be pure CSR D2"
+            continue
+        if stem == "COS_BTM2.DAT":
+            exp = extract_file(csr_d2_bytes, path)
+            assert same_or_prefix(got, exp), "COS_BTM2 must be pure CSR D2"
             continue
         src = csr_d1_bytes if side == "d1" else csr_d2_bytes
         exp = extract_file(src, path)
@@ -210,99 +214,59 @@ def test_image_under_80_minute_cd(stacked):
     hard = 80 * 60 * 75 - 150  # 80:00:00
     assert max_lba < hard, max_lba
 
-def test_blackbgb_sets_lost2_break_bit(stacked, iso_api, scripts_dir):
-    """BLACKBGB must BITON bank3/0x84#4 before each MAPJUMP LOST2 (#634).
+def test_break_fields_match_v019_path(stacked, iso_api, csr_d2_bytes, scripts_dir):
+    """Disc1→2 break fields = known-good v0.1.8/0.1.9 path (undo 0.1.27–0.1.29).
 
-    LOST2 only MAPJUMPs COS_BTM2 (#526) when that bit is set and GM==0xa455.
-    LOSIN2 clears the bit; multi-disc DSKCG path set it elsewhere — single-disc
-    must set it on BLACKBGB (v0.1.29+).
+    - LOST2 + COS_BTM2 pure CSR D2 (no IFUW force / AKAO2 JMPF)
+    - BLACKBGB Ask-stripped (no DSKCG), no experimental BITON 0x84#4
+    - LOST2 MAPJUMP#526 IFUW else remains 0x0B (force=0 blacked the scene)
     """
     import sys
     if str(scripts_dir) not in sys.path:
         sys.path.insert(0, str(scripts_dir))
     from field_dat import load_field_dat, op_size
     from ff7_opcodes import OPCODE_NAMES
+    from helpers import same_or_prefix
 
     extract_file, _ = iso_api
-    fd = load_field_dat(extract_file(stacked, "FIELD/BLACKBGB.DAT"))
-    biton84 = bytes.fromhex("82308404")
-    sites = 0
+    lost = extract_file(stacked, "FIELD/LOST2.DAT")
+    cos = extract_file(stacked, "FIELD/COS_BTM2.DAT")
+    bb = extract_file(stacked, "FIELD/BLACKBGB.DAT")
+    assert same_or_prefix(lost, extract_file(csr_d2_bytes, "FIELD/LOST2.DAT"))
+    assert same_or_prefix(cos, extract_file(csr_d2_bytes, "FIELD/COS_BTM2.DAT"))
+
+    fd = load_field_dat(lost)
+    pat = bytes.fromhex("1820000055a4")
+    saw_mj = False
     for sc in fd.scripts:
         if sc.entity != "init" or sc.slot != 0:
             continue
         pos = 0
-        ops = []
         while pos < len(sc.raw):
             op = sc.raw[pos]
             sz = max(op_size(sc.raw, pos), 1)
             chunk = sc.raw[pos : pos + sz]
             name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
-            ops.append((name, chunk))
+            if name == "IFUW" and chunk.startswith(pat) and len(chunk) >= 8:
+                # break MAPJUMP gate: else must stay 0x0B (not forced 0)
+                if chunk[6] == 0x00:  # C == equal
+                    assert chunk[7] == 0x0B, "LOST2 IFUW else forced — causes black break"
+            if name.startswith("MAPJUMP") and int.from_bytes(chunk[1:3], "little") == 526:
+                saw_mj = True
             pos += sz
-        for i, (name, chunk) in enumerate(ops):
-            if not (name.startswith("MAPJUMP") and int.from_bytes(chunk[1:3], "little") == 634):
-                continue
-            window = b"".join(c for _, c in ops[max(0, i - 6) : i])
-            assert biton84 in window, f"no BITON 84/4 before LOST2 MAPJUMP near op {i}"
-            sites += 1
-    assert sites >= 2, sites
+    assert saw_mj
 
-
-def test_lost2_break_path_sim(stacked, iso_api, scripts_dir):
-    """With GM=0xa455 + bit4, pure CSR D2 LOST2 init MAPJUMPs #526 COS_BTM2."""
-    import sys
-    if str(scripts_dir) not in sys.path:
-        sys.path.insert(0, str(scripts_dir))
-    from field_dat import load_field_dat, op_size
-    from ff7_opcodes import OPCODE_NAMES
-
-    extract_file, _ = iso_api
-    fd = load_field_dat(extract_file(stacked, "FIELD/LOST2.DAT"))
-    gm = 0xA455
-    bit84 = 1 << 4
-
-    def run(bit):
-        for sc in fd.scripts:
-            if sc.entity != "init" or sc.slot != 0:
-                continue
-            raw = sc.raw
-            pos = 0
-            for _ in range(80):
-                op = raw[pos]
-                sz = max(op_size(raw, pos), 1)
-                chunk = raw[pos : pos + sz]
-                name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
-                if name == "IFUB":
-                    c, e, v = chunk[4], chunk[5], chunk[3]
-                    cond = bool(bit & (1 << v)) if c == 9 else False
-                    fail = (pos + sz - 1) + e
-                    pos = fail if not cond else pos + sz
-                    continue
-                if name == "IFUW":
-                    v = int.from_bytes(chunk[4:6], "little")
-                    c, e = chunk[6], chunk[7]
-                    table = {
-                        0: gm == v,
-                        1: gm != v,
-                        2: gm > v,
-                        3: gm < v,
-                        4: gm >= v,
-                        5: gm <= v,
-                    }
-                    cond = table.get(c, False)
-                    fail = (pos + sz - 1) + e
-                    pos = fail if not cond else pos + sz
-                    continue
-                if name == "JMPF":
-                    pos = pos + sz + chunk[1]
-                    continue
-                if name == "RET":
-                    return "RET"
-                if name.startswith("MAPJUMP"):
-                    return f"MJ{int.from_bytes(chunk[1:3], 'little')}"
-                pos += sz
-        return "miss"
-
-    assert run(bit84) == "MJ526"
-    assert run(0) == "RET"
+    # BLACKBGB: no DSKCG; no BITON bank3/0x84#4 (0.1.29 experiment)
+    fd = load_field_dat(bb)
+    biton84 = bytes.fromhex("82308404")
+    for sc in fd.scripts:
+        pos = 0
+        while pos < len(sc.raw):
+            op = sc.raw[pos]
+            sz = max(op_size(sc.raw, pos), 1)
+            chunk = sc.raw[pos : pos + sz]
+            name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+            assert name != "DSKCG", "BLACKBGB still has DSKCG"
+            assert chunk != biton84, "BLACKBGB has experimental BITON 84/4"
+            pos += sz
 
