@@ -267,7 +267,7 @@ def test_gate1_lost2_a455_jumps_cos_btm2(stacked, iso_api, scripts_dir):
 
 
 def test_gate1_cos_btm2_open_for_a455(stacked, iso_api, scripts_dir):
-    """Gate1: COS_BTM2 must not RET on GM>=0x202; break IFUW a455 + ASK remain."""
+    """Gate1: COS_BTM2 a455 path must reach ASK (IFSW E lands on break, not RET)."""
     import sys
     if str(scripts_dir) not in sys.path:
         sys.path.insert(0, str(scripts_dir))
@@ -276,23 +276,57 @@ def test_gate1_cos_btm2_open_for_a455(stacked, iso_api, scripts_dir):
 
     extract_file, _ = iso_api
     fd = load_field_dat(extract_file(stacked, "FIELD/COS_BTM2.DAT"))
-    saw_ask = False
+    gm = 0xA455
     for sc in fd.scripts:
         if sc.entity != "directr" or sc.slot != 0:
             continue
+        # IFSW before SETBYTE/RET must be C== and E=6 so fail -> 0x73 not RET 0x72
         pos = 0
         while pos < len(sc.raw):
             op = sc.raw[pos]
             sz = max(op_size(sc.raw, pos), 1)
             chunk = sc.raw[pos : pos + sz]
             name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
-            # IFSW vs 0x0202 must not be >= (0x04) — that RETs before break for a455
-            if name == "IFSW" and chunk[4:6] == bytes.fromhex("0202"):
-                assert chunk[6] != 0x04, "COS_BTM2 still gates break with GM>=0x202"
+            if (
+                name == "IFSW"
+                and chunk[4:6] == bytes.fromhex("0202")
+                and sc.raw[pos + sz : pos + sz + 5] == bytes.fromhex("8050030100")
+            ):
+                assert chunk[6] == 0x00, chunk.hex()
+                assert chunk[7] == 0x06, chunk.hex()
+            pos += sz
+        # Sim a455 reaches ASK
+        raw, pos = sc.raw, 0
+        saw_ask = False
+        for _ in range(250):
+            if pos >= len(raw):
+                break
+            op = raw[pos]
+            sz = max(op_size(raw, pos), 1)
+            chunk = raw[pos : pos + sz]
+            name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+            if name == "IFUB":
+                e = chunk[5]
+                pos = (pos + sz - 1) + e
+                continue
+            if name in ("IFUW", "IFSW"):
+                v = int.from_bytes(chunk[4:6], "little")
+                c, e = chunk[6], chunk[7]
+                table = {0: gm == v, 1: gm != v, 2: gm > v, 3: gm < v, 4: gm >= v, 5: gm <= v}
+                cond = table.get(c, False)
+                fail = (pos + sz - 1) + e
+                pos = fail if not cond else pos + sz
+                continue
+            if name == "JMPF":
+                pos = pos + sz + chunk[1]
+                continue
+            if name == "RET":
+                break
             if name == "ASK":
                 saw_ask = True
+                break
             pos += sz
-    assert saw_ask
+        assert saw_ask, "COS_BTM2 a455 sim never reached ASK"
 
 
 def test_gate1_blackbgb_ask_stripped(stacked, iso_api, scripts_dir):

@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-14 | [gate1-cos-ifsw-e-ret](2026-08-14-gate1-cos-ifsw-e-ret.md) | COS IFSW E=5 RET before break ASK (v0.1.32) | shipped |
 | 2026-08-14 | [gate1-lost2-cos-btm2-break](2026-08-14-gate1-lost2-cos-btm2-break.md) | LOST2 to COS_BTM2 + open COS for a455 (v0.1.31) | shipped |
 | 2026-08-13 | [lost2-break-bit-bank3-84](2026-08-13-lost2-break-bit-bank3-84.md) | LOST2 break needs bank3/0x84#4; BLACKBGB BITON (v0.1.29) | shipped |
 | 2026-08-13 | [path-fmv-movies-pack-clobber](2026-08-13-path-fmv-movies-pack-clobber.md) | manip-movies clobbered PARASHOT/NRCRL after SD inject |

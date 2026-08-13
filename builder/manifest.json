@@ -1336,8 +1336,8 @@
       "id": "single-disc-on-csr-v0.1.24",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.31",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.31: disc1\u21922 break scene (COS_BTM2).",
+      "version": "0.1.32",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.32: disc1\u21922 break COS_BTM2 ASK path fixed.",
       "hint": "Use one Disc 1 image for the full CSR game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1510,6 +1510,30 @@
       },
       "kind": "mod",
       "version": "0.1.31"
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.32",
+      "name": "Single-disc break COS open (internal)",
+      "kind": "mod",
+      "version": "0.1.32",
+      "blurb": "Internal auto: Gate1 COS_BTM2 reach break ASK for a455.",
+      "hint": "Always with Single-disc.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.32/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.24"
+      }
     }
   ],
   "bases": [],
