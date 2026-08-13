@@ -1,0 +1,2 @@
+# Dev / regression only (not needed to play or ship packs as a player).
+pytest>=7.0
