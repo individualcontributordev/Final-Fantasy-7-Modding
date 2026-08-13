@@ -1,29 +1,34 @@
-# INSTRUCTIONS — rebuild Disc 1 after MOVIE_ID boot fix
+# INSTRUCTIONS — rebuild Disc 1 (Single-disc v0.1.26 boot fix)
 
-## What broke
+## Why 0.1.24 alone worked
 
-DuckStation: Logical seek to [80:52:34] failed (loop).
-MSF 80:52:34 = LBA 363784 = where v0.1.25 had moved MINT/MOVIE_ID.BIN
-past the ~80-minute CD range. Game could not load the movie table so the
-disc looked unloadable.
+0.1.24 never moved MINT/MOVIE_ID.BIN and stays under the CD ~80-minute range.
+The path-engine pack broke boot two ways:
+1. Moved MOVIE_ID to LBA 363784 (MSF 80:52:34) — DuckStation seek loop
+2. Even after in-place MOVIE_ID fix, streams past 80:00 + sticky id@0.1.25 cache
 
-## Fix (same pack id v0.1.25, rebuilt)
+## Fix v0.1.26
 
-MOVIE_ID grows in place at CSR LBA 126959 (1220 bytes still one sector).
-Path-engine FMVs + field PMVIE remaps + FSHIP_24/BLIN66_6 kept.
+New hidden pack id (forces fresh download). Image ends ~79:10. MOVIE_ID stays
+at LBA 126959. PARASHOT engine id still wired for MD8_5.
 
 ## Build
 
-1. Hard-refresh https://individualcontributor.dev/builder/
-2. Base CSR + Single-disc only (one checkbox, badge v0.1.25)
-3. APPLIED order: movies v0.1.4, single-disc-on-csr-v0.1.24, v0.1.25
-4. Build Disc 1 (discard any zip from before this fix)
-5. Load the .cue in DuckStation (keep .bin and .cue together)
+1. Hard-refresh builder (Cmd+Shift+R) or private window
+2. Base: CSR
+3. One checkbox: Single-disc badge v0.1.26 (no second row)
+4. CSR+ off for this check
+5. APPLIED must list:
+   - single-disc-csr-manip-movies-v0.1.4
+   - single-disc-on-csr-v0.1.24
+   - single-disc-on-csr-v0.1.26   (auto; NOT 0.1.25)
+6. Build Disc 1 — discard older zips
+7. Open the .cue with .bin beside it
 
 ## Success
 
-- Boots past logo/title without infinite CDROM seek failures
-- No spam of Seek to [80:52:34] failed
+- Boots without Logical seek to [80:52:34] failed spam
+- Badge / APPLIED shows 0.1.26 path-engine, not 0.1.25
 
 ## Then playtest
 
@@ -34,5 +39,5 @@ Path-engine FMVs + field PMVIE remaps + FSHIP_24/BLIN66_6 kept.
 
 ## Evidence
 
-- APPLIED.txt
-- Boot OK / fail + any new DuckStation CDROM lines
+- APPLIED.txt (must include v0.1.26, must not need 0.1.25)
+- Boot OK / fail

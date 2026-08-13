@@ -1336,8 +1336,8 @@
       "id": "single-disc-on-csr-v0.1.24",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.25",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.25: PARASHOT engine ids for Highwind/MD8 path; CSR D2 trims on FSHIP_24 and BLIN66_6. (Path-engine layer auto-applies.)",
+      "version": "0.1.26",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.26: path-engine boot fix (under 80min CD) + PARASHOT/MD8.",
       "hint": "Use one Disc 1 image for the full CSR game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1367,15 +1367,37 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.25/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "beta": true,
       "status": "beta",
       "betaNote": "Engine movie-id fix for Highwind/MD8 path.",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.24"
-      },
+      "autoIncludeWhen": {},
       "uiHidden": true,
       "hidden": true
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.26",
+      "name": "Single-disc path-engine (internal)",
+      "kind": "mod",
+      "version": "0.1.26",
+      "blurb": "Internal. Auto with Single-disc. Engine movie ids + fields 71/255. Under 80min.",
+      "hint": "Always included with Single-disc; not selectable.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.26/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.24"
+      }
     }
   ],
   "bases": [],
