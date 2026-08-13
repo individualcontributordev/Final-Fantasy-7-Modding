@@ -237,3 +237,31 @@ def test_lost2_no_akao2_resume_before_music(stacked, iso_api, scripts_dir):
             pos += sz
         assert mus >= 2
 
+def test_lost2_break_mapjumps_cos_btm2(stacked, iso_api, scripts_dir):
+    """LOST2 must force MAPJUMP cos_btm2 (#526) when break GM is set (else 0x0B cleared)."""
+    import sys
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from field_dat import load_field_dat, op_size
+    from ff7_opcodes import OPCODE_NAMES
+    extract_file, _ = iso_api
+    dat = extract_file(stacked, "FIELD/LOST2.DAT")
+    fd = load_field_dat(dat)
+    pat = bytes.fromhex("1820000055a4")
+    saw_mj = False
+    for sc in fd.scripts:
+        if sc.entity != "init" or sc.slot != 0:
+            continue
+        pos = 0
+        while pos < len(sc.raw):
+            op = sc.raw[pos]
+            sz = max(op_size(sc.raw, pos), 1)
+            chunk = sc.raw[pos : pos + sz]
+            name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+            if name == "IFUW" and chunk.startswith(pat):
+                assert chunk[-1] != 0x0B, "break else-jump still skips MAPJUMP"
+            if name.startswith("MAPJUMP") and int.from_bytes(chunk[1:3], "little") == 526:
+                saw_mj = True
+            pos += sz
+    assert saw_mj
+

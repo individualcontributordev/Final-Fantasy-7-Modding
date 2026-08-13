@@ -1,3 +1,11 @@
+## 0.1.28 (disc-break scene LOST2 to COS_BTM2)
+
+- After D1 to D2 transition, game went straight to LOST2 #634 forest with no break
+  scene and bad music. Pure CSR D2 LOST2 only MAPJUMPs cos_btm2 when IFUW
+  GM==0xa455 falls through; else +0x0B skips break. v0.1.6 force was lost later.
+- Restore: LOST2 IFUW else 0x0B→0 (always MAPJUMP #526 cos_btm2). COS_BTM2 clear
+  large disc-id IFUW else-jumps (v0.1.7). Hidden pack v0.1.28.
+
 ## 0.1.27 (LOST2 #634 music after disc break)
 
 - No music on field 634 after D1 to D2 break. CSR D2 LOST2 runs AKAO2 cmd 0x9A
