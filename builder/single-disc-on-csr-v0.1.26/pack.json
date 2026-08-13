@@ -1,0 +1,23 @@
+{
+  "id": "single-disc-on-csr-v0.1.26",
+  "version": "0.1.26",
+  "name": "Single-disc path-engine (internal)",
+  "blurb": "Internal. Auto with Single-disc. Engine movie ids + fields 71/255. Under 80min.",
+  "hint": "Always included with Single-disc; not selectable.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "enabled": true,
+  "uiHidden": true,
+  "hidden": true,
+  "beta": true,
+  "status": "beta",
+  "autoIncludeWhen": {
+    "addonSelected": "single-disc-on-csr-v0.1.24"
+  }
+}

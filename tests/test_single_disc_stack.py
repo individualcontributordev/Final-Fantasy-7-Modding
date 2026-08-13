@@ -198,3 +198,10 @@ def test_movie_id_stays_in_place_lba(stacked, csr_d1_bytes, iso_api):
     assert got.lba < 200_000
     assert len(extract_file(stacked, "MINT/MOVIE_ID.BIN")) // 20 >= 60
 
+def test_image_under_80_minute_cd(stacked):
+    """DuckStation rejects seeks near/past ~80:00 lead-out for CD images."""
+    from psx_mode2_iso import SECTOR
+    max_lba = len(stacked) // SECTOR - 1
+    hard = 80 * 60 * 75 - 150  # 80:00:00
+    assert max_lba < hard, max_lba
+

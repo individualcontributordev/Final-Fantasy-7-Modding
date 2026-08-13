@@ -1,3 +1,12 @@
+## 0.1.26 (path-engine under 80min + cache bust)
+
+- Still would not load after 0.1.25b: sticky browser layer cache on id@version
+  0.1.25, and path streams past 80:00:00 MSF (DuckStation CD limit).
+- New pack id single-disc-on-csr-v0.1.26 (auto, uiHidden): MOVIE_ID in-place at
+  LBA 126959; reuse PARASHOT@OPENINGE + CANONHT2@CAR_1209; append only
+  CANONHT0/1/H3F/H1P; image ends ~79:10. Disable auto for 0.1.25.
+- Player-facing Single-disc badge v0.1.26.
+
 ## 0.1.25b (MOVIE_ID in-place — DuckStation boot)
 
 - Disc would not load: DuckStation Logical seek to [80:52:34] failed.

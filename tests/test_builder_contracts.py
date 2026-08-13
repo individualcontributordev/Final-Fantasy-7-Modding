@@ -37,13 +37,14 @@ def test_addon_apply_rank_movies_before_single_disc(builder_js: str):
     rank = extract_addon_apply_rank_fn(builder_js)
     assert rank("single-disc-csr-manip-movies-v0.1.4") == 10
     assert rank("single-disc-on-csr-v0.1.24") == 20
+    assert rank("single-disc-on-csr-v0.1.26") == 21
     assert rank("single-disc-on-csr-v0.1.25") == 21  # path-engine delta after core
     assert rank("single-disc-endings-v0.1.0-part1") == 30
     assert rank("field-encounter-25-v0.1.2") == 40
     assert rank("csr-plus-scene-hojo-v0.1.0") == 50
     # order invariant
     assert rank("single-disc-csr-manip-movies-v9") < rank("single-disc-on-csr-v9")
-    assert rank("single-disc-on-csr-v0.1.24") < rank("single-disc-on-csr-v0.1.25")
+    assert rank("single-disc-on-csr-v0.1.24") < rank("single-disc-on-csr-v0.1.26")
     assert rank("single-disc-on-csr-v9") < rank("single-disc-endings-v9")
     assert rank("single-disc-endings-v9") < rank("csr-plus-scene-x")
 
