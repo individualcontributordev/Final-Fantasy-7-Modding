@@ -29,8 +29,8 @@ internal layers (see [Pack layering](#pack-layering)).
 ## Gate 1 — Disc 1→2 transition (priority until green)
 
 **Lock after PASS:** `LOSIN2`, `BLACKBGB`, `LOST2`, `COS_BTM2`  
-Known-good path: **v0.1.8 / v0.1.9 / v0.1.30** (pure CSR D2 LOST2+COS_BTM2,
-Ask BLACKBGB). Do **not** re-force IFUW→COS_BTM2 or BITON 0x84 experiments.
+Target fix: **v0.1.31** (LOST2 a455 to #526 + COS open for a455; Ask BLACKBGB).
+Disabled dead ends: 0.1.27-0.1.30. After PASS lock LOST2/COS_BTM2/BLACKBGB/LOSIN2.
 
 | # | Spot | PASS | Known FAIL |
 |---|------|------|------------|

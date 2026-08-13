@@ -1,0 +1,23 @@
+{
+  "id": "single-disc-on-csr-v0.1.31",
+  "version": "0.1.31",
+  "name": "Single-disc break (internal)",
+  "blurb": "Internal auto: Gate1 LOST2\u2192COS_BTM2 break + open COS for a455.",
+  "hint": "Always with Single-disc.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "enabled": true,
+  "uiHidden": true,
+  "hidden": true,
+  "beta": true,
+  "status": "beta",
+  "autoIncludeWhen": {
+    "addonSelected": "single-disc-on-csr-v0.1.24"
+  }
+}

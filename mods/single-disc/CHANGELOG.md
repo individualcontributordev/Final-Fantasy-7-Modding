@@ -1,3 +1,16 @@
+## 0.1.31 (Gate1 disc-break: LOST2 to COS_BTM2)
+
+- Playtest v0.1.30: transition OK but no break scene and no music on #634.
+  Pure CSR D2 LOST2 with LOSIN2 GM=0xa455 RETs (no MUSIC, no MAPJUMP #526).
+  COS_BTM2 also RET on GM>=0x0202 before the break ASK block.
+- Fix (minimal, same-length):
+  1) LOST2 init IFUW !=0xa455 fail else 0x12 to 0x13 lands MAPJUMP #526
+  2) COS_BTM2 IFSW GM>=0x0202 to GM==0x0202 so a455 reaches break ASK/music
+  3) Keep Ask-stripped BLACKBGB (no DSKCG / no BITON84)
+- Cleanup: disable auto for v0.1.27-0.1.30. Stack is movies + core 0.1.24
+  + path 0.1.26 + 0.1.31 only.
+- Hidden pack single-disc-on-csr-v0.1.31; badge v0.1.31.
+
 ## 0.1.30 (restore known-good disc-break fields)
 
 - v0.1.27–0.1.29 broke D1→D2 again: AKAO2/IFUW forces and BLACKBGB BITON 0x84#4
