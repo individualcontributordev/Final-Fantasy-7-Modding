@@ -111,13 +111,20 @@ def test_manifest_enables_sd_core_and_optional_path_delta(manifest: dict):
         and a.get("enabled", True)
     ]
     assert len(enabled) >= 1
-    # Base core + optional path-engine delta (e.g. v0.1.24 + v0.1.25) OK
+    # Base core + path-engine delta (GitHub size split; delta is uiHidden)
     assert len(enabled) <= 2, f"too many enabled SD cores: {[e['id'] for e in enabled]}"
-    ids = {e["id"] for e in enabled}
-    assert any(i.endswith("v0.1.24") or "v0.1.24" in i for i in ids) or len(enabled) == 1
-    for e in enabled:
-        assert e.get("version")
-        assert e["version"] in e["id"]
+    by_id = {e["id"]: e for e in enabled}
+    assert any("v0.1.24" in i for i in by_id) or len(enabled) == 1
+    # Player-facing version on the visible core pack
+    core = next(e for e in enabled if not e.get("uiHidden") and not e.get("hidden"))
+    assert core.get("version")
+    # Internal path-engine delta must auto-include with core and stay hidden
+    delta = next((e for e in enabled if e.get("uiHidden") or e.get("hidden")), None)
+    if delta is not None:
+        aw = delta.get("autoIncludeWhen") or {}
+        assert aw.get("addonSelected") == core["id"] or str(
+            aw.get("addonSelected", "")
+        ).startswith("single-disc-on-csr-")
 
 
 def test_manifest_movies_and_endings_enabled(manifest: dict):

@@ -1336,8 +1336,8 @@
       "id": "single-disc-on-csr-v0.1.24",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.24",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.24: PARASHOT/NRCRL after manip-movies with unique LBAs. Hojo/break kept.",
+      "version": "0.1.25",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.25: PARASHOT engine ids for Highwind/MD8 path; CSR D2 trims on FSHIP_24 and BLIN66_6. (Path-engine layer auto-applies.)",
       "hint": "Use one Disc 1 image for the full CSR game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1354,11 +1354,11 @@
     },
     {
       "id": "single-disc-on-csr-v0.1.25",
-      "name": "Single-disc path engine (v0.1.25)",
+      "name": "Single-disc path-engine (internal)",
       "kind": "mod",
       "version": "0.1.25",
-      "blurb": "v0.1.25 path fix on top of Single-disc 0.1.24: PARASHOT engine id for MD8_5; CSR D2 FSHIP_24 + BLIN66_6.",
-      "hint": "Auto with Single-disc; requires single-disc-on-csr-v0.1.24.",
+      "blurb": "Internal fix layer auto-applied with Single-disc. PARASHOT engine ids + FSHIP_24/BLIN66_6 CSR D2.",
+      "hint": "Always included with Single-disc; not selectable.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -1373,7 +1373,9 @@
       "betaNote": "Engine movie-id fix for Highwind/MD8 path.",
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.24"
-      }
+      },
+      "uiHidden": true,
+      "hidden": true
     }
   ],
   "bases": [],

@@ -13,7 +13,7 @@
   "beta": true,
   "status": "beta",
   "id": "single-disc-on-csr-v0.1.24",
-  "version": "0.1.24",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.24: PARASHOT/NRCRL after manip-movies with unique LBAs. Hojo/break kept.",
+  "version": "0.1.25",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.25: PARASHOT engine ids for Highwind/MD8 path; CSR D2 trims on FSHIP_24 and BLIN66_6. (Path-engine layer auto-applies.)",
   "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
 }
