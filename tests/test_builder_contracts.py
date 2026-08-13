@@ -37,11 +37,13 @@ def test_addon_apply_rank_movies_before_single_disc(builder_js: str):
     rank = extract_addon_apply_rank_fn(builder_js)
     assert rank("single-disc-csr-manip-movies-v0.1.4") == 10
     assert rank("single-disc-on-csr-v0.1.24") == 20
+    assert rank("single-disc-on-csr-v0.1.25") == 21  # path-engine delta after core
     assert rank("single-disc-endings-v0.1.0-part1") == 30
     assert rank("field-encounter-25-v0.1.2") == 40
     assert rank("csr-plus-scene-hojo-v0.1.0") == 50
     # order invariant
     assert rank("single-disc-csr-manip-movies-v9") < rank("single-disc-on-csr-v9")
+    assert rank("single-disc-on-csr-v0.1.24") < rank("single-disc-on-csr-v0.1.25")
     assert rank("single-disc-on-csr-v9") < rank("single-disc-endings-v9")
     assert rank("single-disc-endings-v9") < rank("csr-plus-scene-x")
 
@@ -101,7 +103,7 @@ def test_is_mode2_form1_python_mirror_matches_contract():
     assert is_mode2_form1_py(sector(1, 0x08)) is False  # Mode1
 
 
-def test_manifest_enables_exactly_one_latest_sd_core(manifest: dict):
+def test_manifest_enables_sd_core_and_optional_path_delta(manifest: dict):
     enabled = [
         a
         for a in manifest.get("addons") or []
@@ -109,12 +111,13 @@ def test_manifest_enables_exactly_one_latest_sd_core(manifest: dict):
         and a.get("enabled", True)
     ]
     assert len(enabled) >= 1
-    # only one primary enabled on-csr core is the usual publish rule
-    assert len(enabled) == 1, f"multiple enabled SD cores: {[e['id'] for e in enabled]}"
-    assert enabled[0]["version"]
-    assert enabled[0]["id"].endswith(enabled[0]["version"]) or enabled[0][
-        "version"
-    ] in enabled[0]["id"]
+    # Base core + optional path-engine delta (e.g. v0.1.24 + v0.1.25) OK
+    assert len(enabled) <= 2, f"too many enabled SD cores: {[e['id'] for e in enabled]}"
+    ids = {e["id"] for e in enabled}
+    assert any(i.endswith("v0.1.24") or "v0.1.24" in i for i in ids) or len(enabled) == 1
+    for e in enabled:
+        assert e.get("version")
+        assert e["version"] in e["id"]
 
 
 def test_manifest_movies_and_endings_enabled(manifest: dict):

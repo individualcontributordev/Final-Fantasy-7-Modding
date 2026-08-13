@@ -25,8 +25,9 @@ pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 
 @pytest.fixture(scope="module")
-def stack_ids(latest_movies, latest_sd_on_csr):
-    return [latest_movies, latest_sd_on_csr]
+def stack_ids(latest_movies, sd_on_csr_stack):
+    # movies first, then single-disc core + path-engine deltas (version order)
+    return [latest_movies, *sd_on_csr_stack]
 
 
 @pytest.fixture(scope="module")
@@ -75,34 +76,60 @@ def test_prefer_list_fields(stacked, csr_d1_bytes, csr_d2_bytes, iso_api, root):
         assert same_or_prefix(got, exp), f"{stem} prefer {side} mismatch"
 
 
-def test_fship_12_parashot_script(stacked, csr_d2_bytes, iso_api):
+def test_fship_12_engine_path_ids(stacked, iso_api):
+    """FSHIP_12 uses remapped D1 engine ids 54-57 (D2 mids 55/59/50/51)."""
     extract_file, _ = iso_api
-    got = extract_file(stacked, "FIELD/FSHIP_12.DAT")
-    assert got == extract_file(csr_d2_bytes, "FIELD/FSHIP_12.DAT")
-    ops = field_ops(got)
-    assert ("P", 59) in ops  # PARASHOT
-    assert ("P", 50) in ops and ("P", 51) in ops
-    assert ("J", 731) in ops  # MD8_5
+    ops = field_ops(extract_file(stacked, "FIELD/FSHIP_12.DAT"))
+    pm = {o[1] for o in ops if o[0] == "P"}
+    assert {54, 55, 56, 57} <= pm
+    assert ("J", 731) in ops  # MD8_5 next
 
 
-def test_md8_5_nrcrlb(stacked, csr_d1_bytes, csr_d2_bytes, iso_api):
-    extract_file, _ = iso_api
-    for ext in (".DAT", ".MIM", ".BSX"):
-        p = f"FIELD/MD8_5{ext}"
-        assert extract_file(stacked, p) == extract_file(csr_d1_bytes, p)
-        assert extract_file(stacked, p) == extract_file(csr_d2_bytes, p)
+def test_md8_5_parashot_engine_id(stacked, pristine_d2_bytes, iso_api):
+    """MD8_5 (#731) must play PARASHOT via MOVIE_ID[58], not wrong mid53."""
+    import struct
+
+    extract_file, find_file = iso_api
+    from psx_mode2_iso import SECTOR
+
     ops = field_ops(extract_file(stacked, "FIELD/MD8_5.DAT"))
-    assert ("P", 53) in ops
+    assert ("P", 58) in ops
+    mid = extract_file(stacked, "MINT/MOVIE_ID.BIN")
+    assert len(mid) // 20 >= 59
+    lba, eng = struct.unpack_from("<2I", mid, 58 * 20)
+    sec = stacked[lba * SECTOR : (lba + 1) * SECTOR]
+    p = find_file(pristine_d2_bytes, "MOVIE/PARASHOT.MOV")
+    exp = pristine_d2_bytes[p.lba * SECTOR : (p.lba + 1) * SECTOR]
+    assert sec == exp
+    assert eng == 11957984  # D2 Form2 eng size for PARASHOT
 
 
-def test_md8_52_nrcrl(stacked, csr_d2_bytes, iso_api):
+def test_md8_52_engine_id(stacked, iso_api):
     extract_file, _ = iso_api
-    got = extract_file(stacked, "FIELD/MD8_52.DAT")
-    exp = extract_file(csr_d2_bytes, "FIELD/MD8_52.DAT")
-    assert same_or_prefix(got, exp)
-    ops = field_ops(got)
-    assert ("P", 52) in ops
+    ops = field_ops(extract_file(stacked, "FIELD/MD8_52.DAT"))
+    assert ("P", 59) in ops
     assert ("J", 72) in ops  # FSHIP_25
+
+
+def test_fship_24_and_blin66_6_csr_d2_trims(stacked, csr_d2_bytes, iso_api, scripts_dir):
+    """#71 FSHIP_24 and #255 BLIN66_6: CSR trims live on D2 (D1==pristine)."""
+    import sys
+
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from lzs import decompress_all_with_header
+
+    extract_file, _ = iso_api
+    for stem in ("FSHIP_24", "BLIN66_6"):
+        got = extract_file(stacked, f"FIELD/{stem}.DAT")
+        exp = extract_file(csr_d2_bytes, f"FIELD/{stem}.DAT")
+        assert decompress_all_with_header(got) == decompress_all_with_header(exp)
+
+
+def test_movie_id_grown_for_path_mids(stacked, iso_api):
+    extract_file, _ = iso_api
+    mid = extract_file(stacked, "MINT/MOVIE_ID.BIN")
+    assert len(mid) // 20 >= 60  # need ids 54..59
 
 
 def test_path_fmv_payloads_unique_lbas(stacked, pristine_d2_bytes, iso_api):

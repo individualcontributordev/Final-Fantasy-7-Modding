@@ -61,6 +61,8 @@ def extract_addon_apply_rank_fn(builder_js: str):
         eid = str(entry_id or "")
         if "single-disc-csr-manip-movies" in eid:
             return 10
+        if "single-disc-on-csr-v0.1.25" in eid or "path-engine" in eid:
+            return 21
         if eid.startswith("single-disc-on-"):
             return 20
         if "single-disc-endings" in eid:
