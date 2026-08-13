@@ -1,3 +1,9 @@
+## 0.1.33 (repo purge)
+
+- Deleted retired single-disc pack dirs/layers (0.1.1-0.1.25, ref pack, old movies).
+- Core layer lives under single-disc-on-csr-v0.1.33 only (no shared v0.1.24 id).
+- Path FMVs remain one hidden auto (v0.1.26). Old fanfare/victory versions removed.
+
 ## 0.1.33 (note)
 
 - CSR field-ref internal pack disabled (core already pure CSR D2 LOST2/COS scripts).

@@ -62,11 +62,7 @@ def extract_addon_apply_rank_fn(builder_js: str):
         if "single-disc-csr-manip-movies" in eid:
             return 10
         # Hidden path/break deltas after player-facing single-disc core.
-        if (
-            "single-disc-on-csr-ref-" in eid
-            or "single-disc-on-csr-v0.1.26" in eid
-            or "path-engine" in eid
-        ):
+        if "single-disc-on-csr-v0.1.26" in eid or "path-engine" in eid or "single-disc-on-csr-ref-" in eid:
             return 21
         if eid.startswith("single-disc-on-"):
             return 20
@@ -81,7 +77,7 @@ def extract_addon_apply_rank_fn(builder_js: str):
     # sanity: source still documents the intended order
     assert "single-disc-csr-manip-movies" in builder_js
     assert "startsWith('single-disc-on-')" in builder_js or 'startsWith("single-disc-on-")' in builder_js
-    assert "single-disc-on-csr-ref-" in builder_js or "single-disc-on-csr-v0.1.26" in builder_js
+    assert "single-disc-on-csr-v0.1.26" in builder_js
     return addon_apply_rank
 
 

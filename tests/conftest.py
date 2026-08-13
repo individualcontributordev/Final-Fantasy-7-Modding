@@ -22,7 +22,6 @@ SITE_ROOT = Path(
 SECTOR = 2352
 CSR_BASE_ID = "csr-v0.14.1"
 SD_ON_CSR_PREFIX = "single-disc-on-csr-v"
-SD_ON_CSR_DELTA_PREFIX = "single-disc-on-csr-delta-v"
 MOVIES_PREFIX = "single-disc-csr-manip-movies-v"
 ENDINGS_PREFIX = "single-disc-endings-v"
 
@@ -90,9 +89,7 @@ def _version_key(pid: str) -> tuple:
 
 
 def _sd_on_csr_apply_key(pid: str) -> tuple:
-    """Core first (rank 20), then path/ref autos (rank 21)."""
-    if "single-disc-on-csr-ref-" in pid:
-        return (1, _version_key(pid))
+    """Core first (rank 20), then path auto (rank 21)."""
     if pid.startswith(SD_ON_CSR_PREFIX):
         ver = pid.split("-v", 1)[-1]
         if ver.startswith("0.1.26"):
@@ -107,9 +104,8 @@ def latest_sd_on_csr(manifest: dict) -> str:
     ids = [
         a
         for a in _enabled_addons(manifest, SD_ON_CSR_PREFIX)
-        if "ref-" not in a and not a.endswith("v0.1.26")
+        if not a.endswith("v0.1.26")
     ]
-    # also include packs that start with prefix via ref separately
     if not ids:
         pytest.skip("no enabled single-disc-on-csr core pack in manifest")
     return max(ids, key=_version_key)
@@ -117,18 +113,11 @@ def latest_sd_on_csr(manifest: dict) -> str:
 
 @pytest.fixture(scope="session")
 def sd_on_csr_stack(manifest: dict) -> list[str]:
-    """Enabled single-disc-on-csr packs + ref pack in apply order."""
+    """Enabled single-disc-on-csr packs in apply order (core then path auto)."""
     ids = _enabled_addons(manifest, SD_ON_CSR_PREFIX)
-    ids += _enabled_addons(manifest, "single-disc-on-csr-ref-v")
-    seen = set()
-    out = []
-    for i in ids:
-        if i not in seen:
-            seen.add(i)
-            out.append(i)
-    if not out:
+    if not ids:
         pytest.skip("no enabled single-disc-on-csr pack in manifest")
-    return sorted(out, key=_sd_on_csr_apply_key)
+    return sorted(ids, key=_sd_on_csr_apply_key)
 
 
 @pytest.fixture(scope="session")
