@@ -90,17 +90,12 @@ def _version_key(pid: str) -> tuple:
 
 
 def _sd_on_csr_apply_key(pid: str) -> tuple:
-    """Core single-disc-on-csr first, then path/break/delta packs (builder rank 20 then 21)."""
-    if pid.startswith(SD_ON_CSR_DELTA_PREFIX):
+    """Core first (rank 20), then path/ref autos (rank 21)."""
+    if "single-disc-on-csr-ref-" in pid:
         return (1, _version_key(pid))
-    # Hidden deltas still use single-disc-on-csr-v0.1.26 / v0.1.31 ids
     if pid.startswith(SD_ON_CSR_PREFIX):
         ver = pid.split("-v", 1)[-1]
-        # Player core is the max enabled plain on-csr id that is NOT only-path/break
-        # Stack order: core (highest non-delta on-csr that is UI core) then lower fixups.
-        # tests use: movies + sorted(on-csr) + deltas. Core should be first.
-        # Treat 0.1.26 and 0.1.31 as after-core (same as builder rank 21).
-        if ver.startswith("0.1.26") or ver.startswith("0.1.31"):
+        if ver.startswith("0.1.26"):
             return (1, _version_key(pid))
         return (0, _version_key(pid))
     return (2, _version_key(pid))
@@ -108,14 +103,13 @@ def _sd_on_csr_apply_key(pid: str) -> tuple:
 
 @pytest.fixture(scope="session")
 def latest_sd_on_csr(manifest: dict) -> str:
-    """Player-facing single-disc-on-csr core (not path/break deltas)."""
+    """Player-facing single-disc-on-csr core (not path/ref autos)."""
     ids = [
         a
         for a in _enabled_addons(manifest, SD_ON_CSR_PREFIX)
-        if not a.startswith(SD_ON_CSR_DELTA_PREFIX)
-        and not a.endswith("v0.1.26")
-        and not a.endswith("v0.1.31")
+        if "ref-" not in a and not a.endswith("v0.1.26")
     ]
+    # also include packs that start with prefix via ref separately
     if not ids:
         pytest.skip("no enabled single-disc-on-csr core pack in manifest")
     return max(ids, key=_version_key)
@@ -123,10 +117,9 @@ def latest_sd_on_csr(manifest: dict) -> str:
 
 @pytest.fixture(scope="session")
 def sd_on_csr_stack(manifest: dict) -> list[str]:
-    """Enabled single-disc-on-csr packs + csr-delta packs in apply order."""
+    """Enabled single-disc-on-csr packs + ref pack in apply order."""
     ids = _enabled_addons(manifest, SD_ON_CSR_PREFIX)
-    ids += _enabled_addons(manifest, SD_ON_CSR_DELTA_PREFIX)
-    # de-dupe preserve
+    ids += _enabled_addons(manifest, "single-disc-on-csr-ref-v")
     seen = set()
     out = []
     for i in ids:
@@ -155,10 +148,19 @@ def endings_parts(manifest: dict) -> list[str]:
 @pytest.fixture(scope="session")
 def layer_path(root: Path, manifest: dict):
     def _lp(pack_id: str, disc: int = 1) -> Path:
+        # Prefer manifest discs[] (may point at a shared core layer folder).
+        for a in manifest.get("addons") or []:
+            if a.get("id") != pack_id:
+                continue
+            rel = (a.get("discs") or {}).get(str(disc))
+            if rel:
+                cand = (root / "builder" / str(rel).lstrip("./")).resolve()
+                if cand.is_file():
+                    return cand
+            break
         p = root / "builder" / pack_id / "layers" / f"disc{disc}.layer.json"
         if p.is_file():
             return p
-        # pack.json discs relative to pack dir
         pack_json = root / "builder" / pack_id / "pack.json"
         if pack_json.is_file():
             pack = json.loads(pack_json.read_text(encoding="utf-8"))
@@ -167,17 +169,9 @@ def layer_path(root: Path, manifest: dict):
                 cand = (root / "builder" / pack_id / rel).resolve()
                 if cand.is_file():
                     return cand
-        # manifest discs paths are relative to builder/
-        for a in manifest.get("addons") or []:
-            if a.get("id") != pack_id:
-                continue
-            rel = (a.get("discs") or {}).get(str(disc))
-            if not rel:
-                break
-            cand = (root / "builder" / rel).resolve()
-            if cand.is_file():
-                return cand
-            break
+                cand = (root / "builder" / str(rel).lstrip("./")).resolve()
+                if cand.is_file():
+                    return cand
         raise FileNotFoundError(p)
 
     return _lp

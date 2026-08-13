@@ -1,8 +1,8 @@
 {
-  "id": "single-disc-on-csr-v0.1.28",
-  "version": "0.1.28",
-  "name": "Single-disc break scene (internal)",
-  "blurb": "Internal auto: LOST2\u2192COS_BTM2 break after disc transition.",
+  "id": "single-disc-on-csr-ref-v0.1.33",
+  "version": "0.1.33",
+  "name": "Single-disc CSR D2 field ref (internal)",
+  "blurb": "Internal auto: pure CSR D2 LOST2 + COS_BTM2 (multi-disc reference).",
   "hint": "Always with Single-disc.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -15,9 +15,7 @@
   "enabled": true,
   "uiHidden": true,
   "hidden": true,
-  "beta": true,
-  "status": "beta",
   "autoIncludeWhen": {
-    "addonSelected": "single-disc-on-csr-v0.1.24"
+    "addonSelected": "single-disc-on-csr-v0.1.33"
   }
 }

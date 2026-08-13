@@ -1395,34 +1395,11 @@
       "autoIncludeWhen": {}
     },
     {
-      "id": "single-disc-on-csr-v0.1.25",
-      "name": "Single-disc path-engine (internal)",
-      "kind": "mod",
-      "version": "0.1.25",
-      "blurb": "Internal fix layer auto-applied with Single-disc. PARASHOT engine ids + FSHIP_24/BLIN66_6 CSR D2.",
-      "hint": "Always included with Single-disc; not selectable.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-on-csr-v0.1.25/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "beta": true,
-      "status": "beta",
-      "betaNote": "Engine movie-id fix for Highwind/MD8 path.",
-      "autoIncludeWhen": {},
-      "uiHidden": true,
-      "hidden": true
-    },
-    {
       "id": "single-disc-on-csr-v0.1.26",
       "name": "Single-disc path-engine (internal)",
       "kind": "mod",
       "version": "0.1.26",
-      "blurb": "Internal auto: engine movie ids + fields 71/255 under 80min.",
+      "blurb": "Internal auto: path FMVs / engine ids under 80min.",
       "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1438,127 +1415,15 @@
       "beta": true,
       "status": "beta",
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.32"
+        "addonSelected": "single-disc-on-csr-v0.1.33"
       }
     },
     {
-      "id": "single-disc-on-csr-v0.1.27",
-      "name": "Single-disc LOST2 music (internal)",
-      "kind": "mod",
-      "version": "0.1.27",
-      "blurb": "Internal auto: LOST2 #634 music after disc break.",
-      "hint": "Always with Single-disc.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-on-csr-v0.1.27/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "uiHidden": true,
-      "hidden": true,
-      "beta": true,
-      "status": "beta",
-      "autoIncludeWhen": {}
-    },
-    {
-      "id": "single-disc-on-csr-v0.1.28",
-      "name": "Single-disc break scene (internal)",
-      "kind": "mod",
-      "version": "0.1.28",
-      "blurb": "Internal auto: LOST2\u2192COS_BTM2 break after disc transition.",
-      "hint": "Always with Single-disc.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-on-csr-v0.1.28/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "uiHidden": true,
-      "hidden": true,
-      "beta": true,
-      "status": "beta",
-      "autoIncludeWhen": {}
-    },
-    {
-      "id": "single-disc-on-csr-v0.1.29",
-      "name": "Single-disc break bit (internal)",
-      "kind": "mod",
-      "version": "0.1.29",
-      "blurb": "Internal auto: set LOST2 break gate bit on BLACKBGB; CSR D2 LOST2/COS_BTM2.",
-      "hint": "Always with Single-disc.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-on-csr-v0.1.29/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "uiHidden": true,
-      "hidden": true,
-      "beta": true,
-      "status": "beta",
-      "autoIncludeWhen": {}
-    },
-    {
-      "id": "single-disc-on-csr-v0.1.30",
-      "name": "Single-disc break restore (internal)",
-      "kind": "mod",
-      "version": "0.1.30",
-      "blurb": "Internal auto: restore v0.1.9 disc-break fields (undo 0.1.27-29).",
-      "hint": "Always with Single-disc.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-on-csr-v0.1.30/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "uiHidden": true,
-      "hidden": true,
-      "beta": true,
-      "status": "beta",
-      "autoIncludeWhen": {}
-    },
-    {
-      "id": "single-disc-on-csr-v0.1.31",
-      "name": "Single-disc Gate1 LOST2 (internal)",
-      "kind": "mod",
-      "version": "0.1.31",
-      "blurb": "Internal auto: LOST2 a455 MAPJUMP COS_BTM2.",
-      "hint": "Always with Single-disc.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-on-csr-v0.1.31/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "uiHidden": true,
-      "hidden": true,
-      "beta": true,
-      "status": "beta",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.32"
-      }
-    },
-    {
-      "id": "single-disc-on-csr-v0.1.32",
+      "id": "single-disc-on-csr-v0.1.33",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.32",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. Path FMVs + disc1\u21922 break (COS_BTM2).",
+      "version": "0.1.33",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. Break-path fields match CSR multi-disc reference (LOSIN2 D1, LOST2+COS_BTM2 D2, no DSKCG on BLACKBGB).",
       "hint": "CSR. Movies + endings auto-apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1575,11 +1440,11 @@
       "status": "beta"
     },
     {
-      "id": "single-disc-on-csr-delta-v0.1.32",
-      "name": "Single-disc Gate1 COS (internal)",
+      "id": "single-disc-on-csr-ref-v0.1.33",
+      "name": "Single-disc CSR field ref (internal)",
       "kind": "mod",
-      "version": "0.1.32",
-      "blurb": "Internal auto: COS_BTM2 ASK reachable for a455.",
+      "version": "0.1.33",
+      "blurb": "Internal auto: pure CSR D2 LOST2 + COS_BTM2.",
       "hint": "Always with Single-disc.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1587,7 +1452,7 @@
       ],
       "layout": "global",
       "discs": {
-        "1": "./single-disc-on-csr-delta-v0.1.32/layers/disc1.layer.json"
+        "1": "./single-disc-on-csr-ref-v0.1.33/layers/disc1.layer.json"
       },
       "enabled": true,
       "uiHidden": true,
@@ -1595,7 +1460,7 @@
       "beta": true,
       "status": "beta",
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr-v0.1.32"
+        "addonSelected": "single-disc-on-csr-v0.1.33"
       }
     }
   ],

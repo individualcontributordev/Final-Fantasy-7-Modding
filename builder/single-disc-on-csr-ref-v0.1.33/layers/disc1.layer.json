@@ -1,0 +1,1 @@
+{"format":"ic-layer-v1","id":"single-disc-ref-d2-fields-disc1","description":"Restore pure CSR D2 LOST2+COS_BTM2 (CSR multi-disc reference)","target":"disc-image","stats":{"originalBytes":837561312,"modifiedBytes":837561312,"changedBytes":2,"records":2},"records":[{"offset":129155592,"hex":"96"},{"offset":129155599,"hex":"96"}]}

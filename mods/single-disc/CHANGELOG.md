@@ -1,3 +1,15 @@
+## 0.1.33 (CSR D1/D2 reference reset)
+
+- Deleted spiral Gate1 packs/scripts (0.1.27–0.1.32 forces on LOST2/COS_BTM2).
+- Break-path fields now match CSR multi-disc reference:
+  - LOSIN2 = CSR Disc 1
+  - LOST2 = pure CSR Disc 2
+  - COS_BTM2 = pure CSR Disc 2
+  - BLACKBGB = Ask-stripped (no DSKCG), same as prior good core
+- Player pack id **single-disc-on-csr-v0.1.33** (badge matches id).
+- Autos: path-engine v0.1.26; ref pack restores pure D2 LOST2/COS if needed.
+- Core layer bytes still shared from builder/single-disc-on-csr-v0.1.24/.
+
 ## 0.1.32 (Gate1 COS_BTM2 actually reaches break ASK)
 - Pack id cleanup: player id single-disc-on-csr-v0.1.32 matches badge (no more version X with id v0.1.24 on one APPLIED line).
 
