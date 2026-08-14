@@ -194,7 +194,7 @@ Done!
 
 Now that ghidra-cli is set up, you can run automated Ghidra analysis scripts!
 
-### Step 1: Extract FIELD.BIN from your ISO
+### Step 1: Extract FIELD.BIN from your disc image
 
 First, check if FIELD.BIN already exists:
 
@@ -203,16 +203,24 @@ cd ~/Final-Fantasy-7-Modding
 ls -lh workspace/iso-extract/FIELD.BIN
 ```
 
-If it doesn't exist, extract it from your ISO:
+If it doesn't exist, extract it from your disc `.bin` file:
 
 ```bash
-# Option A: If you have the ISO mounted or extracted to a folder
-# (Replace D:/ff7-disc1 with wherever your ISO contents are)
-cp /d/ff7-disc1/FIELD/FIELD.BIN workspace/iso-extract/
+# Extract FIELD.BIN from disc 1
+# (Replace workspace/pristine/FINALFANTASY7_D1.bin with your actual disc path)
+python scripts/extract_from_iso.py \
+  workspace/pristine/FINALFANTASY7_D1.bin \
+  FIELD/FIELD.BIN \
+  workspace/iso-extract/FIELD.BIN
+```
 
-# Option B: Extract directly from ISO file using 7zip
-# (Replace with your actual ISO path)
-7z e workspace/pristine/FINALFANTASY7_D1.iso FIELD/FIELD.BIN -oworkspace/iso-extract/
+If you don't know where your disc `.bin` files are, search for them:
+
+```bash
+# Common locations:
+ls -lh workspace/pristine/*.bin
+ls -lh ~/ff7/*.bin
+ls -lh /d/*.bin
 ```
 
 Verify it extracted:
