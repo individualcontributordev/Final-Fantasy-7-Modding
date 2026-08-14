@@ -106,9 +106,107 @@ Do **not** patch until all four "win" steps above are done.
 | Decompile | Ctrl+E (in listing) |
 | Patch instruction | Ctrl+Shift+G |
 
+## Exporting Field Script Data (FIELD/*.DAT)
+
+When patching individual field scripts (e.g., LOST2.DAT for single-disc), Ghidra exports can make finding patch locations much faster than pattern-matching in Python.
+
+### Setup for Field Script Analysis
+
+1. **Import decompressed DAT file:**
+   - Extract: `python scripts/extract_field_dat.py FIELD/LOST2.DAT workspace/tmp/LOST2.dec`
+   - Ghidra → Import `workspace/tmp/LOST2.dec`
+   - Format: Raw Binary
+   - Language: **Data:LE:8:default** (not MIPS — field scripts are bytecode, not MIPS code)
+   - Base address: `0x00000000` (relative to file start)
+
+2. **Enable PSX plugin** (if available):
+   - File → Install Extensions → PSXExecutableLoader
+   - May help with FF7 opcode recognition if plugin supports field script format
+
+### Useful Exports for Script Patching
+
+| Export Type | How to Generate | When to Use |
+|-------------|-----------------|-------------|
+| **Hex Dump with ASCII** | Select region → Copy Special → Byte String | Quick pattern verification |
+| **Memory Listing** | File → Export Program → ASCII | Full disassembly with addresses |
+| **Annotated Hex** | Selection → Export → Intel Hex | Sharing specific script sections |
+| **Raw Bytes** | Selection → Copy Special → Python Byte String | Direct paste into Python patch scripts |
+
+### Example Workflow: Exporting LOST2 init/0 Script
+
+**Goal:** Get annotated hex dump of the init entity's script section for patching.
+
+1. **Find script offset** (from `field_dat.py` or prior analysis):
+   ```python
+   # Run once to find offset:
+   python scripts/compare_field_dat.py FIELD/LOST2.DAT
+   # Output shows init/0 at offset 0x434 (example)
+   ```
+
+2. **In Ghidra:**
+   - Navigation → Go To → `0x434`
+   - Select range (e.g., `0x434` to `0x4F0` for ~190 bytes)
+   - Right-click → Copy Special → Byte String
+
+3. **Export for sharing:**
+   - File → Export Program → ASCII
+   - Output file: `workspace/ghidra/LOST2-init-script.txt`
+   - Include: Selected range only
+   - Format: Listing with addresses and bytes
+
+4. **Share the export:**
+   - Save to `workspace/ghidra/` or `docs/ghidra-pastes/`
+   - Include in documentation or chat for Agent analysis
+   - Annotate key offsets (MUSIC opcodes, RET, jump targets)
+
+### What to Include in Exports
+
+For script patching (like v0.1.36 LOST2), most useful info:
+
+- **Byte offsets** (relative to script start or file start)
+- **Opcode values** (e.g., `0x20 = MUSIC`, `0x00 = RET`, `0x10 = JMPF`)
+- **Control flow** (branches, jumps, returns)
+- **Target addresses** for jumps (where JMPF/GOTO point)
+
+### Example Export Format
+
+```
+Offset   Bytes                           Notes
+------   -----                           -----
+0x434    43 00 14 30 84 04 09 05        MPNAM + IFUB pattern
+0x43A    20 01 00                       MUSIC id=1
+0x43C    00                             RET ← patch this to JMPF
+0x43D    18 ...                         IFUW (unreachable after RET)
+0x463    30 xx xx ...                   AKAO ambient sounds (target)
+```
+
+### Time Savings
+
+**Without Ghidra export:**
+- Agent pattern-matches bytecode blind
+- Multiple iterations to find correct offset
+- Risk of patching wrong location
+
+**With Ghidra export:**
+- Agent sees exact opcode flow and addresses
+- Single iteration to correct patch location
+- Visual confirmation of jump targets
+
+### Adding to Agent Workflow
+
+When posting a script patch task to `docs/INSTRUCTIONS.md`:
+
+1. Export the relevant script section from Ghidra (100-200 bytes around patch area)
+2. Save to `workspace/ghidra/FIELDNAME-ENTITY-SCRIPT.txt`
+3. Mention the export in INSTRUCTIONS so Agent can reference it
+4. Agent writes patch script using exact offsets from export
+
+This workflow was added after v0.1.36 (LOST2 JMPF patch) to avoid future blind pattern-matching.
+
 ## External references
 
 - [Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics)
 - [Field Map RNG](https://ff7speedruns.com/index.php/Field_Map_RNG)
 - [Qhimm FIELD.BIN thread](https://forums.qhimm.com/index.php?topic=6496.0)
 - ff7tk `IsoArchiveFF7.cpp` — how Makou updates FIELD.BIN on save
+- [FF7 Field Script Opcodes Reference](https://wiki.qhimm.com/view/FF7/Field/Script/Opcodes)
