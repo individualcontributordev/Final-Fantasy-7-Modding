@@ -75,13 +75,19 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
     script_file.write_text(script_content)
 
     try:
-        # First, import the file into a Ghidra project
-        print("  Importing FIELD.BIN.dec into Ghidra...")
+        # Import and analyze in one step
+        # ghidra-cli auto-detects format, but for raw binaries you may need to:
+        # 1. Import once through Ghidra GUI with correct settings
+        # 2. Then use ghidra-cli to run scripts
+        print("  Importing and analyzing FIELD.BIN.dec...")
+        print("  (This may take 1-2 minutes on first run)")
+
         import_cmd = [
             "ghidra",
             "import",
             str(FIELD_BIN_DEC.absolute()),
             "--project", PROJECT_NAME,
+            # Don't skip analysis - we need it for extracting functions
         ]
 
         result = subprocess.run(
@@ -92,35 +98,26 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
             check=False
         )
 
-        if result.returncode != 0 and "already exists" not in result.stderr:
+        # Check for success or "already exists"
+        success = result.returncode == 0
+        already_exists = "already exists" in result.stderr or "already exists" in result.stdout
+
+        if not success and not already_exists:
             print(f"❌ Import failed:")
-            print(result.stderr)
-            if result.stdout:
-                print(result.stdout)
+            print("STDERR:", result.stderr)
+            print("STDOUT:", result.stdout)
+            print("\n⚠️  Note: For raw binaries like FIELD.BIN.dec, you may need to:")
+            print("  1. Import it once manually through Ghidra GUI")
+            print("  2. Set processor to MIPS:LE:32:default")
+            print("  3. Set base address to 0x800A0000")
+            print("  4. Run analysis")
+            print("  5. Then this script can extract the data")
             return False
 
-        # Run analysis
-        print("  Running Ghidra analysis...")
-        analyze_cmd = [
-            "ghidra",
-            "analyze",
-            "--project", PROJECT_NAME,
-        ]
-
-        result = subprocess.run(
-            analyze_cmd,
-            capture_output=True,
-            text=True,
-            cwd=OUTPUT_DIR,
-            check=False
-        )
-
-        if result.returncode != 0:
-            print(f"❌ Analysis failed:")
-            print(result.stderr)
-            if result.stdout:
-                print(result.stdout)
-            return False
+        if already_exists:
+            print("  ✅ Already imported (using existing)")
+        else:
+            print("  ✅ Import and analysis complete")
 
         # Now run the extraction script
         print("  Running extraction script...")
