@@ -1,0 +1,19115 @@
+# Field script compare: CSR D1 / CSR D2 / Single-disc stack
+
+Stack: movies 0.1.4 + single-disc-on-csr-v0.1.33 + path 0.1.26 + v0.1.35
+
+- Maplist fields: 787
+- Extracted D1/D2/SD: 787/787/787
+- SD byte-identical to D1 (incl D1==D2): 697
+- SD byte-identical to D2 only: 34
+- SD differs from both: **56**
+- CSR D1!=D2 collisions: 235
+
+## SD fields that match neither pure CSR D1 nor D2
+
+### BLACKBG3
+- D1 sha: 5f71779171f725e0 dec=49892
+- D2 sha: 5f71779171f725e0 dec=49892
+- SD sha: 37b8e003f9e490e6 dec=49864
+
+#### SD vs CSR D1
+- **`p7/1`** len 292->290 (11fd0e49f510->3ec2bcdde33a)
+  - D1:
+    - `0000:SETBYTE 50/02=0x1`
+    - `0004:ASK 48050020010302`
+    - `000b:IFUB A=02V=02C=0E=63->0073`
+    - `0011:WAIT`
+    - `0014:SETWORD 20/00=0x146`
+    - `0019:BITON d0/5b#2`
+    - `001d:REQEW`
+    - `0020:MMBud`
+    - `0023:MMBud`
+    - `0026:MMBud`
+    - `0029:MMBud`
+    - `002c:FADE`
+    - `0035:FADEW`
+    - `0036:REQ`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQEW`
+    - `004e:TLKON`
+    - `0050:SOLID`
+    - `0052:VISI`
+    - `0054:DSKCG disc=1`
+    - `0056:AKAO`
+    - `0064:MUSIC id=3`
+    - `0066:MAPJUMP #103`
+    - `0070:RET`
+    - `0071:JMPF ->0124`
+    - `0073:IFUB A=02V=03C=0E=16->008e`
+    - `0079:WAIT`
+    - `007c:SETWORD 20/00=0x513`
+    - `0081:MAPJUMP #88`
+    - `008b:RET`
+    - `008c:JMPF ->0124`
+    - `008e:WAIT`
+    - `0091:SETWORD 20/00=0x654`
+    - `0096:MMBLK`
+    - `0098:REQEW`
+    - `009b:MMBud`
+    - `009e:MMBud`
+    - `00a1:MMBud`
+    - `00a4:SETBYTE 50/02=0x0`
+    - `00a8:ASK 48050021000302`
+    - `00af:IFUB A=02V=00C=0E=0a->00be`
+    - `00b5:MMBud`
+    - `00b8:BITON 30/cf#0`
+    - `00bc:JMPF ->00f0`
+    - `00be:IFUB A=02V=01C=0E=11->00d4`
+    - `00c4:MMBud`
+    - `00c7:MMBud`
+    - `00ca:SPECIAL`
+    - `00ce:BITON d0/50#2`
+    - `00d2:JMPF ->00f0`
+    - `00d4:IFUB A=02V=02C=0E=16->00ef`
+    - `00da:MMBud`
+    - `00dd:BITON 30/cf#0`
+    - `00e1:MMBud`
+    - `00e4:MMBud`
+    - `00e7:SPECIAL`
+    - `00eb:BITON d0/50#2`
+    - `00ef:WAIT`
+    - `00f2:MENU`
+    - `00f6:FADE`
+    - `00ff:SETBYTE 50/02=0x0`
+    - `0103:ASK 48050022010202`
+    - `010a:IFUB A=02V=01C=0E=06->0115`
+    - `0110:STITM`
+    - `0115:WAIT`
+    - `0118:MAPJUMP #744`
+    - `0122:RET`
+    - `0123:RET`
+  - SD:
+    - `0000:SETBYTE 50/02=0x1`
+    - `0004:ASK 48050020010302`
+    - `000b:IFUB A=02V=02C=0E=61->0071`
+    - `0011:WAIT`
+    - `0014:SETWORD 20/00=0x146`
+    - `0019:BITON d0/5b#2`
+    - `001d:REQEW`
+    - `0020:MMBud`
+    - `0023:MMBud`
+    - `0026:MMBud`
+    - `0029:MMBud`
+    - `002c:FADE`
+    - `0035:FADEW`
+    - `0036:REQ`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQEW`
+    - `004e:TLKON`
+    - `0050:SOLID`
+    - `0052:VISI`
+    - `0054:AKAO`
+    - `0062:MUSIC id=3`
+    - `0064:MAPJUMP #103`
+    - `006e:RET`
+    - `006f:JMPF ->0122`
+    - `0071:IFUB A=02V=03C=0E=16->008c`
+    - `0077:WAIT`
+    - `007a:SETWORD 20/00=0x513`
+    - `007f:MAPJUMP #88`
+    - `0089:RET`
+    - `008a:JMPF ->0122`
+    - `008c:WAIT`
+    - `008f:SETWORD 20/00=0x654`
+    - `0094:MMBLK`
+    - `0096:REQEW`
+    - `0099:MMBud`
+    - `009c:MMBud`
+    - `009f:MMBud`
+    - `00a2:SETBYTE 50/02=0x0`
+    - `00a6:ASK 48050021000302`
+    - `00ad:IFUB A=02V=00C=0E=0a->00bc`
+    - `00b3:MMBud`
+    - `00b6:BITON 30/cf#0`
+    - `00ba:JMPF ->00ee`
+    - `00bc:IFUB A=02V=01C=0E=11->00d2`
+    - `00c2:MMBud`
+    - `00c5:MMBud`
+    - `00c8:SPECIAL`
+    - `00cc:BITON d0/50#2`
+    - `00d0:JMPF ->00ee`
+    - `00d2:IFUB A=02V=02C=0E=16->00ed`
+    - `00d8:MMBud`
+    - `00db:BITON 30/cf#0`
+    - `00df:MMBud`
+    - `00e2:MMBud`
+    - `00e5:SPECIAL`
+    - `00e9:BITON d0/50#2`
+    - `00ed:WAIT`
+    - `00f0:MENU`
+    - `00f4:FADE`
+    - `00fd:SETBYTE 50/02=0x0`
+    - `0101:ASK 48050022010202`
+    - `0108:IFUB A=02V=01C=0E=06->0113`
+    - `010e:STITM`
+    - `0113:WAIT`
+    - `0116:MAPJUMP #744`
+    - `0120:RET`
+    - `0121:RET`
+- **`p8/1`** len 1005->979 (58c721f3df61->ba4c7ce0b19d)
+  - D1 interesting (170):
+    - `0004:SETBYTE 50/02=0x1`
+    - `0008:ASK 48050024010302`
+    - `000f:IFUBL`
+    - `0016:SETBYTE 50/02=0x0`
+    - `0028:ASK 48050325000c02`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQ`
+    - `004e:REQEW`
+    - `0064:IFUB A=02V=00C=0E=14->007d`
+    - `006a:DSKCG disc=1`
+    - `007a:PMVIE id=26`
+    - `007c:MOVIE`
+    - `007d:IFUB A=02V=01C=0E=25->00a7`
+    - `0083:DSKCG disc=1`
+    - `0093:PMVIE id=27`
+    - `0095:MOVIE`
+    - `0096:PMVIE id=28`
+    - `0098:MOVIE`
+    - `00a7:IFUB A=02V=02C=0E=1a->00c6`
+    - `00ad:DSKCG disc=1`
+    - `00bd:PMVIE id=34`
+    - `00bf:MOVIE`
+    - `00c0:PMVIE id=35`
+    - `00c2:MOVIE`
+    - `00c3:PMVIE id=36`
+    - `00c5:MOVIE`
+    - `00c6:IFUB A=02V=03C=0E=14->00df`
+    - `00cc:DSKCG disc=1`
+    - `00dc:PMVIE id=45`
+    - `00de:MOVIE`
+    - `00df:IFUB A=02V=04C=0E=53->0137`
+    - `00e5:DSKCG disc=1`
+    - `00f5:PMVIE id=2`
+    - `00f7:MOVIE`
+    - `00f8:REQ`
+    - `00fb:PMVIE id=40`
+    - `00fd:MOVIE`
+    - `00fe:PMVIE id=48`
+    - `0100:MOVIE`
+    - `0101:PMVIE id=8`
+    - `0103:MOVIE`
+    - `0104:PMVIE id=6`
+    - `0106:MOVIE`
+    - `0107:PMVIE id=7`
+    - `0109:MOVIE`
+    - `010a:PMVIE id=9`
+    - `010c:MOVIE`
+    - `010d:PMVIE id=10`
+    - `010f:MOVIE`
+    - `0110:PMVIE id=49`
+    - `0112:MOVIE`
+    - `0113:PMVIE id=4`
+    - `0115:MOVIE`
+    - `0127:MUSIC id=0`
+    - `0137:IFUB A=02V=05C=0E=3a->0176`
+    - `013d:DSKCG disc=1`
+    - `014d:MUSIC id=4`
+    - `014f:PMVIE id=46`
+    - `0151:MOVIE`
+    - `0152:PMVIE id=47`
+    - `0154:MOVIE`
+    - `0166:MUSIC id=0`
+    - `0176:IFUB A=02V=06C=0E=3a->01b5`
+    - `017c:DSKCG disc=1`
+    - `018c:MUSIC id=5`
+    - `018e:PMVIE id=50`
+    - `0190:MOVIE`
+    - `0191:PMVIE id=51`
+    - `0193:MOVIE`
+    - `01a5:MUSIC id=0`
+    - `01b5:IFUB A=02V=07C=0E=43->01fd`
+    - `01bb:DSKCG disc=2`
+    - `01cb:MUSIC id=6`
+    - `01cd:PMVIE id=20`
+    - `01cf:MOVIE`
+    - ... +90
+  - SD interesting (157):
+    - `0004:SETBYTE 50/02=0x1`
+    - `0008:ASK 48050024010302`
+    - `000f:IFUBL`
+    - `0016:SETBYTE 50/02=0x0`
+    - `0028:ASK 48050325000c02`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQ`
+    - `004e:REQEW`
+    - `0064:IFUB A=02V=00C=0E=12->007b`
+    - `0078:PMVIE id=26`
+    - `007a:MOVIE`
+    - `007b:IFUB A=02V=01C=0E=23->00a3`
+    - `008f:PMVIE id=27`
+    - `0091:MOVIE`
+    - `0092:PMVIE id=28`
+    - `0094:MOVIE`
+    - `00a3:IFUB A=02V=02C=0E=18->00c0`
+    - `00b7:PMVIE id=34`
+    - `00b9:MOVIE`
+    - `00ba:PMVIE id=35`
+    - `00bc:MOVIE`
+    - `00bd:PMVIE id=36`
+    - `00bf:MOVIE`
+    - `00c0:IFUB A=02V=03C=0E=12->00d7`
+    - `00d4:PMVIE id=45`
+    - `00d6:MOVIE`
+    - `00d7:IFUB A=02V=04C=0E=51->012d`
+    - `00eb:PMVIE id=2`
+    - `00ed:MOVIE`
+    - `00ee:REQ`
+    - `00f1:PMVIE id=40`
+    - `00f3:MOVIE`
+    - `00f4:PMVIE id=48`
+    - `00f6:MOVIE`
+    - `00f7:PMVIE id=8`
+    - `00f9:MOVIE`
+    - `00fa:PMVIE id=6`
+    - `00fc:MOVIE`
+    - `00fd:PMVIE id=7`
+    - `00ff:MOVIE`
+    - `0100:PMVIE id=9`
+    - `0102:MOVIE`
+    - `0103:PMVIE id=10`
+    - `0105:MOVIE`
+    - `0106:PMVIE id=49`
+    - `0108:MOVIE`
+    - `0109:PMVIE id=4`
+    - `010b:MOVIE`
+    - `011d:MUSIC id=0`
+    - `012d:IFUB A=02V=05C=0E=38->016a`
+    - `0141:MUSIC id=4`
+    - `0143:PMVIE id=46`
+    - `0145:MOVIE`
+    - `0146:PMVIE id=47`
+    - `0148:MOVIE`
+    - `015a:MUSIC id=0`
+    - `016a:IFUB A=02V=06C=0E=38->01a7`
+    - `017e:MUSIC id=5`
+    - `0180:PMVIE id=50`
+    - `0182:MOVIE`
+    - `0183:PMVIE id=51`
+    - `0185:MOVIE`
+    - `0197:MUSIC id=0`
+    - `01a7:IFUB A=02V=07C=0E=41->01ed`
+    - `01bb:MUSIC id=6`
+    - `01bd:PMVIE id=20`
+    - `01bf:MOVIE`
+    - `01c0:PMVIE id=22`
+    - `01c2:MOVIE`
+    - `01c3:PMVIE id=23`
+    - `01c5:MOVIE`
+    - `01c6:PMVIE id=21`
+    - `01c8:MOVIE`
+    - `01d7:PMVIE id=24`
+    - `01d9:MOVIE`
+    - ... +77
+  - opcode counts: DSKCG:13->0
+
+#### SD vs CSR D2
+- **`p7/1`** len 292->290 (11fd0e49f510->3ec2bcdde33a)
+  - D2:
+    - `0000:SETBYTE 50/02=0x1`
+    - `0004:ASK 48050020010302`
+    - `000b:IFUB A=02V=02C=0E=63->0073`
+    - `0011:WAIT`
+    - `0014:SETWORD 20/00=0x146`
+    - `0019:BITON d0/5b#2`
+    - `001d:REQEW`
+    - `0020:MMBud`
+    - `0023:MMBud`
+    - `0026:MMBud`
+    - `0029:MMBud`
+    - `002c:FADE`
+    - `0035:FADEW`
+    - `0036:REQ`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQEW`
+    - `004e:TLKON`
+    - `0050:SOLID`
+    - `0052:VISI`
+    - `0054:DSKCG disc=1`
+    - `0056:AKAO`
+    - `0064:MUSIC id=3`
+    - `0066:MAPJUMP #103`
+    - `0070:RET`
+    - `0071:JMPF ->0124`
+    - `0073:IFUB A=02V=03C=0E=16->008e`
+    - `0079:WAIT`
+    - `007c:SETWORD 20/00=0x513`
+    - `0081:MAPJUMP #88`
+    - `008b:RET`
+    - `008c:JMPF ->0124`
+    - `008e:WAIT`
+    - `0091:SETWORD 20/00=0x654`
+    - `0096:MMBLK`
+    - `0098:REQEW`
+    - `009b:MMBud`
+    - `009e:MMBud`
+    - `00a1:MMBud`
+    - `00a4:SETBYTE 50/02=0x0`
+    - `00a8:ASK 48050021000302`
+    - `00af:IFUB A=02V=00C=0E=0a->00be`
+    - `00b5:MMBud`
+    - `00b8:BITON 30/cf#0`
+    - `00bc:JMPF ->00f0`
+    - `00be:IFUB A=02V=01C=0E=11->00d4`
+    - `00c4:MMBud`
+    - `00c7:MMBud`
+    - `00ca:SPECIAL`
+    - `00ce:BITON d0/50#2`
+    - `00d2:JMPF ->00f0`
+    - `00d4:IFUB A=02V=02C=0E=16->00ef`
+    - `00da:MMBud`
+    - `00dd:BITON 30/cf#0`
+    - `00e1:MMBud`
+    - `00e4:MMBud`
+    - `00e7:SPECIAL`
+    - `00eb:BITON d0/50#2`
+    - `00ef:WAIT`
+    - `00f2:MENU`
+    - `00f6:FADE`
+    - `00ff:SETBYTE 50/02=0x0`
+    - `0103:ASK 48050022010202`
+    - `010a:IFUB A=02V=01C=0E=06->0115`
+    - `0110:STITM`
+    - `0115:WAIT`
+    - `0118:MAPJUMP #744`
+    - `0122:RET`
+    - `0123:RET`
+  - SD:
+    - `0000:SETBYTE 50/02=0x1`
+    - `0004:ASK 48050020010302`
+    - `000b:IFUB A=02V=02C=0E=61->0071`
+    - `0011:WAIT`
+    - `0014:SETWORD 20/00=0x146`
+    - `0019:BITON d0/5b#2`
+    - `001d:REQEW`
+    - `0020:MMBud`
+    - `0023:MMBud`
+    - `0026:MMBud`
+    - `0029:MMBud`
+    - `002c:FADE`
+    - `0035:FADEW`
+    - `0036:REQ`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQEW`
+    - `004e:TLKON`
+    - `0050:SOLID`
+    - `0052:VISI`
+    - `0054:AKAO`
+    - `0062:MUSIC id=3`
+    - `0064:MAPJUMP #103`
+    - `006e:RET`
+    - `006f:JMPF ->0122`
+    - `0071:IFUB A=02V=03C=0E=16->008c`
+    - `0077:WAIT`
+    - `007a:SETWORD 20/00=0x513`
+    - `007f:MAPJUMP #88`
+    - `0089:RET`
+    - `008a:JMPF ->0122`
+    - `008c:WAIT`
+    - `008f:SETWORD 20/00=0x654`
+    - `0094:MMBLK`
+    - `0096:REQEW`
+    - `0099:MMBud`
+    - `009c:MMBud`
+    - `009f:MMBud`
+    - `00a2:SETBYTE 50/02=0x0`
+    - `00a6:ASK 48050021000302`
+    - `00ad:IFUB A=02V=00C=0E=0a->00bc`
+    - `00b3:MMBud`
+    - `00b6:BITON 30/cf#0`
+    - `00ba:JMPF ->00ee`
+    - `00bc:IFUB A=02V=01C=0E=11->00d2`
+    - `00c2:MMBud`
+    - `00c5:MMBud`
+    - `00c8:SPECIAL`
+    - `00cc:BITON d0/50#2`
+    - `00d0:JMPF ->00ee`
+    - `00d2:IFUB A=02V=02C=0E=16->00ed`
+    - `00d8:MMBud`
+    - `00db:BITON 30/cf#0`
+    - `00df:MMBud`
+    - `00e2:MMBud`
+    - `00e5:SPECIAL`
+    - `00e9:BITON d0/50#2`
+    - `00ed:WAIT`
+    - `00f0:MENU`
+    - `00f4:FADE`
+    - `00fd:SETBYTE 50/02=0x0`
+    - `0101:ASK 48050022010202`
+    - `0108:IFUB A=02V=01C=0E=06->0113`
+    - `010e:STITM`
+    - `0113:WAIT`
+    - `0116:MAPJUMP #744`
+    - `0120:RET`
+    - `0121:RET`
+- **`p8/1`** len 1005->979 (58c721f3df61->ba4c7ce0b19d)
+  - D2 interesting (170):
+    - `0004:SETBYTE 50/02=0x1`
+    - `0008:ASK 48050024010302`
+    - `000f:IFUBL`
+    - `0016:SETBYTE 50/02=0x0`
+    - `0028:ASK 48050325000c02`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQ`
+    - `004e:REQEW`
+    - `0064:IFUB A=02V=00C=0E=14->007d`
+    - `006a:DSKCG disc=1`
+    - `007a:PMVIE id=26`
+    - `007c:MOVIE`
+    - `007d:IFUB A=02V=01C=0E=25->00a7`
+    - `0083:DSKCG disc=1`
+    - `0093:PMVIE id=27`
+    - `0095:MOVIE`
+    - `0096:PMVIE id=28`
+    - `0098:MOVIE`
+    - `00a7:IFUB A=02V=02C=0E=1a->00c6`
+    - `00ad:DSKCG disc=1`
+    - `00bd:PMVIE id=34`
+    - `00bf:MOVIE`
+    - `00c0:PMVIE id=35`
+    - `00c2:MOVIE`
+    - `00c3:PMVIE id=36`
+    - `00c5:MOVIE`
+    - `00c6:IFUB A=02V=03C=0E=14->00df`
+    - `00cc:DSKCG disc=1`
+    - `00dc:PMVIE id=45`
+    - `00de:MOVIE`
+    - `00df:IFUB A=02V=04C=0E=53->0137`
+    - `00e5:DSKCG disc=1`
+    - `00f5:PMVIE id=2`
+    - `00f7:MOVIE`
+    - `00f8:REQ`
+    - `00fb:PMVIE id=40`
+    - `00fd:MOVIE`
+    - `00fe:PMVIE id=48`
+    - `0100:MOVIE`
+    - `0101:PMVIE id=8`
+    - `0103:MOVIE`
+    - `0104:PMVIE id=6`
+    - `0106:MOVIE`
+    - `0107:PMVIE id=7`
+    - `0109:MOVIE`
+    - `010a:PMVIE id=9`
+    - `010c:MOVIE`
+    - `010d:PMVIE id=10`
+    - `010f:MOVIE`
+    - `0110:PMVIE id=49`
+    - `0112:MOVIE`
+    - `0113:PMVIE id=4`
+    - `0115:MOVIE`
+    - `0127:MUSIC id=0`
+    - `0137:IFUB A=02V=05C=0E=3a->0176`
+    - `013d:DSKCG disc=1`
+    - `014d:MUSIC id=4`
+    - `014f:PMVIE id=46`
+    - `0151:MOVIE`
+    - `0152:PMVIE id=47`
+    - `0154:MOVIE`
+    - `0166:MUSIC id=0`
+    - `0176:IFUB A=02V=06C=0E=3a->01b5`
+    - `017c:DSKCG disc=1`
+    - `018c:MUSIC id=5`
+    - `018e:PMVIE id=50`
+    - `0190:MOVIE`
+    - `0191:PMVIE id=51`
+    - `0193:MOVIE`
+    - `01a5:MUSIC id=0`
+    - `01b5:IFUB A=02V=07C=0E=43->01fd`
+    - `01bb:DSKCG disc=2`
+    - `01cb:MUSIC id=6`
+    - `01cd:PMVIE id=20`
+    - `01cf:MOVIE`
+    - ... +90
+  - SD interesting (157):
+    - `0004:SETBYTE 50/02=0x1`
+    - `0008:ASK 48050024010302`
+    - `000f:IFUBL`
+    - `0016:SETBYTE 50/02=0x0`
+    - `0028:ASK 48050325000c02`
+    - `0039:REQ`
+    - `003c:REQ`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:REQ`
+    - `004e:REQEW`
+    - `0064:IFUB A=02V=00C=0E=12->007b`
+    - `0078:PMVIE id=26`
+    - `007a:MOVIE`
+    - `007b:IFUB A=02V=01C=0E=23->00a3`
+    - `008f:PMVIE id=27`
+    - `0091:MOVIE`
+    - `0092:PMVIE id=28`
+    - `0094:MOVIE`
+    - `00a3:IFUB A=02V=02C=0E=18->00c0`
+    - `00b7:PMVIE id=34`
+    - `00b9:MOVIE`
+    - `00ba:PMVIE id=35`
+    - `00bc:MOVIE`
+    - `00bd:PMVIE id=36`
+    - `00bf:MOVIE`
+    - `00c0:IFUB A=02V=03C=0E=12->00d7`
+    - `00d4:PMVIE id=45`
+    - `00d6:MOVIE`
+    - `00d7:IFUB A=02V=04C=0E=51->012d`
+    - `00eb:PMVIE id=2`
+    - `00ed:MOVIE`
+    - `00ee:REQ`
+    - `00f1:PMVIE id=40`
+    - `00f3:MOVIE`
+    - `00f4:PMVIE id=48`
+    - `00f6:MOVIE`
+    - `00f7:PMVIE id=8`
+    - `00f9:MOVIE`
+    - `00fa:PMVIE id=6`
+    - `00fc:MOVIE`
+    - `00fd:PMVIE id=7`
+    - `00ff:MOVIE`
+    - `0100:PMVIE id=9`
+    - `0102:MOVIE`
+    - `0103:PMVIE id=10`
+    - `0105:MOVIE`
+    - `0106:PMVIE id=49`
+    - `0108:MOVIE`
+    - `0109:PMVIE id=4`
+    - `010b:MOVIE`
+    - `011d:MUSIC id=0`
+    - `012d:IFUB A=02V=05C=0E=38->016a`
+    - `0141:MUSIC id=4`
+    - `0143:PMVIE id=46`
+    - `0145:MOVIE`
+    - `0146:PMVIE id=47`
+    - `0148:MOVIE`
+    - `015a:MUSIC id=0`
+    - `016a:IFUB A=02V=06C=0E=38->01a7`
+    - `017e:MUSIC id=5`
+    - `0180:PMVIE id=50`
+    - `0182:MOVIE`
+    - `0183:PMVIE id=51`
+    - `0185:MOVIE`
+    - `0197:MUSIC id=0`
+    - `01a7:IFUB A=02V=07C=0E=41->01ed`
+    - `01bb:MUSIC id=6`
+    - `01bd:PMVIE id=20`
+    - `01bf:MOVIE`
+    - `01c0:PMVIE id=22`
+    - `01c2:MOVIE`
+    - `01c3:PMVIE id=23`
+    - `01c5:MOVIE`
+    - `01c6:PMVIE id=21`
+    - `01c8:MOVIE`
+    - `01d7:PMVIE id=24`
+    - `01d9:MOVIE`
+    - ... +77
+  - opcode counts: DSKCG:13->0
+
+### BLACKBGB
+- D1 sha: 4236c5a642ef5a6f dec=23908
+- D2 sha: 93308243060eefb0 dec=23908
+- SD sha: 617fbce93e715b22 dec=23900
+
+#### SD vs CSR D1
+- **`init/0`** len 802->794 (0771606b3860->8e0d7cea051e)
+  - D1 interesting (59):
+    - `0004:RET`
+    - `0005:IFUB A=88V=07C=9E=f2->00fc`
+    - `000b:MUSIC id=0`
+    - `00c5:BITOFF 30/88#7`
+    - `00d1:MAPJUMP #226`
+    - `00ec:MUSIC id=0`
+    - `00fc:IFUB A=5bV=02C=9E=30->0131`
+    - `0102:BITON 30/88#7`
+    - `0106:BITOFF d0/5b#2`
+    - `011e:REQ`
+    - `0121:REQ`
+    - `012e:MESSAGE 400003`
+    - `0131:IFUB A=88V=05C=9E=1b->0151`
+    - `0137:BITOFF 30/88#5`
+    - `013e:DSKCG disc=3`
+    - `0140:MUSIC id=2`
+    - `0145:MAPJUMP #744`
+    - `014f:JMPF ->021f`
+    - `0151:IFUB A=52V=06C=9E=4c->01a2`
+    - `0157:BITOFF d0/52#6`
+    - `015b:REQ`
+    - `016b:ASK 48050101020300`
+    - `0173:IFUB A=00V=02C=0E=10->0188`
+    - `017c:BITON 30/88#5`
+    - `0180:SETBYTE d0/00=0x3`
+    - `0188:BITOFF 30/88#5`
+    - `018f:DSKCG disc=3`
+    - `0191:MUSIC id=2`
+    - `0196:MAPJUMP #744`
+    - `01a0:JMPF ->021f`
+    - `01a2:IFUB A=86V=02C=9E=22->01c9`
+    - `01a8:BITOFF 30/86#2`
+    - `01af:DSKCG disc=2`
+    - `01b4:BITON 30/89#1`
+    - `01b8:MAPJUMP #634`
+    - `01c2:MUSIC id=3`
+    - `01c7:JMPF ->021f`
+    - `01c9:IFUB A=88V=04C=9E=50->021e`
+    - `01cf:BITOFF 30/88#4`
+    - `01d3:REQ`
+    - `01e3:ASK 48050101020300`
+    - `01ea:IFUB A=00V=02C=0E=10->01ff`
+    - `01f3:BITON 30/86#2`
+    - `01f7:SETBYTE d0/00=0x2`
+    - `01ff:BITOFF 30/86#2`
+    - `0206:DSKCG disc=2`
+    - `020b:BITON 30/89#1`
+    - `0212:MAPJUMP #634`
+    - `021c:MUSIC id=3`
+    - `021e:IFUB A=83V=02C=9E=c1->02e4`
+    - `02c0:MUSIC id=0`
+    - `02d0:PMVIE id=45`
+    - `02d2:MOVIE`
+    - `02d8:MAPJUMP #558`
+    - `02e2:JMPF ->0322`
+    - `02e4:IFSW V=0x27eC=0E=36->0321`
+    - `02fd:MUSIC id=0`
+    - `0317:MAPJUMP #522`
+    - `0321:RET`
+  - SD interesting (55):
+    - `0004:RET`
+    - `0005:IFUB A=88V=07C=9E=f2->00fc`
+    - `000b:MUSIC id=0`
+    - `00c5:BITOFF 30/88#7`
+    - `00e2:MUSIC id=0`
+    - `00f2:MAPJUMP #226`
+    - `00fc:IFUB A=5bV=02C=9E=30->0131`
+    - `0102:BITON 30/88#7`
+    - `0106:BITOFF d0/5b#2`
+    - `011e:REQ`
+    - `0121:REQ`
+    - `012e:MESSAGE 400003`
+    - `0131:IFUB A=88V=05C=9E=19->014f`
+    - `0137:BITOFF 30/88#5`
+    - `013e:MUSIC id=2`
+    - `0143:MAPJUMP #744`
+    - `014d:JMPF ->0217`
+    - `014f:IFUB A=52V=06C=9E=4a->019e`
+    - `0155:BITOFF d0/52#6`
+    - `0159:REQ`
+    - `0169:ASK 48050101020300`
+    - `0171:IFUB A=00V=02C=0E=10->0186`
+    - `017a:BITON 30/88#5`
+    - `017e:SETBYTE d0/00=0x3`
+    - `0186:BITOFF 30/88#5`
+    - `018d:MUSIC id=2`
+    - `0192:MAPJUMP #744`
+    - `019c:JMPF ->0217`
+    - `019e:IFUB A=86V=02C=9E=20->01c3`
+    - `01a4:BITOFF 30/86#2`
+    - `01ae:BITON 30/89#1`
+    - `01b2:MAPJUMP #634`
+    - `01bc:MUSIC id=3`
+    - `01c1:JMPF ->0217`
+    - `01c3:IFUB A=88V=04C=9E=4e->0216`
+    - `01c9:BITOFF 30/88#4`
+    - `01cd:REQ`
+    - `01dd:ASK 48050101020300`
+    - `01e4:IFUB A=00V=02C=0E=10->01f9`
+    - `01ed:BITON 30/86#2`
+    - `01f1:SETBYTE d0/00=0x2`
+    - `01f9:BITOFF 30/86#2`
+    - `0203:BITON 30/89#1`
+    - `020a:MAPJUMP #634`
+    - `0214:MUSIC id=3`
+    - `0216:IFUB A=83V=02C=9E=c1->02dc`
+    - `02b8:MUSIC id=0`
+    - `02c8:PMVIE id=45`
+    - `02ca:MOVIE`
+    - `02d0:MAPJUMP #558`
+    - `02da:JMPF ->031a`
+    - `02dc:IFSW V=0x27eC=0E=36->0319`
+    - `02f5:MUSIC id=0`
+    - `030f:MAPJUMP #522`
+    - `0319:RET`
+  - opcode counts: DSKCG:4->0
+
+#### SD vs CSR D2
+- **`init/0`** len 802->794 (5146fc55094e->8e0d7cea051e)
+  - D2 interesting (59):
+    - `0004:RET`
+    - `0005:IFUB A=88V=07C=9E=f2->00fc`
+    - `000b:MUSIC id=0`
+    - `00c5:BITOFF 30/88#7`
+    - `00e2:MUSIC id=0`
+    - `00f2:MAPJUMP #226`
+    - `00fc:IFUB A=5bV=02C=9E=30->0131`
+    - `0102:BITON 30/88#7`
+    - `0106:BITOFF d0/5b#2`
+    - `011e:REQ`
+    - `0121:REQ`
+    - `012e:MESSAGE 400003`
+    - `0131:IFUB A=88V=05C=9E=1b->0151`
+    - `0137:BITOFF 30/88#5`
+    - `013e:DSKCG disc=3`
+    - `0140:MUSIC id=2`
+    - `0145:MAPJUMP #744`
+    - `014f:JMPF ->021f`
+    - `0151:IFUB A=52V=06C=9E=4c->01a2`
+    - `0157:BITOFF d0/52#6`
+    - `015b:REQ`
+    - `016b:ASK 48050101020300`
+    - `0173:IFUB A=00V=02C=0E=10->0188`
+    - `017c:BITON 30/88#5`
+    - `0180:SETBYTE d0/00=0x3`
+    - `0188:BITOFF 30/88#5`
+    - `018f:DSKCG disc=3`
+    - `0191:MUSIC id=2`
+    - `0196:MAPJUMP #744`
+    - `01a0:JMPF ->021f`
+    - `01a2:IFUB A=86V=02C=9E=22->01c9`
+    - `01a8:BITOFF 30/86#2`
+    - `01af:DSKCG disc=2`
+    - `01b4:BITON 30/89#1`
+    - `01b8:MAPJUMP #634`
+    - `01c2:MUSIC id=3`
+    - `01c7:JMPF ->021f`
+    - `01c9:IFUB A=88V=04C=9E=50->021e`
+    - `01cf:BITOFF 30/88#4`
+    - `01d3:REQ`
+    - `01e3:ASK 48050101020300`
+    - `01ea:IFUB A=00V=02C=0E=10->01ff`
+    - `01f3:BITON 30/86#2`
+    - `01f7:SETBYTE d0/00=0x2`
+    - `01ff:BITOFF 30/86#2`
+    - `0206:DSKCG disc=2`
+    - `020b:BITON 30/89#1`
+    - `0212:MAPJUMP #634`
+    - `021c:MUSIC id=3`
+    - `021e:IFUB A=83V=02C=9E=c1->02e4`
+    - `02c0:MUSIC id=0`
+    - `02d0:PMVIE id=45`
+    - `02d2:MOVIE`
+    - `02d8:MAPJUMP #558`
+    - `02e2:JMPF ->0322`
+    - `02e4:IFSW V=0x27eC=0E=36->0321`
+    - `02fd:MUSIC id=0`
+    - `0317:MAPJUMP #522`
+    - `0321:RET`
+  - SD interesting (55):
+    - `0004:RET`
+    - `0005:IFUB A=88V=07C=9E=f2->00fc`
+    - `000b:MUSIC id=0`
+    - `00c5:BITOFF 30/88#7`
+    - `00e2:MUSIC id=0`
+    - `00f2:MAPJUMP #226`
+    - `00fc:IFUB A=5bV=02C=9E=30->0131`
+    - `0102:BITON 30/88#7`
+    - `0106:BITOFF d0/5b#2`
+    - `011e:REQ`
+    - `0121:REQ`
+    - `012e:MESSAGE 400003`
+    - `0131:IFUB A=88V=05C=9E=19->014f`
+    - `0137:BITOFF 30/88#5`
+    - `013e:MUSIC id=2`
+    - `0143:MAPJUMP #744`
+    - `014d:JMPF ->0217`
+    - `014f:IFUB A=52V=06C=9E=4a->019e`
+    - `0155:BITOFF d0/52#6`
+    - `0159:REQ`
+    - `0169:ASK 48050101020300`
+    - `0171:IFUB A=00V=02C=0E=10->0186`
+    - `017a:BITON 30/88#5`
+    - `017e:SETBYTE d0/00=0x3`
+    - `0186:BITOFF 30/88#5`
+    - `018d:MUSIC id=2`
+    - `0192:MAPJUMP #744`
+    - `019c:JMPF ->0217`
+    - `019e:IFUB A=86V=02C=9E=20->01c3`
+    - `01a4:BITOFF 30/86#2`
+    - `01ae:BITON 30/89#1`
+    - `01b2:MAPJUMP #634`
+    - `01bc:MUSIC id=3`
+    - `01c1:JMPF ->0217`
+    - `01c3:IFUB A=88V=04C=9E=4e->0216`
+    - `01c9:BITOFF 30/88#4`
+    - `01cd:REQ`
+    - `01dd:ASK 48050101020300`
+    - `01e4:IFUB A=00V=02C=0E=10->01f9`
+    - `01ed:BITON 30/86#2`
+    - `01f1:SETBYTE d0/00=0x2`
+    - `01f9:BITOFF 30/86#2`
+    - `0203:BITON 30/89#1`
+    - `020a:MAPJUMP #634`
+    - `0214:MUSIC id=3`
+    - `0216:IFUB A=83V=02C=9E=c1->02dc`
+    - `02b8:MUSIC id=0`
+    - `02c8:PMVIE id=45`
+    - `02ca:MOVIE`
+    - `02d0:MAPJUMP #558`
+    - `02da:JMPF ->031a`
+    - `02dc:IFSW V=0x27eC=0E=36->0319`
+    - `02f5:MUSIC id=0`
+    - `030f:MAPJUMP #522`
+    - `0319:RET`
+  - opcode counts: DSKCG:4->0
+
+### BLACKBGE
+- D1 sha: 47bd6b3a534520e4 dec=10744
+- D2 sha: 47bd6b3a534520e4 dec=10744
+- SD sha: 27cb4cff9541c171 dec=10740
+
+#### SD vs CSR D1
+- **`AD/4`** len 8->6 (618bd6c01713->fd4f391ae771)
+  - D1:
+    - `0000:WAIT`
+    - `0003:DSKCG disc=2`
+    - `0005:WCLSE`
+    - `0007:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:WCLSE`
+    - `0005:RET`
+
+#### SD vs CSR D2
+- **`AD/4`** len 8->6 (618bd6c01713->fd4f391ae771)
+  - D2:
+    - `0000:WAIT`
+    - `0003:DSKCG disc=2`
+    - `0005:WCLSE`
+    - `0007:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:WCLSE`
+    - `0005:RET`
+
+### BLUE_2
+- D1 sha: 71b7346c52ae5358 dec=32464
+- D2 sha: a61c74e7f1105ce5 dec=32496
+- SD sha: 7f351298332665e2 dec=32496
+
+#### SD vs CSR D1
+- **`dir/0`** len 201->173 (d43f3873628e->b4513fc244f7)
+  - D1:
+    - `0000:IFSW V=0x2a1C=0E=05->000c`
+    - `0008:MUSIC id=0`
+    - `000a:JMPF ->001b`
+    - `000c:IFSW V=0x298C=0E=05->0018`
+    - `0014:MUSIC id=1`
+    - `0016:JMPF ->001b`
+    - `0018:MUSIC id=2`
+    - `001a:MPNAM`
+    - `001c:RET`
+    - `001d:IFSW V=0x2a1C=0E=a3->00c7`
+    - `0025:SETWORD 20/00=0x2a2`
+    - `002a:MAPJUMP #632`
+    - `0034:UC`
+    - `0036:MENU2`
+    - `0038:PREQ`
+    - `003b:PREQ`
+    - `003e:WAIT`
+    - `0041:REQ`
+    - `0044:REQEW`
+    - `0047:WAIT`
+    - `004a:FADE`
+    - `0053:FADEW`
+    - `0054:FADE`
+    - `005d:PMVIE id=51`
+    - `005f:AKAO`
+    - `006d:MUSIC id=3`
+    - `006f:AKAO`
+    - `007d:SETWORD 20/00=0x2a2`
+    - `0082:AKAO`
+    - `0090:AKAO`
+    - `009e:AKAO`
+    - `00ac:JMPF ->00be`
+    - `00ae:SETWORD 20/00=0xa455`
+    - `00b3:MAPJUMP #526`
+    - `00bd:MAPJUMP #632`
+    - `00c7:JMPB ->00c7`
+  - SD:
+    - `0000:IFSW V=0x2a1C=0E=05->000c`
+    - `0008:MUSIC id=0`
+    - `000a:JMPF ->001b`
+    - `000c:IFSW V=0x298C=0E=05->0018`
+    - `0014:MUSIC id=1`
+    - `0016:JMPF ->001b`
+    - `0018:MUSIC id=2`
+    - `001a:MPNAM`
+    - `001c:RET`
+    - `001d:IFSW V=0x2a1C=0E=87->00ab`
+    - `0025:UC`
+    - `0027:MENU2`
+    - `0029:PREQ`
+    - `002c:PREQ`
+    - `002f:WAIT`
+    - `0032:REQ`
+    - `0035:REQEW`
+    - `0038:WAIT`
+    - `003b:FADE`
+    - `0044:FADEW`
+    - `0045:FADE`
+    - `004e:PMVIE id=51`
+    - `0050:MOVIE`
+    - `0051:AKAO`
+    - `005f:WAIT`
+    - `0062:MUSIC id=3`
+    - `0064:AKAO`
+    - `0072:SETWORD 20/00=0x2a2`
+    - `0077:AKAO`
+    - `0085:AKAO`
+    - `0093:AKAO`
+    - `00a1:MAPJUMP #632`
+    - `00ab:JMPB ->00ab`
+
+#### SD vs CSR D2
+
+### BUGIN1A
+- D1 sha: 6418984539038ad2 dec=26024
+- D2 sha: 50fa175fe03634db dec=26020
+- SD sha: 985e4ff9e066c196 dec=26020
+
+#### SD vs CSR D1
+- **`AD/4`** len 32->17 (6688ef4ce8c3->4716e49f5cd3)
+  - D1:
+    - `0000:SETWORD 20/00=0x1ed`
+    - `0005:MAPJUMP #541`
+    - `000f:RET`
+    - `0010:MAPJUMP #543`
+    - `001a:SOUND`
+    - `001f:MOVIE`
+  - SD:
+    - `0000:SOUND`
+    - `0005:MOVIE`
+    - `0006:MAPJUMP #543`
+    - `0010:RET`
+- **`AD/7`** len 270->285 (225a7a340b08->f978b37d04c3)
+  - D1:
+    - `0000:SPLIT`
+    - `000f:REQEW`
+    - `0012:REQEW`
+    - `0015:REQEW`
+    - `0018:REQEW`
+    - `001b:REQEW`
+    - `001e:PRQEW`
+    - `0021:REQEW`
+    - `0024:WAIT`
+    - `0027:REQEW`
+    - `002a:REQEW`
+    - `002d:REQEW`
+    - `0030:REQEW`
+    - `0033:REQEW`
+    - `0036:REQEW`
+    - `0039:REQEW`
+    - `003c:REQEW`
+    - `003f:REQEW`
+    - `0042:REQEW`
+    - `0045:REQEW`
+    - `0048:REQEW`
+    - `004b:REQEW`
+    - `004e:REQEW`
+    - `0051:REQEW`
+    - `0054:REQEW`
+    - `0057:REQEW`
+    - `005a:REQEW`
+    - `005d:REQEW`
+    - `0060:REQEW`
+    - `0063:REQ`
+    - `0066:REQ`
+    - `0069:REQ`
+    - `006c:REQ`
+    - `006f:REQ`
+    - `0072:REQ`
+    - `0075:SETWORD 20/00=0x56f`
+    - `007a:WAIT`
+    - `007d:IFUB A=52V=01C=6E=03->0085`
+    - `0083:JMPF ->00a0`
+    - `0085:IFUB A=52V=10C=6E=03->008d`
+    - `008b:JMPF ->00a0`
+    - `008d:IFUB A=91V=08C=6E=03->0095`
+    - `0093:JMPF ->00a0`
+    - `0095:IFUB A=52V=80C=6E=03->009d`
+    - `009b:JMPF ->00a0`
+    - `009d:JMPF ->00c3`
+    - `009f:REQ`
+    - `00a2:REQEW`
+    - `00a5:WAIT`
+    - `00a8:REQEW`
+    - `00ab:REQ`
+    - `00ae:WAIT`
+    - `00b1:REQEW`
+    - `00b4:WAIT`
+    - `00b7:REQ`
+    - `00ba:REQ`
+    - `00bd:REQ`
+    - `00c0:JMPF ->010e`
+    - `00c2:WAIT`
+    - `00c5:FADE`
+    - `00ce:FADEW`
+    - `00cf:BITON 30/bc#2`
+    - `00d3:BITON 30/bc#3`
+    - `00d7:WAIT`
+    - `00da:SOUND`
+    - `00df:MUSIC id=1`
+    - `00e1:AKAO2`
+    - `00f0:AKAO2`
+    - `00ff:MAPJUMP #74`
+    - `0109:UC`
+    - `010b:MENU2`
+    - `010d:RET`
+  - SD:
+    - `0000:SPLIT`
+    - `000f:REQEW`
+    - `0012:JMPF ->0078`
+    - `0014:REQEW`
+    - `0017:REQEW`
+    - `001a:REQEW`
+    - `001d:REQEW`
+    - `0020:PRQEW`
+    - `0023:REQEW`
+    - `0026:WAIT`
+    - `0029:REQEW`
+    - `002c:REQEW`
+    - `002f:REQEW`
+    - `0032:REQEW`
+    - `0035:REQEW`
+    - `0038:REQEW`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:REQEW`
+    - `0044:REQEW`
+    - `0047:REQEW`
+    - `004a:REQEW`
+    - `004d:REQEW`
+    - `0050:REQEW`
+    - `0053:REQEW`
+    - `0056:REQEW`
+    - `0059:REQEW`
+    - `005c:REQEW`
+    - `005f:REQEW`
+    - `0062:REQEW`
+    - `0065:REQ`
+    - `0068:REQ`
+    - `006b:REQ`
+    - `006e:REQ`
+    - `0071:REQ`
+    - `0074:REQ`
+    - `0077:WAIT`
+    - `007a:SETWORD 20/00=0x56f`
+    - `007f:MAPJUMP #542`
+    - `0089:WAIT`
+    - `008c:IFUB A=52V=01C=6E=03->0094`
+    - `0092:JMPF ->00af`
+    - `0094:IFUB A=52V=10C=6E=03->009c`
+    - `009a:JMPF ->00af`
+    - `009c:IFUB A=91V=08C=6E=03->00a4`
+    - `00a2:JMPF ->00af`
+    - `00a4:IFUB A=52V=80C=6E=03->00ac`
+    - `00aa:JMPF ->00af`
+    - `00ac:JMPF ->00d2`
+    - `00ae:REQ`
+    - `00b1:REQEW`
+    - `00b4:WAIT`
+    - `00b7:REQEW`
+    - `00ba:REQ`
+    - `00bd:WAIT`
+    - `00c0:REQEW`
+    - `00c3:WAIT`
+    - `00c6:REQ`
+    - `00c9:REQ`
+    - `00cc:REQ`
+    - `00cf:JMPF ->011d`
+    - `00d1:WAIT`
+    - `00d4:FADE`
+    - `00dd:FADEW`
+    - `00de:BITON 30/bc#2`
+    - `00e2:BITON 30/bc#3`
+    - `00e6:WAIT`
+    - `00e9:SOUND`
+    - `00ee:MUSIC id=1`
+    - `00f0:AKAO2`
+    - `00ff:AKAO2`
+    - `010e:MAPJUMP #74`
+    - `0118:UC`
+    - `011a:MENU2`
+    - `011c:RET`
+- **`BUGEN/1`** len 515->509 (a0394d943658->e1f3008b7e9d)
+  - D1 interesting (51):
+    - `0004:IFSW V=0x44eC=2E=24->002f`
+    - `000c:IFSW V=0x513C=3E=1c->002f`
+    - `0025:MESSAGE 400134`
+    - `002c:JMPFL`
+    - `002f:IFSW V=0x56dC=4E=0c->0042`
+    - `0039:REQEW`
+    - `003c:REQ`
+    - `003f:JMPFL`
+    - `0042:IFSW V=0x3f0C=4E=7f->00c8`
+    - `004e:IFUB A=09V=02C=0E=42->0095`
+    - `0054:IFUB A=c1V=20C=6E=13->006c`
+    - `0067:MESSAGE 40010b`
+    - `006a:JMPF ->0094`
+    - `0079:MESSAGE 400108`
+    - `007c:REQEW`
+    - `008c:MESSAGE 40010a`
+    - `008f:BITON 30/c1#5`
+    - `0093:JMPF ->00c2`
+    - `0095:IFUB A=08V=00C=0E=17->00b1`
+    - `00a8:MESSAGE 400107`
+    - `00ab:SETBYTE 50/08=0x1`
+    - `00af:JMPF ->00c2`
+    - `00be:MESSAGE 40010c`
+    - `00c5:JMPFL`
+    - `00c8:IFSW V=0x20bC=4E=37->0106`
+    - `00e4:MESSAGE 400105`
+    - `00eb:JMPFL`
+    - `00ee:JMPF ->0107`
+    - `00fd:MESSAGE 400104`
+    - `0104:JMPF ->0203`
+    - `0106:IFUB A=aaV=40C=6E=52->015d`
+    - `010c:IFUB A=a1V=20C=6E=35->0146`
+    - `0112:IFUB A=a1V=40C=6E=18->012f`
+    - `0126:MESSAGE 400103`
+    - `012d:JMPF ->0145`
+    - `013d:MESSAGE 400102`
+    - `0144:JMPF ->015c`
+    - `0154:MESSAGE 400102`
+    - `015b:JMPF ->0203`
+    - `0161:JMPFL`
+    - `0171:MESSAGE 400101`
+    - `0174:REQ`
+    - `019f:REQEW`
+    - `01b3:REQEW`
+    - `01d9:BITON 30/aa#6`
+    - `01dd:JMPFL`
+    - `01e3:REQEW`
+    - `01e6:REQ`
+    - `01ef:IFSW V=0x3C=5E=06->01fc`
+    - `01fc:REQ`
+    - `0202:RET`
+  - SD interesting (49):
+    - `0004:IFSW V=0x44eC=2E=24->002f`
+    - `000c:IFSW V=0x513C=3E=1c->002f`
+    - `0025:MESSAGE 400134`
+    - `002c:JMPFL`
+    - `002f:IFSW V=0x56dC=4E=0c->0042`
+    - `0039:REQEW`
+    - `003c:REQ`
+    - `003f:JMPFL`
+    - `0042:IFSW V=0x3f0C=4E=7f->00c8`
+    - `004e:IFUB A=09V=02C=0E=42->0095`
+    - `0054:IFUB A=c1V=20C=6E=13->006c`
+    - `0067:MESSAGE 40010b`
+    - `006a:JMPF ->0094`
+    - `0079:MESSAGE 400108`
+    - `007c:REQEW`
+    - `008c:MESSAGE 40010a`
+    - `008f:BITON 30/c1#5`
+    - `0093:JMPF ->00c2`
+    - `0095:IFUB A=08V=00C=0E=17->00b1`
+    - `00a8:MESSAGE 400107`
+    - `00ab:SETBYTE 50/08=0x1`
+    - `00af:JMPF ->00c2`
+    - `00be:MESSAGE 40010c`
+    - `00c5:JMPFL`
+    - `00c8:IFSW V=0x20bC=4E=37->0106`
+    - `00e4:MESSAGE 400105`
+    - `00eb:JMPFL`
+    - `00ee:JMPF ->0107`
+    - `00fd:MESSAGE 400104`
+    - `0104:JMPF ->01fd`
+    - `0106:IFUB A=aaV=40C=6E=52->015d`
+    - `010c:IFUB A=a1V=20C=6E=35->0146`
+    - `0112:IFUB A=a1V=40C=6E=18->012f`
+    - `0126:MESSAGE 400103`
+    - `012d:JMPF ->0145`
+    - `013d:MESSAGE 400102`
+    - `0144:JMPF ->015c`
+    - `0154:MESSAGE 400102`
+    - `015b:JMPF ->01fd`
+    - `016e:MESSAGE 400101`
+    - `0171:REQ`
+    - `019c:REQEW`
+    - `01b0:REQEW`
+    - `01d6:BITON 30/aa#6`
+    - `01dd:REQEW`
+    - `01e0:REQ`
+    - `01e9:IFSW V=0x3C=5E=06->01f6`
+    - `01f6:REQ`
+    - `01fc:RET`
+  - opcode counts: JMPFL:6->4
+
+#### SD vs CSR D2
+
+### CANON_2
+- D1 sha: 6871af990b1e8f66 dec=51856
+- D2 sha: 1d050fa8e1ba9b29 dec=51468
+- SD sha: 58ba91d34243d1c3 dec=51468
+
+#### SD vs CSR D1
+- **`cloud/0`** len 37->41 (f304fdbb5368->ba258b6fe1ed)
+  - D1:
+    - `0000:CHAR`
+    - `0002:PC`
+    - `0004:IFSW V=0x643C=3E=15->0020`
+    - `000c:IFSW V=0x640C=3E=0d->0020`
+    - `0014:IFUB A=83V=02C=10E=07->0020`
+    - `001a:TLKON`
+    - `001c:SOLID`
+    - `001e:VISI`
+    - `0020:RET`
+    - `0021:SLIDR`
+    - `0024:RET`
+  - SD:
+    - `0000:CHAR`
+    - `0002:PC`
+    - `0004:IFSW V=0x643C=3E=15->0020`
+    - `000c:IFSW V=0x640C=3E=0d->0020`
+    - `0014:IFUB A=83V=02C=10E=07->0020`
+    - `001a:TLKON`
+    - `001c:SOLID`
+    - `001e:VISI`
+    - `0020:RET`
+    - `0021:SLIDR`
+    - `0024:RET`
+    - `0025:VISI`
+    - `0027:VISI`
+- **`cloud/31`** len 4->3 (9703830fb6c2->bcb38be884ac)
+  - D1:
+    - `0000:DFANM`
+    - `0003:RET`
+  - SD:
+    - `0000:VISI`
+    - `0002:RET`
+- `cloud/9` only in SD len=4
+- **`hojyo/31`** len 1172->1210 (096c58d89ddb->fcef578eb0e9)
+  - D1 interesting (95):
+    - `0012:REQEW`
+    - `0025:MESSAGE 400075`
+    - `0032:MESSAGE 400076`
+    - `003f:MESSAGE 400077`
+    - `0042:REQSW`
+    - `0052:MESSAGE 400078`
+    - `0058:REQSW`
+    - `0065:MESSAGE 400079`
+    - `0075:MESSAGE 40007a`
+    - `0082:MESSAGE 40007b`
+    - `0088:REQSW`
+    - `0095:MESSAGE 40007c`
+    - `00a5:MESSAGE 40007d`
+    - `00a8:REQSW`
+    - `00b5:MESSAGE 40007e`
+    - `00c2:MESSAGE 40007f`
+    - `00e4:MESSAGE 400080`
+    - `0100:MESSAGE 400081`
+    - `0106:REQSW`
+    - `0116:MESSAGE 400082`
+    - `0119:REQEW`
+    - `0126:MESSAGE 400083`
+    - `0133:MESSAGE 400084`
+    - `0136:MUSIC id=2`
+    - `0146:REQSW`
+    - `0156:MESSAGE 400085`
+    - `015c:REQSW`
+    - `015f:REQEW`
+    - `016c:MESSAGE 400086`
+    - `017c:MESSAGE 400087`
+    - `017f:IFUB A=0aV=07C=0E=04->0188`
+    - `0188:IFUB A=0bV=07C=0E=04->0191`
+    - `0191:JMPF ->019a`
+    - `01a3:MESSAGE 400088`
+    - `01a6:REQSW`
+    - `01b6:MESSAGE 400089`
+    - `01c6:MESSAGE 40008a`
+    - `01cc:REQEW`
+    - `01d9:MESSAGE 40008b`
+    - `01dc:REQEW`
+    - `01e9:MESSAGE 40008c`
+    - `01ec:REQSW`
+    - `0205:MESSAGE 40008e`
+    - `020b:REQEW`
+    - `0218:MESSAGE 40008d`
+    - `0236:MESSAGE 40008f`
+    - `0239:MUSIC id=3`
+    - `024e:MUSIC id=1`
+    - `0250:REQEW`
+    - `025d:MESSAGE 400090`
+    - `0260:BITOFF f0/83#7`
+    - `0271:MESSAGE 400091`
+    - `0281:MESSAGE 400092`
+    - `0287:MUSIC id=1`
+    - `0295:MESSAGE 400093`
+    - `0298:REQSW`
+    - `029b:PREQ`
+    - `02b4:REQSW`
+    - `02b7:REQSW`
+    - `02ba:MUSIC id=3`
+    - `02c2:BITON f0/80#4`
+    - `02c6:SETWORD 20/00=0x644`
+    - `02e7:MUSIC id=3`
+    - `031b:MESSAGE 400094`
+    - `0321:REQEW`
+    - `0324:IFUB A=0aV=08C=0E=0d->0336`
+    - `0334:JMPF ->0341`
+    - `0340:MESSAGE 400095`
+    - `0346:REQEW`
+    - `0349:IFUB A=0aV=07C=0E=0d->035b`
+    - `0359:JMPF ->0366`
+    - `0365:MESSAGE 400096`
+    - `036b:REQEW`
+    - `036e:IFUB A=0aV=02C=0E=0d->0380`
+    - `037e:JMPF ->038b`
+    - `038a:MESSAGE 400097`
+    - `0390:REQEW`
+    - `0393:IFUB A=0aV=04C=0E=0d->03a5`
+    - `03a3:JMPF ->03b0`
+    - `03af:MESSAGE 400098`
+    - ... +15
+  - SD interesting (98):
+    - `0002:REQEW`
+    - `0017:REQEW`
+    - `002a:MESSAGE 400075`
+    - `0037:MESSAGE 400076`
+    - `0044:MESSAGE 400077`
+    - `0047:REQSW`
+    - `0057:MESSAGE 400078`
+    - `005d:REQSW`
+    - `006a:MESSAGE 400079`
+    - `007a:MESSAGE 40007a`
+    - `0087:MESSAGE 40007b`
+    - `008d:REQSW`
+    - `009a:MESSAGE 40007c`
+    - `00aa:MESSAGE 40007d`
+    - `00ad:REQSW`
+    - `00ba:MESSAGE 40007e`
+    - `00c7:MESSAGE 40007f`
+    - `00e9:MESSAGE 400080`
+    - `0105:MESSAGE 400081`
+    - `010b:REQSW`
+    - `011b:MESSAGE 400082`
+    - `011e:REQEW`
+    - `012b:MESSAGE 400083`
+    - `0138:MESSAGE 400084`
+    - `013b:MUSIC id=2`
+    - `014b:REQSW`
+    - `015b:MESSAGE 400085`
+    - `0161:REQSW`
+    - `0164:REQEW`
+    - `0171:MESSAGE 400086`
+    - `0181:MESSAGE 400087`
+    - `0184:IFUBL`
+    - `018e:IFUB A=0bV=07C=0E=04->0197`
+    - `0197:JMPF ->01a0`
+    - `01a9:MESSAGE 400088`
+    - `01ac:REQSW`
+    - `01bc:MESSAGE 400089`
+    - `01cc:MESSAGE 40008a`
+    - `01d2:REQEW`
+    - `01df:MESSAGE 40008b`
+    - `01e2:REQEW`
+    - `01ef:MESSAGE 40008c`
+    - `01f2:REQSW`
+    - `020b:MESSAGE 40008e`
+    - `0211:REQEW`
+    - `021e:MESSAGE 40008d`
+    - `023c:MESSAGE 40008f`
+    - `023f:MUSIC id=3`
+    - `0254:MUSIC id=1`
+    - `0256:REQEW`
+    - `0263:MESSAGE 400090`
+    - `0266:BITOFF f0/83#7`
+    - `0277:MESSAGE 400091`
+    - `0287:MESSAGE 400092`
+    - `028d:MUSIC id=1`
+    - `029b:MESSAGE 400093`
+    - `029e:REQSW`
+    - `02a1:PREQ`
+    - `02ba:REQSW`
+    - `02bd:REQSW`
+    - `02c0:MUSIC id=3`
+    - `02c8:BITON f0/80#4`
+    - `02cc:SETWORD 20/00=0x644`
+    - `02ed:MUSIC id=3`
+    - `0321:MESSAGE 400094`
+    - `0327:REQEW`
+    - `032a:IFUB A=0aV=08C=0E=0d->033c`
+    - `033a:JMPF ->0347`
+    - `0346:MESSAGE 400095`
+    - `034c:REQEW`
+    - `034f:IFUB A=0aV=07C=0E=0d->0361`
+    - `035f:JMPF ->036c`
+    - `036b:MESSAGE 400096`
+    - `0371:REQEW`
+    - `0374:IFUB A=0aV=02C=0E=0d->0386`
+    - `0384:JMPF ->0391`
+    - `0390:MESSAGE 400097`
+    - `0396:REQEW`
+    - `0399:IFUB A=0aV=04C=0E=0d->03ab`
+    - `03a9:JMPF ->03b6`
+    - ... +18
+  - opcode counts: AKAO:14->15, IFUB:9->8, IFUBL:0->1, MAPJUMP:1->2, MULCK:0->1, REQEW:15->16, SETWORD:1->2, WAIT:7->8
+
+#### SD vs CSR D2
+
+### CONVIL_2
+- D1 sha: 0c1d10ae5193b6cb dec=47560
+- D2 sha: a6293553605da37a dec=46916
+- SD sha: 2289ba0570c4666a dec=46916
+
+#### SD vs CSR D1
+- **`cid/11`** len 46->50 (4cddd7951fcd->71f9a0e1155b)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:SOUND`
+    - `0013:REQEW`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:MOVE`
+    - `0022:SOUND`
+    - `0027:REQEW`
+    - `002a:REQEW`
+    - `002d:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:SOUND`
+    - `0013:REQEW`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:MSPED`
+    - `0020:MOVE`
+    - `0026:SOUND`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:RET`
+- **`cloud/11`** len 46->50 (4cddd7951fcd->71f9a0e1155b)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:SOUND`
+    - `0013:REQEW`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:MOVE`
+    - `0022:SOUND`
+    - `0027:REQEW`
+    - `002a:REQEW`
+    - `002d:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:SOUND`
+    - `0013:REQEW`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:MSPED`
+    - `0020:MOVE`
+    - `0026:SOUND`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:RET`
+- **`event/10`** len 430->432 (37bd47d58109->34ba7662e591)
+  - D1 interesting (70):
+    - `0000:IFUBL`
+    - `0011:MESSAGE 400115`
+    - `0019:REQEW`
+    - `001c:JMPF ->002f`
+    - `0021:REQEW`
+    - `0024:JMPF ->002f`
+    - `0029:REQEW`
+    - `002c:JMPF ->002f`
+    - `002e:REQEW`
+    - `0038:IFSW V=0x1C=0E=07->0046`
+    - `0044:JMPF ->0135`
+    - `0046:IFSW V=0x2C=0E=07->0054`
+    - `0052:JMPF ->0135`
+    - `0054:IFSW V=0x13C=3E=67->00c2`
+    - `005c:IFUB A=a9V=02C=0E=13->0074`
+    - `0062:IFUB A=abV=0fC=2E=07->006e`
+    - `006c:JMPF ->0073`
+    - `0072:JMPF ->00c1`
+    - `0074:IFUB A=a9V=03C=0E=13->008c`
+    - `007a:IFUB A=abV=14C=2E=07->0086`
+    - `0084:JMPF ->008b`
+    - `008a:JMPF ->00c1`
+    - `008c:IFUB A=a9V=04C=0E=13->00a4`
+    - `0092:IFUB A=abV=19C=2E=07->009e`
+    - `009c:JMPF ->00a3`
+    - `00a2:JMPF ->00c1`
+    - `00a4:IFUB A=a9V=05C=0E=13->00bc`
+    - `00aa:IFUB A=abV=19C=2E=07->00b6`
+    - `00b4:JMPF ->00bb`
+    - `00ba:JMPF ->00c1`
+    - `00c0:JMPF ->0135`
+    - `00c2:IFSW V=0x19C=3E=67->0130`
+    - `00ca:IFUB A=a9V=02C=0E=13->00e2`
+    - `00d0:IFUB A=abV=0fC=2E=07->00dc`
+    - `00da:JMPF ->00e1`
+    - `00e0:JMPF ->012f`
+    - `00e2:IFUB A=a9V=03C=0E=13->00fa`
+    - `00e8:IFUB A=abV=14C=2E=07->00f4`
+    - `00f2:JMPF ->00f9`
+    - `00f8:JMPF ->012f`
+    - `00fa:IFUB A=a9V=04C=0E=13->0112`
+    - `0100:IFUB A=abV=19C=2E=07->010c`
+    - `010a:JMPF ->0111`
+    - `0110:JMPF ->012f`
+    - `0112:IFUB A=a9V=05C=0E=13->012a`
+    - `0118:IFUB A=abV=19C=2E=07->0124`
+    - `0122:JMPF ->0129`
+    - `0128:JMPF ->012f`
+    - `012e:JMPF ->0135`
+    - `0137:MUSIC id=0`
+    - `013c:REQEW`
+    - `013f:JMPF ->0152`
+    - `0144:REQEW`
+    - `0147:JMPF ->0152`
+    - `014c:REQEW`
+    - `014f:JMPF ->0152`
+    - `0151:IFSW V=0x1C=6E=18->0170`
+    - `0159:REQEW`
+    - `0166:MESSAGE 400117`
+    - `016e:JMPF ->0180`
+    - `017a:MESSAGE 400116`
+    - `017f:JMPFL`
+    - `0182:REQ`
+    - `0188:IFUB A=a9V=05C=2E=05->0192`
+    - `018e:SETBYTE 10/a9=0x5`
+    - `019c:MESSAGE 400114`
+    - `01a1:REQEW`
+    - `01a4:SETWORD 22/ad=0x0`
+    - `01a9:SETBYTE 10/ac=0x0`
+    - `01ad:RET`
+  - SD interesting (71):
+    - `0000:IFUBL`
+    - `0007:JMPF ->0019`
+    - `0013:MESSAGE 400115`
+    - `001b:REQEW`
+    - `001e:JMPF ->0031`
+    - `0023:REQEW`
+    - `0026:JMPF ->0031`
+    - `002b:REQEW`
+    - `002e:JMPF ->0031`
+    - `0030:REQEW`
+    - `003a:IFSW V=0x1C=0E=07->0048`
+    - `0046:JMPF ->0137`
+    - `0048:IFSW V=0x2C=0E=07->0056`
+    - `0054:JMPF ->0137`
+    - `0056:IFSW V=0x13C=3E=67->00c4`
+    - `005e:IFUB A=a9V=02C=0E=13->0076`
+    - `0064:IFUB A=abV=0fC=2E=07->0070`
+    - `006e:JMPF ->0075`
+    - `0074:JMPF ->00c3`
+    - `0076:IFUB A=a9V=03C=0E=13->008e`
+    - `007c:IFUB A=abV=14C=2E=07->0088`
+    - `0086:JMPF ->008d`
+    - `008c:JMPF ->00c3`
+    - `008e:IFUB A=a9V=04C=0E=13->00a6`
+    - `0094:IFUB A=abV=19C=2E=07->00a0`
+    - `009e:JMPF ->00a5`
+    - `00a4:JMPF ->00c3`
+    - `00a6:IFUB A=a9V=05C=0E=13->00be`
+    - `00ac:IFUB A=abV=19C=2E=07->00b8`
+    - `00b6:JMPF ->00bd`
+    - `00bc:JMPF ->00c3`
+    - `00c2:JMPF ->0137`
+    - `00c4:IFSW V=0x19C=3E=67->0132`
+    - `00cc:IFUB A=a9V=02C=0E=13->00e4`
+    - `00d2:IFUB A=abV=0fC=2E=07->00de`
+    - `00dc:JMPF ->00e3`
+    - `00e2:JMPF ->0131`
+    - `00e4:IFUB A=a9V=03C=0E=13->00fc`
+    - `00ea:IFUB A=abV=14C=2E=07->00f6`
+    - `00f4:JMPF ->00fb`
+    - `00fa:JMPF ->0131`
+    - `00fc:IFUB A=a9V=04C=0E=13->0114`
+    - `0102:IFUB A=abV=19C=2E=07->010e`
+    - `010c:JMPF ->0113`
+    - `0112:JMPF ->0131`
+    - `0114:IFUB A=a9V=05C=0E=13->012c`
+    - `011a:IFUB A=abV=19C=2E=07->0126`
+    - `0124:JMPF ->012b`
+    - `012a:JMPF ->0131`
+    - `0130:JMPF ->0137`
+    - `0139:MUSIC id=0`
+    - `013e:REQEW`
+    - `0141:JMPF ->0154`
+    - `0146:REQEW`
+    - `0149:JMPF ->0154`
+    - `014e:REQEW`
+    - `0151:JMPF ->0154`
+    - `0153:IFSW V=0x1C=6E=18->0172`
+    - `015b:REQEW`
+    - `0168:MESSAGE 400117`
+    - `0170:JMPF ->0182`
+    - `017c:MESSAGE 400116`
+    - `0181:JMPFL`
+    - `0184:REQ`
+    - `018a:IFUB A=a9V=05C=2E=05->0194`
+    - `0190:SETBYTE 10/a9=0x5`
+    - `019e:MESSAGE 400114`
+    - `01a3:REQEW`
+    - `01a6:SETWORD 22/ad=0x0`
+    - `01ab:SETBYTE 10/ac=0x0`
+    - `01af:RET`
+  - opcode counts: JMPF:27->28
+- **`event/31`** len 337->345 (0f7047e8a98d->5ae53db9e92c)
+  - D1:
+    - `0000:IFUB A=acV=00C=1E=c7->00cc`
+    - `0006:WSIZW`
+    - `0010:MESSAGE 400115`
+    - `0013:WREST`
+    - `0015:IFPRTYQ`
+    - `0018:REQEW`
+    - `001b:JMPF ->002e`
+    - `001d:IFPRTYQ`
+    - `0020:REQEW`
+    - `0023:JMPF ->002e`
+    - `0025:IFPRTYQ`
+    - `0028:REQEW`
+    - `002b:JMPF ->002e`
+    - `002d:BTMD2`
+    - `0032:BMUSC`
+    - `0034:BATTLE`
+    - `0038:BTRLD`
+    - `003b:IFPRTYQ`
+    - `003e:REQEW`
+    - `0041:JMPF ->0054`
+    - `0043:IFPRTYQ`
+    - `0046:REQEW`
+    - `0049:JMPF ->0054`
+    - `004b:IFPRTYQ`
+    - `004e:REQEW`
+    - `0051:JMPF ->0054`
+    - `0053:IFSW V=0x1C=6E=6e->00c8`
+    - `005b:AKAO`
+    - `0069:IFPRTYQ`
+    - `006c:REQEW`
+    - `006f:JMPF ->0082`
+    - `0071:IFPRTYQ`
+    - `0074:REQEW`
+    - `0077:JMPF ->0082`
+    - `0079:IFPRTYQ`
+    - `007c:REQEW`
+    - `007f:JMPF ->0082`
+    - `0081:SETBYTE d0/51=0x1`
+    - `0085:REQ`
+    - `0088:WSIZW`
+    - `0092:MESSAGE 40012b`
+    - `0095:WREST`
+    - `0097:MUSIC id=3`
+    - `0099:AKAO`
+    - `00a7:FADE`
+    - `00b0:REQEW`
+    - `00b3:FADEW`
+    - `00b4:SETBYTE 10/a6=0xff`
+    - `00b8:OR`
+    - `00bc:MAPJUMP #354`
+    - `00c6:JMPF ->00cb`
+    - `00c8:JMPF ->00cd`
+    - `00ca:JMPF ->014d`
+    - `00cc:REQ`
+    - `00cf:WSIZW`
+    - `00d9:MESSAGE 40012c`
+    - `00dc:WREST`
+    - `00de:REQEW`
+    - `00e1:WSIZW`
+    - `00eb:MESSAGE 40012d`
+    - `00ee:WREST`
+    - `00f0:AKAO2`
+    - `00ff:PMVIE id=33`
+    - `0101:WAIT`
+    - `0104:MOVIE`
+    - `0105:MUSIC id=0`
+    - `0107:AKAO2`
+    - `0116:SETBYTE 50/0c=0x1`
+    - `011a:OR`
+    - `011e:SETBYTE d0/51=0x1`
+    - `0122:WSIZW`
+    - `012c:MESSAGE 40012e`
+    - `012f:WREST`
+    - `0131:REQ`
+    - `0134:WSIZW`
+    - `013e:MESSAGE 40012f`
+    - `0141:WREST`
+    - `0143:REQEW`
+    - `0146:REQEW`
+    - `0149:REQEW`
+    - `014c:SETBYTE 10/ac=0x0`
+    - `0150:RET`
+  - SD:
+    - `0000:IFUB A=acV=00C=1E=cf->00d4`
+    - `0006:JMPF ->0018`
+    - `0008:WSIZW`
+    - `0012:MESSAGE 400115`
+    - `0015:WREST`
+    - `0017:IFPRTYQ`
+    - `001a:REQEW`
+    - `001d:JMPF ->0030`
+    - `001f:IFPRTYQ`
+    - `0022:REQEW`
+    - `0025:JMPF ->0030`
+    - `0027:IFPRTYQ`
+    - `002a:REQEW`
+    - `002d:JMPF ->0030`
+    - `002f:BTMD2`
+    - `0034:BMUSC`
+    - `0036:BATTLE`
+    - `003a:BTRLD`
+    - `003d:IFPRTYQ`
+    - `0040:REQEW`
+    - `0043:JMPF ->0056`
+    - `0045:IFPRTYQ`
+    - `0048:REQEW`
+    - `004b:JMPF ->0056`
+    - `004d:IFPRTYQ`
+    - `0050:REQEW`
+    - `0053:JMPF ->0056`
+    - `0055:IFSW V=0x1C=6E=74->00d0`
+    - `005d:AKAO`
+    - `006b:JMPF ->009c`
+    - `006d:IFPRTYQ`
+    - `0070:REQEW`
+    - `0073:JMPF ->0086`
+    - `0075:IFPRTYQ`
+    - `0078:REQEW`
+    - `007b:JMPF ->0086`
+    - `007d:IFPRTYQ`
+    - `0080:REQEW`
+    - `0083:JMPF ->0086`
+    - `0085:SETBYTE d0/51=0x1`
+    - `0089:REQ`
+    - `008c:WSIZW`
+    - `0096:MESSAGE 40012b`
+    - `0099:WREST`
+    - `009b:SETBYTE d0/51=0x1`
+    - `009f:MUSIC id=3`
+    - `00a1:AKAO`
+    - `00af:FADE`
+    - `00b8:REQEW`
+    - `00bb:FADEW`
+    - `00bc:SETBYTE 10/a6=0xff`
+    - `00c0:OR`
+    - `00c4:MAPJUMP #354`
+    - `00ce:JMPF ->00d3`
+    - `00d0:JMPF ->00d5`
+    - `00d2:JMPF ->0155`
+    - `00d4:REQ`
+    - `00d7:WSIZW`
+    - `00e1:MESSAGE 40012c`
+    - `00e4:WREST`
+    - `00e6:REQEW`
+    - `00e9:WSIZW`
+    - `00f3:MESSAGE 40012d`
+    - `00f6:WREST`
+    - `00f8:AKAO2`
+    - `0107:PMVIE id=33`
+    - `0109:WAIT`
+    - `010c:MOVIE`
+    - `010d:MUSIC id=0`
+    - `010f:AKAO2`
+    - `011e:SETBYTE 50/0c=0x1`
+    - `0122:OR`
+    - `0126:SETBYTE d0/51=0x1`
+    - `012a:WSIZW`
+    - `0134:MESSAGE 40012e`
+    - `0137:WREST`
+    - `0139:REQ`
+    - `013c:WSIZW`
+    - `0146:MESSAGE 40012f`
+    - `0149:WREST`
+    - `014b:REQEW`
+    - `014e:REQEW`
+    - `0151:REQEW`
+    - `0154:SETBYTE 10/ac=0x0`
+    - `0158:RET`
+- **`event/9`** len 170->172 (55dc75d553b4->c4cff9f2e399)
+  - D1:
+    - `0000:IFUB A=acV=00C=1E=83->0088`
+    - `0006:WSIZW`
+    - `0010:MESSAGE 400115`
+    - `0013:WREST`
+    - `0015:IFPRTYQ`
+    - `0018:REQEW`
+    - `001b:JMPF ->002e`
+    - `001d:IFPRTYQ`
+    - `0020:REQEW`
+    - `0023:JMPF ->002e`
+    - `0025:IFPRTYQ`
+    - `0028:REQEW`
+    - `002b:JMPF ->002e`
+    - `002d:BTMD2`
+    - `0032:BMUSC`
+    - `0034:BATTLE`
+    - `0038:BTRLD`
+    - `003b:MUSIC id=0`
+    - `003d:IFPRTYQ`
+    - `0040:REQEW`
+    - `0043:JMPF ->0056`
+    - `0045:IFPRTYQ`
+    - `0048:REQEW`
+    - `004b:JMPF ->0056`
+    - `004d:IFPRTYQ`
+    - `0050:REQEW`
+    - `0053:JMPF ->0056`
+    - `0055:IFSW V=0x1C=6E=18->0074`
+    - `005d:REQEW`
+    - `0060:WSIZW`
+    - `006a:MESSAGE 400117`
+    - `006d:WREST`
+    - `006f:INC!`
+    - `0072:JMPF ->0087`
+    - `0074:INC`
+    - `0077:WSIZW`
+    - `0081:MESSAGE 400116`
+    - `0084:WREST`
+    - `0086:JMPF ->00a1`
+    - `0088:REQ`
+    - `008b:INC`
+    - `008e:WSIZW`
+    - `0098:MESSAGE 400114`
+    - `009b:WREST`
+    - `009d:REQEW`
+    - `00a0:SETWORD 22/ad=0x0`
+    - `00a5:SETBYTE 10/ac=0x0`
+    - `00a9:RET`
+  - SD:
+    - `0000:IFUB A=acV=00C=1E=85->008a`
+    - `0006:JMPF ->0018`
+    - `0008:WSIZW`
+    - `0012:MESSAGE 400115`
+    - `0015:WREST`
+    - `0017:IFPRTYQ`
+    - `001a:REQEW`
+    - `001d:JMPF ->0030`
+    - `001f:IFPRTYQ`
+    - `0022:REQEW`
+    - `0025:JMPF ->0030`
+    - `0027:IFPRTYQ`
+    - `002a:REQEW`
+    - `002d:JMPF ->0030`
+    - `002f:BTMD2`
+    - `0034:BMUSC`
+    - `0036:BATTLE`
+    - `003a:BTRLD`
+    - `003d:MUSIC id=0`
+    - `003f:IFPRTYQ`
+    - `0042:REQEW`
+    - `0045:JMPF ->0058`
+    - `0047:IFPRTYQ`
+    - `004a:REQEW`
+    - `004d:JMPF ->0058`
+    - `004f:IFPRTYQ`
+    - `0052:REQEW`
+    - `0055:JMPF ->0058`
+    - `0057:IFSW V=0x1C=6E=18->0076`
+    - `005f:REQEW`
+    - `0062:WSIZW`
+    - `006c:MESSAGE 400117`
+    - `006f:WREST`
+    - `0071:INC!`
+    - `0074:JMPF ->0089`
+    - `0076:INC`
+    - `0079:WSIZW`
+    - `0083:MESSAGE 400116`
+    - `0086:WREST`
+    - `0088:JMPF ->00a3`
+    - `008a:REQ`
+    - `008d:INC`
+    - `0090:WSIZW`
+    - `009a:MESSAGE 400114`
+    - `009d:WREST`
+    - `009f:REQEW`
+    - `00a2:SETWORD 22/ad=0x0`
+    - `00a7:SETBYTE 10/ac=0x0`
+    - `00ab:RET`
+- **`mihari/1`** len 1676->1679 (2add90ed39cb->7cfa34e4fa5d)
+  - D1 interesting (247):
+    - `0004:IFUB A=0cV=00C=1E=06->000f`
+    - `000e:RET`
+    - `001c:JMPF ->003d`
+    - `002b:JMPF ->003d`
+    - `003a:JMPF ->003d`
+    - `003c:SETBYTE 10/a9=0x1`
+    - `0040:IFUB A=a7V=01C=3E=03->0048`
+    - `0046:JMPF ->007d`
+    - `0048:IFUB A=a7V=03C=3E=07->0054`
+    - `004e:SETBYTE 10/a9=0x1`
+    - `0052:JMPF ->007d`
+    - `0054:IFUB A=a7V=06C=3E=07->0060`
+    - `005a:SETBYTE 10/a9=0x2`
+    - `005e:JMPF ->007d`
+    - `0060:IFUB A=a7V=09C=3E=07->006c`
+    - `0066:SETBYTE 10/a9=0x3`
+    - `006a:JMPF ->007d`
+    - `006c:IFUB A=a7V=0cC=3E=07->0078`
+    - `0072:SETBYTE 10/a9=0x4`
+    - `0076:JMPF ->007d`
+    - `0078:SETBYTE 10/a9=0x5`
+    - `007c:IFUBL`
+    - `0083:IFUB A=b1V=02C=6E=25->00ad`
+    - `0093:MESSAGE 400131`
+    - `00a6:MESSAGE 400133`
+    - `00ab:JMPF ->00d4`
+    - `00b7:MESSAGE 400132`
+    - `00bc:IFUB A=52V=05C=9E=03->00c4`
+    - `00c2:JMPF ->00d4`
+    - `00ce:MESSAGE 400133`
+    - `00d3:JMPFL`
+    - `00d6:IFUBL`
+    - `00dd:IFUB A=b1V=04C=6E=e6->01c8`
+    - `00e3:IFUB A=b1V=08C=6E=6b->0153`
+    - `00e9:SETBYTE 50/00=0x3`
+    - `00ed:IFUB A=00V=01C=1E=5f->0151`
+    - `00f3:SETBYTE 50/00=0x1`
+    - `0101:ASK 4805011f010300`
+    - `010a:IFUB A=00V=01C=0E=07->0116`
+    - `0114:JMPF ->0150`
+    - `0116:IFUB A=00V=02C=0E=2b->0146`
+    - `011c:REQEW`
+    - `011f:IFUB A=01V=00C=0E=1d->0141`
+    - `0125:SETWORD 60/08=0xfa0`
+    - `013a:MESSAGE 40011a`
+    - `013f:JMPF ->0145`
+    - `0141:REQEW`
+    - `0144:JMPF ->0150`
+    - `0146:IFUB A=00V=03C=0E=04->014f`
+    - `014c:REQEW`
+    - `0151:JMPF ->01c9`
+    - `0164:MESSAGE 40010b`
+    - `0169:REQEW`
+    - `016c:SETBYTE 50/00=0x1`
+    - `017a:ASK 4805011f010300`
+    - `0183:IFUB A=00V=01C=0E=07->018f`
+    - `018d:JMPF ->01c9`
+    - `018f:IFUB A=00V=02C=0E=2b->01bf`
+    - `0195:REQEW`
+    - `0198:IFUB A=01V=00C=0E=1d->01ba`
+    - `019e:SETWORD 60/08=0xfa0`
+    - `01b3:MESSAGE 40011a`
+    - `01b8:JMPF ->01be`
+    - `01ba:REQEW`
+    - `01bd:JMPF ->01c9`
+    - `01bf:IFUB A=00V=03C=0E=04->01c8`
+    - `01c5:REQEW`
+    - `01c8:IFUBL`
+    - `01cf:IFUBL`
+    - `01d6:REQEW`
+    - `01d9:JMPFL`
+    - `01dc:SETWORD 62/08=0x0`
+    - `01e6:SETWORD 66/0a=0x8`
+    - `01eb:SETBYTE 50/02=0x0`
+    - `01f4:IFSW V=0x0C=3E=03->01fe`
+    - `01fc:JMPF ->0204`
+    - `0203:IFSWL`
+    - `020c:IFSW V=0x46C=2E=36->0249`
+    - `0214:SETBYTE 55/01=0x2`
+    - `0218:SETBYTE 50/03=0x0`
+    - ... +167
+  - SD interesting (248):
+    - `0004:IFUB A=0cV=00C=1E=06->000f`
+    - `000e:RET`
+    - `001c:JMPF ->003d`
+    - `002b:JMPF ->003d`
+    - `003a:JMPF ->003d`
+    - `003c:SETBYTE 10/a9=0x1`
+    - `0040:IFUB A=a7V=01C=3E=03->0048`
+    - `0046:JMPF ->007d`
+    - `0048:IFUB A=a7V=03C=3E=07->0054`
+    - `004e:SETBYTE 10/a9=0x1`
+    - `0052:JMPF ->007d`
+    - `0054:IFUB A=a7V=06C=3E=07->0060`
+    - `005a:SETBYTE 10/a9=0x2`
+    - `005e:JMPF ->007d`
+    - `0060:IFUB A=a7V=09C=3E=07->006c`
+    - `0066:SETBYTE 10/a9=0x3`
+    - `006a:JMPF ->007d`
+    - `006c:IFUB A=a7V=0cC=3E=07->0078`
+    - `0072:SETBYTE 10/a9=0x4`
+    - `0076:JMPF ->007d`
+    - `0078:SETBYTE 10/a9=0x5`
+    - `007c:IFUBL`
+    - `0083:IFUB A=b1V=02C=6E=25->00ad`
+    - `0093:MESSAGE 400131`
+    - `00a6:MESSAGE 400133`
+    - `00ab:JMPF ->00d4`
+    - `00b7:MESSAGE 400132`
+    - `00bc:IFUB A=52V=05C=9E=03->00c4`
+    - `00c2:JMPF ->00d4`
+    - `00ce:MESSAGE 400133`
+    - `00d3:JMPFL`
+    - `00d6:IFUBL`
+    - `00dd:IFUB A=b1V=04C=6E=e9->01cb`
+    - `00e3:IFUB A=b1V=08C=6E=6b->0153`
+    - `00e9:SETBYTE 50/00=0x3`
+    - `00ed:IFUB A=00V=01C=1E=5f->0151`
+    - `00f3:SETBYTE 50/00=0x1`
+    - `0101:ASK 4805011f010300`
+    - `010a:IFUB A=00V=01C=0E=07->0116`
+    - `0114:JMPF ->0150`
+    - `0116:IFUB A=00V=02C=0E=2b->0146`
+    - `011c:REQEW`
+    - `011f:IFUB A=01V=00C=0E=1d->0141`
+    - `0125:SETWORD 60/08=0xfa0`
+    - `013a:MESSAGE 40011a`
+    - `013f:JMPF ->0145`
+    - `0141:REQEW`
+    - `0144:JMPF ->0150`
+    - `0146:IFUB A=00V=03C=0E=04->014f`
+    - `014c:REQEW`
+    - `0151:JMPF ->01cc`
+    - `015a:JMPFL`
+    - `0167:MESSAGE 40010b`
+    - `016c:REQEW`
+    - `016f:SETBYTE 50/00=0x1`
+    - `017d:ASK 4805011f010300`
+    - `0186:IFUB A=00V=01C=0E=07->0192`
+    - `0190:JMPF ->01cc`
+    - `0192:IFUB A=00V=02C=0E=2b->01c2`
+    - `0198:REQEW`
+    - `019b:IFUB A=01V=00C=0E=1d->01bd`
+    - `01a1:SETWORD 60/08=0xfa0`
+    - `01b6:MESSAGE 40011a`
+    - `01bb:JMPF ->01c1`
+    - `01bd:REQEW`
+    - `01c0:JMPF ->01cc`
+    - `01c2:IFUB A=00V=03C=0E=04->01cb`
+    - `01c8:REQEW`
+    - `01cb:IFUBL`
+    - `01d2:IFUBL`
+    - `01d9:REQEW`
+    - `01dc:JMPFL`
+    - `01df:SETWORD 62/08=0x0`
+    - `01e9:SETWORD 66/0a=0x8`
+    - `01ee:SETBYTE 50/02=0x0`
+    - `01f7:IFSW V=0x0C=3E=03->0201`
+    - `01ff:JMPF ->0207`
+    - `0206:IFSWL`
+    - `020f:IFSW V=0x46C=2E=36->024c`
+    - `0217:SETBYTE 55/01=0x2`
+    - ... +168
+  - opcode counts: JMPFL:9->10
+- **`tifa/11`** len 46->50 (4cddd7951fcd->71f9a0e1155b)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:SOUND`
+    - `0013:REQEW`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:MOVE`
+    - `0022:SOUND`
+    - `0027:REQEW`
+    - `002a:REQEW`
+    - `002d:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:SOUND`
+    - `0013:REQEW`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:MSPED`
+    - `0020:MOVE`
+    - `0026:SOUND`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:RET`
+
+#### SD vs CSR D2
+
+### COSMIN2
+- D1 sha: 6414979c0acd25c9 dec=17080
+- D2 sha: 6414979c0acd25c9 dec=17080
+- SD sha: ad1e2a047a4117b1 dec=17080
+
+#### SD vs CSR D1
+- `OYAJI/0` only in D1 len=38
+- `OYAJI/1` only in D1 len=325
+- `OYAJI/2` only in D1 len=1
+- `OYAJI/31` only in D1 len=317
+- **`cid/31`** len 1->682 (6e340b9cffb3->295332e365d1)
+  - D1 interesting (1):
+    - `0000:RET`
+  - SD interesting (74):
+    - `0000:RET`
+    - `0018:RET`
+    - `001c:IFUB A=a1V=02C=6E=05->0026`
+    - `0022:SETBYTE 50/04=0x1`
+    - `0026:RET`
+    - `002b:IFSW V=0x3f0C=4E=50->0082`
+    - `0033:IFUB A=02V=00C=0E=34->006c`
+    - `0043:MESSAGE 400107`
+    - `0058:MESSAGE 400108`
+    - `005b:SETBYTE 50/02=0x1`
+    - `005f:SETBYTE 50/04=0x1`
+    - `006a:JMPF ->0081`
+    - `0076:MESSAGE 400108`
+    - `0080:JMPF ->0165`
+    - `0082:IFUB A=02V=00C=0E=ad->0134`
+    - `0088:IFUB A=a1V=02C=6E=27->00b4`
+    - `00a0:MESSAGE 400106`
+    - `00a3:SETBYTE 50/02=0x1`
+    - `00a7:SETBYTE 50/04=0x1`
+    - `00b2:JMPF ->0133`
+    - `00b7:IFUB A=01V=00C=0E=14->00d0`
+    - `00c7:MESSAGE 400101`
+    - `00ca:SETBYTE 50/01=0x1`
+    - `00ce:JMPF ->0133`
+    - `00d0:SETBYTE 50/03=0x0`
+    - `00de:ASK 48050102010203`
+    - `00e5:IFUB A=03V=01C=0E=35->011f`
+    - `00f5:MESSAGE 400104`
+    - `010d:MESSAGE 400105`
+    - `0110:BITON 30/a1#1`
+    - `0114:SETBYTE 50/02=0x1`
+    - `011f:IFUB A=03V=02C=0E=0e->0132`
+    - `012f:MESSAGE 400103`
+    - `0132:JMPF ->0165`
+    - `0134:IFUB A=04V=00C=0E=17->0150`
+    - `0144:MESSAGE 400105`
+    - `014e:JMPF ->0165`
+    - `015a:MESSAGE 400106`
+    - `016b:RET`
+    - `016c:RET`
+    - `016d:IFSW V=0x3f0C=4E=50->01c4`
+    - `0175:IFUB A=02V=00C=0E=34->01ae`
+    - `0185:MESSAGE 400107`
+    - `019a:MESSAGE 400108`
+    - `019d:SETBYTE 50/02=0x1`
+    - `01a1:SETBYTE 50/04=0x1`
+    - `01ac:JMPF ->01c3`
+    - `01b8:MESSAGE 400108`
+    - `01c2:JMPF ->02a7`
+    - `01c4:IFUB A=02V=00C=0E=ad->0276`
+    - `01ca:IFUB A=a1V=02C=6E=27->01f6`
+    - `01e2:MESSAGE 400106`
+    - `01e5:SETBYTE 50/02=0x1`
+    - `01e9:SETBYTE 50/04=0x1`
+    - `01f4:JMPF ->0275`
+    - `01f9:IFUB A=01V=00C=0E=14->0212`
+    - `0209:MESSAGE 400101`
+    - `020c:SETBYTE 50/01=0x1`
+    - `0210:JMPF ->0275`
+    - `0212:SETBYTE 50/03=0x0`
+    - `0220:ASK 48050102010203`
+    - `0227:IFUB A=03V=01C=0E=35->0261`
+    - `0237:MESSAGE 400104`
+    - `024f:MESSAGE 400105`
+    - `0252:BITON 30/a1#1`
+    - `0256:SETBYTE 50/02=0x1`
+    - `0261:IFUB A=03V=02C=0E=0e->0274`
+    - `0271:MESSAGE 400103`
+    - `0274:JMPF ->02a7`
+    - `0276:IFUB A=04V=00C=0E=17->0292`
+    - `0286:MESSAGE 400105`
+    - `0290:JMPF ->02a7`
+    - `029c:MESSAGE 400106`
+    - `02a9:RET`
+  - opcode counts: ANIM!2:0->6, ASK:0->2, BITON:0->2, CHAR:0->1, DFANM:0->1, DIR:0->1, IFSW:0->2, IFUB:0->15, JMPF:0->12, MENU:0->12, MENU2:0->2, MESSAGE:0->20, RET:1->6, SETBYTE:0->15, SOLID:0->1, SOUND:0->6, TALKR:0->1, TLKON:0->1, UC:0->2, WAIT:0->18, WINDOW:0->22, XYZI:0->1
+
+#### SD vs CSR D2
+- `OYAJI/0` only in D2 len=38
+- `OYAJI/1` only in D2 len=325
+- `OYAJI/2` only in D2 len=1
+- `OYAJI/31` only in D2 len=317
+- **`cid/31`** len 1->682 (6e340b9cffb3->295332e365d1)
+  - D2 interesting (1):
+    - `0000:RET`
+  - SD interesting (74):
+    - `0000:RET`
+    - `0018:RET`
+    - `001c:IFUB A=a1V=02C=6E=05->0026`
+    - `0022:SETBYTE 50/04=0x1`
+    - `0026:RET`
+    - `002b:IFSW V=0x3f0C=4E=50->0082`
+    - `0033:IFUB A=02V=00C=0E=34->006c`
+    - `0043:MESSAGE 400107`
+    - `0058:MESSAGE 400108`
+    - `005b:SETBYTE 50/02=0x1`
+    - `005f:SETBYTE 50/04=0x1`
+    - `006a:JMPF ->0081`
+    - `0076:MESSAGE 400108`
+    - `0080:JMPF ->0165`
+    - `0082:IFUB A=02V=00C=0E=ad->0134`
+    - `0088:IFUB A=a1V=02C=6E=27->00b4`
+    - `00a0:MESSAGE 400106`
+    - `00a3:SETBYTE 50/02=0x1`
+    - `00a7:SETBYTE 50/04=0x1`
+    - `00b2:JMPF ->0133`
+    - `00b7:IFUB A=01V=00C=0E=14->00d0`
+    - `00c7:MESSAGE 400101`
+    - `00ca:SETBYTE 50/01=0x1`
+    - `00ce:JMPF ->0133`
+    - `00d0:SETBYTE 50/03=0x0`
+    - `00de:ASK 48050102010203`
+    - `00e5:IFUB A=03V=01C=0E=35->011f`
+    - `00f5:MESSAGE 400104`
+    - `010d:MESSAGE 400105`
+    - `0110:BITON 30/a1#1`
+    - `0114:SETBYTE 50/02=0x1`
+    - `011f:IFUB A=03V=02C=0E=0e->0132`
+    - `012f:MESSAGE 400103`
+    - `0132:JMPF ->0165`
+    - `0134:IFUB A=04V=00C=0E=17->0150`
+    - `0144:MESSAGE 400105`
+    - `014e:JMPF ->0165`
+    - `015a:MESSAGE 400106`
+    - `016b:RET`
+    - `016c:RET`
+    - `016d:IFSW V=0x3f0C=4E=50->01c4`
+    - `0175:IFUB A=02V=00C=0E=34->01ae`
+    - `0185:MESSAGE 400107`
+    - `019a:MESSAGE 400108`
+    - `019d:SETBYTE 50/02=0x1`
+    - `01a1:SETBYTE 50/04=0x1`
+    - `01ac:JMPF ->01c3`
+    - `01b8:MESSAGE 400108`
+    - `01c2:JMPF ->02a7`
+    - `01c4:IFUB A=02V=00C=0E=ad->0276`
+    - `01ca:IFUB A=a1V=02C=6E=27->01f6`
+    - `01e2:MESSAGE 400106`
+    - `01e5:SETBYTE 50/02=0x1`
+    - `01e9:SETBYTE 50/04=0x1`
+    - `01f4:JMPF ->0275`
+    - `01f9:IFUB A=01V=00C=0E=14->0212`
+    - `0209:MESSAGE 400101`
+    - `020c:SETBYTE 50/01=0x1`
+    - `0210:JMPF ->0275`
+    - `0212:SETBYTE 50/03=0x0`
+    - `0220:ASK 48050102010203`
+    - `0227:IFUB A=03V=01C=0E=35->0261`
+    - `0237:MESSAGE 400104`
+    - `024f:MESSAGE 400105`
+    - `0252:BITON 30/a1#1`
+    - `0256:SETBYTE 50/02=0x1`
+    - `0261:IFUB A=03V=02C=0E=0e->0274`
+    - `0271:MESSAGE 400103`
+    - `0274:JMPF ->02a7`
+    - `0276:IFUB A=04V=00C=0E=17->0292`
+    - `0286:MESSAGE 400105`
+    - `0290:JMPF ->02a7`
+    - `029c:MESSAGE 400106`
+    - `02a9:RET`
+  - opcode counts: ANIM!2:0->6, ASK:0->2, BITON:0->2, CHAR:0->1, DFANM:0->1, DIR:0->1, IFSW:0->2, IFUB:0->15, JMPF:0->12, MENU:0->12, MENU2:0->2, MESSAGE:0->20, RET:1->6, SETBYTE:0->15, SOLID:0->1, SOUND:0->6, TALKR:0->1, TLKON:0->1, UC:0->2, WAIT:0->18, WINDOW:0->22, XYZI:0->1
+
+### COS_BTM2
+- D1 sha: 5cc97f01cc560527 dec=32676
+- D2 sha: ad625bb6b00edbaf dec=32672
+- SD sha: 486da6ea334b1625 dec=32672
+
+#### SD vs CSR D1
+- **`AD/0`** len 312->308 (5a4d53a6f479->cac96940159a)
+  - D1:
+    - `0000:IFSW V=0x202C=0E=05->000c`
+    - `0008:UC`
+    - `000a:MENU2`
+    - `000c:RET`
+    - `000d:IFUB A=bfV=80C=6E=47->0059`
+    - `0013:UC`
+    - `0015:MENU2`
+    - `0017:REQEW`
+    - `001a:PRQEW`
+    - `001d:FADEW`
+    - `001e:REQ`
+    - `0021:WAIT`
+    - `0024:PREQ`
+    - `0027:REQEW`
+    - `002a:IFUB A=07V=00C=0E=03->0032`
+    - `0030:JMPB ->002a`
+    - `0032:REQEW`
+    - `0035:REQEW`
+    - `0038:WAIT`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:AKAO2`
+    - `0050:JOIN`
+    - `0052:UC`
+    - `0054:MENU2`
+    - `0056:JMPFL`
+    - `0059:IFSW V=0x202C=0E=91->00f1`
+    - `0061:FADE`
+    - `006a:WAIT`
+    - `006d:FADE`
+    - `0076:REQ`
+    - `0079:FADEW`
+    - `007a:JMPF ->0080`
+    - `007c:WAIT`
+    - `007f:IFUB A=cfV=02C=6E=23->00a7`
+    - `0085:IFUB A=b9V=08C=6E=10->009a`
+    - `008b:WSIZW`
+    - `0095:MESSAGE 40012c`
+    - `0098:JMPF ->00a8`
+    - `009a:WSIZW`
+    - `00a4:MESSAGE 40012b`
+    - `00a7:REQEW`
+    - `00aa:REQEW`
+    - `00ad:REQEW`
+    - `00b0:MMBud`
+    - `00b3:WAIT`
+    - `00b6:MENU`
+    - `00ba:WAIT`
+    - `00bd:REQ`
+    - `00c0:REQ`
+    - `00c3:WAIT`
+    - `00c6:REQEW`
+    - `00c9:WAIT`
+    - `00cc:REQ`
+    - `00cf:REQ`
+    - `00d2:REQ`
+    - `00d5:REQ`
+    - `00d8:REQ`
+    - `00db:JMPF ->00e1`
+    - `00dd:WAIT`
+    - `00e0:REQEW`
+    - `00e3:BITON 30/cf#1`
+    - `00e7:BITON 30/cf#2`
+    - `00eb:UC`
+    - `00ed:MENU2`
+    - `00ef:JMPF ->0138`
+    - `00f1:IFUB A=a1V=20C=6E=41->0137`
+    - `00f7:IFUB A=a1V=40C=6E=3b->0137`
+    - `00fd:IFUB A=abV=10C=6E=03->0105`
+    - `0103:JMPF ->0138`
+    - `0105:BITON 30/ab#4`
+    - `0109:UC`
+    - `010b:MENU2`
+    - `010d:FADEW`
+    - `010e:WAIT`
+    - `0111:REQEW`
+    - `0114:SPLIT`
+    - `0123:PREQ`
+    - `0126:PREQ`
+    - `0129:PRTYE`
+    - `012d:REQEW`
+    - `0130:WAIT`
+    - `0133:UC`
+    - `0135:MENU2`
+    - `0137:RET`
+  - SD:
+    - `0000:IFSW V=0x202C=0E=05->000c`
+    - `0008:UC`
+    - `000a:MENU2`
+    - `000c:RET`
+    - `000d:IFUB A=bfV=80C=6E=47->0059`
+    - `0013:UC`
+    - `0015:MENU2`
+    - `0017:REQEW`
+    - `001a:PRQEW`
+    - `001d:FADEW`
+    - `001e:REQ`
+    - `0021:WAIT`
+    - `0024:PREQ`
+    - `0027:REQEW`
+    - `002a:IFUB A=07V=00C=0E=03->0032`
+    - `0030:JMPB ->002a`
+    - `0032:REQEW`
+    - `0035:REQEW`
+    - `0038:WAIT`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:AKAO2`
+    - `0050:JOIN`
+    - `0052:UC`
+    - `0054:MENU2`
+    - `0056:JMPFL`
+    - `0059:IFSW V=0x202C=0E=8d->00ed`
+    - `0061:FADE`
+    - `006a:WAIT`
+    - `006d:FADE`
+    - `0076:REQ`
+    - `0079:FADEW`
+    - `007a:WAIT`
+    - `007d:IFUB A=cfV=02C=6E=23->00a5`
+    - `0083:IFUB A=b9V=08C=6E=10->0098`
+    - `0089:WSIZW`
+    - `0093:MESSAGE 40012c`
+    - `0096:JMPF ->00a6`
+    - `0098:WSIZW`
+    - `00a2:MESSAGE 40012b`
+    - `00a5:REQEW`
+    - `00a8:REQEW`
+    - `00ab:REQEW`
+    - `00ae:MMBud`
+    - `00b1:WAIT`
+    - `00b4:MENU`
+    - `00b8:WAIT`
+    - `00bb:REQ`
+    - `00be:REQ`
+    - `00c1:WAIT`
+    - `00c4:REQEW`
+    - `00c7:WAIT`
+    - `00ca:REQ`
+    - `00cd:REQ`
+    - `00d0:REQ`
+    - `00d3:REQ`
+    - `00d6:REQ`
+    - `00d9:WAIT`
+    - `00dc:REQEW`
+    - `00df:BITON 30/cf#1`
+    - `00e3:BITON 30/cf#2`
+    - `00e7:UC`
+    - `00e9:MENU2`
+    - `00eb:JMPF ->0134`
+    - `00ed:IFUB A=a1V=20C=6E=41->0133`
+    - `00f3:IFUB A=a1V=40C=6E=3b->0133`
+    - `00f9:IFUB A=abV=10C=6E=03->0101`
+    - `00ff:JMPF ->0134`
+    - `0101:BITON 30/ab#4`
+    - `0105:UC`
+    - `0107:MENU2`
+    - `0109:FADEW`
+    - `010a:WAIT`
+    - `010d:REQEW`
+    - `0110:SPLIT`
+    - `011f:PREQ`
+    - `0122:PREQ`
+    - `0125:PRTYE`
+    - `0129:REQEW`
+    - `012c:WAIT`
+    - `012f:UC`
+    - `0131:MENU2`
+    - `0133:RET`
+- **`BALLET/1`** len 308->304 (46e2dc3ecc36->c4097e014def)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFUB A=abV=08C=6E=4c->0055`
+    - `000a:UC`
+    - `000c:MENU2`
+    - `000e:WSIZW`
+    - `0018:MESSAGE 400023`
+    - `001b:WAIT`
+    - `001e:MENU`
+    - `0022:FADE`
+    - `002b:IFPRTYQ`
+    - `002e:TLKON`
+    - `0030:SOLID`
+    - `0032:VISI`
+    - `0034:JMPF ->003d`
+    - `0036:TLKON`
+    - `0038:SOLID`
+    - `003a:VISI`
+    - `003c:REQEW`
+    - `003f:REQEW`
+    - `0042:REQEW`
+    - `0045:REQ`
+    - `0048:FADE`
+    - `0051:FADEW`
+    - `0052:JMPFL`
+    - `0055:IFUB A=abV=01C=6E=14->006e`
+    - `005b:UC`
+    - `005d:MENU2`
+    - `005f:WSIZW`
+    - `0069:MESSAGE 400005`
+    - `006c:JMPF ->0130`
+    - `006e:SETBYTE 50/03=0x1`
+    - `0072:BITON 30/ab#0`
+    - `0076:UC`
+    - `0078:MENU2`
+    - `007a:GETDIR`
+    - `007e:IFUB A=02V=80C=5E=06->0089`
+    - `0084:REQEW`
+    - `0087:JMPF ->008d`
+    - `0089:REQEW`
+    - `008c:JMPF ->00fb`
+    - `008e:WSIZW`
+    - `0098:MESSAGE 400001`
+    - `009b:WAIT`
+    - `009e:IFUB A=02V=80C=5E=06->00a9`
+    - `00a4:REQ`
+    - `00a7:JMPF ->00ad`
+    - `00a9:REQ`
+    - `00ac:WSIZW`
+    - `00b6:MESSAGE 400002`
+    - `00b9:ANIM!1`
+    - `00bc:WAIT`
+    - `00bf:WSIZW`
+    - `00c9:MESSAGE 400003`
+    - `00cc:ANIM!2`
+    - `00cf:ANIMW`
+    - `00d0:IFUB A=02V=80C=5E=06->00db`
+    - `00d6:REQ`
+    - `00d9:JMPF ->00df`
+    - `00db:REQ`
+    - `00de:REQ`
+    - `00e1:REQ`
+    - `00e4:REQ`
+    - `00e7:REQ`
+    - `00ea:ANIM!1`
+    - `00ed:WSIZW`
+    - `00f7:MESSAGE 400004`
+    - `00fa:WSIZW`
+    - `0104:MESSAGE 400005`
+    - `0107:JMPF ->010f`
+    - `0109:CANM!1`
+    - `010e:IFUB A=02V=80C=5E=06->0119`
+    - `0114:REQEW`
+    - `0117:JMPF ->011d`
+    - `0119:REQEW`
+    - `011c:REQ`
+    - `011f:REQ`
+    - `0122:REQ`
+    - `0125:REQ`
+    - `0128:REQEW`
+    - `012b:SETBYTE 50/03=0x0`
+    - `012f:UC`
+    - `0131:MENU2`
+    - `0133:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFUB A=abV=08C=6E=4c->0055`
+    - `000a:UC`
+    - `000c:MENU2`
+    - `000e:WSIZW`
+    - `0018:MESSAGE 400023`
+    - `001b:WAIT`
+    - `001e:MENU`
+    - `0022:FADE`
+    - `002b:IFPRTYQ`
+    - `002e:TLKON`
+    - `0030:SOLID`
+    - `0032:VISI`
+    - `0034:JMPF ->003d`
+    - `0036:TLKON`
+    - `0038:SOLID`
+    - `003a:VISI`
+    - `003c:REQEW`
+    - `003f:REQEW`
+    - `0042:REQEW`
+    - `0045:REQ`
+    - `0048:FADE`
+    - `0051:FADEW`
+    - `0052:JMPFL`
+    - `0055:IFUB A=abV=01C=6E=14->006e`
+    - `005b:UC`
+    - `005d:MENU2`
+    - `005f:WSIZW`
+    - `0069:MESSAGE 400005`
+    - `006c:JMPF ->012c`
+    - `006e:SETBYTE 50/03=0x1`
+    - `0072:BITON 30/ab#0`
+    - `0076:UC`
+    - `0078:MENU2`
+    - `007a:GETDIR`
+    - `007e:IFUB A=02V=80C=5E=06->0089`
+    - `0084:REQEW`
+    - `0087:JMPF ->008d`
+    - `0089:REQEW`
+    - `008c:WSIZW`
+    - `0096:MESSAGE 400001`
+    - `0099:WAIT`
+    - `009c:IFUB A=02V=80C=5E=06->00a7`
+    - `00a2:REQ`
+    - `00a5:JMPF ->00ab`
+    - `00a7:REQ`
+    - `00aa:WSIZW`
+    - `00b4:MESSAGE 400002`
+    - `00b7:ANIM!1`
+    - `00ba:WAIT`
+    - `00bd:WSIZW`
+    - `00c7:MESSAGE 400003`
+    - `00ca:ANIM!2`
+    - `00cd:ANIMW`
+    - `00ce:IFUB A=02V=80C=5E=06->00d9`
+    - `00d4:REQ`
+    - `00d7:JMPF ->00dd`
+    - `00d9:REQ`
+    - `00dc:REQ`
+    - `00df:REQ`
+    - `00e2:REQ`
+    - `00e5:REQ`
+    - `00e8:ANIM!1`
+    - `00eb:WSIZW`
+    - `00f5:MESSAGE 400004`
+    - `00f8:WSIZW`
+    - `0102:MESSAGE 400005`
+    - `0105:CANM!1`
+    - `010a:IFUB A=02V=80C=5E=06->0115`
+    - `0110:REQEW`
+    - `0113:JMPF ->0119`
+    - `0115:REQEW`
+    - `0118:REQ`
+    - `011b:REQ`
+    - `011e:REQ`
+    - `0121:REQ`
+    - `0124:REQEW`
+    - `0127:SETBYTE 50/03=0x0`
+    - `012b:UC`
+    - `012d:MENU2`
+    - `012f:RET`
+- **`BALLET/6`** len 18->18 (e33cffab9747->4f2c8dd7c908)
+  - D1:
+    - `0000:ANIMW`
+    - `0001:ANIM!1`
+    - `0004:RET`
+    - `0005:WSIZW`
+    - `000f:MESSAGE 40012a`
+  - SD:
+    - `0000:ANIMW`
+    - `0001:ANIM!1`
+    - `0004:WSIZW`
+    - `000e:MESSAGE 40012a`
+    - `0011:RET`
+- **`BALLET/7`** len 48->44 (770043887e01->b3faace68936)
+  - D1:
+    - `0000:SOLID`
+    - `0002:MSPED`
+    - `0006:IFPRTYQ`
+    - `0009:MOVE`
+    - `000f:MOVE`
+    - `0015:TLKON`
+    - `0017:SOLID`
+    - `0019:VISI`
+    - `001b:JMPF ->0030`
+    - `001d:MOVE`
+    - `0023:MOVE`
+    - `0029:TLKON`
+    - `002b:SOLID`
+    - `002d:VISI`
+    - `002f:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:IFPRTYQ`
+    - `0005:MOVE`
+    - `000b:MOVE`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:JMPF ->002c`
+    - `0019:MOVE`
+    - `001f:MOVE`
+    - `0025:TLKON`
+    - `0027:SOLID`
+    - `0029:VISI`
+    - `002b:RET`
+- **`BUGEN/3`** len 36->36 (14c24d002dd6->53135ad9cdcc)
+  - D1:
+    - `0000:XYZI`
+    - `000b:VISI`
+    - `000d:MSPED`
+    - `0011:MOVE`
+    - `0017:MOVE`
+    - `001d:TURNGEN`
+    - `0023:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:VISI`
+    - `000d:MSPED`
+    - `0011:MOVE`
+    - `0017:MOVE`
+    - `001d:TURNGEN`
+    - `0023:RET`
+- **`CLOUD/22`** len 32->26 (2e2dfd1dfa04->8e1430a4a337)
+  - D1:
+    - `0000:JMPF ->0006`
+    - `0002:WAIT`
+    - `0005:ANIME1`
+    - `0008:DIR`
+    - `000b:JMPF ->0011`
+    - `000d:WAIT`
+    - `0010:ANIMW`
+    - `0011:ANIM!2`
+    - `0014:JMPF ->001a`
+    - `0016:WAIT`
+    - `0019:ANIME1`
+    - `001c:DIR`
+    - `001f:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:ANIME1`
+    - `0006:DIR`
+    - `0009:WAIT`
+    - `000c:ANIMW`
+    - `000d:ANIM!2`
+    - `0010:WAIT`
+    - `0013:ANIME1`
+    - `0016:DIR`
+    - `0019:RET`
+- **`EARITH/1`** len 304->302 (f5fb46d40456->838784fca178)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFUB A=abV=08C=6E=48->0051`
+    - `000a:WSIZW`
+    - `0014:MESSAGE 400025`
+    - `0017:WAIT`
+    - `001a:MENU`
+    - `001e:FADE`
+    - `0027:IFPRTYQ`
+    - `002a:TLKON`
+    - `002c:SOLID`
+    - `002e:VISI`
+    - `0030:JMPF ->0039`
+    - `0032:TLKON`
+    - `0034:SOLID`
+    - `0036:VISI`
+    - `0038:REQEW`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:REQ`
+    - `0044:FADE`
+    - `004d:FADEW`
+    - `004e:JMPFL`
+    - `0051:IFUB A=05V=02C=3E=04->005a`
+    - `0057:JMPFL`
+    - `005a:IFUB A=abV=04C=6E=16->0075`
+    - `0060:ANIMW`
+    - `0061:CANM!1`
+    - `0066:WSIZW`
+    - `0070:MESSAGE 400014`
+    - `0073:JMPF ->012c`
+    - `0075:SETBYTE 50/03=0x1`
+    - `0079:BITON 30/ab#2`
+    - `007d:GETDIR`
+    - `0081:IFUB A=02V=80C=5E=06->008c`
+    - `0087:REQEW`
+    - `008a:JMPF ->0090`
+    - `008c:REQEW`
+    - `008f:WSIZW`
+    - `0099:MESSAGE 40010f`
+    - `009c:JMPF ->00fc`
+    - `009e:CANM!1`
+    - `00a3:WSIZW`
+    - `00ad:MESSAGE 400110`
+    - `00b0:WAIT`
+    - `00b3:WSIZW`
+    - `00bd:MESSAGE 400011`
+    - `00c0:WAIT`
+    - `00c3:ANIM!2`
+    - `00c6:WSIZW`
+    - `00d0:MESSAGE 400112`
+    - `00d3:WAIT`
+    - `00d6:WSIZW`
+    - `00e0:MESSAGE 400113`
+    - `00e3:WAIT`
+    - `00e6:IFUB A=02V=80C=5E=08->00f3`
+    - `00ec:CANM!2`
+    - `00f1:JMPF ->00f9`
+    - `00f3:CANM!2`
+    - `00f8:WAIT`
+    - `00fb:IFUB A=02V=80C=5E=06->0106`
+    - `0101:REQEW`
+    - `0104:JMPF ->010a`
+    - `0106:REQEW`
+    - `0109:REQEW`
+    - `010c:UC`
+    - `010e:MENU2`
+    - `0110:WAIT`
+    - `0113:IFUB A=02V=80C=5E=08->0120`
+    - `0119:CANM!2`
+    - `011e:JMPF ->0126`
+    - `0120:CANM!2`
+    - `0125:SETBYTE 50/03=0x0`
+    - `0129:JMPF ->0130`
+    - `012b:UC`
+    - `012d:MENU2`
+    - `012f:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFUB A=abV=08C=6E=48->0051`
+    - `000a:WSIZW`
+    - `0014:MESSAGE 400025`
+    - `0017:WAIT`
+    - `001a:MENU`
+    - `001e:FADE`
+    - `0027:IFPRTYQ`
+    - `002a:TLKON`
+    - `002c:SOLID`
+    - `002e:VISI`
+    - `0030:JMPF ->0039`
+    - `0032:TLKON`
+    - `0034:SOLID`
+    - `0036:VISI`
+    - `0038:REQEW`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:REQ`
+    - `0044:FADE`
+    - `004d:FADEW`
+    - `004e:JMPFL`
+    - `0051:IFUB A=05V=02C=3E=04->005a`
+    - `0057:JMPFL`
+    - `005a:IFUB A=abV=04C=6E=16->0075`
+    - `0060:ANIMW`
+    - `0061:CANM!1`
+    - `0066:WSIZW`
+    - `0070:MESSAGE 400014`
+    - `0073:JMPF ->012a`
+    - `0075:SETBYTE 50/03=0x1`
+    - `0079:BITON 30/ab#2`
+    - `007d:GETDIR`
+    - `0081:IFUB A=02V=80C=5E=06->008c`
+    - `0087:REQEW`
+    - `008a:JMPF ->0090`
+    - `008c:REQEW`
+    - `008f:WSIZW`
+    - `0099:MESSAGE 40010f`
+    - `009c:CANM!1`
+    - `00a1:WSIZW`
+    - `00ab:MESSAGE 400110`
+    - `00ae:WAIT`
+    - `00b1:WSIZW`
+    - `00bb:MESSAGE 400011`
+    - `00be:WAIT`
+    - `00c1:ANIM!2`
+    - `00c4:WSIZW`
+    - `00ce:MESSAGE 400112`
+    - `00d1:WAIT`
+    - `00d4:WSIZW`
+    - `00de:MESSAGE 400113`
+    - `00e1:WAIT`
+    - `00e4:IFUB A=02V=80C=5E=08->00f1`
+    - `00ea:CANM!2`
+    - `00ef:JMPF ->00f7`
+    - `00f1:CANM!2`
+    - `00f6:WAIT`
+    - `00f9:IFUB A=02V=80C=5E=06->0104`
+    - `00ff:REQEW`
+    - `0102:JMPF ->0108`
+    - `0104:REQEW`
+    - `0107:REQEW`
+    - `010a:UC`
+    - `010c:MENU2`
+    - `010e:WAIT`
+    - `0111:IFUB A=02V=80C=5E=08->011e`
+    - `0117:CANM!2`
+    - `011c:JMPF ->0124`
+    - `011e:CANM!2`
+    - `0123:SETBYTE 50/03=0x0`
+    - `0127:JMPF ->012e`
+    - `0129:UC`
+    - `012b:MENU2`
+    - `012d:RET`
+- **`EARITH/30`** len 42->38 (c86f38469e2b->e145e3bca582)
+  - D1:
+    - `0000:SOLID`
+    - `0002:MSPED`
+    - `0006:IFPRTYQ`
+    - `0009:MOVE`
+    - `000f:TLKON`
+    - `0011:SOLID`
+    - `0013:VISI`
+    - `0015:JMPF ->002a`
+    - `0017:MOVE`
+    - `001d:MOVE`
+    - `0023:TLKON`
+    - `0025:SOLID`
+    - `0027:VISI`
+    - `0029:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:IFPRTYQ`
+    - `0005:MOVE`
+    - `000b:TLKON`
+    - `000d:SOLID`
+    - `000f:VISI`
+    - `0011:JMPF ->0026`
+    - `0013:MOVE`
+    - `0019:MOVE`
+    - `001f:TLKON`
+    - `0021:SOLID`
+    - `0023:VISI`
+    - `0025:RET`
+- **`EARITH/7`** len 24->24 (9b00744ab9ef->92e7027ac941)
+  - D1:
+    - `0000:ANIMW`
+    - `0001:SETBYTE 50/03=0x1`
+    - `0005:CANM!1`
+    - `000a:RET`
+    - `000b:WSIZW`
+    - `0015:MESSAGE 400229`
+  - SD:
+    - `0000:ANIMW`
+    - `0001:SETBYTE 50/03=0x1`
+    - `0005:CANM!1`
+    - `000a:WSIZW`
+    - `0014:MESSAGE 400229`
+    - `0017:RET`
+- **`KETCY/6`** len 42->38 (1a9782b7ae3b->201400b8a0f7)
+  - D1:
+    - `0000:SOLID`
+    - `0002:MSPED`
+    - `0006:IFPRTYQ`
+    - `0009:MOVE`
+    - `000f:MOVE`
+    - `0015:TLKON`
+    - `0017:SOLID`
+    - `0019:VISI`
+    - `001b:JMPF ->002a`
+    - `001d:MOVE`
+    - `0023:TLKON`
+    - `0025:SOLID`
+    - `0027:VISI`
+    - `0029:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:IFPRTYQ`
+    - `0005:MOVE`
+    - `000b:MOVE`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:JMPF ->0026`
+    - `0019:MOVE`
+    - `001f:TLKON`
+    - `0021:SOLID`
+    - `0023:VISI`
+    - `0025:RET`
+- **`RED/1`** len 373->366 (df427dd705bc->903873161762)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFUB A=abV=01C=6E=04->000d`
+    - `000a:INC`
+    - `000d:IFUB A=abV=02C=6E=04->0016`
+    - `0013:INC`
+    - `0016:IFUB A=abV=04C=6E=04->001f`
+    - `001c:INC`
+    - `001f:IFUBL`
+    - `0026:SETBYTE 50/03=0x1`
+    - `002a:GETDIR`
+    - `002e:IFUB A=02V=60C=4E=11->0044`
+    - `0034:IFUB A=02V=e0C=5E=06->003f`
+    - `003a:REQEW`
+    - `003d:JMPF ->0043`
+    - `003f:REQEW`
+    - `0042:JMPF ->0048`
+    - `0044:REQEW`
+    - `0047:JMPF ->00a5`
+    - `0049:WSIZW`
+    - `0053:MESSAGE 400017`
+    - `0056:CANM!2`
+    - `005b:WSIZW`
+    - `0065:MESSAGE 400018`
+    - `0068:ANIMW`
+    - `0069:ANIME1`
+    - `006c:WSIZW`
+    - `0076:MESSAGE 400019`
+    - `0079:WAIT`
+    - `007c:WSIZW`
+    - `0086:MESSAGE 40011a`
+    - `0089:WAIT`
+    - `008c:WSIZW`
+    - `0096:MESSAGE 40001b`
+    - `0099:WAIT`
+    - `009c:REQEW`
+    - `009f:CANM!2`
+    - `00a4:IFUB A=02V=60C=4E=0e->00b7`
+    - `00aa:IFUB A=02V=e0C=5E=03->00b2`
+    - `00b0:JMPF ->00b6`
+    - `00b2:REQ`
+    - `00b5:JMPF ->00bb`
+    - `00b7:REQ`
+    - `00ba:JMPF ->0107`
+    - `00bc:WSIZW`
+    - `00c6:MESSAGE 40021c`
+    - `00c9:WAIT`
+    - `00cc:CANM!2`
+    - `00d1:WSIZW`
+    - `00db:MESSAGE 40001d`
+    - `00de:ANIME2`
+    - `00e1:WSIZW`
+    - `00eb:MESSAGE 40001e`
+    - `00ee:ANIME2`
+    - `00f1:WAIT`
+    - `00f4:WSIZW`
+    - `00fe:MESSAGE 40021f`
+    - `0101:CANM!2`
+    - `0106:WSIZW`
+    - `0110:MESSAGE 400020`
+    - `0113:JMPFL`
+    - `0116:REQ`
+    - `0119:WSIZW`
+    - `0123:MESSAGE 400221`
+    - `0126:REQEW`
+    - `0129:REQEW`
+    - `012c:MMBud`
+    - `012f:PRTYP`
+    - `0131:MMBLK`
+    - `0133:WAIT`
+    - `0136:MENU`
+    - `013a:TLKON`
+    - `013c:SOLID`
+    - `013e:VISI`
+    - `0140:REQ`
+    - `0143:REQ`
+    - `0146:REQ`
+    - `0149:REQ`
+    - `014c:REQ`
+    - `014f:BITON 30/ab#3`
+    - `0153:SETWORD 20/00=0x1f6`
+    - `0158:JMPFL`
+    - `015b:WSIZW`
+    - `0165:MESSAGE 400022`
+    - `0168:SETBYTE 50/04=0x0`
+    - `016c:SETBYTE 50/03=0x0`
+    - `0170:UC`
+    - `0172:MENU2`
+    - `0174:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFUB A=abV=01C=6E=04->000d`
+    - `000a:INC`
+    - `000d:IFUB A=abV=02C=6E=04->0016`
+    - `0013:INC`
+    - `0016:IFUB A=abV=04C=6E=04->001f`
+    - `001c:INC`
+    - `001f:IFUBL`
+    - `0026:SETBYTE 50/03=0x1`
+    - `002a:GETDIR`
+    - `002e:IFUB A=02V=60C=4E=11->0044`
+    - `0034:IFUB A=02V=e0C=5E=06->003f`
+    - `003a:REQEW`
+    - `003d:JMPF ->0043`
+    - `003f:REQEW`
+    - `0042:JMPF ->0048`
+    - `0044:REQEW`
+    - `0047:WSIZW`
+    - `0051:MESSAGE 400017`
+    - `0054:CANM!2`
+    - `0059:WSIZW`
+    - `0063:MESSAGE 400018`
+    - `0066:ANIMW`
+    - `0067:ANIME1`
+    - `006a:WSIZW`
+    - `0074:MESSAGE 400019`
+    - `0077:WAIT`
+    - `007a:WSIZW`
+    - `0084:MESSAGE 40011a`
+    - `0087:WAIT`
+    - `008a:WSIZW`
+    - `0094:MESSAGE 40001b`
+    - `0097:WAIT`
+    - `009a:REQ`
+    - `009d:CANM!2`
+    - `00a2:IFUB A=02V=60C=4E=0e->00b5`
+    - `00a8:IFUB A=02V=e0C=5E=03->00b0`
+    - `00ae:JMPF ->00b4`
+    - `00b0:REQ`
+    - `00b3:JMPF ->00b9`
+    - `00b5:REQ`
+    - `00b8:WSIZW`
+    - `00c2:MESSAGE 40021c`
+    - `00c5:WAIT`
+    - `00c8:CANM!2`
+    - `00cd:WSIZW`
+    - `00d7:MESSAGE 40001d`
+    - `00da:ANIME2`
+    - `00dd:WSIZW`
+    - `00e7:MESSAGE 40001e`
+    - `00ea:ANIME2`
+    - `00ed:WAIT`
+    - `00f0:WSIZW`
+    - `00fa:MESSAGE 40021f`
+    - `00fd:CANM!2`
+    - `0102:WSIZW`
+    - `010c:MESSAGE 400020`
+    - `010f:REQ`
+    - `0112:WSIZW`
+    - `011c:MESSAGE 400221`
+    - `011f:REQEW`
+    - `0122:REQEW`
+    - `0125:MMBud`
+    - `0128:PRTYP`
+    - `012a:MMBLK`
+    - `012c:WAIT`
+    - `012f:MENU`
+    - `0133:TLKON`
+    - `0135:SOLID`
+    - `0137:VISI`
+    - `0139:REQ`
+    - `013c:REQ`
+    - `013f:REQ`
+    - `0142:REQ`
+    - `0145:REQ`
+    - `0148:BITON 30/ab#3`
+    - `014c:SETWORD 20/00=0x1f6`
+    - `0151:JMPFL`
+    - `0154:WSIZW`
+    - `015e:MESSAGE 400022`
+    - `0161:SETBYTE 50/04=0x0`
+    - `0165:SETBYTE 50/03=0x0`
+    - `0169:UC`
+    - `016b:MENU2`
+    - `016d:RET`
+- **`TIFA/1`** len 589->586 (e2346345c715->2b7c25db9302)
+  - D1 interesting (80):
+    - `0004:IFUB A=abV=08C=6E=73->007c`
+    - `000e:IFUB A=02V=40C=4E=17->002a`
+    - `0014:IFUB A=02V=c0C=5E=09->0022`
+    - `0020:JMPF ->0029`
+    - `0028:JMPF ->0031`
+    - `003a:MESSAGE 400024`
+    - `0056:JMPF ->0064`
+    - `0063:REQEW`
+    - `0066:REQEW`
+    - `0069:REQEW`
+    - `006c:REQ`
+    - `0079:JMPFL`
+    - `007c:IFUB A=05V=02C=3E=04->0085`
+    - `0082:JMPFL`
+    - `0085:IFUBL`
+    - `0090:IFUB A=02V=40C=4E=17->00ac`
+    - `0096:IFUB A=02V=c0C=5E=09->00a4`
+    - `00a2:JMPF ->00ab`
+    - `00aa:JMPF ->00b3`
+    - `00bc:MESSAGE 40000e`
+    - `00bf:IFUB A=02V=40C=4E=17->00db`
+    - `00c5:IFUB A=02V=c0C=5E=09->00d3`
+    - `00d1:JMPF ->00da`
+    - `00d9:JMPF ->00e2`
+    - `00e1:JMPFL`
+    - `00e4:SETBYTE 50/03=0x1`
+    - `00e8:BITON 30/ab#1`
+    - `00f0:IFUB A=02V=40C=4E=11->0106`
+    - `00f6:IFUB A=02V=c0C=5E=06->0101`
+    - `00fc:REQEW`
+    - `00ff:JMPF ->0105`
+    - `0101:REQEW`
+    - `0104:JMPF ->010a`
+    - `0106:REQEW`
+    - `0109:JMPFL`
+    - `0119:MESSAGE 400006`
+    - `0126:MESSAGE 400007`
+    - `012d:IFUB A=02V=40C=4E=17->0149`
+    - `0133:IFUB A=02V=c0C=5E=09->0141`
+    - `013f:JMPF ->0148`
+    - `0147:JMPF ->0150`
+    - `0159:MESSAGE 400008`
+    - `015c:IFUB A=02V=40C=4E=11->0172`
+    - `0162:IFUB A=02V=c0C=5E=06->016d`
+    - `0168:REQEW`
+    - `016b:JMPF ->0171`
+    - `016d:REQEW`
+    - `0170:JMPF ->0176`
+    - `0172:REQEW`
+    - `0175:REQEW`
+    - `0182:MESSAGE 40000a`
+    - `0185:IFUB A=02V=40C=4E=17->01a1`
+    - `018b:IFUB A=02V=c0C=5E=09->0199`
+    - `0197:JMPF ->01a0`
+    - `019f:JMPF ->01a8`
+    - `01b1:MESSAGE 40000b`
+    - `01b7:IFUB A=02V=40C=4E=11->01cd`
+    - `01bd:IFUB A=02V=c0C=5E=06->01c8`
+    - `01c3:REQEW`
+    - `01c6:JMPF ->01cc`
+    - `01c8:REQEW`
+    - `01cb:JMPF ->01d1`
+    - `01cd:REQEW`
+    - `01da:MESSAGE 40010c`
+    - `01ea:MESSAGE 40000d`
+    - `01ed:IFUB A=02V=40C=4E=15->0207`
+    - `01f3:IFUB A=02V=c0C=5E=08->0200`
+    - `01fe:JMPF ->0206`
+    - `0205:JMPF ->020d`
+    - `0216:MESSAGE 40000e`
+    - `0219:IFUB A=02V=40C=4E=1b->0239`
+    - `021f:IFUB A=02V=c0C=5E=0b->022f`
+    - `022a:REQEW`
+    - `022d:JMPF ->0238`
+    - `0234:REQEW`
+    - `0237:JMPF ->0242`
+    - `023e:REQEW`
+    - `0241:REQEW`
+    - `0244:SETBYTE 50/03=0x0`
+    - `024c:RET`
+  - SD interesting (79):
+    - `0004:IFUB A=abV=08C=6E=73->007c`
+    - `000e:IFUB A=02V=40C=4E=17->002a`
+    - `0014:IFUB A=02V=c0C=5E=09->0022`
+    - `0020:JMPF ->0029`
+    - `0028:JMPF ->0031`
+    - `003a:MESSAGE 400024`
+    - `0056:JMPF ->0064`
+    - `0063:REQEW`
+    - `0066:REQEW`
+    - `0069:REQEW`
+    - `006c:REQ`
+    - `0079:JMPFL`
+    - `007c:IFUB A=05V=02C=3E=04->0085`
+    - `0082:JMPFL`
+    - `0085:IFUBL`
+    - `0090:IFUB A=02V=40C=4E=17->00ac`
+    - `0096:IFUB A=02V=c0C=5E=09->00a4`
+    - `00a2:JMPF ->00ab`
+    - `00aa:JMPF ->00b3`
+    - `00bc:MESSAGE 40000e`
+    - `00bf:IFUB A=02V=40C=4E=17->00db`
+    - `00c5:IFUB A=02V=c0C=5E=09->00d3`
+    - `00d1:JMPF ->00da`
+    - `00d9:JMPF ->00e2`
+    - `00e1:JMPFL`
+    - `00e4:SETBYTE 50/03=0x1`
+    - `00e8:BITON 30/ab#1`
+    - `00f0:IFUB A=02V=40C=4E=11->0106`
+    - `00f6:IFUB A=02V=c0C=5E=06->0101`
+    - `00fc:REQEW`
+    - `00ff:JMPF ->0105`
+    - `0101:REQEW`
+    - `0104:JMPF ->010a`
+    - `0106:REQEW`
+    - `0116:MESSAGE 400006`
+    - `0123:MESSAGE 400007`
+    - `012a:IFUB A=02V=40C=4E=17->0146`
+    - `0130:IFUB A=02V=c0C=5E=09->013e`
+    - `013c:JMPF ->0145`
+    - `0144:JMPF ->014d`
+    - `0156:MESSAGE 400008`
+    - `0159:IFUB A=02V=40C=4E=11->016f`
+    - `015f:IFUB A=02V=c0C=5E=06->016a`
+    - `0165:REQEW`
+    - `0168:JMPF ->016e`
+    - `016a:REQEW`
+    - `016d:JMPF ->0173`
+    - `016f:REQEW`
+    - `0172:REQEW`
+    - `017f:MESSAGE 40000a`
+    - `0182:IFUB A=02V=40C=4E=17->019e`
+    - `0188:IFUB A=02V=c0C=5E=09->0196`
+    - `0194:JMPF ->019d`
+    - `019c:JMPF ->01a5`
+    - `01ae:MESSAGE 40000b`
+    - `01b4:IFUB A=02V=40C=4E=11->01ca`
+    - `01ba:IFUB A=02V=c0C=5E=06->01c5`
+    - `01c0:REQEW`
+    - `01c3:JMPF ->01c9`
+    - `01c5:REQEW`
+    - `01c8:JMPF ->01ce`
+    - `01ca:REQEW`
+    - `01d7:MESSAGE 40010c`
+    - `01e7:MESSAGE 40000d`
+    - `01ea:IFUB A=02V=40C=4E=15->0204`
+    - `01f0:IFUB A=02V=c0C=5E=08->01fd`
+    - `01fb:JMPF ->0203`
+    - `0202:JMPF ->020a`
+    - `0213:MESSAGE 40000e`
+    - `0216:IFUB A=02V=40C=4E=1b->0236`
+    - `021c:IFUB A=02V=c0C=5E=0b->022c`
+    - `0227:REQEW`
+    - `022a:JMPF ->0235`
+    - `0231:REQEW`
+    - `0234:JMPF ->023f`
+    - `023b:REQEW`
+    - `023e:REQEW`
+    - `0241:SETBYTE 50/03=0x0`
+    - `0249:RET`
+  - opcode counts: JMPFL:4->3
+- **`TIFA/8`** len 42->38 (acfff4e210e2->f031c5d666a7)
+  - D1:
+    - `0000:SOLID`
+    - `0002:MSPED`
+    - `0006:IFPRTYQ`
+    - `0009:MOVE`
+    - `000f:TLKON`
+    - `0011:SOLID`
+    - `0013:VISI`
+    - `0015:JMPF ->002a`
+    - `0017:MOVE`
+    - `001d:MOVE`
+    - `0023:TLKON`
+    - `0025:SOLID`
+    - `0027:VISI`
+    - `0029:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:IFPRTYQ`
+    - `0005:MOVE`
+    - `000b:TLKON`
+    - `000d:SOLID`
+    - `000f:VISI`
+    - `0011:JMPF ->0026`
+    - `0013:MOVE`
+    - `0019:MOVE`
+    - `001f:TLKON`
+    - `0021:SOLID`
+    - `0023:VISI`
+    - `0025:RET`
+- **`YUFI/8`** len 48->44 (cd5127730641->bb41a8371505)
+  - D1:
+    - `0000:SOLID`
+    - `0002:MSPED`
+    - `0006:IFPRTYQ`
+    - `0009:MOVE`
+    - `000f:MOVE`
+    - `0015:MOVE`
+    - `001b:TLKON`
+    - `001d:SOLID`
+    - `001f:VISI`
+    - `0021:JMPF ->0030`
+    - `0023:MOVE`
+    - `0029:TLKON`
+    - `002b:SOLID`
+    - `002d:VISI`
+    - `002f:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:IFPRTYQ`
+    - `0005:MOVE`
+    - `000b:MOVE`
+    - `0011:MOVE`
+    - `0017:TLKON`
+    - `0019:SOLID`
+    - `001b:VISI`
+    - `001d:JMPF ->002c`
+    - `001f:MOVE`
+    - `0025:TLKON`
+    - `0027:SOLID`
+    - `0029:VISI`
+    - `002b:RET`
+
+#### SD vs CSR D2
+
+### FRCYO
+- D1 sha: 3a07a80f9947e378 dec=77776
+- D2 sha: 3a07a80f9947e378 dec=77776
+- SD sha: 2948473d72bda841 dec=77776
+
+#### SD vs CSR D1
+- **`keisan/31`** len 763->763 (c9b424a9eeb7->2c5802cf8814)
+  - D1 interesting (131):
+    - `0000:SETBYTE 50/67=0x0`
+    - `0004:SETBYTE 50/69=0x0`
+    - `0008:SETBYTE 50/6a=0x0`
+    - `000c:SETBYTE 50/6b=0x0`
+    - `0010:SETBYTE 50/6c=0x0`
+    - `0014:IFUBL`
+    - `002d:IFUBL`
+    - `0034:SETBYTE 5b/68=0x2a`
+    - `003c:IFUB A=68V=64C=5E=0b->004c`
+    - `0042:SETBYTE b5/2a=0x68`
+    - `0046:SETBYTE 50/6b=0x1`
+    - `004a:JMPF ->0055`
+    - `004c:SETBYTE 50/6b=0x2`
+    - `0050:SETBYTE b0/2a=0x64`
+    - `0054:IFUB A=2bV=00C=1E=1d->0076`
+    - `0068:IFUB A=2cV=64C=4E=09->0076`
+    - `006e:SETBYTE b0/2b=0x0`
+    - `0072:SETBYTE b0/2c=0x64`
+    - `0076:JMPFL`
+    - `0079:IFUBL`
+    - `0080:SETBYTE 5b/68=0x3a`
+    - `0088:IFUB A=68V=64C=5E=0b->0098`
+    - `008e:SETBYTE b5/3a=0x68`
+    - `0092:SETBYTE 50/6b=0x1`
+    - `0096:JMPF ->00a1`
+    - `0098:SETBYTE 50/6b=0x2`
+    - `009c:SETBYTE b0/3a=0x64`
+    - `00a0:IFUB A=3bV=00C=1E=1d->00c2`
+    - `00b4:IFUB A=3cV=64C=4E=09->00c2`
+    - `00ba:SETBYTE b0/3b=0x0`
+    - `00be:SETBYTE b0/3c=0x64`
+    - `00c2:JMPFL`
+    - `00c5:IFUBL`
+    - `00cc:SETBYTE 5b/68=0x4a`
+    - `00d4:IFUB A=68V=64C=5E=0b->00e4`
+    - `00da:SETBYTE b5/4a=0x68`
+    - `00de:SETBYTE 50/6b=0x1`
+    - `00e2:JMPF ->00ed`
+    - `00e4:SETBYTE 50/6b=0x2`
+    - `00e8:SETBYTE b0/4a=0x64`
+    - `00ec:IFUB A=4bV=00C=1E=1d->010e`
+    - `0100:IFUB A=4cV=64C=4E=09->010e`
+    - `0106:SETBYTE b0/4b=0x0`
+    - `010a:SETBYTE b0/4c=0x64`
+    - `010e:JMPFL`
+    - `0111:IFUBL`
+    - `0118:SETBYTE 5b/68=0x5a`
+    - `0120:IFUB A=68V=64C=5E=0b->0130`
+    - `0126:SETBYTE b5/5a=0x68`
+    - `012a:SETBYTE 50/6b=0x1`
+    - `012e:JMPF ->0139`
+    - `0130:SETBYTE 50/6b=0x2`
+    - `0134:SETBYTE b0/5a=0x64`
+    - `0138:IFUB A=5bV=00C=1E=1d->015a`
+    - `014c:IFUB A=5cV=64C=4E=09->015a`
+    - `0152:SETBYTE b0/5b=0x0`
+    - `0156:SETBYTE b0/5c=0x64`
+    - `015a:JMPFL`
+    - `015d:IFUBL`
+    - `0164:SETBYTE 5f/68=0xea`
+    - `016c:IFUB A=68V=64C=5E=0b->017c`
+    - `0172:SETBYTE f5/ea=0x68`
+    - `0176:SETBYTE 50/6b=0x1`
+    - `017a:JMPF ->0185`
+    - `017c:SETBYTE 50/6b=0x2`
+    - `0180:SETBYTE f0/ea=0x64`
+    - `0184:IFUB A=ebV=00C=1E=1d->01a6`
+    - `0198:IFUB A=ecV=64C=4E=09->01a6`
+    - `019e:SETBYTE f0/eb=0x0`
+    - `01a2:SETBYTE f0/ec=0x64`
+    - `01a6:JMPFL`
+    - `01a9:IFUBL`
+    - `01b0:SETBYTE 5f/68=0xfa`
+    - `01b8:IFUB A=68V=64C=5E=0b->01c8`
+    - `01be:SETBYTE f5/fa=0x68`
+    - `01c2:SETBYTE 50/6b=0x1`
+    - `01c6:JMPF ->01d1`
+    - `01c8:SETBYTE 50/6b=0x2`
+    - `01cc:SETBYTE f0/fa=0x64`
+    - `01d0:IFUB A=fbV=00C=1E=1d->01f2`
+    - ... +51
+  - SD interesting (131):
+    - `0000:SETBYTE 50/67=0x0`
+    - `0004:SETBYTE 50/69=0x0`
+    - `0008:SETBYTE 50/6a=0x0`
+    - `000c:SETBYTE 50/6b=0x0`
+    - `0010:SETBYTE 50/6c=0x0`
+    - `0014:IFUBL`
+    - `002d:IFUBL`
+    - `0034:SETBYTE 5b/68=0x2a`
+    - `003c:IFUB A=68V=64C=5E=0b->004c`
+    - `0042:SETBYTE b5/2a=0x68`
+    - `0046:SETBYTE 50/6b=0x1`
+    - `004a:JMPF ->0055`
+    - `004c:SETBYTE 50/6b=0x2`
+    - `0050:SETBYTE b0/2a=0x64`
+    - `0054:IFUB A=2bV=00C=1E=1d->0076`
+    - `0068:IFUB A=2cV=64C=4E=09->0076`
+    - `006e:SETBYTE b0/2b=0x0`
+    - `0072:SETBYTE b0/2c=0x64`
+    - `0076:JMPFL`
+    - `0079:IFUBL`
+    - `0080:SETBYTE 5b/68=0x3a`
+    - `0088:IFUB A=68V=64C=5E=0b->0098`
+    - `008e:SETBYTE b5/3a=0x68`
+    - `0092:SETBYTE 50/6b=0x1`
+    - `0096:JMPF ->00a1`
+    - `0098:SETBYTE 50/6b=0x2`
+    - `009c:SETBYTE b0/3a=0x64`
+    - `00a0:IFUB A=3bV=00C=1E=1d->00c2`
+    - `00b4:IFUB A=3cV=64C=4E=09->00c2`
+    - `00ba:SETBYTE b0/3b=0x0`
+    - `00be:SETBYTE b0/3c=0x64`
+    - `00c2:JMPFL`
+    - `00c5:IFUBL`
+    - `00cc:SETBYTE 5b/68=0x4a`
+    - `00d4:IFUB A=68V=64C=5E=0b->00e4`
+    - `00da:SETBYTE b5/4a=0x68`
+    - `00de:SETBYTE 50/6b=0x1`
+    - `00e2:JMPF ->00ed`
+    - `00e4:SETBYTE 50/6b=0x2`
+    - `00e8:SETBYTE b0/4a=0x64`
+    - `00ec:IFUB A=4bV=00C=1E=1d->010e`
+    - `0100:IFUB A=4cV=64C=4E=09->010e`
+    - `0106:SETBYTE b0/4b=0x0`
+    - `010a:SETBYTE b0/4c=0x64`
+    - `010e:JMPFL`
+    - `0111:IFUBL`
+    - `0118:SETBYTE 5b/68=0x5a`
+    - `0120:IFUB A=68V=64C=5E=0b->0130`
+    - `0126:SETBYTE b5/5a=0x68`
+    - `012a:SETBYTE 50/6b=0x1`
+    - `012e:JMPF ->0139`
+    - `0130:SETBYTE 50/6b=0x2`
+    - `0134:SETBYTE b0/5a=0x64`
+    - `0138:IFUB A=5bV=00C=1E=1d->015a`
+    - `014c:IFUB A=5cV=64C=4E=09->015a`
+    - `0152:SETBYTE b0/5b=0x0`
+    - `0156:SETBYTE b0/5c=0x64`
+    - `015a:JMPFL`
+    - `015d:IFUBL`
+    - `0164:SETBYTE 5f/68=0xea`
+    - `016c:IFUB A=68V=64C=5E=0b->017c`
+    - `0172:SETBYTE f5/ea=0x68`
+    - `0176:SETBYTE 50/6b=0x1`
+    - `017a:JMPF ->0185`
+    - `017c:SETBYTE 50/6b=0x2`
+    - `0180:SETBYTE f0/ea=0x64`
+    - `0184:IFUB A=ebV=00C=1E=1d->01a6`
+    - `0198:IFUB A=ecV=64C=4E=09->01a6`
+    - `019e:SETBYTE f0/eb=0x0`
+    - `01a2:SETBYTE f0/ec=0x64`
+    - `01a6:JMPFL`
+    - `01a9:IFUBL`
+    - `01b0:SETBYTE 5f/68=0xfa`
+    - `01b8:IFUB A=68V=64C=5E=0b->01c8`
+    - `01be:SETBYTE f5/fa=0x68`
+    - `01c2:SETBYTE 50/6b=0x1`
+    - `01c6:JMPF ->01d1`
+    - `01c8:SETBYTE 50/6b=0x2`
+    - `01cc:SETBYTE f0/fa=0x64`
+    - `01d0:IFUB A=fbV=00C=1E=1d->01f2`
+    - ... +51
+
+#### SD vs CSR D2
+- **`keisan/31`** len 763->763 (c9b424a9eeb7->2c5802cf8814)
+  - D2 interesting (131):
+    - `0000:SETBYTE 50/67=0x0`
+    - `0004:SETBYTE 50/69=0x0`
+    - `0008:SETBYTE 50/6a=0x0`
+    - `000c:SETBYTE 50/6b=0x0`
+    - `0010:SETBYTE 50/6c=0x0`
+    - `0014:IFUBL`
+    - `002d:IFUBL`
+    - `0034:SETBYTE 5b/68=0x2a`
+    - `003c:IFUB A=68V=64C=5E=0b->004c`
+    - `0042:SETBYTE b5/2a=0x68`
+    - `0046:SETBYTE 50/6b=0x1`
+    - `004a:JMPF ->0055`
+    - `004c:SETBYTE 50/6b=0x2`
+    - `0050:SETBYTE b0/2a=0x64`
+    - `0054:IFUB A=2bV=00C=1E=1d->0076`
+    - `0068:IFUB A=2cV=64C=4E=09->0076`
+    - `006e:SETBYTE b0/2b=0x0`
+    - `0072:SETBYTE b0/2c=0x64`
+    - `0076:JMPFL`
+    - `0079:IFUBL`
+    - `0080:SETBYTE 5b/68=0x3a`
+    - `0088:IFUB A=68V=64C=5E=0b->0098`
+    - `008e:SETBYTE b5/3a=0x68`
+    - `0092:SETBYTE 50/6b=0x1`
+    - `0096:JMPF ->00a1`
+    - `0098:SETBYTE 50/6b=0x2`
+    - `009c:SETBYTE b0/3a=0x64`
+    - `00a0:IFUB A=3bV=00C=1E=1d->00c2`
+    - `00b4:IFUB A=3cV=64C=4E=09->00c2`
+    - `00ba:SETBYTE b0/3b=0x0`
+    - `00be:SETBYTE b0/3c=0x64`
+    - `00c2:JMPFL`
+    - `00c5:IFUBL`
+    - `00cc:SETBYTE 5b/68=0x4a`
+    - `00d4:IFUB A=68V=64C=5E=0b->00e4`
+    - `00da:SETBYTE b5/4a=0x68`
+    - `00de:SETBYTE 50/6b=0x1`
+    - `00e2:JMPF ->00ed`
+    - `00e4:SETBYTE 50/6b=0x2`
+    - `00e8:SETBYTE b0/4a=0x64`
+    - `00ec:IFUB A=4bV=00C=1E=1d->010e`
+    - `0100:IFUB A=4cV=64C=4E=09->010e`
+    - `0106:SETBYTE b0/4b=0x0`
+    - `010a:SETBYTE b0/4c=0x64`
+    - `010e:JMPFL`
+    - `0111:IFUBL`
+    - `0118:SETBYTE 5b/68=0x5a`
+    - `0120:IFUB A=68V=64C=5E=0b->0130`
+    - `0126:SETBYTE b5/5a=0x68`
+    - `012a:SETBYTE 50/6b=0x1`
+    - `012e:JMPF ->0139`
+    - `0130:SETBYTE 50/6b=0x2`
+    - `0134:SETBYTE b0/5a=0x64`
+    - `0138:IFUB A=5bV=00C=1E=1d->015a`
+    - `014c:IFUB A=5cV=64C=4E=09->015a`
+    - `0152:SETBYTE b0/5b=0x0`
+    - `0156:SETBYTE b0/5c=0x64`
+    - `015a:JMPFL`
+    - `015d:IFUBL`
+    - `0164:SETBYTE 5f/68=0xea`
+    - `016c:IFUB A=68V=64C=5E=0b->017c`
+    - `0172:SETBYTE f5/ea=0x68`
+    - `0176:SETBYTE 50/6b=0x1`
+    - `017a:JMPF ->0185`
+    - `017c:SETBYTE 50/6b=0x2`
+    - `0180:SETBYTE f0/ea=0x64`
+    - `0184:IFUB A=ebV=00C=1E=1d->01a6`
+    - `0198:IFUB A=ecV=64C=4E=09->01a6`
+    - `019e:SETBYTE f0/eb=0x0`
+    - `01a2:SETBYTE f0/ec=0x64`
+    - `01a6:JMPFL`
+    - `01a9:IFUBL`
+    - `01b0:SETBYTE 5f/68=0xfa`
+    - `01b8:IFUB A=68V=64C=5E=0b->01c8`
+    - `01be:SETBYTE f5/fa=0x68`
+    - `01c2:SETBYTE 50/6b=0x1`
+    - `01c6:JMPF ->01d1`
+    - `01c8:SETBYTE 50/6b=0x2`
+    - `01cc:SETBYTE f0/fa=0x64`
+    - `01d0:IFUB A=fbV=00C=1E=1d->01f2`
+    - ... +51
+  - SD interesting (131):
+    - `0000:SETBYTE 50/67=0x0`
+    - `0004:SETBYTE 50/69=0x0`
+    - `0008:SETBYTE 50/6a=0x0`
+    - `000c:SETBYTE 50/6b=0x0`
+    - `0010:SETBYTE 50/6c=0x0`
+    - `0014:IFUBL`
+    - `002d:IFUBL`
+    - `0034:SETBYTE 5b/68=0x2a`
+    - `003c:IFUB A=68V=64C=5E=0b->004c`
+    - `0042:SETBYTE b5/2a=0x68`
+    - `0046:SETBYTE 50/6b=0x1`
+    - `004a:JMPF ->0055`
+    - `004c:SETBYTE 50/6b=0x2`
+    - `0050:SETBYTE b0/2a=0x64`
+    - `0054:IFUB A=2bV=00C=1E=1d->0076`
+    - `0068:IFUB A=2cV=64C=4E=09->0076`
+    - `006e:SETBYTE b0/2b=0x0`
+    - `0072:SETBYTE b0/2c=0x64`
+    - `0076:JMPFL`
+    - `0079:IFUBL`
+    - `0080:SETBYTE 5b/68=0x3a`
+    - `0088:IFUB A=68V=64C=5E=0b->0098`
+    - `008e:SETBYTE b5/3a=0x68`
+    - `0092:SETBYTE 50/6b=0x1`
+    - `0096:JMPF ->00a1`
+    - `0098:SETBYTE 50/6b=0x2`
+    - `009c:SETBYTE b0/3a=0x64`
+    - `00a0:IFUB A=3bV=00C=1E=1d->00c2`
+    - `00b4:IFUB A=3cV=64C=4E=09->00c2`
+    - `00ba:SETBYTE b0/3b=0x0`
+    - `00be:SETBYTE b0/3c=0x64`
+    - `00c2:JMPFL`
+    - `00c5:IFUBL`
+    - `00cc:SETBYTE 5b/68=0x4a`
+    - `00d4:IFUB A=68V=64C=5E=0b->00e4`
+    - `00da:SETBYTE b5/4a=0x68`
+    - `00de:SETBYTE 50/6b=0x1`
+    - `00e2:JMPF ->00ed`
+    - `00e4:SETBYTE 50/6b=0x2`
+    - `00e8:SETBYTE b0/4a=0x64`
+    - `00ec:IFUB A=4bV=00C=1E=1d->010e`
+    - `0100:IFUB A=4cV=64C=4E=09->010e`
+    - `0106:SETBYTE b0/4b=0x0`
+    - `010a:SETBYTE b0/4c=0x64`
+    - `010e:JMPFL`
+    - `0111:IFUBL`
+    - `0118:SETBYTE 5b/68=0x5a`
+    - `0120:IFUB A=68V=64C=5E=0b->0130`
+    - `0126:SETBYTE b5/5a=0x68`
+    - `012a:SETBYTE 50/6b=0x1`
+    - `012e:JMPF ->0139`
+    - `0130:SETBYTE 50/6b=0x2`
+    - `0134:SETBYTE b0/5a=0x64`
+    - `0138:IFUB A=5bV=00C=1E=1d->015a`
+    - `014c:IFUB A=5cV=64C=4E=09->015a`
+    - `0152:SETBYTE b0/5b=0x0`
+    - `0156:SETBYTE b0/5c=0x64`
+    - `015a:JMPFL`
+    - `015d:IFUBL`
+    - `0164:SETBYTE 5f/68=0xea`
+    - `016c:IFUB A=68V=64C=5E=0b->017c`
+    - `0172:SETBYTE f5/ea=0x68`
+    - `0176:SETBYTE 50/6b=0x1`
+    - `017a:JMPF ->0185`
+    - `017c:SETBYTE 50/6b=0x2`
+    - `0180:SETBYTE f0/ea=0x64`
+    - `0184:IFUB A=ebV=00C=1E=1d->01a6`
+    - `0198:IFUB A=ecV=64C=4E=09->01a6`
+    - `019e:SETBYTE f0/eb=0x0`
+    - `01a2:SETBYTE f0/ec=0x64`
+    - `01a6:JMPFL`
+    - `01a9:IFUBL`
+    - `01b0:SETBYTE 5f/68=0xfa`
+    - `01b8:IFUB A=68V=64C=5E=0b->01c8`
+    - `01be:SETBYTE f5/fa=0x68`
+    - `01c2:SETBYTE 50/6b=0x1`
+    - `01c6:JMPF ->01d1`
+    - `01c8:SETBYTE 50/6b=0x2`
+    - `01cc:SETBYTE f0/fa=0x64`
+    - `01d0:IFUB A=fbV=00C=1E=1d->01f2`
+    - ... +51
+
+### FSHIP_1
+- D1 sha: 11250a5a2f33a733 dec=9004
+- D2 sha: 7b3c5cf2767ef751 dec=8976
+- SD sha: 7c689ebd81b44e19 dec=8976
+
+#### SD vs CSR D1
+- **`ba/5`** len 17->17 (c9a5434053bf->3c13a268fc81)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:WINDOW`
+    - `000d:MESSAGE 400101`
+    - `0010:RET`
+  - SD:
+    - `0000:ANIME1`
+    - `0003:RET`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400101`
+- **`ba/6`** len 9->5 (7df7c566d89e->f5822fdcacd0)
+  - D1:
+    - `0000:TURA`
+    - `0004:ANIME1`
+    - `0007:ANIMW`
+    - `0008:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`direct/31`** len 74->80 (374fdd8dd1d7->8bc8db3747c1)
+  - D1:
+    - `0000:FADE`
+    - `0009:MENU2`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:PRTYE`
+    - `0013:REQEW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:IFMEMBQ`
+    - `001f:REQEW`
+    - `0022:FADE`
+    - `002b:FADEW`
+    - `002c:REQEW`
+    - `002f:REQEW`
+    - `0032:REQEW`
+    - `0035:REQEW`
+    - `0038:REQEW`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:CC`
+    - `0043:MENU2`
+    - `0045:UC`
+    - `0047:MENU2`
+    - `0049:RET`
+  - SD:
+    - `0000:FADE`
+    - `0009:MENU2`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:PRTYE`
+    - `0013:REQEW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:IFMEMBQ`
+    - `001f:REQEW`
+    - `0022:FADE`
+    - `002b:FADEW`
+    - `002c:REQEW`
+    - `002f:REQEW`
+    - `0032:REQEW`
+    - `0035:REQEW`
+    - `0038:REQEW`
+    - `003b:CC`
+    - `003d:MMBud`
+    - `0040:MMBud`
+    - `0043:MENU2`
+    - `0045:UC`
+    - `0047:MENU2`
+    - `0049:RET`
+    - `004a:REQEW`
+    - `004d:REQEW`
+- **`tifa/4`** len 30->30 (24b9fe96f2b9->6239a5d166e8)
+  - D1:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:CANM!2`
+    - `000b:ANIMW`
+    - `000c:XYZI`
+    - `0017:TURNGEN`
+    - `001d:RET`
+  - SD:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:XYZI`
+    - `0011:RET`
+    - `0012:CANM!2`
+    - `0017:ANIMW`
+    - `0018:TURNGEN`
+- **`tifa/5`** len 20->13 (66427b3f6b26->7a061ea31a28)
+  - D1:
+    - `0000:WAIT`
+    - `0003:CANIM2`
+    - `0008:ANIMW`
+    - `0009:TURNGEN`
+    - `000f:ANIME1`
+    - `0012:ANIMW`
+    - `0013:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:RET`
+    - `0007:CANIM2`
+    - `000c:ANIMW`
+- **`tifa/6`** len 46->24 (3daf7f612aad->48425d30d213)
+  - D1:
+    - `0000:TURA`
+    - `0004:ANIME1`
+    - `0007:WINDOW`
+    - `0011:MESSAGE 400102`
+    - `0014:CANM!2`
+    - `0019:ANIMW`
+    - `001a:WINDOW`
+    - `0024:MESSAGE 400103`
+    - `0027:CANM!2`
+    - `002c:ANIMW`
+    - `002d:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400102`
+    - `0011:RET`
+    - `0012:CANM!2`
+    - `0017:ANIMW`
+
+#### SD vs CSR D2
+
+### FSHIP_12
+- D1 sha: 11c10bec0f4c609b dec=16488
+- D2 sha: 11c10bec0f4c609b dec=16488
+- SD sha: 4306260f27a81b68 dec=16488
+
+#### SD vs CSR D1
+- **`ad/3`** len 95->95 (b0a100977ef7->42b826540436)
+  - D1:
+    - `0000:WAIT`
+    - `0003:FADE`
+    - `000c:FADEW`
+    - `000d:WAIT`
+    - `0010:REQEW`
+    - `0013:REQSW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:PMVIE id=59`
+    - `001e:MOVIE`
+    - `001f:FADE`
+    - `0028:PMVIE id=50`
+    - `002a:MOVIE`
+    - `002b:REQSW`
+    - `002e:WAIT`
+    - `0031:REQSW`
+    - `0034:REQEW`
+    - `0037:REQEW`
+    - `003a:REQEW`
+    - `003d:AKAO`
+    - `004b:WAIT`
+    - `004e:PMVIE id=51`
+    - `0050:REQ`
+    - `0053:MOVIE`
+    - `0054:MAPJUMP #269`
+    - `005e:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:FADE`
+    - `000c:FADEW`
+    - `000d:WAIT`
+    - `0010:REQEW`
+    - `0013:REQSW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:PMVIE id=55`
+    - `001e:MOVIE`
+    - `001f:FADE`
+    - `0028:PMVIE id=56`
+    - `002a:MOVIE`
+    - `002b:REQSW`
+    - `002e:WAIT`
+    - `0031:REQSW`
+    - `0034:REQEW`
+    - `0037:REQEW`
+    - `003a:REQEW`
+    - `003d:AKAO`
+    - `004b:WAIT`
+    - `004e:PMVIE id=57`
+    - `0050:REQ`
+    - `0053:MOVIE`
+    - `0054:MAPJUMP #269`
+    - `005e:RET`
+- **`drctr/0`** len 76->76 (57f4434b8aca->5befe1fea542)
+  - D1:
+    - `0000:MPNAM`
+    - `0002:IFSW V=0x63eC=0E=05->000e`
+    - `000a:MUSIC id=0`
+    - `000c:JMPF ->0011`
+    - `000e:MUSIC id=1`
+    - `0010:RET`
+    - `0011:IFSW V=0x624C=0E=18->0030`
+    - `0019:UC`
+    - `001b:MENU2`
+    - `001d:FADE`
+    - `0026:PMVIE id=55`
+    - `0028:MOVIE`
+    - `0029:REQEW`
+    - `002c:UC`
+    - `002e:MENU2`
+    - `0030:IFSW V=0x63eC=0E=14->004b`
+    - `0038:UC`
+    - `003a:MENU2`
+    - `003c:WAIT`
+    - `003f:SETWORD 20/00=0x63f`
+    - `0044:REQEW`
+    - `0047:UC`
+    - `0049:MENU2`
+    - `004b:RET`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:IFSW V=0x63eC=0E=05->000e`
+    - `000a:MUSIC id=0`
+    - `000c:JMPF ->0011`
+    - `000e:MUSIC id=1`
+    - `0010:RET`
+    - `0011:IFSW V=0x624C=0E=18->0030`
+    - `0019:UC`
+    - `001b:MENU2`
+    - `001d:FADE`
+    - `0026:PMVIE id=54`
+    - `0028:MOVIE`
+    - `0029:REQEW`
+    - `002c:UC`
+    - `002e:MENU2`
+    - `0030:IFSW V=0x63eC=0E=14->004b`
+    - `0038:UC`
+    - `003a:MENU2`
+    - `003c:WAIT`
+    - `003f:SETWORD 20/00=0x63f`
+    - `0044:REQEW`
+    - `0047:UC`
+    - `0049:MENU2`
+    - `004b:RET`
+
+#### SD vs CSR D2
+- **`ad/3`** len 95->95 (b0a100977ef7->42b826540436)
+  - D2:
+    - `0000:WAIT`
+    - `0003:FADE`
+    - `000c:FADEW`
+    - `000d:WAIT`
+    - `0010:REQEW`
+    - `0013:REQSW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:PMVIE id=59`
+    - `001e:MOVIE`
+    - `001f:FADE`
+    - `0028:PMVIE id=50`
+    - `002a:MOVIE`
+    - `002b:REQSW`
+    - `002e:WAIT`
+    - `0031:REQSW`
+    - `0034:REQEW`
+    - `0037:REQEW`
+    - `003a:REQEW`
+    - `003d:AKAO`
+    - `004b:WAIT`
+    - `004e:PMVIE id=51`
+    - `0050:REQ`
+    - `0053:MOVIE`
+    - `0054:MAPJUMP #269`
+    - `005e:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:FADE`
+    - `000c:FADEW`
+    - `000d:WAIT`
+    - `0010:REQEW`
+    - `0013:REQSW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:PMVIE id=55`
+    - `001e:MOVIE`
+    - `001f:FADE`
+    - `0028:PMVIE id=56`
+    - `002a:MOVIE`
+    - `002b:REQSW`
+    - `002e:WAIT`
+    - `0031:REQSW`
+    - `0034:REQEW`
+    - `0037:REQEW`
+    - `003a:REQEW`
+    - `003d:AKAO`
+    - `004b:WAIT`
+    - `004e:PMVIE id=57`
+    - `0050:REQ`
+    - `0053:MOVIE`
+    - `0054:MAPJUMP #269`
+    - `005e:RET`
+- **`drctr/0`** len 76->76 (57f4434b8aca->5befe1fea542)
+  - D2:
+    - `0000:MPNAM`
+    - `0002:IFSW V=0x63eC=0E=05->000e`
+    - `000a:MUSIC id=0`
+    - `000c:JMPF ->0011`
+    - `000e:MUSIC id=1`
+    - `0010:RET`
+    - `0011:IFSW V=0x624C=0E=18->0030`
+    - `0019:UC`
+    - `001b:MENU2`
+    - `001d:FADE`
+    - `0026:PMVIE id=55`
+    - `0028:MOVIE`
+    - `0029:REQEW`
+    - `002c:UC`
+    - `002e:MENU2`
+    - `0030:IFSW V=0x63eC=0E=14->004b`
+    - `0038:UC`
+    - `003a:MENU2`
+    - `003c:WAIT`
+    - `003f:SETWORD 20/00=0x63f`
+    - `0044:REQEW`
+    - `0047:UC`
+    - `0049:MENU2`
+    - `004b:RET`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:IFSW V=0x63eC=0E=05->000e`
+    - `000a:MUSIC id=0`
+    - `000c:JMPF ->0011`
+    - `000e:MUSIC id=1`
+    - `0010:RET`
+    - `0011:IFSW V=0x624C=0E=18->0030`
+    - `0019:UC`
+    - `001b:MENU2`
+    - `001d:FADE`
+    - `0026:PMVIE id=54`
+    - `0028:MOVIE`
+    - `0029:REQEW`
+    - `002c:UC`
+    - `002e:MENU2`
+    - `0030:IFSW V=0x63eC=0E=14->004b`
+    - `0038:UC`
+    - `003a:MENU2`
+    - `003c:WAIT`
+    - `003f:SETWORD 20/00=0x63f`
+    - `0044:REQEW`
+    - `0047:UC`
+    - `0049:MENU2`
+    - `004b:RET`
+
+### FSHIP_23
+- D1 sha: 5291f2e6c6481a24 dec=43580
+- D2 sha: a2e49869044799b7 dec=43532
+- SD sha: 587ae76080b00421 dec=43532
+
+#### SD vs CSR D1
+- **`ba/1`** len 214->214 (402da6f217b1->0d19faddc478)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x45cC=0E=1a->0025`
+    - `000c:TURA`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400159`
+    - `001d:TURNGEN`
+    - `0023:JMPF ->00d2`
+    - `0025:IFSW V=0x407C=3E=1d->0049`
+    - `002d:TURA`
+    - `0031:ANIME1`
+    - `0034:WINDOW`
+    - `003e:MESSAGE 400154`
+    - `0041:TURNGEN`
+    - `0047:JMPF ->00d2`
+    - `0049:IFSW V=0x409C=3E=1d->006d`
+    - `0051:TURA`
+    - `0055:ANIME1`
+    - `0058:WINDOW`
+    - `0062:MESSAGE 400155`
+    - `0065:TURNGEN`
+    - `006b:JMPF ->00d2`
+    - `006d:IFSW V=0x44eC=3E=13->0087`
+    - `0075:ANIME1`
+    - `0078:WINDOW`
+    - `0082:MESSAGE 400156`
+    - `0085:JMPF ->00d2`
+    - `0087:IFSW V=0x45cC=3E=43->00d1`
+    - `008f:IFUB A=91V=05C=10E=20->00b4`
+    - `0095:ANIME2`
+    - `0098:TURA`
+    - `009c:WINDOW`
+    - `00a6:MESSAGE 400157`
+    - `00a9:REQEW`
+    - `00ac:TURNGEN`
+    - `00b2:JMPF ->00d2`
+    - `00b4:ANIME2`
+    - `00b7:TURA`
+    - `00bb:WINDOW`
+    - `00c5:MESSAGE 400158`
+    - `00c8:REQEW`
+    - `00cb:TURNGEN`
+    - `00d1:UC`
+    - `00d3:MENU2`
+    - `00d5:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x45cC=0E=1a->0025`
+    - `000c:TURA`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400159`
+    - `001d:TURNGEN`
+    - `0023:JMPF ->00d2`
+    - `0025:IFSW V=0x407C=3E=1d->0049`
+    - `002d:TURA`
+    - `0031:ANIME1`
+    - `0034:WINDOW`
+    - `003e:MESSAGE 400154`
+    - `0041:TURNGEN`
+    - `0047:JMPF ->00d2`
+    - `0049:IFSW V=0x409C=3E=1d->006d`
+    - `0051:TURA`
+    - `0055:ANIME1`
+    - `0058:WINDOW`
+    - `0062:MESSAGE 400155`
+    - `0065:TURNGEN`
+    - `006b:JMPF ->00d2`
+    - `006d:IFSW V=0x44eC=3E=13->0087`
+    - `0075:ANIME1`
+    - `0078:WINDOW`
+    - `0082:MESSAGE 400156`
+    - `0085:JMPF ->00d2`
+    - `0087:IFSW V=0x45cC=3E=43->00d1`
+    - `008f:IFUB A=91V=05C=10E=20->00b4`
+    - `0095:ANIME2`
+    - `0098:TURA`
+    - `009c:REQEW`
+    - `009f:TURNGEN`
+    - `00a5:JMPF ->00d2`
+    - `00a7:WINDOW`
+    - `00b1:MESSAGE 400157`
+    - `00b4:ANIME2`
+    - `00b7:TURA`
+    - `00bb:WINDOW`
+    - `00c5:MESSAGE 400158`
+    - `00c8:REQEW`
+    - `00cb:TURNGEN`
+    - `00d1:UC`
+    - `00d3:MENU2`
+    - `00d5:RET`
+- **`cid/1`** len 447->449 (222dc5ab7ee9->e00622d3e71b)
+  - D1 interesting (47):
+    - `0004:IFSWL`
+    - `0017:MESSAGE 400127`
+    - `001e:JMPFL`
+    - `0021:IFSWL`
+    - `002a:IFSWL`
+    - `0033:IFUBL`
+    - `003a:IFUB A=16V=02C=10E=63->00a2`
+    - `004e:MESSAGE 400112`
+    - `005e:MESSAGE 400113`
+    - `006e:MESSAGE 400114`
+    - `0074:REQEW`
+    - `0084:MESSAGE 400116`
+    - `008b:REQEW`
+    - `008e:REQEW`
+    - `0091:REQEW`
+    - `0094:BITON 30/16#2`
+    - `00a0:JMPF ->00b0`
+    - `00ac:MESSAGE 400116`
+    - `00af:JMPFL`
+    - `00b2:IFUB A=16V=02C=10E=63->011a`
+    - `00c6:MESSAGE 400112`
+    - `00d6:MESSAGE 400113`
+    - `00e6:MESSAGE 400114`
+    - `00ec:REQEW`
+    - `00fc:MESSAGE 400116`
+    - `0103:REQEW`
+    - `0106:REQEW`
+    - `0109:REQEW`
+    - `010c:BITON 30/16#2`
+    - `0118:JMPF ->0128`
+    - `0124:MESSAGE 400123`
+    - `0127:JMPFL`
+    - `012a:IFUB A=16V=02C=10E=63->0192`
+    - `013e:MESSAGE 400112`
+    - `014e:MESSAGE 400113`
+    - `015e:MESSAGE 400114`
+    - `0164:REQEW`
+    - `0174:MESSAGE 400116`
+    - `017b:REQEW`
+    - `017e:REQEW`
+    - `0181:REQEW`
+    - `0184:BITON 30/16#2`
+    - `0190:JMPF ->01a0`
+    - `019c:MESSAGE 400124`
+    - `019f:JMPFL`
+    - `01b3:MESSAGE 40016d`
+    - `01be:RET`
+  - SD interesting (48):
+    - `0004:IFSWL`
+    - `0017:MESSAGE 400127`
+    - `001e:JMPFL`
+    - `0021:IFSWL`
+    - `002a:IFSWL`
+    - `0033:IFUBL`
+    - `003a:IFUB A=16V=02C=10E=65->00a4`
+    - `004e:MESSAGE 400112`
+    - `0051:JMPF ->0097`
+    - `0060:MESSAGE 400113`
+    - `0070:MESSAGE 400114`
+    - `0076:REQEW`
+    - `0086:MESSAGE 400116`
+    - `008d:REQEW`
+    - `0090:REQEW`
+    - `0093:REQEW`
+    - `0096:BITON 30/16#2`
+    - `00a2:JMPF ->00b2`
+    - `00ae:MESSAGE 400116`
+    - `00b1:JMPFL`
+    - `00b4:IFUB A=16V=02C=10E=63->011c`
+    - `00c8:MESSAGE 400112`
+    - `00d8:MESSAGE 400113`
+    - `00e8:MESSAGE 400114`
+    - `00ee:REQEW`
+    - `00fe:MESSAGE 400116`
+    - `0105:REQEW`
+    - `0108:REQEW`
+    - `010b:REQEW`
+    - `010e:BITON 30/16#2`
+    - `011a:JMPF ->012a`
+    - `0126:MESSAGE 400123`
+    - `0129:JMPFL`
+    - `012c:IFUB A=16V=02C=10E=63->0194`
+    - `0140:MESSAGE 400112`
+    - `0150:MESSAGE 400113`
+    - `0160:MESSAGE 400114`
+    - `0166:REQEW`
+    - `0176:MESSAGE 400116`
+    - `017d:REQEW`
+    - `0180:REQEW`
+    - `0183:REQEW`
+    - `0186:BITON 30/16#2`
+    - `0192:JMPF ->01a2`
+    - `019e:MESSAGE 400124`
+    - `01a1:JMPFL`
+    - `01b5:MESSAGE 40016d`
+    - `01c0:RET`
+  - opcode counts: JMPF:3->4
+- **`cid/4`** len 35->28 (79d685732ba9->6b6fc4aeda6c)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:ANIME1`
+    - `000d:ANIMW`
+    - `000e:TURA`
+    - `0012:ANIME1`
+    - `0015:WINDOW`
+    - `001f:MESSAGE 400102`
+    - `0022:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:TURA`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400102`
+    - `001b:RET`
+- **`cid/7`** len 21->21 (7ab07eaab89b->7cd68e776ba2)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MOVE`
+    - `0010:TURA`
+    - `0014:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MOVE`
+    - `0010:TURA`
+    - `0014:RET`
+- **`cid/9`** len 56->22 (840f8125878e->1e8796aaaec1)
+  - D1:
+    - `0000:TURA`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400120`
+    - `0011:TURA`
+    - `0015:WINDOW`
+    - `001f:MESSAGE 400121`
+    - `0022:TURA`
+    - `0026:WINDOW`
+    - `0030:MESSAGE 400122`
+    - `0033:TURA`
+    - `0037:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400122`
+    - `0011:TURA`
+    - `0015:RET`
+- **`crew3/1`** len 331->318 (3661d92d77b9->6e69fad9430d)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSWL`
+    - `000d:WINDOW`
+    - `0017:ASK 48050173020300`
+    - `001e:IFUB A=00V=02C=0E=22->0045`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400174`
+    - `0031:FADE`
+    - `003a:FADEW`
+    - `003b:MAPJUMP #45`
+    - `0045:JMPFL`
+    - `0048:IFSW V=0x407C=3E=10->005f`
+    - `0050:WINDOW`
+    - `005a:MESSAGE 40011d`
+    - `005d:JMPF ->0147`
+    - `005f:IFSW V=0x409C=3E=2c->0092`
+    - `0067:IFUB A=16V=03C=10E=17->0083`
+    - `006d:BITON 30/16#3`
+    - `0071:WINDOW`
+    - `007b:MESSAGE 40011f`
+    - `007e:REQEW`
+    - `0081:JMPF ->0091`
+    - `0083:WINDOW`
+    - `008d:MESSAGE 40011d`
+    - `0090:JMPF ->0147`
+    - `0092:IFSW V=0x44eC=3E=5e->00f7`
+    - `009a:WINDOW`
+    - `00a4:ASK 48050125020300`
+    - `00ab:IFUB A=00V=02C=0E=45->00f5`
+    - `00b1:WINDOW`
+    - `00bb:MESSAGE 400126`
+    - `00be:WAIT`
+    - `00c1:IFUB A=16V=07C=10E=1b->00e1`
+    - `00c7:BITON 30/16#7`
+    - `00cb:FADE`
+    - `00d4:FADEW`
+    - `00d5:MAPJUMP #41`
+    - `00df:JMPF ->00f6`
+    - `00e1:FADE`
+    - `00ea:FADEW`
+    - `00eb:MAPJUMP #45`
+    - `00f5:JMPF ->0147`
+    - `00f7:IFSW V=0x456C=3E=10->010e`
+    - `00ff:WINDOW`
+    - `0109:MESSAGE 400146`
+    - `010c:JMPF ->0147`
+    - `010e:WINDOW`
+    - `0118:ASK 48050152020300`
+    - `011f:IFUB A=00V=02C=0E=22->0146`
+    - `0125:WINDOW`
+    - `012f:MESSAGE 400153`
+    - `0132:FADE`
+    - `013b:FADEW`
+    - `013c:MAPJUMP #45`
+    - `0146:UC`
+    - `0148:MENU2`
+    - `014a:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSWL`
+    - `000d:WINDOW`
+    - `0017:ASK 48050173020300`
+    - `001e:IFUB A=00V=02C=0E=22->0045`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400174`
+    - `0031:FADE`
+    - `003a:FADEW`
+    - `003b:MAPJUMP #45`
+    - `0045:JMPFL`
+    - `0048:IFSW V=0x407C=3E=10->005f`
+    - `0050:WINDOW`
+    - `005a:MESSAGE 40011d`
+    - `005d:JMPF ->013a`
+    - `005f:IFSW V=0x409C=3E=1f->0085`
+    - `0067:IFUB A=16V=03C=10E=0a->0076`
+    - `006d:BITON 30/16#3`
+    - `0071:REQEW`
+    - `0074:JMPF ->0084`
+    - `0076:WINDOW`
+    - `0080:MESSAGE 40011d`
+    - `0083:JMPF ->013a`
+    - `0085:IFSW V=0x44eC=3E=5e->00ea`
+    - `008d:WINDOW`
+    - `0097:ASK 48050125020300`
+    - `009e:IFUB A=00V=02C=0E=45->00e8`
+    - `00a4:WINDOW`
+    - `00ae:MESSAGE 400126`
+    - `00b1:WAIT`
+    - `00b4:IFUB A=16V=07C=10E=1b->00d4`
+    - `00ba:BITON 30/16#7`
+    - `00be:FADE`
+    - `00c7:FADEW`
+    - `00c8:MAPJUMP #41`
+    - `00d2:JMPF ->00e9`
+    - `00d4:FADE`
+    - `00dd:FADEW`
+    - `00de:MAPJUMP #45`
+    - `00e8:JMPF ->013a`
+    - `00ea:IFSW V=0x456C=3E=10->0101`
+    - `00f2:WINDOW`
+    - `00fc:MESSAGE 400146`
+    - `00ff:JMPF ->013a`
+    - `0101:WINDOW`
+    - `010b:ASK 48050152020300`
+    - `0112:IFUB A=00V=02C=0E=22->0139`
+    - `0118:WINDOW`
+    - `0122:MESSAGE 400153`
+    - `0125:FADE`
+    - `012e:FADEW`
+    - `012f:MAPJUMP #45`
+    - `0139:UC`
+    - `013b:MENU2`
+    - `013d:RET`
+- **`direct/1`** len 82->84 (e26585733175->62aabdf44f71)
+  - D1:
+    - `0000:REQEW`
+    - `0003:REQEW`
+    - `0006:REQEW`
+    - `0009:REQEW`
+    - `000c:IFMEMBQ`
+    - `000f:REQ`
+    - `0012:REQEW`
+    - `0015:REQSW`
+    - `0018:REQSW`
+    - `001b:REQEW`
+    - `001e:SCR2DC`
+    - `0027:SCRLW`
+    - `0028:MUSIC id=0`
+    - `002a:REQEW`
+    - `002d:WAIT`
+    - `0030:SCRLC`
+    - `0035:SCRLW`
+    - `0036:REQEW`
+    - `0039:REQEW`
+    - `003c:REQEW`
+    - `003f:REQEW`
+    - `0042:REQSW`
+    - `0045:REQEW`
+    - `0048:SETWORD 20/00=0x405`
+    - `004d:UC`
+    - `004f:MENU2`
+    - `0051:RET`
+  - SD:
+    - `0000:REQEW`
+    - `0003:REQEW`
+    - `0006:REQEW`
+    - `0009:REQEW`
+    - `000c:IFMEMBQ`
+    - `000f:REQ`
+    - `0012:REQEW`
+    - `0015:REQSW`
+    - `0018:REQSW`
+    - `001b:REQEW`
+    - `001e:SCR2DC`
+    - `0027:SCRLW`
+    - `0028:MUSIC id=0`
+    - `002a:REQEW`
+    - `002d:SCRLC`
+    - `0032:SCRLW`
+    - `0033:JMPF ->004b`
+    - `0035:WAIT`
+    - `0038:REQEW`
+    - `003b:REQEW`
+    - `003e:REQEW`
+    - `0041:REQEW`
+    - `0044:REQSW`
+    - `0047:REQEW`
+    - `004a:SETWORD 20/00=0x405`
+    - `004f:UC`
+    - `0051:MENU2`
+    - `0053:RET`
+- **`red/1`** len 263->265 (83bbaec75391->b1156abea04e)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x45cC=0E=1a->0025`
+    - `000c:TURA`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 40015e`
+    - `001d:TURNGEN`
+    - `0023:JMPF ->0103`
+    - `0025:IFSW V=0x407C=3E=56->0082`
+    - `002d:UC`
+    - `002f:MENU2`
+    - `0031:TURA`
+    - `0035:WINDOW`
+    - `003f:MESSAGE 400107`
+    - `0042:REQSW`
+    - `0045:REQEW`
+    - `0048:REQSW`
+    - `004b:REQEW`
+    - `004e:REQEW`
+    - `0051:REQEW`
+    - `0054:REQEW`
+    - `0057:REQSW`
+    - `005a:ANIME1`
+    - `005d:WINDOW`
+    - `0067:MESSAGE 400110`
+    - `006a:REQEW`
+    - `006d:TURNGEN`
+    - `0073:ANIME1`
+    - `0076:ANIMW`
+    - `0077:SETWORD 20/00=0x407`
+    - `007c:UC`
+    - `007e:MENU2`
+    - `0080:JMPF ->0103`
+    - `0082:IFSW V=0x409C=3E=1a->00a3`
+    - `008a:TURA`
+    - `008e:WINDOW`
+    - `0098:MESSAGE 40015a`
+    - `009b:TURNGEN`
+    - `00a1:JMPF ->0103`
+    - `00a3:IFSW V=0x44eC=3E=1a->00c4`
+    - `00ab:TURA`
+    - `00af:WINDOW`
+    - `00b9:MESSAGE 40015b`
+    - `00bc:TURNGEN`
+    - `00c2:JMPF ->0103`
+    - `00c4:IFSW V=0x45cC=3E=37->0102`
+    - `00cc:IFUB A=91V=05C=10E=1a->00eb`
+    - `00d2:TURA`
+    - `00d6:WINDOW`
+    - `00e0:MESSAGE 40015d`
+    - `00e3:TURNGEN`
+    - `00e9:JMPF ->0103`
+    - `00eb:TURA`
+    - `00ef:WINDOW`
+    - `00f9:MESSAGE 40015c`
+    - `00fc:TURNGEN`
+    - `0102:UC`
+    - `0104:MENU2`
+    - `0106:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x45cC=0E=1a->0025`
+    - `000c:TURA`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 40015e`
+    - `001d:TURNGEN`
+    - `0023:JMPF ->0105`
+    - `0025:IFSW V=0x407C=3E=58->0084`
+    - `002d:UC`
+    - `002f:MENU2`
+    - `0031:REQSW`
+    - `0034:TURA`
+    - `0038:WINDOW`
+    - `0042:MESSAGE 400107`
+    - `0045:JMPF ->0070`
+    - `0047:REQSW`
+    - `004a:REQEW`
+    - `004d:REQEW`
+    - `0050:REQEW`
+    - `0053:REQEW`
+    - `0056:REQEW`
+    - `0059:REQSW`
+    - `005c:ANIME1`
+    - `005f:WINDOW`
+    - `0069:MESSAGE 400110`
+    - `006c:REQEW`
+    - `006f:TURNGEN`
+    - `0075:ANIME1`
+    - `0078:ANIMW`
+    - `0079:SETWORD 20/00=0x407`
+    - `007e:JMPF ->0105`
+    - `0080:UC`
+    - `0082:MENU2`
+    - `0084:IFSW V=0x409C=3E=1a->00a5`
+    - `008c:TURA`
+    - `0090:WINDOW`
+    - `009a:MESSAGE 40015a`
+    - `009d:TURNGEN`
+    - `00a3:JMPF ->0105`
+    - `00a5:IFSW V=0x44eC=3E=1a->00c6`
+    - `00ad:TURA`
+    - `00b1:WINDOW`
+    - `00bb:MESSAGE 40015b`
+    - `00be:TURNGEN`
+    - `00c4:JMPF ->0105`
+    - `00c6:IFSW V=0x45cC=3E=37->0104`
+    - `00ce:IFUB A=91V=05C=10E=1a->00ed`
+    - `00d4:TURA`
+    - `00d8:WINDOW`
+    - `00e2:MESSAGE 40015d`
+    - `00e5:TURNGEN`
+    - `00eb:JMPF ->0105`
+    - `00ed:TURA`
+    - `00f1:WINDOW`
+    - `00fb:MESSAGE 40015c`
+    - `00fe:TURNGEN`
+    - `0104:UC`
+    - `0106:MENU2`
+    - `0108:RET`
+
+#### SD vs CSR D2
+
+### FSHIP_25
+- D1 sha: da122b8b26bbab12 dec=62072
+- D2 sha: 6278e86171ae32d3 dec=61932
+- SD sha: b5c2152e3587aa9a dec=61932
+
+#### SD vs CSR D1
+- **`ba/8`** len 16->16 (8f99711c1cb0->240cc287cdc1)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:MOVE`
+    - `0009:TURNGEN`
+    - `000f:RET`
+  - SD:
+    - `0000:ANIME1`
+    - `0003:TURNGEN`
+    - `0009:RET`
+    - `000a:MOVE`
+- **`cid/14`** len 67->69 (0bc803c96fc3->099fd0cf52b4)
+  - D1:
+    - `0000:TURA`
+    - `0004:WAIT`
+    - `0007:TURA`
+    - `000b:WAIT`
+    - `000e:TURA`
+    - `0012:WAIT`
+    - `0015:ANIME1`
+    - `0018:MOVE`
+    - `001e:TURNGEN`
+    - `0024:ANIM!2`
+    - `0027:AKAO`
+    - `0035:WINDOW`
+    - `003f:MESSAGE 400222`
+    - `0042:RET`
+  - SD:
+    - `0000:JMPF ->0021`
+    - `0002:TURA`
+    - `0006:WAIT`
+    - `0009:TURA`
+    - `000d:WAIT`
+    - `0010:TURA`
+    - `0014:WAIT`
+    - `0017:ANIME1`
+    - `001a:MOVE`
+    - `0020:TURNGEN`
+    - `0026:ANIM!2`
+    - `0029:AKAO`
+    - `0037:RET`
+    - `0038:WINDOW`
+    - `0042:MESSAGE 400222`
+- **`cid/4`** len 21->32 (269aaeaf512b->d18b86a8413d)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+    - `0015:XYZI`
+- **`cloud/11`** len 23->23 (31aa7d959ff6->93cd647967f4)
+  - D1:
+    - `0000:ANIME2`
+    - `0003:TURNGEN`
+    - `0009:WINDOW`
+    - `0013:MESSAGE 400128`
+    - `0016:RET`
+  - SD:
+    - `0000:ANIME2`
+    - `0003:TURNGEN`
+    - `0009:RET`
+    - `000a:WINDOW`
+    - `0014:MESSAGE 400128`
+- **`cloud/4`** len 15->26 (9effc880cb10->f1942456c05d)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:RET`
+    - `000f:XYZI`
+- **`cloud/5`** len 29->31 (2b89963f46a9->59b116d23464)
+  - D1:
+    - `0000:MOVE`
+    - `0006:WINDOW`
+    - `0010:MESSAGE 40010f`
+    - `0013:MOVE`
+    - `0019:ANIME1`
+    - `001c:RET`
+  - SD:
+    - `0000:JMPF ->0016`
+    - `0002:MOVE`
+    - `0008:WINDOW`
+    - `0012:MESSAGE 40010f`
+    - `0015:MOVE`
+    - `001b:RET`
+    - `001c:ANIME1`
+- **`cloud/6`** len 23->23 (8b9f63cd1f9f->e8cc1a07f861)
+  - D1:
+    - `0000:MOVE`
+    - `0006:ANIME1`
+    - `0009:WINDOW`
+    - `0013:MESSAGE 400117`
+    - `0016:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:RET`
+    - `0007:ANIME1`
+    - `000a:WINDOW`
+    - `0014:MESSAGE 400117`
+- **`direct/2`** len 205->227 (2d69162b7b7f->67c6f917d7b8)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:SCR2D`
+    - `000a:SCRLW`
+    - `000b:REQEW`
+    - `000e:REQEW`
+    - `0011:REQEW`
+    - `0014:REQEW`
+    - `0017:REQEW`
+    - `001a:REQEW`
+    - `001d:REQEW`
+    - `0020:REQEW`
+    - `0023:REQEW`
+    - `0026:REQSW`
+    - `0029:SCRLA`
+    - `002f:SCRLW`
+    - `0030:REQEW`
+    - `0033:REQEW`
+    - `0036:REQEW`
+    - `0039:REQEW`
+    - `003c:REQEW`
+    - `003f:REQEW`
+    - `0042:REQEW`
+    - `0045:REQEW`
+    - `0048:AKAO`
+    - `0056:REQEW`
+    - `0059:REQEW`
+    - `005c:REQSW`
+    - `005f:AKAO`
+    - `006d:WAIT`
+    - `0070:MUSIC id=0`
+    - `0072:REQEW`
+    - `0075:REQ`
+    - `0078:REQ`
+    - `007b:REQEW`
+    - `007e:REQEW`
+    - `0081:REQEW`
+    - `0084:REQEW`
+    - `0087:REQEW`
+    - `008a:REQEW`
+    - `008d:REQEW`
+    - `0090:REQEW`
+    - `0093:REQEW`
+    - `0096:AKAO`
+    - `00a4:REQ`
+    - `00a7:REQ`
+    - `00aa:REQ`
+    - `00ad:SETWORD 20/00=0x56c`
+    - `00b2:REQ`
+    - `00b5:IFMEMBQ`
+    - `00b8:REQ`
+    - `00bb:AKAO`
+    - `00c9:REQEW`
+    - `00cc:RET`
+  - SD:
+    - `0000:JMPF ->000e`
+    - `0002:UC`
+    - `0004:MENU2`
+    - `0006:SCR2D`
+    - `000c:SCRLW`
+    - `000d:REQEW`
+    - `0010:REQEW`
+    - `0013:REQ`
+    - `0016:REQEW`
+    - `0019:REQ`
+    - `001c:REQEW`
+    - `001f:REQ`
+    - `0022:REQEW`
+    - `0025:REQ`
+    - `0028:REQEW`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:REQEW`
+    - `0034:REQEW`
+    - `0037:REQSW`
+    - `003a:REQEW`
+    - `003d:JMPF ->00bf`
+    - `003f:SCRLA`
+    - `0045:SCRLW`
+    - `0046:REQEW`
+    - `0049:REQEW`
+    - `004c:REQEW`
+    - `004f:REQEW`
+    - `0052:REQEW`
+    - `0055:REQEW`
+    - `0058:REQEW`
+    - `005b:REQEW`
+    - `005e:REQEW`
+    - `0061:REQSW`
+    - `0064:AKAO`
+    - `0072:REQEW`
+    - `0075:AKAO`
+    - `0083:WAIT`
+    - `0086:MUSIC id=0`
+    - `0088:REQEW`
+    - `008b:REQ`
+    - `008e:REQ`
+    - `0091:REQEW`
+    - `0094:REQEW`
+    - `0097:REQEW`
+    - `009a:REQEW`
+    - `009d:REQEW`
+    - `00a0:REQEW`
+    - `00a3:REQEW`
+    - `00a6:REQEW`
+    - `00a9:REQEW`
+    - `00ac:REQ`
+    - `00af:REQ`
+    - `00b2:REQ`
+    - `00b5:REQ`
+    - `00b8:IFMEMBQ`
+    - `00bb:REQ`
+    - `00be:AKAO`
+    - `00cc:SETWORD 20/00=0x56c`
+    - `00d1:AKAO`
+    - `00df:REQEW`
+    - `00e2:RET`
+- **`direct/3`** len 197->199 (4ba35552cf24->b71a62e2c4b4)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MUSIC id=1`
+    - `0006:SCR2D`
+    - `000c:SCRLW`
+    - `000d:REQEW`
+    - `0010:REQEW`
+    - `0013:REQEW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:REQEW`
+    - `001f:REQEW`
+    - `0022:REQEW`
+    - `0025:REQSW`
+    - `0028:SCRLA`
+    - `002e:SCR2DC`
+    - `0037:SCRLW`
+    - `0038:SOUND`
+    - `003d:FADE`
+    - `0046:WAIT`
+    - `0049:FADE`
+    - `0052:FADE`
+    - `005b:WAIT`
+    - `005e:FADE`
+    - `0067:FADE`
+    - `0070:WAIT`
+    - `0073:FADE`
+    - `007c:FADE`
+    - `0085:WAIT`
+    - `0088:FADE`
+    - `0091:SOUND`
+    - `0096:REQ`
+    - `0099:REQ`
+    - `009c:REQ`
+    - `009f:REQ`
+    - `00a2:REQEW`
+    - `00a5:REQEW`
+    - `00a8:REQEW`
+    - `00ab:REQEW`
+    - `00ae:REQEW`
+    - `00b1:REQ`
+    - `00b4:REQ`
+    - `00b7:REQ`
+    - `00ba:SCRLA`
+    - `00c0:SCRLW`
+    - `00c1:REQSW`
+    - `00c4:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MUSIC id=1`
+    - `0006:SCR2D`
+    - `000c:SCRLW`
+    - `000d:REQEW`
+    - `0010:REQEW`
+    - `0013:REQEW`
+    - `0016:REQEW`
+    - `0019:REQEW`
+    - `001c:REQEW`
+    - `001f:REQEW`
+    - `0022:REQEW`
+    - `0025:REQSW`
+    - `0028:SCRLA`
+    - `002e:SCR2DC`
+    - `0037:SCRLW`
+    - `0038:SOUND`
+    - `003d:FADE`
+    - `0046:WAIT`
+    - `0049:FADE`
+    - `0052:FADE`
+    - `005b:WAIT`
+    - `005e:FADE`
+    - `0067:FADE`
+    - `0070:WAIT`
+    - `0073:FADE`
+    - `007c:FADE`
+    - `0085:WAIT`
+    - `0088:FADE`
+    - `0091:SOUND`
+    - `0096:REQ`
+    - `0099:JMPF ->00c4`
+    - `009b:REQ`
+    - `009e:REQ`
+    - `00a1:REQ`
+    - `00a4:REQEW`
+    - `00a7:REQEW`
+    - `00aa:REQEW`
+    - `00ad:REQEW`
+    - `00b0:REQEW`
+    - `00b3:REQ`
+    - `00b6:REQ`
+    - `00b9:REQ`
+    - `00bc:SCRLA`
+    - `00c2:SCRLW`
+    - `00c3:REQSW`
+    - `00c6:RET`
+- **`ket/1`** len 631->633 (f9930587afee->5370d41ee36d)
+  - D1 interesting (59):
+    - `0004:IFSWL`
+    - `002c:MESSAGE 400132`
+    - `0039:MESSAGE 400133`
+    - `0046:MESSAGE 400134`
+    - `0049:REQEW`
+    - `0056:MESSAGE 400136`
+    - `0059:REQEW`
+    - `0066:MESSAGE 400138`
+    - `0069:REQEW`
+    - `0076:MESSAGE 400139`
+    - `0092:REQSW`
+    - `009f:MESSAGE 40013a`
+    - `00af:MESSAGE 40013b`
+    - `00bf:MESSAGE 40013c`
+    - `00c2:REQEW`
+    - `00d5:MESSAGE 40013e`
+    - `00e9:MESSAGE 40013f`
+    - `00ec:REQEW`
+    - `0102:MESSAGE 400141`
+    - `0105:REQEW`
+    - `0108:REQEW`
+    - `010b:REQEW`
+    - `010e:REQEW`
+    - `0111:REQEW`
+    - `0114:REQEW`
+    - `0117:REQEW`
+    - `011a:BITON d0/52#3`
+    - `011e:SETWORD 20/00=0x620`
+    - `012d:MAPJUMP #45`
+    - `013b:JMPFL`
+    - `013e:IFSWL`
+    - `0155:MESSAGE 4001b0`
+    - `015e:JMPFL`
+    - `0161:IFSWL`
+    - `0178:MESSAGE 4001b1`
+    - `0181:JMPFL`
+    - `0184:IFSWL`
+    - `0197:MESSAGE 4001b2`
+    - `019a:JMPFL`
+    - `019d:IFSWL`
+    - `01b0:MESSAGE 4001b4`
+    - `01b3:JMPFL`
+    - `01b6:IFSW V=0x56fC=0E=1a->01d7`
+    - `01cc:MESSAGE 4001b5`
+    - `01d5:JMPF ->0273`
+    - `01d7:IFSW V=0x620C=3E=1a->01f8`
+    - `01ed:MESSAGE 4001b6`
+    - `01f6:JMPF ->0273`
+    - `01f8:IFSW V=0x62cC=3E=1a->0219`
+    - `020e:MESSAGE 4001b7`
+    - `0217:JMPF ->0273`
+    - `0219:IFSW V=0x62eC=3E=1a->023a`
+    - `022f:MESSAGE 4001b8`
+    - `0238:JMPF ->0273`
+    - `023a:IFSW V=0x63eC=3E=1a->025b`
+    - `0250:MESSAGE 4001b9`
+    - `0259:JMPF ->0273`
+    - `0269:MESSAGE 4001bc`
+    - `0276:RET`
+  - SD interesting (60):
+    - `0004:IFSWL`
+    - `002c:MESSAGE 400132`
+    - `002f:JMPF ->011d`
+    - `003b:MESSAGE 400133`
+    - `0048:MESSAGE 400134`
+    - `004b:REQEW`
+    - `0058:MESSAGE 400136`
+    - `005b:REQEW`
+    - `0068:MESSAGE 400138`
+    - `006b:REQEW`
+    - `0078:MESSAGE 400139`
+    - `0094:REQSW`
+    - `00a1:MESSAGE 40013a`
+    - `00b1:MESSAGE 40013b`
+    - `00c1:MESSAGE 40013c`
+    - `00c4:REQEW`
+    - `00d7:MESSAGE 40013e`
+    - `00eb:MESSAGE 40013f`
+    - `00ee:REQEW`
+    - `0104:MESSAGE 400141`
+    - `0107:REQEW`
+    - `010a:REQEW`
+    - `010d:REQEW`
+    - `0110:REQEW`
+    - `0113:REQEW`
+    - `0116:REQEW`
+    - `0119:REQEW`
+    - `011c:BITON d0/52#3`
+    - `0120:SETWORD 20/00=0x620`
+    - `012f:MAPJUMP #45`
+    - `013d:JMPFL`
+    - `0140:IFSWL`
+    - `0157:MESSAGE 4001b0`
+    - `0160:JMPFL`
+    - `0163:IFSWL`
+    - `017a:MESSAGE 4001b1`
+    - `0183:JMPFL`
+    - `0186:IFSWL`
+    - `0199:MESSAGE 4001b2`
+    - `019c:JMPFL`
+    - `019f:IFSWL`
+    - `01b2:MESSAGE 4001b4`
+    - `01b5:JMPFL`
+    - `01b8:IFSW V=0x56fC=0E=1a->01d9`
+    - `01ce:MESSAGE 4001b5`
+    - `01d7:JMPF ->0275`
+    - `01d9:IFSW V=0x620C=3E=1a->01fa`
+    - `01ef:MESSAGE 4001b6`
+    - `01f8:JMPF ->0275`
+    - `01fa:IFSW V=0x62cC=3E=1a->021b`
+    - `0210:MESSAGE 4001b7`
+    - `0219:JMPF ->0275`
+    - `021b:IFSW V=0x62eC=3E=1a->023c`
+    - `0231:MESSAGE 4001b8`
+    - `023a:JMPF ->0275`
+    - `023c:IFSW V=0x63eC=3E=1a->025d`
+    - `0252:MESSAGE 4001b9`
+    - `025b:JMPF ->0275`
+    - `026b:MESSAGE 4001bc`
+    - `0278:RET`
+  - opcode counts: JMPF:5->6
+- **`ket/31`** len 61->63 (5fb7802f3920->2f9bb8957007)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:TURA`
+    - `000e:ANIM!2`
+    - `0011:WINDOW`
+    - `001b:MESSAGE 40010d`
+    - `001e:ANIME1`
+    - `0021:WINDOW`
+    - `002b:MESSAGE 40010e`
+    - `002e:MOVE`
+    - `0034:TURA`
+    - `0038:BITON 30/17#7`
+    - `003c:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:TURA`
+    - `000e:JMPF ->0024`
+    - `0010:ANIM!2`
+    - `0013:WINDOW`
+    - `001d:MESSAGE 40010d`
+    - `0020:ANIME1`
+    - `0023:WINDOW`
+    - `002d:MESSAGE 40010e`
+    - `0030:MOVE`
+    - `0036:TURA`
+    - `003a:BITON 30/17#7`
+    - `003e:RET`
+- **`ket/4`** len 21->32 (f9b5be58ee44->f4bb4b0925eb)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+    - `0015:XYZI`
+- **`ket/6`** len 13->13 (daa7a666db4f->3ab17b629d63)
+  - D1:
+    - `0000:MOVE`
+    - `0006:TURNGEN`
+    - `000c:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:RET`
+    - `0007:MOVE`
+- **`produce/0`** len 28->38 (a8fc2f9bce83->471845d2693e)
+  - D1:
+    - `0000:SPECIAL`
+    - `0003:MPNAM`
+    - `0005:RET`
+    - `0006:LSTMP`
+    - `0009:BITON 10/7f#4`
+    - `000d:BITON 10/7f#5`
+    - `0011:NFADE`
+    - `001a:FADEW`
+    - `001b:RET`
+  - SD:
+    - `0000:SPECIAL`
+    - `0003:MPNAM`
+    - `0005:RET`
+    - `0006:LSTMP`
+    - `0009:BITON 10/7f#4`
+    - `000d:BITON 10/7f#5`
+    - `0011:IFSW V=0x526C=0E=03->001b`
+    - `0019:MUSIC id=0`
+    - `001b:NFADE`
+    - `0024:FADEW`
+    - `0025:RET`
+- **`red/4`** len 24->35 (7e41f3b708d3->6d07bc33551b)
+  - D1:
+    - `0000:DFANM`
+    - `0003:XYZI`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+    - `0015:XYZI`
+    - `0020:DFANM`
+- **`red/6`** len 7->7 (27080b87c958->ba3d2349d096)
+  - D1:
+    - `0000:MOVE`
+    - `0006:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:MOVE`
+- **`red/7`** len 176->180 (4c5edb637d9c->8f9d9b8133c8)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400123`
+    - `000d:TURA`
+    - `0011:ANIME1`
+    - `0014:REQSW`
+    - `0017:SCRLA`
+    - `001d:SCRLW`
+    - `001e:MSPED`
+    - `0022:MOVE`
+    - `0028:REQ`
+    - `002b:REQ`
+    - `002e:REQ`
+    - `0031:REQ`
+    - `0034:ANIME1`
+    - `0037:WINDOW`
+    - `0041:MESSAGE 400124`
+    - `0044:REQSW`
+    - `0047:SOUND`
+    - `004c:SCRLA`
+    - `0052:SCRLW`
+    - `0053:REQEW`
+    - `0056:REQ`
+    - `0059:REQ`
+    - `005c:REQ`
+    - `005f:REQ`
+    - `0062:REQEW`
+    - `0065:REQEW`
+    - `0068:REQEW`
+    - `006b:WINDOW`
+    - `0075:MESSAGE 40012b`
+    - `0078:AKAO`
+    - `0086:WAIT`
+    - `0089:MUSIC id=4`
+    - `008b:SOUND`
+    - `0090:SETWORD 20/00=0x56d`
+    - `0095:UC`
+    - `0097:MENU2`
+    - `0099:MSPED`
+    - `009d:MOVE`
+    - `00a3:MOVE`
+    - `00a9:TURNGEN`
+    - `00af:RET`
+  - SD:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400123`
+    - `000d:TURA`
+    - `0011:REQSW`
+    - `0014:SCRLA`
+    - `001a:SCRLW`
+    - `001b:MSPED`
+    - `001f:MOVE`
+    - `0025:REQ`
+    - `0028:REQ`
+    - `002b:REQ`
+    - `002e:REQ`
+    - `0031:WINDOW`
+    - `003b:MESSAGE 400124`
+    - `003e:REQSW`
+    - `0041:SOUND`
+    - `0046:SCRLA`
+    - `004c:JMPF ->0053`
+    - `004e:SCRLW`
+    - `004f:REQEW`
+    - `0052:REQ`
+    - `0055:REQ`
+    - `0058:REQ`
+    - `005b:REQ`
+    - `005e:REQEW`
+    - `0061:JMPF ->006a`
+    - `0063:REQEW`
+    - `0066:REQEW`
+    - `0069:WINDOW`
+    - `0073:MESSAGE 40012b`
+    - `0076:AKAO`
+    - `0084:WAIT`
+    - `0087:MUSIC id=4`
+    - `0089:SOUND`
+    - `008e:SETWORD 20/00=0x56d`
+    - `0093:UC`
+    - `0095:MENU2`
+    - `0097:MSPED`
+    - `009b:MOVE`
+    - `00a1:MOVE`
+    - `00a7:TURNGEN`
+    - `00ad:RET`
+    - `00ae:ANIME1`
+    - `00b1:ANIME1`
+- **`tifa/3`** len 21->32 (5971559cf924->30cbaf81d26b)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DIR`
+    - `000e:TLKON`
+    - `0010:SOLID`
+    - `0012:VISI`
+    - `0014:RET`
+    - `0015:XYZI`
+- **`tifa/6`** len 16->16 (ca27e38d20a8->004247533164)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:MOVE`
+    - `0009:TURNGEN`
+    - `000f:RET`
+  - SD:
+    - `0000:ANIME1`
+    - `0003:TURNGEN`
+    - `0009:RET`
+    - `000a:MOVE`
+- **`yufi/4`** len 27->38 (0c7767d4c841->c98dce5750ef)
+  - D1:
+    - `0000:IFMEMBQ`
+    - `0003:XYZI`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:JMPF ->001b`
+    - `0019:RET`
+    - `001a:RET`
+  - SD:
+    - `0000:IFMEMBQ`
+    - `0003:XYZI`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:JMPF ->001b`
+    - `0019:RET`
+    - `001a:RET`
+    - `001b:XYZI`
+
+#### SD vs CSR D2
+
+### FSHIP_4
+- D1 sha: 281347a21d5e589c dec=30624
+- D2 sha: 2e12f391c811b66f dec=30560
+- SD sha: 6c6935b6d230d0f5 dec=30560
+
+#### SD vs CSR D1
+- **`ba/4`** len 44->20 (196f942ea79d->86cb23184088)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400102`
+    - `000d:ANIME1`
+    - `0010:ANIMW`
+    - `0011:DFANM`
+    - `0014:TURNGEN`
+    - `001a:ANIME1`
+    - `001d:ANIMW`
+    - `001e:WINDOW`
+    - `0028:MESSAGE 400103`
+    - `002b:RET`
+  - SD:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400102`
+    - `000d:TURNGEN`
+    - `0013:RET`
+- **`boo/31`** len 77->79 (24596ca97b7d->4f497def083f)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 40010e`
+    - `000d:WINDOW`
+    - `0017:MESSAGE 40010f`
+    - `001a:WINDOW`
+    - `0024:MESSAGE 400110`
+    - `0027:OFST`
+    - `0033:TURNGEN`
+    - `0039:OFST`
+    - `0045:OFSTW`
+    - `0046:TLKON`
+    - `0048:SOLID`
+    - `004a:VISI`
+    - `004c:RET`
+  - SD:
+    - `0000:JMPF ->002a`
+    - `0002:WINDOW`
+    - `000c:MESSAGE 40010e`
+    - `000f:WINDOW`
+    - `0019:MESSAGE 40010f`
+    - `001c:WINDOW`
+    - `0026:MESSAGE 400110`
+    - `0029:OFST`
+    - `0035:TURNGEN`
+    - `003b:OFST`
+    - `0047:OFSTW`
+    - `0048:TLKON`
+    - `004a:SOLID`
+    - `004c:VISI`
+    - `004e:RET`
+- **`evt1/2`** len 132->129 (3b8fcaad5d64->7d3325a04411)
+  - D1:
+    - `0000:IFSW V=0x403C=3E=2e->0035`
+    - `0008:UC`
+    - `000a:MENU2`
+    - `000c:SCR2DC`
+    - `0015:REQEW`
+    - `0018:REQEW`
+    - `001b:SCRLC`
+    - `0020:SCRLW`
+    - `0021:REQSW`
+    - `0024:REQSW`
+    - `0027:REQEW`
+    - `002a:SETWORD 20/00=0x403`
+    - `002f:UC`
+    - `0031:MENU2`
+    - `0033:JMPF ->0084`
+    - `0035:IFSW V=0x454C=3E=04->0040`
+    - `003d:RET`
+    - `003e:JMPF ->0084`
+    - `0040:IFSW V=0x456C=3E=3c->0083`
+    - `0048:IFUB A=16V=04C=10E=36->0083`
+    - `004e:UC`
+    - `0050:MENU2`
+    - `0052:WINDOW`
+    - `005c:MESSAGE 400107`
+    - `005f:REQEW`
+    - `0062:WINDOW`
+    - `006c:MESSAGE 400108`
+    - `006f:REQEW`
+    - `0072:IFMEMBQ`
+    - `0075:REQEW`
+    - `0078:REQEW`
+    - `007b:BITON 30/16#4`
+    - `007f:UC`
+    - `0081:MENU2`
+    - `0083:RET`
+  - SD:
+    - `0000:IFSW V=0x403C=3E=2b->0032`
+    - `0008:UC`
+    - `000a:MENU2`
+    - `000c:SCR2DC`
+    - `0015:REQEW`
+    - `0018:REQEW`
+    - `001b:SCRLC`
+    - `0020:SCRLW`
+    - `0021:REQSW`
+    - `0024:REQSW`
+    - `0027:SETWORD 20/00=0x403`
+    - `002c:UC`
+    - `002e:MENU2`
+    - `0030:JMPF ->0071`
+    - `0032:IFSW V=0x454C=3E=04->003d`
+    - `003a:RET`
+    - `003b:JMPF ->0071`
+    - `003d:IFSW V=0x456C=3E=2c->0070`
+    - `0045:IFUB A=16V=04C=10E=26->0070`
+    - `004b:UC`
+    - `004d:MENU2`
+    - `004f:REQEW`
+    - `0052:WINDOW`
+    - `005c:MESSAGE 400108`
+    - `005f:IFMEMBQ`
+    - `0062:REQEW`
+    - `0065:REQEW`
+    - `0068:BITON 30/16#4`
+    - `006c:UC`
+    - `006e:MENU2`
+    - `0070:RET`
+    - `0071:WINDOW`
+    - `007b:MESSAGE 400107`
+    - `007e:REQEW`
+- **`ket/4`** len 44->7 (4071ab14665d->33b6d79b51b0)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:ANIMW`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400104`
+    - `0011:WAIT`
+    - `0014:ANIME1`
+    - `0017:ANIMW`
+    - `0018:TURNGEN`
+    - `001e:WINDOW`
+    - `0028:MESSAGE 400105`
+    - `002b:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:RET`
+- **`tifa/3`** len 17->17 (d14f6368bbb8->59f768ec8a96)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:WINDOW`
+    - `000d:MESSAGE 400106`
+    - `0010:RET`
+  - SD:
+    - `0000:ANIME1`
+    - `0003:RET`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400106`
+
+#### SD vs CSR D2
+
+### HYOU11
+- D1 sha: ebcecc764ad31942 dec=27444
+- D2 sha: ebcecc764ad31942 dec=27444
+- SD sha: 563563f70391bf6f dec=27444
+
+#### SD vs CSR D1
+
+#### SD vs CSR D2
+
+### ITOWN2
+- D1 sha: 7c40f84b0a2f61ea dec=17836
+- D2 sha: 3d03c922ebff7e25 dec=17812
+- SD sha: b4d50127d5e838ad dec=17812
+
+#### SD vs CSR D1
+- **`cid/31`** len 47->29 (7500e48c16d0->c8456c56d266)
+  - D1:
+    - `0000:TURNGEN`
+    - `0006:WAIT`
+    - `0009:TURNGEN`
+    - `000f:WAIT`
+    - `0012:MOVE`
+    - `0018:TURNGEN`
+    - `001e:WAIT`
+    - `0021:WSIZW`
+    - `002b:MESSAGE 400018`
+    - `002e:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:TURNGEN`
+    - `000c:WAIT`
+    - `000f:WSIZW`
+    - `0019:MESSAGE 400018`
+    - `001c:RET`
+- **`dic/0`** len 595->650 (3cb8bda492db->2fc1f9de497a)
+  - D1 interesting (33):
+    - `0005:RET`
+    - `0021:REQ`
+    - `0024:REQEW`
+    - `0027:PREQ`
+    - `002a:PREQ`
+    - `002d:REQEW`
+    - `0046:MESSAGE 400002`
+    - `0049:REQ`
+    - `004c:REQEW`
+    - `0083:REQ`
+    - `00a7:REQ`
+    - `00ec:SETBYTE 50/03=0x1`
+    - `00f0:REQ`
+    - `00f6:REQEW`
+    - `00fc:REQ`
+    - `013a:REQ`
+    - `0183:REQEW`
+    - `01a5:SETBYTE 50/03=0x0`
+    - `01b7:REQEW`
+    - `01c2:REQEW`
+    - `01c8:REQEW`
+    - `01cb:JMPF ->01dc`
+    - `01d0:REQEW`
+    - `01d3:JMPF ->01dc`
+    - `01d8:REQEW`
+    - `01db:REQEW`
+    - `01de:PREQ`
+    - `01e1:PREQ`
+    - `01e7:REQEW`
+    - `021a:REQ`
+    - `0243:SETWORD 20/00=0x460`
+    - `0248:MAPJUMP #720`
+    - `0252:RET`
+  - SD interesting (43):
+    - `0005:RET`
+    - `0021:REQ`
+    - `0024:REQEW`
+    - `0027:PREQ`
+    - `002a:PREQ`
+    - `0043:MESSAGE 400002`
+    - `0046:REQ`
+    - `0049:REQEW`
+    - `0080:JMPF ->012e`
+    - `0082:REQ`
+    - `00a6:REQ`
+    - `00eb:SETBYTE 50/03=0x1`
+    - `00ef:REQ`
+    - `00f5:REQEW`
+    - `00fb:REQ`
+    - `0133:JMPFL`
+    - `013c:REQ`
+    - `0185:REQEW`
+    - `01a7:SETBYTE 50/03=0x0`
+    - `01b9:REQEW`
+    - `01c4:REQEW`
+    - `01c7:JMPFL`
+    - `01cd:REQEW`
+    - `01d0:JMPF ->01e1`
+    - `01d5:REQEW`
+    - `01d8:JMPF ->01e1`
+    - `01dd:REQEW`
+    - `01e0:REQEW`
+    - `01e3:PREQ`
+    - `01e6:PREQ`
+    - `01e9:REQEW`
+    - `021c:REQ`
+    - `0245:SETWORD 20/00=0x460`
+    - `024a:MAPJUMP #720`
+    - `0254:RET`
+    - `025b:SETWORD 20/00=0x462`
+    - `0260:MAPJUMP #725`
+    - `026a:RET`
+    - `026b:SETWORD 20/00=0x460`
+    - `0270:MAPJUMP #723`
+    - `027a:RET`
+    - `027b:SETWORD 20/00=0x460`
+    - `0280:MAPJUMP #720`
+  - opcode counts: JMPF:2->3, JMPFL:0->2, MAPJUMP:1->4, PRTYE:0->1, PRTYP:0->1, REQEW:12->11, RET:2->4, SETWORD:1->4, WAIT:15->14
+
+#### SD vs CSR D2
+
+### ITOWN_W
+- D1 sha: f477f6d3c47b07ba dec=20368
+- D2 sha: b1b0b2b617212dd5 dec=20320
+- SD sha: 4550e900ea743774 dec=20320
+
+#### SD vs CSR D1
+- **`line02/4`** len 401->392 (5f682ac5727b->beaf5ffd434b)
+  - D1 interesting (67):
+    - `0004:JMPF ->0008`
+    - `0006:RET`
+    - `000b:IFUBL`
+    - `0012:IFUBL`
+    - `001d:IFUB A=b2V=04C=6E=11->0033`
+    - `0026:REQEW`
+    - `0029:JMPF ->002f`
+    - `002b:REQEW`
+    - `0032:RET`
+    - `0033:IFUBL`
+    - `0047:MESSAGE 40000b`
+    - `004a:JMPF ->005a`
+    - `0056:MESSAGE 40000c`
+    - `0059:JMPFL`
+    - `005c:IFUBL`
+    - `0066:REQEW`
+    - `0069:JMPF ->006f`
+    - `006b:REQEW`
+    - `006e:SETBYTE 50/14=0x0`
+    - `007c:ASK 48050011000114`
+    - `0083:IFUB A=14V=01C=0E=11->0099`
+    - `008c:REQEW`
+    - `008f:JMPF ->0095`
+    - `0091:REQEW`
+    - `0098:RET`
+    - `00aa:REQEW`
+    - `00ad:JMPF ->00b3`
+    - `00af:REQEW`
+    - `00b2:REQEW`
+    - `00b8:REQEW`
+    - `00bb:JMPF ->00c1`
+    - `00bd:REQEW`
+    - `00c0:IFUB A=14V=00C=0E=19->00de`
+    - `00c6:REQEW`
+    - `00cc:REQEW`
+    - `00cf:JMPF ->00d5`
+    - `00d1:REQEW`
+    - `00da:BITON f0/b2#2`
+    - `00de:IFUB A=14V=01C=0E=6f->0152`
+    - `00ee:MESSAGE 40002a`
+    - `00f4:REQEW`
+    - `00f7:JMPF ->00fd`
+    - `00f9:REQEW`
+    - `0106:MESSAGE 40002b`
+    - `010c:REQEW`
+    - `010f:JMPF ->0115`
+    - `0111:REQEW`
+    - `0114:REQEW`
+    - `0117:REQEW`
+    - `0124:MESSAGE 40002e`
+    - `012a:REQEW`
+    - `012d:JMPF ->0133`
+    - `012f:REQEW`
+    - `0132:REQEW`
+    - `0138:REQEW`
+    - `013b:JMPF ->0141`
+    - `013d:REQEW`
+    - `0145:REQEW`
+    - `014e:BITON f0/b1#7`
+    - `0160:JMPFL`
+    - `0166:REQEW`
+    - `0173:MESSAGE 400009`
+    - `0176:JMPF ->0189`
+    - `0178:REQEW`
+    - `0185:MESSAGE 40000a`
+    - `0188:BITON f0/b2#0`
+    - `0190:RET`
+  - SD interesting (68):
+    - `0004:JMPF ->0008`
+    - `0006:RET`
+    - `000b:IFUBL`
+    - `0012:IFUBL`
+    - `001d:IFUB A=b2V=04C=6E=11->0033`
+    - `0026:REQEW`
+    - `0029:JMPF ->002f`
+    - `002b:REQEW`
+    - `0032:RET`
+    - `0033:IFUBL`
+    - `0047:MESSAGE 40000b`
+    - `004a:JMPF ->005a`
+    - `0056:MESSAGE 40000c`
+    - `0059:JMPFL`
+    - `005c:IFUBL`
+    - `0066:REQEW`
+    - `0069:JMPF ->006f`
+    - `006b:REQEW`
+    - `006e:SETBYTE 50/14=0x0`
+    - `007c:ASK 48050011000114`
+    - `0083:IFUB A=14V=01C=0E=11->0099`
+    - `008c:REQEW`
+    - `008f:JMPF ->0095`
+    - `0091:REQEW`
+    - `0098:RET`
+    - `00aa:REQEW`
+    - `00ad:JMPF ->00b3`
+    - `00af:REQEW`
+    - `00b2:REQEW`
+    - `00b8:REQEW`
+    - `00bb:JMPF ->00c1`
+    - `00bd:REQEW`
+    - `00c0:IFUB A=14V=00C=0E=19->00de`
+    - `00c6:REQEW`
+    - `00cc:REQEW`
+    - `00cf:JMPF ->00d5`
+    - `00d1:REQEW`
+    - `00da:BITON f0/b2#2`
+    - `00de:IFUB A=14V=01C=0E=66->0149`
+    - `00e4:JMPF ->0117`
+    - `00f0:MESSAGE 40002a`
+    - `00f6:REQEW`
+    - `00f9:JMPF ->00ff`
+    - `00fb:REQEW`
+    - `0108:MESSAGE 40002b`
+    - `010e:REQEW`
+    - `0111:JMPF ->0117`
+    - `0113:REQEW`
+    - `0116:REQEW`
+    - `0119:REQEW`
+    - `011c:JMPF ->012a`
+    - `0121:REQEW`
+    - `0124:JMPF ->012a`
+    - `0126:REQEW`
+    - `0129:REQEW`
+    - `012f:REQEW`
+    - `0132:JMPF ->0138`
+    - `0134:REQEW`
+    - `013c:REQEW`
+    - `0145:BITON f0/b1#7`
+    - `0157:JMPFL`
+    - `015d:REQEW`
+    - `016a:MESSAGE 400009`
+    - `016d:JMPF ->0180`
+    - `016f:REQEW`
+    - `017c:MESSAGE 40000a`
+    - `017f:BITON f0/b2#0`
+    - `0187:RET`
+  - opcode counts: JMPF:13->15, MESSAGE:7->6, WSIZW:8->7
+- **`syonin/31`** len 47->29 (2a89346be58e->12395a446a74)
+  - D1:
+    - `0000:DFANM`
+    - `0003:JUMP`
+    - `000e:TURNGEN`
+    - `0014:WAIT`
+    - `0017:CANM!2`
+    - `001c:WSIZW`
+    - `0026:MESSAGE 400036`
+    - `0029:CANM!2`
+    - `002e:RET`
+  - SD:
+    - `0000:DFANM`
+    - `0003:JUMP`
+    - `000e:TURNGEN`
+    - `0014:WAIT`
+    - `0017:CANM!2`
+    - `001c:RET`
+- **`syonin/8`** len 22->6 (ae03d17c44f7->620cbe7c5c73)
+  - D1:
+    - `0000:ANIM!2`
+    - `0003:WSIZW`
+    - `000d:MESSAGE 400031`
+    - `0010:CANM!2`
+    - `0015:RET`
+  - SD:
+    - `0000:CANM!2`
+    - `0005:RET`
+- **`tifa/21`** len 52->47 (bc849dcdab46->31ec0fcffbe9)
+  - D1:
+    - `0000:WSIZW`
+    - `000a:MESSAGE 400032`
+    - `000d:MOVE`
+    - `0013:TURA`
+    - `0017:CANM!2`
+    - `001c:SOUND`
+    - `0021:WSIZW`
+    - `002b:MESSAGE 400033`
+    - `002e:CANM!2`
+    - `0033:RET`
+  - SD:
+    - `0000:WSIZW`
+    - `000a:MESSAGE 400032`
+    - `000d:MOVE`
+    - `0013:TURA`
+    - `0017:CANM!2`
+    - `001c:SOUND`
+    - `0021:WSIZW`
+    - `002b:MESSAGE 400033`
+    - `002e:RET`
+
+#### SD vs CSR D2
+
+### JUNBIN4
+- D1 sha: d34e96aa14e90727 dec=36500
+- D2 sha: 95334994e43989d4 dec=36396
+- SD sha: 9c6ace08a533c328 dec=36396
+
+#### SD vs CSR D1
+- **`ba/31`** len 37->37 (bf4a4f5b0b73->a3437c306204)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:CANM!2`
+    - `000f:WINDOW`
+    - `0019:MESSAGE 400083`
+    - `001c:CANM!2`
+    - `0021:DFANM`
+    - `0024:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:RET`
+    - `000b:CANM!2`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400083`
+    - `001d:CANM!2`
+    - `0022:DFANM`
+- **`ba/6`** len 24->24 (c6f5913b9a0a->a52a224d71e1)
+  - D1:
+    - `0000:CANM!2`
+    - `0005:WINDOW`
+    - `000f:MESSAGE 400079`
+    - `0012:CANM!2`
+    - `0017:RET`
+  - SD:
+    - `0000:CANM!2`
+    - `0005:CANM!2`
+    - `000a:RET`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 400079`
+- **`ba/9`** len 117->129 (c52458d44e2a->34782c41e5b6)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MOVE`
+    - `000a:DIR`
+    - `000d:CANM!2`
+    - `0012:IFKEYON`
+    - `0016:ANIM!2`
+    - `0019:INC`
+    - `001c:IFKEYON`
+    - `0020:ANIM!2`
+    - `0023:INC`
+    - `0026:IFKEYON`
+    - `002a:ANIM!2`
+    - `002d:INC`
+    - `0030:IFKEYON`
+    - `0034:ANIM!2`
+    - `0037:INC`
+    - `003a:IFKEYON`
+    - `003e:ANIM!2`
+    - `0041:INC`
+    - `0044:IFUB A=14V=02C=2E=03->004c`
+    - `004a:JMPF ->004f`
+    - `004c:JMPB ->0012`
+    - `004e:PMJMP`
+    - `0051:WINDOW`
+    - `005b:MESSAGE 40007f`
+    - `005e:WAIT`
+    - `0061:SETWORD 20/00=0x3f4`
+    - `0066:MAPJUMP #398`
+    - `0070:UC`
+    - `0072:MENU2`
+    - `0074:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MOVE`
+    - `000a:DIR`
+    - `000d:JMPF ->0054`
+    - `000f:CANM!2`
+    - `0014:IFKEYON`
+    - `0018:ANIM!2`
+    - `001b:INC`
+    - `001e:IFKEYON`
+    - `0022:ANIM!2`
+    - `0025:INC`
+    - `0028:IFKEYON`
+    - `002c:ANIM!2`
+    - `002f:INC`
+    - `0032:IFKEYON`
+    - `0036:ANIM!2`
+    - `0039:INC`
+    - `003c:IFKEYON`
+    - `0040:ANIM!2`
+    - `0043:INC`
+    - `0046:IFUB A=14V=02C=2E=03->004e`
+    - `004c:JMPF ->0051`
+    - `004e:JMPB ->0014`
+    - `0050:PMJMP`
+    - `0053:SETWORD 20/00=0x3f4`
+    - `0058:MAPJUMP #399`
+    - `0062:UC`
+    - `0064:MENU2`
+    - `0066:RET`
+    - `0067:MAPJUMP #398`
+    - `0071:WINDOW`
+    - `007b:MESSAGE 40007f`
+    - `007e:WAIT`
+- **`dir/0`** len 377->349 (b354b12ffe97->f589a9454fd4)
+  - D1:
+    - `0000:IFSW V=0x3f2C=4E=05->000c`
+    - `0008:IDLCK`
+    - `000c:IFSW V=0x3f7C=4E=0b->001e`
+    - `0014:IFSW V=0x3feC=3E=03->001e`
+    - `001c:MUSIC id=0`
+    - `001e:BTLMD`
+    - `0021:BMUSC`
+    - `0023:MPNAM`
+    - `0025:RET`
+    - `0026:IFSW V=0x3f6C=0E=0c->0039`
+    - `002e:UC`
+    - `0030:MENU2`
+    - `0032:REQEW`
+    - `0035:UC`
+    - `0037:MENU2`
+    - `0039:IFSW V=0x3f0C=0E=af->00ef`
+    - `0041:UC`
+    - `0043:MENU2`
+    - `0045:REQEW`
+    - `0048:SETBYTE 50/0a=0x1`
+    - `004c:AKAO`
+    - `005a:MUSIC id=1`
+    - `005c:REQ`
+    - `005f:IDLCK`
+    - `0063:WINDOW`
+    - `006d:MESSAGE 400071`
+    - `0070:WINDOW`
+    - `007a:MESSAGE 400072`
+    - `007d:REQ`
+    - `0080:WAIT`
+    - `0083:WINDOW`
+    - `008d:MESSAGE 400073`
+    - `0090:REQ`
+    - `0093:REQ`
+    - `0096:WAIT`
+    - `0099:REQ`
+    - `009c:WAIT`
+    - `009f:REQ`
+    - `00a2:REQ`
+    - `00a5:WAIT`
+    - `00a8:SETBYTE 50/0a=0x0`
+    - `00ac:REQEW`
+    - `00af:REQEW`
+    - `00b2:REQEW`
+    - `00b5:REQEW`
+    - `00b8:REQEW`
+    - `00bb:IFUB A=09V=00C=0E=03->00c3`
+    - `00c1:JMPB ->00bb`
+    - `00c3:SETBYTE 50/09=0x0`
+    - `00c7:REQ`
+    - `00ca:REQEW`
+    - `00cd:REQ`
+    - `00d0:REQEW`
+    - `00d3:BATTLE`
+    - `00d7:WAIT`
+    - `00da:REQ`
+    - `00dd:REQEW`
+    - `00e0:REQEW`
+    - `00e3:REQEW`
+    - `00e6:SETWORD 20/00=0x3f2`
+    - `00eb:UC`
+    - `00ed:MENU2`
+    - `00ef:IFSW V=0x3ebC=0E=81->0177`
+    - `00f7:UC`
+    - `00f9:MENU2`
+    - `00fb:REQ`
+    - `00fe:REQ`
+    - `0101:REQ`
+    - `0104:REQ`
+    - `0107:WAIT`
+    - `010a:REQ`
+    - `010d:WINDOW`
+    - `0117:MESSAGE 400055`
+    - `011a:IFUB A=09V=00C=0E=03->0122`
+    - `0120:JMPB ->011a`
+    - `0122:SETBYTE 50/09=0x0`
+    - `0126:SETBYTE 50/15=0x1`
+    - `012a:REQEW`
+    - `012d:REQEW`
+    - `0130:REQ`
+    - `0133:REQEW`
+    - `0136:REQ`
+    - `0139:WINDOW`
+    - `0143:MESSAGE 400059`
+    - `0146:PMJMP`
+    - `0149:REQ`
+    - `014c:IFUB A=09V=00C=0E=03->0154`
+    - `0152:JMPB ->014c`
+    - `0154:SETBYTE 50/09=0x0`
+    - `0158:REQEW`
+    - `015b:REQ`
+    - `015e:REQEW`
+    - `0161:REQ`
+    - `0164:REQEW`
+    - `0167:REQEW`
+    - `016a:WAIT`
+    - `016d:MAPJUMP #402`
+    - `0177:JMPB ->0177`
+  - SD:
+    - `0000:IFSW V=0x3f2C=4E=05->000c`
+    - `0008:IDLCK`
+    - `000c:IFSW V=0x3f7C=4E=0b->001e`
+    - `0014:IFSW V=0x3feC=3E=03->001e`
+    - `001c:MUSIC id=0`
+    - `001e:BTLMD`
+    - `0021:BMUSC`
+    - `0023:MPNAM`
+    - `0025:RET`
+    - `0026:IFSW V=0x3f6C=0E=0c->0039`
+    - `002e:UC`
+    - `0030:MENU2`
+    - `0032:REQEW`
+    - `0035:UC`
+    - `0037:MENU2`
+    - `0039:IFSW V=0x3f0C=0E=81->00c1`
+    - `0041:UC`
+    - `0043:MENU2`
+    - `0045:REQEW`
+    - `0048:SETBYTE 50/0a=0x1`
+    - `004c:MUSIC id=1`
+    - `004e:REQ`
+    - `0051:IDLCK`
+    - `0055:WINDOW`
+    - `005f:MESSAGE 400071`
+    - `0062:REQ`
+    - `0065:REQ`
+    - `0068:REQ`
+    - `006b:WAIT`
+    - `006e:REQ`
+    - `0071:WAIT`
+    - `0074:REQ`
+    - `0077:REQ`
+    - `007a:WAIT`
+    - `007d:SETBYTE 50/0a=0x0`
+    - `0081:REQEW`
+    - `0084:REQEW`
+    - `0087:REQEW`
+    - `008a:REQEW`
+    - `008d:REQEW`
+    - `0090:IFUB A=09V=00C=0E=03->0098`
+    - `0096:JMPB ->0090`
+    - `0098:SETBYTE 50/09=0x0`
+    - `009c:REQ`
+    - `009f:REQEW`
+    - `00a2:REQ`
+    - `00a5:REQEW`
+    - `00a8:BATTLE`
+    - `00ac:WAIT`
+    - `00af:REQ`
+    - `00b2:REQEW`
+    - `00b5:REQEW`
+    - `00b8:SETWORD 20/00=0x3f2`
+    - `00bd:UC`
+    - `00bf:MENU2`
+    - `00c1:IFSW V=0x3ebC=0E=83->014b`
+    - `00c9:JMPF ->0142`
+    - `00cb:UC`
+    - `00cd:MENU2`
+    - `00cf:REQ`
+    - `00d2:REQ`
+    - `00d5:REQ`
+    - `00d8:REQ`
+    - `00db:WAIT`
+    - `00de:REQ`
+    - `00e1:WINDOW`
+    - `00eb:MESSAGE 400055`
+    - `00ee:IFUB A=09V=00C=0E=03->00f6`
+    - `00f4:JMPB ->00ee`
+    - `00f6:SETBYTE 50/09=0x0`
+    - `00fa:SETBYTE 50/15=0x1`
+    - `00fe:REQEW`
+    - `0101:REQEW`
+    - `0104:REQ`
+    - `0107:REQEW`
+    - `010a:REQ`
+    - `010d:WINDOW`
+    - `0117:MESSAGE 400059`
+    - `011a:PMJMP`
+    - `011d:REQ`
+    - `0120:IFUB A=09V=00C=0E=03->0128`
+    - `0126:JMPB ->0120`
+    - `0128:SETBYTE 50/09=0x0`
+    - `012c:REQEW`
+    - `012f:REQ`
+    - `0132:REQEW`
+    - `0135:REQ`
+    - `0138:REQEW`
+    - `013b:REQEW`
+    - `013e:WAIT`
+    - `0141:MAPJUMP #402`
+    - `014b:JMPB ->014b`
+    - `014d:WAIT`
+    - `0150:WINDOW`
+    - `015a:MESSAGE 400073`
+- **`ket/1`** len 73->60 (360d30bc5e8c->00f733582816)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x3f4C=3E=10->001b`
+    - `000c:WINDOW`
+    - `0016:MESSAGE 40007e`
+    - `0019:JMPF ->0046`
+    - `001b:WINDOW`
+    - `0025:MESSAGE 400081`
+    - `0028:ANIME2`
+    - `002b:WINDOW`
+    - `0035:MESSAGE 400082`
+    - `0038:REQEW`
+    - `003b:WAIT`
+    - `003e:JOIN`
+    - `0040:SETWORD 20/00=0x3f7`
+    - `0045:UC`
+    - `0047:MENU2`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x3f4C=3E=10->001b`
+    - `000c:WINDOW`
+    - `0016:MESSAGE 40007e`
+    - `0019:JMPF ->0039`
+    - `001b:WINDOW`
+    - `0025:MESSAGE 400081`
+    - `0028:ANIME2`
+    - `002b:REQEW`
+    - `002e:WAIT`
+    - `0031:JOIN`
+    - `0033:SETWORD 20/00=0x3f7`
+    - `0038:UC`
+    - `003a:MENU2`
+- **`ket/31`** len 54->38 (c797ddb5c68f->d220dad761d1)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:WINDOW`
+    - `000d:MESSAGE 40007d`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 40007e`
+    - `001d:JUMP`
+    - `0028:MOVE`
+    - `002e:TURA`
+    - `0032:SLIDR`
+    - `0035:RET`
+  - SD:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 40007e`
+    - `000d:JUMP`
+    - `0018:MOVE`
+    - `001e:TURA`
+    - `0022:SLIDR`
+    - `0025:RET`
+- **`ket/4`** len 41->28 (6c69e1340d7a->8f32b2f98db2)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MOVE`
+    - `0010:SOUND`
+    - `0015:DFANM`
+    - `0018:WINDOW`
+    - `0022:MESSAGE 40007b`
+    - `0025:DFANM`
+    - `0028:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MOVE`
+    - `0010:SOUND`
+    - `0015:DFANM`
+    - `0018:DFANM`
+    - `001b:RET`
+- **`sca/10`** len 41->28 (4c60f4e88288->2d0d454a0340)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MSPED`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400074`
+    - `001b:WINDOW`
+    - `0025:MESSAGE 400075`
+    - `0028:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MSPED`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400074`
+    - `001b:RET`
+- **`sca/31`** len 32->16 (2bfaeb1de4cc->f6c513cb4125)
+  - D1:
+    - `0000:TURA`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400077`
+    - `0011:WAIT`
+    - `0014:REQ`
+    - `0017:SOUND`
+    - `001c:ANIM!2`
+    - `001f:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:REQ`
+    - `0007:SOUND`
+    - `000c:ANIM!2`
+    - `000f:RET`
+- **`sca/9`** len 31->12 (5f38646f5e7e->5f53676dddfa)
+  - D1:
+    - `0000:MOVE`
+    - `0006:CANM!1`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 400070`
+    - `0018:ANIMW`
+    - `0019:CANIM2`
+    - `001e:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:CANIM2`
+    - `000b:RET`
+
+#### SD vs CSR D2
+
+### JUNBIN5
+- D1 sha: 9c3ec886f4b79ac9 dec=39432
+- D2 sha: bb1b1ba1f4ea7d2e dec=39396
+- SD sha: 01b73bd1d59ad441 dec=39396
+
+#### SD vs CSR D1
+- **`dir/0`** len 461->463 (4a492ed079d2->157e145d9415)
+  - D1 interesting (43):
+    - `0000:SETWORD 60/09=0x5c`
+    - `0005:SETWORD 60/0b=0x5b`
+    - `000a:SETWORD 60/0d=0x5a`
+    - `000f:SETWORD 60/0f=0x59`
+    - `0014:IFSW V=0x3f6C=0E=03->001e`
+    - `0020:RET`
+    - `0021:IFSW V=0x3f8C=0E=12->003a`
+    - `002d:REQSW`
+    - `0033:REQEW`
+    - `003a:IFSW V=0x3f6C=0E=aa->00eb`
+    - `004f:PMVIE id=29`
+    - `0051:MOVIE`
+    - `0080:REQ`
+    - `00d4:REQSW`
+    - `00d7:REQEW`
+    - `00e1:MAPJUMP #401`
+    - `00eb:IFSW V=0x3ebC=0E=d9->01cb`
+    - `00ff:REQSW`
+    - `0105:REQ`
+    - `010b:REQEW`
+    - `010e:REQ`
+    - `0119:REQEW`
+    - `011c:REQ`
+    - `011f:REQ`
+    - `0122:REQEW`
+    - `0125:SETBYTE 50/11=0x1`
+    - `0129:IFUB A=12V=00C=0E=03->0131`
+    - `0131:SETBYTE 50/12=0x0`
+    - `0135:REQ`
+    - `0146:REQEW`
+    - `014c:REQ`
+    - `0157:REQEW`
+    - `015a:REQ`
+    - `0165:REQ`
+    - `016b:REQEW`
+    - `0173:REQEW`
+    - `0179:REQEW`
+    - `018d:REQ`
+    - `0193:REQEW`
+    - `019e:REQEW`
+    - `01a4:SETWORD 20/00=0x3f0`
+    - `01ad:MUSIC id=0`
+    - `01bd:MAPJUMP #401`
+  - SD interesting (44):
+    - `0000:SETWORD 60/09=0x5c`
+    - `0005:SETWORD 60/0b=0x5b`
+    - `000a:SETWORD 60/0d=0x5a`
+    - `000f:SETWORD 60/0f=0x59`
+    - `0014:IFSW V=0x3f6C=0E=03->001e`
+    - `0020:RET`
+    - `0021:IFSW V=0x3f8C=0E=12->003a`
+    - `002d:REQSW`
+    - `0033:REQEW`
+    - `003a:IFSW V=0x3f6C=0E=aa->00eb`
+    - `004f:PMVIE id=29`
+    - `0051:MOVIE`
+    - `0080:REQ`
+    - `00d4:REQSW`
+    - `00d7:REQEW`
+    - `00e1:MAPJUMP #401`
+    - `00eb:IFSW V=0x3ebC=0E=db->01cd`
+    - `00f3:JMPF ->01a7`
+    - `0101:REQSW`
+    - `0107:REQ`
+    - `010d:REQEW`
+    - `0110:REQ`
+    - `011b:REQEW`
+    - `011e:REQ`
+    - `0121:REQ`
+    - `0124:REQEW`
+    - `0127:SETBYTE 50/11=0x1`
+    - `012b:IFUB A=12V=00C=0E=03->0133`
+    - `0133:SETBYTE 50/12=0x0`
+    - `0137:REQ`
+    - `0148:REQEW`
+    - `014e:REQ`
+    - `0159:REQEW`
+    - `015c:REQ`
+    - `0167:REQ`
+    - `016d:REQEW`
+    - `0175:REQEW`
+    - `017b:REQEW`
+    - `018f:REQ`
+    - `0195:REQEW`
+    - `01a0:REQEW`
+    - `01a6:SETWORD 20/00=0x3f0`
+    - `01af:MAPJUMP #401`
+    - `01b9:MUSIC id=0`
+  - opcode counts: JMPF:0->1
+- **`ti/13`** len 235->199 (8728710338d8->eff676db72f9)
+  - D1:
+    - `0000:SLIDR`
+    - `0003:MOVE`
+    - `0009:TURNGEN`
+    - `000f:SLIDR`
+    - `0012:WAIT`
+    - `0015:ANIME2`
+    - `0018:WAIT`
+    - `001b:WINDOW`
+    - `0025:MESSAGE 40006f`
+    - `0028:ANIMW`
+    - `0029:SOUND`
+    - `002e:SHAKE`
+    - `0036:FADE`
+    - `003f:WAIT`
+    - `0042:FADE`
+    - `004b:WAIT`
+    - `004e:FADE`
+    - `0057:WAIT`
+    - `005a:FADE`
+    - `0063:WAIT`
+    - `0066:FADE`
+    - `006f:WAIT`
+    - `0072:FADE`
+    - `007b:SHAKE`
+    - `0083:PMVIE id=31`
+    - `0085:MOVIE`
+    - `0086:REQSW`
+    - `0089:WAIT`
+    - `008c:MSPED`
+    - `0090:MOVE`
+    - `0096:CANM!2`
+    - `009b:WAIT`
+    - `009e:WMODE`
+    - `00a2:WINDOW`
+    - `00ac:MESSAGE 400363`
+    - `00af:ANIM!2`
+    - `00b2:WINDOW`
+    - `00bc:MESSAGE 400064`
+    - `00bf:PMJMP`
+    - `00c2:ANIME1`
+    - `00c5:DFANM`
+    - `00c8:MOVE`
+    - `00ce:DFANM`
+    - `00d1:LADER`
+    - `00e0:MAPJUMP #414`
+    - `00ea:RET`
+  - SD:
+    - `0000:SLIDR`
+    - `0003:MOVE`
+    - `0009:TURNGEN`
+    - `000f:SLIDR`
+    - `0012:WAIT`
+    - `0015:ANIME2`
+    - `0018:ANIMW`
+    - `0019:SOUND`
+    - `001e:SHAKE`
+    - `0026:FADE`
+    - `002f:WAIT`
+    - `0032:FADE`
+    - `003b:WAIT`
+    - `003e:FADE`
+    - `0047:WAIT`
+    - `004a:FADE`
+    - `0053:WAIT`
+    - `0056:FADE`
+    - `005f:WAIT`
+    - `0062:FADE`
+    - `006b:SHAKE`
+    - `0073:REQSW`
+    - `0076:WAIT`
+    - `0079:MSPED`
+    - `007d:MOVE`
+    - `0083:CANM!2`
+    - `0088:PMJMP`
+    - `008b:ANIME1`
+    - `008e:DFANM`
+    - `0091:MOVE`
+    - `0097:DFANM`
+    - `009a:LADER`
+    - `00a9:MAPJUMP #414`
+    - `00b3:RET`
+    - `00b4:PMVIE id=31`
+    - `00b6:MOVIE`
+    - `00b7:WAIT`
+    - `00ba:WINDOW`
+    - `00c4:MESSAGE 40006f`
+
+#### SD vs CSR D2
+
+### JUNONE2
+- D1 sha: 550220f2111a7001 dec=22804
+- D2 sha: f775fef2087b5b3d dec=22804
+- SD sha: 8f119f265227aafc dec=22804
+
+#### SD vs CSR D1
+- **`lin1/3`** len 226->223 (4777d2dca6a8->ecacb8a48956)
+  - D1:
+    - `0000:IFSW V=0x3f8C=3E=da->00e1`
+    - `0008:UC`
+    - `000a:MENU2`
+    - `000c:IFMEMBQ`
+    - `000f:REQ`
+    - `0012:REQ`
+    - `0015:SPLIT`
+    - `0024:IFUB A=0aV=00C=0E=03->002c`
+    - `002a:JMPB ->0024`
+    - `002c:SETBYTE 50/0a=0x0`
+    - `0030:REQEW`
+    - `0033:REQEW`
+    - `0036:REQEW`
+    - `0039:REQ`
+    - `003c:SOUND`
+    - `0041:FADE`
+    - `004a:WAIT`
+    - `004d:FADE`
+    - `0056:REQ`
+    - `0059:REQ`
+    - `005c:WAIT`
+    - `005f:FADE`
+    - `0068:WAIT`
+    - `006b:FADE`
+    - `0074:WAIT`
+    - `0077:FADE`
+    - `0080:WAIT`
+    - `0083:FADE`
+    - `008c:WAIT`
+    - `008f:FADE`
+    - `0098:WAIT`
+    - `009b:FADE`
+    - `00a4:WAIT`
+    - `00a7:PMVIE id=30`
+    - `00a9:FADE`
+    - `00b2:WAIT`
+    - `00b5:FADE`
+    - `00be:MOVIE`
+    - `00bf:SETBYTE 50/09=0x1`
+    - `00c3:IFMEMBQ`
+    - `00c6:REQEW`
+    - `00c9:REQEW`
+    - `00cc:REQEW`
+    - `00cf:PRTYE`
+    - `00d3:JMPF ->00d9`
+    - `00d5:REQEW`
+    - `00d8:SETWORD 20/00=0x3f8`
+    - `00dd:UC`
+    - `00df:MENU2`
+    - `00e1:RET`
+  - SD:
+    - `0000:IFSW V=0x3f8C=3E=d1->00d8`
+    - `0008:UC`
+    - `000a:MENU2`
+    - `000c:IFMEMBQ`
+    - `000f:REQ`
+    - `0012:REQ`
+    - `0015:SPLIT`
+    - `0024:IFUB A=0aV=00C=0E=03->002c`
+    - `002a:JMPB ->0024`
+    - `002c:SETBYTE 50/0a=0x0`
+    - `0030:REQEW`
+    - `0033:REQEW`
+    - `0036:REQEW`
+    - `0039:REQ`
+    - `003c:SOUND`
+    - `0041:FADE`
+    - `004a:WAIT`
+    - `004d:FADE`
+    - `0056:REQ`
+    - `0059:WAIT`
+    - `005c:FADE`
+    - `0065:WAIT`
+    - `0068:FADE`
+    - `0071:WAIT`
+    - `0074:FADE`
+    - `007d:WAIT`
+    - `0080:FADE`
+    - `0089:WAIT`
+    - `008c:FADE`
+    - `0095:WAIT`
+    - `0098:FADE`
+    - `00a1:WAIT`
+    - `00a4:FADE`
+    - `00ad:WAIT`
+    - `00b0:FADE`
+    - `00b9:SETBYTE 50/09=0x1`
+    - `00bd:IFMEMBQ`
+    - `00c0:REQEW`
+    - `00c3:REQEW`
+    - `00c6:REQEW`
+    - `00c9:PRTYE`
+    - `00cd:JMPF ->00d0`
+    - `00cf:SETWORD 20/00=0x3f8`
+    - `00d4:UC`
+    - `00d6:MENU2`
+    - `00d8:RET`
+    - `00d9:PMVIE id=30`
+    - `00db:MOVIE`
+    - `00dc:REQEW`
+
+#### SD vs CSR D2
+
+### JUNONE7
+- D1 sha: ad4ad8044cda68b8 dec=26436
+- D2 sha: 8baa829e565473b3 dec=26304
+- SD sha: 4b48e626ad30bf4d dec=26304
+
+#### SD vs CSR D1
+- **`dir/31`** len 25->15 (ebdff78f8879->f16a6011ac04)
+  - D1:
+    - `0000:PMVIE id=32`
+    - `0002:REQ`
+    - `0005:MOVIE`
+    - `0006:BITOFF 10/7f#0`
+    - `000a:BITOFF 10/7f#2`
+    - `000e:MAPJUMP #66`
+    - `0018:RET`
+  - SD:
+    - `0000:REQ`
+    - `0003:BITOFF 10/7f#0`
+    - `0007:BITOFF 10/7f#2`
+    - `000b:PMVIE id=32`
+    - `000d:RET`
+    - `000e:MOVIE`
+- **`sca/14`** len 40->10 (87f1a1cbd0a6->46aecac6ad0e)
+  - D1:
+    - `0000:ANIME2`
+    - `0003:TURNGEN`
+    - `0009:WINDOW`
+    - `0013:MESSAGE 40009c`
+    - `0016:ANIMW`
+    - `0017:DFANM`
+    - `001a:WINDOW`
+    - `0024:MESSAGE 40009d`
+    - `0027:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:DFANM`
+    - `0009:RET`
+- **`sca/5`** len 38->27 (c487e072ca1a->3d20cfc6a274)
+  - D1:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:MOVE`
+    - `000c:TURA`
+    - `0010:ANIME2`
+    - `0013:WINDOW`
+    - `001d:MESSAGE 40008d`
+    - `0020:ANIMW`
+    - `0021:SETBYTE 50/09=0x1`
+    - `0025:RET`
+  - SD:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:MOVE`
+    - `000c:SETBYTE 50/09=0x1`
+    - `0010:RET`
+    - `0011:TURA`
+    - `0015:MOVE`
+- **`ti/31`** len 71->76 (88c1cc05ccfb->0f057391a406)
+  - D1:
+    - `0000:WMODE`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 40009e`
+    - `0011:AKAO`
+    - `001f:CANM!2`
+    - `0024:ANIME1`
+    - `0027:CANM!2`
+    - `002c:WINDOW`
+    - `0036:MESSAGE 40009f`
+    - `0039:REQ`
+    - `003c:ANIME2`
+    - `003f:TURNGEN`
+    - `0045:ANIMW`
+    - `0046:RET`
+  - SD:
+    - `0000:WMODE`
+    - `0004:AKAO`
+    - `0012:CANM!2`
+    - `0017:ANIME1`
+    - `001a:CANM!2`
+    - `001f:WINDOW`
+    - `0029:MESSAGE 40009f`
+    - `002c:BITOFF 10/7f#0`
+    - `0030:BITOFF 10/7f#2`
+    - `0034:REQ`
+    - `0037:ANIME2`
+    - `003a:TURNGEN`
+    - `0040:ANIMW`
+    - `0041:MAPJUMP #66`
+    - `004b:RET`
+- **`ti/5`** len 203->177 (2bf66831cf5d->6b373594b63e)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:ANIM!2`
+    - `0007:ANIM!2`
+    - `000a:ANIM!2`
+    - `000d:ANIM!2`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 40008c`
+    - `001d:REQ`
+    - `0020:MSPED`
+    - `0024:MOVE`
+    - `002a:ANIME2`
+    - `002d:TURA`
+    - `0031:ANIMW`
+    - `0032:WAIT`
+    - `0035:ANIM!2`
+    - `0038:DFANM`
+    - `003b:IFUB A=09V=00C=0E=03->0043`
+    - `0041:JMPB ->003b`
+    - `0043:SETBYTE 50/09=0x0`
+    - `0047:WAIT`
+    - `004a:REQEW`
+    - `004d:REQ`
+    - `0050:WAIT`
+    - `0053:ANIM!2`
+    - `0056:WAIT`
+    - `0059:REQEW`
+    - `005c:ANIM!2`
+    - `005f:DFANM`
+    - `0062:WINDOW`
+    - `006c:MESSAGE 400098`
+    - `006f:CANM!2`
+    - `0074:SOUND`
+    - `0079:REQ`
+    - `007c:CANM!2`
+    - `0081:REQ`
+    - `0084:WAIT`
+    - `0087:WMODE`
+    - `008b:WMODE`
+    - `008f:REQ`
+    - `0092:IFKEY`
+    - `0096:REQ`
+    - `0099:DFANM`
+    - `009c:WAIT`
+    - `009f:SOUND`
+    - `00a4:REQ`
+    - `00a7:WAIT`
+    - `00aa:DFANM`
+    - `00ad:RANDOM`
+    - `00b0:WAIT`
+    - `00b3:IFUB A=0dV=c8C=3E=04->00bc`
+    - `00b9:WAIT`
+    - `00bc:IFUB A=0dV=50C=3E=04->00c5`
+    - `00c2:WAIT`
+    - `00c5:DFANM`
+    - `00c8:JMPB ->0092`
+    - `00ca:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:ANIM!2`
+    - `0007:ANIM!2`
+    - `000a:ANIM!2`
+    - `000d:ANIM!2`
+    - `0010:REQ`
+    - `0013:MSPED`
+    - `0017:MOVE`
+    - `001d:ANIME2`
+    - `0020:TURA`
+    - `0024:ANIM!2`
+    - `0027:DFANM`
+    - `002a:IFUB A=09V=00C=0E=03->0032`
+    - `0030:JMPB ->002a`
+    - `0032:SETBYTE 50/09=0x0`
+    - `0036:REQ`
+    - `0039:WAIT`
+    - `003c:ANIM!2`
+    - `003f:WAIT`
+    - `0042:ANIM!2`
+    - `0045:DFANM`
+    - `0048:WINDOW`
+    - `0052:MESSAGE 400098`
+    - `0055:CANM!2`
+    - `005a:SOUND`
+    - `005f:REQ`
+    - `0062:CANM!2`
+    - `0067:REQ`
+    - `006a:WAIT`
+    - `006d:WMODE`
+    - `0071:WMODE`
+    - `0075:REQ`
+    - `0078:IFKEY`
+    - `007c:REQ`
+    - `007f:DFANM`
+    - `0082:WAIT`
+    - `0085:SOUND`
+    - `008a:REQ`
+    - `008d:WAIT`
+    - `0090:DFANM`
+    - `0093:RANDOM`
+    - `0096:WAIT`
+    - `0099:IFUB A=0dV=c8C=3E=04->00a2`
+    - `009f:WAIT`
+    - `00a2:IFUB A=0dV=50C=3E=04->00ab`
+    - `00a8:WAIT`
+    - `00ab:DFANM`
+    - `00ae:JMPB ->0078`
+    - `00b0:RET`
+
+#### SD vs CSR D2
+
+### LAS4_0
+- D1 sha: b18dc6a9e7b71838 dec=33344
+- D2 sha: b18dc6a9e7b71838 dec=33344
+- SD sha: 0076e56d65ef676c dec=33368
+
+#### SD vs CSR D1
+- **`dic/0`** len 763->767 (fed883b3334f->762531e7d243)
+  - D1 interesting (92):
+    - `0002:MUSIC id=0`
+    - `0006:IFUBL`
+    - `0020:IFUB A=cfV=00C=9E=04->0029`
+    - `0029:IFUB A=50V=02C=9E=04->0032`
+    - `0032:IFUB A=56V=00C=0E=14->004b`
+    - `003b:IFUB A=00V=80C=3E=07->0047`
+    - `0041:SETBYTE d0/56=0x2`
+    - `0045:JMPF ->004c`
+    - `0047:SETBYTE d0/56=0x3`
+    - `004b:IFUB A=55V=00C=0E=14->0064`
+    - `0054:IFUB A=00V=80C=3E=07->0060`
+    - `005a:SETBYTE d0/55=0x2`
+    - `005e:JMPF ->0065`
+    - `0060:SETBYTE d0/55=0x3`
+    - `0064:IFUB A=57V=00C=0E=14->007d`
+    - `006d:IFUB A=00V=80C=3E=07->0079`
+    - `0073:SETBYTE d0/57=0x2`
+    - `0077:JMPF ->007e`
+    - `0079:SETBYTE d0/57=0x3`
+    - `007d:IFUB A=58V=00C=0E=14->0096`
+    - `0086:IFUB A=00V=80C=3E=07->0092`
+    - `008c:SETBYTE d0/58=0x2`
+    - `0090:JMPF ->0097`
+    - `0092:SETBYTE d0/58=0x3`
+    - `0096:IFUB A=5aV=00C=0E=14->00af`
+    - `009f:IFUB A=00V=80C=3E=07->00ab`
+    - `00a5:SETBYTE d0/5a=0x2`
+    - `00a9:JMPF ->00b0`
+    - `00ab:SETBYTE d0/5a=0x3`
+    - `00af:IFUB A=56V=00C=0E=14->00c8`
+    - `00b8:IFUB A=00V=80C=3E=07->00c4`
+    - `00be:SETBYTE d0/56=0x2`
+    - `00c2:JMPF ->00c9`
+    - `00c4:SETBYTE d0/56=0x3`
+    - `00c8:IFUB A=cfV=00C=9E=1a->00e7`
+    - `00ce:IFUB A=59V=00C=0E=14->00e7`
+    - `00d7:IFUB A=00V=80C=3E=07->00e3`
+    - `00dd:SETBYTE d0/59=0x2`
+    - `00e1:JMPF ->00e8`
+    - `00e3:SETBYTE d0/59=0x3`
+    - `00e7:IFUB A=50V=02C=9E=1a->0106`
+    - `00ed:IFUB A=5cV=00C=0E=14->0106`
+    - `00f6:IFUB A=00V=80C=3E=07->0102`
+    - `00fc:SETBYTE d0/5c=0x2`
+    - `0100:JMPF ->0107`
+    - `0102:SETBYTE d0/5c=0x3`
+    - `0106:IFSW V=0x7cfC=0E=26->0133`
+    - `0121:IFUB A=cfV=00C=9E=04->012a`
+    - `012a:IFUB A=50V=02C=9E=04->0133`
+    - `0133:BITOFF d0/60#1`
+    - `0137:RET`
+    - `0138:IFSWL`
+    - `015e:REQEW`
+    - `0161:REQEW`
+    - `0164:REQEW`
+    - `0167:REQEW`
+    - `016a:REQEW`
+    - `0170:REQ`
+    - `0173:REQ`
+    - `0176:REQ`
+    - `0179:REQ`
+    - `017f:REQ`
+    - `0185:REQEW`
+    - `0188:REQ`
+    - `018b:REQ`
+    - `018e:REQ`
+    - `0191:REQ`
+    - `0197:REQ`
+    - `019d:REQ`
+    - `01a0:IFUB A=06V=00C=0E=03->01a8`
+    - `01b6:REQ`
+    - `01bc:REQEW`
+    - `01de:REQEW`
+    - `01e1:REQEW`
+    - `01e4:REQEW`
+    - `0206:REQEW`
+    - `0228:REQEW`
+    - `0239:REQ`
+    - `0246:MESSAGE 400155`
+    - `0257:REQ`
+    - ... +12
+  - SD interesting (95):
+    - `0002:MUSIC id=0`
+    - `0006:IFUBL`
+    - `0020:IFUB A=cfV=00C=9E=04->0029`
+    - `0029:IFUB A=50V=02C=9E=04->0032`
+    - `0032:IFUB A=56V=00C=0E=14->004b`
+    - `003b:IFUB A=00V=80C=3E=07->0047`
+    - `0041:SETBYTE d0/56=0x2`
+    - `0045:JMPF ->004c`
+    - `0047:SETBYTE d0/56=0x3`
+    - `004b:IFUB A=55V=00C=0E=14->0064`
+    - `0054:IFUB A=00V=80C=3E=07->0060`
+    - `005a:SETBYTE d0/55=0x2`
+    - `005e:JMPF ->0065`
+    - `0060:SETBYTE d0/55=0x3`
+    - `0064:IFUB A=57V=00C=0E=14->007d`
+    - `006d:IFUB A=00V=80C=3E=07->0079`
+    - `0073:SETBYTE d0/57=0x2`
+    - `0077:JMPF ->007e`
+    - `0079:SETBYTE d0/57=0x3`
+    - `007d:IFUB A=58V=00C=0E=14->0096`
+    - `0086:IFUB A=00V=80C=3E=07->0092`
+    - `008c:SETBYTE d0/58=0x2`
+    - `0090:JMPF ->0097`
+    - `0092:SETBYTE d0/58=0x3`
+    - `0096:IFUB A=5aV=00C=0E=14->00af`
+    - `009f:IFUB A=00V=80C=3E=07->00ab`
+    - `00a5:SETBYTE d0/5a=0x2`
+    - `00a9:JMPF ->00b0`
+    - `00ab:SETBYTE d0/5a=0x3`
+    - `00af:IFUB A=56V=00C=0E=14->00c8`
+    - `00b8:IFUB A=00V=80C=3E=07->00c4`
+    - `00be:SETBYTE d0/56=0x2`
+    - `00c2:JMPF ->00c9`
+    - `00c4:SETBYTE d0/56=0x3`
+    - `00c8:IFUB A=cfV=00C=9E=1a->00e7`
+    - `00ce:IFUB A=59V=00C=0E=14->00e7`
+    - `00d7:IFUB A=00V=80C=3E=07->00e3`
+    - `00dd:SETBYTE d0/59=0x2`
+    - `00e1:JMPF ->00e8`
+    - `00e3:SETBYTE d0/59=0x3`
+    - `00e7:IFUB A=50V=02C=9E=1a->0106`
+    - `00ed:IFUB A=5cV=00C=0E=14->0106`
+    - `00f6:IFUB A=00V=80C=3E=07->0102`
+    - `00fc:SETBYTE d0/5c=0x2`
+    - `0100:JMPF ->0107`
+    - `0102:SETBYTE d0/5c=0x3`
+    - `0106:IFSW V=0x7cfC=0E=26->0133`
+    - `0121:IFUB A=cfV=00C=9E=04->012a`
+    - `012a:IFUB A=50V=02C=9E=04->0133`
+    - `0133:BITOFF d0/60#1`
+    - `0137:RET`
+    - `0138:IFSWL`
+    - `0141:JMPF ->0150`
+    - `015d:REQEW`
+    - `0160:JMPFL`
+    - `0163:REQEW`
+    - `0166:REQEW`
+    - `0169:REQEW`
+    - `016c:REQEW`
+    - `0172:REQ`
+    - `0175:REQ`
+    - `0178:REQ`
+    - `017b:REQ`
+    - `0181:REQ`
+    - `0187:REQEW`
+    - `018a:REQ`
+    - `018d:REQ`
+    - `0190:REQ`
+    - `0193:REQ`
+    - `0199:REQ`
+    - `019f:REQ`
+    - `01a2:IFUB A=06V=00C=0E=03->01aa`
+    - `01b8:REQ`
+    - `01be:REQEW`
+    - `01e0:REQEW`
+    - `01e3:REQEW`
+    - `01e6:REQEW`
+    - `0208:REQEW`
+    - `022a:REQEW`
+    - `023b:REQ`
+    - ... +15
+  - opcode counts: JMPF:8->10, JMPFL:1->2, WAIT:10->9
+- **`dic/31`** len 252->268 (e41ae2e8542c->8753fd24cb35)
+  - D1:
+    - `0000:WSIZW`
+    - `000a:ASK 48050133010201`
+    - `0011:IFUB A=01V=02C=0E=02->0018`
+    - `0017:RET`
+    - `0018:REQEW`
+    - `001b:REQEW`
+    - `001e:REQEW`
+    - `0021:AKAO`
+    - `002f:REQ`
+    - `0032:REQ`
+    - `0035:REQ`
+    - `0038:REQ`
+    - `003b:IFUB A=cfV=00C=9E=04->0044`
+    - `0041:REQ`
+    - `0044:IFUB A=50V=02C=9E=04->004d`
+    - `004a:REQ`
+    - `004d:REQEW`
+    - `0050:WAIT`
+    - `0053:AKAO`
+    - `0061:SOUND`
+    - `0066:REQ`
+    - `0069:REQ`
+    - `006c:REQ`
+    - `006f:REQ`
+    - `0072:REQ`
+    - `0075:REQ`
+    - `0078:REQ`
+    - `007b:IFUB A=cfV=00C=9E=04->0084`
+    - `0081:REQ`
+    - `0084:IFUB A=50V=02C=9E=04->008d`
+    - `008a:REQ`
+    - `008d:REQEW`
+    - `0090:REQEW`
+    - `0093:REQEW`
+    - `0096:REQEW`
+    - `0099:REQEW`
+    - `009c:REQEW`
+    - `009f:REQEW`
+    - `00a2:REQEW`
+    - `00a5:REQEW`
+    - `00a8:IFUB A=cfV=00C=9E=04->00b1`
+    - `00ae:REQEW`
+    - `00b1:IFUB A=50V=02C=9E=04->00ba`
+    - `00b7:REQEW`
+    - `00ba:REQ`
+    - `00bd:IFUB A=03V=00C=0E=03->00c5`
+    - `00c3:JMPB ->00bd`
+    - `00c5:REQEW`
+    - `00c8:REQEW`
+    - `00cb:MENU`
+    - `00cf:FADE`
+    - `00d8:REQEW`
+    - `00db:PRQEW`
+    - `00de:PRQEW`
+    - `00e1:FADE`
+    - `00ea:MUSIC id=2`
+    - `00ec:FADEW`
+    - `00ed:PREQ`
+    - `00f0:PRQEW`
+    - `00f3:PRQEW`
+    - `00f6:JOIN`
+    - `00f8:REQEW`
+    - `00fb:RET`
+  - SD:
+    - `0000:WSIZW`
+    - `000a:ASK 48050133010201`
+    - `0011:IFUB A=01V=02C=0E=02->0018`
+    - `0017:RET`
+    - `0018:REQEW`
+    - `001b:AKAO`
+    - `0029:JMPF ->0064`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:AKAO`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:IFUB A=cfV=00C=9E=04->0054`
+    - `0051:REQ`
+    - `0054:IFUB A=50V=02C=9E=04->005d`
+    - `005a:REQ`
+    - `005d:REQEW`
+    - `0060:WAIT`
+    - `0063:AKAO`
+    - `0071:SOUND`
+    - `0076:REQ`
+    - `0079:REQ`
+    - `007c:REQ`
+    - `007f:REQ`
+    - `0082:REQ`
+    - `0085:REQ`
+    - `0088:REQ`
+    - `008b:IFUB A=cfV=00C=9E=04->0094`
+    - `0091:REQ`
+    - `0094:IFUB A=50V=02C=9E=04->009d`
+    - `009a:REQ`
+    - `009d:REQEW`
+    - `00a0:REQEW`
+    - `00a3:REQEW`
+    - `00a6:REQEW`
+    - `00a9:REQEW`
+    - `00ac:REQEW`
+    - `00af:REQEW`
+    - `00b2:REQEW`
+    - `00b5:REQEW`
+    - `00b8:IFUB A=cfV=00C=9E=04->00c1`
+    - `00be:REQEW`
+    - `00c1:IFUB A=50V=02C=9E=04->00ca`
+    - `00c7:REQEW`
+    - `00ca:REQ`
+    - `00cd:IFUB A=03V=00C=0E=03->00d5`
+    - `00d3:JMPB ->00cd`
+    - `00d5:REQEW`
+    - `00d8:REQEW`
+    - `00db:MENU`
+    - `00df:FADE`
+    - `00e8:REQEW`
+    - `00eb:PRQEW`
+    - `00ee:PRQEW`
+    - `00f1:FADE`
+    - `00fa:MUSIC id=2`
+    - `00fc:FADEW`
+    - `00fd:PREQ`
+    - `0100:PRQEW`
+    - `0103:PRQEW`
+    - `0106:JOIN`
+    - `0108:REQEW`
+    - `010b:RET`
+
+#### SD vs CSR D2
+- **`dic/0`** len 763->767 (fed883b3334f->762531e7d243)
+  - D2 interesting (92):
+    - `0002:MUSIC id=0`
+    - `0006:IFUBL`
+    - `0020:IFUB A=cfV=00C=9E=04->0029`
+    - `0029:IFUB A=50V=02C=9E=04->0032`
+    - `0032:IFUB A=56V=00C=0E=14->004b`
+    - `003b:IFUB A=00V=80C=3E=07->0047`
+    - `0041:SETBYTE d0/56=0x2`
+    - `0045:JMPF ->004c`
+    - `0047:SETBYTE d0/56=0x3`
+    - `004b:IFUB A=55V=00C=0E=14->0064`
+    - `0054:IFUB A=00V=80C=3E=07->0060`
+    - `005a:SETBYTE d0/55=0x2`
+    - `005e:JMPF ->0065`
+    - `0060:SETBYTE d0/55=0x3`
+    - `0064:IFUB A=57V=00C=0E=14->007d`
+    - `006d:IFUB A=00V=80C=3E=07->0079`
+    - `0073:SETBYTE d0/57=0x2`
+    - `0077:JMPF ->007e`
+    - `0079:SETBYTE d0/57=0x3`
+    - `007d:IFUB A=58V=00C=0E=14->0096`
+    - `0086:IFUB A=00V=80C=3E=07->0092`
+    - `008c:SETBYTE d0/58=0x2`
+    - `0090:JMPF ->0097`
+    - `0092:SETBYTE d0/58=0x3`
+    - `0096:IFUB A=5aV=00C=0E=14->00af`
+    - `009f:IFUB A=00V=80C=3E=07->00ab`
+    - `00a5:SETBYTE d0/5a=0x2`
+    - `00a9:JMPF ->00b0`
+    - `00ab:SETBYTE d0/5a=0x3`
+    - `00af:IFUB A=56V=00C=0E=14->00c8`
+    - `00b8:IFUB A=00V=80C=3E=07->00c4`
+    - `00be:SETBYTE d0/56=0x2`
+    - `00c2:JMPF ->00c9`
+    - `00c4:SETBYTE d0/56=0x3`
+    - `00c8:IFUB A=cfV=00C=9E=1a->00e7`
+    - `00ce:IFUB A=59V=00C=0E=14->00e7`
+    - `00d7:IFUB A=00V=80C=3E=07->00e3`
+    - `00dd:SETBYTE d0/59=0x2`
+    - `00e1:JMPF ->00e8`
+    - `00e3:SETBYTE d0/59=0x3`
+    - `00e7:IFUB A=50V=02C=9E=1a->0106`
+    - `00ed:IFUB A=5cV=00C=0E=14->0106`
+    - `00f6:IFUB A=00V=80C=3E=07->0102`
+    - `00fc:SETBYTE d0/5c=0x2`
+    - `0100:JMPF ->0107`
+    - `0102:SETBYTE d0/5c=0x3`
+    - `0106:IFSW V=0x7cfC=0E=26->0133`
+    - `0121:IFUB A=cfV=00C=9E=04->012a`
+    - `012a:IFUB A=50V=02C=9E=04->0133`
+    - `0133:BITOFF d0/60#1`
+    - `0137:RET`
+    - `0138:IFSWL`
+    - `015e:REQEW`
+    - `0161:REQEW`
+    - `0164:REQEW`
+    - `0167:REQEW`
+    - `016a:REQEW`
+    - `0170:REQ`
+    - `0173:REQ`
+    - `0176:REQ`
+    - `0179:REQ`
+    - `017f:REQ`
+    - `0185:REQEW`
+    - `0188:REQ`
+    - `018b:REQ`
+    - `018e:REQ`
+    - `0191:REQ`
+    - `0197:REQ`
+    - `019d:REQ`
+    - `01a0:IFUB A=06V=00C=0E=03->01a8`
+    - `01b6:REQ`
+    - `01bc:REQEW`
+    - `01de:REQEW`
+    - `01e1:REQEW`
+    - `01e4:REQEW`
+    - `0206:REQEW`
+    - `0228:REQEW`
+    - `0239:REQ`
+    - `0246:MESSAGE 400155`
+    - `0257:REQ`
+    - ... +12
+  - SD interesting (95):
+    - `0002:MUSIC id=0`
+    - `0006:IFUBL`
+    - `0020:IFUB A=cfV=00C=9E=04->0029`
+    - `0029:IFUB A=50V=02C=9E=04->0032`
+    - `0032:IFUB A=56V=00C=0E=14->004b`
+    - `003b:IFUB A=00V=80C=3E=07->0047`
+    - `0041:SETBYTE d0/56=0x2`
+    - `0045:JMPF ->004c`
+    - `0047:SETBYTE d0/56=0x3`
+    - `004b:IFUB A=55V=00C=0E=14->0064`
+    - `0054:IFUB A=00V=80C=3E=07->0060`
+    - `005a:SETBYTE d0/55=0x2`
+    - `005e:JMPF ->0065`
+    - `0060:SETBYTE d0/55=0x3`
+    - `0064:IFUB A=57V=00C=0E=14->007d`
+    - `006d:IFUB A=00V=80C=3E=07->0079`
+    - `0073:SETBYTE d0/57=0x2`
+    - `0077:JMPF ->007e`
+    - `0079:SETBYTE d0/57=0x3`
+    - `007d:IFUB A=58V=00C=0E=14->0096`
+    - `0086:IFUB A=00V=80C=3E=07->0092`
+    - `008c:SETBYTE d0/58=0x2`
+    - `0090:JMPF ->0097`
+    - `0092:SETBYTE d0/58=0x3`
+    - `0096:IFUB A=5aV=00C=0E=14->00af`
+    - `009f:IFUB A=00V=80C=3E=07->00ab`
+    - `00a5:SETBYTE d0/5a=0x2`
+    - `00a9:JMPF ->00b0`
+    - `00ab:SETBYTE d0/5a=0x3`
+    - `00af:IFUB A=56V=00C=0E=14->00c8`
+    - `00b8:IFUB A=00V=80C=3E=07->00c4`
+    - `00be:SETBYTE d0/56=0x2`
+    - `00c2:JMPF ->00c9`
+    - `00c4:SETBYTE d0/56=0x3`
+    - `00c8:IFUB A=cfV=00C=9E=1a->00e7`
+    - `00ce:IFUB A=59V=00C=0E=14->00e7`
+    - `00d7:IFUB A=00V=80C=3E=07->00e3`
+    - `00dd:SETBYTE d0/59=0x2`
+    - `00e1:JMPF ->00e8`
+    - `00e3:SETBYTE d0/59=0x3`
+    - `00e7:IFUB A=50V=02C=9E=1a->0106`
+    - `00ed:IFUB A=5cV=00C=0E=14->0106`
+    - `00f6:IFUB A=00V=80C=3E=07->0102`
+    - `00fc:SETBYTE d0/5c=0x2`
+    - `0100:JMPF ->0107`
+    - `0102:SETBYTE d0/5c=0x3`
+    - `0106:IFSW V=0x7cfC=0E=26->0133`
+    - `0121:IFUB A=cfV=00C=9E=04->012a`
+    - `012a:IFUB A=50V=02C=9E=04->0133`
+    - `0133:BITOFF d0/60#1`
+    - `0137:RET`
+    - `0138:IFSWL`
+    - `0141:JMPF ->0150`
+    - `015d:REQEW`
+    - `0160:JMPFL`
+    - `0163:REQEW`
+    - `0166:REQEW`
+    - `0169:REQEW`
+    - `016c:REQEW`
+    - `0172:REQ`
+    - `0175:REQ`
+    - `0178:REQ`
+    - `017b:REQ`
+    - `0181:REQ`
+    - `0187:REQEW`
+    - `018a:REQ`
+    - `018d:REQ`
+    - `0190:REQ`
+    - `0193:REQ`
+    - `0199:REQ`
+    - `019f:REQ`
+    - `01a2:IFUB A=06V=00C=0E=03->01aa`
+    - `01b8:REQ`
+    - `01be:REQEW`
+    - `01e0:REQEW`
+    - `01e3:REQEW`
+    - `01e6:REQEW`
+    - `0208:REQEW`
+    - `022a:REQEW`
+    - `023b:REQ`
+    - ... +15
+  - opcode counts: JMPF:8->10, JMPFL:1->2, WAIT:10->9
+- **`dic/31`** len 252->268 (e41ae2e8542c->8753fd24cb35)
+  - D2:
+    - `0000:WSIZW`
+    - `000a:ASK 48050133010201`
+    - `0011:IFUB A=01V=02C=0E=02->0018`
+    - `0017:RET`
+    - `0018:REQEW`
+    - `001b:REQEW`
+    - `001e:REQEW`
+    - `0021:AKAO`
+    - `002f:REQ`
+    - `0032:REQ`
+    - `0035:REQ`
+    - `0038:REQ`
+    - `003b:IFUB A=cfV=00C=9E=04->0044`
+    - `0041:REQ`
+    - `0044:IFUB A=50V=02C=9E=04->004d`
+    - `004a:REQ`
+    - `004d:REQEW`
+    - `0050:WAIT`
+    - `0053:AKAO`
+    - `0061:SOUND`
+    - `0066:REQ`
+    - `0069:REQ`
+    - `006c:REQ`
+    - `006f:REQ`
+    - `0072:REQ`
+    - `0075:REQ`
+    - `0078:REQ`
+    - `007b:IFUB A=cfV=00C=9E=04->0084`
+    - `0081:REQ`
+    - `0084:IFUB A=50V=02C=9E=04->008d`
+    - `008a:REQ`
+    - `008d:REQEW`
+    - `0090:REQEW`
+    - `0093:REQEW`
+    - `0096:REQEW`
+    - `0099:REQEW`
+    - `009c:REQEW`
+    - `009f:REQEW`
+    - `00a2:REQEW`
+    - `00a5:REQEW`
+    - `00a8:IFUB A=cfV=00C=9E=04->00b1`
+    - `00ae:REQEW`
+    - `00b1:IFUB A=50V=02C=9E=04->00ba`
+    - `00b7:REQEW`
+    - `00ba:REQ`
+    - `00bd:IFUB A=03V=00C=0E=03->00c5`
+    - `00c3:JMPB ->00bd`
+    - `00c5:REQEW`
+    - `00c8:REQEW`
+    - `00cb:MENU`
+    - `00cf:FADE`
+    - `00d8:REQEW`
+    - `00db:PRQEW`
+    - `00de:PRQEW`
+    - `00e1:FADE`
+    - `00ea:MUSIC id=2`
+    - `00ec:FADEW`
+    - `00ed:PREQ`
+    - `00f0:PRQEW`
+    - `00f3:PRQEW`
+    - `00f6:JOIN`
+    - `00f8:REQEW`
+    - `00fb:RET`
+  - SD:
+    - `0000:WSIZW`
+    - `000a:ASK 48050133010201`
+    - `0011:IFUB A=01V=02C=0E=02->0018`
+    - `0017:RET`
+    - `0018:REQEW`
+    - `001b:AKAO`
+    - `0029:JMPF ->0064`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:AKAO`
+    - `003f:REQ`
+    - `0042:REQ`
+    - `0045:REQ`
+    - `0048:REQ`
+    - `004b:IFUB A=cfV=00C=9E=04->0054`
+    - `0051:REQ`
+    - `0054:IFUB A=50V=02C=9E=04->005d`
+    - `005a:REQ`
+    - `005d:REQEW`
+    - `0060:WAIT`
+    - `0063:AKAO`
+    - `0071:SOUND`
+    - `0076:REQ`
+    - `0079:REQ`
+    - `007c:REQ`
+    - `007f:REQ`
+    - `0082:REQ`
+    - `0085:REQ`
+    - `0088:REQ`
+    - `008b:IFUB A=cfV=00C=9E=04->0094`
+    - `0091:REQ`
+    - `0094:IFUB A=50V=02C=9E=04->009d`
+    - `009a:REQ`
+    - `009d:REQEW`
+    - `00a0:REQEW`
+    - `00a3:REQEW`
+    - `00a6:REQEW`
+    - `00a9:REQEW`
+    - `00ac:REQEW`
+    - `00af:REQEW`
+    - `00b2:REQEW`
+    - `00b5:REQEW`
+    - `00b8:IFUB A=cfV=00C=9E=04->00c1`
+    - `00be:REQEW`
+    - `00c1:IFUB A=50V=02C=9E=04->00ca`
+    - `00c7:REQEW`
+    - `00ca:REQ`
+    - `00cd:IFUB A=03V=00C=0E=03->00d5`
+    - `00d3:JMPB ->00cd`
+    - `00d5:REQEW`
+    - `00d8:REQEW`
+    - `00db:MENU`
+    - `00df:FADE`
+    - `00e8:REQEW`
+    - `00eb:PRQEW`
+    - `00ee:PRQEW`
+    - `00f1:FADE`
+    - `00fa:MUSIC id=2`
+    - `00fc:FADEW`
+    - `00fd:PREQ`
+    - `0100:PRQEW`
+    - `0103:PRQEW`
+    - `0106:JOIN`
+    - `0108:REQEW`
+    - `010b:RET`
+
+### LAS4_2
+- D1 sha: 0dd1f4d23979e7f6 dec=16972
+- D2 sha: 0dd1f4d23979e7f6 dec=16972
+- SD sha: cc5d3a60b78e7ad9 dec=16964
+
+#### SD vs CSR D1
+- **`batkun/31`** len 77->75 (1b1d7664fa25->9adeb8e46737)
+  - D1:
+    - `0000:RANDOM`
+    - `0003:IFUB A=01V=b4C=2E=44->004c`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=01V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=01V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:PMVIE id=20`
+    - `003f:REQ`
+    - `0042:FADE`
+    - `004b:FADEW`
+    - `004c:RET`
+  - SD:
+    - `0000:RANDOM`
+    - `0003:IFUB A=01V=b4C=2E=42->004a`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=01V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=01V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:REQ`
+    - `0040:FADE`
+    - `0049:FADEW`
+    - `004a:RET`
+- **`dic/0`** len 112->110 (ca2507f4f6f4->5bef2eaab7c9)
+  - D1:
+    - `0000:MPJPO`
+    - `0002:AKAO`
+    - `0010:MUSIC id=0`
+    - `0012:BTLMD`
+    - `0015:MPNAM`
+    - `0017:IDLCK`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:BITOFF d0/60#1`
+    - `0027:RET`
+    - `0028:FADE`
+    - `0031:BGMOVIE`
+    - `0033:MVCAM`
+    - `0035:REQ`
+    - `0038:PREQ`
+    - `003b:PREQ`
+    - `003e:PMVIE id=20`
+    - `0040:REQ`
+    - `0043:FADE`
+    - `004c:FADEW`
+    - `004d:REQEW`
+    - `0050:WAIT`
+    - `0053:REQ`
+    - `0056:PREQ`
+    - `0059:PRQEW`
+    - `005c:WAIT`
+    - `005f:REQ`
+    - `0062:JOIN`
+    - `0064:REQEW`
+    - `0067:UC`
+    - `0069:MENU2`
+    - `006b:SETBYTE 50/00=0x0`
+    - `006f:RET`
+  - SD:
+    - `0000:MPJPO`
+    - `0002:AKAO`
+    - `0010:MUSIC id=0`
+    - `0012:BTLMD`
+    - `0015:MPNAM`
+    - `0017:IDLCK`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:BITOFF d0/60#1`
+    - `0027:RET`
+    - `0028:FADE`
+    - `0031:BGMOVIE`
+    - `0033:MVCAM`
+    - `0035:REQ`
+    - `0038:PREQ`
+    - `003b:PREQ`
+    - `003e:REQ`
+    - `0041:FADE`
+    - `004a:FADEW`
+    - `004b:REQEW`
+    - `004e:WAIT`
+    - `0051:REQ`
+    - `0054:PREQ`
+    - `0057:PRQEW`
+    - `005a:WAIT`
+    - `005d:REQ`
+    - `0060:JOIN`
+    - `0062:REQEW`
+    - `0065:UC`
+    - `0067:MENU2`
+    - `0069:SETBYTE 50/00=0x0`
+    - `006d:RET`
+- **`me/31`** len 64->62 (85f3f863433d->9181edebc389)
+  - D1:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=37->003d`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:PMVIE id=20`
+    - `002c:REQ`
+    - `002f:FADE`
+    - `0038:FADEW`
+    - `0039:UC`
+    - `003b:MENU2`
+    - `003d:JMPB ->0001`
+    - `003f:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=35->003b`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:REQ`
+    - `002d:FADE`
+    - `0036:FADEW`
+    - `0037:UC`
+    - `0039:MENU2`
+    - `003b:JMPB ->0001`
+    - `003d:RET`
+- **`movkun/31`** len 4->3 (de44b9a87880->2f9263f52bfc)
+  - D1:
+    - `0000:BGMOVIE`
+    - `0002:MOVIE`
+    - `0003:RET`
+  - SD:
+    - `0000:BGMOVIE`
+    - `0002:RET`
+
+#### SD vs CSR D2
+- **`batkun/31`** len 77->75 (1b1d7664fa25->9adeb8e46737)
+  - D2:
+    - `0000:RANDOM`
+    - `0003:IFUB A=01V=b4C=2E=44->004c`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=01V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=01V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:PMVIE id=20`
+    - `003f:REQ`
+    - `0042:FADE`
+    - `004b:FADEW`
+    - `004c:RET`
+  - SD:
+    - `0000:RANDOM`
+    - `0003:IFUB A=01V=b4C=2E=42->004a`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=01V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=01V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:REQ`
+    - `0040:FADE`
+    - `0049:FADEW`
+    - `004a:RET`
+- **`dic/0`** len 112->110 (ca2507f4f6f4->5bef2eaab7c9)
+  - D2:
+    - `0000:MPJPO`
+    - `0002:AKAO`
+    - `0010:MUSIC id=0`
+    - `0012:BTLMD`
+    - `0015:MPNAM`
+    - `0017:IDLCK`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:BITOFF d0/60#1`
+    - `0027:RET`
+    - `0028:FADE`
+    - `0031:BGMOVIE`
+    - `0033:MVCAM`
+    - `0035:REQ`
+    - `0038:PREQ`
+    - `003b:PREQ`
+    - `003e:PMVIE id=20`
+    - `0040:REQ`
+    - `0043:FADE`
+    - `004c:FADEW`
+    - `004d:REQEW`
+    - `0050:WAIT`
+    - `0053:REQ`
+    - `0056:PREQ`
+    - `0059:PRQEW`
+    - `005c:WAIT`
+    - `005f:REQ`
+    - `0062:JOIN`
+    - `0064:REQEW`
+    - `0067:UC`
+    - `0069:MENU2`
+    - `006b:SETBYTE 50/00=0x0`
+    - `006f:RET`
+  - SD:
+    - `0000:MPJPO`
+    - `0002:AKAO`
+    - `0010:MUSIC id=0`
+    - `0012:BTLMD`
+    - `0015:MPNAM`
+    - `0017:IDLCK`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:BITOFF d0/60#1`
+    - `0027:RET`
+    - `0028:FADE`
+    - `0031:BGMOVIE`
+    - `0033:MVCAM`
+    - `0035:REQ`
+    - `0038:PREQ`
+    - `003b:PREQ`
+    - `003e:REQ`
+    - `0041:FADE`
+    - `004a:FADEW`
+    - `004b:REQEW`
+    - `004e:WAIT`
+    - `0051:REQ`
+    - `0054:PREQ`
+    - `0057:PRQEW`
+    - `005a:WAIT`
+    - `005d:REQ`
+    - `0060:JOIN`
+    - `0062:REQEW`
+    - `0065:UC`
+    - `0067:MENU2`
+    - `0069:SETBYTE 50/00=0x0`
+    - `006d:RET`
+- **`me/31`** len 64->62 (85f3f863433d->9181edebc389)
+  - D2:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=37->003d`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:PMVIE id=20`
+    - `002c:REQ`
+    - `002f:FADE`
+    - `0038:FADEW`
+    - `0039:UC`
+    - `003b:MENU2`
+    - `003d:JMPB ->0001`
+    - `003f:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=35->003b`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:REQ`
+    - `002d:FADE`
+    - `0036:FADEW`
+    - `0037:UC`
+    - `0039:MENU2`
+    - `003b:JMPB ->0001`
+    - `003d:RET`
+- **`movkun/31`** len 4->3 (de44b9a87880->2f9263f52bfc)
+  - D2:
+    - `0000:BGMOVIE`
+    - `0002:MOVIE`
+    - `0003:RET`
+  - SD:
+    - `0000:BGMOVIE`
+    - `0002:RET`
+
+### LAS4_3
+- D1 sha: 4b71bff14a6a2fed dec=21652
+- D2 sha: 4b71bff14a6a2fed dec=21652
+- SD sha: e5e38a4345ecd9cd dec=21644
+
+#### SD vs CSR D1
+- **`batkun/31`** len 77->75 (aaa6cde5e6a1->4e2565dfc1bf)
+  - D1:
+    - `0000:RANDOM`
+    - `0003:IFUB A=05V=b4C=2E=44->004c`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=05V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=05V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:PMVIE id=21`
+    - `003f:REQ`
+    - `0042:FADE`
+    - `004b:FADEW`
+    - `004c:RET`
+  - SD:
+    - `0000:RANDOM`
+    - `0003:IFUB A=05V=b4C=2E=42->004a`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=05V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=05V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:REQ`
+    - `0040:FADE`
+    - `0049:FADEW`
+    - `004a:RET`
+- **`dic/0`** len 112->110 (e3d788c882a9->b430a5df2bc6)
+  - D1:
+    - `0000:MUSIC id=0`
+    - `0002:BTLMD`
+    - `0005:MPNAM`
+    - `0007:LSTMP`
+    - `000a:IFSW V=0x2fdC=0E=12->0023`
+    - `0012:FADE`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:IFSW V=0x60C=0E=09->0033`
+    - `002b:SETBYTE 50/00=0x1`
+    - `002f:UC`
+    - `0031:MENU2`
+    - `0033:RET`
+    - `0034:BGMOVIE`
+    - `0036:MVCAM`
+    - `0038:PMVIE id=21`
+    - `003a:REQSW`
+    - `003d:FADE`
+    - `0046:FADEW`
+    - `0047:IFSW V=0x2fdC=0E=0d->005b`
+    - `004f:FADEW`
+    - `0050:REQEW`
+    - `0053:SETBYTE 50/00=0x0`
+    - `0057:UC`
+    - `0059:MENU2`
+    - `005b:IFSW V=0x60C=0E=0d->006f`
+    - `0063:FADEW`
+    - `0064:REQEW`
+    - `0067:SETBYTE 50/00=0x0`
+    - `006b:UC`
+    - `006d:MENU2`
+    - `006f:RET`
+  - SD:
+    - `0000:MUSIC id=0`
+    - `0002:BTLMD`
+    - `0005:MPNAM`
+    - `0007:LSTMP`
+    - `000a:IFSW V=0x2fdC=0E=12->0023`
+    - `0012:FADE`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:IFSW V=0x60C=0E=09->0033`
+    - `002b:SETBYTE 50/00=0x1`
+    - `002f:UC`
+    - `0031:MENU2`
+    - `0033:RET`
+    - `0034:BGMOVIE`
+    - `0036:MVCAM`
+    - `0038:REQSW`
+    - `003b:FADE`
+    - `0044:FADEW`
+    - `0045:IFSW V=0x2fdC=0E=0d->0059`
+    - `004d:FADEW`
+    - `004e:REQEW`
+    - `0051:SETBYTE 50/00=0x0`
+    - `0055:UC`
+    - `0057:MENU2`
+    - `0059:IFSW V=0x60C=0E=0d->006d`
+    - `0061:FADEW`
+    - `0062:REQEW`
+    - `0065:SETBYTE 50/00=0x0`
+    - `0069:UC`
+    - `006b:MENU2`
+    - `006d:RET`
+- **`me/31`** len 64->62 (fb395f863cec->9181edebc389)
+  - D1:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=37->003d`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:PMVIE id=21`
+    - `002c:REQ`
+    - `002f:FADE`
+    - `0038:FADEW`
+    - `0039:UC`
+    - `003b:MENU2`
+    - `003d:JMPB ->0001`
+    - `003f:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=35->003b`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:REQ`
+    - `002d:FADE`
+    - `0036:FADEW`
+    - `0037:UC`
+    - `0039:MENU2`
+    - `003b:JMPB ->0001`
+    - `003d:RET`
+- **`movkun/31`** len 4->3 (de44b9a87880->2f9263f52bfc)
+  - D1:
+    - `0000:BGMOVIE`
+    - `0002:MOVIE`
+    - `0003:RET`
+  - SD:
+    - `0000:BGMOVIE`
+    - `0002:RET`
+
+#### SD vs CSR D2
+- **`batkun/31`** len 77->75 (aaa6cde5e6a1->4e2565dfc1bf)
+  - D2:
+    - `0000:RANDOM`
+    - `0003:IFUB A=05V=b4C=2E=44->004c`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=05V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=05V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:PMVIE id=21`
+    - `003f:REQ`
+    - `0042:FADE`
+    - `004b:FADEW`
+    - `004c:RET`
+  - SD:
+    - `0000:RANDOM`
+    - `0003:IFUB A=05V=b4C=2E=42->004a`
+    - `0009:SETBYTE 50/00=0x1`
+    - `000d:UC`
+    - `000f:MENU2`
+    - `0011:MENU`
+    - `0015:RANDOM`
+    - `0018:IFUB A=05V=1aC=3E=07->0024`
+    - `001e:BATTLE`
+    - `0022:JMPF ->0035`
+    - `0024:IFUB A=05V=9aC=3E=07->0030`
+    - `002a:BATTLE`
+    - `002e:JMPF ->0035`
+    - `0030:BATTLE`
+    - `0034:FADE`
+    - `003d:REQ`
+    - `0040:FADE`
+    - `0049:FADEW`
+    - `004a:RET`
+- **`dic/0`** len 112->110 (e3d788c882a9->b430a5df2bc6)
+  - D2:
+    - `0000:MUSIC id=0`
+    - `0002:BTLMD`
+    - `0005:MPNAM`
+    - `0007:LSTMP`
+    - `000a:IFSW V=0x2fdC=0E=12->0023`
+    - `0012:FADE`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:IFSW V=0x60C=0E=09->0033`
+    - `002b:SETBYTE 50/00=0x1`
+    - `002f:UC`
+    - `0031:MENU2`
+    - `0033:RET`
+    - `0034:BGMOVIE`
+    - `0036:MVCAM`
+    - `0038:PMVIE id=21`
+    - `003a:REQSW`
+    - `003d:FADE`
+    - `0046:FADEW`
+    - `0047:IFSW V=0x2fdC=0E=0d->005b`
+    - `004f:FADEW`
+    - `0050:REQEW`
+    - `0053:SETBYTE 50/00=0x0`
+    - `0057:UC`
+    - `0059:MENU2`
+    - `005b:IFSW V=0x60C=0E=0d->006f`
+    - `0063:FADEW`
+    - `0064:REQEW`
+    - `0067:SETBYTE 50/00=0x0`
+    - `006b:UC`
+    - `006d:MENU2`
+    - `006f:RET`
+  - SD:
+    - `0000:MUSIC id=0`
+    - `0002:BTLMD`
+    - `0005:MPNAM`
+    - `0007:LSTMP`
+    - `000a:IFSW V=0x2fdC=0E=12->0023`
+    - `0012:FADE`
+    - `001b:SETBYTE 50/00=0x1`
+    - `001f:UC`
+    - `0021:MENU2`
+    - `0023:IFSW V=0x60C=0E=09->0033`
+    - `002b:SETBYTE 50/00=0x1`
+    - `002f:UC`
+    - `0031:MENU2`
+    - `0033:RET`
+    - `0034:BGMOVIE`
+    - `0036:MVCAM`
+    - `0038:REQSW`
+    - `003b:FADE`
+    - `0044:FADEW`
+    - `0045:IFSW V=0x2fdC=0E=0d->0059`
+    - `004d:FADEW`
+    - `004e:REQEW`
+    - `0051:SETBYTE 50/00=0x0`
+    - `0055:UC`
+    - `0057:MENU2`
+    - `0059:IFSW V=0x60C=0E=0d->006d`
+    - `0061:FADEW`
+    - `0062:REQEW`
+    - `0065:SETBYTE 50/00=0x0`
+    - `0069:UC`
+    - `006b:MENU2`
+    - `006d:RET`
+- **`me/31`** len 64->62 (fb395f863cec->9181edebc389)
+  - D2:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=37->003d`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:PMVIE id=21`
+    - `002c:REQ`
+    - `002f:FADE`
+    - `0038:FADEW`
+    - `0039:UC`
+    - `003b:MENU2`
+    - `003d:JMPB ->0001`
+    - `003f:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:IFUB A=00V=00C=0E=35->003b`
+    - `0007:IFKEY`
+    - `000b:UC`
+    - `000d:MENU2`
+    - `000f:FADE`
+    - `0018:FADEW`
+    - `0019:MENU`
+    - `001d:MENU`
+    - `0021:FADE`
+    - `002a:REQ`
+    - `002d:FADE`
+    - `0036:FADEW`
+    - `0037:UC`
+    - `0039:MENU2`
+    - `003b:JMPB ->0001`
+    - `003d:RET`
+- **`movkun/31`** len 4->3 (de44b9a87880->2f9263f52bfc)
+  - D2:
+    - `0000:BGMOVIE`
+    - `0002:MOVIE`
+    - `0003:RET`
+  - SD:
+    - `0000:BGMOVIE`
+    - `0002:RET`
+
+### LAS4_4
+- D1 sha: 50198c94a1ccdafb dec=17484
+- D2 sha: 50198c94a1ccdafb dec=17484
+- SD sha: 5d4dc27a8712a9a2 dec=17500
+
+#### SD vs CSR D1
+- **`cloud/31`** len 51->51 (f044d4597b04->d0d0511a2172)
+  - D1:
+    - `0000:ANIM!1`
+    - `0003:WSIZW`
+    - `000d:MESSAGE 400109`
+    - `0010:PREQ`
+    - `0013:ANIM!1`
+    - `0016:KAWAI`
+    - `001c:PREQ`
+    - `001f:WSIZW`
+    - `0029:REQ`
+    - `002c:MESSAGE 40010a`
+    - `002f:REQEW`
+    - `0032:RET`
+  - SD:
+    - `0000:WSIZW`
+    - `000a:MESSAGE 400109`
+    - `000d:KAWAI`
+    - `0013:REQ`
+    - `0016:REQEW`
+    - `0019:RET`
+    - `001a:ANIM!1`
+    - `001d:PREQ`
+    - `0020:ANIM!1`
+    - `0023:PREQ`
+    - `0026:WSIZW`
+    - `0030:MESSAGE 40010a`
+- **`cloud/4`** len 17->17 (b3acf702e31d->711d89d750fe)
+  - D1:
+    - `0000:ANIM!1`
+    - `0003:WSIZW`
+    - `000d:MESSAGE 400101`
+    - `0010:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:ANIM!1`
+    - `0004:WSIZW`
+    - `000e:MESSAGE 400101`
+- **`dic/0`** len 149->161 (7ff9733c4e19->3b4d0dc25507)
+  - D1:
+    - `0000:MUSIC id=0`
+    - `0002:AKAO`
+    - `0010:UC`
+    - `0012:MENU2`
+    - `0014:BMUSC`
+    - `0016:SETWORD 20/00=0x7cf`
+    - `001b:RET`
+    - `001c:FADE`
+    - `0025:MVCAM`
+    - `0027:PMVIE id=21`
+    - `0029:REQSW`
+    - `002c:FADE`
+    - `0035:FADEW`
+    - `0036:REQ`
+    - `0039:WAIT`
+    - `003c:PREQ`
+    - `003f:WAIT`
+    - `0042:PRQEW`
+    - `0045:PREQ`
+    - `0048:PREQ`
+    - `004b:REQ`
+    - `004e:REQEW`
+    - `0051:WAIT`
+    - `0054:SOUND`
+    - `0059:WAIT`
+    - `005c:REQ`
+    - `005f:PREQ`
+    - `0062:PREQ`
+    - `0065:PRQEW`
+    - `0068:REQEW`
+    - `006b:REQEW`
+    - `006e:WAIT`
+    - `0071:MENU`
+    - `0075:MENU`
+    - `0079:BATTLE`
+    - `007d:FADE`
+    - `0086:MENU`
+    - `008a:MAPJUMP #777`
+    - `0094:RET`
+  - SD:
+    - `0000:MUSIC id=0`
+    - `0002:AKAO`
+    - `0010:UC`
+    - `0012:MENU2`
+    - `0014:BMUSC`
+    - `0016:SETWORD 20/00=0x7cf`
+    - `001b:RET`
+    - `001c:FADE`
+    - `0025:MVCAM`
+    - `0027:PMVIE id=21`
+    - `0029:FADE`
+    - `0032:FADEW`
+    - `0033:REQ`
+    - `0036:WAIT`
+    - `0039:PREQ`
+    - `003c:WAIT`
+    - `003f:PRQEW`
+    - `0042:PREQ`
+    - `0045:PREQ`
+    - `0048:REQ`
+    - `004b:REQEW`
+    - `004e:SOUND`
+    - `0053:JMPF ->0068`
+    - `0055:WAIT`
+    - `0058:WAIT`
+    - `005b:REQ`
+    - `005e:PREQ`
+    - `0061:PREQ`
+    - `0064:PRQEW`
+    - `0067:REQEW`
+    - `006a:REQEW`
+    - `006d:WAIT`
+    - `0070:MENU`
+    - `0074:MENU`
+    - `0078:BATTLE`
+    - `007c:FADE`
+    - `0085:MENU`
+    - `0089:MAPJUMP #768`
+    - `0093:MAPJUMP #777`
+    - `009d:RET`
+    - `009e:REQSW`
+- **`jenova/4`** len 24->27 (882d2de1fcb6->79488641081e)
+  - D1:
+    - `0000:WAIT`
+    - `0003:WCLSE`
+    - `0005:SOUND`
+    - `000a:OFST`
+    - `0016:OFSTW`
+    - `0017:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:WCLSE`
+    - `0005:SOUND`
+    - `000a:OFST`
+    - `0016:OFSTW`
+    - `0017:RET`
+    - `0018:WAIT`
+
+#### SD vs CSR D2
+- **`cloud/31`** len 51->51 (f044d4597b04->d0d0511a2172)
+  - D2:
+    - `0000:ANIM!1`
+    - `0003:WSIZW`
+    - `000d:MESSAGE 400109`
+    - `0010:PREQ`
+    - `0013:ANIM!1`
+    - `0016:KAWAI`
+    - `001c:PREQ`
+    - `001f:WSIZW`
+    - `0029:REQ`
+    - `002c:MESSAGE 40010a`
+    - `002f:REQEW`
+    - `0032:RET`
+  - SD:
+    - `0000:WSIZW`
+    - `000a:MESSAGE 400109`
+    - `000d:KAWAI`
+    - `0013:REQ`
+    - `0016:REQEW`
+    - `0019:RET`
+    - `001a:ANIM!1`
+    - `001d:PREQ`
+    - `0020:ANIM!1`
+    - `0023:PREQ`
+    - `0026:WSIZW`
+    - `0030:MESSAGE 40010a`
+- **`cloud/4`** len 17->17 (b3acf702e31d->711d89d750fe)
+  - D2:
+    - `0000:ANIM!1`
+    - `0003:WSIZW`
+    - `000d:MESSAGE 400101`
+    - `0010:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:ANIM!1`
+    - `0004:WSIZW`
+    - `000e:MESSAGE 400101`
+- **`dic/0`** len 149->161 (7ff9733c4e19->3b4d0dc25507)
+  - D2:
+    - `0000:MUSIC id=0`
+    - `0002:AKAO`
+    - `0010:UC`
+    - `0012:MENU2`
+    - `0014:BMUSC`
+    - `0016:SETWORD 20/00=0x7cf`
+    - `001b:RET`
+    - `001c:FADE`
+    - `0025:MVCAM`
+    - `0027:PMVIE id=21`
+    - `0029:REQSW`
+    - `002c:FADE`
+    - `0035:FADEW`
+    - `0036:REQ`
+    - `0039:WAIT`
+    - `003c:PREQ`
+    - `003f:WAIT`
+    - `0042:PRQEW`
+    - `0045:PREQ`
+    - `0048:PREQ`
+    - `004b:REQ`
+    - `004e:REQEW`
+    - `0051:WAIT`
+    - `0054:SOUND`
+    - `0059:WAIT`
+    - `005c:REQ`
+    - `005f:PREQ`
+    - `0062:PREQ`
+    - `0065:PRQEW`
+    - `0068:REQEW`
+    - `006b:REQEW`
+    - `006e:WAIT`
+    - `0071:MENU`
+    - `0075:MENU`
+    - `0079:BATTLE`
+    - `007d:FADE`
+    - `0086:MENU`
+    - `008a:MAPJUMP #777`
+    - `0094:RET`
+  - SD:
+    - `0000:MUSIC id=0`
+    - `0002:AKAO`
+    - `0010:UC`
+    - `0012:MENU2`
+    - `0014:BMUSC`
+    - `0016:SETWORD 20/00=0x7cf`
+    - `001b:RET`
+    - `001c:FADE`
+    - `0025:MVCAM`
+    - `0027:PMVIE id=21`
+    - `0029:FADE`
+    - `0032:FADEW`
+    - `0033:REQ`
+    - `0036:WAIT`
+    - `0039:PREQ`
+    - `003c:WAIT`
+    - `003f:PRQEW`
+    - `0042:PREQ`
+    - `0045:PREQ`
+    - `0048:REQ`
+    - `004b:REQEW`
+    - `004e:SOUND`
+    - `0053:JMPF ->0068`
+    - `0055:WAIT`
+    - `0058:WAIT`
+    - `005b:REQ`
+    - `005e:PREQ`
+    - `0061:PREQ`
+    - `0064:PRQEW`
+    - `0067:REQEW`
+    - `006a:REQEW`
+    - `006d:WAIT`
+    - `0070:MENU`
+    - `0074:MENU`
+    - `0078:BATTLE`
+    - `007c:FADE`
+    - `0085:MENU`
+    - `0089:MAPJUMP #768`
+    - `0093:MAPJUMP #777`
+    - `009d:RET`
+    - `009e:REQSW`
+- **`jenova/4`** len 24->27 (882d2de1fcb6->79488641081e)
+  - D2:
+    - `0000:WAIT`
+    - `0003:WCLSE`
+    - `0005:SOUND`
+    - `000a:OFST`
+    - `0016:OFSTW`
+    - `0017:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:WCLSE`
+    - `0005:SOUND`
+    - `000a:OFST`
+    - `0016:OFSTW`
+    - `0017:RET`
+    - `0018:WAIT`
+
+### LAS4_42
+- D1 sha: 1b130e9f2d39c949 dec=9196
+- D2 sha: 1b130e9f2d39c949 dec=9196
+- SD sha: 04486cf38ca3ef14 dec=9196
+
+#### SD vs CSR D1
+- **`dic/0`** len 77->74 (7e13eca8561f->bce498c003a0)
+  - D1:
+    - `0000:MUSIC id=0`
+    - `0002:UC`
+    - `0004:MENU2`
+    - `0006:RET`
+    - `0007:FADE`
+    - `0010:MVCAM`
+    - `0012:PMVIE id=22`
+    - `0014:REQSW`
+    - `0017:PREQ`
+    - `001a:PREQ`
+    - `001d:FADE`
+    - `0026:REQSW`
+    - `0029:WAIT`
+    - `002c:PREQ`
+    - `002f:PREQ`
+    - `0032:FADEW`
+    - `0033:MOVIE`
+    - `0034:FADE`
+    - `003d:FADEW`
+    - `003e:MAPJUMP #768`
+    - `0048:UC`
+    - `004a:MENU2`
+    - `004c:RET`
+  - SD:
+    - `0000:MUSIC id=0`
+    - `0002:UC`
+    - `0004:MENU2`
+    - `0006:RET`
+    - `0007:FADE`
+    - `0010:MVCAM`
+    - `0012:REQSW`
+    - `0015:PREQ`
+    - `0018:PREQ`
+    - `001b:FADE`
+    - `0024:REQSW`
+    - `0027:WAIT`
+    - `002a:PREQ`
+    - `002d:PREQ`
+    - `0030:FADEW`
+    - `0031:FADE`
+    - `003a:FADEW`
+    - `003b:MAPJUMP #768`
+    - `0045:UC`
+    - `0047:MENU2`
+    - `0049:RET`
+
+#### SD vs CSR D2
+- **`dic/0`** len 77->74 (7e13eca8561f->bce498c003a0)
+  - D2:
+    - `0000:MUSIC id=0`
+    - `0002:UC`
+    - `0004:MENU2`
+    - `0006:RET`
+    - `0007:FADE`
+    - `0010:MVCAM`
+    - `0012:PMVIE id=22`
+    - `0014:REQSW`
+    - `0017:PREQ`
+    - `001a:PREQ`
+    - `001d:FADE`
+    - `0026:REQSW`
+    - `0029:WAIT`
+    - `002c:PREQ`
+    - `002f:PREQ`
+    - `0032:FADEW`
+    - `0033:MOVIE`
+    - `0034:FADE`
+    - `003d:FADEW`
+    - `003e:MAPJUMP #768`
+    - `0048:UC`
+    - `004a:MENU2`
+    - `004c:RET`
+  - SD:
+    - `0000:MUSIC id=0`
+    - `0002:UC`
+    - `0004:MENU2`
+    - `0006:RET`
+    - `0007:FADE`
+    - `0010:MVCAM`
+    - `0012:REQSW`
+    - `0015:PREQ`
+    - `0018:PREQ`
+    - `001b:FADE`
+    - `0024:REQSW`
+    - `0027:WAIT`
+    - `002a:PREQ`
+    - `002d:PREQ`
+    - `0030:FADEW`
+    - `0031:FADE`
+    - `003a:FADEW`
+    - `003b:MAPJUMP #768`
+    - `0045:UC`
+    - `0047:MENU2`
+    - `0049:RET`
+
+### LASTMAP
+- D1 sha: 3d0243e566871c1e dec=55260
+- D2 sha: 3d0243e566871c1e dec=55260
+- SD sha: 8f343cea4d9bc5c8 dec=55252
+
+#### SD vs CSR D1
+- **`AD/3`** len 3->1 (0299c9eab02a->6e340b9cffb3)
+  - D1:
+    - `0000:PMVIE id=23`
+    - `0002:RET`
+  - SD:
+    - `0000:RET`
+- **`AD/31`** len 4->3 (86a8afc868ab->198eb0eb19fa)
+  - D1:
+    - `0000:MVCAM`
+    - `0002:MOVIE`
+    - `0003:RET`
+  - SD:
+    - `0000:MVCAM`
+    - `0002:RET`
+- **`AD/4`** len 3->1 (e58582e582e1->6e340b9cffb3)
+  - D1:
+    - `0000:PMVIE id=24`
+    - `0002:RET`
+  - SD:
+    - `0000:RET`
+- **`AD3/31`** len 1125->1124 (c5c95a5b6466->7d7cf54f28ae)
+  - D1 interesting (137):
+    - `0004:REQEW`
+    - `0007:REQEW`
+    - `0017:REQEW`
+    - `0036:REQSW`
+    - `003a:REQ`
+    - `003d:REQ`
+    - `0040:REQ`
+    - `0043:REQ`
+    - `0046:REQ`
+    - `0049:REQ`
+    - `004c:REQ`
+    - `004f:REQEW`
+    - `0052:REQEW`
+    - `006d:JMPF ->0077`
+    - `006f:REQEW`
+    - `0072:SETBYTE 50/02=0x2`
+    - `0076:JMPF ->0080`
+    - `0078:REQEW`
+    - `007b:SETBYTE 50/02=0x1`
+    - `007f:JMPF ->0089`
+    - `0081:REQEW`
+    - `0084:SETBYTE 50/02=0x0`
+    - `0088:REQEW`
+    - `008b:REQ`
+    - `008e:REQ`
+    - `0091:REQ`
+    - `0094:REQ`
+    - `0097:REQ`
+    - `009a:REQ`
+    - `00a0:REQ`
+    - `00a3:IFUB A=02V=00C=0E=04->00ac`
+    - `00a9:REQEW`
+    - `00ac:IFUB A=02V=01C=0E=04->00b5`
+    - `00b2:REQEW`
+    - `00b5:IFUB A=02V=02C=0E=04->00be`
+    - `00bb:REQEW`
+    - `00be:IFUB A=04V=00C=0E=03->00c6`
+    - `00dc:REQ`
+    - `00e4:REQ`
+    - `00e7:REQ`
+    - `00ea:REQ`
+    - `00ed:REQ`
+    - `00f0:REQ`
+    - `00f3:REQ`
+    - `00f6:REQ`
+    - `00f9:REQEW`
+    - `0108:MESSAGE 40020f`
+    - `010e:REQEW`
+    - `0111:REQEW`
+    - `012a:REQ`
+    - `0132:REQ`
+    - `0135:REQ`
+    - `0138:REQ`
+    - `013b:REQ`
+    - `013e:REQ`
+    - `0141:REQ`
+    - `0144:REQ`
+    - `0147:REQEW`
+    - `0157:MESSAGE 400311`
+    - `0164:MESSAGE 400312`
+    - `0167:REQ`
+    - `016a:REQ`
+    - `016d:REQ`
+    - `0170:REQ`
+    - `0173:REQ`
+    - `0176:REQ`
+    - `0179:REQ`
+    - `017c:REQ`
+    - `0198:REQ`
+    - `01ad:MESSAGE 400314`
+    - `01ba:MESSAGE 400315`
+    - `01bd:IFUB A=cfV=01C=6E=0e->01d0`
+    - `01cd:MESSAGE 400316`
+    - `01ee:REQ`
+    - `01f1:REQ`
+    - `01f4:REQ`
+    - `01f7:REQ`
+    - `01fa:REQ`
+    - `01fd:REQ`
+    - `0200:REQ`
+    - ... +57
+  - SD interesting (136):
+    - `0004:REQEW`
+    - `0007:REQEW`
+    - `0017:REQEW`
+    - `0036:REQSW`
+    - `003a:REQ`
+    - `003d:REQ`
+    - `0040:REQ`
+    - `0043:REQ`
+    - `0046:REQ`
+    - `0049:REQ`
+    - `004c:REQ`
+    - `004f:REQEW`
+    - `0052:REQEW`
+    - `006d:JMPF ->0077`
+    - `006f:REQEW`
+    - `0072:SETBYTE 50/02=0x2`
+    - `0076:JMPF ->0080`
+    - `0078:REQEW`
+    - `007b:SETBYTE 50/02=0x1`
+    - `007f:JMPF ->0089`
+    - `0081:REQEW`
+    - `0084:SETBYTE 50/02=0x0`
+    - `0088:REQEW`
+    - `008b:REQ`
+    - `008e:REQ`
+    - `0091:REQ`
+    - `0094:REQ`
+    - `0097:REQ`
+    - `009a:REQ`
+    - `00a0:REQ`
+    - `00a3:IFUB A=02V=00C=0E=04->00ac`
+    - `00a9:REQEW`
+    - `00ac:IFUB A=02V=01C=0E=04->00b5`
+    - `00b2:REQEW`
+    - `00b5:IFUB A=02V=02C=0E=04->00be`
+    - `00bb:REQEW`
+    - `00be:IFUB A=04V=00C=0E=03->00c6`
+    - `00dc:REQ`
+    - `00e4:REQ`
+    - `00e7:REQ`
+    - `00ea:REQ`
+    - `00ed:REQ`
+    - `00f0:REQ`
+    - `00f3:REQ`
+    - `00f6:REQ`
+    - `00f9:REQEW`
+    - `0108:MESSAGE 40020f`
+    - `010e:REQEW`
+    - `0111:REQEW`
+    - `012a:REQ`
+    - `0132:REQ`
+    - `0135:REQ`
+    - `0138:REQ`
+    - `013b:REQ`
+    - `013e:REQ`
+    - `0141:REQ`
+    - `0144:REQ`
+    - `0147:REQEW`
+    - `0157:MESSAGE 400311`
+    - `0164:MESSAGE 400312`
+    - `0167:REQ`
+    - `016a:REQ`
+    - `016d:REQ`
+    - `0170:REQ`
+    - `0173:REQ`
+    - `0176:REQ`
+    - `0179:REQ`
+    - `017c:REQ`
+    - `0198:REQ`
+    - `01ad:MESSAGE 400314`
+    - `01ba:MESSAGE 400315`
+    - `01bd:IFUB A=cfV=01C=6E=0e->01d0`
+    - `01cd:MESSAGE 400316`
+    - `01ee:REQ`
+    - `01f1:REQ`
+    - `01f4:REQ`
+    - `01f7:REQ`
+    - `01fa:REQ`
+    - `01fd:REQ`
+    - `0200:REQ`
+    - ... +56
+  - opcode counts: MOVIE:1->0
+
+#### SD vs CSR D2
+- **`AD/3`** len 3->1 (0299c9eab02a->6e340b9cffb3)
+  - D2:
+    - `0000:PMVIE id=23`
+    - `0002:RET`
+  - SD:
+    - `0000:RET`
+- **`AD/31`** len 4->3 (86a8afc868ab->198eb0eb19fa)
+  - D2:
+    - `0000:MVCAM`
+    - `0002:MOVIE`
+    - `0003:RET`
+  - SD:
+    - `0000:MVCAM`
+    - `0002:RET`
+- **`AD/4`** len 3->1 (e58582e582e1->6e340b9cffb3)
+  - D2:
+    - `0000:PMVIE id=24`
+    - `0002:RET`
+  - SD:
+    - `0000:RET`
+- **`AD3/31`** len 1125->1124 (c5c95a5b6466->7d7cf54f28ae)
+  - D2 interesting (137):
+    - `0004:REQEW`
+    - `0007:REQEW`
+    - `0017:REQEW`
+    - `0036:REQSW`
+    - `003a:REQ`
+    - `003d:REQ`
+    - `0040:REQ`
+    - `0043:REQ`
+    - `0046:REQ`
+    - `0049:REQ`
+    - `004c:REQ`
+    - `004f:REQEW`
+    - `0052:REQEW`
+    - `006d:JMPF ->0077`
+    - `006f:REQEW`
+    - `0072:SETBYTE 50/02=0x2`
+    - `0076:JMPF ->0080`
+    - `0078:REQEW`
+    - `007b:SETBYTE 50/02=0x1`
+    - `007f:JMPF ->0089`
+    - `0081:REQEW`
+    - `0084:SETBYTE 50/02=0x0`
+    - `0088:REQEW`
+    - `008b:REQ`
+    - `008e:REQ`
+    - `0091:REQ`
+    - `0094:REQ`
+    - `0097:REQ`
+    - `009a:REQ`
+    - `00a0:REQ`
+    - `00a3:IFUB A=02V=00C=0E=04->00ac`
+    - `00a9:REQEW`
+    - `00ac:IFUB A=02V=01C=0E=04->00b5`
+    - `00b2:REQEW`
+    - `00b5:IFUB A=02V=02C=0E=04->00be`
+    - `00bb:REQEW`
+    - `00be:IFUB A=04V=00C=0E=03->00c6`
+    - `00dc:REQ`
+    - `00e4:REQ`
+    - `00e7:REQ`
+    - `00ea:REQ`
+    - `00ed:REQ`
+    - `00f0:REQ`
+    - `00f3:REQ`
+    - `00f6:REQ`
+    - `00f9:REQEW`
+    - `0108:MESSAGE 40020f`
+    - `010e:REQEW`
+    - `0111:REQEW`
+    - `012a:REQ`
+    - `0132:REQ`
+    - `0135:REQ`
+    - `0138:REQ`
+    - `013b:REQ`
+    - `013e:REQ`
+    - `0141:REQ`
+    - `0144:REQ`
+    - `0147:REQEW`
+    - `0157:MESSAGE 400311`
+    - `0164:MESSAGE 400312`
+    - `0167:REQ`
+    - `016a:REQ`
+    - `016d:REQ`
+    - `0170:REQ`
+    - `0173:REQ`
+    - `0176:REQ`
+    - `0179:REQ`
+    - `017c:REQ`
+    - `0198:REQ`
+    - `01ad:MESSAGE 400314`
+    - `01ba:MESSAGE 400315`
+    - `01bd:IFUB A=cfV=01C=6E=0e->01d0`
+    - `01cd:MESSAGE 400316`
+    - `01ee:REQ`
+    - `01f1:REQ`
+    - `01f4:REQ`
+    - `01f7:REQ`
+    - `01fa:REQ`
+    - `01fd:REQ`
+    - `0200:REQ`
+    - ... +57
+  - SD interesting (136):
+    - `0004:REQEW`
+    - `0007:REQEW`
+    - `0017:REQEW`
+    - `0036:REQSW`
+    - `003a:REQ`
+    - `003d:REQ`
+    - `0040:REQ`
+    - `0043:REQ`
+    - `0046:REQ`
+    - `0049:REQ`
+    - `004c:REQ`
+    - `004f:REQEW`
+    - `0052:REQEW`
+    - `006d:JMPF ->0077`
+    - `006f:REQEW`
+    - `0072:SETBYTE 50/02=0x2`
+    - `0076:JMPF ->0080`
+    - `0078:REQEW`
+    - `007b:SETBYTE 50/02=0x1`
+    - `007f:JMPF ->0089`
+    - `0081:REQEW`
+    - `0084:SETBYTE 50/02=0x0`
+    - `0088:REQEW`
+    - `008b:REQ`
+    - `008e:REQ`
+    - `0091:REQ`
+    - `0094:REQ`
+    - `0097:REQ`
+    - `009a:REQ`
+    - `00a0:REQ`
+    - `00a3:IFUB A=02V=00C=0E=04->00ac`
+    - `00a9:REQEW`
+    - `00ac:IFUB A=02V=01C=0E=04->00b5`
+    - `00b2:REQEW`
+    - `00b5:IFUB A=02V=02C=0E=04->00be`
+    - `00bb:REQEW`
+    - `00be:IFUB A=04V=00C=0E=03->00c6`
+    - `00dc:REQ`
+    - `00e4:REQ`
+    - `00e7:REQ`
+    - `00ea:REQ`
+    - `00ed:REQ`
+    - `00f0:REQ`
+    - `00f3:REQ`
+    - `00f6:REQ`
+    - `00f9:REQEW`
+    - `0108:MESSAGE 40020f`
+    - `010e:REQEW`
+    - `0111:REQEW`
+    - `012a:REQ`
+    - `0132:REQ`
+    - `0135:REQ`
+    - `0138:REQ`
+    - `013b:REQ`
+    - `013e:REQ`
+    - `0141:REQ`
+    - `0144:REQ`
+    - `0147:REQEW`
+    - `0157:MESSAGE 400311`
+    - `0164:MESSAGE 400312`
+    - `0167:REQ`
+    - `016a:REQ`
+    - `016d:REQ`
+    - `0170:REQ`
+    - `0173:REQ`
+    - `0176:REQ`
+    - `0179:REQ`
+    - `017c:REQ`
+    - `0198:REQ`
+    - `01ad:MESSAGE 400314`
+    - `01ba:MESSAGE 400315`
+    - `01bd:IFUB A=cfV=01C=6E=0e->01d0`
+    - `01cd:MESSAGE 400316`
+    - `01ee:REQ`
+    - `01f1:REQ`
+    - `01f4:REQ`
+    - `01f7:REQ`
+    - `01fa:REQ`
+    - `01fd:REQ`
+    - `0200:REQ`
+    - ... +56
+  - opcode counts: MOVIE:1->0
+
+### LOSLAKE3
+- D1 sha: b8cb5e90e2bf6dfe dec=20244
+- D2 sha: b8cb5e90e2bf6dfe dec=20244
+- SD sha: 0f90cc164d929bd1 dec=20228
+
+#### SD vs CSR D1
+- **`dir/0`** len 57->51 (adff03c5f985->eab20115e927)
+  - D1:
+    - `0000:SPECIAL`
+    - `0003:RET`
+    - `0004:IFSW V=0x576C=0E=2c->0037`
+    - `000c:REQEW`
+    - `000f:WAIT`
+    - `0012:PMVIE id=57`
+    - `0014:REQ`
+    - `0017:MOVIE`
+    - `0018:REQ`
+    - `001b:REQEW`
+    - `001e:PMVIE id=58`
+    - `0020:REQ`
+    - `0023:MOVIE`
+    - `0024:WAIT`
+    - `0027:REQEW`
+    - `002a:WAIT`
+    - `002d:MAPJUMP #637`
+    - `0037:JMPB ->0037`
+  - SD:
+    - `0000:SPECIAL`
+    - `0003:RET`
+    - `0004:IFSW V=0x576C=0E=26->0031`
+    - `000c:REQEW`
+    - `000f:WAIT`
+    - `0012:REQ`
+    - `0015:REQ`
+    - `0018:REQEW`
+    - `001b:REQ`
+    - `001e:WAIT`
+    - `0021:REQEW`
+    - `0024:WAIT`
+    - `0027:MAPJUMP #637`
+    - `0031:JMPB ->0031`
+- **`mf/3`** len 35->32 (693ebdbe7063->89cd17fdf205)
+  - D1:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:MVIEF`
+    - `0008:IFSW V=0xcC=2E=11->0020`
+    - `0010:AKAO`
+    - `001e:JMPF ->0023`
+    - `0020:JMPB ->0005`
+    - `0022:RET`
+  - SD:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:IFSW V=0xcC=2E=11->001d`
+    - `000d:AKAO`
+    - `001b:JMPF ->0020`
+    - `001d:JMPB ->0005`
+    - `001f:RET`
+- **`mf/31`** len 60->51 (9d0afee10de7->5fe4ad1faa0c)
+  - D1:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:MVIEF`
+    - `0008:IFSW V=0xaC=2E=06->0015`
+    - `0010:REQ`
+    - `0013:JMPF ->0018`
+    - `0015:JMPB ->0005`
+    - `0017:MVIEF`
+    - `001a:IFSW V=0x1eC=2E=06->0027`
+    - `0022:REQ`
+    - `0025:JMPF ->002a`
+    - `0027:JMPB ->0017`
+    - `0029:MVIEF`
+    - `002c:IFSW V=0x9bC=2E=06->0039`
+    - `0034:REQ`
+    - `0037:JMPF ->003c`
+    - `0039:JMPB ->0029`
+    - `003b:RET`
+  - SD:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:IFSW V=0xaC=2E=06->0012`
+    - `000d:REQ`
+    - `0010:JMPF ->0015`
+    - `0012:JMPB ->0005`
+    - `0014:IFSW V=0x1eC=2E=06->0021`
+    - `001c:REQ`
+    - `001f:JMPF ->0024`
+    - `0021:JMPB ->0014`
+    - `0023:IFSW V=0x9bC=2E=06->0030`
+    - `002b:REQ`
+    - `002e:JMPF ->0033`
+    - `0030:JMPB ->0023`
+    - `0032:RET`
+
+#### SD vs CSR D2
+- **`dir/0`** len 57->51 (adff03c5f985->eab20115e927)
+  - D2:
+    - `0000:SPECIAL`
+    - `0003:RET`
+    - `0004:IFSW V=0x576C=0E=2c->0037`
+    - `000c:REQEW`
+    - `000f:WAIT`
+    - `0012:PMVIE id=57`
+    - `0014:REQ`
+    - `0017:MOVIE`
+    - `0018:REQ`
+    - `001b:REQEW`
+    - `001e:PMVIE id=58`
+    - `0020:REQ`
+    - `0023:MOVIE`
+    - `0024:WAIT`
+    - `0027:REQEW`
+    - `002a:WAIT`
+    - `002d:MAPJUMP #637`
+    - `0037:JMPB ->0037`
+  - SD:
+    - `0000:SPECIAL`
+    - `0003:RET`
+    - `0004:IFSW V=0x576C=0E=26->0031`
+    - `000c:REQEW`
+    - `000f:WAIT`
+    - `0012:REQ`
+    - `0015:REQ`
+    - `0018:REQEW`
+    - `001b:REQ`
+    - `001e:WAIT`
+    - `0021:REQEW`
+    - `0024:WAIT`
+    - `0027:MAPJUMP #637`
+    - `0031:JMPB ->0031`
+- **`mf/3`** len 35->32 (693ebdbe7063->89cd17fdf205)
+  - D2:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:MVIEF`
+    - `0008:IFSW V=0xcC=2E=11->0020`
+    - `0010:AKAO`
+    - `001e:JMPF ->0023`
+    - `0020:JMPB ->0005`
+    - `0022:RET`
+  - SD:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:IFSW V=0xcC=2E=11->001d`
+    - `000d:AKAO`
+    - `001b:JMPF ->0020`
+    - `001d:JMPB ->0005`
+    - `001f:RET`
+- **`mf/31`** len 60->51 (9d0afee10de7->5fe4ad1faa0c)
+  - D2:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:MVIEF`
+    - `0008:IFSW V=0xaC=2E=06->0015`
+    - `0010:REQ`
+    - `0013:JMPF ->0018`
+    - `0015:JMPB ->0005`
+    - `0017:MVIEF`
+    - `001a:IFSW V=0x1eC=2E=06->0027`
+    - `0022:REQ`
+    - `0025:JMPF ->002a`
+    - `0027:JMPB ->0017`
+    - `0029:MVIEF`
+    - `002c:IFSW V=0x9bC=2E=06->0039`
+    - `0034:REQ`
+    - `0037:JMPF ->003c`
+    - `0039:JMPB ->0029`
+    - `003b:RET`
+  - SD:
+    - `0000:SETWORD 60/09=0x0`
+    - `0005:IFSW V=0xaC=2E=06->0012`
+    - `000d:REQ`
+    - `0010:JMPF ->0015`
+    - `0012:JMPB ->0005`
+    - `0014:IFSW V=0x1eC=2E=06->0021`
+    - `001c:REQ`
+    - `001f:JMPF ->0024`
+    - `0021:JMPB ->0014`
+    - `0023:IFSW V=0x9bC=2E=06->0030`
+    - `002b:REQ`
+    - `002e:JMPF ->0033`
+    - `0030:JMPB ->0023`
+    - `0032:RET`
+
+### LOST2
+- D1 sha: ade6b42a54455dc0 dec=32132
+- D2 sha: 69a15e2493a4490f dec=32304
+- SD sha: f7cce34eb31e636a dec=32304
+
+#### SD vs CSR D1
+- **`Info/4`** len 17->17 (a2051850cb01->30bf66d56136)
+  - D1:
+    - `0000:IFUB A=89V=01C=9E=0c->0011`
+    - `0006:UC`
+    - `0008:MENU2`
+    - `000a:BITOFF 30/89#1`
+    - `000e:REQEW`
+  - SD:
+    - `0000:IFUB A=89V=01C=9E=0c->0011`
+    - `0006:UC`
+    - `0008:MENU2`
+    - `000a:BITOFF 30/89#1`
+    - `000e:REQEW`
+- **`ballet/3`** len 98->98 (706589c61700->d7ed037cfcc1)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:SOLID`
+    - `001e:WAIT`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 40014e`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017b`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:SOLID`
+    - `001e:WAIT`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 40014e`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017b`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`ballet/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`cefir/31`** len 256->258 (779c26b39fad->465ac34572e2)
+  - D1:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:MSPED`
+    - `000a:DFANM`
+    - `000d:FMOVE`
+    - `0013:FMOVE`
+    - `0019:FMOVE`
+    - `001f:TLKON`
+    - `0021:SOLID`
+    - `0023:VISI`
+    - `0025:WAIT`
+    - `0028:TLKON`
+    - `002a:SOLID`
+    - `002c:VISI`
+    - `002e:FMOVE`
+    - `0034:TLKON`
+    - `0036:SOLID`
+    - `0038:VISI`
+    - `003a:WAIT`
+    - `003d:TLKON`
+    - `003f:SOLID`
+    - `0041:VISI`
+    - `0043:FMOVE`
+    - `0049:TLKON`
+    - `004b:SOLID`
+    - `004d:VISI`
+    - `004f:WAIT`
+    - `0052:TLKON`
+    - `0054:SOLID`
+    - `0056:VISI`
+    - `0058:FMOVE`
+    - `005e:TLKON`
+    - `0060:SOLID`
+    - `0062:VISI`
+    - `0064:WAIT`
+    - `0067:TLKON`
+    - `0069:SOLID`
+    - `006b:VISI`
+    - `006d:CMOVE`
+    - `0073:TLKON`
+    - `0075:SOLID`
+    - `0077:VISI`
+    - `0079:WAIT`
+    - `007c:TLKON`
+    - `007e:SOLID`
+    - `0080:VISI`
+    - `0082:WAIT`
+    - `0085:TLKON`
+    - `0087:SOLID`
+    - `0089:VISI`
+    - `008b:WAIT`
+    - `008e:TLKON`
+    - `0090:SOLID`
+    - `0092:VISI`
+    - `0094:SCR2DL`
+    - `009d:AKAO`
+    - `00ab:FMOVE`
+    - `00b1:TLKON`
+    - `00b3:SOLID`
+    - `00b5:VISI`
+    - `00b7:WAIT`
+    - `00ba:TLKON`
+    - `00bc:SOLID`
+    - `00be:VISI`
+    - `00c0:WAIT`
+    - `00c3:TLKON`
+    - `00c5:SOLID`
+    - `00c7:VISI`
+    - `00c9:WAIT`
+    - `00cc:TLKON`
+    - `00ce:SOLID`
+    - `00d0:VISI`
+    - `00d2:NFADE`
+    - `00db:WAIT`
+    - `00de:TLKON`
+    - `00e0:SOLID`
+    - `00e2:VISI`
+    - `00e4:WAIT`
+    - `00e7:TLKON`
+    - `00e9:SOLID`
+    - `00eb:VISI`
+    - `00ed:WAIT`
+    - `00f0:TLKON`
+    - `00f2:SOLID`
+    - `00f4:VISI`
+    - `00f6:PRQEW`
+    - `00f9:PRQEW`
+    - `00fc:REQ`
+    - `00ff:RET`
+  - SD:
+    - `0000:JMPF ->00ff`
+    - `0002:TLKON`
+    - `0004:SOLID`
+    - `0006:VISI`
+    - `0008:MSPED`
+    - `000c:DFANM`
+    - `000f:FMOVE`
+    - `0015:FMOVE`
+    - `001b:FMOVE`
+    - `0021:TLKON`
+    - `0023:SOLID`
+    - `0025:VISI`
+    - `0027:WAIT`
+    - `002a:TLKON`
+    - `002c:SOLID`
+    - `002e:VISI`
+    - `0030:FMOVE`
+    - `0036:TLKON`
+    - `0038:SOLID`
+    - `003a:VISI`
+    - `003c:WAIT`
+    - `003f:TLKON`
+    - `0041:SOLID`
+    - `0043:VISI`
+    - `0045:FMOVE`
+    - `004b:TLKON`
+    - `004d:SOLID`
+    - `004f:VISI`
+    - `0051:WAIT`
+    - `0054:TLKON`
+    - `0056:SOLID`
+    - `0058:VISI`
+    - `005a:FMOVE`
+    - `0060:TLKON`
+    - `0062:SOLID`
+    - `0064:VISI`
+    - `0066:WAIT`
+    - `0069:TLKON`
+    - `006b:SOLID`
+    - `006d:VISI`
+    - `006f:CMOVE`
+    - `0075:TLKON`
+    - `0077:SOLID`
+    - `0079:VISI`
+    - `007b:WAIT`
+    - `007e:TLKON`
+    - `0080:SOLID`
+    - `0082:VISI`
+    - `0084:WAIT`
+    - `0087:TLKON`
+    - `0089:SOLID`
+    - `008b:VISI`
+    - `008d:WAIT`
+    - `0090:TLKON`
+    - `0092:SOLID`
+    - `0094:VISI`
+    - `0096:SCR2DL`
+    - `009f:AKAO`
+    - `00ad:FMOVE`
+    - `00b3:TLKON`
+    - `00b5:SOLID`
+    - `00b7:VISI`
+    - `00b9:WAIT`
+    - `00bc:TLKON`
+    - `00be:SOLID`
+    - `00c0:VISI`
+    - `00c2:WAIT`
+    - `00c5:TLKON`
+    - `00c7:SOLID`
+    - `00c9:VISI`
+    - `00cb:WAIT`
+    - `00ce:TLKON`
+    - `00d0:SOLID`
+    - `00d2:VISI`
+    - `00d4:NFADE`
+    - `00dd:WAIT`
+    - `00e0:TLKON`
+    - `00e2:SOLID`
+    - `00e4:VISI`
+    - `00e6:WAIT`
+    - `00e9:TLKON`
+    - `00eb:SOLID`
+    - `00ed:VISI`
+    - `00ef:WAIT`
+    - `00f2:TLKON`
+    - `00f4:SOLID`
+    - `00f6:VISI`
+    - `00f8:PRQEW`
+    - `00fb:PRQEW`
+    - `00fe:REQ`
+    - `0101:RET`
+- **`cid/3`** len 98->98 (7037f2c6f35d->0a62bd3f09de)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400154`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017e`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400154`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017e`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`cid/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`cloud/31`** len 92->109 (44e2bacde736->52a144ecd408)
+  - D1:
+    - `0000:DFANM`
+    - `0003:WAIT`
+    - `0006:PRQEW`
+    - `0009:WAIT`
+    - `000c:DFANM`
+    - `000f:WINDOW`
+    - `0019:MESSAGE 400092`
+    - `001c:WAIT`
+    - `001f:ANIME2`
+    - `0022:WINDOW`
+    - `002c:MESSAGE 400090`
+    - `002f:JOIN`
+    - `0031:AKAO`
+    - `003f:AKAO`
+    - `004d:NFADE`
+    - `0056:SCRCC`
+    - `0057:UC`
+    - `0059:MENU2`
+    - `005b:RET`
+  - SD:
+    - `0000:JMPF ->005a`
+    - `0002:DFANM`
+    - `0005:WAIT`
+    - `0008:PRQEW`
+    - `000b:WAIT`
+    - `000e:DFANM`
+    - `0011:WINDOW`
+    - `001b:MESSAGE 400092`
+    - `001e:WAIT`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400090`
+    - `0031:JOIN`
+    - `0033:AKAO`
+    - `0041:AKAO`
+    - `004f:NFADE`
+    - `0058:SCRCC`
+    - `0059:WINDOW`
+    - `0063:MESSAGE 400090`
+    - `0066:JOIN`
+    - `0068:UC`
+    - `006a:MENU2`
+    - `006c:RET`
+- **`cloud/7`** len 258->260 (5c03e8d1a1a0->1f3b91f1c84c)
+  - D1:
+    - `0000:MOVE`
+    - `0006:SPLIT`
+    - `0015:PREQ`
+    - `0018:IFUB A=0bV=01C=0E=10->002d`
+    - `001e:WINDOW`
+    - `0028:MESSAGE 400282`
+    - `002b:JMPF ->00aa`
+    - `002d:IFUB A=0bV=02C=0E=10->0042`
+    - `0033:WINDOW`
+    - `003d:MESSAGE 400283`
+    - `0040:JMPF ->00aa`
+    - `0042:IFUB A=0bV=04C=0E=10->0057`
+    - `0048:WINDOW`
+    - `0052:MESSAGE 400284`
+    - `0055:JMPF ->00aa`
+    - `0057:IFUB A=0bV=08C=0E=10->006c`
+    - `005d:WINDOW`
+    - `0067:MESSAGE 400285`
+    - `006a:JMPF ->00aa`
+    - `006c:IFUB A=0bV=05C=0E=10->0081`
+    - `0072:WINDOW`
+    - `007c:MESSAGE 400286`
+    - `007f:JMPF ->00aa`
+    - `0081:IFUB A=0bV=07C=0E=10->0096`
+    - `0087:WINDOW`
+    - `0091:MESSAGE 400288`
+    - `0094:JMPF ->00aa`
+    - `0096:IFUB A=0bV=06C=0E=0e->00a9`
+    - `009c:WINDOW`
+    - `00a6:MESSAGE 400287`
+    - `00a9:AKAO`
+    - `00b7:WAIT`
+    - `00ba:AKAO`
+    - `00c8:AKAO`
+    - `00d6:ANIM!2`
+    - `00d9:ANIM!1`
+    - `00dc:WINDOW`
+    - `00e6:MESSAGE 400091`
+    - `00e9:SCR2DL`
+    - `00f2:REQ`
+    - `00f5:WAIT`
+    - `00f8:NFADE`
+    - `0101:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:SPLIT`
+    - `0015:JMPF ->00f5`
+    - `0017:PREQ`
+    - `001a:IFUB A=0bV=01C=0E=10->002f`
+    - `0020:WINDOW`
+    - `002a:MESSAGE 400282`
+    - `002d:JMPF ->00ac`
+    - `002f:IFUB A=0bV=02C=0E=10->0044`
+    - `0035:WINDOW`
+    - `003f:MESSAGE 400283`
+    - `0042:JMPF ->00ac`
+    - `0044:IFUB A=0bV=04C=0E=10->0059`
+    - `004a:WINDOW`
+    - `0054:MESSAGE 400284`
+    - `0057:JMPF ->00ac`
+    - `0059:IFUB A=0bV=08C=0E=10->006e`
+    - `005f:WINDOW`
+    - `0069:MESSAGE 400285`
+    - `006c:JMPF ->00ac`
+    - `006e:IFUB A=0bV=05C=0E=10->0083`
+    - `0074:WINDOW`
+    - `007e:MESSAGE 400286`
+    - `0081:JMPF ->00ac`
+    - `0083:IFUB A=0bV=07C=0E=10->0098`
+    - `0089:WINDOW`
+    - `0093:MESSAGE 400288`
+    - `0096:JMPF ->00ac`
+    - `0098:IFUB A=0bV=06C=0E=0e->00ab`
+    - `009e:WINDOW`
+    - `00a8:MESSAGE 400287`
+    - `00ab:AKAO`
+    - `00b9:WAIT`
+    - `00bc:AKAO`
+    - `00ca:AKAO`
+    - `00d8:ANIM!2`
+    - `00db:ANIM!1`
+    - `00de:WINDOW`
+    - `00e8:MESSAGE 400091`
+    - `00eb:SCR2DL`
+    - `00f4:REQ`
+    - `00f7:RET`
+    - `00f8:NFADE`
+    - `0101:WAIT`
+- **`init/0`** len 209->268 (8312390ef227->1a2fedbb9b2c)
+  - D1:
+    - `0000:MPNAM`
+    - `0002:IFUB A=84V=04C=9E=0d->0014`
+    - `0008:IFUW V=0xa455C=1E=05->0014`
+    - `0010:MUSIC id=0`
+    - `0012:JMPF ->001f`
+    - `0014:IFUW V=0xa455C=1E=03->001e`
+    - `001c:MUSIC id=1`
+    - `001e:RET`
+    - `001f:IFUB A=84V=04C=9E=04->0028`
+    - `0025:REQ`
+    - `0028:AKAO`
+    - `0036:AKAO`
+    - `0044:AKAO`
+    - `0052:AKAO`
+    - `0060:AKAO`
+    - `006e:AKAO`
+    - `007c:AKAO`
+    - `008a:AKAO`
+    - `0098:AKAO`
+    - `00a6:AKAO`
+    - `00b4:AKAO`
+    - `00c2:AKAO`
+    - `00d0:RET`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:IFUB A=84V=04C=9E=24->002b`
+    - `0008:IFUW V=0xa455C=1E=12->0021`
+    - `0010:AKAO2`
+    - `001f:MUSIC id=0`
+    - `0021:JMPF ->003d`
+    - `0023:IFUW V=0xa455C=1E=12->003c`
+    - `002b:AKAO2`
+    - `003a:MUSIC id=1`
+    - `003c:RET`
+    - `003d:IFUW V=0xa455C=0E=0b->004f`
+    - `0045:MAPJUMP #526`
+    - `004f:IFSW V=0x2a5C=0E=04->005a`
+    - `0057:REQ`
+    - `005a:IFUB A=84V=04C=9E=04->0063`
+    - `0060:REQ`
+    - `0063:AKAO`
+    - `0071:AKAO`
+    - `007f:AKAO`
+    - `008d:AKAO`
+    - `009b:AKAO`
+    - `00a9:AKAO`
+    - `00b7:AKAO`
+    - `00c5:AKAO`
+    - `00d3:AKAO`
+    - `00e1:AKAO`
+    - `00ef:AKAO`
+    - `00fd:AKAO`
+    - `010b:RET`
+- **`ketcy/3`** len 98->98 (93f28c8b291f->c1596515d35c)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400158`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 400180`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400158`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 400180`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`ketcy/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`line/3`** len 36->36 (2edd2f221a2c->e0631416ffb3)
+  - D1:
+    - `0000:IFUB A=84V=04C=9E=06->000b`
+    - `0006:REQEW`
+    - `0009:JMPF ->0024`
+    - `000b:IFSW V=0x298C=3E=11->0023`
+    - `0013:IFUB A=84V=04C=10E=0b->0023`
+    - `0019:UC`
+    - `001b:MENU2`
+    - `001d:PREQ`
+    - `0020:REQ`
+    - `0023:RET`
+  - SD:
+    - `0000:IFUB A=84V=04C=9E=06->000b`
+    - `0006:REQEW`
+    - `0009:JMPF ->0024`
+    - `000b:IFSW V=0x298C=3E=11->0023`
+    - `0013:IFUB A=84V=04C=10E=0b->0023`
+    - `0019:UC`
+    - `001b:MENU2`
+    - `001d:PREQ`
+    - `0020:REQ`
+    - `0023:RET`
+- **`red13/3`** len 98->98 (8fb8102467be->df9f2a7a4085)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400152`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017d`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400152`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017d`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`red13/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`tifa/3`** len 98->98 (b38b100e5413->1d487958fadb)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400150`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017c`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400150`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017c`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`tifa/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- `version/0` only in SD len=2
+- `version/31` only in SD len=18
+- **`vincent/3`** len 98->98 (ea715a24f4f6->af7506e7e8ae)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 40015a`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 400181`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 40015a`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 400181`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`vincent/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`yufi/3`** len 98->98 (1d164e7bad03->a2294f6fd7f8)
+  - D1:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400156`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017f`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+  - SD:
+    - `0000:AXYZI`
+    - `0008:XYZI`
+    - `0013:DIR`
+    - `0016:TLKON`
+    - `0018:SOLID`
+    - `001a:VISI`
+    - `001c:WAIT`
+    - `001f:SOLID`
+    - `0021:ANIME2`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400156`
+    - `0031:IFUB A=08V=00C=0E=03->0039`
+    - `0037:JMPB ->0031`
+    - `0039:REQEW`
+    - `003c:ANIMW`
+    - `003d:WAIT`
+    - `0040:ANIME2`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40017f`
+    - `0050:REQ`
+    - `0053:IFUB A=08V=01C=0E=03->005b`
+    - `0059:JMPB ->0053`
+    - `005b:TLKON`
+    - `005d:SOLID`
+    - `005f:VISI`
+    - `0061:RET`
+- **`yufi/5`** len 5->5 (321f42f797b7->d7185306ba42)
+  - D1:
+    - `0000:TURA`
+    - `0004:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+
+#### SD vs CSR D2
+- **`init/0`** len 268->268 (98e1a5418ec0->1a2fedbb9b2c)
+  - D2:
+    - `0000:MPNAM`
+    - `0002:IFUB A=84V=04C=9E=1c->0023`
+    - `0008:IFUW V=0xa455C=1E=12->0021`
+    - `0010:AKAO2`
+    - `001f:MUSIC id=0`
+    - `0021:JMPF ->003d`
+    - `0023:IFUW V=0xa455C=1E=12->003c`
+    - `002b:AKAO2`
+    - `003a:MUSIC id=1`
+    - `003c:RET`
+    - `003d:IFUW V=0xa455C=0E=0b->004f`
+    - `0045:MAPJUMP #526`
+    - `004f:IFSW V=0x2a5C=0E=04->005a`
+    - `0057:REQ`
+    - `005a:IFUB A=84V=04C=9E=04->0063`
+    - `0060:REQ`
+    - `0063:AKAO`
+    - `0071:AKAO`
+    - `007f:AKAO`
+    - `008d:AKAO`
+    - `009b:AKAO`
+    - `00a9:AKAO`
+    - `00b7:AKAO`
+    - `00c5:AKAO`
+    - `00d3:AKAO`
+    - `00e1:AKAO`
+    - `00ef:AKAO`
+    - `00fd:AKAO`
+    - `010b:RET`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:IFUB A=84V=04C=9E=24->002b`
+    - `0008:IFUW V=0xa455C=1E=12->0021`
+    - `0010:AKAO2`
+    - `001f:MUSIC id=0`
+    - `0021:JMPF ->003d`
+    - `0023:IFUW V=0xa455C=1E=12->003c`
+    - `002b:AKAO2`
+    - `003a:MUSIC id=1`
+    - `003c:RET`
+    - `003d:IFUW V=0xa455C=0E=0b->004f`
+    - `0045:MAPJUMP #526`
+    - `004f:IFSW V=0x2a5C=0E=04->005a`
+    - `0057:REQ`
+    - `005a:IFUB A=84V=04C=9E=04->0063`
+    - `0060:REQ`
+    - `0063:AKAO`
+    - `0071:AKAO`
+    - `007f:AKAO`
+    - `008d:AKAO`
+    - `009b:AKAO`
+    - `00a9:AKAO`
+    - `00b7:AKAO`
+    - `00c5:AKAO`
+    - `00d3:AKAO`
+    - `00e1:AKAO`
+    - `00ef:AKAO`
+    - `00fd:AKAO`
+    - `010b:RET`
+
+### MD8BRDG2
+- D1 sha: cb09bd5488719994 dec=33964
+- D2 sha: 0212e781411affc5 dec=33556
+- SD sha: f95696f9602d61f9 dec=33556
+
+#### SD vs CSR D1
+- **`line_rb/2`** len 555->559 (0a0ecd0c274d->41f194a7905e)
+  - D1 interesting (65):
+    - `0000:IFUB A=80V=03C=10E=07->000c`
+    - `000a:JMPF ->000e`
+    - `000c:RET`
+    - `0011:REQEW`
+    - `0014:REQSW`
+    - `0017:REQEW`
+    - `0029:REQSW`
+    - `002f:REQEW`
+    - `003c:MESSAGE 40005f`
+    - `0042:REQEW`
+    - `004f:MESSAGE 400060`
+    - `0055:REQEW`
+    - `0062:MESSAGE 400061`
+    - `0068:REQEW`
+    - `0075:MESSAGE 400062`
+    - `007b:REQEW`
+    - `0088:MESSAGE 400063`
+    - `008e:REQEW`
+    - `009b:MESSAGE 400064`
+    - `00a1:REQEW`
+    - `00ae:MESSAGE 400065`
+    - `00b1:IFUB A=07V=01C=0E=03->00b9`
+    - `00b7:JMPF ->00bc`
+    - `00bb:MUSIC id=2`
+    - `00ce:MUSIC id=1`
+    - `00dd:REQEW`
+    - `00e3:REQEW`
+    - `00f0:MESSAGE 400066`
+    - `00f3:REQEW`
+    - `0100:MESSAGE 400067`
+    - `0103:REQEW`
+    - `0109:REQSW`
+    - `010c:REQ`
+    - `010f:REQEW`
+    - `0115:REQSW`
+    - `0118:REQEW`
+    - `0125:MESSAGE 400068`
+    - `0128:REQEW`
+    - `0135:MESSAGE 400069`
+    - `0138:REQEW`
+    - `013b:REQEW`
+    - `0148:MESSAGE 40006a`
+    - `014b:REQEW`
+    - `014e:REQEW`
+    - `015b:MESSAGE 40006b`
+    - `015e:REQEW`
+    - `0161:REQSW`
+    - `0164:REQ`
+    - `0167:REQEW`
+    - `016a:REQEW`
+    - `016d:REQEW`
+    - `0170:REQEW`
+    - `0173:REQEW`
+    - `0188:MESSAGE 40006c`
+    - `018b:REQSW`
+    - `018e:PREQ`
+    - `01bd:REQEW`
+    - `01ca:REQEW`
+    - `01d7:MESSAGE 40006f`
+    - `01da:MUSIC id=0`
+    - `01de:REQEW`
+    - `0219:BITON f0/80#3`
+    - `021d:SETWORD 20/00=0x643`
+    - `0222:BITON f0/83#7`
+    - `022a:RET`
+  - SD interesting (67):
+    - `0000:IFUB A=80V=03C=10E=07->000c`
+    - `000a:JMPF ->000e`
+    - `000c:RET`
+    - `0011:REQEW`
+    - `0014:REQSW`
+    - `0017:REQEW`
+    - `0029:REQSW`
+    - `002c:JMPF ->00b4`
+    - `0031:REQEW`
+    - `003e:MESSAGE 40005f`
+    - `0044:REQEW`
+    - `0051:MESSAGE 400060`
+    - `0057:REQEW`
+    - `0064:MESSAGE 400061`
+    - `006a:REQEW`
+    - `0077:MESSAGE 400062`
+    - `007d:REQEW`
+    - `008a:MESSAGE 400063`
+    - `0090:REQEW`
+    - `009d:MESSAGE 400064`
+    - `00a3:REQEW`
+    - `00b0:MESSAGE 400065`
+    - `00b3:IFUB A=07V=01C=0E=03->00bb`
+    - `00b9:JMPF ->00be`
+    - `00bd:MUSIC id=2`
+    - `00d0:MUSIC id=1`
+    - `00d2:JMPF ->01a4`
+    - `00e1:REQEW`
+    - `00e7:REQEW`
+    - `00f4:MESSAGE 400066`
+    - `00f7:REQEW`
+    - `0104:MESSAGE 400067`
+    - `0107:REQEW`
+    - `010d:REQSW`
+    - `0110:REQ`
+    - `0113:REQEW`
+    - `0119:REQSW`
+    - `011c:REQEW`
+    - `0129:MESSAGE 400068`
+    - `012c:REQEW`
+    - `0139:MESSAGE 400069`
+    - `013c:REQEW`
+    - `013f:REQEW`
+    - `014c:MESSAGE 40006a`
+    - `014f:REQEW`
+    - `0152:REQEW`
+    - `015f:MESSAGE 40006b`
+    - `0162:REQEW`
+    - `0165:REQSW`
+    - `0168:REQ`
+    - `016b:REQEW`
+    - `016e:REQEW`
+    - `0171:REQEW`
+    - `0174:REQEW`
+    - `0177:REQEW`
+    - `018c:MESSAGE 40006c`
+    - `018f:REQSW`
+    - `0192:PREQ`
+    - `01c1:REQEW`
+    - `01ce:REQEW`
+    - `01db:MESSAGE 40006f`
+    - `01de:MUSIC id=0`
+    - `01e2:REQEW`
+    - `021d:BITON f0/80#3`
+    - `0221:SETWORD 20/00=0x643`
+    - `0226:BITON f0/83#7`
+    - `022e:RET`
+  - opcode counts: JMPF:2->4
+- **`robo/3`** len 742->757 (93298797aa5d->ba31ea1f93b8)
+  - D1:
+    - `0000:DFANM`
+    - `0003:OFST`
+    - `000f:AKAO`
+    - `001d:AKAO`
+    - `002b:AKAO`
+    - `0039:SHAKE`
+    - `0041:WAIT`
+    - `0044:SHAKE`
+    - `004c:AKAO`
+    - `005a:AKAO`
+    - `0068:SHAKE`
+    - `0070:WAIT`
+    - `0073:SHAKE`
+    - `007b:AKAO`
+    - `0089:AKAO`
+    - `0097:SHAKE`
+    - `009f:WAIT`
+    - `00a2:SHAKE`
+    - `00aa:AKAO`
+    - `00b8:AKAO`
+    - `00c6:SHAKE`
+    - `00ce:WAIT`
+    - `00d1:SHAKE`
+    - `00d9:AKAO`
+    - `00e7:AKAO`
+    - `00f5:SHAKE`
+    - `00fd:WAIT`
+    - `0100:SHAKE`
+    - `0108:AKAO`
+    - `0116:AKAO`
+    - `0124:SHAKE`
+    - `012c:WAIT`
+    - `012f:SHAKE`
+    - `0137:AKAO`
+    - `0145:AKAO`
+    - `0153:SHAKE`
+    - `015b:WAIT`
+    - `015e:SHAKE`
+    - `0166:AKAO`
+    - `0174:AKAO`
+    - `0182:SHAKE`
+    - `018a:WAIT`
+    - `018d:SHAKE`
+    - `0195:AKAO`
+    - `01a3:AKAO`
+    - `01b1:SHAKE`
+    - `01b9:WAIT`
+    - `01bc:SHAKE`
+    - `01c4:AKAO`
+    - `01d2:AKAO`
+    - `01e0:SHAKE`
+    - `01e8:WAIT`
+    - `01eb:SHAKE`
+    - `01f3:AKAO`
+    - `0201:AKAO`
+    - `020f:SHAKE`
+    - `0217:WAIT`
+    - `021a:SHAKE`
+    - `0222:AKAO`
+    - `0230:AKAO`
+    - `023e:SHAKE`
+    - `0246:WAIT`
+    - `0249:SHAKE`
+    - `0251:AKAO`
+    - `025f:AKAO`
+    - `026d:SHAKE`
+    - `0275:WAIT`
+    - `0278:SHAKE`
+    - `0280:AKAO`
+    - `028e:AKAO`
+    - `029c:SHAKE`
+    - `02a4:WAIT`
+    - `02a7:SHAKE`
+    - `02af:AKAO`
+    - `02bd:AKAO`
+    - `02cb:SHAKE`
+    - `02d3:WAIT`
+    - `02d6:SHAKE`
+    - `02de:SETBYTE 50/07=0x1`
+    - `02e2:DFANM`
+    - `02e5:RET`
+  - SD:
+    - `0000:DFANM`
+    - `0003:OFST`
+    - `000f:AKAO`
+    - `001d:JMPFL`
+    - `0020:AKAO`
+    - `002e:AKAO`
+    - `003c:SHAKE`
+    - `0044:WAIT`
+    - `0047:SHAKE`
+    - `004f:AKAO`
+    - `005d:AKAO`
+    - `006b:SHAKE`
+    - `0073:WAIT`
+    - `0076:SHAKE`
+    - `007e:AKAO`
+    - `008c:AKAO`
+    - `009a:SHAKE`
+    - `00a2:WAIT`
+    - `00a5:SHAKE`
+    - `00ad:AKAO`
+    - `00bb:AKAO`
+    - `00c9:SHAKE`
+    - `00d1:WAIT`
+    - `00d4:SHAKE`
+    - `00dc:AKAO`
+    - `00ea:AKAO`
+    - `00f8:SHAKE`
+    - `0100:WAIT`
+    - `0103:SHAKE`
+    - `010b:AKAO`
+    - `0119:AKAO`
+    - `0127:SHAKE`
+    - `012f:WAIT`
+    - `0132:SHAKE`
+    - `013a:AKAO`
+    - `0148:AKAO`
+    - `0156:SHAKE`
+    - `015e:WAIT`
+    - `0161:SHAKE`
+    - `0169:AKAO`
+    - `0177:AKAO`
+    - `0185:SHAKE`
+    - `018d:WAIT`
+    - `0190:SHAKE`
+    - `0198:AKAO`
+    - `01a6:AKAO`
+    - `01b4:SHAKE`
+    - `01bc:WAIT`
+    - `01bf:SHAKE`
+    - `01c7:AKAO`
+    - `01d5:AKAO`
+    - `01e3:SHAKE`
+    - `01eb:WAIT`
+    - `01ee:SHAKE`
+    - `01f6:AKAO`
+    - `0204:AKAO`
+    - `0212:SHAKE`
+    - `021a:WAIT`
+    - `021d:SHAKE`
+    - `0225:AKAO`
+    - `0233:AKAO`
+    - `0241:SHAKE`
+    - `0249:WAIT`
+    - `024c:SHAKE`
+    - `0254:AKAO`
+    - `0262:AKAO`
+    - `0270:SHAKE`
+    - `0278:WAIT`
+    - `027b:SHAKE`
+    - `0283:AKAO`
+    - `0291:AKAO`
+    - `029f:SHAKE`
+    - `02a7:WAIT`
+    - `02aa:SHAKE`
+    - `02b2:AKAO`
+    - `02c0:AKAO`
+    - `02ce:SHAKE`
+    - `02d6:WAIT`
+    - `02d9:SHAKE`
+    - `02e1:SETBYTE 50/07=0x1`
+    - `02e5:DFANM`
+    - `02e8:RET`
+    - `02e9:OFST`
+- **`robo/31`** len 304->308 (6b4d7005249c->2f3daecc6e13)
+  - D1:
+    - `0000:AKAO`
+    - `000e:WAIT`
+    - `0011:AKAO`
+    - `001f:WAIT`
+    - `0022:AKAO`
+    - `0030:WAIT`
+    - `0033:AKAO`
+    - `0041:WAIT`
+    - `0044:WINDOW`
+    - `004e:MESSAGE 40006d`
+    - `0051:AKAO`
+    - `005f:KAWAI`
+    - `0077:WAIT`
+    - `007a:KAWAI`
+    - `007e:ANIM!2`
+    - `0081:WAIT`
+    - `0084:WINDOW`
+    - `008e:MESSAGE 40006e`
+    - `0091:KAWAI`
+    - `00a9:WAIT`
+    - `00ac:KAWAI`
+    - `00b0:AKAO`
+    - `00be:AKAO`
+    - `00cc:AKAO`
+    - `00da:FADE`
+    - `00e3:FADEW`
+    - `00e4:WAIT`
+    - `00e7:TLKON`
+    - `00e9:SOLID`
+    - `00eb:VISI`
+    - `00ed:FADE`
+    - `00f6:FADEW`
+    - `00f7:AKAO`
+    - `0105:AKAO`
+    - `0113:AKAO`
+    - `0121:AKAO`
+    - `012f:RET`
+  - SD:
+    - `0000:JMPF ->0025`
+    - `0002:AKAO`
+    - `0010:WAIT`
+    - `0013:AKAO`
+    - `0021:WAIT`
+    - `0024:AKAO`
+    - `0032:WAIT`
+    - `0035:AKAO`
+    - `0043:WAIT`
+    - `0046:WINDOW`
+    - `0050:MESSAGE 40006d`
+    - `0053:AKAO`
+    - `0061:KAWAI`
+    - `0079:WAIT`
+    - `007c:KAWAI`
+    - `0080:ANIM!2`
+    - `0083:WAIT`
+    - `0086:WINDOW`
+    - `0090:MESSAGE 40006e`
+    - `0093:KAWAI`
+    - `00ab:WAIT`
+    - `00ae:KAWAI`
+    - `00b2:AKAO`
+    - `00c0:AKAO`
+    - `00ce:AKAO`
+    - `00dc:FADE`
+    - `00e5:FADEW`
+    - `00e6:JMPF ->00ec`
+    - `00e8:WAIT`
+    - `00eb:TLKON`
+    - `00ed:SOLID`
+    - `00ef:VISI`
+    - `00f1:FADE`
+    - `00fa:FADEW`
+    - `00fb:AKAO`
+    - `0109:AKAO`
+    - `0117:AKAO`
+    - `0125:AKAO`
+    - `0133:RET`
+
+#### SD vs CSR D2
+
+### MD8_5
+- D1 sha: a869658f31348510 dec=29324
+- D2 sha: a869658f31348510 dec=29324
+- SD sha: e4e696543dea868e dec=29324
+
+#### SD vs CSR D1
+- **`dir/0`** len 52->52 (050f87818ea3->38f7c7cf85af)
+  - D1:
+    - `0000:MPNAM`
+    - `0002:MUSIC id=0`
+    - `0004:BMUSC`
+    - `0006:RET`
+    - `0007:IFSW V=0x63fC=0E=24->0032`
+    - `000f:FADE`
+    - `0018:UC`
+    - `001a:MENU2`
+    - `001c:SETBYTE 50/0b=0x1`
+    - `0020:PMVIE id=53`
+    - `0022:REQ`
+    - `0025:MOVIE`
+    - `0026:SETWORD 20/00=0x640`
+    - `002b:REQEW`
+    - `002e:UC`
+    - `0030:MENU2`
+    - `0032:JMPB ->0032`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:MUSIC id=0`
+    - `0004:BMUSC`
+    - `0006:RET`
+    - `0007:IFSW V=0x63fC=0E=24->0032`
+    - `000f:FADE`
+    - `0018:UC`
+    - `001a:MENU2`
+    - `001c:SETBYTE 50/0b=0x1`
+    - `0020:PMVIE id=58`
+    - `0022:REQ`
+    - `0025:MOVIE`
+    - `0026:SETWORD 20/00=0x640`
+    - `002b:REQEW`
+    - `002e:UC`
+    - `0030:MENU2`
+    - `0032:JMPB ->0032`
+
+#### SD vs CSR D2
+- **`dir/0`** len 52->52 (050f87818ea3->38f7c7cf85af)
+  - D2:
+    - `0000:MPNAM`
+    - `0002:MUSIC id=0`
+    - `0004:BMUSC`
+    - `0006:RET`
+    - `0007:IFSW V=0x63fC=0E=24->0032`
+    - `000f:FADE`
+    - `0018:UC`
+    - `001a:MENU2`
+    - `001c:SETBYTE 50/0b=0x1`
+    - `0020:PMVIE id=53`
+    - `0022:REQ`
+    - `0025:MOVIE`
+    - `0026:SETWORD 20/00=0x640`
+    - `002b:REQEW`
+    - `002e:UC`
+    - `0030:MENU2`
+    - `0032:JMPB ->0032`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:MUSIC id=0`
+    - `0004:BMUSC`
+    - `0006:RET`
+    - `0007:IFSW V=0x63fC=0E=24->0032`
+    - `000f:FADE`
+    - `0018:UC`
+    - `001a:MENU2`
+    - `001c:SETBYTE 50/0b=0x1`
+    - `0020:PMVIE id=58`
+    - `0022:REQ`
+    - `0025:MOVIE`
+    - `0026:SETWORD 20/00=0x640`
+    - `002b:REQEW`
+    - `002e:UC`
+    - `0030:MENU2`
+    - `0032:JMPB ->0032`
+
+### MD8_52
+- D1 sha: 3f76ddd30fa37f31 dec=18888
+- D2 sha: 3f76ddd30fa37f31 dec=18888
+- SD sha: d0f62380ebcaffcf dec=18888
+
+#### SD vs CSR D1
+- **`dir3/0`** len 77->77 (c7043706dff3->0a54b22bcb81)
+  - D1:
+    - `0000:RET`
+    - `0001:MUSIC id=0`
+    - `0003:WAIT`
+    - `0006:WAIT`
+    - `0009:REQ`
+    - `000c:WAIT`
+    - `000f:REQ`
+    - `0012:WAIT`
+    - `0015:WCLSE`
+    - `0017:WAIT`
+    - `001a:WCLSE`
+    - `001c:REQ`
+    - `001f:WAIT`
+    - `0022:MVCAM`
+    - `0024:PMVIE id=52`
+    - `0026:REQ`
+    - `0029:REQ`
+    - `002c:REQ`
+    - `002f:REQ`
+    - `0032:REQ`
+    - `0035:REQ`
+    - `0038:REQ`
+    - `003b:SOUND`
+    - `0040:MOVIE`
+    - `0041:MAPJUMP #72`
+    - `004b:JMPB ->004b`
+  - SD:
+    - `0000:RET`
+    - `0001:MUSIC id=0`
+    - `0003:WAIT`
+    - `0006:WAIT`
+    - `0009:REQ`
+    - `000c:WAIT`
+    - `000f:REQ`
+    - `0012:WAIT`
+    - `0015:WCLSE`
+    - `0017:WAIT`
+    - `001a:WCLSE`
+    - `001c:REQ`
+    - `001f:WAIT`
+    - `0022:MVCAM`
+    - `0024:PMVIE id=59`
+    - `0026:REQ`
+    - `0029:REQ`
+    - `002c:REQ`
+    - `002f:REQ`
+    - `0032:REQ`
+    - `0035:REQ`
+    - `0038:REQ`
+    - `003b:SOUND`
+    - `0040:MOVIE`
+    - `0041:MAPJUMP #72`
+    - `004b:JMPB ->004b`
+
+#### SD vs CSR D2
+- **`dir3/0`** len 77->77 (c7043706dff3->0a54b22bcb81)
+  - D2:
+    - `0000:RET`
+    - `0001:MUSIC id=0`
+    - `0003:WAIT`
+    - `0006:WAIT`
+    - `0009:REQ`
+    - `000c:WAIT`
+    - `000f:REQ`
+    - `0012:WAIT`
+    - `0015:WCLSE`
+    - `0017:WAIT`
+    - `001a:WCLSE`
+    - `001c:REQ`
+    - `001f:WAIT`
+    - `0022:MVCAM`
+    - `0024:PMVIE id=52`
+    - `0026:REQ`
+    - `0029:REQ`
+    - `002c:REQ`
+    - `002f:REQ`
+    - `0032:REQ`
+    - `0035:REQ`
+    - `0038:REQ`
+    - `003b:SOUND`
+    - `0040:MOVIE`
+    - `0041:MAPJUMP #72`
+    - `004b:JMPB ->004b`
+  - SD:
+    - `0000:RET`
+    - `0001:MUSIC id=0`
+    - `0003:WAIT`
+    - `0006:WAIT`
+    - `0009:REQ`
+    - `000c:WAIT`
+    - `000f:REQ`
+    - `0012:WAIT`
+    - `0015:WCLSE`
+    - `0017:WAIT`
+    - `001a:WCLSE`
+    - `001c:REQ`
+    - `001f:WAIT`
+    - `0022:MVCAM`
+    - `0024:PMVIE id=59`
+    - `0026:REQ`
+    - `0029:REQ`
+    - `002c:REQ`
+    - `002f:REQ`
+    - `0032:REQ`
+    - `0035:REQ`
+    - `0038:REQ`
+    - `003b:SOUND`
+    - `0040:MOVIE`
+    - `0041:MAPJUMP #72`
+    - `004b:JMPB ->004b`
+
+### MD8_6
+- D1 sha: 3da5927072c06133 dec=39128
+- D2 sha: 36dd3966d573eca7 dec=38752
+- SD sha: ce625e42e5aa78ff dec=38752
+
+#### SD vs CSR D1
+- **`ketcy/0`** len 276->277 (b47f74dbcb28->55f1147d7f7d)
+  - D1:
+    - `0000:CHAR`
+    - `0002:IFPRTYQ`
+    - `0005:TLKON`
+    - `0007:SOLID`
+    - `0009:VISI`
+    - `000b:JMPF ->001c`
+    - `000d:XYZI`
+    - `0018:DIR`
+    - `001b:IFUB A=80V=01C=9E=07->0027`
+    - `0021:TLKON`
+    - `0023:SOLID`
+    - `0025:VISI`
+    - `0027:RET`
+    - `0028:SLIDR`
+    - `002b:DFANM`
+    - `002e:IFPRTYQ`
+    - `0031:TLKON`
+    - `0033:SOLID`
+    - `0035:VISI`
+    - `0037:IFUB A=80V=01C=10E=20->005c`
+    - `003d:IFPRTYQ`
+    - `0040:TLKON`
+    - `0042:SOLID`
+    - `0044:VISI`
+    - `0046:JMPF ->005d`
+    - `0048:XYZI`
+    - `0053:DIR`
+    - `0056:TLKON`
+    - `0058:SOLID`
+    - `005a:VISI`
+    - `005c:IFUB A=12V=01C=0E=b0->0111`
+    - `0062:IFUB A=80V=01C=10E=aa->0111`
+    - `0068:UC`
+    - `006a:MENU2`
+    - `006c:AKAO`
+    - `007a:PXYZI`
+    - `0082:XYZI`
+    - `008d:TLKON`
+    - `008f:SOLID`
+    - `0091:VISI`
+    - `0093:SOLID`
+    - `0095:SLIDR`
+    - `0098:MSPED`
+    - `009c:DFANM`
+    - `009f:MOVE`
+    - `00a5:PTURA`
+    - `00a9:WINDOW`
+    - `00b3:MESSAGE 400034`
+    - `00b6:TURNGEN`
+    - `00bc:DFANM`
+    - `00bf:WAIT`
+    - `00c2:SOUND`
+    - `00c7:REQEW`
+    - `00ca:SOUND`
+    - `00cf:WAIT`
+    - `00d2:DFANM`
+    - `00d5:MUSIC id=3`
+    - `00d7:AKAO`
+    - `00e5:PTURA`
+    - `00e9:WAIT`
+    - `00ec:DFANM`
+    - `00ef:WINDOW`
+    - `00f9:MESSAGE 400037`
+    - `00fc:MUSIC id=0`
+    - `00fe:DFANM`
+    - `0101:PMOVA`
+    - `0103:BITON f0/80#1`
+    - `0107:TLKON`
+    - `0109:SOLID`
+    - `010b:VISI`
+    - `010d:UC`
+    - `010f:MENU2`
+    - `0111:JMPB ->0037`
+    - `0113:RET`
+  - SD:
+    - `0000:CHAR`
+    - `0002:IFPRTYQ`
+    - `0005:TLKON`
+    - `0007:SOLID`
+    - `0009:VISI`
+    - `000b:JMPF ->001c`
+    - `000d:XYZI`
+    - `0018:DIR`
+    - `001b:IFUB A=80V=01C=9E=07->0027`
+    - `0021:TLKON`
+    - `0023:SOLID`
+    - `0025:VISI`
+    - `0027:RET`
+    - `0028:SLIDR`
+    - `002b:DFANM`
+    - `002e:IFPRTYQ`
+    - `0031:TLKON`
+    - `0033:SOLID`
+    - `0035:VISI`
+    - `0037:IFUB A=80V=01C=10E=20->005c`
+    - `003d:IFPRTYQ`
+    - `0040:TLKON`
+    - `0042:SOLID`
+    - `0044:VISI`
+    - `0046:JMPF ->005d`
+    - `0048:XYZI`
+    - `0053:DIR`
+    - `0056:TLKON`
+    - `0058:SOLID`
+    - `005a:VISI`
+    - `005c:IFUB A=12V=01C=0E=b0->0111`
+    - `0062:IFUB A=80V=01C=10E=aa->0111`
+    - `0068:UC`
+    - `006a:MENU2`
+    - `006c:AKAO`
+    - `007a:PXYZI`
+    - `0082:XYZI`
+    - `008d:TLKON`
+    - `008f:SOLID`
+    - `0091:VISI`
+    - `0093:SOLID`
+    - `0095:SLIDR`
+    - `0098:MSPED`
+    - `009c:DFANM`
+    - `009f:MOVE`
+    - `00a5:PTURA`
+    - `00a9:WINDOW`
+    - `00b3:MESSAGE 400034`
+    - `00b6:TURNGEN`
+    - `00bc:DFANM`
+    - `00bf:WAIT`
+    - `00c2:SOUND`
+    - `00c7:REQEW`
+    - `00ca:SOUND`
+    - `00cf:WAIT`
+    - `00d2:DFANM`
+    - `00d5:MUSIC id=3`
+    - `00d7:AKAO`
+    - `00e5:PTURA`
+    - `00e9:WAIT`
+    - `00ec:DFANM`
+    - `00ef:WINDOW`
+    - `00f9:MESSAGE 400037`
+    - `00fc:MUSIC id=0`
+    - `00fe:DFANM`
+    - `0101:PMOVA`
+    - `0103:BITON f0/80#1`
+    - `0107:TLKON`
+    - `0109:SOLID`
+    - `010b:VISI`
+    - `010d:UC`
+    - `010f:MENU2`
+    - `0111:JMPBL`
+    - `0114:RET`
+- **`ketcy/1`** len 152->210 (ab2657d67819->4ed20c2a5215)
+  - D1:
+    - `0000:IFPRTYQ`
+    - `0003:RET`
+    - `0004:UC`
+    - `0006:MENU2`
+    - `0008:AKAO`
+    - `0016:PTURA`
+    - `001a:WINDOW`
+    - `0024:MESSAGE 400034`
+    - `0027:TURNGEN`
+    - `002d:DFANM`
+    - `0030:WAIT`
+    - `0033:SOUND`
+    - `0038:REQEW`
+    - `003b:SOUND`
+    - `0040:WAIT`
+    - `0043:DFANM`
+    - `0046:MUSIC id=3`
+    - `0048:AKAO`
+    - `0056:PTURA`
+    - `005a:WAIT`
+    - `005d:ANIM!2`
+    - `0060:WINDOW`
+    - `006a:MESSAGE 400037`
+    - `006d:MUSIC id=0`
+    - `006f:TURNGEN`
+    - `0075:DFANM`
+    - `0078:SOLID`
+    - `007a:SLIDR`
+    - `007d:JUMP`
+    - `0088:TLKON`
+    - `008a:SOLID`
+    - `008c:VISI`
+    - `008e:BITON f0/80#1`
+    - `0092:UC`
+    - `0094:MENU2`
+    - `0096:JMPB ->0096`
+  - SD:
+    - `0000:IFPRTYQ`
+    - `0003:RET`
+    - `0004:AKAO`
+    - `0012:AKAO`
+    - `0020:AKAO`
+    - `002e:AKAO`
+    - `003c:UC`
+    - `003e:MENU2`
+    - `0040:AKAO`
+    - `004e:JMPF ->0062`
+    - `0050:PTURA`
+    - `0054:WINDOW`
+    - `005e:MESSAGE 400034`
+    - `0061:TURNGEN`
+    - `0067:DFANM`
+    - `006a:WAIT`
+    - `006d:SOUND`
+    - `0072:REQEW`
+    - `0075:SOUND`
+    - `007a:WAIT`
+    - `007d:DFANM`
+    - `0080:MUSIC id=3`
+    - `0082:AKAO`
+    - `0090:PTURA`
+    - `0094:WAIT`
+    - `0097:ANIM!2`
+    - `009a:WINDOW`
+    - `00a4:MESSAGE 400037`
+    - `00a7:MUSIC id=0`
+    - `00a9:TURNGEN`
+    - `00af:DFANM`
+    - `00b2:SOLID`
+    - `00b4:SLIDR`
+    - `00b7:JUMP`
+    - `00c2:TLKON`
+    - `00c4:SOLID`
+    - `00c6:VISI`
+    - `00c8:BITON f0/80#1`
+    - `00cc:UC`
+    - `00ce:MENU2`
+    - `00d0:JMPB ->00d0`
+
+#### SD vs CSR D2
+
+### MDS5_W
+- D1 sha: 0d5c50d7624fc433 dec=13980
+- D2 sha: 0d5c50d7624fc433 dec=13980
+- SD sha: 32260b8ceee6eb04 dec=13980
+
+#### SD vs CSR D1
+- `cloud/4` only in D1 len=6
+- **`cloud/5`** len 5->771 (04fe20795d83->32690cd253f4)
+  - D1 interesting (1):
+    - `0004:RET`
+  - SD interesting (69):
+    - `000f:RET`
+    - `0024:RET`
+    - `0025:RET`
+    - `0026:RET`
+    - `0027:RET`
+    - `002e:RET`
+    - `002f:RET`
+    - `0036:RET`
+    - `0037:RET`
+    - `003c:RET`
+    - `003d:RET`
+    - `003e:RET`
+    - `003f:RET`
+    - `004d:RET`
+    - `004e:RET`
+    - `004f:RET`
+    - `0055:RET`
+    - `0056:RET`
+    - `0057:RET`
+    - `005d:RET`
+    - `005e:RET`
+    - `005f:RET`
+    - `0073:REQSW`
+    - `0079:REQSW`
+    - `007f:REQSW`
+    - `0085:REQSW`
+    - `008b:REQSW`
+    - `0091:REQSW`
+    - `0097:REQSW`
+    - `009d:REQSW`
+    - `00a3:REQSW`
+    - `00a6:REQ`
+    - `00a9:REQEW`
+    - `00ae:JMPF ->00b0`
+    - `00b3:REQEW`
+    - `00b6:IFUW V=0x318C=24E=03->00c0`
+    - `00be:IFUW V=0x318C=24E=03->00c8`
+    - `00c6:IFUW V=0x318C=24E=03->00d0`
+    - `00ce:IFUW V=0x318C=24E=03->00d8`
+    - `00d6:IFUW V=0x318C=24E=03->00e0`
+    - `00de:IFUW V=0x318C=29E=03->00e8`
+    - `00e9:REQEW`
+    - `00ef:REQEW`
+    - `00f5:REQEW`
+    - `00fb:REQEW`
+    - `0101:REQEW`
+    - `0107:REQEW`
+    - `010d:REQEW`
+    - `0113:REQEW`
+    - `0119:REQEW`
+    - `011f:REQEW`
+    - `0125:REQEW`
+    - `016b:REQEW`
+    - `01a9:PREQ`
+    - `01e4:IFSW V=0x469C=105E=04->01ef`
+    - `022b:PREQ`
+    - `0266:DSKCG disc=5`
+    - `0268:DSKCG disc=5`
+    - `026c:JMPF ->0273`
+    - `02e6:MUSIC id=0`
+    - `02e8:RET`
+    - `02e9:RET`
+    - `02ea:RET`
+    - `02ef:RET`
+    - `02f0:RET`
+    - `02f1:RET`
+    - `02f7:RET`
+    - `02fd:RET`
+    - `0302:RET`
+  - opcode counts: BGCLR:0->1, BGON:0->14, BTLMD:0->1, BTRLD:0->11, CANM!2:0->2, CHAR:0->1, DSKCG:0->2, FADE:0->1, FADEW:0->1, GETPC:0->1, IDLCK:0->2, IFSW:0->1, IFUW:0->6, JMPB:0->28, JMPBL:0->1, JMPF:0->2, JOIN:0->1, MENU:0->3, MOVA:0->25, MPARA:0->1, MPDSP:0->28, MPNAM:0->1, MPd:0->1, MUSIC:0->1, MVIEF:0->9, PC:0->1, PMOVA:0->30, PREQ:0->2, PXYZI:0->1, REQ:0->1, REQEW:0->14, REQSW:0->9, RET:1->31, SCR2D:0->2, SCRLA:0->1, SCRLP:0->2, SLIP:0->1, SPECIAL:0->1, SPLIT:0->1, TURA:1->15, Unknown11:0->3, VWOFT:0->1, WINDOW:0->6
+
+#### SD vs CSR D2
+- `cloud/4` only in D2 len=6
+- **`cloud/5`** len 5->771 (04fe20795d83->32690cd253f4)
+  - D2 interesting (1):
+    - `0004:RET`
+  - SD interesting (69):
+    - `000f:RET`
+    - `0024:RET`
+    - `0025:RET`
+    - `0026:RET`
+    - `0027:RET`
+    - `002e:RET`
+    - `002f:RET`
+    - `0036:RET`
+    - `0037:RET`
+    - `003c:RET`
+    - `003d:RET`
+    - `003e:RET`
+    - `003f:RET`
+    - `004d:RET`
+    - `004e:RET`
+    - `004f:RET`
+    - `0055:RET`
+    - `0056:RET`
+    - `0057:RET`
+    - `005d:RET`
+    - `005e:RET`
+    - `005f:RET`
+    - `0073:REQSW`
+    - `0079:REQSW`
+    - `007f:REQSW`
+    - `0085:REQSW`
+    - `008b:REQSW`
+    - `0091:REQSW`
+    - `0097:REQSW`
+    - `009d:REQSW`
+    - `00a3:REQSW`
+    - `00a6:REQ`
+    - `00a9:REQEW`
+    - `00ae:JMPF ->00b0`
+    - `00b3:REQEW`
+    - `00b6:IFUW V=0x318C=24E=03->00c0`
+    - `00be:IFUW V=0x318C=24E=03->00c8`
+    - `00c6:IFUW V=0x318C=24E=03->00d0`
+    - `00ce:IFUW V=0x318C=24E=03->00d8`
+    - `00d6:IFUW V=0x318C=24E=03->00e0`
+    - `00de:IFUW V=0x318C=29E=03->00e8`
+    - `00e9:REQEW`
+    - `00ef:REQEW`
+    - `00f5:REQEW`
+    - `00fb:REQEW`
+    - `0101:REQEW`
+    - `0107:REQEW`
+    - `010d:REQEW`
+    - `0113:REQEW`
+    - `0119:REQEW`
+    - `011f:REQEW`
+    - `0125:REQEW`
+    - `016b:REQEW`
+    - `01a9:PREQ`
+    - `01e4:IFSW V=0x469C=105E=04->01ef`
+    - `022b:PREQ`
+    - `0266:DSKCG disc=5`
+    - `0268:DSKCG disc=5`
+    - `026c:JMPF ->0273`
+    - `02e6:MUSIC id=0`
+    - `02e8:RET`
+    - `02e9:RET`
+    - `02ea:RET`
+    - `02ef:RET`
+    - `02f0:RET`
+    - `02f1:RET`
+    - `02f7:RET`
+    - `02fd:RET`
+    - `0302:RET`
+  - opcode counts: BGCLR:0->1, BGON:0->14, BTLMD:0->1, BTRLD:0->11, CANM!2:0->2, CHAR:0->1, DSKCG:0->2, FADE:0->1, FADEW:0->1, GETPC:0->1, IDLCK:0->2, IFSW:0->1, IFUW:0->6, JMPB:0->28, JMPBL:0->1, JMPF:0->2, JOIN:0->1, MENU:0->3, MOVA:0->25, MPARA:0->1, MPDSP:0->28, MPNAM:0->1, MPd:0->1, MUSIC:0->1, MVIEF:0->9, PC:0->1, PMOVA:0->30, PREQ:0->2, PXYZI:0->1, REQ:0->1, REQEW:0->14, REQSW:0->9, RET:1->31, SCR2D:0->2, SCRLA:0->1, SCRLP:0->2, SLIP:0->1, SPECIAL:0->1, SPLIT:0->1, TURA:1->15, Unknown11:0->3, VWOFT:0->1, WINDOW:0->6
+
+### MTCRL_2
+- D1 sha: 3d2db11e74ec9904 dec=46336
+- D2 sha: a1f98f5bf8ac7b8d dec=45912
+- SD sha: e7a14640b4c84b72 dec=45912
+
+#### SD vs CSR D1
+- **`cid/31`** len 606->613 (c5ca118f661a->51d63dce8817)
+  - D1 interesting (38):
+    - `0004:REQSW`
+    - `0007:REQEW`
+    - `0014:MESSAGE 4000b2`
+    - `0038:PREQ`
+    - `0050:REQSW`
+    - `0053:REQEW`
+    - `0063:PREQ`
+    - `0073:MESSAGE 4000b3`
+    - `0087:MUSIC id=3`
+    - `008c:REQSW`
+    - `0099:MESSAGE 4000b5`
+    - `009f:REQSW`
+    - `00ac:MESSAGE 4000b8`
+    - `00b2:REQSW`
+    - `00bf:MESSAGE 4000b6`
+    - `00c5:REQSW`
+    - `00d2:MESSAGE 4000b4`
+    - `00d8:REQSW`
+    - `00e5:MESSAGE 4000b7`
+    - `0139:REQEW`
+    - `0157:MESSAGE 4000b9`
+    - `015d:REQEW`
+    - `016a:MESSAGE 4000ba`
+    - `0170:REQEW`
+    - `017d:MESSAGE 4000bb`
+    - `0183:REQEW`
+    - `0190:MESSAGE 4000bc`
+    - `0196:REQEW`
+    - `01a3:MESSAGE 4000bd`
+    - `01a9:REQEW`
+    - `01b6:MESSAGE 4000be`
+    - `01c6:MESSAGE 4000bf`
+    - `021b:MESSAGE 4000c0`
+    - `0248:REQEW`
+    - `024b:BITON f0/90#3`
+    - `024f:BITON f0/90#0`
+    - `0253:MAPJUMP #728`
+    - `025d:RET`
+  - SD interesting (41):
+    - `0004:REQSW`
+    - `0007:REQEW`
+    - `0014:MESSAGE 4000b2`
+    - `0017:JMPF ->001d`
+    - `0037:JMPF ->0043`
+    - `003c:PREQ`
+    - `0054:REQSW`
+    - `0057:REQEW`
+    - `0067:PREQ`
+    - `0077:MESSAGE 4000b3`
+    - `008b:MUSIC id=3`
+    - `008d:JMPFL`
+    - `0093:REQSW`
+    - `00a0:MESSAGE 4000b5`
+    - `00a6:REQSW`
+    - `00b3:MESSAGE 4000b8`
+    - `00b9:REQSW`
+    - `00c6:MESSAGE 4000b6`
+    - `00cc:REQSW`
+    - `00d9:MESSAGE 4000b4`
+    - `00df:REQSW`
+    - `00ec:MESSAGE 4000b7`
+    - `0140:REQEW`
+    - `015e:MESSAGE 4000b9`
+    - `0164:REQEW`
+    - `0171:MESSAGE 4000ba`
+    - `0177:REQEW`
+    - `0184:MESSAGE 4000bb`
+    - `018a:REQEW`
+    - `0197:MESSAGE 4000bc`
+    - `019d:REQEW`
+    - `01aa:MESSAGE 4000bd`
+    - `01b0:REQEW`
+    - `01bd:MESSAGE 4000be`
+    - `01cd:MESSAGE 4000bf`
+    - `0222:MESSAGE 4000c0`
+    - `024f:REQEW`
+    - `0252:BITON f0/90#3`
+    - `0256:BITON f0/90#0`
+    - `025a:MAPJUMP #728`
+    - `0264:RET`
+  - opcode counts: JMPF:0->2, JMPFL:0->1
+
+#### SD vs CSR D2
+
+### NIVGATE
+- D1 sha: f71737cb271e53df dec=13328
+- D2 sha: 35ce26242738cc5a dec=13292
+- SD sha: edcbd9ebcba82be4 dec=13292
+
+#### SD vs CSR D1
+- **`b_drct/1`** len 16->16 (1035d12ede61->2668d3b363c5)
+  - D1:
+    - `0000:SPLIT`
+    - `000f:RET`
+  - SD:
+    - `0000:SPLIT`
+    - `000f:RET`
+- **`b_drct/31`** len 16->16 (3fe0bf1186a2->b244ae15a1f2)
+  - D1:
+    - `0000:SPLIT`
+    - `000f:RET`
+  - SD:
+    - `0000:SPLIT`
+    - `000f:RET`
+- **`cefiros/3`** len 177->171 (d41ce032f94d->7f507395405f)
+  - D1:
+    - `0000:MSPED`
+    - `0004:JMPF ->00ab`
+    - `0006:MOVE`
+    - `000c:TURA`
+    - `0010:ANIME1`
+    - `0013:WINDOW`
+    - `001d:MESSAGE 400101`
+    - `0020:ANIMW`
+    - `0021:ANIME1`
+    - `0024:ANIME1`
+    - `0027:WINDOW`
+    - `0031:MESSAGE 400102`
+    - `0034:ANIMW`
+    - `0035:WAIT`
+    - `0038:WINDOW`
+    - `0042:MESSAGE 400103`
+    - `0045:WAIT`
+    - `0048:WINDOW`
+    - `0052:MESSAGE 400104`
+    - `0055:WAIT`
+    - `0058:CANM!2`
+    - `005d:ANIMW`
+    - `005e:WINDOW`
+    - `0068:MESSAGE 400105`
+    - `006b:CANM!2`
+    - `0070:ANIMW`
+    - `0071:ANIM!2`
+    - `0074:ANIMW`
+    - `0075:DFANM`
+    - `0078:WAIT`
+    - `007b:ANIM!2`
+    - `007e:ANIMW`
+    - `007f:DFANM`
+    - `0082:WAIT`
+    - `0085:ANIME1`
+    - `0088:ANIMW`
+    - `0089:DFANM`
+    - `008c:WINDOW`
+    - `0096:MESSAGE 400106`
+    - `0099:ANIME1`
+    - `009c:WINDOW`
+    - `00a6:MESSAGE 400107`
+    - `00a9:ANIMW`
+    - `00aa:MOVE`
+    - `00b0:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:ANIME1`
+    - `000d:WINDOW`
+    - `0017:MESSAGE 400101`
+    - `001a:ANIMW`
+    - `001b:ANIME1`
+    - `001e:ANIME1`
+    - `0021:WINDOW`
+    - `002b:MESSAGE 400102`
+    - `002e:ANIMW`
+    - `002f:WAIT`
+    - `0032:WINDOW`
+    - `003c:MESSAGE 400103`
+    - `003f:WAIT`
+    - `0042:WINDOW`
+    - `004c:MESSAGE 400104`
+    - `004f:WAIT`
+    - `0052:CANM!2`
+    - `0057:ANIMW`
+    - `0058:WINDOW`
+    - `0062:MESSAGE 400105`
+    - `0065:CANM!2`
+    - `006a:ANIMW`
+    - `006b:ANIM!2`
+    - `006e:ANIMW`
+    - `006f:DFANM`
+    - `0072:WAIT`
+    - `0075:ANIM!2`
+    - `0078:ANIMW`
+    - `0079:DFANM`
+    - `007c:WAIT`
+    - `007f:ANIME1`
+    - `0082:ANIMW`
+    - `0083:DFANM`
+    - `0086:WINDOW`
+    - `0090:MESSAGE 400106`
+    - `0093:ANIME1`
+    - `0096:WINDOW`
+    - `00a0:MESSAGE 400107`
+    - `00a3:ANIMW`
+    - `00a4:MOVE`
+    - `00aa:RET`
+- **`cefiros/6`** len 13->17 (7b09b97157e1->ea83501bc4d8)
+  - D1:
+    - `0000:MOVE`
+    - `0006:TURNGEN`
+    - `000c:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:RET`
+    - `000b:TURNGEN`
+- **`cefiros/7`** len 24->28 (8b5e816c8635->0089a979712c)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:WINDOW`
+    - `000d:MESSAGE 400107`
+    - `0010:ANIMW`
+    - `0011:MOVE`
+    - `0017:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:RET`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 400107`
+    - `0018:ANIME1`
+    - `001b:ANIMW`
+- **`cloud/11`** len 13->17 (0b840c6395bc->bdc8f61d381e)
+  - D1:
+    - `0000:MOVE`
+    - `0006:MOVE`
+    - `000c:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MOVE`
+    - `0010:RET`
+- **`cloud/13`** len 12->5 (dc6639d7f9ed->1b0f6752fbcf)
+  - D1:
+    - `0000:TURA`
+    - `0004:ANIME1`
+    - `0007:ANIMW`
+    - `0008:WAIT`
+    - `000b:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`cloud/17`** len 21->5 (3fe5b8c37554->94af43902382)
+  - D1:
+    - `0000:TURA`
+    - `0004:ANIME1`
+    - `0007:WINDOW`
+    - `0011:MESSAGE 400125`
+    - `0014:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`cloud/3`** len 29->25 (4d187422e397->ee51366cf89f)
+  - D1:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:MSPED`
+    - `000a:MOVE`
+    - `0010:MOVE`
+    - `0016:UC`
+    - `0018:MENU2`
+    - `001a:MENU2`
+    - `001c:RET`
+  - SD:
+    - `0000:TLKON`
+    - `0002:SOLID`
+    - `0004:VISI`
+    - `0006:MOVE`
+    - `000c:MOVE`
+    - `0012:UC`
+    - `0014:MENU2`
+    - `0016:MENU2`
+    - `0018:RET`
+- **`hei1/3`** len 25->21 (052d4d018d47->3405aef938ed)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:WAIT`
+    - `000d:ANIME1`
+    - `0010:ANIMW`
+    - `0011:WAIT`
+    - `0014:TURA`
+    - `0018:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:WAIT`
+    - `0009:ANIME1`
+    - `000c:ANIMW`
+    - `000d:WAIT`
+    - `0010:TURA`
+    - `0014:RET`
+- **`hei1/31`** len 21->25 (d1bed231412d->a46939dc67f6)
+  - D1:
+    - `0000:MOVE`
+    - `0006:WAIT`
+    - `0009:ANIME1`
+    - `000c:ANIMW`
+    - `000d:WAIT`
+    - `0010:TURA`
+    - `0014:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:WAIT`
+    - `000d:ANIME1`
+    - `0010:ANIMW`
+    - `0011:WAIT`
+    - `0014:TURA`
+    - `0018:RET`
+- **`hei2/3`** len 15->11 (498a7e0dfc5c->fcce80a906fc)
+  - D1:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:TURA`
+    - `000e:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:RET`
+- **`hei2/31`** len 11->15 (b92835561b37->781be9503951)
+  - D1:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:TURA`
+    - `000e:RET`
+- **`line_jp/2`** len 118->116 (8ee9c8c7efe7->92cf24982fe1)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x180C=3E=64->006f`
+    - `000c:SETWORD 20/00=0x161`
+    - `0011:JMPF ->0064`
+    - `0013:FADE`
+    - `001c:FADEW`
+    - `001d:WINDOW`
+    - `0027:MESSAGE 400108`
+    - `002a:REQEW`
+    - `002d:REQEW`
+    - `0030:REQEW`
+    - `0033:WAIT`
+    - `0036:FADE`
+    - `003f:FADEW`
+    - `0040:REQEW`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 400109`
+    - `0050:REQEW`
+    - `0053:WINDOW`
+    - `005d:MESSAGE 40010a`
+    - `0060:WAIT`
+    - `0063:MAPJUMP #332`
+    - `006d:JMPF ->0076`
+    - `006f:UC`
+    - `0071:MENU2`
+    - `0073:MENU2`
+    - `0075:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:IFSW V=0x180C=3E=62->006d`
+    - `000c:SETWORD 20/00=0x161`
+    - `0011:FADE`
+    - `001a:FADEW`
+    - `001b:WINDOW`
+    - `0025:MESSAGE 400108`
+    - `0028:REQEW`
+    - `002b:REQEW`
+    - `002e:REQEW`
+    - `0031:WAIT`
+    - `0034:FADE`
+    - `003d:FADEW`
+    - `003e:REQEW`
+    - `0041:WINDOW`
+    - `004b:MESSAGE 400109`
+    - `004e:REQEW`
+    - `0051:WINDOW`
+    - `005b:MESSAGE 40010a`
+    - `005e:WAIT`
+    - `0061:MAPJUMP #332`
+    - `006b:JMPF ->0074`
+    - `006d:UC`
+    - `006f:MENU2`
+    - `0071:MENU2`
+    - `0073:RET`
+- **`tifa/1`** len 61->84 (5fefdf225369->f97abc77d6fd)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:TURA`
+    - `0008:ANIME1`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 40012c`
+    - `0018:WAIT`
+    - `001b:SOUND`
+    - `0020:NFADE`
+    - `0029:FADEW`
+    - `002a:WAIT`
+    - `002d:SOUND`
+    - `0032:MAPJUMP #290`
+    - `003c:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:TURA`
+    - `0008:WINDOW`
+    - `0012:MESSAGE 40012c`
+    - `0015:SOUND`
+    - `001a:NFADE`
+    - `0023:FADEW`
+    - `0024:WAIT`
+    - `0027:SOUND`
+    - `002c:MAPJUMP #293`
+    - `0036:MAPJUMP #290`
+    - `0040:RET`
+    - `0041:WINDOW`
+    - `004b:MESSAGE 40012c`
+    - `004e:WAIT`
+    - `0051:ANIME1`
+- **`tifa/5`** len 41->41 (19e4bf06b843->5ba46f8cdb56)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 40011c`
+    - `000d:TURA`
+    - `0011:CANM!2`
+    - `0016:WINDOW`
+    - `0020:MESSAGE 40011d`
+    - `0023:CANIM2`
+    - `0028:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+    - `0005:CANM!2`
+    - `000a:CANIM2`
+    - `000f:WINDOW`
+    - `0019:MESSAGE 40011c`
+    - `001c:WINDOW`
+    - `0026:MESSAGE 40011d`
+- **`tifa/9`** len 21->5 (2351205bce5c->1b0f6752fbcf)
+  - D1:
+    - `0000:TURA`
+    - `0004:ANIME1`
+    - `0007:WINDOW`
+    - `0011:MESSAGE 400124`
+    - `0014:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`zax/5`** len 13->17 (90c2b4917f36->a6f4ba1e9105)
+  - D1:
+    - `0000:MOVE`
+    - `0006:MOVE`
+    - `000c:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:MOVE`
+    - `0010:RET`
+
+#### SD vs CSR D2
+
+### NIVGATE2
+- D1 sha: 3d7f5df578fbf8da dec=11760
+- D2 sha: 82b58bf6d79950e6 dec=11704
+- SD sha: 8a9b09cf930e8193 dec=11704
+
+#### SD vs CSR D1
+
+#### SD vs CSR D2
+
+### NIVL_B22
+- D1 sha: a94747b70e42c392 dec=35356
+- D2 sha: ab1df5eabe74e1a7 dec=35144
+- SD sha: 566d038ed568e1d3 dec=35144
+
+#### SD vs CSR D1
+- **`cefirth/1`** len 239->239 (8ccc2be953b4->10fc8067bae8)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:TURA`
+    - `0008:IFUB A=15V=02C=9E=10->001d`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400119`
+    - `001b:JMPF ->00eb`
+    - `001d:WINDOW`
+    - `0027:MESSAGE 400112`
+    - `002a:REQEW`
+    - `002d:FADE`
+    - `0036:SOUND`
+    - `003b:XYZI`
+    - `0046:WAIT`
+    - `0049:FADE`
+    - `0052:SOUND`
+    - `0057:TURA`
+    - `005b:IFPRTYQ`
+    - `005e:REQSW`
+    - `0061:IFPRTYQ`
+    - `0064:REQSW`
+    - `0067:IFPRTYQ`
+    - `006a:REQSW`
+    - `006d:IFPRTYQ`
+    - `0070:REQSW`
+    - `0073:IFPRTYQ`
+    - `0076:REQSW`
+    - `0079:IFPRTYQ`
+    - `007c:REQSW`
+    - `007f:REQEW`
+    - `0082:REQEW`
+    - `0085:IFPRTYQ`
+    - `0088:REQSW`
+    - `008b:IFPRTYQ`
+    - `008e:REQSW`
+    - `0091:IFPRTYQ`
+    - `0094:REQSW`
+    - `0097:IFPRTYQ`
+    - `009a:REQSW`
+    - `009d:IFPRTYQ`
+    - `00a0:REQSW`
+    - `00a3:IFPRTYQ`
+    - `00a6:REQSW`
+    - `00a9:CANM!2`
+    - `00ae:WINDOW`
+    - `00b8:MESSAGE 400115`
+    - `00bb:CANM!2`
+    - `00c0:WINDOW`
+    - `00ca:MESSAGE 400116`
+    - `00cd:REQEW`
+    - `00d0:ANIME1`
+    - `00d3:WINDOW`
+    - `00dd:MESSAGE 400118`
+    - `00e0:WAIT`
+    - `00e3:REQEW`
+    - `00e6:BITON 30/15#2`
+    - `00ea:UC`
+    - `00ec:MENU2`
+    - `00ee:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:TURA`
+    - `0008:IFUB A=15V=02C=9E=10->001d`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400119`
+    - `001b:JMPF ->00c1`
+    - `001d:WINDOW`
+    - `0027:MESSAGE 400112`
+    - `002a:REQEW`
+    - `002d:FADE`
+    - `0036:SOUND`
+    - `003b:XYZI`
+    - `0046:WAIT`
+    - `0049:FADE`
+    - `0052:SOUND`
+    - `0057:TURA`
+    - `005b:IFPRTYQ`
+    - `005e:REQSW`
+    - `0061:IFPRTYQ`
+    - `0064:REQSW`
+    - `0067:IFPRTYQ`
+    - `006a:REQSW`
+    - `006d:IFPRTYQ`
+    - `0070:REQSW`
+    - `0073:IFPRTYQ`
+    - `0076:REQSW`
+    - `0079:IFPRTYQ`
+    - `007c:REQSW`
+    - `007f:REQEW`
+    - `0082:REQEW`
+    - `0085:IFPRTYQ`
+    - `0088:REQSW`
+    - `008b:IFPRTYQ`
+    - `008e:REQSW`
+    - `0091:IFPRTYQ`
+    - `0094:REQSW`
+    - `0097:IFPRTYQ`
+    - `009a:REQSW`
+    - `009d:IFPRTYQ`
+    - `00a0:REQSW`
+    - `00a3:IFPRTYQ`
+    - `00a6:REQSW`
+    - `00a9:ANIME1`
+    - `00ac:WINDOW`
+    - `00b6:MESSAGE 400118`
+    - `00b9:REQEW`
+    - `00bc:BITON 30/15#2`
+    - `00c0:UC`
+    - `00c2:MENU2`
+    - `00c4:RET`
+    - `00c5:WINDOW`
+    - `00cf:MESSAGE 400118`
+    - `00d2:WAIT`
+    - `00d5:WINDOW`
+    - `00df:MESSAGE 400112`
+    - `00e2:REQEW`
+    - `00e5:CANM!2`
+    - `00ea:CANM!2`
+- **`cefirth/5`** len 20->4 (6c9e8a016f06->76a0acd909eb)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:WINDOW`
+    - `000d:MESSAGE 400111`
+    - `0010:REQEW`
+    - `0013:RET`
+  - SD:
+    - `0000:REQEW`
+    - `0003:RET`
+- **`cefirth/6`** len 18->5 (7d276282783f->fa0ff367dfc2)
+  - D1:
+    - `0000:TURA`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 40011e`
+    - `0011:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`cefirth/7`** len 26->26 (b4e5ed5d2c4a->667abd8d6343)
+  - D1:
+    - `0000:TURNGEN`
+    - `0006:WINDOW`
+    - `0010:MESSAGE 40011f`
+    - `0013:TLKON`
+    - `0015:SOLID`
+    - `0017:VISI`
+    - `0019:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:TLKON`
+    - `0008:SOLID`
+    - `000a:VISI`
+    - `000c:RET`
+    - `000d:WINDOW`
+    - `0017:MESSAGE 40011f`
+- **`cid/3`** len 31->5 (08909a6a5c41->ceacd8773414)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 40020b`
+    - `000d:TURA`
+    - `0011:WINDOW`
+    - `001b:MESSAGE 40020c`
+    - `001e:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`cloud/10`** len 17->17 (ee0b9313a4af->ff4c3e0b1a88)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:WINDOW`
+    - `000d:MESSAGE 400220`
+    - `0010:RET`
+  - SD:
+    - `0000:ANIME1`
+    - `0003:RET`
+    - `0004:WINDOW`
+    - `000e:MESSAGE 400220`
+- **`cloud/11`** len 93->93 (48ff4bd92ce0->5db940c9aab6)
+  - D1:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:CANM!2`
+    - `000f:ANIMW`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400223`
+    - `001d:CANM!2`
+    - `0022:ANIMW`
+    - `0023:CANM!2`
+    - `0028:WINDOW`
+    - `0032:MESSAGE 400224`
+    - `0035:CANM!2`
+    - `003a:ANIMW`
+    - `003b:WINDOW`
+    - `0045:MESSAGE 400225`
+    - `0048:ANIME1`
+    - `004b:WINDOW`
+    - `0055:MESSAGE 400226`
+    - `0058:TURA`
+    - `005c:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:CANM!2`
+    - `000f:ANIMW`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400223`
+    - `001d:CANM!2`
+    - `0022:ANIMW`
+    - `0023:RET`
+    - `0024:CANM!2`
+    - `0029:WINDOW`
+    - `0033:MESSAGE 400224`
+    - `0036:CANM!2`
+    - `003b:ANIMW`
+    - `003c:WINDOW`
+    - `0046:MESSAGE 400225`
+    - `0049:ANIME1`
+    - `004c:WINDOW`
+    - `0056:MESSAGE 400226`
+    - `0059:TURA`
+- **`cloud/4`** len 39->20 (d14999da2a98->875536a90a58)
+  - D1:
+    - `0000:MOVE`
+    - `0006:ANIME1`
+    - `0009:WINDOW`
+    - `0013:MESSAGE 40020d`
+    - `0016:ANIME1`
+    - `0019:WINDOW`
+    - `0023:MESSAGE 40020e`
+    - `0026:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:RET`
+    - `0007:WINDOW`
+    - `0011:MESSAGE 40020e`
+- **`cloud/6`** len 27->24 (a09358af147a->aafddb086aa3)
+  - D1:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:ANIME1`
+    - `000d:WINDOW`
+    - `0017:MESSAGE 400210`
+    - `001a:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:RET`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 400210`
+- **`cloud/7`** len 44->7 (97c0b00e9097->cab662520fe8)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400213`
+    - `000d:TURNGEN`
+    - `0013:CANM!2`
+    - `0018:ANIMW`
+    - `0019:WINDOW`
+    - `0023:MESSAGE 400214`
+    - `0026:CANM!2`
+    - `002b:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:RET`
+- **`cloud/8`** len 27->27 (2b49bf1cd565->78ed2977e232)
+  - D1:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:ANIME1`
+    - `000d:WINDOW`
+    - `0017:MESSAGE 400217`
+    - `001a:RET`
+  - SD:
+    - `0000:MOVE`
+    - `0006:TURA`
+    - `000a:ANIME1`
+    - `000d:RET`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400217`
+- **`tifa/1`** len 219->284 (a11b2f03b866->1460f26654a8)
+  - D1:
+    - `0000:IFUB A=15V=03C=9E=58->005d`
+    - `0006:UC`
+    - `0008:MENU2`
+    - `000a:CANM!2`
+    - `000f:ANIMW`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400221`
+    - `001d:REQEW`
+    - `0020:TURA`
+    - `0024:ANIME1`
+    - `0027:WINDOW`
+    - `0031:MESSAGE 400227`
+    - `0034:REQEW`
+    - `0037:WINDOW`
+    - `0041:MESSAGE 400229`
+    - `0044:REQEW`
+    - `0047:TURA`
+    - `004b:WINDOW`
+    - `0055:MESSAGE 40022e`
+    - `0058:REQSW`
+    - `005b:JMPF ->00db`
+    - `005d:IFUB A=15V=02C=9E=63->00c5`
+    - `0063:UC`
+    - `0065:MENU2`
+    - `0067:WINDOW`
+    - `0071:MESSAGE 40021a`
+    - `0074:ANIME1`
+    - `0077:WINDOW`
+    - `0081:MESSAGE 40021b`
+    - `0084:REQEW`
+    - `0087:CANM!2`
+    - `008c:ANIMW`
+    - `008d:WINDOW`
+    - `0097:MESSAGE 40021c`
+    - `009a:REQSW`
+    - `009d:REQEW`
+    - `00a0:REQSW`
+    - `00a3:CANM!2`
+    - `00a8:ANIMW`
+    - `00a9:TURNGEN`
+    - `00af:CANM!2`
+    - `00b4:ANIMW`
+    - `00b5:REQEW`
+    - `00b8:REQEW`
+    - `00bb:BITON 30/15#3`
+    - `00bf:UC`
+    - `00c1:MENU2`
+    - `00c3:JMPF ->00db`
+    - `00c5:UC`
+    - `00c7:MENU2`
+    - `00c9:WINDOW`
+    - `00d3:MESSAGE 400221`
+    - `00d6:UC`
+    - `00d8:MENU2`
+    - `00da:RET`
+  - SD:
+    - `0000:IFUB A=15V=03C=9E=9d->00a2`
+    - `0006:UC`
+    - `0008:MENU2`
+    - `000a:SETWORD 20/00=0x31a`
+    - `000f:CANM!2`
+    - `0014:ANIMW`
+    - `0015:WINDOW`
+    - `001f:MESSAGE 400221`
+    - `0022:NFADE`
+    - `002b:FADEW`
+    - `002c:MAPJUMP #706`
+    - `0036:MAPJUMP #707`
+    - `0040:BITOFF f0/83#7`
+    - `0044:SETWORD 20/00=0x3e7`
+    - `0049:MENU`
+    - `004d:PRTYE`
+    - `0051:NFADE`
+    - `005a:FADEW`
+    - `005b:MAPJUMP #400`
+    - `0065:TURA`
+    - `0069:ANIME1`
+    - `006c:WINDOW`
+    - `0076:MESSAGE 400227`
+    - `0079:REQEW`
+    - `007c:WINDOW`
+    - `0086:MESSAGE 400229`
+    - `0089:REQEW`
+    - `008c:TURA`
+    - `0090:WINDOW`
+    - `009a:MESSAGE 40022e`
+    - `009d:REQSW`
+    - `00a0:JMPF ->011c`
+    - `00a2:IFUB A=15V=02C=9E=5f->0106`
+    - `00a8:UC`
+    - `00aa:MENU2`
+    - `00ac:WINDOW`
+    - `00b6:MESSAGE 40021a`
+    - `00b9:JMPF ->00e2`
+    - `00bb:ANIME1`
+    - `00be:WINDOW`
+    - `00c8:MESSAGE 40021b`
+    - `00cb:REQEW`
+    - `00ce:CANM!2`
+    - `00d3:ANIMW`
+    - `00d4:WINDOW`
+    - `00de:MESSAGE 40021c`
+    - `00e1:REQEW`
+    - `00e4:CANM!2`
+    - `00e9:ANIMW`
+    - `00ea:TURNGEN`
+    - `00f0:CANM!2`
+    - `00f5:ANIMW`
+    - `00f6:REQEW`
+    - `00f9:REQEW`
+    - `00fc:BITON 30/15#3`
+    - `0100:UC`
+    - `0102:MENU2`
+    - `0104:JMPF ->011c`
+    - `0106:UC`
+    - `0108:MENU2`
+    - `010a:WINDOW`
+    - `0114:MESSAGE 400221`
+    - `0117:UC`
+    - `0119:MENU2`
+    - `011b:RET`
+
+#### SD vs CSR D2
+
+### RCKTBAS1
+- D1 sha: ff195b70e881988c dec=55096
+- D2 sha: dcdaad9232ba4746 dec=55028
+- SD sha: f1dcdfefbf172c8f dec=55028
+
+#### SD vs CSR D1
+- **`cid/4`** len 86->88 (20558bb99bf5->6b34f70556de)
+  - D1:
+    - `0000:XYZI`
+    - `000b:SOLID`
+    - `000d:SLIDR`
+    - `0010:TLKON`
+    - `0012:SOLID`
+    - `0014:VISI`
+    - `0016:MSPED`
+    - `001a:MOVE`
+    - `0020:ANIME2`
+    - `0023:WINDOW`
+    - `002d:MESSAGE 400245`
+    - `0030:ANIME2`
+    - `0033:TURNGEN`
+    - `0039:ANIME2`
+    - `003c:WINDOW`
+    - `0046:MESSAGE 400246`
+    - `0049:MOVE`
+    - `004f:TLKON`
+    - `0051:SOLID`
+    - `0053:VISI`
+    - `0055:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:SOLID`
+    - `000d:SLIDR`
+    - `0010:TLKON`
+    - `0012:SOLID`
+    - `0014:VISI`
+    - `0016:MSPED`
+    - `001a:MOVE`
+    - `0020:JMPF ->0036`
+    - `0022:ANIME2`
+    - `0025:WINDOW`
+    - `002f:MESSAGE 400245`
+    - `0032:ANIME2`
+    - `0035:TURNGEN`
+    - `003b:WINDOW`
+    - `0045:MESSAGE 400246`
+    - `0048:MOVE`
+    - `004e:TLKON`
+    - `0050:SOLID`
+    - `0052:VISI`
+    - `0054:RET`
+    - `0055:ANIME2`
+
+#### SD vs CSR D2
+
+### RCKTBAS2
+- D1 sha: 2deeb1ab06f0d2e1 dec=49428
+- D2 sha: c399a2a3c804a76b dec=49364
+- SD sha: 41d91458b735f1c8 dec=49364
+
+#### SD vs CSR D1
+- **`lude/31`** len 135->137 (77cbcf1d5fb3->16947d099593)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 40014b`
+    - `000d:MOVE`
+    - `0013:TURA`
+    - `0017:ANIM!1`
+    - `001a:WINDOW`
+    - `0024:MESSAGE 40014c`
+    - `0027:REQ`
+    - `002a:REQ`
+    - `002d:WAIT`
+    - `0030:AKAO`
+    - `003e:WAIT`
+    - `0041:BTLMD`
+    - `0044:BATTLE`
+    - `0048:FADE`
+    - `0051:ANIME1`
+    - `0054:REQ`
+    - `0057:REQ`
+    - `005a:FADE`
+    - `0063:FADEW`
+    - `0064:WAIT`
+    - `0067:ANIM!1`
+    - `006a:FMOVE`
+    - `0070:TURNGEN`
+    - `0076:WAIT`
+    - `0079:WINDOW`
+    - `0083:MESSAGE 40014d`
+    - `0086:RET`
+  - SD:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 40014b`
+    - `000d:MOVE`
+    - `0013:TURA`
+    - `0017:JMPF ->0044`
+    - `0019:ANIM!1`
+    - `001c:WINDOW`
+    - `0026:MESSAGE 40014c`
+    - `0029:REQ`
+    - `002c:REQ`
+    - `002f:WAIT`
+    - `0032:AKAO`
+    - `0040:WAIT`
+    - `0043:BTLMD`
+    - `0046:BATTLE`
+    - `004a:FADE`
+    - `0053:ANIME1`
+    - `0056:REQ`
+    - `0059:REQ`
+    - `005c:FADE`
+    - `0065:FADEW`
+    - `0066:WAIT`
+    - `0069:ANIM!1`
+    - `006c:FMOVE`
+    - `0072:TURNGEN`
+    - `0078:WAIT`
+    - `007b:WINDOW`
+    - `0085:MESSAGE 40014d`
+    - `0088:RET`
+
+#### SD vs CSR D2
+
+### RCKTIN2
+- D1 sha: c79b80f2d84f2298 dec=35656
+- D2 sha: 91ca3a56eeee1632 dec=35656
+- SD sha: 2dec715a93b575cb dec=35656
+
+#### SD vs CSR D1
+- **`cid/1`** len 656->653 (478474b9c512->9ecf636d79e2)
+  - D1 interesting (57):
+    - `0000:IFUB A=0aV=03C=0E=04->0009`
+    - `0006:RET`
+    - `0007:JMPF ->00ea`
+    - `0009:IFUB A=0dV=01C=0E=0f->001d`
+    - `0019:MESSAGE 40021c`
+    - `001c:RET`
+    - `001d:SETBYTE 50/0a=0x1`
+    - `002e:IFUB A=82V=02C=10E=38->006b`
+    - `0034:REQ`
+    - `0041:MESSAGE 400207`
+    - `0044:BITON 30/82#2`
+    - `0048:SETWORD 20/00=0x21a`
+    - `004d:REQEW`
+    - `0050:IFUB A=0eV=00C=0E=03->0058`
+    - `005b:REQ`
+    - `0063:IFUB A=11V=00C=0E=03->006b`
+    - `006b:SETBYTE 50/0b=0x2`
+    - `007c:ASK 4805020b02040b`
+    - `0083:IFUB A=0bV=03C=0E=2d->00b5`
+    - `0089:SETBYTE 50/11=0x0`
+    - `008d:REQ`
+    - `0098:IFUB A=11V=00C=0E=03->00a0`
+    - `00b3:JMPF ->00e6`
+    - `00b5:IFUB A=0bV=04C=0E=23->00dd`
+    - `00c8:MESSAGE 40021a`
+    - `00db:JMPF ->00e6`
+    - `00dd:JMPFL`
+    - `00e4:RET`
+    - `00e5:SETBYTE 50/0a=0x0`
+    - `00e9:RET`
+    - `00ea:IFUB A=82V=06C=9E=1d->010c`
+    - `00fa:MESSAGE 40021b`
+    - `0107:SETBYTE 50/0a=0x0`
+    - `010b:RET`
+    - `010c:SETBYTE 50/11=0x0`
+    - `0110:REQ`
+    - `0113:BITON 30/82#6`
+    - `0117:REQ`
+    - `0122:IFUB A=11V=00C=0E=03->012a`
+    - `012a:JMPFL`
+    - `013a:MESSAGE 40020d`
+    - `014d:MESSAGE 40020e`
+    - `0150:REQEW`
+    - `015d:MESSAGE 40020f`
+    - `016d:MESSAGE 400210`
+    - `0171:REQ`
+    - `018f:IFUB A=0cV=00C=0E=03->0197`
+    - `01b3:MESSAGE 400212`
+    - `01db:MESSAGE 400213`
+    - `01f5:MESSAGE 400214`
+    - `020b:MESSAGE 400215`
+    - `0211:REQ`
+    - `021c:IFUB A=11V=01C=0E=03->0224`
+    - `0240:MESSAGE 400217`
+    - `0253:MESSAGE 400218`
+    - `0274:MESSAGE 40021c`
+    - `028a:MESSAGE 40020a`
+  - SD interesting (56):
+    - `0000:IFUB A=0aV=03C=0E=04->0009`
+    - `0006:RET`
+    - `0007:JMPF ->00fd`
+    - `0009:IFUB A=0dV=01C=0E=0f->001d`
+    - `0019:MESSAGE 40021c`
+    - `001c:RET`
+    - `001d:SETBYTE 50/0a=0x1`
+    - `002e:IFUB A=82V=02C=10E=4b->007e`
+    - `0034:REQ`
+    - `0041:MESSAGE 400207`
+    - `0044:BITON 30/82#2`
+    - `0048:SETWORD 20/00=0x21a`
+    - `004d:REQEW`
+    - `0050:IFUB A=0eV=00C=0E=03->0058`
+    - `005b:REQ`
+    - `0063:IFUB A=11V=00C=0E=03->006b`
+    - `0078:MESSAGE 40020a`
+    - `007e:SETBYTE 50/0b=0x2`
+    - `008f:ASK 4805020b02040b`
+    - `0096:IFUB A=0bV=03C=0E=2d->00c8`
+    - `009c:SETBYTE 50/11=0x0`
+    - `00a0:REQ`
+    - `00ab:IFUB A=11V=00C=0E=03->00b3`
+    - `00c6:JMPF ->00f9`
+    - `00c8:IFUB A=0bV=04C=0E=23->00f0`
+    - `00db:MESSAGE 40021a`
+    - `00ee:JMPF ->00f9`
+    - `00f0:JMPFL`
+    - `00f7:RET`
+    - `00f8:SETBYTE 50/0a=0x0`
+    - `00fc:RET`
+    - `00fd:IFUB A=82V=06C=9E=1d->011f`
+    - `010d:MESSAGE 40021b`
+    - `011a:SETBYTE 50/0a=0x0`
+    - `011e:RET`
+    - `011f:SETBYTE 50/11=0x0`
+    - `0123:REQ`
+    - `0126:BITON 30/82#6`
+    - `012a:REQ`
+    - `0135:IFUB A=11V=00C=0E=03->013d`
+    - `014a:MESSAGE 40020d`
+    - `015d:MESSAGE 40020e`
+    - `0160:REQEW`
+    - `016d:MESSAGE 40020f`
+    - `017d:MESSAGE 400210`
+    - `0181:REQ`
+    - `019f:IFUB A=0cV=00C=0E=03->01a7`
+    - `01c3:MESSAGE 400212`
+    - `01eb:MESSAGE 400213`
+    - `0205:MESSAGE 400214`
+    - `021b:MESSAGE 400215`
+    - `0221:REQ`
+    - `022c:IFUB A=11V=01C=0E=03->0234`
+    - `0250:MESSAGE 400217`
+    - `0263:MESSAGE 400218`
+    - `0284:MESSAGE 40021c`
+  - opcode counts: JMPFL:2->1
+- **`leader/0`** len 184->186 (5630ce5abc65->fffaa6ad6a5a)
+  - D1:
+    - `0000:CHAR`
+    - `0002:IFSW V=0x522C=3E=2d->0036`
+    - `000a:IFUB A=85V=01C=9E=1f->002e`
+    - `0010:IFUB A=85V=02C=9E=11->0026`
+    - `0016:XYZI`
+    - `0021:DIR`
+    - `0024:JMPF ->002d`
+    - `0026:TLKON`
+    - `0028:SOLID`
+    - `002a:VISI`
+    - `002c:JMPF ->0035`
+    - `002e:TLKON`
+    - `0030:SOLID`
+    - `0032:VISI`
+    - `0034:JMPF ->003d`
+    - `0036:TLKON`
+    - `0038:SOLID`
+    - `003a:VISI`
+    - `003c:RET`
+    - `003d:SLIDR`
+    - `0040:IFUB A=85V=01C=9E=72->00b7`
+    - `0046:IFUB A=85V=02C=9E=6c->00b7`
+    - `004c:IFUB A=85V=03C=10E=61->00b2`
+    - `0052:UC`
+    - `0054:MENU2`
+    - `0056:BITON 30/85#3`
+    - `005a:FADEW`
+    - `005b:WAIT`
+    - `005e:REQ`
+    - `0061:ANIME2`
+    - `0064:WINDOW`
+    - `006e:MESSAGE 400349`
+    - `0071:REQEW`
+    - `0074:WAIT`
+    - `0077:ANIM!1`
+    - `007a:WINDOW`
+    - `0084:MESSAGE 40034b`
+    - `0087:WAIT`
+    - `008a:BTLMD`
+    - `008d:BATTLE`
+    - `0091:FADE`
+    - `009a:BLINK`
+    - `009c:ANIM!2`
+    - `009f:WAIT`
+    - `00a2:FADE`
+    - `00ab:FADEW`
+    - `00ac:UC`
+    - `00ae:MENU2`
+    - `00b0:JMPF ->00b8`
+    - `00b2:BLINK`
+    - `00b4:DFANM`
+    - `00b7:RET`
+  - SD:
+    - `0000:CHAR`
+    - `0002:IFSW V=0x522C=3E=2d->0036`
+    - `000a:IFUB A=85V=01C=9E=1f->002e`
+    - `0010:IFUB A=85V=02C=9E=11->0026`
+    - `0016:XYZI`
+    - `0021:DIR`
+    - `0024:JMPF ->002d`
+    - `0026:TLKON`
+    - `0028:SOLID`
+    - `002a:VISI`
+    - `002c:JMPF ->0035`
+    - `002e:TLKON`
+    - `0030:SOLID`
+    - `0032:VISI`
+    - `0034:JMPF ->003d`
+    - `0036:TLKON`
+    - `0038:SOLID`
+    - `003a:VISI`
+    - `003c:RET`
+    - `003d:SLIDR`
+    - `0040:IFUB A=85V=01C=9E=74->00b9`
+    - `0046:IFUB A=85V=02C=9E=6e->00b9`
+    - `004c:IFUB A=85V=03C=10E=63->00b4`
+    - `0052:UC`
+    - `0054:MENU2`
+    - `0056:BITON 30/85#3`
+    - `005a:FADEW`
+    - `005b:WAIT`
+    - `005e:REQ`
+    - `0061:ANIME2`
+    - `0064:WINDOW`
+    - `006e:MESSAGE 400349`
+    - `0071:JMPF ->008a`
+    - `0073:REQEW`
+    - `0076:WAIT`
+    - `0079:ANIM!1`
+    - `007c:WINDOW`
+    - `0086:MESSAGE 40034b`
+    - `0089:WAIT`
+    - `008c:BTLMD`
+    - `008f:BATTLE`
+    - `0093:FADE`
+    - `009c:BLINK`
+    - `009e:ANIM!2`
+    - `00a1:WAIT`
+    - `00a4:FADE`
+    - `00ad:FADEW`
+    - `00ae:UC`
+    - `00b0:MENU2`
+    - `00b2:JMPF ->00ba`
+    - `00b4:BLINK`
+    - `00b6:DFANM`
+    - `00b9:RET`
+
+#### SD vs CSR D2
+
+### RCKTIN6
+- D1 sha: eb3a5b64cee9d97c dec=32340
+- D2 sha: f18813b89ac18aa1 dec=32308
+- SD sha: 11abff9bf1ef694d dec=32308
+
+#### SD vs CSR D1
+- **`event2/4`** len 118->118 (44ffa61c976c->011d66b98c61)
+  - D1:
+    - `0000:IFUB A=87V=07C=10E=71->0076`
+    - `0006:BITON 30/87#7`
+    - `000a:UC`
+    - `000c:MENU2`
+    - `000e:PMJMP`
+    - `0011:AKAO`
+    - `001f:REQ`
+    - `0022:WAIT`
+    - `0025:SHAKE`
+    - `002d:AKAO`
+    - `003b:AKAO`
+    - `0049:NFADE`
+    - `0052:REQ`
+    - `0055:FADEW`
+    - `0056:BITON 30/88#0`
+    - `005a:MUSIC id=3`
+    - `005c:AKAO`
+    - `006a:MULCK`
+    - `006c:MAPJUMP #565`
+  - SD:
+    - `0000:IFUB A=87V=07C=10E=71->0076`
+    - `0006:BITON 30/87#7`
+    - `000a:UC`
+    - `000c:MENU2`
+    - `000e:PMJMP`
+    - `0011:AKAO`
+    - `001f:REQ`
+    - `0022:WAIT`
+    - `0025:SHAKE`
+    - `002d:AKAO`
+    - `003b:AKAO`
+    - `0049:NFADE`
+    - `0052:REQ`
+    - `0055:FADEW`
+    - `0056:MUSIC id=3`
+    - `0058:AKAO`
+    - `0066:MULCK`
+    - `0068:MAPJUMP #565`
+    - `0072:BITON 30/88#0`
+
+#### SD vs CSR D2
+
+### SEMKIN_4
+- D1 sha: 6e080d6641c54eda dec=44220
+- D2 sha: e8e40a80a88bcb1c dec=43792
+- SD sha: 2e9f63fd9b33c4d1 dec=43792
+
+#### SD vs CSR D1
+- **`init/31`** len 433->438 (407aef7b39c0->82592b432e3f)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:AKAO`
+    - `0012:REQEW`
+    - `0015:WINDOW`
+    - `001f:MESSAGE 40000f`
+    - `0022:SPLIT`
+    - `0031:REQSW`
+    - `0034:SCR2DC`
+    - `003d:SCRLW`
+    - `003e:REQEW`
+    - `0041:IFPRTYQ`
+    - `0044:REQEW`
+    - `0047:IFUB A=0aV=05C=0E=0d->0059`
+    - `004d:WINDOW`
+    - `0057:JMPF ->0064`
+    - `0059:WINDOW`
+    - `0063:MESSAGE 400010`
+    - `0066:AKAO`
+    - `0074:AKAO`
+    - `0082:AKAO`
+    - `0090:AKAO`
+    - `009e:REQEW`
+    - `00a1:AKAO`
+    - `00af:REQEW`
+    - `00b2:MUSIC id=3`
+    - `00b4:AKAO`
+    - `00c2:MUSIC id=0`
+    - `00c4:SCRLC`
+    - `00c9:SCRLW`
+    - `00ca:SCRCC`
+    - `00cb:IFPRTYQ`
+    - `00ce:REQEW`
+    - `00d1:IFUB A=0aV=01C=0E=0d->00e3`
+    - `00d7:WINDOW`
+    - `00e1:JMPF ->00ee`
+    - `00e3:WINDOW`
+    - `00ed:MESSAGE 400011`
+    - `00f0:IFPRTYQ`
+    - `00f3:REQEW`
+    - `00f6:IFUB A=0aV=02C=0E=0d->0108`
+    - `00fc:WINDOW`
+    - `0106:JMPF ->0113`
+    - `0108:WINDOW`
+    - `0112:MESSAGE 400012`
+    - `0115:IFPRTYQ`
+    - `0118:REQEW`
+    - `011b:IFUB A=0aV=08C=0E=0d->012d`
+    - `0121:WINDOW`
+    - `012b:JMPF ->0138`
+    - `012d:WINDOW`
+    - `0137:MESSAGE 400013`
+    - `013a:IFPRTYQ`
+    - `013d:IFUB A=0aV=07C=0E=0d->014f`
+    - `0143:WINDOW`
+    - `014d:JMPF ->015a`
+    - `014f:WINDOW`
+    - `0159:MESSAGE 400014`
+    - `015c:IFPRTYQ`
+    - `015f:REQEW`
+    - `0162:IFUB A=0aV=06C=0E=0d->0174`
+    - `0168:WINDOW`
+    - `0172:JMPF ->017f`
+    - `0174:WINDOW`
+    - `017e:MESSAGE 400015`
+    - `0181:IFPRTYQ`
+    - `0184:REQEW`
+    - `0187:IFUB A=0aV=04C=0E=0d->0199`
+    - `018d:WINDOW`
+    - `0197:JMPF ->01a4`
+    - `0199:WINDOW`
+    - `01a3:MESSAGE 400016`
+    - `01a6:BITON f0/84#2`
+    - `01aa:JOIN`
+    - `01ac:UC`
+    - `01ae:MENU2`
+    - `01b0:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:AKAO`
+    - `0012:REQEW`
+    - `0015:WINDOW`
+    - `001f:MESSAGE 40000f`
+    - `0022:SPLIT`
+    - `0031:JMPFL`
+    - `0034:REQSW`
+    - `0037:SCR2DC`
+    - `0040:SCRLW`
+    - `0041:REQEW`
+    - `0044:IFPRTYQ`
+    - `0047:REQEW`
+    - `004a:IFUB A=0aV=05C=0E=0d->005c`
+    - `0050:WINDOW`
+    - `005a:JMPF ->0067`
+    - `005c:WINDOW`
+    - `0066:MESSAGE 400010`
+    - `0069:AKAO`
+    - `0077:AKAO`
+    - `0085:AKAO`
+    - `0093:AKAO`
+    - `00a1:REQEW`
+    - `00a4:AKAO`
+    - `00b2:REQEW`
+    - `00b5:MUSIC id=3`
+    - `00b7:AKAO`
+    - `00c5:MUSIC id=0`
+    - `00c7:JMPF ->00d0`
+    - `00c9:SCRLC`
+    - `00ce:SCRLW`
+    - `00cf:SCRCC`
+    - `00d0:IFPRTYQ`
+    - `00d3:IFUB A=0aV=01C=0E=0d->00e5`
+    - `00d9:WINDOW`
+    - `00e3:JMPF ->00f0`
+    - `00e5:WINDOW`
+    - `00ef:MESSAGE 400011`
+    - `00f2:IFPRTYQ`
+    - `00f5:IFUB A=0aV=02C=0E=0d->0107`
+    - `00fb:WINDOW`
+    - `0105:JMPF ->0112`
+    - `0107:WINDOW`
+    - `0111:MESSAGE 400012`
+    - `0114:IFPRTYQ`
+    - `0117:IFUB A=0aV=08C=0E=0d->0129`
+    - `011d:WINDOW`
+    - `0127:JMPF ->0134`
+    - `0129:WINDOW`
+    - `0133:MESSAGE 400013`
+    - `0136:IFPRTYQ`
+    - `0139:IFUB A=0aV=07C=0E=0d->014b`
+    - `013f:WINDOW`
+    - `0149:JMPF ->0156`
+    - `014b:WINDOW`
+    - `0155:MESSAGE 400014`
+    - `0158:IFPRTYQ`
+    - `015b:IFUB A=0aV=06C=0E=0d->016d`
+    - `0161:WINDOW`
+    - `016b:JMPF ->0178`
+    - `016d:WINDOW`
+    - `0177:MESSAGE 400015`
+    - `017a:IFPRTYQ`
+    - `017d:IFUB A=0aV=04C=0E=0d->018f`
+    - `0183:WINDOW`
+    - `018d:JMPF ->019a`
+    - `018f:WINDOW`
+    - `0199:MESSAGE 400016`
+    - `019c:BITON f0/84#2`
+    - `01a0:JOIN`
+    - `01a2:UC`
+    - `01a4:MENU2`
+    - `01a6:RET`
+    - `01a7:REQEW`
+    - `01aa:REQEW`
+    - `01ad:REQEW`
+    - `01b0:REQEW`
+    - `01b3:REQEW`
+
+#### SD vs CSR D2
+
+### SEMKIN_5
+- D1 sha: 47b42ac7888bbf34 dec=43156
+- D2 sha: 475e0584b7feb1d7 dec=42736
+- SD sha: b5d5d6a5a1c1217d dec=42736
+
+#### SD vs CSR D1
+- **`init/0`** len 152->156 (405f95bbaad4->6e2125d052b2)
+  - D1:
+    - `0000:MPNAM`
+    - `0002:MUSIC id=0`
+    - `0004:BMUSC`
+    - `0006:AKAO`
+    - `0014:RET`
+    - `0015:UC`
+    - `0017:MENU2`
+    - `0019:FADE`
+    - `0022:REQEW`
+    - `0025:REQEW`
+    - `0028:REQEW`
+    - `002b:REQEW`
+    - `002e:FADE`
+    - `0037:FADEW`
+    - `0038:IFUB A=86V=06C=10E=56->0093`
+    - `003e:WINDOW`
+    - `0048:MESSAGE 400017`
+    - `004b:REQEW`
+    - `004e:SCR2DC`
+    - `0057:REQSW`
+    - `005a:REQEW`
+    - `005d:AKAO`
+    - `006b:REQEW`
+    - `006e:AKAO`
+    - `007c:WAIT`
+    - `007f:REQSW`
+    - `0082:SCRLC`
+    - `0087:SCRLW`
+    - `0088:SCRCC`
+    - `0089:REQEW`
+    - `008c:REQEW`
+    - `008f:BITON f0/86#6`
+    - `0093:UC`
+    - `0095:MENU2`
+    - `0097:RET`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:MUSIC id=0`
+    - `0004:BMUSC`
+    - `0006:AKAO`
+    - `0014:RET`
+    - `0015:UC`
+    - `0017:MENU2`
+    - `0019:FADE`
+    - `0022:REQEW`
+    - `0025:REQEW`
+    - `0028:REQEW`
+    - `002b:REQEW`
+    - `002e:FADE`
+    - `0037:FADEW`
+    - `0038:IFUB A=86V=06C=10E=5a->0097`
+    - `003e:WINDOW`
+    - `0048:MESSAGE 400017`
+    - `004b:REQEW`
+    - `004e:SCR2DC`
+    - `0057:REQSW`
+    - `005a:JMPF ->0060`
+    - `005c:REQEW`
+    - `005f:AKAO`
+    - `006d:REQEW`
+    - `0070:AKAO`
+    - `007e:JMPF ->0087`
+    - `0080:WAIT`
+    - `0083:REQSW`
+    - `0086:SCRLC`
+    - `008b:SCRLW`
+    - `008c:SCRCC`
+    - `008d:REQEW`
+    - `0090:REQEW`
+    - `0093:BITON f0/86#6`
+    - `0097:UC`
+    - `0099:MENU2`
+    - `009b:RET`
+- **`init/31`** len 452->458 (ec84436c41c9->2cd68a01d198)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:SCR2DC`
+    - `000d:SCRLW`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400018`
+    - `001b:REQEW`
+    - `001e:REQEW`
+    - `0021:WINDOW`
+    - `002b:MESSAGE 400019`
+    - `002e:WAIT`
+    - `0031:IFPRTYQ`
+    - `0034:REQEW`
+    - `0037:IFUB A=0aV=01C=0E=10->004c`
+    - `003d:WINDOW`
+    - `0047:MESSAGE 40001a`
+    - `004a:JMPF ->005a`
+    - `004c:WINDOW`
+    - `0056:MESSAGE 40001a`
+    - `0059:IFPRTYQ`
+    - `005c:REQEW`
+    - `005f:IFUB A=0aV=07C=0E=10->0074`
+    - `0065:WINDOW`
+    - `006f:MESSAGE 40001c`
+    - `0072:JMPF ->0082`
+    - `0074:WINDOW`
+    - `007e:MESSAGE 40001c`
+    - `0081:IFPRTYQ`
+    - `0084:REQEW`
+    - `0087:IFUB A=0aV=04C=0E=10->009c`
+    - `008d:WINDOW`
+    - `0097:MESSAGE 40001b`
+    - `009a:JMPF ->00aa`
+    - `009c:WINDOW`
+    - `00a6:MESSAGE 40001b`
+    - `00a9:IFPRTYQ`
+    - `00ac:REQEW`
+    - `00af:IFUB A=0aV=08C=0E=10->00c4`
+    - `00b5:WINDOW`
+    - `00bf:MESSAGE 40001d`
+    - `00c2:JMPF ->00d2`
+    - `00c4:WINDOW`
+    - `00ce:MESSAGE 40001d`
+    - `00d1:IFPRTYQ`
+    - `00d4:REQEW`
+    - `00d7:IFUB A=0aV=02C=0E=10->00ec`
+    - `00dd:WINDOW`
+    - `00e7:MESSAGE 40001e`
+    - `00ea:JMPF ->00fa`
+    - `00ec:WINDOW`
+    - `00f6:MESSAGE 40001e`
+    - `00f9:IFPRTYQ`
+    - `00fc:REQEW`
+    - `00ff:IFUB A=0aV=05C=0E=10->0114`
+    - `0105:WINDOW`
+    - `010f:MESSAGE 40001f`
+    - `0112:JMPF ->0122`
+    - `0114:WINDOW`
+    - `011e:MESSAGE 40001f`
+    - `0121:WINDOW`
+    - `012b:MESSAGE 400020`
+    - `012e:REQEW`
+    - `0131:WINDOW`
+    - `013b:MESSAGE 400021`
+    - `013e:WAIT`
+    - `0141:REQEW`
+    - `0144:WINDOW`
+    - `014e:MESSAGE 400022`
+    - `0151:PRQSW`
+    - `0154:PREQ`
+    - `0157:PRQEW`
+    - `015a:REQEW`
+    - `015d:SETBYTE 50/06=0x1`
+    - `0161:REQEW`
+    - `0164:SETBYTE 50/06=0x0`
+    - `0168:REQSW`
+    - `016b:WINDOW`
+    - `0175:MESSAGE 400023`
+    - `0178:REQSW`
+    - `017b:AKAO`
+    - `0189:REQEW`
+    - `018c:AKAO`
+    - `019a:WAIT`
+    - `019d:MUSIC id=1`
+    - `019f:FMUSC`
+    - `01a1:BTLMD`
+    - `01a4:BATTLE`
+    - `01a8:FADE`
+    - `01b1:BITON f0/85#1`
+    - `01b5:MAPJUMP #426`
+    - `01bf:UC`
+    - `01c1:MENU2`
+    - `01c3:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:SCR2DC`
+    - `000d:SCRLW`
+    - `000e:WINDOW`
+    - `0018:MESSAGE 400018`
+    - `001b:REQEW`
+    - `001e:WAIT`
+    - `0021:JMPFL`
+    - `0024:REQEW`
+    - `0027:WINDOW`
+    - `0031:MESSAGE 400019`
+    - `0034:WAIT`
+    - `0037:IFPRTYQ`
+    - `003a:REQEW`
+    - `003d:IFUB A=0aV=01C=0E=10->0052`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40001a`
+    - `0050:JMPF ->0060`
+    - `0052:WINDOW`
+    - `005c:MESSAGE 40001a`
+    - `005f:IFPRTYQ`
+    - `0062:REQEW`
+    - `0065:IFUB A=0aV=07C=0E=10->007a`
+    - `006b:WINDOW`
+    - `0075:MESSAGE 40001c`
+    - `0078:JMPF ->0088`
+    - `007a:WINDOW`
+    - `0084:MESSAGE 40001c`
+    - `0087:IFPRTYQ`
+    - `008a:REQEW`
+    - `008d:IFUB A=0aV=04C=0E=10->00a2`
+    - `0093:WINDOW`
+    - `009d:MESSAGE 40001b`
+    - `00a0:JMPF ->00b0`
+    - `00a2:WINDOW`
+    - `00ac:MESSAGE 40001b`
+    - `00af:IFPRTYQ`
+    - `00b2:REQEW`
+    - `00b5:IFUB A=0aV=08C=0E=10->00ca`
+    - `00bb:WINDOW`
+    - `00c5:MESSAGE 40001d`
+    - `00c8:JMPF ->00d8`
+    - `00ca:WINDOW`
+    - `00d4:MESSAGE 40001d`
+    - `00d7:IFPRTYQ`
+    - `00da:REQEW`
+    - `00dd:IFUB A=0aV=02C=0E=10->00f2`
+    - `00e3:WINDOW`
+    - `00ed:MESSAGE 40001e`
+    - `00f0:JMPF ->0100`
+    - `00f2:WINDOW`
+    - `00fc:MESSAGE 40001e`
+    - `00ff:IFPRTYQ`
+    - `0102:REQEW`
+    - `0105:IFUB A=0aV=05C=0E=10->011a`
+    - `010b:WINDOW`
+    - `0115:MESSAGE 40001f`
+    - `0118:JMPF ->0128`
+    - `011a:WINDOW`
+    - `0124:MESSAGE 40001f`
+    - `0127:WINDOW`
+    - `0131:MESSAGE 400020`
+    - `0134:REQEW`
+    - `0137:WINDOW`
+    - `0141:MESSAGE 400021`
+    - `0144:WAIT`
+    - `0147:REQEW`
+    - `014a:WINDOW`
+    - `0154:MESSAGE 400022`
+    - `0157:PRQSW`
+    - `015a:PREQ`
+    - `015d:PRQEW`
+    - `0160:REQEW`
+    - `0163:SETBYTE 50/06=0x1`
+    - `0167:REQEW`
+    - `016a:SETBYTE 50/06=0x0`
+    - `016e:REQSW`
+    - `0171:WINDOW`
+    - `017b:MESSAGE 400023`
+    - `017e:REQSW`
+    - `0181:AKAO`
+    - `018f:REQEW`
+    - `0192:AKAO`
+    - `01a0:WAIT`
+    - `01a3:MUSIC id=1`
+    - `01a5:FMUSC`
+    - `01a7:BTLMD`
+    - `01aa:BATTLE`
+    - `01ae:FADE`
+    - `01b7:BITON f0/85#1`
+    - `01bb:MAPJUMP #426`
+    - `01c5:UC`
+    - `01c7:MENU2`
+    - `01c9:RET`
+- **`materia/31`** len 40->42 (e2205abdd381->442b1eeaa922)
+  - D1:
+    - `0000:OFST`
+    - `000c:WAIT`
+    - `000f:WAIT`
+    - `0012:OFST`
+    - `001e:WAIT`
+    - `0021:TLKON`
+    - `0023:SOLID`
+    - `0025:VISI`
+    - `0027:RET`
+  - SD:
+    - `0000:JMPF ->0024`
+    - `0002:OFST`
+    - `000e:WAIT`
+    - `0011:WAIT`
+    - `0014:OFST`
+    - `0020:WAIT`
+    - `0023:TLKON`
+    - `0025:SOLID`
+    - `0027:VISI`
+    - `0029:RET`
+
+#### SD vs CSR D2
+
+### SHPIN_3
+- D1 sha: af8d943fd24f7973 dec=34516
+- D2 sha: 9735ea1ee9e272f8 dec=34564
+- SD sha: 791a79cee02b6480 dec=34516
+
+#### SD vs CSR D1
+
+#### SD vs CSR D2
+- **`CLOUD/12`** len 19->19 (651f326d9ac2->af9a7a21cb6f)
+  - D2:
+    - `0000:SOLID`
+    - `0002:ANIM!1`
+    - `0005:WINDOW`
+    - `000f:MESSAGE 400011`
+    - `0012:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:ANIM!1`
+    - `0005:RET`
+    - `0006:WINDOW`
+    - `0010:MESSAGE 400011`
+- **`CLOUD/16`** len 34->31 (7b55a71ad7d4->e0360e81c98a)
+  - D2:
+    - `0000:CANM!2`
+    - `0005:ANIMW`
+    - `0006:WAIT`
+    - `0009:CANM!1`
+    - `000e:TURNGEN`
+    - `0014:WINDOW`
+    - `001e:MESSAGE 40001d`
+    - `0021:RET`
+  - SD:
+    - `0000:CANM!2`
+    - `0005:ANIMW`
+    - `0006:CANM!1`
+    - `000b:TURNGEN`
+    - `0011:WINDOW`
+    - `001b:MESSAGE 40001d`
+    - `001e:RET`
+- **`CLOUD/31`** len 132->123 (01a18ad694fc->f81bed89f925)
+  - D2:
+    - `0000:SCR2DL`
+    - `0009:ANIME1`
+    - `000c:DIR`
+    - `000f:SCRLW`
+    - `0010:WAIT`
+    - `0013:WINDOW`
+    - `001d:MESSAGE 400030`
+    - `0020:WAIT`
+    - `0023:FADE`
+    - `002c:DFANM`
+    - `002f:TURNGEN`
+    - `0035:DFANM`
+    - `0038:SLIDR`
+    - `003b:MSPED`
+    - `003f:MOVE`
+    - `0045:AKAO`
+    - `0053:AKAO`
+    - `0061:AKAO`
+    - `006f:FADEW`
+    - `0070:OR2`
+    - `0075:BITON 10/45#0`
+    - `0079:MAPJUMP #37`
+    - `0083:RET`
+  - SD:
+    - `0000:SCR2DL`
+    - `0009:ANIME1`
+    - `000c:DIR`
+    - `000f:SCRLW`
+    - `0010:FADE`
+    - `0019:DFANM`
+    - `001c:TURNGEN`
+    - `0022:DFANM`
+    - `0025:SLIDR`
+    - `0028:MSPED`
+    - `002c:MOVE`
+    - `0032:AKAO`
+    - `0040:AKAO`
+    - `004e:AKAO`
+    - `005c:FADEW`
+    - `005d:OR2`
+    - `0062:BITON 10/45#0`
+    - `0066:MAPJUMP #441`
+    - `0070:RET`
+    - `0071:MAPJUMP #37`
+- **`CLOUD/5`** len 30->30 (07d87ccac5d2->6568e896e270)
+  - D2:
+    - `0000:WAIT`
+    - `0003:MSPED`
+    - `0007:MOVE`
+    - `000d:DIR`
+    - `0010:WINDOW`
+    - `001a:MESSAGE 400003`
+    - `001d:RET`
+  - SD:
+    - `0000:MSPED`
+    - `0004:MOVE`
+    - `000a:DIR`
+    - `000d:WINDOW`
+    - `0017:MESSAGE 400003`
+    - `001a:RET`
+    - `001b:WAIT`
+- **`CLOUD/8`** len 7->7 (628b1349a48c->2850bd2183d2)
+  - D2:
+    - `0000:WAIT`
+    - `0003:DFANM`
+    - `0006:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:DFANM`
+    - `0006:RET`
+- **`ELINE/5`** len 393->359 (9ab878a409e9->cb937c5bfac2)
+  - D2:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:LINON`
+    - `0006:BTLON`
+    - `0008:SPLIT`
+    - `0017:REQEW`
+    - `001a:WAIT`
+    - `001d:REQEW`
+    - `0020:REQEW`
+    - `0023:WAIT`
+    - `0026:PREQ`
+    - `0029:PREQ`
+    - `002c:REQ`
+    - `002f:WINDOW`
+    - `0039:MESSAGE 400105`
+    - `003c:WAIT`
+    - `003f:PRQEW`
+    - `0042:SETBYTE 50/00=0x1`
+    - `0046:REQEW`
+    - `0049:PRQEW`
+    - `004c:WAIT`
+    - `004f:AKAO`
+    - `005d:REQEW`
+    - `0060:REQEW`
+    - `0063:REQEW`
+    - `0066:REQEW`
+    - `0069:REQEW`
+    - `006c:WMODE`
+    - `0070:REQ`
+    - `0073:AKAO`
+    - `0081:WAIT`
+    - `0084:REQEW`
+    - `0087:REQ`
+    - `008a:WCLSE`
+    - `008c:WMODE`
+    - `0090:WAIT`
+    - `0093:REQ`
+    - `0096:SOUND`
+    - `009b:FADE`
+    - `00a4:FADEW`
+    - `00a5:FADE`
+    - `00ae:PREQ`
+    - `00b1:PREQ`
+    - `00b4:WAIT`
+    - `00b7:SOUND`
+    - `00bc:FADE`
+    - `00c5:FADEW`
+    - `00c6:FADE`
+    - `00cf:FADEW`
+    - `00d0:SOUND`
+    - `00d5:FADE`
+    - `00de:FADEW`
+    - `00df:FADE`
+    - `00e8:WAIT`
+    - `00eb:BMUSC`
+    - `00ed:AKAO`
+    - `00fb:BATTLE`
+    - `00ff:SOUND`
+    - `0104:FADE`
+    - `010d:BMUSC`
+    - `010f:REQEW`
+    - `0112:REQEW`
+    - `0115:PRQEW`
+    - `0118:PRQEW`
+    - `011b:REQEW`
+    - `011e:REQEW`
+    - `0121:FADE`
+    - `012a:FADEW`
+    - `012b:WAIT`
+    - `012e:PRQEW`
+    - `0131:REQEW`
+    - `0134:PRQEW`
+    - `0137:REQ`
+    - `013a:WAIT`
+    - `013d:REQEW`
+    - `0140:PRQEW`
+    - `0143:REQEW`
+    - `0146:WAIT`
+    - `0149:PRQEW`
+    - `014c:WAIT`
+    - `014f:PREQ`
+    - `0152:PREQ`
+    - `0155:REQ`
+    - `0158:SOUND`
+    - `015d:WINDOW`
+    - `0167:MESSAGE 400324`
+    - `016a:WAIT`
+    - `016d:PRQEW`
+    - `0170:WAIT`
+    - `0173:PREQ`
+    - `0176:WAIT`
+    - `0179:PREQ`
+    - `017c:WAIT`
+    - `017f:REQEW`
+    - `0182:BTLON`
+    - `0184:UC`
+    - `0186:MENU2`
+    - `0188:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:LINON`
+    - `0006:BTLON`
+    - `0008:SPLIT`
+    - `0017:REQEW`
+    - `001a:REQEW`
+    - `001d:PREQ`
+    - `0020:PREQ`
+    - `0023:REQ`
+    - `0026:SETBYTE 50/00=0x1`
+    - `002a:JMPF ->0067`
+    - `002c:WINDOW`
+    - `0036:MESSAGE 400105`
+    - `0039:WAIT`
+    - `003c:PRQEW`
+    - `003f:SETBYTE 50/00=0x1`
+    - `0043:REQEW`
+    - `0046:PRQEW`
+    - `0049:WAIT`
+    - `004c:AKAO`
+    - `005a:REQEW`
+    - `005d:REQEW`
+    - `0060:REQEW`
+    - `0063:REQEW`
+    - `0066:REQEW`
+    - `0069:WMODE`
+    - `006d:REQ`
+    - `0070:AKAO`
+    - `007e:WAIT`
+    - `0081:REQEW`
+    - `0084:REQ`
+    - `0087:WCLSE`
+    - `0089:WMODE`
+    - `008d:WAIT`
+    - `0090:REQ`
+    - `0093:SOUND`
+    - `0098:FADE`
+    - `00a1:FADEW`
+    - `00a2:FADE`
+    - `00ab:PREQ`
+    - `00ae:PREQ`
+    - `00b1:SOUND`
+    - `00b6:FADE`
+    - `00bf:FADEW`
+    - `00c0:FADE`
+    - `00c9:FADEW`
+    - `00ca:SOUND`
+    - `00cf:FADE`
+    - `00d8:FADEW`
+    - `00d9:FADE`
+    - `00e2:WAIT`
+    - `00e5:BMUSC`
+    - `00e7:AKAO`
+    - `00f5:BATTLE`
+    - `00f9:SOUND`
+    - `00fe:FADE`
+    - `0107:BMUSC`
+    - `0109:REQEW`
+    - `010c:REQEW`
+    - `010f:PRQEW`
+    - `0112:PRQEW`
+    - `0115:REQEW`
+    - `0118:REQEW`
+    - `011b:FADE`
+    - `0124:FADEW`
+    - `0125:PRQEW`
+    - `0128:REQEW`
+    - `012b:PRQEW`
+    - `012e:REQ`
+    - `0131:WAIT`
+    - `0134:REQEW`
+    - `0137:PRQEW`
+    - `013a:REQEW`
+    - `013d:WAIT`
+    - `0140:PRQEW`
+    - `0143:WAIT`
+    - `0146:PREQ`
+    - `0149:PREQ`
+    - `014c:REQ`
+    - `014f:SOUND`
+    - `0154:PRQEW`
+    - `0157:PREQ`
+    - `015a:PREQ`
+    - `015d:REQEW`
+    - `0160:BTLON`
+    - `0162:UC`
+    - `0164:MENU2`
+    - `0166:RET`
+
+### SUBIN_1B
+- D1 sha: 9bd0d35c350d2138 dec=42552
+- D2 sha: b1f48faf1014f102 dec=42596
+- SD sha: f853811a12cfdd9a dec=42596
+
+#### SD vs CSR D1
+- **`cid/4`** len 89->93 (05fbe6df95ec->d13dd71909b8)
+  - D1:
+    - `0000:SOLID`
+    - `0002:SLIDR`
+    - `0005:MSPED`
+    - `0009:MOVE`
+    - `000f:ANIME2`
+    - `0012:WINDOW`
+    - `001c:MESSAGE 400019`
+    - `001f:ANIME1`
+    - `0022:AKAO`
+    - `0030:WAIT`
+    - `0033:REQSW`
+    - `0036:REQSW`
+    - `0039:ANIME1`
+    - `003c:ANIME2`
+    - `003f:TURA`
+    - `0043:WINDOW`
+    - `004d:MESSAGE 40001a`
+    - `0050:REQSW`
+    - `0053:SOLID`
+    - `0055:SLIDR`
+    - `0058:RET`
+  - SD:
+    - `0000:SOLID`
+    - `0002:SLIDR`
+    - `0005:MSPED`
+    - `0009:MOVE`
+    - `000f:JMPF ->0025`
+    - `0011:ANIME2`
+    - `0014:WINDOW`
+    - `001e:MESSAGE 400019`
+    - `0021:ANIME1`
+    - `0024:AKAO`
+    - `0032:WAIT`
+    - `0035:REQSW`
+    - `0038:REQSW`
+    - `003b:ANIME1`
+    - `003e:ANIME2`
+    - `0041:TURA`
+    - `0045:JMPF ->0055`
+    - `0047:WINDOW`
+    - `0051:MESSAGE 40001a`
+    - `0054:REQSW`
+    - `0057:SOLID`
+    - `0059:SLIDR`
+    - `005c:RET`
+- **`cloud/14`** len 433->438 (ad8a49f0f639->3689a7b3c016)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:SETBYTE 50/0f=0x0`
+    - `0007:WINDOW`
+    - `0011:ASK 4805002402040f`
+    - `0018:IFUB A=0fV=02C=0E=43->0060`
+    - `001e:DIR`
+    - `0021:ANIME2`
+    - `0024:TURNGEN`
+    - `002a:WAIT`
+    - `002d:AKAO`
+    - `003b:IFUB A=17V=02C=0E=0a->004a`
+    - `0041:REQEW`
+    - `0044:SETBYTE 50/17=0x0`
+    - `0048:JMPF ->0061`
+    - `004a:IFUB A=17V=01C=0E=0a->0059`
+    - `0050:REQEW`
+    - `0053:SETBYTE 50/17=0x2`
+    - `0057:JMPF ->0061`
+    - `0059:REQEW`
+    - `005c:SETBYTE 50/17=0x1`
+    - `0060:IFUBL`
+    - `0067:ANIME2`
+    - `006a:TURNGEN`
+    - `0070:WAIT`
+    - `0073:AKAO`
+    - `0081:OFST`
+    - `008d:JUMP`
+    - `0098:AKAO`
+    - `00a6:ANIMB`
+    - `00a7:ANIM!2`
+    - `00aa:DFANM`
+    - `00ad:ANIME2`
+    - `00b0:SETBYTE 50/0f=0x0`
+    - `00b4:WINDOW`
+    - `00be:ASK 4805002502030f`
+    - `00c5:IFUB A=0fV=02C=0E=39->0103`
+    - `00cb:ANIME2`
+    - `00ce:AKAO`
+    - `00dc:IFUB A=17V=02C=0E=0a->00eb`
+    - `00e2:REQEW`
+    - `00e5:SETBYTE 50/17=0x0`
+    - `00e9:JMPF ->0102`
+    - `00eb:IFUB A=17V=01C=0E=0a->00fa`
+    - `00f1:REQEW`
+    - `00f4:SETBYTE 50/17=0x2`
+    - `00f8:JMPF ->0102`
+    - `00fa:REQEW`
+    - `00fd:SETBYTE 50/17=0x1`
+    - `0101:JMPB ->00ad`
+    - `0103:IFUB A=0fV=03C=0E=92->019a`
+    - `0109:ANIME1`
+    - `010c:WINDOW`
+    - `0116:MESSAGE 400026`
+    - `0119:ANIME1`
+    - `011c:VWOFT`
+    - `0123:AKAO`
+    - `0131:WMODE`
+    - `0135:WINDOW`
+    - `013f:MESSAGE 400127`
+    - `0142:ANIME1`
+    - `0145:SETWORD 20/00=0x506`
+    - `014a:WAIT`
+    - `014d:FADE`
+    - `0156:FADEW`
+    - `0157:AKAO`
+    - `0165:AKAO`
+    - `0173:AKAO`
+    - `0181:AKAO`
+    - `018f:MINIGAME`
+    - `019a:SETBYTE 50/0f=0x0`
+    - `019e:IFUB A=0fV=04C=0E=0d->01b0`
+    - `01a4:ANIME2`
+    - `01a7:TURNGEN`
+    - `01ad:ANIME1`
+    - `01b0:RET`
+  - SD:
+    - `0000:ANIME1`
+    - `0003:SETBYTE 50/0f=0x0`
+    - `0007:WINDOW`
+    - `0011:ASK 4805002402040f`
+    - `0018:IFUB A=0fV=02C=0E=43->0060`
+    - `001e:DIR`
+    - `0021:ANIME2`
+    - `0024:TURNGEN`
+    - `002a:WAIT`
+    - `002d:AKAO`
+    - `003b:IFUB A=17V=02C=0E=0a->004a`
+    - `0041:REQEW`
+    - `0044:SETBYTE 50/17=0x0`
+    - `0048:JMPF ->0061`
+    - `004a:IFUB A=17V=01C=0E=0a->0059`
+    - `0050:REQEW`
+    - `0053:SETBYTE 50/17=0x2`
+    - `0057:JMPF ->0061`
+    - `0059:REQEW`
+    - `005c:SETBYTE 50/17=0x1`
+    - `0060:IFUBL`
+    - `0067:ANIME2`
+    - `006a:TURNGEN`
+    - `0070:WAIT`
+    - `0073:AKAO`
+    - `0081:OFST`
+    - `008d:JUMP`
+    - `0098:AKAO`
+    - `00a6:ANIMB`
+    - `00a7:ANIM!2`
+    - `00aa:DFANM`
+    - `00ad:ANIME2`
+    - `00b0:SETBYTE 50/0f=0x0`
+    - `00b4:WINDOW`
+    - `00be:ASK 4805002502030f`
+    - `00c5:IFUB A=0fV=02C=0E=39->0103`
+    - `00cb:ANIME2`
+    - `00ce:AKAO`
+    - `00dc:IFUB A=17V=02C=0E=0a->00eb`
+    - `00e2:REQEW`
+    - `00e5:SETBYTE 50/17=0x0`
+    - `00e9:JMPF ->0102`
+    - `00eb:IFUB A=17V=01C=0E=0a->00fa`
+    - `00f1:REQEW`
+    - `00f4:SETBYTE 50/17=0x2`
+    - `00f8:JMPF ->0102`
+    - `00fa:REQEW`
+    - `00fd:SETBYTE 50/17=0x1`
+    - `0101:JMPB ->00ad`
+    - `0103:IFUB A=0fV=03C=0E=97->019f`
+    - `0109:JMPF ->011c`
+    - `010b:ANIME1`
+    - `010e:WINDOW`
+    - `0118:MESSAGE 400026`
+    - `011b:ANIME1`
+    - `011e:VWOFT`
+    - `0125:AKAO`
+    - `0133:JMPFL`
+    - `0136:WMODE`
+    - `013a:WINDOW`
+    - `0144:MESSAGE 400127`
+    - `0147:ANIME1`
+    - `014a:SETWORD 20/00=0x506`
+    - `014f:WAIT`
+    - `0152:FADE`
+    - `015b:FADEW`
+    - `015c:AKAO`
+    - `016a:AKAO`
+    - `0178:AKAO`
+    - `0186:AKAO`
+    - `0194:MINIGAME`
+    - `019f:SETBYTE 50/0f=0x0`
+    - `01a3:IFUB A=0fV=04C=0E=0d->01b5`
+    - `01a9:ANIME2`
+    - `01ac:TURNGEN`
+    - `01b2:ANIME1`
+    - `01b5:RET`
+- **`cloud/16`** len 368->398 (60a9b12d0b56->c783d4f37665)
+  - D1:
+    - `0000:ANIME1`
+    - `0003:IFUB A=5bV=06C=9E=10->0018`
+    - `0009:WINDOW`
+    - `0013:MESSAGE 400058`
+    - `0016:JMPF ->0036`
+    - `0018:WINDOW`
+    - `0022:MESSAGE 400057`
+    - `0025:ANIME2`
+    - `0028:WINDOW`
+    - `0032:MESSAGE 400059`
+    - `0035:AKAO`
+    - `0043:WAIT`
+    - `0046:AKAO`
+    - `0054:REQSW`
+    - `0057:WMODE`
+    - `005b:WINDOW`
+    - `0065:MESSAGE 40015a`
+    - `0068:REQSW`
+    - `006b:WINDOW`
+    - `0075:MESSAGE 40015b`
+    - `0078:REQSW`
+    - `007b:WINDOW`
+    - `0085:MESSAGE 40015c`
+    - `0088:ANIME1`
+    - `008b:IFUB A=5bV=06C=9E=10->00a0`
+    - `0091:WINDOW`
+    - `009b:MESSAGE 40005d`
+    - `009e:JMPF ->00ae`
+    - `00a0:WINDOW`
+    - `00aa:MESSAGE 40005e`
+    - `00ad:AKAO`
+    - `00bb:BITON 10/43#0`
+    - `00bf:WINDOW`
+    - `00c9:MESSAGE 40005f`
+    - `00cc:AKAO`
+    - `00da:AKAO`
+    - `00e8:WAIT`
+    - `00eb:FADE`
+    - `00f4:FADEW`
+    - `00f5:AKAO`
+    - `0103:AKAO`
+    - `0111:AKAO`
+    - `011f:AKAO`
+    - `012d:AKAO`
+    - `013b:AKAO`
+    - `0149:AKAO`
+    - `0157:AKAO`
+    - `0165:MAPJUMP #56`
+    - `016f:RET`
+  - SD:
+    - `0000:JMPF ->00a3`
+    - `0002:ANIME1`
+    - `0005:IFUB A=5bV=06C=9E=10->001a`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 400058`
+    - `0018:JMPF ->0038`
+    - `001a:WINDOW`
+    - `0024:MESSAGE 400057`
+    - `0027:ANIME2`
+    - `002a:WINDOW`
+    - `0034:MESSAGE 400059`
+    - `0037:AKAO`
+    - `0045:WAIT`
+    - `0048:AKAO`
+    - `0056:REQSW`
+    - `0059:WMODE`
+    - `005d:WINDOW`
+    - `0067:MESSAGE 40015a`
+    - `006a:REQSW`
+    - `006d:WINDOW`
+    - `0077:MESSAGE 40015b`
+    - `007a:REQSW`
+    - `007d:WINDOW`
+    - `0087:MESSAGE 40015c`
+    - `008a:ANIME1`
+    - `008d:IFUB A=5bV=06C=9E=10->00a2`
+    - `0093:WINDOW`
+    - `009d:MESSAGE 40005d`
+    - `00a0:JMPF ->00b0`
+    - `00a2:WINDOW`
+    - `00ac:MESSAGE 40005e`
+    - `00af:AKAO`
+    - `00bd:AKAO`
+    - `00cb:AKAO`
+    - `00d9:BITON 10/43#0`
+    - `00dd:WINDOW`
+    - `00e7:MESSAGE 40005f`
+    - `00ea:AKAO`
+    - `00f8:AKAO`
+    - `0106:WAIT`
+    - `0109:FADE`
+    - `0112:FADEW`
+    - `0113:AKAO`
+    - `0121:AKAO`
+    - `012f:AKAO`
+    - `013d:AKAO`
+    - `014b:AKAO`
+    - `0159:AKAO`
+    - `0167:AKAO`
+    - `0175:AKAO`
+    - `0183:MAPJUMP #56`
+    - `018d:RET`
+- **`cloud/6`** len 521->527 (319415b6351c->d8aa41b5b159)
+  - D1:
+    - `0000:OFST`
+    - `000c:ANIME1`
+    - `000f:OFST`
+    - `001b:DFANM`
+    - `001e:CANM!2`
+    - `0023:WSIZW`
+    - `002d:MESSAGE 400037`
+    - `0030:AKAO`
+    - `003e:WAIT`
+    - `0041:AKAO`
+    - `004f:REQSW`
+    - `0052:CANM!1`
+    - `0057:WMODE`
+    - `005b:WINDOW`
+    - `0065:MESSAGE 400138`
+    - `0068:REQSW`
+    - `006b:WINDOW`
+    - `0075:MESSAGE 400138`
+    - `0078:ANIME2`
+    - `007b:WINDOW`
+    - `0085:MESSAGE 400039`
+    - `0088:REQSW`
+    - `008b:WINDOW`
+    - `0095:MESSAGE 40013a`
+    - `0098:CANM!2`
+    - `009d:PRQEW`
+    - `00a0:WINDOW`
+    - `00aa:MESSAGE 400042`
+    - `00ad:CANM!2`
+    - `00b2:REQSW`
+    - `00b5:ANIME2`
+    - `00b8:WINDOW`
+    - `00c2:MESSAGE 400043`
+    - `00c5:REQSW`
+    - `00c8:WINDOW`
+    - `00d2:MESSAGE 400144`
+    - `00d5:REQSW`
+    - `00d8:WINDOW`
+    - `00e2:MESSAGE 400145`
+    - `00e5:REQSW`
+    - `00e8:WINDOW`
+    - `00f2:MESSAGE 400146`
+    - `00f5:REQSW`
+    - `00f8:WINDOW`
+    - `0102:MESSAGE 400147`
+    - `0105:REQSW`
+    - `0108:WINDOW`
+    - `0112:MESSAGE 400148`
+    - `0115:REQSW`
+    - `0118:WINDOW`
+    - `0122:MESSAGE 400149`
+    - `0125:REQSW`
+    - `0128:AKAO`
+    - `0136:CANM!2`
+    - `013b:WINDOW`
+    - `0145:MESSAGE 40004a`
+    - `0148:CANM!2`
+    - `014d:WINDOW`
+    - `0157:MESSAGE 40004b`
+    - `015a:PRQEW`
+    - `015d:AKAO`
+    - `016b:AKAO`
+    - `0179:WAIT`
+    - `017c:FADE`
+    - `0185:FADEW`
+    - `0186:BITON d0/50#4`
+    - `018a:BITON d0/50#3`
+    - `018e:AKAO`
+    - `019c:AKAO`
+    - `01aa:AKAO`
+    - `01b8:AKAO`
+    - `01c6:AKAO`
+    - `01d4:AKAO`
+    - `01e2:AKAO`
+    - `01f0:AKAO`
+    - `01fe:MAPJUMP #42`
+    - `0208:RET`
+  - SD:
+    - `0000:OFST`
+    - `000c:ANIME1`
+    - `000f:OFST`
+    - `001b:DFANM`
+    - `001e:CANM!2`
+    - `0023:JMPFL`
+    - `0026:WSIZW`
+    - `0030:MESSAGE 400037`
+    - `0033:AKAO`
+    - `0041:WAIT`
+    - `0044:AKAO`
+    - `0052:REQSW`
+    - `0055:CANM!1`
+    - `005a:WMODE`
+    - `005e:WINDOW`
+    - `0068:MESSAGE 400138`
+    - `006b:REQSW`
+    - `006e:WINDOW`
+    - `0078:MESSAGE 400138`
+    - `007b:ANIME2`
+    - `007e:WINDOW`
+    - `0088:MESSAGE 400039`
+    - `008b:REQSW`
+    - `008e:WINDOW`
+    - `0098:MESSAGE 40013a`
+    - `009b:CANM!2`
+    - `00a0:PRQEW`
+    - `00a3:WINDOW`
+    - `00ad:MESSAGE 400042`
+    - `00b0:CANM!2`
+    - `00b5:REQSW`
+    - `00b8:ANIME2`
+    - `00bb:WINDOW`
+    - `00c5:MESSAGE 400043`
+    - `00c8:REQSW`
+    - `00cb:WINDOW`
+    - `00d5:MESSAGE 400144`
+    - `00d8:REQSW`
+    - `00db:WINDOW`
+    - `00e5:MESSAGE 400145`
+    - `00e8:REQSW`
+    - `00eb:WINDOW`
+    - `00f5:MESSAGE 400146`
+    - `00f8:REQSW`
+    - `00fb:WINDOW`
+    - `0105:MESSAGE 400147`
+    - `0108:REQSW`
+    - `010b:WINDOW`
+    - `0115:MESSAGE 400148`
+    - `0118:REQSW`
+    - `011b:WINDOW`
+    - `0125:MESSAGE 400149`
+    - `0128:REQSW`
+    - `012b:AKAO`
+    - `0139:CANM!2`
+    - `013e:WINDOW`
+    - `0148:MESSAGE 40004a`
+    - `014b:JMPFL`
+    - `014e:CANM!2`
+    - `0153:WINDOW`
+    - `015d:MESSAGE 40004b`
+    - `0160:PRQEW`
+    - `0163:AKAO`
+    - `0171:AKAO`
+    - `017f:WAIT`
+    - `0182:FADE`
+    - `018b:FADEW`
+    - `018c:BITON d0/50#4`
+    - `0190:BITON d0/50#3`
+    - `0194:AKAO`
+    - `01a2:AKAO`
+    - `01b0:AKAO`
+    - `01be:AKAO`
+    - `01cc:AKAO`
+    - `01da:AKAO`
+    - `01e8:AKAO`
+    - `01f6:AKAO`
+    - `0204:MAPJUMP #42`
+    - `020e:RET`
+- **`direct/31`** len 369->369 (33fd62ff5b78->b79bb20f49b9)
+  - D1:
+    - `0000:RET`
+    - `0001:IFUBL`
+    - `0008:IFUB A=52V=00C=9E=2f->003c`
+    - `000e:IFUB A=eeV=04C=9E=03->0016`
+    - `0014:JMPF ->003d`
+    - `0016:BITON 30/ee#4`
+    - `001a:UC`
+    - `001c:MENU2`
+    - `001e:PRQSW`
+    - `0021:PRQSW`
+    - `0024:REQEW`
+    - `0027:REQSW`
+    - `002a:REQSW`
+    - `002d:IFPRTYQ`
+    - `0030:REQSW`
+    - `0033:IFPRTYQ`
+    - `0036:REQSW`
+    - `0039:REQSW`
+    - `003c:IFUB A=52V=01C=9E=2f->0070`
+    - `0042:IFUB A=eeV=03C=9E=03->004a`
+    - `0048:JMPF ->0071`
+    - `004a:BITON 30/ee#3`
+    - `004e:UC`
+    - `0050:MENU2`
+    - `0052:PRQSW`
+    - `0055:PRQSW`
+    - `0058:REQSW`
+    - `005b:REQSW`
+    - `005e:REQSW`
+    - `0061:IFPRTYQ`
+    - `0064:REQSW`
+    - `0067:IFPRTYQ`
+    - `006a:REQSW`
+    - `006d:REQSW`
+    - `0070:JMPFL`
+    - `0073:IFSW V=0x506C=0E=52->00cc`
+    - `007b:UC`
+    - `007d:MENU2`
+    - `007f:SETWORD 20/00=0x513`
+    - `0084:BITON d0/50#0`
+    - `0088:REQSW`
+    - `008b:PRQSW`
+    - `008e:PRQEW`
+    - `0091:REQSW`
+    - `0094:REQSW`
+    - `0097:IFSW V=0x1C=0E=0f->00ad`
+    - `009f:REQSW`
+    - `00a2:PRQSW`
+    - `00a5:PRQSW`
+    - `00a8:REQEW`
+    - `00ab:JMPF ->00cb`
+    - `00ad:PRQSW`
+    - `00b0:PRQSW`
+    - `00b3:REQSW`
+    - `00b6:AKAO`
+    - `00c4:REQSW`
+    - `00c7:REQEW`
+    - `00ca:JMPF ->0171`
+    - `00cc:IFSW V=0x503C=0E=0f->00e2`
+    - `00d4:PRQEW`
+    - `00d7:PRQEW`
+    - `00da:REQSW`
+    - `00dd:REQSW`
+    - `00e0:JMPF ->0171`
+    - `00e2:UC`
+    - `00e4:MENU2`
+    - `00e6:WAIT`
+    - `00e9:REQSW`
+    - `00ec:REQEW`
+    - `00ef:REQEW`
+    - `00f2:REQEW`
+    - `00f5:REQEW`
+    - `00f8:REQSW`
+    - `00fb:REQSW`
+    - `00fe:WINDOW`
+    - `0108:MESSAGE 400005`
+    - `010b:REQEW`
+    - `010e:REQSW`
+    - `0111:REQSW`
+    - `0114:WINDOW`
+    - `011e:MESSAGE 400005`
+    - `0121:REQEW`
+    - `0124:VWOFT`
+    - `012b:REQEW`
+    - `012e:SPLIT`
+    - `013d:PRQEW`
+    - `0140:PRQEW`
+    - `0143:PRQEW`
+    - `0146:AKAO`
+    - `0154:REQEW`
+    - `0157:SETWORD 20/00=0x503`
+    - `015c:UC`
+    - `015e:MENU2`
+    - `0160:MUSIC id=0`
+    - `0162:AKAO`
+    - `0170:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:IFUBL`
+    - `0008:IFUB A=52V=00C=9E=2f->003c`
+    - `000e:IFUB A=eeV=04C=9E=03->0016`
+    - `0014:JMPF ->003d`
+    - `0016:BITON 30/ee#4`
+    - `001a:UC`
+    - `001c:MENU2`
+    - `001e:PRQSW`
+    - `0021:PRQSW`
+    - `0024:REQEW`
+    - `0027:REQSW`
+    - `002a:REQSW`
+    - `002d:IFPRTYQ`
+    - `0030:REQSW`
+    - `0033:IFPRTYQ`
+    - `0036:REQSW`
+    - `0039:REQSW`
+    - `003c:IFUB A=52V=01C=9E=2f->0070`
+    - `0042:IFUB A=eeV=03C=9E=03->004a`
+    - `0048:JMPF ->0071`
+    - `004a:BITON 30/ee#3`
+    - `004e:UC`
+    - `0050:MENU2`
+    - `0052:PRQSW`
+    - `0055:PRQSW`
+    - `0058:REQSW`
+    - `005b:REQSW`
+    - `005e:REQSW`
+    - `0061:IFPRTYQ`
+    - `0064:REQSW`
+    - `0067:IFPRTYQ`
+    - `006a:REQSW`
+    - `006d:REQSW`
+    - `0070:JMPFL`
+    - `0073:IFSW V=0x506C=0E=52->00cc`
+    - `007b:UC`
+    - `007d:MENU2`
+    - `007f:SETWORD 20/00=0x513`
+    - `0084:BITON d0/50#0`
+    - `0088:REQSW`
+    - `008b:PRQSW`
+    - `008e:PRQEW`
+    - `0091:REQSW`
+    - `0094:REQSW`
+    - `0097:IFSW V=0x1C=0E=0f->00ad`
+    - `009f:REQSW`
+    - `00a2:PRQSW`
+    - `00a5:PRQSW`
+    - `00a8:REQEW`
+    - `00ab:JMPF ->00cb`
+    - `00ad:PRQSW`
+    - `00b0:PRQSW`
+    - `00b3:REQSW`
+    - `00b6:AKAO`
+    - `00c4:REQSW`
+    - `00c7:REQEW`
+    - `00ca:JMPF ->0171`
+    - `00cc:IFSW V=0x503C=0E=0f->00e2`
+    - `00d4:PRQEW`
+    - `00d7:PRQEW`
+    - `00da:REQSW`
+    - `00dd:REQSW`
+    - `00e0:JMPF ->0171`
+    - `00e2:UC`
+    - `00e4:MENU2`
+    - `00e6:WAIT`
+    - `00e9:REQSW`
+    - `00ec:REQEW`
+    - `00ef:REQEW`
+    - `00f2:REQEW`
+    - `00f5:REQEW`
+    - `00f8:REQSW`
+    - `00fb:REQSW`
+    - `00fe:WINDOW`
+    - `0108:MESSAGE 400005`
+    - `010b:REQEW`
+    - `010e:REQSW`
+    - `0111:REQSW`
+    - `0114:WINDOW`
+    - `011e:MESSAGE 400005`
+    - `0121:REQEW`
+    - `0124:VWOFT`
+    - `012b:REQEW`
+    - `012e:SPLIT`
+    - `013d:PRQEW`
+    - `0140:PRQEW`
+    - `0143:PRQEW`
+    - `0146:AKAO`
+    - `0154:REQEW`
+    - `0157:SETWORD 20/00=0x503`
+    - `015c:UC`
+    - `015e:MENU2`
+    - `0160:MUSIC id=0`
+    - `0162:AKAO`
+    - `0170:RET`
+- **`tifa/3`** len 24->24 (4e4bfd72dbe5->502b59af110b)
+  - D1:
+    - `0000:ANIME2`
+    - `0003:TURA`
+    - `0007:ANIME1`
+    - `000a:WINDOW`
+    - `0014:MESSAGE 40000e`
+    - `0017:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+    - `0005:ANIME2`
+    - `0008:ANIME1`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 40000e`
+
+#### SD vs CSR D2
+
+### TRNAD_4
+- D1 sha: 46900de2574128c9 dec=41476
+- D2 sha: f2e42287b7ac29f4 dec=41424
+- SD sha: 7a52d5d279a693fa dec=41424
+
+#### SD vs CSR D1
+- **`black1/3`** len 45->45 (9650a42cb756->fc89ff7b003a)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400018`
+    - `000d:REQSW`
+    - `0010:REQSW`
+    - `0013:CANM!1`
+    - `0018:WAIT`
+    - `001b:SOUND`
+    - `0020:WAIT`
+    - `0023:ASPED`
+    - `0027:CANIM2`
+    - `002c:RET`
+  - SD:
+    - `0000:REQSW`
+    - `0003:REQSW`
+    - `0006:CANM!1`
+    - `000b:WAIT`
+    - `000e:SOUND`
+    - `0013:WAIT`
+    - `0016:ASPED`
+    - `001a:CANIM2`
+    - `001f:RET`
+    - `0020:WINDOW`
+    - `002a:MESSAGE 400018`
+- **`discver/2`** len 255->258 (8ffac1563df2->842b9a847400)
+  - D1:
+    - `0000:IFUB A=84V=04C=10E=f9->00fe`
+    - `0006:UC`
+    - `0008:MENU2`
+    - `000a:SCR2DL`
+    - `0013:SCRLW`
+    - `0014:BTLON`
+    - `0016:MENU2`
+    - `0018:BITON 10/84#4`
+    - `001c:LINON`
+    - `001e:REQEW`
+    - `0021:WAIT`
+    - `0024:WINDOW`
+    - `002e:MESSAGE 400001`
+    - `0031:REQEW`
+    - `0034:SPLIT`
+    - `0043:REQEW`
+    - `0046:WINDOW`
+    - `0050:MESSAGE 400002`
+    - `0053:WINDOW`
+    - `005d:MESSAGE 400012`
+    - `0060:IDLCK`
+    - `0064:IDLCK`
+    - `0068:IDLCK`
+    - `006c:IDLCK`
+    - `0070:SETBYTE 50/11=0xa`
+    - `0074:SETBYTE 50/12=0xa`
+    - `0078:SETBYTE 50/13=0xa`
+    - `007c:NFADE`
+    - `0085:REQEW`
+    - `0088:FADEW`
+    - `0089:REQSW`
+    - `008c:REQSW`
+    - `008f:BITON 50/29#0`
+    - `0093:REQSW`
+    - `0096:REQSW`
+    - `0099:WINDOW`
+    - `00a3:MESSAGE 400006`
+    - `00a6:WINDOW`
+    - `00b0:MESSAGE 400009`
+    - `00b3:REQSW`
+    - `00b6:REQSW`
+    - `00b9:UC`
+    - `00bb:REQEW`
+    - `00be:NFADE`
+    - `00c7:REQEW`
+    - `00ca:REQEW`
+    - `00cd:FADEW`
+    - `00ce:NFADE`
+    - `00d7:REQEW`
+    - `00da:BMUSC`
+    - `00dc:BTLMD`
+    - `00df:BATTLE`
+    - `00e3:BMUSC`
+    - `00e5:MUSIC id=0`
+    - `00e7:FADE`
+    - `00f0:MAPJUMP #702`
+    - `00fa:UC`
+    - `00fc:MENU2`
+    - `00fe:RET`
+  - SD:
+    - `0000:IFUBL`
+    - `0007:UC`
+    - `0009:MENU2`
+    - `000b:SCR2DL`
+    - `0014:SCRLW`
+    - `0015:BTLON`
+    - `0017:MENU2`
+    - `0019:BITON 10/84#4`
+    - `001d:LINON`
+    - `001f:REQEW`
+    - `0022:JMPF ->00d1`
+    - `0024:WAIT`
+    - `0027:REQEW`
+    - `002a:SPLIT`
+    - `0039:REQEW`
+    - `003c:WINDOW`
+    - `0046:MESSAGE 400002`
+    - `0049:WINDOW`
+    - `0053:MESSAGE 400012`
+    - `0056:IDLCK`
+    - `005a:IDLCK`
+    - `005e:IDLCK`
+    - `0062:IDLCK`
+    - `0066:SETBYTE 50/11=0xa`
+    - `006a:SETBYTE 50/12=0xa`
+    - `006e:SETBYTE 50/13=0xa`
+    - `0072:NFADE`
+    - `007b:REQEW`
+    - `007e:FADEW`
+    - `007f:REQSW`
+    - `0082:REQSW`
+    - `0085:BITON 50/29#0`
+    - `0089:REQSW`
+    - `008c:REQSW`
+    - `008f:WINDOW`
+    - `0099:MESSAGE 400006`
+    - `009c:WINDOW`
+    - `00a6:MESSAGE 400009`
+    - `00a9:REQSW`
+    - `00ac:REQSW`
+    - `00af:UC`
+    - `00b1:REQEW`
+    - `00b4:NFADE`
+    - `00bd:REQEW`
+    - `00c0:REQEW`
+    - `00c3:FADEW`
+    - `00c4:NFADE`
+    - `00cd:REQEW`
+    - `00d0:BMUSC`
+    - `00d2:BTLMD`
+    - `00d5:BATTLE`
+    - `00d9:BMUSC`
+    - `00db:MUSIC id=0`
+    - `00dd:FADE`
+    - `00e6:MAPJUMP #702`
+    - `00f0:UC`
+    - `00f2:MENU2`
+    - `00f4:RET`
+    - `00f5:WINDOW`
+    - `00ff:MESSAGE 400001`
+
+#### SD vs CSR D2
+
+### TRNAD_51
+- D1 sha: 23e06951ae9cc7a1 dec=32728
+- D2 sha: 27e335f5704306ad dec=32736
+- SD sha: 94ab12c9422960e4 dec=32736
+
+#### SD vs CSR D1
+- **`produce/0`** len 71->81 (99d8bb424436->6acd0e913f04)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MENU2`
+    - `0006:MPJPO`
+    - `0008:MPNAM`
+    - `000a:BTLON`
+    - `000c:RET`
+    - `000d:FADE`
+    - `0016:FADEW`
+    - `0017:AKAO`
+    - `0025:MULCK`
+    - `0027:MUSIC id=0`
+    - `0029:IFSW V=0x316C=3E=06->0036`
+    - `0031:REQSW`
+    - `0034:JMPF ->0047`
+    - `0036:IFSW V=0x31aC=3E=06->0043`
+    - `003e:REQSW`
+    - `0041:JMPF ->0047`
+    - `0043:REQSW`
+    - `0046:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MENU2`
+    - `0006:MPJPO`
+    - `0008:MPNAM`
+    - `000a:BTLON`
+    - `000c:RET`
+    - `000d:MAPJUMP #707`
+    - `0017:FADE`
+    - `0020:FADEW`
+    - `0021:AKAO`
+    - `002f:MULCK`
+    - `0031:MUSIC id=0`
+    - `0033:IFSW V=0x316C=3E=06->0040`
+    - `003b:REQSW`
+    - `003e:JMPF ->0051`
+    - `0040:IFSW V=0x31aC=3E=06->004d`
+    - `0048:REQSW`
+    - `004b:JMPF ->0051`
+    - `004d:REQSW`
+    - `0050:RET`
+
+#### SD vs CSR D2
+
+### TRNAD_53
+- D1 sha: ab1a60e3fb417d3f dec=17576
+- D2 sha: ab1a60e3fb417d3f dec=17576
+- SD sha: 60f7f007c5b7e3df dec=17568
+
+#### SD vs CSR D1
+- **`cloud/3`** len 52->46 (965ef90abe16->8a709ab79ba8)
+  - D1:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400101`
+    - `000d:BTLON`
+    - `000f:RET`
+    - `0010:PMVIE id=23`
+    - `0012:WAIT`
+    - `0015:MOVIE`
+    - `0016:PMVIE id=24`
+    - `0018:PRTYE`
+    - `001c:MMBud`
+    - `001f:PRTYE`
+    - `0023:SETWORD 20/00=0x3e7`
+    - `0028:MOVIE`
+    - `0029:MAPJUMP #400`
+    - `0033:RET`
+  - SD:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400101`
+    - `000d:BTLON`
+    - `000f:RET`
+    - `0010:WAIT`
+    - `0013:PRTYE`
+    - `0017:MMBud`
+    - `001a:PRTYE`
+    - `001e:SETWORD 20/00=0x3e7`
+    - `0023:MAPJUMP #400`
+    - `002d:RET`
+
+#### SD vs CSR D2
+- **`cloud/3`** len 52->46 (965ef90abe16->8a709ab79ba8)
+  - D2:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400101`
+    - `000d:BTLON`
+    - `000f:RET`
+    - `0010:PMVIE id=23`
+    - `0012:WAIT`
+    - `0015:MOVIE`
+    - `0016:PMVIE id=24`
+    - `0018:PRTYE`
+    - `001c:MMBud`
+    - `001f:PRTYE`
+    - `0023:SETWORD 20/00=0x3e7`
+    - `0028:MOVIE`
+    - `0029:MAPJUMP #400`
+    - `0033:RET`
+  - SD:
+    - `0000:WINDOW`
+    - `000a:MESSAGE 400101`
+    - `000d:BTLON`
+    - `000f:RET`
+    - `0010:WAIT`
+    - `0013:PRTYE`
+    - `0017:MMBud`
+    - `001a:PRTYE`
+    - `001e:SETWORD 20/00=0x3e7`
+    - `0023:MAPJUMP #400`
+    - `002d:RET`
+
+### TUNNEL_6
+- D1 sha: a6c10e71fc77431e dec=49036
+- D2 sha: e7f78b28ba79a4d1 dec=48636
+- SD sha: fdee1ea8bfe9f1d8 dec=48636
+
+#### SD vs CSR D1
+- **`irena/0`** len 807->833 (c6a88cb0192d->eada7ad07ec7)
+  - D1 interesting (66):
+    - `0016:RET`
+    - `001a:IFUB A=0cV=01C=0E=09->0028`
+    - `0020:IFUB A=80V=02C=10E=03->0028`
+    - `0026:JMPF ->002b`
+    - `0038:MESSAGE 400045`
+    - `0049:REQEW`
+    - `007d:MESSAGE 400046`
+    - `0080:MUSIC id=2`
+    - `0093:MUSIC id=3`
+    - `0098:REQEW`
+    - `00a5:MESSAGE 400047`
+    - `00a8:REQEW`
+    - `00b5:MESSAGE 400048`
+    - `00c5:MESSAGE 400049`
+    - `00cb:REQEW`
+    - `00d8:MESSAGE 40004c`
+    - `00db:REQEW`
+    - `00e8:MESSAGE 40004d`
+    - `00f8:MESSAGE 40004e`
+    - `0108:MESSAGE 40004f`
+    - `010b:IFUB A=88V=07C=10E=0a->011a`
+    - `0127:MESSAGE 400050`
+    - `012a:REQSW`
+    - `012d:REQEW`
+    - `0130:IFUB A=88V=07C=10E=40->0175`
+    - `0136:MUSIC id=4`
+    - `0150:REQEW`
+    - `0153:REQEW`
+    - `0156:BITON f0/80#2`
+    - `015a:SETWORD 20/00=0x642`
+    - `015f:MUSIC id=0`
+    - `0173:JMPF ->0204`
+    - `0182:MESSAGE 400051`
+    - `0185:SETBYTE 50/0a=0x0`
+    - `0193:ASK 4805005202030a`
+    - `019a:IFUB A=0aV=02C=0E=5c->01fb`
+    - `01b0:MESSAGE 400053`
+    - `01b3:REQEW`
+    - `01bc:MUSIC id=4`
+    - `01d8:REQEW`
+    - `01db:REQEW`
+    - `01de:BITON f0/80#2`
+    - `01e2:SETWORD 20/00=0x642`
+    - `01e7:MUSIC id=0`
+    - `01fb:IFUB A=0aV=03C=0E=03->0203`
+    - `0201:JMPF ->020b`
+    - `0209:RET`
+    - `0220:MESSAGE 400054`
+    - `022d:MESSAGE 400055`
+    - `0243:MESSAGE 400056`
+    - `0253:MESSAGE 400057`
+    - `0260:MESSAGE 400058`
+    - `0276:MESSAGE 400059`
+    - `0286:MESSAGE 40005a`
+    - `0296:MESSAGE 40005b`
+    - `0299:REQEW`
+    - `02a6:MESSAGE 40005c`
+    - `02a9:REQEW`
+    - `02c2:MESSAGE 40005d`
+    - `02ee:MESSAGE 40005e`
+    - `02ff:REQEW`
+    - `0302:BITON f0/80#2`
+    - `0306:SETWORD 20/00=0x642`
+    - `030b:MUSIC id=2`
+    - `031e:MUSIC id=0`
+    - `0326:RET`
+  - SD interesting (71):
+    - `0016:RET`
+    - `001a:IFUB A=0cV=01C=0E=09->0028`
+    - `0020:IFUB A=80V=02C=10E=03->0028`
+    - `0026:JMPF ->002b`
+    - `0038:MESSAGE 400045`
+    - `0049:REQEW`
+    - `006d:REQSW`
+    - `0070:REQEW`
+    - `0073:MUSIC id=2`
+    - `0083:MUSIC id=3`
+    - `0085:JMPF ->014b`
+    - `0097:MESSAGE 400046`
+    - `009a:MUSIC id=2`
+    - `00ad:MUSIC id=3`
+    - `00b2:REQEW`
+    - `00bf:MESSAGE 400047`
+    - `00c2:REQEW`
+    - `00cf:MESSAGE 400048`
+    - `00df:MESSAGE 400049`
+    - `00e5:REQEW`
+    - `00f2:MESSAGE 40004c`
+    - `00f5:REQEW`
+    - `0102:MESSAGE 40004d`
+    - `0112:MESSAGE 40004e`
+    - `0122:MESSAGE 40004f`
+    - `0125:IFUB A=88V=07C=10E=0a->0134`
+    - `0141:MESSAGE 400050`
+    - `0144:REQSW`
+    - `0147:REQEW`
+    - `014a:IFUB A=88V=07C=10E=40->018f`
+    - `0150:MUSIC id=4`
+    - `016a:REQEW`
+    - `016d:REQEW`
+    - `0170:BITON f0/80#2`
+    - `0174:SETWORD 20/00=0x642`
+    - `0179:MUSIC id=0`
+    - `018d:JMPF ->021e`
+    - `019c:MESSAGE 400051`
+    - `019f:SETBYTE 50/0a=0x0`
+    - `01ad:ASK 4805005202030a`
+    - `01b4:IFUB A=0aV=02C=0E=5c->0215`
+    - `01ca:MESSAGE 400053`
+    - `01cd:REQEW`
+    - `01d6:MUSIC id=4`
+    - `01f2:REQEW`
+    - `01f5:REQEW`
+    - `01f8:BITON f0/80#2`
+    - `01fc:SETWORD 20/00=0x642`
+    - `0201:MUSIC id=0`
+    - `0215:IFUB A=0aV=03C=0E=03->021d`
+    - `021b:JMPF ->0225`
+    - `0223:RET`
+    - `023a:MESSAGE 400054`
+    - `0247:MESSAGE 400055`
+    - `025d:MESSAGE 400056`
+    - `026d:MESSAGE 400057`
+    - `027a:MESSAGE 400058`
+    - `0290:MESSAGE 400059`
+    - `02a0:MESSAGE 40005a`
+    - `02b0:MESSAGE 40005b`
+    - `02b3:REQEW`
+    - `02c0:MESSAGE 40005c`
+    - `02c3:REQEW`
+    - `02dc:MESSAGE 40005d`
+    - `0308:MESSAGE 40005e`
+    - `0319:REQEW`
+    - `031c:BITON f0/80#2`
+    - `0320:SETWORD 20/00=0x642`
+    - `0325:MUSIC id=2`
+    - `0338:MUSIC id=0`
+    - `0340:RET`
+  - opcode counts: AKAO:4->5, JMPF:3->4, MUSIC:8->10, REQEW:14->15, REQSW:1->2
+- **`lude/3`** len 37->41 (60c20561070a->164f402d68e1)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DFANM`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:MSPED`
+    - `001b:MOVE`
+    - `0021:DFANM`
+    - `0024:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DFANM`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:MSPED`
+    - `001b:MOVE`
+    - `0021:DFANM`
+    - `0024:RET`
+    - `0025:MSPED`
+- **`reno/3`** len 37->41 (7d970e77f021->b8595ade772f)
+  - D1:
+    - `0000:XYZI`
+    - `000b:DFANM`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:MSPED`
+    - `001b:MOVE`
+    - `0021:DFANM`
+    - `0024:RET`
+  - SD:
+    - `0000:XYZI`
+    - `000b:DFANM`
+    - `000e:DIR`
+    - `0011:TLKON`
+    - `0013:SOLID`
+    - `0015:VISI`
+    - `0017:MSPED`
+    - `001b:MOVE`
+    - `0021:DFANM`
+    - `0024:RET`
+    - `0025:MSPED`
+
+#### SD vs CSR D2
+
+### WHITE2
+- D1 sha: e72e008703ef9641 dec=19496
+- D2 sha: b59ab825ec353aaf dec=19500
+- SD sha: 9f4696c8e2cf6168 dec=19488
+
+#### SD vs CSR D1
+- **`cl/31`** len 293->290 (2381451c0f4e->afeb8b410d1e)
+  - D1:
+    - `0000:AKAO`
+    - `000e:MSPED`
+    - `0012:MOVE`
+    - `0018:SPLIT`
+    - `0027:REQEW`
+    - `002a:MUSIC id=1`
+    - `002c:AKAO`
+    - `003a:FADE`
+    - `0043:FADEW`
+    - `0044:MENU`
+    - `0048:MVCAM`
+    - `004a:PMVIE id=56`
+    - `004c:REQ`
+    - `004f:MOVIE`
+    - `0050:NFADE`
+    - `0059:FADEW`
+    - `005a:MVCAM`
+    - `005c:REQ`
+    - `005f:WAIT`
+    - `0062:ANIM!2`
+    - `0065:WINDOW`
+    - `006f:MESSAGE 40005a`
+    - `0072:REQEW`
+    - `0075:ANIM!2`
+    - `0078:WINDOW`
+    - `0082:MESSAGE 40005c`
+    - `0085:CANM!2`
+    - `008a:WINDOW`
+    - `0094:MESSAGE 40005d`
+    - `0097:CANM!2`
+    - `009c:DFANM`
+    - `009f:PRQEW`
+    - `00a2:ANIME2`
+    - `00a5:PTURA`
+    - `00a9:ANIMW`
+    - `00aa:PRQEW`
+    - `00ad:ANIME2`
+    - `00b0:PTURA`
+    - `00b4:ANIMW`
+    - `00b5:WAIT`
+    - `00b8:ANIME1`
+    - `00bb:WAIT`
+    - `00be:ANIME2`
+    - `00c1:TURNGEN`
+    - `00c7:ANIMW`
+    - `00c8:ANIM!1`
+    - `00cb:WAIT`
+    - `00ce:WINDOW`
+    - `00d8:MESSAGE 40006c`
+    - `00db:ANIMW`
+    - `00dc:WINDOW`
+    - `00e6:MESSAGE 40006d`
+    - `00e9:ANIME1`
+    - `00ec:WINDOW`
+    - `00f6:MESSAGE 40006e`
+    - `00f9:REQEW`
+    - `00fc:ANIME2`
+    - `00ff:WINDOW`
+    - `0109:MESSAGE 400070`
+    - `010c:ANIMW`
+    - `010d:CANM!2`
+    - `0112:WINDOW`
+    - `011c:MESSAGE 400071`
+    - `011f:CANM!2`
+    - `0124:RET`
+  - SD:
+    - `0000:AKAO`
+    - `000e:MSPED`
+    - `0012:MOVE`
+    - `0018:SPLIT`
+    - `0027:REQEW`
+    - `002a:MUSIC id=1`
+    - `002c:AKAO`
+    - `003a:FADE`
+    - `0043:FADEW`
+    - `0044:MENU`
+    - `0048:MVCAM`
+    - `004a:REQ`
+    - `004d:NFADE`
+    - `0056:FADEW`
+    - `0057:MVCAM`
+    - `0059:REQ`
+    - `005c:WAIT`
+    - `005f:ANIM!2`
+    - `0062:WINDOW`
+    - `006c:MESSAGE 40005a`
+    - `006f:REQEW`
+    - `0072:ANIM!2`
+    - `0075:WINDOW`
+    - `007f:MESSAGE 40005c`
+    - `0082:CANM!2`
+    - `0087:WINDOW`
+    - `0091:MESSAGE 40005d`
+    - `0094:CANM!2`
+    - `0099:DFANM`
+    - `009c:PRQEW`
+    - `009f:ANIME2`
+    - `00a2:PTURA`
+    - `00a6:ANIMW`
+    - `00a7:PRQEW`
+    - `00aa:ANIME2`
+    - `00ad:PTURA`
+    - `00b1:ANIMW`
+    - `00b2:WAIT`
+    - `00b5:ANIME1`
+    - `00b8:WAIT`
+    - `00bb:ANIME2`
+    - `00be:TURNGEN`
+    - `00c4:ANIMW`
+    - `00c5:ANIM!1`
+    - `00c8:WAIT`
+    - `00cb:WINDOW`
+    - `00d5:MESSAGE 40006c`
+    - `00d8:ANIMW`
+    - `00d9:WINDOW`
+    - `00e3:MESSAGE 40006d`
+    - `00e6:ANIME1`
+    - `00e9:WINDOW`
+    - `00f3:MESSAGE 40006e`
+    - `00f6:REQEW`
+    - `00f9:ANIME2`
+    - `00fc:WINDOW`
+    - `0106:MESSAGE 400070`
+    - `0109:ANIMW`
+    - `010a:CANM!2`
+    - `010f:WINDOW`
+    - `0119:MESSAGE 400071`
+    - `011c:CANM!2`
+    - `0121:RET`
+- **`mdir/31`** len 31->26 (1d1b69b85046->d2923a5f6bb4)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MVCAM`
+    - `0006:IFSW V=0x654C=4E=05->0012`
+    - `000e:PMVIE id=28`
+    - `0010:JMPF ->0015`
+    - `0012:PMVIE id=42`
+    - `0014:NFADE`
+    - `001d:MOVIE`
+    - `001e:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MVCAM`
+    - `0006:IFSW V=0x654C=4E=03->0010`
+    - `000e:JMPF ->0011`
+    - `0010:NFADE`
+    - `0019:RET`
+
+#### SD vs CSR D2
+- **`cl/31`** len 295->290 (d7bfee14ca9d->afeb8b410d1e)
+  - D2:
+    - `0000:AKAO`
+    - `000e:MSPED`
+    - `0012:MOVE`
+    - `0018:SPLIT`
+    - `0027:REQEW`
+    - `002a:MUSIC id=1`
+    - `002c:AKAO`
+    - `003a:JMPF ->0122`
+    - `003c:FADE`
+    - `0045:FADEW`
+    - `0046:MENU`
+    - `004a:MVCAM`
+    - `004c:PMVIE id=56`
+    - `004e:REQ`
+    - `0051:MOVIE`
+    - `0052:NFADE`
+    - `005b:FADEW`
+    - `005c:MVCAM`
+    - `005e:REQ`
+    - `0061:WAIT`
+    - `0064:ANIM!2`
+    - `0067:WINDOW`
+    - `0071:MESSAGE 40005a`
+    - `0074:REQEW`
+    - `0077:ANIM!2`
+    - `007a:WINDOW`
+    - `0084:MESSAGE 40005c`
+    - `0087:CANM!2`
+    - `008c:WINDOW`
+    - `0096:MESSAGE 40005d`
+    - `0099:CANM!2`
+    - `009e:DFANM`
+    - `00a1:PRQEW`
+    - `00a4:ANIME2`
+    - `00a7:PTURA`
+    - `00ab:ANIMW`
+    - `00ac:PRQEW`
+    - `00af:ANIME2`
+    - `00b2:PTURA`
+    - `00b6:ANIMW`
+    - `00b7:WAIT`
+    - `00ba:ANIME1`
+    - `00bd:WAIT`
+    - `00c0:ANIME2`
+    - `00c3:TURNGEN`
+    - `00c9:ANIMW`
+    - `00ca:ANIM!1`
+    - `00cd:WAIT`
+    - `00d0:WINDOW`
+    - `00da:MESSAGE 40006c`
+    - `00dd:ANIMW`
+    - `00de:WINDOW`
+    - `00e8:MESSAGE 40006d`
+    - `00eb:ANIME1`
+    - `00ee:WINDOW`
+    - `00f8:MESSAGE 40006e`
+    - `00fb:REQEW`
+    - `00fe:ANIME2`
+    - `0101:WINDOW`
+    - `010b:MESSAGE 400070`
+    - `010e:ANIMW`
+    - `010f:CANM!2`
+    - `0114:WINDOW`
+    - `011e:MESSAGE 400071`
+    - `0121:CANM!2`
+    - `0126:RET`
+  - SD:
+    - `0000:AKAO`
+    - `000e:MSPED`
+    - `0012:MOVE`
+    - `0018:SPLIT`
+    - `0027:REQEW`
+    - `002a:MUSIC id=1`
+    - `002c:AKAO`
+    - `003a:FADE`
+    - `0043:FADEW`
+    - `0044:MENU`
+    - `0048:MVCAM`
+    - `004a:REQ`
+    - `004d:NFADE`
+    - `0056:FADEW`
+    - `0057:MVCAM`
+    - `0059:REQ`
+    - `005c:WAIT`
+    - `005f:ANIM!2`
+    - `0062:WINDOW`
+    - `006c:MESSAGE 40005a`
+    - `006f:REQEW`
+    - `0072:ANIM!2`
+    - `0075:WINDOW`
+    - `007f:MESSAGE 40005c`
+    - `0082:CANM!2`
+    - `0087:WINDOW`
+    - `0091:MESSAGE 40005d`
+    - `0094:CANM!2`
+    - `0099:DFANM`
+    - `009c:PRQEW`
+    - `009f:ANIME2`
+    - `00a2:PTURA`
+    - `00a6:ANIMW`
+    - `00a7:PRQEW`
+    - `00aa:ANIME2`
+    - `00ad:PTURA`
+    - `00b1:ANIMW`
+    - `00b2:WAIT`
+    - `00b5:ANIME1`
+    - `00b8:WAIT`
+    - `00bb:ANIME2`
+    - `00be:TURNGEN`
+    - `00c4:ANIMW`
+    - `00c5:ANIM!1`
+    - `00c8:WAIT`
+    - `00cb:WINDOW`
+    - `00d5:MESSAGE 40006c`
+    - `00d8:ANIMW`
+    - `00d9:WINDOW`
+    - `00e3:MESSAGE 40006d`
+    - `00e6:ANIME1`
+    - `00e9:WINDOW`
+    - `00f3:MESSAGE 40006e`
+    - `00f6:REQEW`
+    - `00f9:ANIME2`
+    - `00fc:WINDOW`
+    - `0106:MESSAGE 400070`
+    - `0109:ANIMW`
+    - `010a:CANM!2`
+    - `010f:WINDOW`
+    - `0119:MESSAGE 400071`
+    - `011c:CANM!2`
+    - `0121:RET`
+- **`mdir/31`** len 31->26 (1d1b69b85046->d2923a5f6bb4)
+  - D2:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MVCAM`
+    - `0006:IFSW V=0x654C=4E=05->0012`
+    - `000e:PMVIE id=28`
+    - `0010:JMPF ->0015`
+    - `0012:PMVIE id=42`
+    - `0014:NFADE`
+    - `001d:MOVIE`
+    - `001e:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:MVCAM`
+    - `0006:IFSW V=0x654C=4E=03->0010`
+    - `000e:JMPF ->0011`
+    - `0010:NFADE`
+    - `0019:RET`
+
+### WHITEBG3
+- D1 sha: aae7a9423645465e dec=21316
+- D2 sha: aae7a9423645465e dec=21316
+- SD sha: 8c2a04032fba6e58 dec=21316
+
+#### SD vs CSR D1
+- `cid/0` only in D1 len=21
+- `cid/31` only in D1 len=1
+- **`ti/31`** len 1->23 (6e340b9cffb3->c5f47c7e6945)
+  - D1:
+    - `0000:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:CHAR`
+    - `0003:PC`
+    - `0005:IFSW V=0x49aC=0E=07->0013`
+    - `000d:TLKON`
+    - `000f:SOLID`
+    - `0011:VISI`
+    - `0013:RET`
+    - `0014:JMPB ->0014`
+    - `0016:RET`
+
+#### SD vs CSR D2
+- `cid/0` only in D2 len=21
+- `cid/31` only in D2 len=1
+- **`ti/31`** len 1->23 (6e340b9cffb3->c5f47c7e6945)
+  - D2:
+    - `0000:RET`
+  - SD:
+    - `0000:RET`
+    - `0001:CHAR`
+    - `0003:PC`
+    - `0005:IFSW V=0x49aC=0E=07->0013`
+    - `000d:TLKON`
+    - `000f:SOLID`
+    - `0011:VISI`
+    - `0013:RET`
+    - `0014:JMPB ->0014`
+    - `0016:RET`
+
+### ZCOAL_1
+- D1 sha: 5a5ade4ba147afc6 dec=33796
+- D2 sha: c5174dadb891890e dec=33364
+- SD sha: 9bd16d8df07731d8 dec=33364
+
+#### SD vs CSR D1
+- **`cid/0`** len 505->508 (91868508b1e1->94dd443cebc2)
+  - D1 interesting (74):
+    - `0004:RET`
+    - `0019:IFUB A=09V=08C=0E=05->0023`
+    - `001f:JMPF ->002e`
+    - `0021:JMPF ->0025`
+    - `0023:RET`
+    - `0024:IFUB A=90V=03C=9E=03->002c`
+    - `002a:JMPF ->002e`
+    - `002c:RET`
+    - `0034:IFUB A=0aV=01C=0E=14->004d`
+    - `003a:REQEW`
+    - `0047:MESSAGE 4000c1`
+    - `004a:REQEW`
+    - `004d:IFUB A=0aV=04C=0E=14->0066`
+    - `0053:REQEW`
+    - `0060:MESSAGE 4000c2`
+    - `0063:REQEW`
+    - `0066:IFUB A=0aV=05C=0E=14->007f`
+    - `006c:REQEW`
+    - `0079:MESSAGE 4000c3`
+    - `007c:REQEW`
+    - `007f:IFUB A=0aV=06C=0E=14->0098`
+    - `0085:REQEW`
+    - `0092:MESSAGE 4000c4`
+    - `0095:REQEW`
+    - `0098:IFUB A=0aV=07C=0E=14->00b1`
+    - `009e:REQEW`
+    - `00ab:MESSAGE 4000c5`
+    - `00ae:REQEW`
+    - `00bb:MESSAGE 4000c6`
+    - `00be:IFUB A=0aV=01C=0E=14->00d7`
+    - `00c4:REQEW`
+    - `00d1:MESSAGE 4000c7`
+    - `00d4:REQEW`
+    - `00d7:IFUB A=0aV=04C=0E=14->00f0`
+    - `00dd:REQEW`
+    - `00ea:MESSAGE 4000c8`
+    - `00ed:REQEW`
+    - `00f0:IFUB A=0aV=05C=0E=14->0109`
+    - `00f6:REQEW`
+    - `0103:MESSAGE 4000c9`
+    - `0106:REQEW`
+    - `0109:IFUB A=0aV=06C=0E=14->0122`
+    - `010f:REQEW`
+    - `011c:MESSAGE 4000ca`
+    - `011f:REQEW`
+    - `0122:IFUB A=0aV=07C=0E=14->013b`
+    - `0128:REQEW`
+    - `0135:MESSAGE 4000cb`
+    - `0138:REQEW`
+    - `0148:MESSAGE 4000cc`
+    - `015f:REQSW`
+    - `0162:REQEW`
+    - `0179:REQSW`
+    - `017c:REQEW`
+    - `018c:MESSAGE 4000ce`
+    - `018f:REQ`
+    - `0192:REQ`
+    - `0195:REQSW`
+    - `0198:SETBYTE 50/12=0x1`
+    - `019c:IFUB A=10V=00C=0E=2c->01cd`
+    - `01b4:REQSW`
+    - `01b7:REQ`
+    - `01bd:SETBYTE 50/10=0x1`
+    - `01c1:SETBYTE 50/11=0x1`
+    - `01c5:JMPF ->01cc`
+    - `01c7:SETBYTE 50/11=0x0`
+    - `01cb:JMPF ->01f7`
+    - `01df:REQSW`
+    - `01e2:REQ`
+    - `01e8:SETBYTE 50/10=0x0`
+    - `01ec:SETBYTE 50/11=0x1`
+    - `01f0:JMPF ->01f7`
+    - `01f2:SETBYTE 50/11=0x0`
+    - `01f8:RET`
+  - SD interesting (75):
+    - `0004:RET`
+    - `0019:IFUB A=09V=08C=0E=05->0023`
+    - `001f:JMPF ->002e`
+    - `0021:JMPF ->0025`
+    - `0023:RET`
+    - `0024:IFUB A=90V=03C=9E=03->002c`
+    - `002a:JMPF ->002e`
+    - `002c:RET`
+    - `0031:JMPFL`
+    - `0037:IFUB A=0aV=01C=0E=14->0050`
+    - `003d:REQEW`
+    - `004a:MESSAGE 4000c1`
+    - `004d:REQEW`
+    - `0050:IFUB A=0aV=04C=0E=14->0069`
+    - `0056:REQEW`
+    - `0063:MESSAGE 4000c2`
+    - `0066:REQEW`
+    - `0069:IFUB A=0aV=05C=0E=14->0082`
+    - `006f:REQEW`
+    - `007c:MESSAGE 4000c3`
+    - `007f:REQEW`
+    - `0082:IFUB A=0aV=06C=0E=14->009b`
+    - `0088:REQEW`
+    - `0095:MESSAGE 4000c4`
+    - `0098:REQEW`
+    - `009b:IFUB A=0aV=07C=0E=14->00b4`
+    - `00a1:REQEW`
+    - `00ae:MESSAGE 4000c5`
+    - `00b1:REQEW`
+    - `00be:MESSAGE 4000c6`
+    - `00c1:IFUB A=0aV=01C=0E=14->00da`
+    - `00c7:REQEW`
+    - `00d4:MESSAGE 4000c7`
+    - `00d7:REQEW`
+    - `00da:IFUB A=0aV=04C=0E=14->00f3`
+    - `00e0:REQEW`
+    - `00ed:MESSAGE 4000c8`
+    - `00f0:REQEW`
+    - `00f3:IFUB A=0aV=05C=0E=14->010c`
+    - `00f9:REQEW`
+    - `0106:MESSAGE 4000c9`
+    - `0109:REQEW`
+    - `010c:IFUB A=0aV=06C=0E=14->0125`
+    - `0112:REQEW`
+    - `011f:MESSAGE 4000ca`
+    - `0122:REQEW`
+    - `0125:IFUB A=0aV=07C=0E=14->013e`
+    - `012b:REQEW`
+    - `0138:MESSAGE 4000cb`
+    - `013b:REQEW`
+    - `014b:MESSAGE 4000cc`
+    - `0162:REQSW`
+    - `0165:REQEW`
+    - `017c:REQSW`
+    - `017f:REQEW`
+    - `018f:MESSAGE 4000ce`
+    - `0192:REQ`
+    - `0195:REQ`
+    - `0198:REQSW`
+    - `019b:SETBYTE 50/12=0x1`
+    - `019f:IFUB A=10V=00C=0E=2c->01d0`
+    - `01b7:REQSW`
+    - `01ba:REQ`
+    - `01c0:SETBYTE 50/10=0x1`
+    - `01c4:SETBYTE 50/11=0x1`
+    - `01c8:JMPF ->01cf`
+    - `01ca:SETBYTE 50/11=0x0`
+    - `01ce:JMPF ->01fa`
+    - `01e2:REQSW`
+    - `01e5:REQ`
+    - `01eb:SETBYTE 50/10=0x0`
+    - `01ef:SETBYTE 50/11=0x1`
+    - `01f3:JMPF ->01fa`
+    - `01f5:SETBYTE 50/11=0x0`
+    - `01fb:RET`
+  - opcode counts: JMPFL:0->1
+
+#### SD vs CSR D2
+
+### ZCOAL_3
+- D1 sha: cc92ad17118afd00 dec=32384
+- D2 sha: 3837cf1038fdf952 dec=31952
+- SD sha: 875c6a5b1ac4fa8b dec=31952
+
+#### SD vs CSR D1
+- **`cid/0`** len 1234->1238 (9a6110adecde->12fda82b5426)
+  - D1 interesting (110):
+    - `0004:RET`
+    - `0007:JMPF ->000a`
+    - `0009:REQSW`
+    - `0032:SETBYTE 50/06=0x1`
+    - `0055:REQEW`
+    - `0062:MESSAGE 4000d3`
+    - `0072:MESSAGE 4000d4`
+    - `007f:MESSAGE 4000d5`
+    - `0082:REQEW`
+    - `009a:REQEW`
+    - `00b4:MESSAGE 4000d6`
+    - `00ba:REQEW`
+    - `00bd:IFUB A=0aV=01C=0E=0d->00cf`
+    - `00cd:JMPF ->00da`
+    - `00d9:MESSAGE 4000d7`
+    - `00dc:REQEW`
+    - `00e2:REQEW`
+    - `00e5:IFUB A=0aV=04C=0E=0d->00f7`
+    - `00f5:JMPF ->0102`
+    - `0101:MESSAGE 4000d8`
+    - `0104:REQEW`
+    - `010a:REQEW`
+    - `010d:IFUB A=0aV=05C=0E=0d->011f`
+    - `011d:JMPF ->012a`
+    - `0129:MESSAGE 4000d9`
+    - `012c:REQEW`
+    - `0132:REQEW`
+    - `0135:IFUB A=0aV=06C=0E=0d->0147`
+    - `0145:JMPF ->0152`
+    - `0151:MESSAGE 4000da`
+    - `0154:REQEW`
+    - `015a:REQEW`
+    - `015d:IFUB A=0aV=07C=0E=0d->016f`
+    - `016d:JMPF ->017a`
+    - `0179:MESSAGE 4000db`
+    - `017c:REQEW`
+    - `018c:MESSAGE 4000dc`
+    - `018f:MUSIC id=1`
+    - `01ce:MESSAGE 4000dd`
+    - `01d1:REQ`
+    - `01e1:MESSAGE 4000df`
+    - `01fd:SETBYTE 50/07=0x1`
+    - `0201:JMPF ->0221`
+    - `021c:JMPF ->0221`
+    - `0236:SETBYTE 50/16=0x2`
+    - `023a:IFUB A=07V=01C=0E=06->0245`
+    - `0243:JMPF ->0249`
+    - `024e:REQEW`
+    - `0251:IFUB A=0aV=01C=0E=0d->0263`
+    - `0261:JMPF ->026e`
+    - `026d:MESSAGE 4000e0`
+    - `0270:REQEW`
+    - `0276:REQEW`
+    - `0279:IFUB A=0aV=04C=0E=0d->028b`
+    - `0289:JMPF ->0296`
+    - `0295:MESSAGE 4000e1`
+    - `0298:REQEW`
+    - `029e:REQEW`
+    - `02a1:IFUB A=0aV=06C=0E=0d->02b3`
+    - `02b1:JMPF ->02be`
+    - `02bd:MESSAGE 4000e2`
+    - `02c0:REQEW`
+    - `02c6:REQEW`
+    - `02c9:IFUB A=0aV=07C=0E=0d->02db`
+    - `02d9:JMPF ->02e6`
+    - `02e5:MESSAGE 4000e3`
+    - `02e8:REQEW`
+    - `02ee:REQEW`
+    - `02f1:IFUB A=0aV=05C=0E=0d->0303`
+    - `0301:JMPF ->030e`
+    - `030d:MESSAGE 4000e4`
+    - `0310:REQEW`
+    - `0323:MESSAGE 4000e5`
+    - `033f:SETBYTE 50/07=0x1`
+    - `0343:JMPF ->0367`
+    - `035e:SETBYTE 50/07=0x0`
+    - `0362:JMPF ->0367`
+    - `037f:SETBYTE 50/16=0x0`
+    - `0383:IFUB A=07V=01C=0E=06->038e`
+    - `038c:JMPF ->0392`
+    - ... +30
+  - SD interesting (112):
+    - `0004:RET`
+    - `0007:JMPF ->000a`
+    - `0009:REQSW`
+    - `0032:SETBYTE 50/06=0x1`
+    - `0040:JMPF ->0078`
+    - `0057:REQEW`
+    - `0064:MESSAGE 4000d3`
+    - `0074:MESSAGE 4000d4`
+    - `0081:MESSAGE 4000d5`
+    - `0084:REQEW`
+    - `009c:REQEW`
+    - `00a9:JMPF ->0194`
+    - `00b8:MESSAGE 4000d6`
+    - `00be:REQEW`
+    - `00c1:IFUB A=0aV=01C=0E=0d->00d3`
+    - `00d1:JMPF ->00de`
+    - `00dd:MESSAGE 4000d7`
+    - `00e0:REQEW`
+    - `00e6:REQEW`
+    - `00e9:IFUB A=0aV=04C=0E=0d->00fb`
+    - `00f9:JMPF ->0106`
+    - `0105:MESSAGE 4000d8`
+    - `0108:REQEW`
+    - `010e:REQEW`
+    - `0111:IFUB A=0aV=05C=0E=0d->0123`
+    - `0121:JMPF ->012e`
+    - `012d:MESSAGE 4000d9`
+    - `0130:REQEW`
+    - `0136:REQEW`
+    - `0139:IFUB A=0aV=06C=0E=0d->014b`
+    - `0149:JMPF ->0156`
+    - `0155:MESSAGE 4000da`
+    - `0158:REQEW`
+    - `015e:REQEW`
+    - `0161:IFUB A=0aV=07C=0E=0d->0173`
+    - `0171:JMPF ->017e`
+    - `017d:MESSAGE 4000db`
+    - `0180:REQEW`
+    - `0190:MESSAGE 4000dc`
+    - `0193:MUSIC id=1`
+    - `01d2:MESSAGE 4000dd`
+    - `01d5:REQ`
+    - `01e5:MESSAGE 4000df`
+    - `0201:SETBYTE 50/07=0x1`
+    - `0205:JMPF ->0225`
+    - `0220:JMPF ->0225`
+    - `023a:SETBYTE 50/16=0x2`
+    - `023e:IFUB A=07V=01C=0E=06->0249`
+    - `0247:JMPF ->024d`
+    - `0252:REQEW`
+    - `0255:IFUB A=0aV=01C=0E=0d->0267`
+    - `0265:JMPF ->0272`
+    - `0271:MESSAGE 4000e0`
+    - `0274:REQEW`
+    - `027a:REQEW`
+    - `027d:IFUB A=0aV=04C=0E=0d->028f`
+    - `028d:JMPF ->029a`
+    - `0299:MESSAGE 4000e1`
+    - `029c:REQEW`
+    - `02a2:REQEW`
+    - `02a5:IFUB A=0aV=06C=0E=0d->02b7`
+    - `02b5:JMPF ->02c2`
+    - `02c1:MESSAGE 4000e2`
+    - `02c4:REQEW`
+    - `02ca:REQEW`
+    - `02cd:IFUB A=0aV=07C=0E=0d->02df`
+    - `02dd:JMPF ->02ea`
+    - `02e9:MESSAGE 4000e3`
+    - `02ec:REQEW`
+    - `02f2:REQEW`
+    - `02f5:IFUB A=0aV=05C=0E=0d->0307`
+    - `0305:JMPF ->0312`
+    - `0311:MESSAGE 4000e4`
+    - `0314:REQEW`
+    - `0327:MESSAGE 4000e5`
+    - `0343:SETBYTE 50/07=0x1`
+    - `0347:JMPF ->036b`
+    - `0362:SETBYTE 50/07=0x0`
+    - `0366:JMPF ->036b`
+    - `0383:SETBYTE 50/16=0x0`
+    - ... +32
+  - opcode counts: JMPF:22->24
+- **`cid/31`** len 82->82 (423c93b9ccff->65f6e634b736)
+  - D1:
+    - `0000:BITON f0/91#2`
+    - `0004:BITON f0/91#5`
+    - `0008:ANIM!2`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 4000d2`
+    - `0018:WCLS`
+    - `001a:WAIT`
+    - `001d:IFUB A=52V=05C=9E=06->0028`
+    - `0023:SETWORD 20/00=0x45c`
+    - `0028:AKAO`
+    - `0036:AKAO`
+    - `0044:PMVIE id=34`
+    - `0046:MOVIE`
+    - `0047:MAPJUMP #456`
+    - `0051:RET`
+  - SD:
+    - `0000:BITON f0/91#2`
+    - `0004:BITON f0/91#5`
+    - `0008:ANIM!2`
+    - `000b:WINDOW`
+    - `0015:MESSAGE 4000d2`
+    - `0018:WCLS`
+    - `001a:WAIT`
+    - `001d:IFUB A=52V=05C=9E=06->0028`
+    - `0023:SETWORD 20/00=0x45c`
+    - `0028:AKAO`
+    - `0036:AKAO`
+    - `0044:PMVIE id=34`
+    - `0046:MAPJUMP #456`
+    - `0050:RET`
+    - `0051:MOVIE`
+
+#### SD vs CSR D2
+
+### ZMIND1
+- D1 sha: eb581da589c3907b dec=16072
+- D2 sha: d6ee1fdf2deae26d dec=15928
+- SD sha: 12bd076aacfd7ab3 dec=15928
+
+#### SD vs CSR D1
+- **`dic/0`** len 188->187 (8db0322614d1->e2b581b80c09)
+  - D1:
+    - `0000:MPNAM`
+    - `0002:LSTMP`
+    - `0005:AKAO`
+    - `0013:AKAO`
+    - `0021:AKAO`
+    - `002f:AKAO`
+    - `003d:SPECIAL`
+    - `0040:RET`
+    - `0041:UC`
+    - `0043:MENU2`
+    - `0045:MENU2`
+    - `0047:NFADE`
+    - `0050:NFADE`
+    - `0059:AKAO`
+    - `0067:MUSIC id=0`
+    - `0069:WAIT`
+    - `006c:IFSW V=0x462C=5E=18->008b`
+    - `0074:REQEW`
+    - `0077:NFADE`
+    - `0080:FADEW`
+    - `0081:REQEW`
+    - `0084:UC`
+    - `0086:MENU2`
+    - `0088:MENU2`
+    - `008a:RET`
+    - `008b:IFSW V=0x49cC=0E=29->00bb`
+    - `0093:REQEW`
+    - `0096:NFADE`
+    - `009f:FADEW`
+    - `00a0:REQEW`
+    - `00a3:REQEW`
+    - `00a6:REQEW`
+    - `00a9:REQEW`
+    - `00ac:REQ`
+    - `00af:REQEW`
+    - `00b2:REQEW`
+    - `00b5:UC`
+    - `00b7:MENU2`
+    - `00b9:MENU2`
+    - `00bb:RET`
+  - SD:
+    - `0000:MPNAM`
+    - `0002:LSTMP`
+    - `0005:AKAO`
+    - `0013:AKAO`
+    - `0021:AKAO`
+    - `002f:AKAO`
+    - `003d:SPECIAL`
+    - `0040:RET`
+    - `0041:UC`
+    - `0043:MENU2`
+    - `0045:MENU2`
+    - `0047:AKAO`
+    - `0055:MUSIC id=0`
+    - `0057:WAIT`
+    - `005a:IFSW V=0x462C=5E=18->0079`
+    - `0062:REQEW`
+    - `0065:NFADE`
+    - `006e:FADEW`
+    - `006f:REQEW`
+    - `0072:UC`
+    - `0074:MENU2`
+    - `0076:MENU2`
+    - `0078:RET`
+    - `0079:IFSW V=0x49cC=0E=28->00a8`
+    - `0081:REQEW`
+    - `0084:NFADE`
+    - `008d:FADEW`
+    - `008e:REQEW`
+    - `0091:JMPF ->00a0`
+    - `0093:REQEW`
+    - `0096:REQEW`
+    - `0099:REQ`
+    - `009c:REQEW`
+    - `009f:REQEW`
+    - `00a2:UC`
+    - `00a4:MENU2`
+    - `00a6:MENU2`
+    - `00a8:RET`
+    - `00a9:NFADE`
+    - `00b2:NFADE`
+- **`door1/5`** len 55->57 (9e0fedc8b499->6b1ab3e4ab28)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:LINON`
+    - `0006:PRTYE`
+    - `000a:IFSW V=0x462C=0E=12->0023`
+    - `0012:SETWORD 20/00=0x464`
+    - `0017:REQEW`
+    - `001a:REQ`
+    - `001d:REQ`
+    - `0020:PMVIE id=37`
+    - `0022:MOVIE`
+    - `0023:NFADE`
+    - `002c:MAPJUMP #280`
+    - `0036:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:LINON`
+    - `0006:PRTYE`
+    - `000a:IFSW V=0x462C=0E=14->0025`
+    - `0012:SETWORD 20/00=0x464`
+    - `0017:JMPF ->0026`
+    - `0019:REQEW`
+    - `001c:REQ`
+    - `001f:REQ`
+    - `0022:PMVIE id=37`
+    - `0024:MOVIE`
+    - `0025:NFADE`
+    - `002e:MAPJUMP #280`
+    - `0038:RET`
+- **`door2/5`** len 43->66 (78e3cd73d646->d842c0549491)
+  - D1:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:LINON`
+    - `0006:PRTYE`
+    - `000a:IFSW V=0x49cC=0E=06->0017`
+    - `0012:SETWORD 20/00=0x49d`
+    - `0017:NFADE`
+    - `0020:MAPJUMP #280`
+    - `002a:RET`
+  - SD:
+    - `0000:UC`
+    - `0002:MENU2`
+    - `0004:LINON`
+    - `0006:PRTYE`
+    - `000a:IFSW V=0x49cC=0E=06->0017`
+    - `0012:SETWORD 20/00=0x49d`
+    - `0017:NFADE`
+    - `0020:PRTYE`
+    - `0024:PRTYP`
+    - `0026:PRTYP`
+    - `0028:SETWORD 20/00=0x4a4`
+    - `002d:MAPJUMP #727`
+    - `0037:MAPJUMP #280`
+    - `0041:RET`
+- **`mabolo/31`** len 77->77 (91414e32da8f->b8ef52ccfa6f)
+  - D1:
+    - `0000:MOVA`
+    - `0002:GETAXY`
+    - `0007:MOVE`
+    - `000d:SOUND`
+    - `0012:KAWAI`
+    - `0016:KAWAI`
+    - `002e:WAIT`
+    - `0031:KAWAI`
+    - `0035:TURNGEN`
+    - `003b:WAIT`
+    - `003e:SOUND`
+    - `0043:ANIM!2`
+    - `0046:TLKON`
+    - `0048:SOLID`
+    - `004a:VISI`
+    - `004c:RET`
+  - SD:
+    - `0000:MOVA`
+    - `0002:GETAXY`
+    - `0007:MOVE`
+    - `000d:SOUND`
+    - `0012:KAWAI`
+    - `0016:KAWAI`
+    - `002e:WAIT`
+    - `0031:KAWAI`
+    - `0035:TURNGEN`
+    - `003b:WAIT`
+    - `003e:SOUND`
+    - `0043:ANIM!2`
+    - `0046:TLKON`
+    - `0048:SOLID`
+    - `004a:VISI`
+    - `004c:RET`
+- **`mabolo/6`** len 13->13 (212d5bf620db->09f03622bdcd)
+  - D1:
+    - `0000:TURNGEN`
+    - `0006:WAIT`
+    - `0009:ANIM!2`
+    - `000c:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:WAIT`
+    - `0009:ANIM!2`
+    - `000c:RET`
+- **`shad3/1`** len 69->56 (4dbea2b290ae->9c3e560405a3)
+  - D1:
+    - `0000:IFSW V=0x49cC=0E=02->0009`
+    - `0008:RET`
+    - `0009:UC`
+    - `000b:MENU2`
+    - `000d:SOLID`
+    - `000f:WSIZW`
+    - `0019:MESSAGE 40000b`
+    - `001c:ASPED`
+    - `0020:IFUB A=04V=00C=0E=19->003e`
+    - `0026:CANM!2`
+    - `002b:REQEW`
+    - `002e:MOVE`
+    - `0034:TURNGEN`
+    - `003a:SETBYTE 50/04=0x1`
+    - `003e:UC`
+    - `0040:MENU2`
+    - `0042:MENU2`
+    - `0044:RET`
+  - SD:
+    - `0000:IFSW V=0x49cC=0E=02->0009`
+    - `0008:RET`
+    - `0009:UC`
+    - `000b:MENU2`
+    - `000d:SOLID`
+    - `000f:ASPED`
+    - `0013:IFUB A=04V=00C=0E=19->0031`
+    - `0019:CANM!2`
+    - `001e:REQEW`
+    - `0021:MOVE`
+    - `0027:TURNGEN`
+    - `002d:SETBYTE 50/04=0x1`
+    - `0031:UC`
+    - `0033:MENU2`
+    - `0035:MENU2`
+    - `0037:RET`
+- **`shad3/31`** len 10->10 (6d10ce705afe->042f5db6cbad)
+  - D1:
+    - `0000:WAIT`
+    - `0003:TURNGEN`
+    - `0009:RET`
+  - SD:
+    - `0000:WAIT`
+    - `0003:TURNGEN`
+    - `0009:RET`
+- **`tifa/0`** len 60->61 (7493235b9440->5919a72c2e58)
+  - D1:
+    - `0000:CHAR`
+    - `0002:PC`
+    - `0004:SLIDR`
+    - `0007:RET`
+    - `0008:IFSW V=0x462C=0E=13->0022`
+    - `0010:ASPED`
+    - `0014:XYZI`
+    - `001f:ANIM!2`
+    - `0022:IFSW V=0x49cC=0E=12->003b`
+    - `002a:XYZI`
+    - `0035:TURNGEN`
+    - `003b:RET`
+  - SD:
+    - `0000:CHAR`
+    - `0002:PC`
+    - `0004:SLIDR`
+    - `0007:RET`
+    - `0008:IFSW V=0x462C=0E=14->0023`
+    - `0010:ASPED`
+    - `0014:XYZI`
+    - `001f:RET`
+    - `0020:ANIM!2`
+    - `0023:IFSW V=0x49cC=0E=12->003c`
+    - `002b:XYZI`
+    - `0036:TURNGEN`
+    - `003c:RET`
+- **`tifa/3`** len 192->182 (c88cbbd725d1->d7ab67939870)
+  - D1:
+    - `0000:ASPED`
+    - `0004:ANIM!2`
+    - `0007:WAIT`
+    - `000a:ANIM!2`
+    - `000d:WAIT`
+    - `0010:ANIM!2`
+    - `0013:WSIZW`
+    - `001d:MESSAGE 400001`
+    - `0020:REQ`
+    - `0023:WAIT`
+    - `0026:ASPED`
+    - `002a:TURNGEN`
+    - `0030:REQ`
+    - `0033:CANM!2`
+    - `0038:WAIT`
+    - `003b:WSIZW`
+    - `0045:MESSAGE 400002`
+    - `0048:MOVE`
+    - `004e:CANM!2`
+    - `0053:WSIZW`
+    - `005d:MESSAGE 400003`
+    - `0060:ASPED`
+    - `0064:ANIM!2`
+    - `0067:WSIZW`
+    - `0071:MESSAGE 400005`
+    - `0074:ANIM!2`
+    - `0077:CANM!2`
+    - `007c:WSIZW`
+    - `0086:MESSAGE 400004`
+    - `0089:ANIM!2`
+    - `008c:WSIZW`
+    - `0096:MESSAGE 400006`
+    - `0099:TURNGEN`
+    - `009f:ASPED`
+    - `00a3:ANIM!2`
+    - `00a6:WSIZW`
+    - `00b0:MESSAGE 400007`
+    - `00b3:ANIM!2`
+    - `00b6:SCRLC`
+    - `00bb:SCRLW`
+    - `00bc:DFANM`
+    - `00bf:RET`
+  - SD:
+    - `0000:ASPED`
+    - `0004:ANIM!2`
+    - `0007:WSIZW`
+    - `0011:MESSAGE 400001`
+    - `0014:REQ`
+    - `0017:JMPF ->00b6`
+    - `0019:WAIT`
+    - `001c:ASPED`
+    - `0020:TURNGEN`
+    - `0026:REQ`
+    - `0029:CANM!2`
+    - `002e:WAIT`
+    - `0031:WSIZW`
+    - `003b:MESSAGE 400002`
+    - `003e:MOVE`
+    - `0044:CANM!2`
+    - `0049:WSIZW`
+    - `0053:MESSAGE 400003`
+    - `0056:ASPED`
+    - `005a:ANIM!2`
+    - `005d:WSIZW`
+    - `0067:MESSAGE 400005`
+    - `006a:ANIM!2`
+    - `006d:CANM!2`
+    - `0072:WSIZW`
+    - `007c:MESSAGE 400004`
+    - `007f:ANIM!2`
+    - `0082:WSIZW`
+    - `008c:MESSAGE 400006`
+    - `008f:TURNGEN`
+    - `0095:ASPED`
+    - `0099:ANIM!2`
+    - `009c:WSIZW`
+    - `00a6:MESSAGE 400007`
+    - `00a9:ANIM!2`
+    - `00ac:SCRLC`
+    - `00b1:SCRLW`
+    - `00b2:DFANM`
+    - `00b5:RET`
+- **`tifa/31`** len 62->64 (dc2ed3842399->070aed1daa99)
+  - D1:
+    - `0000:TURNGEN`
+    - `0006:REQ`
+    - `0009:REQ`
+    - `000c:WAIT`
+    - `000f:ASPED`
+    - `0013:CANM!2`
+    - `0018:WAIT`
+    - `001b:WSIZW`
+    - `0025:MESSAGE 400016`
+    - `0028:REQEW`
+    - `002b:WAIT`
+    - `002e:REQ`
+    - `0031:WAIT`
+    - `0034:ASPED`
+    - `0038:CANM!2`
+    - `003d:RET`
+  - SD:
+    - `0000:TURNGEN`
+    - `0006:JMPF ->001e`
+    - `0008:REQ`
+    - `000b:REQ`
+    - `000e:WAIT`
+    - `0011:ASPED`
+    - `0015:CANM!2`
+    - `001a:WAIT`
+    - `001d:WSIZW`
+    - `0027:MESSAGE 400016`
+    - `002a:REQEW`
+    - `002d:WAIT`
+    - `0030:REQ`
+    - `0033:WAIT`
+    - `0036:ASPED`
+    - `003a:CANM!2`
+    - `003f:RET`
+- **`tifa/4`** len 34->5 (e8fc68aa6467->04fe20795d83)
+  - D1:
+    - `0000:TURA`
+    - `0004:WSIZW`
+    - `000e:MESSAGE 400008`
+    - `0011:ANIM!2`
+    - `0014:WSIZW`
+    - `001e:MESSAGE 400009`
+    - `0021:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`tifa/7`** len 37->5 (247f10366018->de508cb27b77)
+  - D1:
+    - `0000:TURA`
+    - `0004:ANIM!2`
+    - `0007:WSIZW`
+    - `0011:MESSAGE 40000f`
+    - `0014:ANIM!2`
+    - `0017:WSIZW`
+    - `0021:MESSAGE 400010`
+    - `0024:RET`
+  - SD:
+    - `0000:TURA`
+    - `0004:RET`
+- **`tifa/8`** len 95->9 (5c91af50f1f6->9eedd41c8bc0)
+  - D1:
+    - `0000:ASPED`
+    - `0004:TURNGEN`
+    - `000a:ANIM!2`
+    - `000d:WSIZW`
+    - `0017:MESSAGE 400012`
+    - `001a:ANIM!2`
+    - `001d:WSIZW`
+    - `0027:MESSAGE 400013`
+    - `002a:TURNGEN`
+    - `0030:ANIM!2`
+    - `0033:WSIZW`
+    - `003d:MESSAGE 400014`
+    - `0040:TURA`
+    - `0044:WAIT`
+    - `0047:TURA`
+    - `004b:WAIT`
+    - `004e:ANIM!2`
+    - `0051:WSIZW`
+    - `005b:MESSAGE 400015`
+    - `005e:RET`
+  - SD:
+    - `0000:ASPED`
+    - `0004:TURA`
+    - `0008:RET`
+
+#### SD vs CSR D2
+
+## CSR D1!=D2 collisions: which side SD matched
+
+| Field | SD matches | Prefer list | Note |
+|-------|------------|-------------|------|
+| ANCNT2 | d1 |  ||
+| ANCNT3 | d1 |  ||
+| ANCNT4 | d1 |  ||
+| ASTAGE_A | d1 |  ||
+| ASTAGE_B | d1 |  ||
+| BIGWHEEL | d1 |  ||
+| BLACKBG9 | d1 |  ||
+| BLACKBGB | NEITHER | d1 | PATCHED|
+| BLACKBGC | d1 |  ||
+| BLIN1 | d1 |  ||
+| BLIN59 | d1 |  ||
+| BLIN61 | d1 |  ||
+| BLIN62_1 | d1 |  ||
+| BLIN66_1 | d1 |  ||
+| BLIN66_3 | d1 |  ||
+| BLIN66_4 | d1 |  ||
+| BLIN66_5 | d1 |  ||
+| BLIN66_6 | d2 |  ||
+| BLIN67_1 | d1 |  ||
+| BLIN67_2 | d1 |  ||
+| BLIN67_3 | d1 |  ||
+| BLIN68_1 | d1 |  ||
+| BLIN68_2 | d1 |  ||
+| BLIN69_1 | d1 |  ||
+| BLIN70_1 | d1 |  ||
+| BLIN70_2 | d1 |  ||
+| BLIN70_3 | d1 |  ||
+| BLIN70_4 | d2 |  ||
+| BLINST_2 | d1 |  ||
+| BLUE_2 | NEITHER |  | PATCHED|
+| BUGIN1A | NEITHER | review | PATCHED|
+| BUGIN2 | d1 |  ||
+| BWHLIN | d1 |  ||
+| CANON_2 | NEITHER | d2 | PATCHED|
+| CARGOIN | d1 |  ||
+| CHORACE2 | d1 |  ||
+| CHRIN_1B | d1 |  ||
+| CHRIN_2 | d1 |  ||
+| CHRIN_3B | d1 |  ||
+| CLSIN2_1 | d1 |  ||
+| CLSIN2_2 | d1 |  ||
+| COLNE_1 | d1 |  ||
+| COLNE_2 | d1 |  ||
+| COLNE_4 | d1 |  ||
+| COLNE_5 | d1 |  ||
+| COLNE_6 | d1 |  ||
+| COLNE_B1 | d1 |  ||
+| COLOSS | d1 |  ||
+| CONDOR2 | d2 |  ||
+| CONVIL_1 | d2 |  ||
+| CONVIL_2 | NEITHER |  | PATCHED|
+| COSIN2 | d1 |  ||
+| COS_BTM | d2 | review ||
+| COS_BTM2 | NEITHER | review | PATCHED|
+| CRATER_1 | d2 |  ||
+| CRATER_2 | d2 |  ||
+| CRCIN_2 | d1 |  ||
+| DEL1 | d1 | d1 ||
+| DYNE | d1 |  ||
+| EALIN_1 | d1 |  ||
+| EALIN_12 | d1 |  ||
+| EALIN_2 | d1 |  ||
+| ELEOUT | d1 |  ||
+| ELM | d1 |  ||
+| ELMINN_1 | d1 |  ||
+| ELMINN_2 | d1 |  ||
+| FR_E | d2 |  ||
+| FSHIP_1 | NEITHER |  | PATCHED|
+| FSHIP_2 | d2 |  ||
+| FSHIP_22 | d2 |  ||
+| FSHIP_23 | NEITHER |  | PATCHED|
+| FSHIP_24 | d2 |  ||
+| FSHIP_25 | NEITHER |  | PATCHED|
+| FSHIP_3 | d2 |  ||
+| FSHIP_4 | NEITHER |  | PATCHED|
+| GAIA_32 | d2 |  ||
+| GAIIN_6 | d2 |  ||
+| GAMES | d1 |  ||
+| GHOTIN_2 | d1 |  ||
+| GHOTIN_4 | d1 |  ||
+| GIDUN_1 | d1 |  ||
+| GIDUN_2 | d1 |  ||
+| GIDUN_3 | d1 |  ||
+| GIDUN_4 | d1 |  ||
+| GLDGATE | d1 |  ||
+| GLDST | d1 |  ||
+| GNINN | d1 |  ||
+| GONGAGA | d1 |  ||
+| HYOU7 | d2 |  ||
+| ITHOS | d2 |  ||
+| ITOWN1A | d2 |  ||
+| ITOWN2 | NEITHER |  | PATCHED|
+| ITOWN_W | NEITHER |  | PATCHED|
+| JAIL1 | d1 |  ||
+| JAILIN2 | d1 |  ||
+| JTEMPL | d1 |  ||
+| JTEMPLB | d1 |  ||
+| JTEMPLC | d1 |  ||
+| JTMPIN1 | d1 |  ||
+| JTMPIN2 | d1 |  ||
+| JUMIN | d1 |  ||
+| JUNAIR | d2 |  ||
+| JUNAIR2 | d2 | review ||
+| JUNBIN22 | d2 |  ||
+| JUNBIN3 | d2 |  ||
+| JUNBIN4 | NEITHER |  | PATCHED|
+| JUNBIN5 | NEITHER |  | PATCHED|
+| JUNDOC1A | d1 |  ||
+| JUNELE1 | d2 |  ||
+| JUNIN1 | d1 |  ||
+| JUNIN1A | d1 |  ||
+| JUNIN2 | d2 |  ||
+| JUNONE2 | NEITHER |  | PATCHED|
+| JUNONE22 | d2 |  ||
+| JUNONE7 | NEITHER |  | PATCHED|
+| JUNONR1 | d1 |  ||
+| JUNONR4 | d1 |  ||
+| KURO_1 | d1 |  ||
+| KURO_12 | d1 |  ||
+| KURO_3 | d1 |  ||
+| KURO_7 | d1 |  ||
+| KURO_8 | d1 |  ||
+| KURO_82 | d1 |  ||
+| KURO_9 | d1 |  ||
+| LOSIN2 | d1 | d1 ||
+| LOSLAKE1 | d2 |  ||
+| LOST2 | NEITHER | d2 | PATCHED|
+| MD0 | d1 |  ||
+| MD1STIN | d1 |  ||
+| MD1_1 | d1 |  ||
+| MD8BRDG | d1 |  ||
+| MD8BRDG2 | NEITHER |  | PATCHED|
+| MD8_1 | d1 |  ||
+| MD8_6 | NEITHER |  | PATCHED|
+| MDS5_2 | d1 |  ||
+| MDS5_4 | d1 |  ||
+| MDS6_1 | d1 |  ||
+| MDS6_22 | d1 |  ||
+| MDS7 | d1 |  ||
+| MDS7PB_1 | d1 |  ||
+| MDS7PB_2 | d1 |  ||
+| MDS7PLR1 | d1 |  ||
+| MDS7PLR2 | d1 |  ||
+| MDS7ST1 | d1 |  ||
+| MDS7ST3 | d1 |  ||
+| MKTINN | d1 |  ||
+| MKT_M | d1 |  ||
+| MKT_MENS | d1 |  ||
+| MKT_S1 | d1 |  ||
+| MKT_S2 | d1 |  ||
+| MKT_W | d1 |  ||
+| MRKT2 | d1 |  ||
+| MRKT3 | d1 |  ||
+| MRKT4 | d1 |  ||
+| MTCRL_2 | NEITHER |  | PATCHED|
+| MTCRL_3 | d1 |  ||
+| MTNVL2 | d1 |  ||
+| MTNVL3 | d1 |  ||
+| MTNVL6 | d1 |  ||
+| MTNVL6B | d1 |  ||
+| NCOREL | d1 |  ||
+| NIVGATE | NEITHER | review | PATCHED|
+| NIVGATE2 | NEITHER |  | PATCHED|
+| NIVINN_2 | d1 |  ||
+| NIVL | d1 |  ||
+| NIVL_3 | d1 |  ||
+| NIVL_B1 | d1 |  ||
+| NIVL_B2 | d1 |  ||
+| NIVL_B22 | NEITHER |  | PATCHED|
+| NIVL_E1 | d1 |  ||
+| NMKIN_1 | d1 |  ||
+| NMKIN_5 | d1 |  ||
+| NRTHMK | d1 |  ||
+| NVDUN2 | d1 |  ||
+| NVDUN3 | d1 |  ||
+| NVDUN31 | d1 |  ||
+| NVMKIN1 | d1 |  ||
+| NVMKIN21 | d1 |  ||
+| NVMKIN31 | d1 |  ||
+| NVMKIN32 | d1 |  ||
+| PILLAR_2 | d1 |  ||
+| PILLAR_3 | d1 |  ||
+| PSDUN_1 | d1 |  ||
+| RCKT | d1 |  ||
+| RCKT3 | d1 |  ||
+| RCKT32 | d1 |  ||
+| RCKTBAS1 | NEITHER |  | PATCHED|
+| RCKTBAS2 | NEITHER |  | PATCHED|
+| RCKTIN2 | NEITHER | review | PATCHED|
+| RCKTIN3 | d2 |  ||
+| RCKTIN5 | d2 |  ||
+| RCKTIN6 | NEITHER |  | PATCHED|
+| RCKTIN7 | d2 | review ||
+| RKTSID | d1 |  ||
+| ROADEND | d1 |  ||
+| ROPEST | d1 |  ||
+| SEA | d1 |  ||
+| SEMKIN_4 | NEITHER |  | PATCHED|
+| SEMKIN_5 | NEITHER |  | PATCHED|
+| SETO1 | d1 |  ||
+| SHIP_1 | d1 |  ||
+| SHIP_2 | d1 |  ||
+| SHPIN_3 | NEITHER |  | PATCHED|
+| SINBIL_1 | d1 |  ||
+| SININ2_1 | d1 |  ||
+| SININB31 | d1 |  ||
+| SININB41 | d1 |  ||
+| SININB51 | d1 |  ||
+| SKY | d1 |  ||
+| SLFRST_1 | d1 |  ||
+| SMKIN_2 | d1 |  ||
+| SMKIN_5 | d1 |  ||
+| SOUTHMK1 | d1 |  ||
+| SOUTHMK2 | d1 |  ||
+| SUBIN_1B | NEITHER |  | PATCHED|
+| TIN_1 | d1 |  ||
+| TIN_2 | d1 |  ||
+| TRACKIN | d1 |  ||
+| TRNAD_1 | d2 |  ||
+| TRNAD_2 | d2 |  ||
+| TRNAD_4 | NEITHER |  | PATCHED|
+| TRNAD_51 | NEITHER |  | PATCHED|
+| TRNAD_52 | d2 |  ||
+| TUNNEL_1 | d1 |  ||
+| TUNNEL_6 | NEITHER |  | PATCHED|
+| UJUNON1 | d1 |  ||
+| UJUNON2 | d1 |  ||
+| UJUNON4 | d1 |  ||
+| WHITE1 | d2 |  ||
+| WHITE2 | NEITHER |  | PATCHED|
+| ZCOAL_1 | NEITHER |  | PATCHED|
+| ZCOAL_3 | NEITHER |  | PATCHED|
+| ZMIND1 | NEITHER |  | PATCHED|
+| ZMIND2 | d2 |  ||
+| ZMIND3 | d2 |  ||
+
+## High-signal ops on PATCHED fields
+
+### BLACKBG3
+- D1 DSKCG (14):
+  - `p7/1 0054:DSKCG disc=1`
+  - `p8/1 006a:DSKCG disc=1`
+  - `p8/1 0083:DSKCG disc=1`
+  - `p8/1 00ad:DSKCG disc=1`
+  - `p8/1 00cc:DSKCG disc=1`
+  - `p8/1 00e5:DSKCG disc=1`
+  - `p8/1 013d:DSKCG disc=1`
+  - `p8/1 017c:DSKCG disc=1`
+  - `p8/1 01bb:DSKCG disc=2`
+  - `p8/1 0203:DSKCG disc=2`
+  - `p8/1 0283:DSKCG disc=2`
+  - `p8/1 02a5:DSKCG disc=2`
+  - `p8/1 02c1:DSKCG disc=2`
+  - `p8/1 0367:DSKCG disc=2`
+- D1 MAPJUMP (18):
+  - `p1/1 0059:MAPJUMP #161`
+  - `p1/1 008d:MAPJUMP #126`
+  - `p2/1 0032:MAPJUMP #184`
+  - `p2/1 006c:MAPJUMP #625`
+  - `p2/1 00a0:MAPJUMP #632`
+  - `p3/1 006e:MAPJUMP #330`
+  - `p3/1 00ac:MAPJUMP #335`
+  - `p4/1 002d:MAPJUMP #103`
+  - `p4/1 006c:MAPJUMP #515`
+  - `p5/1 0040:MAPJUMP #350`
+  - `p5/1 007f:MAPJUMP #350`
+  - `p6/1 004f:MAPJUMP #557`
+  - `p6/1 00a3:MAPJUMP #567`
+  - `p6/1 00d9:MAPJUMP #557`
+  - `p7/1 0066:MAPJUMP #103`
+  - `p7/1 0081:MAPJUMP #88`
+  - `p7/1 0118:MAPJUMP #744`
+  - `p8/1 03da:MAPJUMP #65`
+- D1 MUSIC (19):
+  - `init/3 0000:MUSIC id=0`
+  - `init/3 0023:MUSIC id=1`
+  - `init/4 0000:MUSIC id=0`
+  - `init/4 0023:MUSIC id=2`
+  - `p7/1 0064:MUSIC id=3`
+  - `p8/1 0127:MUSIC id=0`
+  - `p8/1 014d:MUSIC id=4`
+  - `p8/1 0166:MUSIC id=0`
+  - `p8/1 018c:MUSIC id=5`
+  - `p8/1 01a5:MUSIC id=0`
+  - `p8/1 01cb:MUSIC id=6`
+  - `p8/1 01ea:MUSIC id=0`
+  - `p8/1 0216:MUSIC id=7`
+  - `p8/1 023e:MUSIC id=0`
+  - `p8/1 0254:MUSIC id=8`
+  - `p8/1 026a:MUSIC id=0`
+  - `p8/1 0382:MUSIC id=9`
+  - `p8/1 038d:MUSIC id=10`
+  - `p8/1 0395:MUSIC id=11`
+- D1 ASK (16):
+  - `p1/1 0004:ASK 48050013010302`
+  - `p1/1 0033:ASK 48050014010302`
+  - `p2/1 0008:ASK 48050015010302`
+  - `p3/1 0008:ASK 48050016010302`
+  - `p3/1 0025:ASK 48050018010202`
+  - `p3/1 0036:ASK 48050019000302`
+  - `p4/1 0008:ASK 4805001a010302`
+  - `p5/1 0008:ASK 4805001b010302`
+  - `p5/1 0060:ASK 4805001c010202`
+  - `p6/1 0008:ASK 4805001d010302`
+  - `p6/1 002e:ASK 4805001e010202`
+  - `p7/1 0004:ASK 48050020010302`
+  - `p7/1 00a8:ASK 48050021000302`
+  - `p7/1 0103:ASK 48050022010202`
+  - `p8/1 0008:ASK 48050024010302`
+  - `p8/1 0028:ASK 48050325000c02`
+- D1 BITON (13):
+  - `p3/1 001a:BITON 30/80#1`
+  - `p5/1 0053:BITON 30/80#1`
+  - `p6/1 003b:BITON 30/82#3`
+  - `p6/1 0079:BITON 30/82#3`
+  - `p6/1 007d:BITON 30/85#1`
+  - `p6/1 0081:BITON 30/85#2`
+  - `p6/1 0085:BITON 30/85#3`
+  - `p6/1 00c0:BITON 30/82#3`
+  - `p7/1 0019:BITON d0/5b#2`
+  - `p7/1 00b8:BITON 30/cf#0`
+  - `p7/1 00ce:BITON d0/50#2`
+  - `p7/1 00dd:BITON 30/cf#0`
+  - `p7/1 00eb:BITON d0/50#2`
+- D1 BITOFF (2):
+  - `p6/1 008e:BITOFF 30/85#5`
+  - `p6/1 0092:BITOFF 30/87#7`
+- D1 SETWORD (20):
+  - `init/3 0013:SETWORD 60/00=0x0`
+  - `init/4 0013:SETWORD 60/00=0x0`
+  - `init/5 0003:SETWORD 60/00=0x0`
+  - `p1/1 002a:SETWORD 20/00=0x72`
+  - `p1/1 0085:SETWORD 20/00=0x80`
+  - `p2/1 002a:SETWORD 20/00=0x95`
+  - `p2/1 0047:SETWORD 20/00=0x295`
+  - `p2/1 007b:SETWORD 20/00=0x2a2`
+  - `p3/1 0015:SETWORD 20/00=0x3e8`
+  - `p3/1 0084:SETWORD 20/00=0x155`
+  - `p4/1 0018:SETWORD 20/00=0x27e`
+  - `p4/1 005a:SETWORD 20/00=0x1d5`
+  - `p5/1 001b:SETWORD 20/00=0x155`
+  - `p5/1 0057:SETWORD 20/00=0x181`
+  - `p6/1 0025:SETWORD 20/00=0x214`
+  - `p6/1 0089:SETWORD 20/00=0x522`
+  - `p6/1 00c4:SETWORD 20/00=0x513`
+  - `p7/1 0014:SETWORD 20/00=0x146`
+  - `p7/1 007c:SETWORD 20/00=0x513`
+  - `p7/1 0091:SETWORD 20/00=0x654`
+- D2 DSKCG (14):
+  - `p7/1 0054:DSKCG disc=1`
+  - `p8/1 006a:DSKCG disc=1`
+  - `p8/1 0083:DSKCG disc=1`
+  - `p8/1 00ad:DSKCG disc=1`
+  - `p8/1 00cc:DSKCG disc=1`
+  - `p8/1 00e5:DSKCG disc=1`
+  - `p8/1 013d:DSKCG disc=1`
+  - `p8/1 017c:DSKCG disc=1`
+  - `p8/1 01bb:DSKCG disc=2`
+  - `p8/1 0203:DSKCG disc=2`
+  - `p8/1 0283:DSKCG disc=2`
+  - `p8/1 02a5:DSKCG disc=2`
+  - `p8/1 02c1:DSKCG disc=2`
+  - `p8/1 0367:DSKCG disc=2`
+- D2 MAPJUMP (18):
+  - `p1/1 0059:MAPJUMP #161`
+  - `p1/1 008d:MAPJUMP #126`
+  - `p2/1 0032:MAPJUMP #184`
+  - `p2/1 006c:MAPJUMP #625`
+  - `p2/1 00a0:MAPJUMP #632`
+  - `p3/1 006e:MAPJUMP #330`
+  - `p3/1 00ac:MAPJUMP #335`
+  - `p4/1 002d:MAPJUMP #103`
+  - `p4/1 006c:MAPJUMP #515`
+  - `p5/1 0040:MAPJUMP #350`
+  - `p5/1 007f:MAPJUMP #350`
+  - `p6/1 004f:MAPJUMP #557`
+  - `p6/1 00a3:MAPJUMP #567`
+  - `p6/1 00d9:MAPJUMP #557`
+  - `p7/1 0066:MAPJUMP #103`
+  - `p7/1 0081:MAPJUMP #88`
+  - `p7/1 0118:MAPJUMP #744`
+  - `p8/1 03da:MAPJUMP #65`
+- D2 MUSIC (19):
+  - `init/3 0000:MUSIC id=0`
+  - `init/3 0023:MUSIC id=1`
+  - `init/4 0000:MUSIC id=0`
+  - `init/4 0023:MUSIC id=2`
+  - `p7/1 0064:MUSIC id=3`
+  - `p8/1 0127:MUSIC id=0`
+  - `p8/1 014d:MUSIC id=4`
+  - `p8/1 0166:MUSIC id=0`
+  - `p8/1 018c:MUSIC id=5`
+  - `p8/1 01a5:MUSIC id=0`
+  - `p8/1 01cb:MUSIC id=6`
+  - `p8/1 01ea:MUSIC id=0`
+  - `p8/1 0216:MUSIC id=7`
+  - `p8/1 023e:MUSIC id=0`
+  - `p8/1 0254:MUSIC id=8`
+  - `p8/1 026a:MUSIC id=0`
+  - `p8/1 0382:MUSIC id=9`
+  - `p8/1 038d:MUSIC id=10`
+  - `p8/1 0395:MUSIC id=11`
+- D2 ASK (16):
+  - `p1/1 0004:ASK 48050013010302`
+  - `p1/1 0033:ASK 48050014010302`
+  - `p2/1 0008:ASK 48050015010302`
+  - `p3/1 0008:ASK 48050016010302`
+  - `p3/1 0025:ASK 48050018010202`
+  - `p3/1 0036:ASK 48050019000302`
+  - `p4/1 0008:ASK 4805001a010302`
+  - `p5/1 0008:ASK 4805001b010302`
+  - `p5/1 0060:ASK 4805001c010202`
+  - `p6/1 0008:ASK 4805001d010302`
+  - `p6/1 002e:ASK 4805001e010202`
+  - `p7/1 0004:ASK 48050020010302`
+  - `p7/1 00a8:ASK 48050021000302`
+  - `p7/1 0103:ASK 48050022010202`
+  - `p8/1 0008:ASK 48050024010302`
+  - `p8/1 0028:ASK 48050325000c02`
+- D2 BITON (13):
+  - `p3/1 001a:BITON 30/80#1`
+  - `p5/1 0053:BITON 30/80#1`
+  - `p6/1 003b:BITON 30/82#3`
+  - `p6/1 0079:BITON 30/82#3`
+  - `p6/1 007d:BITON 30/85#1`
+  - `p6/1 0081:BITON 30/85#2`
+  - `p6/1 0085:BITON 30/85#3`
+  - `p6/1 00c0:BITON 30/82#3`
+  - `p7/1 0019:BITON d0/5b#2`
+  - `p7/1 00b8:BITON 30/cf#0`
+  - `p7/1 00ce:BITON d0/50#2`
+  - `p7/1 00dd:BITON 30/cf#0`
+  - `p7/1 00eb:BITON d0/50#2`
+- D2 BITOFF (2):
+  - `p6/1 008e:BITOFF 30/85#5`
+  - `p6/1 0092:BITOFF 30/87#7`
+- D2 SETWORD (20):
+  - `init/3 0013:SETWORD 60/00=0x0`
+  - `init/4 0013:SETWORD 60/00=0x0`
+  - `init/5 0003:SETWORD 60/00=0x0`
+  - `p1/1 002a:SETWORD 20/00=0x72`
+  - `p1/1 0085:SETWORD 20/00=0x80`
+  - `p2/1 002a:SETWORD 20/00=0x95`
+  - `p2/1 0047:SETWORD 20/00=0x295`
+  - `p2/1 007b:SETWORD 20/00=0x2a2`
+  - `p3/1 0015:SETWORD 20/00=0x3e8`
+  - `p3/1 0084:SETWORD 20/00=0x155`
+  - `p4/1 0018:SETWORD 20/00=0x27e`
+  - `p4/1 005a:SETWORD 20/00=0x1d5`
+  - `p5/1 001b:SETWORD 20/00=0x155`
+  - `p5/1 0057:SETWORD 20/00=0x181`
+  - `p6/1 0025:SETWORD 20/00=0x214`
+  - `p6/1 0089:SETWORD 20/00=0x522`
+  - `p6/1 00c4:SETWORD 20/00=0x513`
+  - `p7/1 0014:SETWORD 20/00=0x146`
+  - `p7/1 007c:SETWORD 20/00=0x513`
+  - `p7/1 0091:SETWORD 20/00=0x654`
+- SD MAPJUMP (18):
+  - `p1/1 0059:MAPJUMP #161`
+  - `p1/1 008d:MAPJUMP #126`
+  - `p2/1 0032:MAPJUMP #184`
+  - `p2/1 006c:MAPJUMP #625`
+  - `p2/1 00a0:MAPJUMP #632`
+  - `p3/1 006e:MAPJUMP #330`
+  - `p3/1 00ac:MAPJUMP #335`
+  - `p4/1 002d:MAPJUMP #103`
+  - `p4/1 006c:MAPJUMP #515`
+  - `p5/1 0040:MAPJUMP #350`
+  - `p5/1 007f:MAPJUMP #350`
+  - `p6/1 004f:MAPJUMP #557`
+  - `p6/1 00a3:MAPJUMP #567`
+  - `p6/1 00d9:MAPJUMP #557`
+  - `p7/1 0064:MAPJUMP #103`
+  - `p7/1 007f:MAPJUMP #88`
+  - `p7/1 0116:MAPJUMP #744`
+  - `p8/1 03c0:MAPJUMP #65`
+- SD MUSIC (19):
+  - `init/3 0000:MUSIC id=0`
+  - `init/3 0023:MUSIC id=1`
+  - `init/4 0000:MUSIC id=0`
+  - `init/4 0023:MUSIC id=2`
+  - `p7/1 0062:MUSIC id=3`
+  - `p8/1 011d:MUSIC id=0`
+  - `p8/1 0141:MUSIC id=4`
+  - `p8/1 015a:MUSIC id=0`
+  - `p8/1 017e:MUSIC id=5`
+  - `p8/1 0197:MUSIC id=0`
+  - `p8/1 01bb:MUSIC id=6`
+  - `p8/1 01da:MUSIC id=0`
+  - `p8/1 0204:MUSIC id=7`
+  - `p8/1 022c:MUSIC id=0`
+  - `p8/1 0242:MUSIC id=8`
+  - `p8/1 0258:MUSIC id=0`
+  - `p8/1 0368:MUSIC id=9`
+  - `p8/1 0373:MUSIC id=10`
+  - `p8/1 037b:MUSIC id=11`
+- SD ASK (16):
+  - `p1/1 0004:ASK 48050013010302`
+  - `p1/1 0033:ASK 48050014010302`
+  - `p2/1 0008:ASK 48050015010302`
+  - `p3/1 0008:ASK 48050016010302`
+  - `p3/1 0025:ASK 48050018010202`
+  - `p3/1 0036:ASK 48050019000302`
+  - `p4/1 0008:ASK 4805001a010302`
+  - `p5/1 0008:ASK 4805001b010302`
+  - `p5/1 0060:ASK 4805001c010202`
+  - `p6/1 0008:ASK 4805001d010302`
+  - `p6/1 002e:ASK 4805001e010202`
+  - `p7/1 0004:ASK 48050020010302`
+  - `p7/1 00a6:ASK 48050021000302`
+  - `p7/1 0101:ASK 48050022010202`
+  - `p8/1 0008:ASK 48050024010302`
+  - `p8/1 0028:ASK 48050325000c02`
+- SD BITON (13):
+  - `p3/1 001a:BITON 30/80#1`
+  - `p5/1 0053:BITON 30/80#1`
+  - `p6/1 003b:BITON 30/82#3`
+  - `p6/1 0079:BITON 30/82#3`
+  - `p6/1 007d:BITON 30/85#1`
+  - `p6/1 0081:BITON 30/85#2`
+  - `p6/1 0085:BITON 30/85#3`
+  - `p6/1 00c0:BITON 30/82#3`
+  - `p7/1 0019:BITON d0/5b#2`
+  - `p7/1 00b6:BITON 30/cf#0`
+  - `p7/1 00cc:BITON d0/50#2`
+  - `p7/1 00db:BITON 30/cf#0`
+  - `p7/1 00e9:BITON d0/50#2`
+- SD BITOFF (2):
+  - `p6/1 008e:BITOFF 30/85#5`
+  - `p6/1 0092:BITOFF 30/87#7`
+- SD SETWORD (20):
+  - `init/3 0013:SETWORD 60/00=0x0`
+  - `init/4 0013:SETWORD 60/00=0x0`
+  - `init/5 0003:SETWORD 60/00=0x0`
+  - `p1/1 002a:SETWORD 20/00=0x72`
+  - `p1/1 0085:SETWORD 20/00=0x80`
+  - `p2/1 002a:SETWORD 20/00=0x95`
+  - `p2/1 0047:SETWORD 20/00=0x295`
+  - `p2/1 007b:SETWORD 20/00=0x2a2`
+  - `p3/1 0015:SETWORD 20/00=0x3e8`
+  - `p3/1 0084:SETWORD 20/00=0x155`
+  - `p4/1 0018:SETWORD 20/00=0x27e`
+  - `p4/1 005a:SETWORD 20/00=0x1d5`
+  - `p5/1 001b:SETWORD 20/00=0x155`
+  - `p5/1 0057:SETWORD 20/00=0x181`
+  - `p6/1 0025:SETWORD 20/00=0x214`
+  - `p6/1 0089:SETWORD 20/00=0x522`
+  - `p6/1 00c4:SETWORD 20/00=0x513`
+  - `p7/1 0014:SETWORD 20/00=0x146`
+  - `p7/1 007a:SETWORD 20/00=0x513`
+  - `p7/1 008f:SETWORD 20/00=0x654`
+
+### BLACKBGB
+- D1 DSKCG (4):
+  - `init/0 013e:DSKCG disc=3`
+  - `init/0 018f:DSKCG disc=3`
+  - `init/0 01af:DSKCG disc=2`
+  - `init/0 0206:DSKCG disc=2`
+- D1 MAPJUMP (7):
+  - `init/0 00d1:MAPJUMP #226`
+  - `init/0 0145:MAPJUMP #744`
+  - `init/0 0196:MAPJUMP #744`
+  - `init/0 01b8:MAPJUMP #634`
+  - `init/0 0212:MAPJUMP #634`
+  - `init/0 02d8:MAPJUMP #558`
+  - `init/0 0317:MAPJUMP #522`
+- D1 MUSIC (8):
+  - `init/0 000b:MUSIC id=0`
+  - `init/0 00ec:MUSIC id=0`
+  - `init/0 0140:MUSIC id=2`
+  - `init/0 0191:MUSIC id=2`
+  - `init/0 01c2:MUSIC id=3`
+  - `init/0 021c:MUSIC id=3`
+  - `init/0 02c0:MUSIC id=0`
+  - `init/0 02fd:MUSIC id=0`
+- D1 ASK (2):
+  - `init/0 016b:ASK 48050101020300`
+  - `init/0 01e3:ASK 48050101020300`
+- D1 BITON (5):
+  - `init/0 0102:BITON 30/88#7`
+  - `init/0 017c:BITON 30/88#5`
+  - `init/0 01b4:BITON 30/89#1`
+  - `init/0 01f3:BITON 30/86#2`
+  - `init/0 020b:BITON 30/89#1`
+- D1 BITOFF (8):
+  - `init/0 00c5:BITOFF 30/88#7`
+  - `init/0 0106:BITOFF d0/5b#2`
+  - `init/0 0137:BITOFF 30/88#5`
+  - `init/0 0157:BITOFF d0/52#6`
+  - `init/0 0188:BITOFF 30/88#5`
+  - `init/0 01a8:BITOFF 30/86#2`
+  - `init/0 01cf:BITOFF 30/88#4`
+  - `init/0 01ff:BITOFF 30/86#2`
+- D2 DSKCG (4):
+  - `init/0 013e:DSKCG disc=3`
+  - `init/0 018f:DSKCG disc=3`
+  - `init/0 01af:DSKCG disc=2`
+  - `init/0 0206:DSKCG disc=2`
+- D2 MAPJUMP (7):
+  - `init/0 00f2:MAPJUMP #226`
+  - `init/0 0145:MAPJUMP #744`
+  - `init/0 0196:MAPJUMP #744`
+  - `init/0 01b8:MAPJUMP #634`
+  - `init/0 0212:MAPJUMP #634`
+  - `init/0 02d8:MAPJUMP #558`
+  - `init/0 0317:MAPJUMP #522`
+- D2 MUSIC (8):
+  - `init/0 000b:MUSIC id=0`
+  - `init/0 00e2:MUSIC id=0`
+  - `init/0 0140:MUSIC id=2`
+  - `init/0 0191:MUSIC id=2`
+  - `init/0 01c2:MUSIC id=3`
+  - `init/0 021c:MUSIC id=3`
+  - `init/0 02c0:MUSIC id=0`
+  - `init/0 02fd:MUSIC id=0`
+- D2 ASK (2):
+  - `init/0 016b:ASK 48050101020300`
+  - `init/0 01e3:ASK 48050101020300`
+- D2 BITON (5):
+  - `init/0 0102:BITON 30/88#7`
+  - `init/0 017c:BITON 30/88#5`
+  - `init/0 01b4:BITON 30/89#1`
+  - `init/0 01f3:BITON 30/86#2`
+  - `init/0 020b:BITON 30/89#1`
+- D2 BITOFF (8):
+  - `init/0 00c5:BITOFF 30/88#7`
+  - `init/0 0106:BITOFF d0/5b#2`
+  - `init/0 0137:BITOFF 30/88#5`
+  - `init/0 0157:BITOFF d0/52#6`
+  - `init/0 0188:BITOFF 30/88#5`
+  - `init/0 01a8:BITOFF 30/86#2`
+  - `init/0 01cf:BITOFF 30/88#4`
+  - `init/0 01ff:BITOFF 30/86#2`
+- SD MAPJUMP (7):
+  - `init/0 00f2:MAPJUMP #226`
+  - `init/0 0143:MAPJUMP #744`
+  - `init/0 0192:MAPJUMP #744`
+  - `init/0 01b2:MAPJUMP #634`
+  - `init/0 020a:MAPJUMP #634`
+  - `init/0 02d0:MAPJUMP #558`
+  - `init/0 030f:MAPJUMP #522`
+- SD MUSIC (8):
+  - `init/0 000b:MUSIC id=0`
+  - `init/0 00e2:MUSIC id=0`
+  - `init/0 013e:MUSIC id=2`
+  - `init/0 018d:MUSIC id=2`
+  - `init/0 01bc:MUSIC id=3`
+  - `init/0 0214:MUSIC id=3`
+  - `init/0 02b8:MUSIC id=0`
+  - `init/0 02f5:MUSIC id=0`
+- SD ASK (2):
+  - `init/0 0169:ASK 48050101020300`
+  - `init/0 01dd:ASK 48050101020300`
+- SD BITON (5):
+  - `init/0 0102:BITON 30/88#7`
+  - `init/0 017a:BITON 30/88#5`
+  - `init/0 01ae:BITON 30/89#1`
+  - `init/0 01ed:BITON 30/86#2`
+  - `init/0 0203:BITON 30/89#1`
+- SD BITOFF (8):
+  - `init/0 00c5:BITOFF 30/88#7`
+  - `init/0 0106:BITOFF d0/5b#2`
+  - `init/0 0137:BITOFF 30/88#5`
+  - `init/0 0155:BITOFF d0/52#6`
+  - `init/0 0186:BITOFF 30/88#5`
+  - `init/0 01a4:BITOFF 30/86#2`
+  - `init/0 01c9:BITOFF 30/88#4`
+  - `init/0 01f9:BITOFF 30/86#2`
+
+### BLACKBGE
+- D1 DSKCG (1):
+  - `AD/4 0003:DSKCG disc=2`
+- D1 MAPJUMP (1):
+  - `directr/0 0028:MAPJUMP #763`
+- D1 MUSIC (1):
+  - `directr/0 0000:MUSIC id=0`
+- D1 ASK (1):
+  - `AD/3 000d:ASK 48050101020300`
+- D2 DSKCG (1):
+  - `AD/4 0003:DSKCG disc=2`
+- D2 MAPJUMP (1):
+  - `directr/0 0028:MAPJUMP #763`
+- D2 MUSIC (1):
+  - `directr/0 0000:MUSIC id=0`
+- D2 ASK (1):
+  - `AD/3 000d:ASK 48050101020300`
+- SD MAPJUMP (1):
+  - `directr/0 0028:MAPJUMP #763`
+- SD MUSIC (1):
+  - `directr/0 0000:MUSIC id=0`
+- SD ASK (1):
+  - `AD/3 000d:ASK 48050101020300`
+
+### BLUE_2
+- D1 MAPJUMP (3):
+  - `dir/0 002a:MAPJUMP #632`
+  - `dir/0 00b3:MAPJUMP #526`
+  - `dir/0 00bd:MAPJUMP #632`
+- D1 MUSIC (4):
+  - `dir/0 0008:MUSIC id=0`
+  - `dir/0 0014:MUSIC id=1`
+  - `dir/0 0018:MUSIC id=2`
+  - `dir/0 006d:MUSIC id=3`
+- D1 SETWORD (3):
+  - `dir/0 0025:SETWORD 20/00=0x2a2`
+  - `dir/0 007d:SETWORD 20/00=0x2a2`
+  - `dir/0 00ae:SETWORD 20/00=0xa455`
+- D2 MAPJUMP (1):
+  - `dir/0 00a1:MAPJUMP #632`
+- D2 MUSIC (4):
+  - `dir/0 0008:MUSIC id=0`
+  - `dir/0 0014:MUSIC id=1`
+  - `dir/0 0018:MUSIC id=2`
+  - `dir/0 0062:MUSIC id=3`
+- D2 SETWORD (1):
+  - `dir/0 0072:SETWORD 20/00=0x2a2`
+- SD MAPJUMP (1):
+  - `dir/0 00a1:MAPJUMP #632`
+- SD MUSIC (4):
+  - `dir/0 0008:MUSIC id=0`
+  - `dir/0 0014:MUSIC id=1`
+  - `dir/0 0018:MUSIC id=2`
+  - `dir/0 0062:MUSIC id=3`
+- SD SETWORD (1):
+  - `dir/0 0072:SETWORD 20/00=0x2a2`
+
+### BUGIN1A
+- D1 MAPJUMP (4):
+  - `AD/4 0005:MAPJUMP #541`
+  - `AD/4 0010:MAPJUMP #543`
+  - `AD/5 0006:MAPJUMP #542`
+  - `AD/7 00ff:MAPJUMP #74`
+- D1 MUSIC (8):
+  - `directr/0 0013:MUSIC id=0`
+  - `directr/0 0017:MUSIC id=1`
+  - `directr/0 0023:MUSIC id=1`
+  - `directr/0 0027:MUSIC id=0`
+  - `CLOUD/10 007d:MUSIC id=2`
+  - `BUGEN/5 0026:MUSIC id=0`
+  - `AD/7 00df:MUSIC id=1`
+  - `AD/31 0035:MUSIC id=0`
+- D1 BITON (7):
+  - `BUGEN/1 008f:BITON 30/c1#5`
+  - `BUGEN/1 01d9:BITON 30/aa#6`
+  - `BUGEN/5 0044:BITON 30/a1#5`
+  - `BUGEN/5 0048:BITON 30/a1#6`
+  - `AD/6 0040:BITON 30/aa#7`
+  - `AD/7 00cf:BITON 30/bc#2`
+  - `AD/7 00d3:BITON 30/bc#3`
+- D1 SETWORD (2):
+  - `AD/4 0000:SETWORD 20/00=0x1ed`
+  - `AD/7 0075:SETWORD 20/00=0x56f`
+- D2 MAPJUMP (4):
+  - `AD/4 0006:MAPJUMP #543`
+  - `AD/5 0006:MAPJUMP #542`
+  - `AD/7 007f:MAPJUMP #542`
+  - `AD/7 010e:MAPJUMP #74`
+- D2 MUSIC (8):
+  - `directr/0 0013:MUSIC id=0`
+  - `directr/0 0017:MUSIC id=1`
+  - `directr/0 0023:MUSIC id=1`
+  - `directr/0 0027:MUSIC id=0`
+  - `CLOUD/10 007d:MUSIC id=2`
+  - `BUGEN/5 0026:MUSIC id=0`
+  - `AD/7 00ee:MUSIC id=1`
+  - `AD/31 0035:MUSIC id=0`
+- D2 BITON (7):
+  - `BUGEN/1 008f:BITON 30/c1#5`
+  - `BUGEN/1 01d6:BITON 30/aa#6`
+  - `BUGEN/5 0044:BITON 30/a1#5`
+  - `BUGEN/5 0048:BITON 30/a1#6`
+  - `AD/6 0040:BITON 30/aa#7`
+  - `AD/7 00de:BITON 30/bc#2`
+  - `AD/7 00e2:BITON 30/bc#3`
+- D2 SETWORD (1):
+  - `AD/7 007a:SETWORD 20/00=0x56f`
+- SD MAPJUMP (4):
+  - `AD/4 0006:MAPJUMP #543`
+  - `AD/5 0006:MAPJUMP #542`
+  - `AD/7 007f:MAPJUMP #542`
+  - `AD/7 010e:MAPJUMP #74`
+- SD MUSIC (8):
+  - `directr/0 0013:MUSIC id=0`
+  - `directr/0 0017:MUSIC id=1`
+  - `directr/0 0023:MUSIC id=1`
+  - `directr/0 0027:MUSIC id=0`
+  - `CLOUD/10 007d:MUSIC id=2`
+  - `BUGEN/5 0026:MUSIC id=0`
+  - `AD/7 00ee:MUSIC id=1`
+  - `AD/31 0035:MUSIC id=0`
+- SD BITON (7):
+  - `BUGEN/1 008f:BITON 30/c1#5`
+  - `BUGEN/1 01d6:BITON 30/aa#6`
+  - `BUGEN/5 0044:BITON 30/a1#5`
+  - `BUGEN/5 0048:BITON 30/a1#6`
+  - `AD/6 0040:BITON 30/aa#7`
+  - `AD/7 00de:BITON 30/bc#2`
+  - `AD/7 00e2:BITON 30/bc#3`
+- SD SETWORD (1):
+  - `AD/7 007a:SETWORD 20/00=0x56f`
+
+### CANON_2
+- D1 MAPJUMP (2):
+  - `hojyo/0 00e9:MAPJUMP #71`
+  - `hojyo/31 0485:MAPJUMP #72`
+- D1 MUSIC (7):
+  - `init/0 0002:MUSIC id=0`
+  - `hojyo/31 0136:MUSIC id=2`
+  - `hojyo/31 0239:MUSIC id=3`
+  - `hojyo/31 024e:MUSIC id=1`
+  - `hojyo/31 0287:MUSIC id=1`
+  - `hojyo/31 02ba:MUSIC id=3`
+  - `hojyo/31 02e7:MUSIC id=3`
+- D1 BITON (2):
+  - `hojyo/0 00c4:BITON f0/83#2`
+  - `hojyo/31 02c2:BITON f0/80#4`
+- D1 BITOFF (1):
+  - `hojyo/31 0260:BITOFF f0/83#7`
+- D1 SETWORD (2):
+  - `hojyo/0 00c8:SETWORD 20/00=0x635`
+  - `hojyo/31 02c6:SETWORD 20/00=0x644`
+- D2 MAPJUMP (3):
+  - `hojyo/0 00e9:MAPJUMP #71`
+  - `hojyo/31 0440:MAPJUMP #105`
+  - `hojyo/31 04ab:MAPJUMP #72`
+- D2 MUSIC (7):
+  - `init/0 0002:MUSIC id=0`
+  - `hojyo/31 013b:MUSIC id=2`
+  - `hojyo/31 023f:MUSIC id=3`
+  - `hojyo/31 0254:MUSIC id=1`
+  - `hojyo/31 028d:MUSIC id=1`
+  - `hojyo/31 02c0:MUSIC id=3`
+  - `hojyo/31 02ed:MUSIC id=3`
+- D2 BITON (2):
+  - `hojyo/0 00c4:BITON f0/83#2`
+  - `hojyo/31 02c8:BITON f0/80#4`
+- D2 BITOFF (1):
+  - `hojyo/31 0266:BITOFF f0/83#7`
+- D2 SETWORD (3):
+  - `hojyo/0 00c8:SETWORD 20/00=0x635`
+  - `hojyo/31 02cc:SETWORD 20/00=0x644`
+  - `hojyo/31 043b:SETWORD 20/00=0x654`
+- SD MAPJUMP (3):
+  - `hojyo/0 00e9:MAPJUMP #71`
+  - `hojyo/31 0440:MAPJUMP #105`
+  - `hojyo/31 04ab:MAPJUMP #72`
+- SD MUSIC (7):
+  - `init/0 0002:MUSIC id=0`
+  - `hojyo/31 013b:MUSIC id=2`
+  - `hojyo/31 023f:MUSIC id=3`
+  - `hojyo/31 0254:MUSIC id=1`
+  - `hojyo/31 028d:MUSIC id=1`
+  - `hojyo/31 02c0:MUSIC id=3`
+  - `hojyo/31 02ed:MUSIC id=3`
+- SD BITON (2):
+  - `hojyo/0 00c4:BITON f0/83#2`
+  - `hojyo/31 02c8:BITON f0/80#4`
+- SD BITOFF (1):
+  - `hojyo/31 0266:BITOFF f0/83#7`
+- SD SETWORD (3):
+  - `hojyo/0 00c8:SETWORD 20/00=0x635`
+  - `hojyo/31 02cc:SETWORD 20/00=0x644`
+  - `hojyo/31 043b:SETWORD 20/00=0x654`
+
+### CONVIL_2
+- D1 MAPJUMP (2):
+  - `event/1 0000:MAPJUMP #358`
+  - `event/31 00bc:MAPJUMP #354`
+- D1 MUSIC (5):
+  - `init/0 000d:MUSIC id=0`
+  - `event/9 003b:MUSIC id=0`
+  - `event/10 0137:MUSIC id=0`
+  - `event/31 0097:MUSIC id=3`
+  - `event/31 0105:MUSIC id=0`
+- D1 ASK (12):
+  - `event3/1 0018:ASK 4805011e010500`
+  - `event2/1 0019:ASK 4805010d010600`
+  - `event2/1 006b:ASK 4805013e010504`
+  - `event2/1 00fe:ASK 48050144010301`
+  - `event2/1 011f:ASK 48050145010701`
+  - `event2/1 01c0:ASK 48050146010501`
+  - `event2/2 004e:ASK 48050124010600`
+  - `mihari/1 0101:ASK 4805011f010300`
+  - `mihari/1 017a:ASK 4805011f010300`
+  - `mihari/1 0273:ASK 4805011f010300`
+  - `mihari/1 0387:ASK 4805011d030700`
+  - `mihari/1 054b:ASK 4805011d030700`
+- D1 SETWORD (38):
+  - `event3/1 006f:SETWORD 22/ad=0x0`
+  - `event3/1 0095:SETWORD 20/b4=0x0`
+  - `event3/31 0004:SETWORD 60/13=0x0`
+  - `event3/31 0009:SETWORD 60/15=0x0`
+  - `event2/2 005f:SETWORD 60/08=0x1f4`
+  - `event2/2 006c:SETWORD 60/08=0x3e8`
+  - `event2/2 0079:SETWORD 60/08=0x7d0`
+  - `event2/2 0086:SETWORD 60/08=0xbb8`
+  - `event2/2 0093:SETWORD 60/08=0x1388`
+  - `event2/2 00a0:SETWORD 60/08=0x0`
+  - `event/4 001b:SETWORD 60/08=0xfa0`
+  - `event/4 00c2:SETWORD 60/08=0xfa0`
+  - `event/9 00a0:SETWORD 22/ad=0x0`
+  - `event/10 01a4:SETWORD 22/ad=0x0`
+  - `itemget/31 0006:SETWORD 60/08=0x0`
+  - `mihari/1 0125:SETWORD 60/08=0xfa0`
+  - `mihari/1 019e:SETWORD 60/08=0xfa0`
+  - `mihari/1 01dc:SETWORD 62/08=0x0`
+  - `mihari/1 01e6:SETWORD 66/0a=0x8`
+  - `mihari/1 021c:SETWORD 60/08=0x0`
+  - `mihari/1 023f:SETWORD 20/b4=0x0`
+  - `mihari/1 02b6:SETWORD 60/08=0xfa0`
+  - `mihari/1 02fc:SETWORD 60/08=0xfa0`
+  - `mihari/1 0354:SETWORD 60/08=0xfa0`
+  - `mihari/1 03af:SETWORD 60/08=0xfa0`
+  - `mihari/1 03d4:SETWORD 60/08=0xfa0`
+  - `mihari/1 0423:SETWORD 22/ad=0x0`
+  - `mihari/1 043d:SETWORD 20/b4=0x0`
+  - `mihari/1 0482:SETWORD 60/08=0xfa0`
+  - `mihari/1 04a4:SETWORD 22/ad=0x0`
+  - `mihari/1 04c3:SETWORD 60/08=0x0`
+  - `mihari/1 04e6:SETWORD 20/b4=0x0`
+  - `mihari/1 0571:SETWORD 60/08=0xfa0`
+  - `mihari/1 0596:SETWORD 60/08=0xfa0`
+  - `mihari/1 05e1:SETWORD 22/ad=0x0`
+  - `mihari/1 05ff:SETWORD 20/b4=0x0`
+  - `mihari/1 0644:SETWORD 60/08=0xfa0`
+  - `mihari/1 066e:SETWORD 22/ad=0x0`
+- D2 MAPJUMP (2):
+  - `event/1 0000:MAPJUMP #358`
+  - `event/31 00c4:MAPJUMP #354`
+- D2 MUSIC (5):
+  - `init/0 000d:MUSIC id=0`
+  - `event/9 003d:MUSIC id=0`
+  - `event/10 0139:MUSIC id=0`
+  - `event/31 009f:MUSIC id=3`
+  - `event/31 010d:MUSIC id=0`
+- D2 ASK (12):
+  - `event3/1 0018:ASK 4805011e010500`
+  - `event2/1 0019:ASK 4805010d010600`
+  - `event2/1 006b:ASK 4805013e010504`
+  - `event2/1 00fe:ASK 48050144010301`
+  - `event2/1 011f:ASK 48050145010701`
+  - `event2/1 01c0:ASK 48050146010501`
+  - `event2/2 004e:ASK 48050124010600`
+  - `mihari/1 0101:ASK 4805011f010300`
+  - `mihari/1 017d:ASK 4805011f010300`
+  - `mihari/1 0276:ASK 4805011f010300`
+  - `mihari/1 038a:ASK 4805011d030700`
+  - `mihari/1 054e:ASK 4805011d030700`
+- D2 SETWORD (38):
+  - `event3/1 006f:SETWORD 22/ad=0x0`
+  - `event3/1 0095:SETWORD 20/b4=0x0`
+  - `event3/31 0004:SETWORD 60/13=0x0`
+  - `event3/31 0009:SETWORD 60/15=0x0`
+  - `event2/2 005f:SETWORD 60/08=0x1f4`
+  - `event2/2 006c:SETWORD 60/08=0x3e8`
+  - `event2/2 0079:SETWORD 60/08=0x7d0`
+  - `event2/2 0086:SETWORD 60/08=0xbb8`
+  - `event2/2 0093:SETWORD 60/08=0x1388`
+  - `event2/2 00a0:SETWORD 60/08=0x0`
+  - `event/4 001b:SETWORD 60/08=0xfa0`
+  - `event/4 00c2:SETWORD 60/08=0xfa0`
+  - `event/9 00a2:SETWORD 22/ad=0x0`
+  - `event/10 01a6:SETWORD 22/ad=0x0`
+  - `itemget/31 0006:SETWORD 60/08=0x0`
+  - `mihari/1 0125:SETWORD 60/08=0xfa0`
+  - `mihari/1 01a1:SETWORD 60/08=0xfa0`
+  - `mihari/1 01df:SETWORD 62/08=0x0`
+  - `mihari/1 01e9:SETWORD 66/0a=0x8`
+  - `mihari/1 021f:SETWORD 60/08=0x0`
+  - `mihari/1 0242:SETWORD 20/b4=0x0`
+  - `mihari/1 02b9:SETWORD 60/08=0xfa0`
+  - `mihari/1 02ff:SETWORD 60/08=0xfa0`
+  - `mihari/1 0357:SETWORD 60/08=0xfa0`
+  - `mihari/1 03b2:SETWORD 60/08=0xfa0`
+  - `mihari/1 03d7:SETWORD 60/08=0xfa0`
+  - `mihari/1 0426:SETWORD 22/ad=0x0`
+  - `mihari/1 0440:SETWORD 20/b4=0x0`
+  - `mihari/1 0485:SETWORD 60/08=0xfa0`
+  - `mihari/1 04a7:SETWORD 22/ad=0x0`
+  - `mihari/1 04c6:SETWORD 60/08=0x0`
+  - `mihari/1 04e9:SETWORD 20/b4=0x0`
+  - `mihari/1 0574:SETWORD 60/08=0xfa0`
+  - `mihari/1 0599:SETWORD 60/08=0xfa0`
+  - `mihari/1 05e4:SETWORD 22/ad=0x0`
+  - `mihari/1 0602:SETWORD 20/b4=0x0`
+  - `mihari/1 0647:SETWORD 60/08=0xfa0`
+  - `mihari/1 0671:SETWORD 22/ad=0x0`
+- SD MAPJUMP (2):
+  - `event/1 0000:MAPJUMP #358`
+  - `event/31 00c4:MAPJUMP #354`
+- SD MUSIC (5):
+  - `init/0 000d:MUSIC id=0`
+  - `event/9 003d:MUSIC id=0`
+  - `event/10 0139:MUSIC id=0`
+  - `event/31 009f:MUSIC id=3`
+  - `event/31 010d:MUSIC id=0`
+- SD ASK (12):
+  - `event3/1 0018:ASK 4805011e010500`
+  - `event2/1 0019:ASK 4805010d010600`
+  - `event2/1 006b:ASK 4805013e010504`
+  - `event2/1 00fe:ASK 48050144010301`
+  - `event2/1 011f:ASK 48050145010701`
+  - `event2/1 01c0:ASK 48050146010501`
+  - `event2/2 004e:ASK 48050124010600`
+  - `mihari/1 0101:ASK 4805011f010300`
+  - `mihari/1 017d:ASK 4805011f010300`
+  - `mihari/1 0276:ASK 4805011f010300`
+  - `mihari/1 038a:ASK 4805011d030700`
+  - `mihari/1 054e:ASK 4805011d030700`
+- SD SETWORD (38):
+  - `event3/1 006f:SETWORD 22/ad=0x0`
+  - `event3/1 0095:SETWORD 20/b4=0x0`
+  - `event3/31 0004:SETWORD 60/13=0x0`
+  - `event3/31 0009:SETWORD 60/15=0x0`
+  - `event2/2 005f:SETWORD 60/08=0x1f4`
+  - `event2/2 006c:SETWORD 60/08=0x3e8`
+  - `event2/2 0079:SETWORD 60/08=0x7d0`
+  - `event2/2 0086:SETWORD 60/08=0xbb8`
+  - `event2/2 0093:SETWORD 60/08=0x1388`
+  - `event2/2 00a0:SETWORD 60/08=0x0`
+  - `event/4 001b:SETWORD 60/08=0xfa0`
+  - `event/4 00c2:SETWORD 60/08=0xfa0`
+  - `event/9 00a2:SETWORD 22/ad=0x0`
+  - `event/10 01a6:SETWORD 22/ad=0x0`
+  - `itemget/31 0006:SETWORD 60/08=0x0`
+  - `mihari/1 0125:SETWORD 60/08=0xfa0`
+  - `mihari/1 01a1:SETWORD 60/08=0xfa0`
+  - `mihari/1 01df:SETWORD 62/08=0x0`
+  - `mihari/1 01e9:SETWORD 66/0a=0x8`
+  - `mihari/1 021f:SETWORD 60/08=0x0`
+  - `mihari/1 0242:SETWORD 20/b4=0x0`
+  - `mihari/1 02b9:SETWORD 60/08=0xfa0`
+  - `mihari/1 02ff:SETWORD 60/08=0xfa0`
+  - `mihari/1 0357:SETWORD 60/08=0xfa0`
+  - `mihari/1 03b2:SETWORD 60/08=0xfa0`
+  - `mihari/1 03d7:SETWORD 60/08=0xfa0`
+  - `mihari/1 0426:SETWORD 22/ad=0x0`
+  - `mihari/1 0440:SETWORD 20/b4=0x0`
+  - `mihari/1 0485:SETWORD 60/08=0xfa0`
+  - `mihari/1 04a7:SETWORD 22/ad=0x0`
+  - `mihari/1 04c6:SETWORD 60/08=0x0`
+  - `mihari/1 04e9:SETWORD 20/b4=0x0`
+  - `mihari/1 0574:SETWORD 60/08=0xfa0`
+  - `mihari/1 0599:SETWORD 60/08=0xfa0`
+  - `mihari/1 05e4:SETWORD 22/ad=0x0`
+  - `mihari/1 0602:SETWORD 20/b4=0x0`
+  - `mihari/1 0647:SETWORD 60/08=0xfa0`
+  - `mihari/1 0671:SETWORD 22/ad=0x0`
+
+### COSMIN2
+- D1 MUSIC (1):
+  - `directr/0 0002:MUSIC id=0`
+- D1 ASK (2):
+  - `OYAJI/1 00b7:ASK 48050102010203`
+  - `OYAJI/31 00b3:ASK 48050102010203`
+- D1 BITON (2):
+  - `OYAJI/1 00e9:BITON 30/a1#1`
+  - `OYAJI/31 00e5:BITON 30/a1#1`
+- D2 MUSIC (1):
+  - `directr/0 0002:MUSIC id=0`
+- D2 ASK (2):
+  - `OYAJI/1 00b7:ASK 48050102010203`
+  - `OYAJI/31 00b3:ASK 48050102010203`
+- D2 BITON (2):
+  - `OYAJI/1 00e9:BITON 30/a1#1`
+  - `OYAJI/31 00e5:BITON 30/a1#1`
+- SD MUSIC (1):
+  - `directr/0 0002:MUSIC id=0`
+- SD ASK (2):
+  - `cid/31 00de:ASK 48050102010203`
+  - `cid/31 0220:ASK 48050102010203`
+- SD BITON (2):
+  - `cid/31 0110:BITON 30/a1#1`
+  - `cid/31 0252:BITON 30/a1#1`
+
+### COS_BTM2
+- D1 MAPJUMP (3):
+  - `timeout/31 0023:MAPJUMP #634`
+  - `LINEFR1/5 0000:MAPJUMP #525`
+  - `LINEFR2/5 0000:MAPJUMP #525`
+- D1 MUSIC (6):
+  - `directr/0 0016:MUSIC id=0`
+  - `directr/0 0020:MUSIC id=1`
+  - `directr/0 002c:MUSIC id=2`
+  - `directr/0 00df:MUSIC id=1`
+  - `directr/0 00e7:MUSIC id=2`
+  - `directr/0 00ef:MUSIC id=0`
+- D1 ASK (1):
+  - `directr/0 0123:ASK 4805013801030a`
+- D1 BITON (7):
+  - `EARITH/1 0079:BITON 30/ab#2`
+  - `BALLET/1 0072:BITON 30/ab#0`
+  - `TIFA/1 00e8:BITON 30/ab#1`
+  - `RED/1 014f:BITON 30/ab#3`
+  - `AD/0 00e3:BITON 30/cf#1`
+  - `AD/0 00e7:BITON 30/cf#2`
+  - `AD/0 0105:BITON 30/ab#4`
+- D1 SETWORD (2):
+  - `timeout/31 001e:SETWORD 20/00=0x2a5`
+  - `RED/1 0153:SETWORD 20/00=0x1f6`
+- D2 MAPJUMP (3):
+  - `timeout/31 0023:MAPJUMP #634`
+  - `LINEFR1/5 0000:MAPJUMP #525`
+  - `LINEFR2/5 0000:MAPJUMP #525`
+- D2 MUSIC (6):
+  - `directr/0 0016:MUSIC id=0`
+  - `directr/0 0020:MUSIC id=1`
+  - `directr/0 002c:MUSIC id=2`
+  - `directr/0 00df:MUSIC id=1`
+  - `directr/0 00e7:MUSIC id=2`
+  - `directr/0 00ef:MUSIC id=0`
+- D2 ASK (1):
+  - `directr/0 0123:ASK 4805013801030a`
+- D2 BITON (7):
+  - `EARITH/1 0079:BITON 30/ab#2`
+  - `BALLET/1 0072:BITON 30/ab#0`
+  - `TIFA/1 00e8:BITON 30/ab#1`
+  - `RED/1 0148:BITON 30/ab#3`
+  - `AD/0 00df:BITON 30/cf#1`
+  - `AD/0 00e3:BITON 30/cf#2`
+  - `AD/0 0101:BITON 30/ab#4`
+- D2 SETWORD (2):
+  - `timeout/31 001e:SETWORD 20/00=0x2a5`
+  - `RED/1 014c:SETWORD 20/00=0x1f6`
+- SD MAPJUMP (3):
+  - `timeout/31 0023:MAPJUMP #634`
+  - `LINEFR1/5 0000:MAPJUMP #525`
+  - `LINEFR2/5 0000:MAPJUMP #525`
+- SD MUSIC (6):
+  - `directr/0 0016:MUSIC id=0`
+  - `directr/0 0020:MUSIC id=1`
+  - `directr/0 002c:MUSIC id=2`
+  - `directr/0 00df:MUSIC id=1`
+  - `directr/0 00e7:MUSIC id=2`
+  - `directr/0 00ef:MUSIC id=0`
+- SD ASK (1):
+  - `directr/0 0123:ASK 4805013801030a`
+- SD BITON (7):
+  - `EARITH/1 0079:BITON 30/ab#2`
+  - `BALLET/1 0072:BITON 30/ab#0`
+  - `TIFA/1 00e8:BITON 30/ab#1`
+  - `RED/1 0148:BITON 30/ab#3`
+  - `AD/0 00df:BITON 30/cf#1`
+  - `AD/0 00e3:BITON 30/cf#2`
+  - `AD/0 0101:BITON 30/ab#4`
+- SD SETWORD (2):
+  - `timeout/31 001e:SETWORD 20/00=0x2a5`
+  - `RED/1 014c:SETWORD 20/00=0x1f6`
+
+### FRCYO
+- D1 MAPJUMP (1):
+  - `sono2/31 0d1d:MAPJUMP #3`
+- D1 MUSIC (4):
+  - `dic/0 0000:MUSIC id=0`
+  - `sono2/31 0995:MUSIC id=0`
+  - `ray/31 1d1d:MUSIC id=1`
+  - `ray/31 1ea8:MUSIC id=0`
+- D1 ASK (30):
+  - `cloud/3 000f:ASK 48050109020301`
+  - `kodomo/1 012d:ASK 4805016f000202`
+  - `gaki/1 00b8:ASK 4805010f000301`
+  - `gaki/1 00f1:ASK 48050111000101`
+  - `gaki/1 0146:ASK 48050114000101`
+  - `gaki/1 01d2:ASK 48050119020301`
+  - `gaki/1 029a:ASK 4805011d000101`
+  - `gaki/1 0366:ASK 4805012200070b`
+  - `gaki/1 0396:ASK 4805013900050b`
+  - `gaki/1 0747:ASK 4805003300020b`
+  - `gaki/1 076f:ASK 4805004a000112`
+  - `gaki/1 0d35:ASK 4805004903040b`
+  - `sono2/31 011b:ASK 4805014c00081e`
+  - `sono2/31 0538:ASK 4805005403050b`
+  - `sono2/31 0cb7:ASK 4805002503040b`
+  - `choko1/1 0060:ASK 4805005a00023a`
+  - `choko1/1 00e4:ASK 4805005a00023a`
+  - `choko2/1 0060:ASK 4805005a00023a`
+  - `choko2/1 00ec:ASK 4805005a00023a`
+  - `choko3/1 0060:ASK 4805005a00023a`
+  - `choko3/1 00ec:ASK 4805005a00023a`
+  - `choko4/1 0060:ASK 4805005a00023a`
+  - `choko4/1 00ec:ASK 4805005a00023a`
+  - `choko5/1 0060:ASK 4805005a00023a`
+  - `choko5/1 00ec:ASK 4805005a00023a`
+  - `choko6/1 0060:ASK 4805005a00023a`
+  - `choko6/1 00ec:ASK 4805005a00023a`
+  - `ray/31 0244:ASK 4805015c020387`
+  - `ray/31 02a7:ASK 4805015600081e`
+  - `ray/31 042e:ASK 4805015502040b`
+- D1 BITON (51):
+  - `kodomo/1 0079:BITON d0/5b#0`
+  - `kodomo/1 00a9:BITON b0/84#7`
+  - `kodomo/1 06f3:BITON d0/5b#0`
+  - `gaki/1 0089:BITON 30/40#0`
+  - `gaki/1 022e:BITON 30/41#4`
+  - `gaki/1 0239:BITON 30/40#6`
+  - `gaki/1 02f6:BITON 30/41#4`
+  - `gaki/1 0301:BITON 30/40#6`
+  - `gaki/1 0820:BITON 30/5b#0`
+  - `gaki/1 082f:BITON 30/5b#1`
+  - `gaki/1 083e:BITON 30/5b#2`
+  - `gaki/1 084d:BITON 30/5b#3`
+  - `gaki/1 085c:BITON 30/5b#4`
+  - `gaki/1 086b:BITON 30/5b#5`
+  - `gaki/1 0e0b:BITON 30/5c#4`
+  - `gaki/1 0f53:BITON 30/5c#3`
+  - `gaki/1 0fbd:BITON 30/5c#4`
+  - `gaki/1 1111:BITON 30/5c#2`
+  - `gaki/1 117b:BITON 30/5c#3`
+  - `gaki/1 11e5:BITON 30/5c#4`
+  - `gaki/1 134b:BITON 30/5c#1`
+  - `gaki/1 13b5:BITON 30/5c#2`
+  - `gaki/1 141f:BITON 30/5c#3`
+  - `gaki/1 1489:BITON 30/5c#4`
+  - `gaki/1 15fb:BITON 30/5c#0`
+  - `gaki/1 1665:BITON 30/5c#1`
+  - `gaki/1 16cf:BITON 30/5c#2`
+  - `gaki/1 1739:BITON 30/5c#3`
+  - `gaki/1 17a3:BITON 30/5c#4`
+  - `sono2/31 0cc7:BITON 10/7e#1`
+  - `sono2/31 0d15:BITON 15/7e#55`
+  - `ray/31 19ac:BITON 30/5c#0`
+  - `ray/31 19c2:BITON 30/5c#1`
+  - `ray/31 19d8:BITON 30/5c#2`
+  - `ray/31 19ee:BITON 30/5c#3`
+  - `ray/31 1a04:BITON 30/5c#4`
+  - `ray/31 1a1a:BITON 30/5c#5`
+  - `ray/31 1a3f:BITON 30/5c#0`
+  - `ray/31 1a55:BITON 30/5c#1`
+  - `ray/31 1a6b:BITON 30/5c#2`
+  - `ray/31 1a81:BITON 30/5c#3`
+  - `ray/31 1a97:BITON 30/5c#4`
+  - `ray/31 1aad:BITON 30/5c#5`
+  - `ray/31 1b83:BITON 30/5b#2`
+  - `ray/31 1b87:BITON 30/5c#2`
+  - `ray/31 1be3:BITON 30/5b#3`
+  - `ray/31 1be7:BITON 30/5c#3`
+  - `ray/31 1c43:BITON 30/5b#4`
+  - `ray/31 1c47:BITON 30/5c#4`
+  - `ray/31 1ca3:BITON 30/5b#5`
+  - ... +1
+- D1 BITOFF (55):
+  - `kodomo/1 00ad:BITOFF b0/84#6`
+  - `kodomo/1 06a7:BITOFF b0/84#6`
+  - `gaki/1 0d4d:BITOFF 30/5b#5`
+  - `gaki/1 0d93:BITOFF 30/5c#5`
+  - `gaki/1 0e11:BITOFF 30/5c#4`
+  - `gaki/1 0e2d:BITOFF 30/5b#5`
+  - `gaki/1 0e73:BITOFF 30/5c#5`
+  - `gaki/1 0e95:BITOFF 30/5b#4`
+  - `gaki/1 0edb:BITOFF 30/5c#4`
+  - `gaki/1 0f59:BITOFF 30/5c#3`
+  - `gaki/1 0fc3:BITOFF 30/5c#4`
+  - `gaki/1 1021:BITOFF 30/5c#5`
+  - `gaki/1 1043:BITOFF 30/5b#5`
+  - `gaki/1 1049:BITOFF 30/5b#4`
+  - `gaki/1 1095:BITOFF 30/5c#3`
+  - `gaki/1 10b1:BITOFF 30/5b#3`
+  - `gaki/1 1117:BITOFF 30/5c#2`
+  - `gaki/1 1181:BITOFF 30/5c#3`
+  - `gaki/1 11eb:BITOFF 30/5c#4`
+  - `gaki/1 1249:BITOFF 30/5c#5`
+  - `gaki/1 126b:BITOFF 30/5b#5`
+  - `gaki/1 1277:BITOFF 30/5b#4`
+  - `gaki/1 1283:BITOFF 30/5b#3`
+  - `gaki/1 12cf:BITOFF 30/5c#2`
+  - `gaki/1 12eb:BITOFF 30/5b#2`
+  - `gaki/1 1351:BITOFF 30/5c#1`
+  - `gaki/1 13bb:BITOFF 30/5c#2`
+  - `gaki/1 1425:BITOFF 30/5c#3`
+  - `gaki/1 148f:BITOFF 30/5c#4`
+  - `gaki/1 14ed:BITOFF 30/5c#5`
+  - `gaki/1 150f:BITOFF 30/5b#5`
+  - `gaki/1 151b:BITOFF 30/5b#4`
+  - `gaki/1 1527:BITOFF 30/5b#3`
+  - `gaki/1 1533:BITOFF 30/5b#2`
+  - `gaki/1 157f:BITOFF 30/5c#1`
+  - `gaki/1 159b:BITOFF 30/5b#1`
+  - `gaki/1 1601:BITOFF 30/5c#0`
+  - `gaki/1 166b:BITOFF 30/5c#1`
+  - `gaki/1 16d5:BITOFF 30/5c#2`
+  - `gaki/1 173f:BITOFF 30/5c#3`
+  - `gaki/1 17a9:BITOFF 30/5c#4`
+  - `gaki/1 1807:BITOFF 30/5c#5`
+  - `gaki/1 1829:BITOFF 30/5b#5`
+  - `gaki/1 1835:BITOFF 30/5b#4`
+  - `gaki/1 1841:BITOFF 30/5b#3`
+  - `gaki/1 184d:BITOFF 30/5b#2`
+  - `gaki/1 1859:BITOFF 30/5b#1`
+  - `gaki/1 18a5:BITOFF 30/5c#0`
+  - `gaki/1 18c1:BITOFF 30/5b#0`
+  - `choko1/0 0036:BITOFF 30/5c#0`
+  - ... +5
+- D1 SETWORD (1235):
+  - `kodomo/1 01ac:SETWORD 6c/04=0x22`
+  - `kodomo/1 01c5:SETWORD 6c/04=0x32`
+  - `kodomo/1 01f0:SETWORD 6c/04=0x42`
+  - `kodomo/1 021b:SETWORD 6c/04=0x52`
+  - `kodomo/1 0246:SETWORD 67/04=0xe2`
+  - `kodomo/1 0271:SETWORD 67/04=0xf2`
+  - `kodomo/1 02c9:SETWORD 6c/04=0x26`
+  - `kodomo/1 02e2:SETWORD 6c/04=0x36`
+  - `kodomo/1 030d:SETWORD 6c/04=0x46`
+  - `kodomo/1 0338:SETWORD 6c/04=0x56`
+  - `kodomo/1 0363:SETWORD 67/04=0xe6`
+  - `kodomo/1 038e:SETWORD 67/04=0xf6`
+  - `kodomo/1 03e6:SETWORD 6e/04=0x44`
+  - `kodomo/1 03ff:SETWORD 6e/04=0x46`
+  - `kodomo/1 042a:SETWORD 6e/04=0x48`
+  - `kodomo/1 0455:SETWORD 6e/04=0x4a`
+  - `kodomo/1 0480:SETWORD 6e/04=0x4c`
+  - `kodomo/1 04ab:SETWORD 6e/04=0x4e`
+  - `gaki/1 0d51:SETWORD 70/f0=0x0`
+  - `gaki/1 0d56:SETWORD 70/f2=0x0`
+  - `gaki/1 0d5b:SETWORD 70/f4=0x0`
+  - `gaki/1 0d60:SETWORD 70/f6=0x0`
+  - `gaki/1 0d65:SETWORD e0/4e=0x0`
+  - `gaki/1 0d8e:SETWORD 40/6c=0x0`
+  - `gaki/1 0dc3:SETWORD 77/e0=0xf0`
+  - `gaki/1 0dc8:SETWORD 77/e2=0xf2`
+  - `gaki/1 0dcd:SETWORD 77/e4=0xf4`
+  - `gaki/1 0dd2:SETWORD 77/e6=0xf6`
+  - `gaki/1 0dd7:SETWORD ee/4c=0x4e`
+  - `gaki/1 0e00:SETWORD 44/6a=0x6c`
+  - `gaki/1 0e31:SETWORD 70/f0=0x0`
+  - `gaki/1 0e36:SETWORD 70/f2=0x0`
+  - `gaki/1 0e3b:SETWORD 70/f4=0x0`
+  - `gaki/1 0e40:SETWORD 70/f6=0x0`
+  - `gaki/1 0e45:SETWORD e0/4e=0x0`
+  - `gaki/1 0e6e:SETWORD 40/6c=0x0`
+  - `gaki/1 0e99:SETWORD 70/e0=0x0`
+  - `gaki/1 0e9e:SETWORD 70/e2=0x0`
+  - `gaki/1 0ea3:SETWORD 70/e4=0x0`
+  - `gaki/1 0ea8:SETWORD 70/e6=0x0`
+  - `gaki/1 0ead:SETWORD e0/4c=0x0`
+  - `gaki/1 0ed6:SETWORD 40/6a=0x0`
+  - `gaki/1 0f0b:SETWORD c7/50=0xe0`
+  - `gaki/1 0f10:SETWORD c7/52=0xe2`
+  - `gaki/1 0f15:SETWORD c7/54=0xe4`
+  - `gaki/1 0f1a:SETWORD c7/56=0xe6`
+  - `gaki/1 0f1f:SETWORD ee/4a=0x4c`
+  - `gaki/1 0f48:SETWORD 44/68=0x6a`
+  - `gaki/1 0f75:SETWORD 77/e0=0xf0`
+  - `gaki/1 0f7a:SETWORD 77/e2=0xf2`
+  - ... +1185
+- D2 MAPJUMP (1):
+  - `sono2/31 0d1d:MAPJUMP #3`
+- D2 MUSIC (4):
+  - `dic/0 0000:MUSIC id=0`
+  - `sono2/31 0995:MUSIC id=0`
+  - `ray/31 1d1d:MUSIC id=1`
+  - `ray/31 1ea8:MUSIC id=0`
+- D2 ASK (30):
+  - `cloud/3 000f:ASK 48050109020301`
+  - `kodomo/1 012d:ASK 4805016f000202`
+  - `gaki/1 00b8:ASK 4805010f000301`
+  - `gaki/1 00f1:ASK 48050111000101`
+  - `gaki/1 0146:ASK 48050114000101`
+  - `gaki/1 01d2:ASK 48050119020301`
+  - `gaki/1 029a:ASK 4805011d000101`
+  - `gaki/1 0366:ASK 4805012200070b`
+  - `gaki/1 0396:ASK 4805013900050b`
+  - `gaki/1 0747:ASK 4805003300020b`
+  - `gaki/1 076f:ASK 4805004a000112`
+  - `gaki/1 0d35:ASK 4805004903040b`
+  - `sono2/31 011b:ASK 4805014c00081e`
+  - `sono2/31 0538:ASK 4805005403050b`
+  - `sono2/31 0cb7:ASK 4805002503040b`
+  - `choko1/1 0060:ASK 4805005a00023a`
+  - `choko1/1 00e4:ASK 4805005a00023a`
+  - `choko2/1 0060:ASK 4805005a00023a`
+  - `choko2/1 00ec:ASK 4805005a00023a`
+  - `choko3/1 0060:ASK 4805005a00023a`
+  - `choko3/1 00ec:ASK 4805005a00023a`
+  - `choko4/1 0060:ASK 4805005a00023a`
+  - `choko4/1 00ec:ASK 4805005a00023a`
+  - `choko5/1 0060:ASK 4805005a00023a`
+  - `choko5/1 00ec:ASK 4805005a00023a`
+  - `choko6/1 0060:ASK 4805005a00023a`
+  - `choko6/1 00ec:ASK 4805005a00023a`
+  - `ray/31 0244:ASK 4805015c020387`
+  - `ray/31 02a7:ASK 4805015600081e`
+  - `ray/31 042e:ASK 4805015502040b`
+- D2 BITON (51):
+  - `kodomo/1 0079:BITON d0/5b#0`
+  - `kodomo/1 00a9:BITON b0/84#7`
+  - `kodomo/1 06f3:BITON d0/5b#0`
+  - `gaki/1 0089:BITON 30/40#0`
+  - `gaki/1 022e:BITON 30/41#4`
+  - `gaki/1 0239:BITON 30/40#6`
+  - `gaki/1 02f6:BITON 30/41#4`
+  - `gaki/1 0301:BITON 30/40#6`
+  - `gaki/1 0820:BITON 30/5b#0`
+  - `gaki/1 082f:BITON 30/5b#1`
+  - `gaki/1 083e:BITON 30/5b#2`
+  - `gaki/1 084d:BITON 30/5b#3`
+  - `gaki/1 085c:BITON 30/5b#4`
+  - `gaki/1 086b:BITON 30/5b#5`
+  - `gaki/1 0e0b:BITON 30/5c#4`
+  - `gaki/1 0f53:BITON 30/5c#3`
+  - `gaki/1 0fbd:BITON 30/5c#4`
+  - `gaki/1 1111:BITON 30/5c#2`
+  - `gaki/1 117b:BITON 30/5c#3`
+  - `gaki/1 11e5:BITON 30/5c#4`
+  - `gaki/1 134b:BITON 30/5c#1`
+  - `gaki/1 13b5:BITON 30/5c#2`
+  - `gaki/1 141f:BITON 30/5c#3`
+  - `gaki/1 1489:BITON 30/5c#4`
+  - `gaki/1 15fb:BITON 30/5c#0`
+  - `gaki/1 1665:BITON 30/5c#1`
+  - `gaki/1 16cf:BITON 30/5c#2`
+  - `gaki/1 1739:BITON 30/5c#3`
+  - `gaki/1 17a3:BITON 30/5c#4`
+  - `sono2/31 0cc7:BITON 10/7e#1`
+  - `sono2/31 0d15:BITON 15/7e#55`
+  - `ray/31 19ac:BITON 30/5c#0`
+  - `ray/31 19c2:BITON 30/5c#1`
+  - `ray/31 19d8:BITON 30/5c#2`
+  - `ray/31 19ee:BITON 30/5c#3`
+  - `ray/31 1a04:BITON 30/5c#4`
+  - `ray/31 1a1a:BITON 30/5c#5`
+  - `ray/31 1a3f:BITON 30/5c#0`
+  - `ray/31 1a55:BITON 30/5c#1`
+  - `ray/31 1a6b:BITON 30/5c#2`
+  - `ray/31 1a81:BITON 30/5c#3`
+  - `ray/31 1a97:BITON 30/5c#4`
+  - `ray/31 1aad:BITON 30/5c#5`
+  - `ray/31 1b83:BITON 30/5b#2`
+  - `ray/31 1b87:BITON 30/5c#2`
+  - `ray/31 1be3:BITON 30/5b#3`
+  - `ray/31 1be7:BITON 30/5c#3`
+  - `ray/31 1c43:BITON 30/5b#4`
+  - `ray/31 1c47:BITON 30/5c#4`
+  - `ray/31 1ca3:BITON 30/5b#5`
+  - ... +1
+- D2 BITOFF (55):
+  - `kodomo/1 00ad:BITOFF b0/84#6`
+  - `kodomo/1 06a7:BITOFF b0/84#6`
+  - `gaki/1 0d4d:BITOFF 30/5b#5`
+  - `gaki/1 0d93:BITOFF 30/5c#5`
+  - `gaki/1 0e11:BITOFF 30/5c#4`
+  - `gaki/1 0e2d:BITOFF 30/5b#5`
+  - `gaki/1 0e73:BITOFF 30/5c#5`
+  - `gaki/1 0e95:BITOFF 30/5b#4`
+  - `gaki/1 0edb:BITOFF 30/5c#4`
+  - `gaki/1 0f59:BITOFF 30/5c#3`
+  - `gaki/1 0fc3:BITOFF 30/5c#4`
+  - `gaki/1 1021:BITOFF 30/5c#5`
+  - `gaki/1 1043:BITOFF 30/5b#5`
+  - `gaki/1 1049:BITOFF 30/5b#4`
+  - `gaki/1 1095:BITOFF 30/5c#3`
+  - `gaki/1 10b1:BITOFF 30/5b#3`
+  - `gaki/1 1117:BITOFF 30/5c#2`
+  - `gaki/1 1181:BITOFF 30/5c#3`
+  - `gaki/1 11eb:BITOFF 30/5c#4`
+  - `gaki/1 1249:BITOFF 30/5c#5`
+  - `gaki/1 126b:BITOFF 30/5b#5`
+  - `gaki/1 1277:BITOFF 30/5b#4`
+  - `gaki/1 1283:BITOFF 30/5b#3`
+  - `gaki/1 12cf:BITOFF 30/5c#2`
+  - `gaki/1 12eb:BITOFF 30/5b#2`
+  - `gaki/1 1351:BITOFF 30/5c#1`
+  - `gaki/1 13bb:BITOFF 30/5c#2`
+  - `gaki/1 1425:BITOFF 30/5c#3`
+  - `gaki/1 148f:BITOFF 30/5c#4`
+  - `gaki/1 14ed:BITOFF 30/5c#5`
+  - `gaki/1 150f:BITOFF 30/5b#5`
+  - `gaki/1 151b:BITOFF 30/5b#4`
+  - `gaki/1 1527:BITOFF 30/5b#3`
+  - `gaki/1 1533:BITOFF 30/5b#2`
+  - `gaki/1 157f:BITOFF 30/5c#1`
+  - `gaki/1 159b:BITOFF 30/5b#1`
+  - `gaki/1 1601:BITOFF 30/5c#0`
+  - `gaki/1 166b:BITOFF 30/5c#1`
+  - `gaki/1 16d5:BITOFF 30/5c#2`
+  - `gaki/1 173f:BITOFF 30/5c#3`
+  - `gaki/1 17a9:BITOFF 30/5c#4`
+  - `gaki/1 1807:BITOFF 30/5c#5`
+  - `gaki/1 1829:BITOFF 30/5b#5`
+  - `gaki/1 1835:BITOFF 30/5b#4`
+  - `gaki/1 1841:BITOFF 30/5b#3`
+  - `gaki/1 184d:BITOFF 30/5b#2`
+  - `gaki/1 1859:BITOFF 30/5b#1`
+  - `gaki/1 18a5:BITOFF 30/5c#0`
+  - `gaki/1 18c1:BITOFF 30/5b#0`
+  - `choko1/0 0036:BITOFF 30/5c#0`
+  - ... +5
+- D2 SETWORD (1235):
+  - `kodomo/1 01ac:SETWORD 6c/04=0x22`
+  - `kodomo/1 01c5:SETWORD 6c/04=0x32`
+  - `kodomo/1 01f0:SETWORD 6c/04=0x42`
+  - `kodomo/1 021b:SETWORD 6c/04=0x52`
+  - `kodomo/1 0246:SETWORD 67/04=0xe2`
+  - `kodomo/1 0271:SETWORD 67/04=0xf2`
+  - `kodomo/1 02c9:SETWORD 6c/04=0x26`
+  - `kodomo/1 02e2:SETWORD 6c/04=0x36`
+  - `kodomo/1 030d:SETWORD 6c/04=0x46`
+  - `kodomo/1 0338:SETWORD 6c/04=0x56`
+  - `kodomo/1 0363:SETWORD 67/04=0xe6`
+  - `kodomo/1 038e:SETWORD 67/04=0xf6`
+  - `kodomo/1 03e6:SETWORD 6e/04=0x44`
+  - `kodomo/1 03ff:SETWORD 6e/04=0x46`
+  - `kodomo/1 042a:SETWORD 6e/04=0x48`
+  - `kodomo/1 0455:SETWORD 6e/04=0x4a`
+  - `kodomo/1 0480:SETWORD 6e/04=0x4c`
+  - `kodomo/1 04ab:SETWORD 6e/04=0x4e`
+  - `gaki/1 0d51:SETWORD 70/f0=0x0`
+  - `gaki/1 0d56:SETWORD 70/f2=0x0`
+  - `gaki/1 0d5b:SETWORD 70/f4=0x0`
+  - `gaki/1 0d60:SETWORD 70/f6=0x0`
+  - `gaki/1 0d65:SETWORD e0/4e=0x0`
+  - `gaki/1 0d8e:SETWORD 40/6c=0x0`
+  - `gaki/1 0dc3:SETWORD 77/e0=0xf0`
+  - `gaki/1 0dc8:SETWORD 77/e2=0xf2`
+  - `gaki/1 0dcd:SETWORD 77/e4=0xf4`
+  - `gaki/1 0dd2:SETWORD 77/e6=0xf6`
+  - `gaki/1 0dd7:SETWORD ee/4c=0x4e`
+  - `gaki/1 0e00:SETWORD 44/6a=0x6c`
+  - `gaki/1 0e31:SETWORD 70/f0=0x0`
+  - `gaki/1 0e36:SETWORD 70/f2=0x0`
+  - `gaki/1 0e3b:SETWORD 70/f4=0x0`
+  - `gaki/1 0e40:SETWORD 70/f6=0x0`
+  - `gaki/1 0e45:SETWORD e0/4e=0x0`
+  - `gaki/1 0e6e:SETWORD 40/6c=0x0`
+  - `gaki/1 0e99:SETWORD 70/e0=0x0`
+  - `gaki/1 0e9e:SETWORD 70/e2=0x0`
+  - `gaki/1 0ea3:SETWORD 70/e4=0x0`
+  - `gaki/1 0ea8:SETWORD 70/e6=0x0`
+  - `gaki/1 0ead:SETWORD e0/4c=0x0`
+  - `gaki/1 0ed6:SETWORD 40/6a=0x0`
+  - `gaki/1 0f0b:SETWORD c7/50=0xe0`
+  - `gaki/1 0f10:SETWORD c7/52=0xe2`
+  - `gaki/1 0f15:SETWORD c7/54=0xe4`
+  - `gaki/1 0f1a:SETWORD c7/56=0xe6`
+  - `gaki/1 0f1f:SETWORD ee/4a=0x4c`
+  - `gaki/1 0f48:SETWORD 44/68=0x6a`
+  - `gaki/1 0f75:SETWORD 77/e0=0xf0`
+  - `gaki/1 0f7a:SETWORD 77/e2=0xf2`
+  - ... +1185
+- SD MAPJUMP (1):
+  - `sono2/31 0d1d:MAPJUMP #3`
+- SD MUSIC (4):
+  - `dic/0 0000:MUSIC id=0`
+  - `sono2/31 0995:MUSIC id=0`
+  - `ray/31 1d1d:MUSIC id=1`
+  - `ray/31 1ea8:MUSIC id=0`
+- SD ASK (30):
+  - `cloud/3 000f:ASK 48050109020301`
+  - `kodomo/1 012d:ASK 4805016f000202`
+  - `gaki/1 00b8:ASK 4805010f000301`
+  - `gaki/1 00f1:ASK 48050111000101`
+  - `gaki/1 0146:ASK 48050114000101`
+  - `gaki/1 01d2:ASK 48050119020301`
+  - `gaki/1 029a:ASK 4805011d000101`
+  - `gaki/1 0366:ASK 4805012200070b`
+  - `gaki/1 0396:ASK 4805013900050b`
+  - `gaki/1 0747:ASK 4805003300020b`
+  - `gaki/1 076f:ASK 4805004a000112`
+  - `gaki/1 0d35:ASK 4805004903040b`
+  - `sono2/31 011b:ASK 4805014c00081e`
+  - `sono2/31 0538:ASK 4805005403050b`
+  - `sono2/31 0cb7:ASK 4805002503040b`
+  - `choko1/1 0060:ASK 4805005a00023a`
+  - `choko1/1 00e4:ASK 4805005a00023a`
+  - `choko2/1 0060:ASK 4805005a00023a`
+  - `choko2/1 00ec:ASK 4805005a00023a`
+  - `choko3/1 0060:ASK 4805005a00023a`
+  - `choko3/1 00ec:ASK 4805005a00023a`
+  - `choko4/1 0060:ASK 4805005a00023a`
+  - `choko4/1 00ec:ASK 4805005a00023a`
+  - `choko5/1 0060:ASK 4805005a00023a`
+  - `choko5/1 00ec:ASK 4805005a00023a`
+  - `choko6/1 0060:ASK 4805005a00023a`
+  - `choko6/1 00ec:ASK 4805005a00023a`
+  - `ray/31 0244:ASK 4805015c020387`
+  - `ray/31 02a7:ASK 4805015600081e`
+  - `ray/31 042e:ASK 4805015502040b`
+- SD BITON (51):
+  - `kodomo/1 0079:BITON d0/5b#0`
+  - `kodomo/1 00a9:BITON b0/84#7`
+  - `kodomo/1 06f3:BITON d0/5b#0`
+  - `gaki/1 0089:BITON 30/40#0`
+  - `gaki/1 022e:BITON 30/41#4`
+  - `gaki/1 0239:BITON 30/40#6`
+  - `gaki/1 02f6:BITON 30/41#4`
+  - `gaki/1 0301:BITON 30/40#6`
+  - `gaki/1 0820:BITON 30/5b#0`
+  - `gaki/1 082f:BITON 30/5b#1`
+  - `gaki/1 083e:BITON 30/5b#2`
+  - `gaki/1 084d:BITON 30/5b#3`
+  - `gaki/1 085c:BITON 30/5b#4`
+  - `gaki/1 086b:BITON 30/5b#5`
+  - `gaki/1 0e0b:BITON 30/5c#4`
+  - `gaki/1 0f53:BITON 30/5c#3`
+  - `gaki/1 0fbd:BITON 30/5c#4`
+  - `gaki/1 1111:BITON 30/5c#2`
+  - `gaki/1 117b:BITON 30/5c#3`
+  - `gaki/1 11e5:BITON 30/5c#4`
+  - `gaki/1 134b:BITON 30/5c#1`
+  - `gaki/1 13b5:BITON 30/5c#2`
+  - `gaki/1 141f:BITON 30/5c#3`
+  - `gaki/1 1489:BITON 30/5c#4`
+  - `gaki/1 15fb:BITON 30/5c#0`
+  - `gaki/1 1665:BITON 30/5c#1`
+  - `gaki/1 16cf:BITON 30/5c#2`
+  - `gaki/1 1739:BITON 30/5c#3`
+  - `gaki/1 17a3:BITON 30/5c#4`
+  - `sono2/31 0cc7:BITON 10/7e#1`
+  - `sono2/31 0d15:BITON 15/7e#55`
+  - `ray/31 19ac:BITON 30/5c#0`
+  - `ray/31 19c2:BITON 30/5c#1`
+  - `ray/31 19d8:BITON 30/5c#2`
+  - `ray/31 19ee:BITON 30/5c#3`
+  - `ray/31 1a04:BITON 30/5c#4`
+  - `ray/31 1a1a:BITON 30/5c#5`
+  - `ray/31 1a3f:BITON 30/5c#0`
+  - `ray/31 1a55:BITON 30/5c#1`
+  - `ray/31 1a6b:BITON 30/5c#2`
+  - `ray/31 1a81:BITON 30/5c#3`
+  - `ray/31 1a97:BITON 30/5c#4`
+  - `ray/31 1aad:BITON 30/5c#5`
+  - `ray/31 1b83:BITON 30/5b#2`
+  - `ray/31 1b87:BITON 30/5c#2`
+  - `ray/31 1be3:BITON 30/5b#3`
+  - `ray/31 1be7:BITON 30/5c#3`
+  - `ray/31 1c43:BITON 30/5b#4`
+  - `ray/31 1c47:BITON 30/5c#4`
+  - `ray/31 1ca3:BITON 30/5b#5`
+  - ... +1
+- SD BITOFF (55):
+  - `kodomo/1 00ad:BITOFF b0/84#6`
+  - `kodomo/1 06a7:BITOFF b0/84#6`
+  - `gaki/1 0d4d:BITOFF 30/5b#5`
+  - `gaki/1 0d93:BITOFF 30/5c#5`
+  - `gaki/1 0e11:BITOFF 30/5c#4`
+  - `gaki/1 0e2d:BITOFF 30/5b#5`
+  - `gaki/1 0e73:BITOFF 30/5c#5`
+  - `gaki/1 0e95:BITOFF 30/5b#4`
+  - `gaki/1 0edb:BITOFF 30/5c#4`
+  - `gaki/1 0f59:BITOFF 30/5c#3`
+  - `gaki/1 0fc3:BITOFF 30/5c#4`
+  - `gaki/1 1021:BITOFF 30/5c#5`
+  - `gaki/1 1043:BITOFF 30/5b#5`
+  - `gaki/1 1049:BITOFF 30/5b#4`
+  - `gaki/1 1095:BITOFF 30/5c#3`
+  - `gaki/1 10b1:BITOFF 30/5b#3`
+  - `gaki/1 1117:BITOFF 30/5c#2`
+  - `gaki/1 1181:BITOFF 30/5c#3`
+  - `gaki/1 11eb:BITOFF 30/5c#4`
+  - `gaki/1 1249:BITOFF 30/5c#5`
+  - `gaki/1 126b:BITOFF 30/5b#5`
+  - `gaki/1 1277:BITOFF 30/5b#4`
+  - `gaki/1 1283:BITOFF 30/5b#3`
+  - `gaki/1 12cf:BITOFF 30/5c#2`
+  - `gaki/1 12eb:BITOFF 30/5b#2`
+  - `gaki/1 1351:BITOFF 30/5c#1`
+  - `gaki/1 13bb:BITOFF 30/5c#2`
+  - `gaki/1 1425:BITOFF 30/5c#3`
+  - `gaki/1 148f:BITOFF 30/5c#4`
+  - `gaki/1 14ed:BITOFF 30/5c#5`
+  - `gaki/1 150f:BITOFF 30/5b#5`
+  - `gaki/1 151b:BITOFF 30/5b#4`
+  - `gaki/1 1527:BITOFF 30/5b#3`
+  - `gaki/1 1533:BITOFF 30/5b#2`
+  - `gaki/1 157f:BITOFF 30/5c#1`
+  - `gaki/1 159b:BITOFF 30/5b#1`
+  - `gaki/1 1601:BITOFF 30/5c#0`
+  - `gaki/1 166b:BITOFF 30/5c#1`
+  - `gaki/1 16d5:BITOFF 30/5c#2`
+  - `gaki/1 173f:BITOFF 30/5c#3`
+  - `gaki/1 17a9:BITOFF 30/5c#4`
+  - `gaki/1 1807:BITOFF 30/5c#5`
+  - `gaki/1 1829:BITOFF 30/5b#5`
+  - `gaki/1 1835:BITOFF 30/5b#4`
+  - `gaki/1 1841:BITOFF 30/5b#3`
+  - `gaki/1 184d:BITOFF 30/5b#2`
+  - `gaki/1 1859:BITOFF 30/5b#1`
+  - `gaki/1 18a5:BITOFF 30/5c#0`
+  - `gaki/1 18c1:BITOFF 30/5b#0`
+  - `choko1/0 0036:BITOFF 30/5c#0`
+  - ... +5
+- SD SETWORD (1235):
+  - `kodomo/1 01ac:SETWORD 6c/04=0x22`
+  - `kodomo/1 01c5:SETWORD 6c/04=0x32`
+  - `kodomo/1 01f0:SETWORD 6c/04=0x42`
+  - `kodomo/1 021b:SETWORD 6c/04=0x52`
+  - `kodomo/1 0246:SETWORD 67/04=0xe2`
+  - `kodomo/1 0271:SETWORD 67/04=0xf2`
+  - `kodomo/1 02c9:SETWORD 6c/04=0x26`
+  - `kodomo/1 02e2:SETWORD 6c/04=0x36`
+  - `kodomo/1 030d:SETWORD 6c/04=0x46`
+  - `kodomo/1 0338:SETWORD 6c/04=0x56`
+  - `kodomo/1 0363:SETWORD 67/04=0xe6`
+  - `kodomo/1 038e:SETWORD 67/04=0xf6`
+  - `kodomo/1 03e6:SETWORD 6e/04=0x44`
+  - `kodomo/1 03ff:SETWORD 6e/04=0x46`
+  - `kodomo/1 042a:SETWORD 6e/04=0x48`
+  - `kodomo/1 0455:SETWORD 6e/04=0x4a`
+  - `kodomo/1 0480:SETWORD 6e/04=0x4c`
+  - `kodomo/1 04ab:SETWORD 6e/04=0x4e`
+  - `gaki/1 0d51:SETWORD 70/f0=0x0`
+  - `gaki/1 0d56:SETWORD 70/f2=0x0`
+  - `gaki/1 0d5b:SETWORD 70/f4=0x0`
+  - `gaki/1 0d60:SETWORD 70/f6=0x0`
+  - `gaki/1 0d65:SETWORD e0/4e=0x0`
+  - `gaki/1 0d8e:SETWORD 40/6c=0x0`
+  - `gaki/1 0dc3:SETWORD 77/e0=0xf0`
+  - `gaki/1 0dc8:SETWORD 77/e2=0xf2`
+  - `gaki/1 0dcd:SETWORD 77/e4=0xf4`
+  - `gaki/1 0dd2:SETWORD 77/e6=0xf6`
+  - `gaki/1 0dd7:SETWORD ee/4c=0x4e`
+  - `gaki/1 0e00:SETWORD 44/6a=0x6c`
+  - `gaki/1 0e31:SETWORD 70/f0=0x0`
+  - `gaki/1 0e36:SETWORD 70/f2=0x0`
+  - `gaki/1 0e3b:SETWORD 70/f4=0x0`
+  - `gaki/1 0e40:SETWORD 70/f6=0x0`
+  - `gaki/1 0e45:SETWORD e0/4e=0x0`
+  - `gaki/1 0e6e:SETWORD 40/6c=0x0`
+  - `gaki/1 0e99:SETWORD 70/e0=0x0`
+  - `gaki/1 0e9e:SETWORD 70/e2=0x0`
+  - `gaki/1 0ea3:SETWORD 70/e4=0x0`
+  - `gaki/1 0ea8:SETWORD 70/e6=0x0`
+  - `gaki/1 0ead:SETWORD e0/4c=0x0`
+  - `gaki/1 0ed6:SETWORD 40/6a=0x0`
+  - `gaki/1 0f0b:SETWORD c7/50=0xe0`
+  - `gaki/1 0f10:SETWORD c7/52=0xe2`
+  - `gaki/1 0f15:SETWORD c7/54=0xe4`
+  - `gaki/1 0f1a:SETWORD c7/56=0xe6`
+  - `gaki/1 0f1f:SETWORD ee/4a=0x4c`
+  - `gaki/1 0f48:SETWORD 44/68=0x6a`
+  - `gaki/1 0f75:SETWORD 77/e0=0xf0`
+  - `gaki/1 0f7a:SETWORD 77/e2=0xf2`
+  - ... +1185
+
+### FSHIP_1
+- D1 BITON (1):
+  - `yufi/1 0048:BITON 30/16#1`
+- D1 SETWORD (1):
+  - `bunki/31 000d:SETWORD 20/00=0x401`
+- D2 BITON (1):
+  - `yufi/1 0048:BITON 30/16#1`
+- D2 SETWORD (1):
+  - `bunki/31 000d:SETWORD 20/00=0x401`
+- SD BITON (1):
+  - `yufi/1 0048:BITON 30/16#1`
+- SD SETWORD (1):
+  - `bunki/31 000d:SETWORD 20/00=0x401`
+
+### FSHIP_12
+- D1 MAPJUMP (3):
+  - `ad/3 0054:MAPJUMP #269`
+  - `ad/31 003e:MAPJUMP #731`
+  - `ad/31 0051:MAPJUMP #731`
+- D1 MUSIC (3):
+  - `drctr/0 000a:MUSIC id=0`
+  - `drctr/0 000e:MUSIC id=1`
+  - `tkeep/31 0019:MUSIC id=2`
+- D1 ASK (2):
+  - `ad/31 000f:ASK 4805000802030c`
+  - `ad/31 002e:ASK 4805000901020c`
+- D1 SETWORD (1):
+  - `drctr/0 003f:SETWORD 20/00=0x63f`
+- D2 MAPJUMP (3):
+  - `ad/3 0054:MAPJUMP #269`
+  - `ad/31 003e:MAPJUMP #731`
+  - `ad/31 0051:MAPJUMP #731`
+- D2 MUSIC (3):
+  - `drctr/0 000a:MUSIC id=0`
+  - `drctr/0 000e:MUSIC id=1`
+  - `tkeep/31 0019:MUSIC id=2`
+- D2 ASK (2):
+  - `ad/31 000f:ASK 4805000802030c`
+  - `ad/31 002e:ASK 4805000901020c`
+- D2 SETWORD (1):
+  - `drctr/0 003f:SETWORD 20/00=0x63f`
+- SD MAPJUMP (3):
+  - `ad/3 0054:MAPJUMP #269`
+  - `ad/31 003e:MAPJUMP #731`
+  - `ad/31 0051:MAPJUMP #731`
+- SD MUSIC (3):
+  - `drctr/0 000a:MUSIC id=0`
+  - `drctr/0 000e:MUSIC id=1`
+  - `tkeep/31 0019:MUSIC id=2`
+- SD ASK (2):
+  - `ad/31 000f:ASK 4805000802030c`
+  - `ad/31 002e:ASK 4805000901020c`
+- SD SETWORD (1):
+  - `drctr/0 003f:SETWORD 20/00=0x63f`
+
+### FSHIP_23
+- D1 MAPJUMP (7):
+  - `direct/3 004f:MAPJUMP #255`
+  - `direct/4 0096:MAPJUMP #74`
+  - `jump/2 000e:MAPJUMP #74`
+  - `crew3/1 003b:MAPJUMP #45`
+  - `crew3/1 00d5:MAPJUMP #41`
+  - `crew3/1 00eb:MAPJUMP #45`
+  - `crew3/1 013c:MAPJUMP #45`
+- D1 MUSIC (9):
+  - `bunki/31 001a:MUSIC id=0`
+  - `bunki/31 0043:MUSIC id=0`
+  - `bunki/31 0052:MUSIC id=0`
+  - `bunki/31 007a:MUSIC id=0`
+  - `direct/1 0028:MUSIC id=0`
+  - `direct/4 004b:MUSIC id=1`
+  - `direct/4 005e:MUSIC id=2`
+  - `cid/15 0052:MUSIC id=1`
+  - `cid/15 0065:MUSIC id=0`
+- D1 ASK (3):
+  - `crew3/1 0017:ASK 48050173020300`
+  - `crew3/1 00a4:ASK 48050125020300`
+  - `crew3/1 0118:ASK 48050152020300`
+- D1 BITON (11):
+  - `produce/31 000b:BITON 10/7f#4`
+  - `produce/31 000f:BITON 10/7f#5`
+  - `cid/1 0094:BITON 30/16#2`
+  - `cid/1 010c:BITON 30/16#2`
+  - `cid/1 0184:BITON 30/16#2`
+  - `cid/20 0015:BITON 30/17#0`
+  - `cid/21 0015:BITON 30/17#1`
+  - `cid/22 0015:BITON 30/17#2`
+  - `cid/23 003b:BITON 30/16#5`
+  - `crew3/1 006d:BITON 30/16#3`
+  - `crew3/1 00c7:BITON 30/16#7`
+- D1 BITOFF (4):
+  - `red/31 0000:BITOFF 30/16#5`
+  - `cid/20 0008:BITOFF 30/17#0`
+  - `cid/21 0008:BITOFF 30/17#1`
+  - `cid/22 0008:BITOFF 30/17#2`
+- D1 SETWORD (4):
+  - `direct/1 0048:SETWORD 20/00=0x405`
+  - `direct/3 004a:SETWORD 20/00=0x450`
+  - `direct/4 0087:SETWORD 20/00=0x454`
+  - `red/1 0077:SETWORD 20/00=0x407`
+- D2 MAPJUMP (7):
+  - `direct/3 004f:MAPJUMP #255`
+  - `direct/4 0096:MAPJUMP #74`
+  - `jump/2 000e:MAPJUMP #74`
+  - `crew3/1 003b:MAPJUMP #45`
+  - `crew3/1 00c8:MAPJUMP #41`
+  - `crew3/1 00de:MAPJUMP #45`
+  - `crew3/1 012f:MAPJUMP #45`
+- D2 MUSIC (9):
+  - `bunki/31 001a:MUSIC id=0`
+  - `bunki/31 0043:MUSIC id=0`
+  - `bunki/31 0052:MUSIC id=0`
+  - `bunki/31 007a:MUSIC id=0`
+  - `direct/1 0028:MUSIC id=0`
+  - `direct/4 004b:MUSIC id=1`
+  - `direct/4 005e:MUSIC id=2`
+  - `cid/15 0052:MUSIC id=1`
+  - `cid/15 0065:MUSIC id=0`
+- D2 ASK (3):
+  - `crew3/1 0017:ASK 48050173020300`
+  - `crew3/1 0097:ASK 48050125020300`
+  - `crew3/1 010b:ASK 48050152020300`
+- D2 BITON (11):
+  - `produce/31 000b:BITON 10/7f#4`
+  - `produce/31 000f:BITON 10/7f#5`
+  - `cid/1 0096:BITON 30/16#2`
+  - `cid/1 010e:BITON 30/16#2`
+  - `cid/1 0186:BITON 30/16#2`
+  - `cid/20 0015:BITON 30/17#0`
+  - `cid/21 0015:BITON 30/17#1`
+  - `cid/22 0015:BITON 30/17#2`
+  - `cid/23 003b:BITON 30/16#5`
+  - `crew3/1 006d:BITON 30/16#3`
+  - `crew3/1 00ba:BITON 30/16#7`
+- D2 BITOFF (4):
+  - `red/31 0000:BITOFF 30/16#5`
+  - `cid/20 0008:BITOFF 30/17#0`
+  - `cid/21 0008:BITOFF 30/17#1`
+  - `cid/22 0008:BITOFF 30/17#2`
+- D2 SETWORD (4):
+  - `direct/1 004a:SETWORD 20/00=0x405`
+  - `direct/3 004a:SETWORD 20/00=0x450`
+  - `direct/4 0087:SETWORD 20/00=0x454`
+  - `red/1 0079:SETWORD 20/00=0x407`
+- SD MAPJUMP (7):
+  - `direct/3 004f:MAPJUMP #255`
+  - `direct/4 0096:MAPJUMP #74`
+  - `jump/2 000e:MAPJUMP #74`
+  - `crew3/1 003b:MAPJUMP #45`
+  - `crew3/1 00c8:MAPJUMP #41`
+  - `crew3/1 00de:MAPJUMP #45`
+  - `crew3/1 012f:MAPJUMP #45`
+- SD MUSIC (9):
+  - `bunki/31 001a:MUSIC id=0`
+  - `bunki/31 0043:MUSIC id=0`
+  - `bunki/31 0052:MUSIC id=0`
+  - `bunki/31 007a:MUSIC id=0`
+  - `direct/1 0028:MUSIC id=0`
+  - `direct/4 004b:MUSIC id=1`
+  - `direct/4 005e:MUSIC id=2`
+  - `cid/15 0052:MUSIC id=1`
+  - `cid/15 0065:MUSIC id=0`
+- SD ASK (3):
+  - `crew3/1 0017:ASK 48050173020300`
+  - `crew3/1 0097:ASK 48050125020300`
+  - `crew3/1 010b:ASK 48050152020300`
+- SD BITON (11):
+  - `produce/31 000b:BITON 10/7f#4`
+  - `produce/31 000f:BITON 10/7f#5`
+  - `cid/1 0096:BITON 30/16#2`
+  - `cid/1 010e:BITON 30/16#2`
+  - `cid/1 0186:BITON 30/16#2`
+  - `cid/20 0015:BITON 30/17#0`
+  - `cid/21 0015:BITON 30/17#1`
+  - `cid/22 0015:BITON 30/17#2`
+  - `cid/23 003b:BITON 30/16#5`
+  - `crew3/1 006d:BITON 30/16#3`
+  - `crew3/1 00ba:BITON 30/16#7`
+- SD BITOFF (4):
+  - `red/31 0000:BITOFF 30/16#5`
+  - `cid/20 0008:BITOFF 30/17#0`
+  - `cid/21 0008:BITOFF 30/17#1`
+  - `cid/22 0008:BITOFF 30/17#2`
+- SD SETWORD (4):
+  - `direct/1 004a:SETWORD 20/00=0x405`
+  - `direct/3 004a:SETWORD 20/00=0x450`
+  - `direct/4 0087:SETWORD 20/00=0x454`
+  - `red/1 0079:SETWORD 20/00=0x407`
+
+### FSHIP_25
+- D1 MAPJUMP (3):
+  - `direct/5 00b5:MAPJUMP #77`
+  - `ket/1 012d:MAPJUMP #45`
+  - `crew3/1 01be:MAPJUMP #45`
+- D1 MUSIC (5):
+  - `direct/2 0070:MUSIC id=0`
+  - `direct/3 0004:MUSIC id=1`
+  - `direct/5 0004:MUSIC id=2`
+  - `direct/5 004e:MUSIC id=3`
+  - `red/7 0089:MUSIC id=4`
+- D1 ASK (12):
+  - `tifa/1 016f:ASK 48050189000200`
+  - `cid/1 0153:ASK 480501c7000100`
+  - `crew3/1 0017:ASK 48050104020300`
+  - `crew3/1 0043:ASK 48050105020300`
+  - `crew3/1 006f:ASK 48050105020300`
+  - `crew3/1 009b:ASK 48050106020300`
+  - `crew3/1 00c7:ASK 48050107020300`
+  - `crew3/1 00f2:ASK 48050108020300`
+  - `crew3/1 011c:ASK 48050109020300`
+  - `crew3/1 0146:ASK 4805010a020300`
+  - `crew3/1 0170:ASK 4805010b020300`
+  - `crew3/1 0192:ASK 4805010c020300`
+- D1 BITON (13):
+  - `produce/0 0009:BITON 10/7f#4`
+  - `produce/0 000d:BITON 10/7f#5`
+  - `produce/2 000a:BITON 30/18#1`
+  - `produce/3 000a:BITON 30/18#2`
+  - `produce/31 000a:BITON 30/18#3`
+  - `himei/2 000e:BITON 30/17#3`
+  - `tifa/1 00b9:BITON 30/17#6`
+  - `tifa/1 0182:BITON 30/18#0`
+  - `tifa/1 0196:BITON 30/18#0`
+  - `tifa/1 01aa:BITON 30/18#0`
+  - `ket/1 011a:BITON d0/52#3`
+  - `ket/31 0038:BITON 30/17#7`
+  - `cid/1 01e2:BITON 30/18#4`
+- D1 BITOFF (5):
+  - `direct/4 0033:BITOFF d0/52#3`
+  - `direct/5 00b0:BITOFF 30/18#6`
+  - `tifa/1 01fb:BITOFF 30/18#3`
+  - `tifa/1 01ff:BITOFF 30/18#0`
+  - `crew3/1 01ba:BITOFF d0/5b#7`
+- D1 SETWORD (6):
+  - `direct/2 00ad:SETWORD 20/00=0x56c`
+  - `direct/4 0037:SETWORD 20/00=0x62c`
+  - `direct/5 00a6:SETWORD 20/00=0x64a`
+  - `direct/5 00ab:SETWORD 20/00=0x64c`
+  - `red/7 0090:SETWORD 20/00=0x56d`
+  - `ket/1 011e:SETWORD 20/00=0x620`
+- D2 MAPJUMP (3):
+  - `direct/5 00b5:MAPJUMP #77`
+  - `ket/1 012f:MAPJUMP #45`
+  - `crew3/1 01be:MAPJUMP #45`
+- D2 MUSIC (6):
+  - `produce/0 0019:MUSIC id=0`
+  - `direct/2 0086:MUSIC id=0`
+  - `direct/3 0004:MUSIC id=1`
+  - `direct/5 0004:MUSIC id=2`
+  - `direct/5 004e:MUSIC id=3`
+  - `red/7 0087:MUSIC id=4`
+- D2 ASK (12):
+  - `tifa/1 016f:ASK 48050189000200`
+  - `cid/1 0153:ASK 480501c7000100`
+  - `crew3/1 0017:ASK 48050104020300`
+  - `crew3/1 0043:ASK 48050105020300`
+  - `crew3/1 006f:ASK 48050105020300`
+  - `crew3/1 009b:ASK 48050106020300`
+  - `crew3/1 00c7:ASK 48050107020300`
+  - `crew3/1 00f2:ASK 48050108020300`
+  - `crew3/1 011c:ASK 48050109020300`
+  - `crew3/1 0146:ASK 4805010a020300`
+  - `crew3/1 0170:ASK 4805010b020300`
+  - `crew3/1 0192:ASK 4805010c020300`
+- D2 BITON (13):
+  - `produce/0 0009:BITON 10/7f#4`
+  - `produce/0 000d:BITON 10/7f#5`
+  - `produce/2 000a:BITON 30/18#1`
+  - `produce/3 000a:BITON 30/18#2`
+  - `produce/31 000a:BITON 30/18#3`
+  - `himei/2 000e:BITON 30/17#3`
+  - `tifa/1 00b9:BITON 30/17#6`
+  - `tifa/1 0182:BITON 30/18#0`
+  - `tifa/1 0196:BITON 30/18#0`
+  - `tifa/1 01aa:BITON 30/18#0`
+  - `ket/1 011c:BITON d0/52#3`
+  - `ket/31 003a:BITON 30/17#7`
+  - `cid/1 01e2:BITON 30/18#4`
+- D2 BITOFF (5):
+  - `direct/4 0033:BITOFF d0/52#3`
+  - `direct/5 00b0:BITOFF 30/18#6`
+  - `tifa/1 01fb:BITOFF 30/18#3`
+  - `tifa/1 01ff:BITOFF 30/18#0`
+  - `crew3/1 01ba:BITOFF d0/5b#7`
+- D2 SETWORD (6):
+  - `direct/2 00cc:SETWORD 20/00=0x56c`
+  - `direct/4 0037:SETWORD 20/00=0x62c`
+  - `direct/5 00a6:SETWORD 20/00=0x64a`
+  - `direct/5 00ab:SETWORD 20/00=0x64c`
+  - `red/7 008e:SETWORD 20/00=0x56d`
+  - `ket/1 0120:SETWORD 20/00=0x620`
+- SD MAPJUMP (3):
+  - `direct/5 00b5:MAPJUMP #77`
+  - `ket/1 012f:MAPJUMP #45`
+  - `crew3/1 01be:MAPJUMP #45`
+- SD MUSIC (6):
+  - `produce/0 0019:MUSIC id=0`
+  - `direct/2 0086:MUSIC id=0`
+  - `direct/3 0004:MUSIC id=1`
+  - `direct/5 0004:MUSIC id=2`
+  - `direct/5 004e:MUSIC id=3`
+  - `red/7 0087:MUSIC id=4`
+- SD ASK (12):
+  - `tifa/1 016f:ASK 48050189000200`
+  - `cid/1 0153:ASK 480501c7000100`
+  - `crew3/1 0017:ASK 48050104020300`
+  - `crew3/1 0043:ASK 48050105020300`
+  - `crew3/1 006f:ASK 48050105020300`
+  - `crew3/1 009b:ASK 48050106020300`
+  - `crew3/1 00c7:ASK 48050107020300`
+  - `crew3/1 00f2:ASK 48050108020300`
+  - `crew3/1 011c:ASK 48050109020300`
+  - `crew3/1 0146:ASK 4805010a020300`
+  - `crew3/1 0170:ASK 4805010b020300`
+  - `crew3/1 0192:ASK 4805010c020300`
+- SD BITON (13):
+  - `produce/0 0009:BITON 10/7f#4`
+  - `produce/0 000d:BITON 10/7f#5`
+  - `produce/2 000a:BITON 30/18#1`
+  - `produce/3 000a:BITON 30/18#2`
+  - `produce/31 000a:BITON 30/18#3`
+  - `himei/2 000e:BITON 30/17#3`
+  - `tifa/1 00b9:BITON 30/17#6`
+  - `tifa/1 0182:BITON 30/18#0`
+  - `tifa/1 0196:BITON 30/18#0`
+  - `tifa/1 01aa:BITON 30/18#0`
+  - `ket/1 011c:BITON d0/52#3`
+  - `ket/31 003a:BITON 30/17#7`
+  - `cid/1 01e2:BITON 30/18#4`
+- SD BITOFF (5):
+  - `direct/4 0033:BITOFF d0/52#3`
+  - `direct/5 00b0:BITOFF 30/18#6`
+  - `tifa/1 01fb:BITOFF 30/18#3`
+  - `tifa/1 01ff:BITOFF 30/18#0`
+  - `crew3/1 01ba:BITOFF d0/5b#7`
+- SD SETWORD (6):
+  - `direct/2 00cc:SETWORD 20/00=0x56c`
+  - `direct/4 0037:SETWORD 20/00=0x62c`
+  - `direct/5 00a6:SETWORD 20/00=0x64a`
+  - `direct/5 00ab:SETWORD 20/00=0x64c`
+  - `red/7 008e:SETWORD 20/00=0x56d`
+  - `ket/1 0120:SETWORD 20/00=0x620`
+
+### FSHIP_4
+- D1 MAPJUMP (6):
+  - `direct/1 0014:MAPJUMP #76`
+  - `jump/2 000c:MAPJUMP #68`
+  - `jump/2 001e:MAPJUMP #70`
+  - `jump/2 002a:MAPJUMP #72`
+  - `k_jump/2 000a:MAPJUMP #744`
+  - `cloud/10 002b:MAPJUMP #68`
+- D1 ASK (4):
+  - `crew/1 0014:ASK 48050123020300`
+  - `crew/1 004d:ASK 48050126000100`
+  - `crew/1 00b4:ASK 48050123020300`
+  - `crew/1 00fc:ASK 48050123020300`
+- D1 BITON (5):
+  - `direct/3 001c:BITON 30/17#4`
+  - `direct/3 0020:BITON 30/18#6`
+  - `door/2 0011:BITON 30/16#0`
+  - `evt1/2 007b:BITON 30/16#4`
+  - `yufi/1 006a:BITON 30/18#5`
+- D1 BITOFF (2):
+  - `door1/2 000a:BITOFF 30/16#0`
+  - `door2/2 000a:BITOFF 30/16#0`
+- D1 SETWORD (3):
+  - `evt1/2 002a:SETWORD 20/00=0x403`
+  - `evt2/2 0014:SETWORD 20/00=0x64e`
+  - `cloud/10 0010:SETWORD 20/00=0x64e`
+- D2 MAPJUMP (6):
+  - `direct/1 0014:MAPJUMP #76`
+  - `jump/2 000c:MAPJUMP #68`
+  - `jump/2 001e:MAPJUMP #70`
+  - `jump/2 002a:MAPJUMP #72`
+  - `k_jump/2 000a:MAPJUMP #744`
+  - `cloud/10 002b:MAPJUMP #68`
+- D2 ASK (4):
+  - `crew/1 0014:ASK 48050123020300`
+  - `crew/1 004d:ASK 48050126000100`
+  - `crew/1 00b4:ASK 48050123020300`
+  - `crew/1 00fc:ASK 48050123020300`
+- D2 BITON (5):
+  - `direct/3 001c:BITON 30/17#4`
+  - `direct/3 0020:BITON 30/18#6`
+  - `door/2 0011:BITON 30/16#0`
+  - `evt1/2 0068:BITON 30/16#4`
+  - `yufi/1 006a:BITON 30/18#5`
+- D2 BITOFF (2):
+  - `door1/2 000a:BITOFF 30/16#0`
+  - `door2/2 000a:BITOFF 30/16#0`
+- D2 SETWORD (3):
+  - `evt1/2 0027:SETWORD 20/00=0x403`
+  - `evt2/2 0014:SETWORD 20/00=0x64e`
+  - `cloud/10 0010:SETWORD 20/00=0x64e`
+- SD MAPJUMP (6):
+  - `direct/1 0014:MAPJUMP #76`
+  - `jump/2 000c:MAPJUMP #68`
+  - `jump/2 001e:MAPJUMP #70`
+  - `jump/2 002a:MAPJUMP #72`
+  - `k_jump/2 000a:MAPJUMP #744`
+  - `cloud/10 002b:MAPJUMP #68`
+- SD ASK (4):
+  - `crew/1 0014:ASK 48050123020300`
+  - `crew/1 004d:ASK 48050126000100`
+  - `crew/1 00b4:ASK 48050123020300`
+  - `crew/1 00fc:ASK 48050123020300`
+- SD BITON (5):
+  - `direct/3 001c:BITON 30/17#4`
+  - `direct/3 0020:BITON 30/18#6`
+  - `door/2 0011:BITON 30/16#0`
+  - `evt1/2 0068:BITON 30/16#4`
+  - `yufi/1 006a:BITON 30/18#5`
+- SD BITOFF (2):
+  - `door1/2 000a:BITOFF 30/16#0`
+  - `door2/2 000a:BITOFF 30/16#0`
+- SD SETWORD (3):
+  - `evt1/2 0027:SETWORD 20/00=0x403`
+  - `evt2/2 0014:SETWORD 20/00=0x64e`
+  - `cloud/10 0010:SETWORD 20/00=0x64e`
+
+### HYOU11
+- D1 MAPJUMP (5):
+  - `init/0 0037:MAPJUMP #669`
+  - `jump/1 0000:MAPJUMP #670`
+  - `jump/31 0000:MAPJUMP #670`
+  - `cloud/31 0019:MAPJUMP #688`
+  - `cloud/31 0025:MAPJUMP #687`
+- D1 MUSIC (1):
+  - `init/0 0002:MUSIC id=0`
+- D1 SETWORD (1):
+  - `init/0 0006:SETWORD 20/ba=0x2a9`
+- D2 MAPJUMP (5):
+  - `init/0 0037:MAPJUMP #669`
+  - `jump/1 0000:MAPJUMP #670`
+  - `jump/31 0000:MAPJUMP #670`
+  - `cloud/31 0019:MAPJUMP #688`
+  - `cloud/31 0025:MAPJUMP #687`
+- D2 MUSIC (1):
+  - `init/0 0002:MUSIC id=0`
+- D2 SETWORD (1):
+  - `init/0 0006:SETWORD 20/ba=0x2a9`
+- SD MAPJUMP (5):
+  - `init/0 0037:MAPJUMP #669`
+  - `jump/1 0000:MAPJUMP #670`
+  - `jump/31 0000:MAPJUMP #670`
+  - `cloud/31 0019:MAPJUMP #688`
+  - `cloud/31 0025:MAPJUMP #687`
+- SD MUSIC (1):
+  - `init/0 0002:MUSIC id=0`
+- SD SETWORD (1):
+  - `init/0 0006:SETWORD 20/ba=0x2a9`
+
+### ITOWN2
+- D1 MAPJUMP (1):
+  - `dic/0 0248:MAPJUMP #720`
+- D1 SETWORD (1):
+  - `dic/0 0243:SETWORD 20/00=0x460`
+- D2 MAPJUMP (4):
+  - `dic/0 024a:MAPJUMP #720`
+  - `dic/0 0260:MAPJUMP #725`
+  - `dic/0 0270:MAPJUMP #723`
+  - `dic/0 0280:MAPJUMP #720`
+- D2 SETWORD (4):
+  - `dic/0 0245:SETWORD 20/00=0x460`
+  - `dic/0 025b:SETWORD 20/00=0x462`
+  - `dic/0 026b:SETWORD 20/00=0x460`
+  - `dic/0 027b:SETWORD 20/00=0x460`
+- SD MAPJUMP (4):
+  - `dic/0 024a:MAPJUMP #720`
+  - `dic/0 0260:MAPJUMP #725`
+  - `dic/0 0270:MAPJUMP #723`
+  - `dic/0 0280:MAPJUMP #720`
+- SD SETWORD (4):
+  - `dic/0 0245:SETWORD 20/00=0x460`
+  - `dic/0 025b:SETWORD 20/00=0x462`
+  - `dic/0 026b:SETWORD 20/00=0x460`
+  - `dic/0 027b:SETWORD 20/00=0x460`
+
+### ITOWN_W
+- D1 MAPJUMP (1):
+  - `out/5 0004:MAPJUMP #712`
+- D1 MUSIC (1):
+  - `dic/0 000a:MUSIC id=0`
+- D1 ASK (6):
+  - `tifa/6 002b:ASK 4805003800010b`
+  - `tifa/16 0042:ASK 48050020000114`
+  - `cid/6 002d:ASK 4805003d00010b`
+  - `cid/16 004b:ASK 48050022000114`
+  - `chokob/1 00d1:ASK 4805004200050d`
+  - `line02/4 007c:ASK 48050011000114`
+- D1 BITON (9):
+  - `syonin/1 003b:BITON f0/b1#5`
+  - `syonin/3 0037:BITON f0/b1#5`
+  - `obasan/1 0023:BITON f0/b1#3`
+  - `obasan/1 005c:BITON f0/b1#4`
+  - `chokob/1 0000:BITON d0/5b#0`
+  - `chokob/1 024f:BITON f0/b3#0`
+  - `line02/4 00da:BITON f0/b2#2`
+  - `line02/4 014e:BITON f0/b1#7`
+  - `line02/4 0188:BITON f0/b2#0`
+- D2 MAPJUMP (1):
+  - `out/5 0004:MAPJUMP #712`
+- D2 MUSIC (1):
+  - `dic/0 000a:MUSIC id=0`
+- D2 ASK (6):
+  - `tifa/6 002b:ASK 4805003800010b`
+  - `tifa/16 0042:ASK 48050020000114`
+  - `cid/6 002d:ASK 4805003d00010b`
+  - `cid/16 004b:ASK 48050022000114`
+  - `chokob/1 00d1:ASK 4805004200050d`
+  - `line02/4 007c:ASK 48050011000114`
+- D2 BITON (9):
+  - `syonin/1 003b:BITON f0/b1#5`
+  - `syonin/3 0037:BITON f0/b1#5`
+  - `obasan/1 0023:BITON f0/b1#3`
+  - `obasan/1 005c:BITON f0/b1#4`
+  - `chokob/1 0000:BITON d0/5b#0`
+  - `chokob/1 024f:BITON f0/b3#0`
+  - `line02/4 00da:BITON f0/b2#2`
+  - `line02/4 0145:BITON f0/b1#7`
+  - `line02/4 017f:BITON f0/b2#0`
+- SD MAPJUMP (1):
+  - `out/5 0004:MAPJUMP #712`
+- SD MUSIC (1):
+  - `dic/0 000a:MUSIC id=0`
+- SD ASK (6):
+  - `tifa/6 002b:ASK 4805003800010b`
+  - `tifa/16 0042:ASK 48050020000114`
+  - `cid/6 002d:ASK 4805003d00010b`
+  - `cid/16 004b:ASK 48050022000114`
+  - `chokob/1 00d1:ASK 4805004200050d`
+  - `line02/4 007c:ASK 48050011000114`
+- SD BITON (9):
+  - `syonin/1 003b:BITON f0/b1#5`
+  - `syonin/3 0037:BITON f0/b1#5`
+  - `obasan/1 0023:BITON f0/b1#3`
+  - `obasan/1 005c:BITON f0/b1#4`
+  - `chokob/1 0000:BITON d0/5b#0`
+  - `chokob/1 024f:BITON f0/b3#0`
+  - `line02/4 00da:BITON f0/b2#2`
+  - `line02/4 0145:BITON f0/b1#7`
+  - `line02/4 017f:BITON f0/b2#0`
+
+### JUNBIN4
+- D1 MAPJUMP (2):
+  - `dir/0 016d:MAPJUMP #402`
+  - `ba/9 0066:MAPJUMP #398`
+- D1 MUSIC (2):
+  - `dir/0 001c:MUSIC id=0`
+  - `dir/0 005a:MUSIC id=1`
+- D1 SETWORD (3):
+  - `dir/0 00e6:SETWORD 20/00=0x3f2`
+  - `ba/9 0061:SETWORD 20/00=0x3f4`
+  - `ket/1 0040:SETWORD 20/00=0x3f7`
+- D2 MAPJUMP (3):
+  - `dir/0 0141:MAPJUMP #402`
+  - `ba/9 0058:MAPJUMP #399`
+  - `ba/9 0067:MAPJUMP #398`
+- D2 MUSIC (2):
+  - `dir/0 001c:MUSIC id=0`
+  - `dir/0 004c:MUSIC id=1`
+- D2 SETWORD (3):
+  - `dir/0 00b8:SETWORD 20/00=0x3f2`
+  - `ba/9 0053:SETWORD 20/00=0x3f4`
+  - `ket/1 0033:SETWORD 20/00=0x3f7`
+- SD MAPJUMP (3):
+  - `dir/0 0141:MAPJUMP #402`
+  - `ba/9 0058:MAPJUMP #399`
+  - `ba/9 0067:MAPJUMP #398`
+- SD MUSIC (2):
+  - `dir/0 001c:MUSIC id=0`
+  - `dir/0 004c:MUSIC id=1`
+- SD SETWORD (3):
+  - `dir/0 00b8:SETWORD 20/00=0x3f2`
+  - `ba/9 0053:SETWORD 20/00=0x3f4`
+  - `ket/1 0033:SETWORD 20/00=0x3f7`
+
+### JUNBIN5
+- D1 MAPJUMP (3):
+  - `dir/0 00e1:MAPJUMP #401`
+  - `dir/0 01bd:MAPJUMP #401`
+  - `ti/13 00e0:MAPJUMP #414`
+- D1 MUSIC (3):
+  - `dir/0 01ad:MUSIC id=0`
+  - `ti/12 0012:MUSIC id=0`
+  - `ti/12 0022:MUSIC id=1`
+- D1 SETWORD (6):
+  - `dir/0 0000:SETWORD 60/09=0x5c`
+  - `dir/0 0005:SETWORD 60/0b=0x5b`
+  - `dir/0 000a:SETWORD 60/0d=0x5a`
+  - `dir/0 000f:SETWORD 60/0f=0x59`
+  - `dir/0 01a4:SETWORD 20/00=0x3f0`
+  - `gusSw/4 0013:SETWORD 20/00=0x3f9`
+- D2 MAPJUMP (3):
+  - `dir/0 00e1:MAPJUMP #401`
+  - `dir/0 01af:MAPJUMP #401`
+  - `ti/13 00a9:MAPJUMP #414`
+- D2 MUSIC (3):
+  - `dir/0 01b9:MUSIC id=0`
+  - `ti/12 0012:MUSIC id=0`
+  - `ti/12 0022:MUSIC id=1`
+- D2 SETWORD (6):
+  - `dir/0 0000:SETWORD 60/09=0x5c`
+  - `dir/0 0005:SETWORD 60/0b=0x5b`
+  - `dir/0 000a:SETWORD 60/0d=0x5a`
+  - `dir/0 000f:SETWORD 60/0f=0x59`
+  - `dir/0 01a6:SETWORD 20/00=0x3f0`
+  - `gusSw/4 0013:SETWORD 20/00=0x3f9`
+- SD MAPJUMP (3):
+  - `dir/0 00e1:MAPJUMP #401`
+  - `dir/0 01af:MAPJUMP #401`
+  - `ti/13 00a9:MAPJUMP #414`
+- SD MUSIC (3):
+  - `dir/0 01b9:MUSIC id=0`
+  - `ti/12 0012:MUSIC id=0`
+  - `ti/12 0022:MUSIC id=1`
+- SD SETWORD (6):
+  - `dir/0 0000:SETWORD 60/09=0x5c`
+  - `dir/0 0005:SETWORD 60/0b=0x5b`
+  - `dir/0 000a:SETWORD 60/0d=0x5a`
+  - `dir/0 000f:SETWORD 60/0f=0x59`
+  - `dir/0 01a6:SETWORD 20/00=0x3f0`
+  - `gusSw/4 0013:SETWORD 20/00=0x3f9`
+
+### JUNONE2
+- D1 MAPJUMP (2):
+  - `dir/0 0036:MAPJUMP #398`
+  - `lin0/3 0004:MAPJUMP #384`
+- D1 MUSIC (1):
+  - `dir/0 001c:MUSIC id=0`
+- D1 BITON (1):
+  - `lin0/3 0000:BITON 10/e2#6`
+- D1 SETWORD (1):
+  - `lin1/3 00d8:SETWORD 20/00=0x3f8`
+- D2 MAPJUMP (2):
+  - `dir/0 0036:MAPJUMP #398`
+  - `lin0/3 0004:MAPJUMP #384`
+- D2 MUSIC (1):
+  - `dir/0 001c:MUSIC id=0`
+- D2 BITON (1):
+  - `lin0/3 0000:BITON 10/e2#6`
+- D2 SETWORD (1):
+  - `lin1/3 00cf:SETWORD 20/00=0x3f8`
+- SD MAPJUMP (2):
+  - `dir/0 0036:MAPJUMP #398`
+  - `lin0/3 0004:MAPJUMP #384`
+- SD MUSIC (1):
+  - `dir/0 001c:MUSIC id=0`
+- SD BITON (1):
+  - `lin0/3 0000:BITON 10/e2#6`
+- SD SETWORD (1):
+  - `lin1/3 00cf:SETWORD 20/00=0x3f8`
+
+### JUNONE7
+- D1 MAPJUMP (1):
+  - `dir/31 000e:MAPJUMP #66`
+- D1 MUSIC (3):
+  - `dir/0 0000:MUSIC id=0`
+  - `movf/31 0010:MUSIC id=1`
+  - `movf/31 0020:MUSIC id=2`
+- D1 BITOFF (2):
+  - `dir/31 0006:BITOFF 10/7f#0`
+  - `dir/31 000a:BITOFF 10/7f#2`
+- D1 SETWORD (2):
+  - `movf/31 0000:SETWORD 60/13=0x0`
+  - `lin0/3 0008:SETWORD 20/00=0x3fe`
+- D2 MAPJUMP (1):
+  - `ti/31 0041:MAPJUMP #66`
+- D2 MUSIC (3):
+  - `dir/0 0000:MUSIC id=0`
+  - `movf/31 0010:MUSIC id=1`
+  - `movf/31 0020:MUSIC id=2`
+- D2 BITOFF (4):
+  - `dir/31 0003:BITOFF 10/7f#0`
+  - `dir/31 0007:BITOFF 10/7f#2`
+  - `ti/31 002c:BITOFF 10/7f#0`
+  - `ti/31 0030:BITOFF 10/7f#2`
+- D2 SETWORD (2):
+  - `movf/31 0000:SETWORD 60/13=0x0`
+  - `lin0/3 0008:SETWORD 20/00=0x3fe`
+- SD MAPJUMP (1):
+  - `ti/31 0041:MAPJUMP #66`
+- SD MUSIC (3):
+  - `dir/0 0000:MUSIC id=0`
+  - `movf/31 0010:MUSIC id=1`
+  - `movf/31 0020:MUSIC id=2`
+- SD BITOFF (4):
+  - `dir/31 0003:BITOFF 10/7f#0`
+  - `dir/31 0007:BITOFF 10/7f#2`
+  - `ti/31 002c:BITOFF 10/7f#0`
+  - `ti/31 0030:BITOFF 10/7f#2`
+- SD SETWORD (2):
+  - `movf/31 0000:SETWORD 60/13=0x0`
+  - `lin0/3 0008:SETWORD 20/00=0x3fe`
+
+### LAS4_0
+- D1 MAPJUMP (2):
+  - `cloud/10 00b1:MAPJUMP #765`
+  - `l1/5 0008:MAPJUMP #764`
+- D1 MUSIC (3):
+  - `dic/0 0002:MUSIC id=0`
+  - `dic/0 0297:MUSIC id=2`
+  - `dic/31 00ea:MUSIC id=2`
+- D1 ASK (1):
+  - `dic/31 000a:ASK 48050133010201`
+- D1 BITON (40):
+  - `dic/0 02f2:BITON b0/8d#0`
+  - `ballet/1 003a:BITON b0/8e#0`
+  - `ballet/1 0051:BITON f0/53#6`
+  - `ballet/1 006f:BITON f0/92#4`
+  - `ballet/1 0087:BITON 10/32#6`
+  - `tifa/1 003d:BITON b0/8e#1`
+  - `tifa/1 0054:BITON f0/52#7`
+  - `tifa/1 0072:BITON f0/93#3`
+  - `tifa/1 008a:BITON 10/31#6`
+  - `red/1 004d:BITON b0/8e#2`
+  - `red/1 0051:BITON f0/53#7`
+  - `red/1 0081:BITON b0/8e#2`
+  - `red/1 0085:BITON f0/93#5`
+  - `red/1 00ac:BITON b0/8e#2`
+  - `red/1 00b0:BITON 10/32#1`
+  - `cid/1 003d:BITON b0/8e#3`
+  - `cid/1 0054:BITON f0/53#0`
+  - `cid/1 0072:BITON f0/94#0`
+  - `cid/1 008a:BITON 10/31#4`
+  - `yufi/1 0036:BITON b0/8e#5`
+  - `yufi/1 0094:BITON b0/8e#7`
+  - `yufi/1 00db:BITON b0/8e#2`
+  - `yufi/1 00df:BITON f0/53#3`
+  - `yufi/1 0170:BITON b0/8e#2`
+  - `yufi/1 0174:BITON f0/93#7`
+  - `yufi/1 0187:BITON b0/8e#2`
+  - `yufi/1 018b:BITON f0/93#6`
+  - `yufi/1 01b5:BITON b0/8e#2`
+  - `yufi/1 01b9:BITON 10/31#7`
+  - `cait/1 0030:BITON b0/8e#4`
+  - `cait/1 0047:BITON f0/52#6`
+  - `cait/1 0065:BITON f0/93#2`
+  - `cait/1 007d:BITON 10/31#6`
+  - `vincent/1 0044:BITON f0/53#2`
+  - `vincent/1 004d:BITON b0/8e#6`
+  - `vincent/1 006b:BITON f0/93#1`
+  - `vincent/1 0074:BITON b0/8e#6`
+  - `vincent/1 0087:BITON 10/32#4`
+  - `vincent/1 008b:BITON b0/8e#6`
+  - `l1/5 0004:BITON d0/60#1`
+- D1 BITOFF (1):
+  - `dic/0 0133:BITOFF d0/60#1`
+- D1 SETWORD (1):
+  - `cloud/10 00ac:SETWORD 20/00=0x7cf`
+- D2 MAPJUMP (2):
+  - `cloud/10 00b1:MAPJUMP #765`
+  - `l1/5 0008:MAPJUMP #764`
+- D2 MUSIC (3):
+  - `dic/0 0002:MUSIC id=0`
+  - `dic/0 0297:MUSIC id=2`
+  - `dic/31 00ea:MUSIC id=2`
+- D2 ASK (1):
+  - `dic/31 000a:ASK 48050133010201`
+- D2 BITON (40):
+  - `dic/0 02f2:BITON b0/8d#0`
+  - `ballet/1 003a:BITON b0/8e#0`
+  - `ballet/1 0051:BITON f0/53#6`
+  - `ballet/1 006f:BITON f0/92#4`
+  - `ballet/1 0087:BITON 10/32#6`
+  - `tifa/1 003d:BITON b0/8e#1`
+  - `tifa/1 0054:BITON f0/52#7`
+  - `tifa/1 0072:BITON f0/93#3`
+  - `tifa/1 008a:BITON 10/31#6`
+  - `red/1 004d:BITON b0/8e#2`
+  - `red/1 0051:BITON f0/53#7`
+  - `red/1 0081:BITON b0/8e#2`
+  - `red/1 0085:BITON f0/93#5`
+  - `red/1 00ac:BITON b0/8e#2`
+  - `red/1 00b0:BITON 10/32#1`
+  - `cid/1 003d:BITON b0/8e#3`
+  - `cid/1 0054:BITON f0/53#0`
+  - `cid/1 0072:BITON f0/94#0`
+  - `cid/1 008a:BITON 10/31#4`
+  - `yufi/1 0036:BITON b0/8e#5`
+  - `yufi/1 0094:BITON b0/8e#7`
+  - `yufi/1 00db:BITON b0/8e#2`
+  - `yufi/1 00df:BITON f0/53#3`
+  - `yufi/1 0170:BITON b0/8e#2`
+  - `yufi/1 0174:BITON f0/93#7`
+  - `yufi/1 0187:BITON b0/8e#2`
+  - `yufi/1 018b:BITON f0/93#6`
+  - `yufi/1 01b5:BITON b0/8e#2`
+  - `yufi/1 01b9:BITON 10/31#7`
+  - `cait/1 0030:BITON b0/8e#4`
+  - `cait/1 0047:BITON f0/52#6`
+  - `cait/1 0065:BITON f0/93#2`
+  - `cait/1 007d:BITON 10/31#6`
+  - `vincent/1 0044:BITON f0/53#2`
+  - `vincent/1 004d:BITON b0/8e#6`
+  - `vincent/1 006b:BITON f0/93#1`
+  - `vincent/1 0074:BITON b0/8e#6`
+  - `vincent/1 0087:BITON 10/32#4`
+  - `vincent/1 008b:BITON b0/8e#6`
+  - `l1/5 0004:BITON d0/60#1`
+- D2 BITOFF (1):
+  - `dic/0 0133:BITOFF d0/60#1`
+- D2 SETWORD (1):
+  - `cloud/10 00ac:SETWORD 20/00=0x7cf`
+- SD MAPJUMP (2):
+  - `cloud/10 00b1:MAPJUMP #765`
+  - `l1/5 0008:MAPJUMP #764`
+- SD MUSIC (3):
+  - `dic/0 0002:MUSIC id=0`
+  - `dic/0 0299:MUSIC id=2`
+  - `dic/31 00fa:MUSIC id=2`
+- SD ASK (1):
+  - `dic/31 000a:ASK 48050133010201`
+- SD BITON (40):
+  - `dic/0 02f6:BITON b0/8d#0`
+  - `ballet/1 003a:BITON b0/8e#0`
+  - `ballet/1 0051:BITON f0/53#6`
+  - `ballet/1 006f:BITON f0/92#4`
+  - `ballet/1 0087:BITON 10/32#6`
+  - `tifa/1 003d:BITON b0/8e#1`
+  - `tifa/1 0054:BITON f0/52#7`
+  - `tifa/1 0072:BITON f0/93#3`
+  - `tifa/1 008a:BITON 10/31#6`
+  - `red/1 004d:BITON b0/8e#2`
+  - `red/1 0051:BITON f0/53#7`
+  - `red/1 0081:BITON b0/8e#2`
+  - `red/1 0085:BITON f0/93#5`
+  - `red/1 00ac:BITON b0/8e#2`
+  - `red/1 00b0:BITON 10/32#1`
+  - `cid/1 003d:BITON b0/8e#3`
+  - `cid/1 0054:BITON f0/53#0`
+  - `cid/1 0072:BITON f0/94#0`
+  - `cid/1 008a:BITON 10/31#4`
+  - `yufi/1 0036:BITON b0/8e#5`
+  - `yufi/1 0094:BITON b0/8e#7`
+  - `yufi/1 00db:BITON b0/8e#2`
+  - `yufi/1 00df:BITON f0/53#3`
+  - `yufi/1 0170:BITON b0/8e#2`
+  - `yufi/1 0174:BITON f0/93#7`
+  - `yufi/1 0187:BITON b0/8e#2`
+  - `yufi/1 018b:BITON f0/93#6`
+  - `yufi/1 01b5:BITON b0/8e#2`
+  - `yufi/1 01b9:BITON 10/31#7`
+  - `cait/1 0030:BITON b0/8e#4`
+  - `cait/1 0047:BITON f0/52#6`
+  - `cait/1 0065:BITON f0/93#2`
+  - `cait/1 007d:BITON 10/31#6`
+  - `vincent/1 0044:BITON f0/53#2`
+  - `vincent/1 004d:BITON b0/8e#6`
+  - `vincent/1 006b:BITON f0/93#1`
+  - `vincent/1 0074:BITON b0/8e#6`
+  - `vincent/1 0087:BITON 10/32#4`
+  - `vincent/1 008b:BITON b0/8e#6`
+  - `l1/5 0004:BITON d0/60#1`
+- SD BITOFF (1):
+  - `dic/0 0133:BITOFF d0/60#1`
+- SD SETWORD (1):
+  - `cloud/10 00ac:SETWORD 20/00=0x7cf`
+
+### LAS4_2
+- D1 MAPJUMP (1):
+  - `l6/2 0016:MAPJUMP #766`
+- D1 MUSIC (1):
+  - `dic/0 0010:MUSIC id=0`
+- D1 BITOFF (1):
+  - `dic/0 0023:BITOFF d0/60#1`
+- D2 MAPJUMP (1):
+  - `l6/2 0016:MAPJUMP #766`
+- D2 MUSIC (1):
+  - `dic/0 0010:MUSIC id=0`
+- D2 BITOFF (1):
+  - `dic/0 0023:BITOFF d0/60#1`
+- SD MAPJUMP (1):
+  - `l6/2 0016:MAPJUMP #766`
+- SD MUSIC (1):
+  - `dic/0 0010:MUSIC id=0`
+- SD BITOFF (1):
+  - `dic/0 0023:BITOFF d0/60#1`
+
+### LAS4_3
+- D1 MAPJUMP (1):
+  - `l8/2 0024:MAPJUMP #767`
+- D1 MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- D2 MAPJUMP (1):
+  - `l8/2 0024:MAPJUMP #767`
+- D2 MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- SD MAPJUMP (1):
+  - `l8/2 0024:MAPJUMP #767`
+- SD MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+
+### LAS4_4
+- D1 MAPJUMP (1):
+  - `dic/0 008a:MAPJUMP #777`
+- D1 MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- D1 SETWORD (1):
+  - `dic/0 0016:SETWORD 20/00=0x7cf`
+- D2 MAPJUMP (1):
+  - `dic/0 008a:MAPJUMP #777`
+- D2 MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- D2 SETWORD (1):
+  - `dic/0 0016:SETWORD 20/00=0x7cf`
+- SD MAPJUMP (2):
+  - `dic/0 0089:MAPJUMP #768`
+  - `dic/0 0093:MAPJUMP #777`
+- SD MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- SD SETWORD (1):
+  - `dic/0 0016:SETWORD 20/00=0x7cf`
+
+### LAS4_42
+- D1 MAPJUMP (1):
+  - `dic/0 003e:MAPJUMP #768`
+- D1 MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- D2 MAPJUMP (1):
+  - `dic/0 003e:MAPJUMP #768`
+- D2 MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+- SD MAPJUMP (1):
+  - `dic/0 003b:MAPJUMP #768`
+- SD MUSIC (1):
+  - `dic/0 0000:MUSIC id=0`
+
+### LASTMAP
+- D1 MAPJUMP (1):
+  - `HEN/8 0185:MAPJUMP #763`
+- D1 MUSIC (4):
+  - `directr/0 0002:MUSIC id=0`
+  - `CEFIROS/3 00b7:MUSIC id=2`
+  - `HEN/8 0108:MUSIC id=3`
+  - `HEN/8 0171:MUSIC id=0`
+- D1 ASK (1):
+  - `AD3/31 034a:ASK 48050220000103`
+- D1 BITON (2):
+  - `AD3/31 0445:BITON d0/61#5`
+  - `BAT/4 0011:BITON d0/61#5`
+- D2 MAPJUMP (1):
+  - `HEN/8 0185:MAPJUMP #763`
+- D2 MUSIC (4):
+  - `directr/0 0002:MUSIC id=0`
+  - `CEFIROS/3 00b7:MUSIC id=2`
+  - `HEN/8 0108:MUSIC id=3`
+  - `HEN/8 0171:MUSIC id=0`
+- D2 ASK (1):
+  - `AD3/31 034a:ASK 48050220000103`
+- D2 BITON (2):
+  - `AD3/31 0445:BITON d0/61#5`
+  - `BAT/4 0011:BITON d0/61#5`
+- SD MAPJUMP (1):
+  - `HEN/8 0185:MAPJUMP #763`
+- SD MUSIC (4):
+  - `directr/0 0002:MUSIC id=0`
+  - `CEFIROS/3 00b7:MUSIC id=2`
+  - `HEN/8 0108:MUSIC id=3`
+  - `HEN/8 0171:MUSIC id=0`
+- SD ASK (1):
+  - `AD3/31 034a:ASK 48050220000103`
+- SD BITON (2):
+  - `AD3/31 0444:BITON d0/61#5`
+  - `BAT/4 0011:BITON d0/61#5`
+
+### LOSLAKE3
+- D1 MAPJUMP (1):
+  - `dir/0 002d:MAPJUMP #637`
+- D1 SETWORD (2):
+  - `mf/3 0000:SETWORD 60/09=0x0`
+  - `mf/31 0000:SETWORD 60/09=0x0`
+- D2 MAPJUMP (1):
+  - `dir/0 002d:MAPJUMP #637`
+- D2 SETWORD (2):
+  - `mf/3 0000:SETWORD 60/09=0x0`
+  - `mf/31 0000:SETWORD 60/09=0x0`
+- SD MAPJUMP (1):
+  - `dir/0 0027:MAPJUMP #637`
+- SD SETWORD (2):
+  - `mf/3 0000:SETWORD 60/09=0x0`
+  - `mf/31 0000:SETWORD 60/09=0x0`
+
+### LOST2
+- D1 MAPJUMP (1):
+  - `jump/4 0000:MAPJUMP #630`
+- D1 MUSIC (2):
+  - `init/0 0010:MUSIC id=0`
+  - `init/0 001c:MUSIC id=1`
+- D1 BITOFF (1):
+  - `Info/4 000a:BITOFF 30/89#1`
+- D2 MAPJUMP (2):
+  - `init/0 0045:MAPJUMP #526`
+  - `jump/4 0000:MAPJUMP #630`
+- D2 MUSIC (2):
+  - `init/0 001f:MUSIC id=0`
+  - `init/0 003a:MUSIC id=1`
+- D2 BITOFF (1):
+  - `Info/4 000a:BITOFF 30/89#1`
+- SD MAPJUMP (2):
+  - `init/0 0045:MAPJUMP #526`
+  - `jump/4 0000:MAPJUMP #630`
+- SD MUSIC (2):
+  - `init/0 001f:MUSIC id=0`
+  - `init/0 003a:MUSIC id=1`
+- SD BITOFF (1):
+  - `Info/4 000a:BITOFF 30/89#1`
+
+### MD8BRDG2
+- D1 MAPJUMP (1):
+  - `jump_d/3 0000:MAPJUMP #737`
+- D1 MUSIC (4):
+  - `init/0 0002:MUSIC id=0`
+  - `line_rb/2 00bb:MUSIC id=2`
+  - `line_rb/2 00ce:MUSIC id=1`
+  - `line_rb/2 01da:MUSIC id=0`
+- D1 BITON (3):
+  - `init/0 0060:BITON f0/83#7`
+  - `line_rb/2 0219:BITON f0/80#3`
+  - `line_rb/2 0222:BITON f0/83#7`
+- D1 SETWORD (1):
+  - `line_rb/2 021d:SETWORD 20/00=0x643`
+- D2 MAPJUMP (1):
+  - `jump_d/3 0000:MAPJUMP #737`
+- D2 MUSIC (4):
+  - `init/0 0002:MUSIC id=0`
+  - `line_rb/2 00bd:MUSIC id=2`
+  - `line_rb/2 00d0:MUSIC id=1`
+  - `line_rb/2 01de:MUSIC id=0`
+- D2 BITON (3):
+  - `init/0 0060:BITON f0/83#7`
+  - `line_rb/2 021d:BITON f0/80#3`
+  - `line_rb/2 0226:BITON f0/83#7`
+- D2 SETWORD (1):
+  - `line_rb/2 0221:SETWORD 20/00=0x643`
+- SD MAPJUMP (1):
+  - `jump_d/3 0000:MAPJUMP #737`
+- SD MUSIC (4):
+  - `init/0 0002:MUSIC id=0`
+  - `line_rb/2 00bd:MUSIC id=2`
+  - `line_rb/2 00d0:MUSIC id=1`
+  - `line_rb/2 01de:MUSIC id=0`
+- SD BITON (3):
+  - `init/0 0060:BITON f0/83#7`
+  - `line_rb/2 021d:BITON f0/80#3`
+  - `line_rb/2 0226:BITON f0/83#7`
+- SD SETWORD (1):
+  - `line_rb/2 0221:SETWORD 20/00=0x643`
+
+### MD8_5
+- D1 MUSIC (1):
+  - `dir/0 0002:MUSIC id=0`
+- D1 SETWORD (2):
+  - `dir/0 0026:SETWORD 20/00=0x640`
+  - `movc/3 0000:SETWORD 60/09=0x0`
+- D2 MUSIC (1):
+  - `dir/0 0002:MUSIC id=0`
+- D2 SETWORD (2):
+  - `dir/0 0026:SETWORD 20/00=0x640`
+  - `movc/3 0000:SETWORD 60/09=0x0`
+- SD MUSIC (1):
+  - `dir/0 0002:MUSIC id=0`
+- SD SETWORD (2):
+  - `dir/0 0026:SETWORD 20/00=0x640`
+  - `movc/3 0000:SETWORD 60/09=0x0`
+
+### MD8_52
+- D1 MAPJUMP (1):
+  - `dir3/0 0041:MAPJUMP #72`
+- D1 MUSIC (1):
+  - `dir3/0 0001:MUSIC id=0`
+- D2 MAPJUMP (1):
+  - `dir3/0 0041:MAPJUMP #72`
+- D2 MUSIC (1):
+  - `dir3/0 0001:MUSIC id=0`
+- SD MAPJUMP (1):
+  - `dir3/0 0041:MAPJUMP #72`
+- SD MUSIC (1):
+  - `dir3/0 0001:MUSIC id=0`
+
+### MD8_6
+- D1 MAPJUMP (2):
+  - `cloud/0 0040:MAPJUMP #733`
+  - `cloud/31 0044:MAPJUMP #733`
+- D1 MUSIC (6):
+  - `init/0 0008:MUSIC id=0`
+  - `init/0 000c:MUSIC id=1`
+  - `ketcy/0 00d5:MUSIC id=3`
+  - `ketcy/0 00fc:MUSIC id=0`
+  - `ketcy/1 0046:MUSIC id=3`
+  - `ketcy/1 006d:MUSIC id=0`
+- D1 BITON (3):
+  - `ketcy/0 0103:BITON f0/80#1`
+  - `ketcy/1 008e:BITON f0/80#1`
+  - `save_l/5 0029:BITON d0/5b#1`
+- D1 BITOFF (1):
+  - `save_l/31 0005:BITOFF d0/5b#1`
+- D1 SETWORD (3):
+  - `cloud/0 003b:SETWORD 20/00=0x641`
+  - `cloud/31 003f:SETWORD 20/00=0x641`
+  - `save_l/5 002d:SETWORD 20/1e=0x0`
+- D2 MAPJUMP (2):
+  - `cloud/0 0040:MAPJUMP #733`
+  - `cloud/31 0044:MAPJUMP #733`
+- D2 MUSIC (6):
+  - `init/0 0008:MUSIC id=0`
+  - `init/0 000c:MUSIC id=1`
+  - `ketcy/0 00d5:MUSIC id=3`
+  - `ketcy/0 00fc:MUSIC id=0`
+  - `ketcy/1 0080:MUSIC id=3`
+  - `ketcy/1 00a7:MUSIC id=0`
+- D2 BITON (3):
+  - `ketcy/0 0103:BITON f0/80#1`
+  - `ketcy/1 00c8:BITON f0/80#1`
+  - `save_l/5 0029:BITON d0/5b#1`
+- D2 BITOFF (1):
+  - `save_l/31 0005:BITOFF d0/5b#1`
+- D2 SETWORD (3):
+  - `cloud/0 003b:SETWORD 20/00=0x641`
+  - `cloud/31 003f:SETWORD 20/00=0x641`
+  - `save_l/5 002d:SETWORD 20/1e=0x0`
+- SD MAPJUMP (2):
+  - `cloud/0 0040:MAPJUMP #733`
+  - `cloud/31 0044:MAPJUMP #733`
+- SD MUSIC (6):
+  - `init/0 0008:MUSIC id=0`
+  - `init/0 000c:MUSIC id=1`
+  - `ketcy/0 00d5:MUSIC id=3`
+  - `ketcy/0 00fc:MUSIC id=0`
+  - `ketcy/1 0080:MUSIC id=3`
+  - `ketcy/1 00a7:MUSIC id=0`
+- SD BITON (3):
+  - `ketcy/0 0103:BITON f0/80#1`
+  - `ketcy/1 00c8:BITON f0/80#1`
+  - `save_l/5 0029:BITON d0/5b#1`
+- SD BITOFF (1):
+  - `save_l/31 0005:BITOFF d0/5b#1`
+- SD SETWORD (3):
+  - `cloud/0 003b:SETWORD 20/00=0x641`
+  - `cloud/31 003f:SETWORD 20/00=0x641`
+  - `save_l/5 002d:SETWORD 20/1e=0x0`
+
+### MDS5_W
+- D1 MUSIC (1):
+  - `directr/0 0002:MUSIC id=0`
+- D2 MUSIC (1):
+  - `directr/0 0002:MUSIC id=0`
+- SD DSKCG (2):
+  - `cloud/5 0266:DSKCG disc=5`
+  - `cloud/5 0268:DSKCG disc=5`
+- SD MUSIC (2):
+  - `directr/0 0002:MUSIC id=0`
+  - `cloud/5 02e6:MUSIC id=0`
+
+### MTCRL_2
+- D1 MAPJUMP (1):
+  - `cid/31 0253:MAPJUMP #728`
+- D1 MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `cid/31 0087:MUSIC id=3`
+- D1 BITON (2):
+  - `cid/31 024b:BITON f0/90#3`
+  - `cid/31 024f:BITON f0/90#0`
+- D2 MAPJUMP (1):
+  - `cid/31 025a:MAPJUMP #728`
+- D2 MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `cid/31 008b:MUSIC id=3`
+- D2 BITON (2):
+  - `cid/31 0252:BITON f0/90#3`
+  - `cid/31 0256:BITON f0/90#0`
+- SD MAPJUMP (1):
+  - `cid/31 025a:MAPJUMP #728`
+- SD MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `cid/31 008b:MUSIC id=3`
+- SD BITON (2):
+  - `cid/31 0252:BITON f0/90#3`
+  - `cid/31 0256:BITON f0/90#0`
+
+### NIVGATE
+- D1 MAPJUMP (2):
+  - `line_jp/2 0063:MAPJUMP #332`
+  - `tifa/1 0032:MAPJUMP #290`
+- D1 MUSIC (1):
+  - `produce/31 0003:MUSIC id=0`
+- D1 ASK (1):
+  - `hei2/1 0012:ASK 4805010d010206`
+- D1 SETWORD (1):
+  - `line_jp/2 000c:SETWORD 20/00=0x161`
+- D2 MAPJUMP (3):
+  - `line_jp/2 0061:MAPJUMP #332`
+  - `tifa/1 002c:MAPJUMP #293`
+  - `tifa/1 0036:MAPJUMP #290`
+- D2 MUSIC (1):
+  - `produce/31 0003:MUSIC id=0`
+- D2 ASK (1):
+  - `hei2/1 0012:ASK 4805010d010206`
+- D2 SETWORD (1):
+  - `line_jp/2 000c:SETWORD 20/00=0x161`
+- SD MAPJUMP (3):
+  - `line_jp/2 0061:MAPJUMP #332`
+  - `tifa/1 002c:MAPJUMP #293`
+  - `tifa/1 0036:MAPJUMP #290`
+- SD MUSIC (1):
+  - `produce/31 0003:MUSIC id=0`
+- SD ASK (1):
+  - `hei2/1 0012:ASK 4805010d010206`
+- SD SETWORD (1):
+  - `line_jp/2 000c:SETWORD 20/00=0x161`
+
+### NIVGATE2
+- D1 MAPJUMP (2):
+  - `drct/31 0052:MAPJUMP #291`
+  - `zax/4 0026:MAPJUMP #726`
+- D1 SETWORD (1):
+  - `zax/4 0021:SETWORD 20/00=0x466`
+- D2 MAPJUMP (2):
+  - `drct/31 0052:MAPJUMP #291`
+  - `zax/4 0026:MAPJUMP #726`
+- D2 SETWORD (1):
+  - `zax/4 0021:SETWORD 20/00=0x466`
+- SD MAPJUMP (2):
+  - `drct/31 0052:MAPJUMP #291`
+  - `zax/4 0026:MAPJUMP #726`
+- SD SETWORD (1):
+  - `zax/4 0021:SETWORD 20/00=0x466`
+
+### NIVL_B22
+- D1 MAPJUMP (2):
+  - `cloud/31 01ce:MAPJUMP #706`
+  - `cefirth/9 014a:MAPJUMP #296`
+- D1 MUSIC (1):
+  - `cefirth/4 0010:MUSIC id=0`
+- D1 BITON (2):
+  - `tifa/1 00bb:BITON 30/15#3`
+  - `cefirth/1 00e6:BITON 30/15#2`
+- D1 SETWORD (1):
+  - `cefirth/9 0145:SETWORD 20/00=0x302`
+- D2 MAPJUMP (5):
+  - `cloud/31 01ce:MAPJUMP #706`
+  - `tifa/1 002c:MAPJUMP #706`
+  - `tifa/1 0036:MAPJUMP #707`
+  - `tifa/1 005b:MAPJUMP #400`
+  - `cefirth/9 014a:MAPJUMP #296`
+- D2 MUSIC (1):
+  - `cefirth/4 0010:MUSIC id=0`
+- D2 BITON (2):
+  - `tifa/1 00fc:BITON 30/15#3`
+  - `cefirth/1 00bc:BITON 30/15#2`
+- D2 BITOFF (1):
+  - `tifa/1 0040:BITOFF f0/83#7`
+- D2 SETWORD (3):
+  - `tifa/1 000a:SETWORD 20/00=0x31a`
+  - `tifa/1 0044:SETWORD 20/00=0x3e7`
+  - `cefirth/9 0145:SETWORD 20/00=0x302`
+- SD MAPJUMP (5):
+  - `cloud/31 01ce:MAPJUMP #706`
+  - `tifa/1 002c:MAPJUMP #706`
+  - `tifa/1 0036:MAPJUMP #707`
+  - `tifa/1 005b:MAPJUMP #400`
+  - `cefirth/9 014a:MAPJUMP #296`
+- SD MUSIC (1):
+  - `cefirth/4 0010:MUSIC id=0`
+- SD BITON (2):
+  - `tifa/1 00fc:BITON 30/15#3`
+  - `cefirth/1 00bc:BITON 30/15#2`
+- SD BITOFF (1):
+  - `tifa/1 0040:BITOFF f0/83#7`
+- SD SETWORD (3):
+  - `tifa/1 000a:SETWORD 20/00=0x31a`
+  - `tifa/1 0044:SETWORD 20/00=0x3e7`
+  - `cefirth/9 0145:SETWORD 20/00=0x302`
+
+### RCKTBAS1
+- D1 MAPJUMP (10):
+  - `line1/4 0006:MAPJUMP #557`
+  - `line2/4 0006:MAPJUMP #557`
+  - `line3/4 0006:MAPJUMP #557`
+  - `line4/4 0006:MAPJUMP #557`
+  - `cloud/0 0038:MAPJUMP #562`
+  - `cloud/3 003d:MAPJUMP #562`
+  - `tifa/0 0038:MAPJUMP #562`
+  - `tifa/31 003d:MAPJUMP #562`
+  - `cid/0 0038:MAPJUMP #562`
+  - `cid/3 003d:MAPJUMP #562`
+- D1 MUSIC (5):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 0016:MUSIC id=2`
+  - `hei1/3 0018:MUSIC id=3`
+  - `hei1/3 0028:MUSIC id=2`
+- D1 BITON (1):
+  - `cloud/4 004a:BITON 30/85#1`
+- D2 MAPJUMP (10):
+  - `line1/4 0006:MAPJUMP #557`
+  - `line2/4 0006:MAPJUMP #557`
+  - `line3/4 0006:MAPJUMP #557`
+  - `line4/4 0006:MAPJUMP #557`
+  - `cloud/0 0038:MAPJUMP #562`
+  - `cloud/3 003d:MAPJUMP #562`
+  - `tifa/0 0038:MAPJUMP #562`
+  - `tifa/31 003d:MAPJUMP #562`
+  - `cid/0 0038:MAPJUMP #562`
+  - `cid/3 003d:MAPJUMP #562`
+- D2 MUSIC (5):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 0016:MUSIC id=2`
+  - `hei1/3 0018:MUSIC id=3`
+  - `hei1/3 0028:MUSIC id=2`
+- D2 BITON (1):
+  - `cloud/4 004a:BITON 30/85#1`
+- SD MAPJUMP (10):
+  - `line1/4 0006:MAPJUMP #557`
+  - `line2/4 0006:MAPJUMP #557`
+  - `line3/4 0006:MAPJUMP #557`
+  - `line4/4 0006:MAPJUMP #557`
+  - `cloud/0 0038:MAPJUMP #562`
+  - `cloud/3 003d:MAPJUMP #562`
+  - `tifa/0 0038:MAPJUMP #562`
+  - `tifa/31 003d:MAPJUMP #562`
+  - `cid/0 0038:MAPJUMP #562`
+  - `cid/3 003d:MAPJUMP #562`
+- SD MUSIC (5):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 0016:MUSIC id=2`
+  - `hei1/3 0018:MUSIC id=3`
+  - `hei1/3 0028:MUSIC id=2`
+- SD BITON (1):
+  - `cloud/4 004a:BITON 30/85#1`
+
+### RCKTBAS2
+- D1 MAPJUMP (6):
+  - `cloud/0 002f:MAPJUMP #561`
+  - `cloud/3 003d:MAPJUMP #561`
+  - `tifa/0 002f:MAPJUMP #561`
+  - `tifa/31 003d:MAPJUMP #561`
+  - `cid/0 002f:MAPJUMP #561`
+  - `cid/31 003d:MAPJUMP #561`
+- D1 MUSIC (3):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 0016:MUSIC id=2`
+- D1 BITON (1):
+  - `line/4 0010:BITON 30/85#2`
+- D2 MAPJUMP (6):
+  - `cloud/0 002f:MAPJUMP #561`
+  - `cloud/3 003d:MAPJUMP #561`
+  - `tifa/0 002f:MAPJUMP #561`
+  - `tifa/31 003d:MAPJUMP #561`
+  - `cid/0 002f:MAPJUMP #561`
+  - `cid/31 003d:MAPJUMP #561`
+- D2 MUSIC (3):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 0016:MUSIC id=2`
+- D2 BITON (1):
+  - `line/4 0010:BITON 30/85#2`
+- SD MAPJUMP (6):
+  - `cloud/0 002f:MAPJUMP #561`
+  - `cloud/3 003d:MAPJUMP #561`
+  - `tifa/0 002f:MAPJUMP #561`
+  - `tifa/31 003d:MAPJUMP #561`
+  - `cid/0 002f:MAPJUMP #561`
+  - `cid/31 003d:MAPJUMP #561`
+- SD MUSIC (3):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 0016:MUSIC id=2`
+- SD BITON (1):
+  - `line/4 0010:BITON 30/85#2`
+
+### RCKTIN2
+- D1 MAPJUMP (3):
+  - `init/4 0011:MAPJUMP #567`
+  - `init/31 0003:MAPJUMP #570`
+  - `line3/4 0028:MAPJUMP #567`
+- D1 MUSIC (6):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 001c:MUSIC id=2`
+  - `init/0 0026:MUSIC id=3`
+  - `init/3 0022:MUSIC id=4`
+  - `crew1/4 0011:MUSIC id=1`
+- D1 ASK (1):
+  - `cid/1 007c:ASK 4805020b02040b`
+- D1 BITON (3):
+  - `cid/1 0044:BITON 30/82#2`
+  - `cid/1 0113:BITON 30/82#6`
+  - `leader/0 0056:BITON 30/85#3`
+- D1 SETWORD (1):
+  - `cid/1 0048:SETWORD 20/00=0x21a`
+- D2 MAPJUMP (3):
+  - `init/4 0011:MAPJUMP #567`
+  - `init/31 0003:MAPJUMP #570`
+  - `line3/4 0028:MAPJUMP #567`
+- D2 MUSIC (6):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 001c:MUSIC id=2`
+  - `init/0 0026:MUSIC id=3`
+  - `init/3 0022:MUSIC id=4`
+  - `crew1/4 0011:MUSIC id=1`
+- D2 ASK (1):
+  - `cid/1 008f:ASK 4805020b02040b`
+- D2 BITON (3):
+  - `cid/1 0044:BITON 30/82#2`
+  - `cid/1 0126:BITON 30/82#6`
+  - `leader/0 0056:BITON 30/85#3`
+- D2 SETWORD (1):
+  - `cid/1 0048:SETWORD 20/00=0x21a`
+- SD MAPJUMP (3):
+  - `init/4 0011:MAPJUMP #567`
+  - `init/31 0003:MAPJUMP #570`
+  - `line3/4 0028:MAPJUMP #567`
+- SD MUSIC (6):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 001c:MUSIC id=2`
+  - `init/0 0026:MUSIC id=3`
+  - `init/3 0022:MUSIC id=4`
+  - `crew1/4 0011:MUSIC id=1`
+- SD ASK (1):
+  - `cid/1 008f:ASK 4805020b02040b`
+- SD BITON (3):
+  - `cid/1 0044:BITON 30/82#2`
+  - `cid/1 0126:BITON 30/82#6`
+  - `leader/0 0056:BITON 30/85#3`
+- SD SETWORD (1):
+  - `cid/1 0048:SETWORD 20/00=0x21a`
+
+### RCKTIN6
+- D1 MAPJUMP (6):
+  - `line1/4 0000:MAPJUMP #570`
+  - `line2/4 0000:MAPJUMP #565`
+  - `event2/4 006c:MAPJUMP #565`
+  - `cloud/3 0033:MAPJUMP #567`
+  - `cid/31 00e6:MAPJUMP #565`
+  - `siera/0 008e:MAPJUMP #564`
+- D1 MUSIC (6):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 001c:MUSIC id=2`
+  - `init/0 0026:MUSIC id=2`
+  - `event2/4 005a:MUSIC id=3`
+  - `cid/31 008e:MUSIC id=0`
+- D1 BITON (4):
+  - `event1/4 0006:BITON 30/85#5`
+  - `event2/4 0006:BITON 30/87#7`
+  - `event2/4 0056:BITON 30/88#0`
+  - `cid/31 00c1:BITON 30/88#1`
+- D1 BITOFF (1):
+  - `cid/31 00c5:BITOFF 30/88#0`
+- D2 MAPJUMP (6):
+  - `line1/4 0000:MAPJUMP #570`
+  - `line2/4 0000:MAPJUMP #565`
+  - `event2/4 0068:MAPJUMP #565`
+  - `cloud/3 0033:MAPJUMP #567`
+  - `cid/31 00e6:MAPJUMP #565`
+  - `siera/0 008e:MAPJUMP #564`
+- D2 MUSIC (6):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 001c:MUSIC id=2`
+  - `init/0 0026:MUSIC id=2`
+  - `event2/4 0056:MUSIC id=3`
+  - `cid/31 008e:MUSIC id=0`
+- D2 BITON (4):
+  - `event1/4 0006:BITON 30/85#5`
+  - `event2/4 0006:BITON 30/87#7`
+  - `event2/4 0072:BITON 30/88#0`
+  - `cid/31 00c1:BITON 30/88#1`
+- D2 BITOFF (1):
+  - `cid/31 00c5:BITOFF 30/88#0`
+- SD MAPJUMP (6):
+  - `line1/4 0000:MAPJUMP #570`
+  - `line2/4 0000:MAPJUMP #565`
+  - `event2/4 0068:MAPJUMP #565`
+  - `cloud/3 0033:MAPJUMP #567`
+  - `cid/31 00e6:MAPJUMP #565`
+  - `siera/0 008e:MAPJUMP #564`
+- SD MUSIC (6):
+  - `init/0 000e:MUSIC id=0`
+  - `init/0 0012:MUSIC id=1`
+  - `init/0 001c:MUSIC id=2`
+  - `init/0 0026:MUSIC id=2`
+  - `event2/4 0056:MUSIC id=3`
+  - `cid/31 008e:MUSIC id=0`
+- SD BITON (4):
+  - `event1/4 0006:BITON 30/85#5`
+  - `event2/4 0006:BITON 30/87#7`
+  - `event2/4 0072:BITON 30/88#0`
+  - `cid/31 00c1:BITON 30/88#1`
+- SD BITOFF (1):
+  - `cid/31 00c5:BITOFF 30/88#0`
+
+### SEMKIN_4
+- D1 MAPJUMP (2):
+  - `jump/3 0006:MAPJUMP #425`
+  - `jump/3 0012:MAPJUMP #425`
+- D1 MUSIC (4):
+  - `init/0 0008:MUSIC id=0`
+  - `init/0 000e:MUSIC id=1`
+  - `init/31 00b2:MUSIC id=3`
+  - `init/31 00c2:MUSIC id=0`
+- D1 BITON (1):
+  - `init/31 01a6:BITON f0/84#2`
+- D1 SETWORD (2):
+  - `init/0 0055:SETWORD 62/06=0x18`
+  - `init/0 0064:SETWORD 62/06=0x18`
+- D2 MAPJUMP (2):
+  - `jump/3 0006:MAPJUMP #425`
+  - `jump/3 0012:MAPJUMP #425`
+- D2 MUSIC (4):
+  - `init/0 0008:MUSIC id=0`
+  - `init/0 000e:MUSIC id=1`
+  - `init/31 00b5:MUSIC id=3`
+  - `init/31 00c5:MUSIC id=0`
+- D2 BITON (1):
+  - `init/31 019c:BITON f0/84#2`
+- D2 SETWORD (2):
+  - `init/0 0055:SETWORD 62/06=0x18`
+  - `init/0 0064:SETWORD 62/06=0x18`
+- SD MAPJUMP (2):
+  - `jump/3 0006:MAPJUMP #425`
+  - `jump/3 0012:MAPJUMP #425`
+- SD MUSIC (4):
+  - `init/0 0008:MUSIC id=0`
+  - `init/0 000e:MUSIC id=1`
+  - `init/31 00b5:MUSIC id=3`
+  - `init/31 00c5:MUSIC id=0`
+- SD BITON (1):
+  - `init/31 019c:BITON f0/84#2`
+- SD SETWORD (2):
+  - `init/0 0055:SETWORD 62/06=0x18`
+  - `init/0 0064:SETWORD 62/06=0x18`
+
+### SEMKIN_5
+- D1 MAPJUMP (1):
+  - `init/31 01b5:MAPJUMP #426`
+- D1 MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `init/31 019d:MUSIC id=1`
+- D1 BITON (2):
+  - `init/0 008f:BITON f0/86#6`
+  - `init/31 01b1:BITON f0/85#1`
+- D2 MAPJUMP (1):
+  - `init/31 01bb:MAPJUMP #426`
+- D2 MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `init/31 01a3:MUSIC id=1`
+- D2 BITON (2):
+  - `init/0 0093:BITON f0/86#6`
+  - `init/31 01b7:BITON f0/85#1`
+- SD MAPJUMP (1):
+  - `init/31 01bb:MAPJUMP #426`
+- SD MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `init/31 01a3:MUSIC id=1`
+- SD BITON (2):
+  - `init/0 0093:BITON f0/86#6`
+  - `init/31 01b7:BITON f0/85#1`
+
+### SHPIN_3
+- D1 MAPJUMP (2):
+  - `CLOUD/31 0066:MAPJUMP #441`
+  - `CLOUD/31 0071:MAPJUMP #37`
+- D1 MUSIC (1):
+  - `directr/0 000e:MUSIC id=0`
+- D1 ASK (5):
+  - `EARITH/14 0015:ASK 48050226020301`
+  - `BALLET/14 0015:ASK 48050225020301`
+  - `TIFA/14 0015:ASK 48050227020301`
+  - `RED/14 0015:ASK 48050228020301`
+  - `YUFI/14 0015:ASK 48050229020301`
+- D1 BITON (2):
+  - `CLOUD/31 0062:BITON 10/45#0`
+  - `TAKARA/1 004c:BITON 10/39#6`
+- D2 MAPJUMP (1):
+  - `CLOUD/31 0079:MAPJUMP #37`
+- D2 MUSIC (1):
+  - `directr/0 000e:MUSIC id=0`
+- D2 ASK (5):
+  - `EARITH/14 0015:ASK 48050226020301`
+  - `BALLET/14 0015:ASK 48050225020301`
+  - `TIFA/14 0015:ASK 48050227020301`
+  - `RED/14 0015:ASK 48050228020301`
+  - `YUFI/14 0015:ASK 48050229020301`
+- D2 BITON (2):
+  - `CLOUD/31 0075:BITON 10/45#0`
+  - `TAKARA/1 004c:BITON 10/39#6`
+- SD MAPJUMP (2):
+  - `CLOUD/31 0066:MAPJUMP #441`
+  - `CLOUD/31 0071:MAPJUMP #37`
+- SD MUSIC (1):
+  - `directr/0 000e:MUSIC id=0`
+- SD ASK (5):
+  - `EARITH/14 0015:ASK 48050226020301`
+  - `BALLET/14 0015:ASK 48050225020301`
+  - `TIFA/14 0015:ASK 48050227020301`
+  - `RED/14 0015:ASK 48050228020301`
+  - `YUFI/14 0015:ASK 48050229020301`
+- SD BITON (2):
+  - `CLOUD/31 0062:BITON 10/45#0`
+  - `TAKARA/1 004c:BITON 10/39#6`
+
+### SUBIN_1B
+- D1 MAPJUMP (4):
+  - `cloud/6 01fe:MAPJUMP #42`
+  - `cloud/15 00fe:MAPJUMP #409`
+  - `cloud/16 0165:MAPJUMP #56`
+  - `cloud/31 0155:MAPJUMP #56`
+- D1 MUSIC (6):
+  - `produce/31 0008:MUSIC id=0`
+  - `produce/31 0031:MUSIC id=1`
+  - `produce/31 003c:MUSIC id=2`
+  - `produce/31 004f:MUSIC id=0`
+  - `produce/31 005a:MUSIC id=2`
+  - `direct/31 0160:MUSIC id=0`
+- D1 ASK (3):
+  - `cloud/14 0011:ASK 4805002402040f`
+  - `cloud/14 00be:ASK 4805002502030f`
+  - `taityo/6 005f:ASK 4805006702030f`
+- D1 BITON (9):
+  - `direct/31 0016:BITON 30/ee#4`
+  - `direct/31 004a:BITON 30/ee#3`
+  - `direct/31 0084:BITON d0/50#0`
+  - `mes/31 0000:BITON 10/42#6`
+  - `cloud/6 0186:BITON d0/50#4`
+  - `cloud/6 018a:BITON d0/50#3`
+  - `cloud/16 00bb:BITON 10/43#0`
+  - `cloud/31 00ab:BITON 10/42#6`
+  - `taityo/6 00a3:BITON 30/ee#5`
+- D1 SETWORD (3):
+  - `direct/31 007f:SETWORD 20/00=0x513`
+  - `direct/31 0157:SETWORD 20/00=0x503`
+  - `cloud/14 0145:SETWORD 20/00=0x506`
+- D2 MAPJUMP (4):
+  - `cloud/6 0204:MAPJUMP #42`
+  - `cloud/15 00fe:MAPJUMP #409`
+  - `cloud/16 0183:MAPJUMP #56`
+  - `cloud/31 0155:MAPJUMP #56`
+- D2 MUSIC (6):
+  - `produce/31 0008:MUSIC id=0`
+  - `produce/31 0031:MUSIC id=1`
+  - `produce/31 003c:MUSIC id=2`
+  - `produce/31 004f:MUSIC id=0`
+  - `produce/31 005a:MUSIC id=2`
+  - `direct/31 0160:MUSIC id=0`
+- D2 ASK (3):
+  - `cloud/14 0011:ASK 4805002402040f`
+  - `cloud/14 00be:ASK 4805002502030f`
+  - `taityo/6 005f:ASK 4805006702030f`
+- D2 BITON (9):
+  - `direct/31 0016:BITON 30/ee#4`
+  - `direct/31 004a:BITON 30/ee#3`
+  - `direct/31 0084:BITON d0/50#0`
+  - `mes/31 0000:BITON 10/42#6`
+  - `cloud/6 018c:BITON d0/50#4`
+  - `cloud/6 0190:BITON d0/50#3`
+  - `cloud/16 00d9:BITON 10/43#0`
+  - `cloud/31 00ab:BITON 10/42#6`
+  - `taityo/6 00a3:BITON 30/ee#5`
+- D2 SETWORD (3):
+  - `direct/31 007f:SETWORD 20/00=0x513`
+  - `direct/31 0157:SETWORD 20/00=0x503`
+  - `cloud/14 014a:SETWORD 20/00=0x506`
+- SD MAPJUMP (4):
+  - `cloud/6 0204:MAPJUMP #42`
+  - `cloud/15 00fe:MAPJUMP #409`
+  - `cloud/16 0183:MAPJUMP #56`
+  - `cloud/31 0155:MAPJUMP #56`
+- SD MUSIC (6):
+  - `produce/31 0008:MUSIC id=0`
+  - `produce/31 0031:MUSIC id=1`
+  - `produce/31 003c:MUSIC id=2`
+  - `produce/31 004f:MUSIC id=0`
+  - `produce/31 005a:MUSIC id=2`
+  - `direct/31 0160:MUSIC id=0`
+- SD ASK (3):
+  - `cloud/14 0011:ASK 4805002402040f`
+  - `cloud/14 00be:ASK 4805002502030f`
+  - `taityo/6 005f:ASK 4805006702030f`
+- SD BITON (9):
+  - `direct/31 0016:BITON 30/ee#4`
+  - `direct/31 004a:BITON 30/ee#3`
+  - `direct/31 0084:BITON d0/50#0`
+  - `mes/31 0000:BITON 10/42#6`
+  - `cloud/6 018c:BITON d0/50#4`
+  - `cloud/6 0190:BITON d0/50#3`
+  - `cloud/16 00d9:BITON 10/43#0`
+  - `cloud/31 00ab:BITON 10/42#6`
+  - `taityo/6 00a3:BITON 30/ee#5`
+- SD SETWORD (3):
+  - `direct/31 007f:SETWORD 20/00=0x513`
+  - `direct/31 0157:SETWORD 20/00=0x503`
+  - `cloud/14 014a:SETWORD 20/00=0x506`
+
+### TRNAD_4
+- D1 MAPJUMP (1):
+  - `discver/2 00f0:MAPJUMP #702`
+- D1 MUSIC (2):
+  - `drctr/0 0002:MUSIC id=0`
+  - `discver/2 00e5:MUSIC id=0`
+- D1 BITON (12):
+  - `drctr/31 0010:BITON 50/28#0`
+  - `drctr/31 0024:BITON 50/28#0`
+  - `drctr/31 0038:BITON 50/28#0`
+  - `drctr/31 004c:BITON 50/28#0`
+  - `drctr/31 0060:BITON 50/28#0`
+  - `drctr/31 0074:BITON 50/28#0`
+  - `saveln/5 001c:BITON d0/5b#1`
+  - `discver/2 0018:BITON 10/84#4`
+  - `discver/2 008f:BITON 50/29#0`
+  - `cloud/31 0018:BITON 50/28#1`
+  - `tbox1/1 000a:BITON f0/02#1`
+  - `cdmtra/1 001e:BITON f0/02#3`
+- D1 BITOFF (2):
+  - `saveln/31 0000:BITOFF d0/5b#1`
+  - `black1/7 001e:BITOFF 50/29#0`
+- D1 SETWORD (1):
+  - `saveln/5 0020:SETWORD 20/1e=0x0`
+- D2 MAPJUMP (1):
+  - `discver/2 00e6:MAPJUMP #702`
+- D2 MUSIC (2):
+  - `drctr/0 0002:MUSIC id=0`
+  - `discver/2 00db:MUSIC id=0`
+- D2 BITON (12):
+  - `drctr/31 0010:BITON 50/28#0`
+  - `drctr/31 0024:BITON 50/28#0`
+  - `drctr/31 0038:BITON 50/28#0`
+  - `drctr/31 004c:BITON 50/28#0`
+  - `drctr/31 0060:BITON 50/28#0`
+  - `drctr/31 0074:BITON 50/28#0`
+  - `saveln/5 001c:BITON d0/5b#1`
+  - `discver/2 0019:BITON 10/84#4`
+  - `discver/2 0085:BITON 50/29#0`
+  - `cloud/31 0018:BITON 50/28#1`
+  - `tbox1/1 000a:BITON f0/02#1`
+  - `cdmtra/1 001e:BITON f0/02#3`
+- D2 BITOFF (2):
+  - `saveln/31 0000:BITOFF d0/5b#1`
+  - `black1/7 001e:BITOFF 50/29#0`
+- D2 SETWORD (1):
+  - `saveln/5 0020:SETWORD 20/1e=0x0`
+- SD MAPJUMP (1):
+  - `discver/2 00e6:MAPJUMP #702`
+- SD MUSIC (2):
+  - `drctr/0 0002:MUSIC id=0`
+  - `discver/2 00db:MUSIC id=0`
+- SD BITON (12):
+  - `drctr/31 0010:BITON 50/28#0`
+  - `drctr/31 0024:BITON 50/28#0`
+  - `drctr/31 0038:BITON 50/28#0`
+  - `drctr/31 004c:BITON 50/28#0`
+  - `drctr/31 0060:BITON 50/28#0`
+  - `drctr/31 0074:BITON 50/28#0`
+  - `saveln/5 001c:BITON d0/5b#1`
+  - `discver/2 0019:BITON 10/84#4`
+  - `discver/2 0085:BITON 50/29#0`
+  - `cloud/31 0018:BITON 50/28#1`
+  - `tbox1/1 000a:BITON f0/02#1`
+  - `cdmtra/1 001e:BITON f0/02#3`
+- SD BITOFF (2):
+  - `saveln/31 0000:BITOFF d0/5b#1`
+  - `black1/7 001e:BITOFF 50/29#0`
+- SD SETWORD (1):
+  - `saveln/5 0020:SETWORD 20/1e=0x0`
+
+### TRNAD_51
+- D1 MAPJUMP (4):
+  - `tg_d/1 0091:MAPJUMP #702`
+  - `tg_d/31 0139:MAPJUMP #781`
+  - `cloud/15 01dc:MAPJUMP #707`
+  - `cloud/15 01ff:MAPJUMP #400`
+- D1 MUSIC (2):
+  - `produce/0 0027:MUSIC id=0`
+  - `tg_d/31 002c:MUSIC id=1`
+- D1 BITON (1):
+  - `tg_d/2 0082:BITON 30/15#4`
+- D1 BITOFF (1):
+  - `line/2 0008:BITOFF 30/15#4`
+- D1 SETWORD (5):
+  - `tg_d/1 0075:SETWORD 20/00=0x316`
+  - `tg_d/2 0086:SETWORD 20/00=0x318`
+  - `tg_d/31 0134:SETWORD 20/00=0x3e7`
+  - `cloud/15 01d5:SETWORD 20/00=0x31a`
+  - `cloud/15 01f1:SETWORD 20/00=0x3e7`
+- D2 MAPJUMP (5):
+  - `produce/0 000d:MAPJUMP #707`
+  - `tg_d/1 0091:MAPJUMP #702`
+  - `tg_d/31 0139:MAPJUMP #781`
+  - `cloud/15 01dc:MAPJUMP #707`
+  - `cloud/15 01ff:MAPJUMP #400`
+- D2 MUSIC (2):
+  - `produce/0 0031:MUSIC id=0`
+  - `tg_d/31 002c:MUSIC id=1`
+- D2 BITON (1):
+  - `tg_d/2 0082:BITON 30/15#4`
+- D2 BITOFF (1):
+  - `line/2 0008:BITOFF 30/15#4`
+- D2 SETWORD (5):
+  - `tg_d/1 0075:SETWORD 20/00=0x316`
+  - `tg_d/2 0086:SETWORD 20/00=0x318`
+  - `tg_d/31 0134:SETWORD 20/00=0x3e7`
+  - `cloud/15 01d5:SETWORD 20/00=0x31a`
+  - `cloud/15 01f1:SETWORD 20/00=0x3e7`
+- SD MAPJUMP (5):
+  - `produce/0 000d:MAPJUMP #707`
+  - `tg_d/1 0091:MAPJUMP #702`
+  - `tg_d/31 0139:MAPJUMP #781`
+  - `cloud/15 01dc:MAPJUMP #707`
+  - `cloud/15 01ff:MAPJUMP #400`
+- SD MUSIC (2):
+  - `produce/0 0031:MUSIC id=0`
+  - `tg_d/31 002c:MUSIC id=1`
+- SD BITON (1):
+  - `tg_d/2 0082:BITON 30/15#4`
+- SD BITOFF (1):
+  - `line/2 0008:BITOFF 30/15#4`
+- SD SETWORD (5):
+  - `tg_d/1 0075:SETWORD 20/00=0x316`
+  - `tg_d/2 0086:SETWORD 20/00=0x318`
+  - `tg_d/31 0134:SETWORD 20/00=0x3e7`
+  - `cloud/15 01d5:SETWORD 20/00=0x31a`
+  - `cloud/15 01f1:SETWORD 20/00=0x3e7`
+
+### TRNAD_53
+- D1 MAPJUMP (1):
+  - `cloud/3 0029:MAPJUMP #400`
+- D1 MUSIC (1):
+  - `produce/31 0003:MUSIC id=0`
+- D1 SETWORD (1):
+  - `cloud/3 0023:SETWORD 20/00=0x3e7`
+- D2 MAPJUMP (1):
+  - `cloud/3 0029:MAPJUMP #400`
+- D2 MUSIC (1):
+  - `produce/31 0003:MUSIC id=0`
+- D2 SETWORD (1):
+  - `cloud/3 0023:SETWORD 20/00=0x3e7`
+- SD MAPJUMP (1):
+  - `cloud/3 0023:MAPJUMP #400`
+- SD MUSIC (1):
+  - `produce/31 0003:MUSIC id=0`
+- SD SETWORD (1):
+  - `cloud/3 001e:SETWORD 20/00=0x3e7`
+
+### TUNNEL_6
+- D1 MAPJUMP (4):
+  - `cloud/0 007f:MAPJUMP #735`
+  - `cloud/5 0054:MAPJUMP #735`
+  - `jump_u/3 0003:MAPJUMP #737`
+  - `jump_d/3 0003:MAPJUMP #737`
+- D1 MUSIC (9):
+  - `init/0 0002:MUSIC id=0`
+  - `irena/0 0080:MUSIC id=2`
+  - `irena/0 0093:MUSIC id=3`
+  - `irena/0 0136:MUSIC id=4`
+  - `irena/0 015f:MUSIC id=0`
+  - `irena/0 01bc:MUSIC id=4`
+  - `irena/0 01e7:MUSIC id=0`
+  - `irena/0 030b:MUSIC id=2`
+  - `irena/0 031e:MUSIC id=0`
+- D1 ASK (1):
+  - `irena/0 0193:ASK 4805005202030a`
+- D1 BITON (3):
+  - `irena/0 0156:BITON f0/80#2`
+  - `irena/0 01de:BITON f0/80#2`
+  - `irena/0 0302:BITON f0/80#2`
+- D1 BITOFF (2):
+  - `cloud/0 006e:BITOFF f0/83#4`
+  - `cloud/5 006e:BITOFF f0/83#4`
+- D1 SETWORD (3):
+  - `irena/0 015a:SETWORD 20/00=0x642`
+  - `irena/0 01e2:SETWORD 20/00=0x642`
+  - `irena/0 0306:SETWORD 20/00=0x642`
+- D2 MAPJUMP (4):
+  - `cloud/0 007f:MAPJUMP #735`
+  - `cloud/5 0054:MAPJUMP #735`
+  - `jump_u/3 0003:MAPJUMP #737`
+  - `jump_d/3 0003:MAPJUMP #737`
+- D2 MUSIC (11):
+  - `init/0 0002:MUSIC id=0`
+  - `irena/0 0073:MUSIC id=2`
+  - `irena/0 0083:MUSIC id=3`
+  - `irena/0 009a:MUSIC id=2`
+  - `irena/0 00ad:MUSIC id=3`
+  - `irena/0 0150:MUSIC id=4`
+  - `irena/0 0179:MUSIC id=0`
+  - `irena/0 01d6:MUSIC id=4`
+  - `irena/0 0201:MUSIC id=0`
+  - `irena/0 0325:MUSIC id=2`
+  - `irena/0 0338:MUSIC id=0`
+- D2 ASK (1):
+  - `irena/0 01ad:ASK 4805005202030a`
+- D2 BITON (3):
+  - `irena/0 0170:BITON f0/80#2`
+  - `irena/0 01f8:BITON f0/80#2`
+  - `irena/0 031c:BITON f0/80#2`
+- D2 BITOFF (2):
+  - `cloud/0 006e:BITOFF f0/83#4`
+  - `cloud/5 006e:BITOFF f0/83#4`
+- D2 SETWORD (3):
+  - `irena/0 0174:SETWORD 20/00=0x642`
+  - `irena/0 01fc:SETWORD 20/00=0x642`
+  - `irena/0 0320:SETWORD 20/00=0x642`
+- SD MAPJUMP (4):
+  - `cloud/0 007f:MAPJUMP #735`
+  - `cloud/5 0054:MAPJUMP #735`
+  - `jump_u/3 0003:MAPJUMP #737`
+  - `jump_d/3 0003:MAPJUMP #737`
+- SD MUSIC (11):
+  - `init/0 0002:MUSIC id=0`
+  - `irena/0 0073:MUSIC id=2`
+  - `irena/0 0083:MUSIC id=3`
+  - `irena/0 009a:MUSIC id=2`
+  - `irena/0 00ad:MUSIC id=3`
+  - `irena/0 0150:MUSIC id=4`
+  - `irena/0 0179:MUSIC id=0`
+  - `irena/0 01d6:MUSIC id=4`
+  - `irena/0 0201:MUSIC id=0`
+  - `irena/0 0325:MUSIC id=2`
+  - `irena/0 0338:MUSIC id=0`
+- SD ASK (1):
+  - `irena/0 01ad:ASK 4805005202030a`
+- SD BITON (3):
+  - `irena/0 0170:BITON f0/80#2`
+  - `irena/0 01f8:BITON f0/80#2`
+  - `irena/0 031c:BITON f0/80#2`
+- SD BITOFF (2):
+  - `cloud/0 006e:BITOFF f0/83#4`
+  - `cloud/5 006e:BITOFF f0/83#4`
+- SD SETWORD (3):
+  - `irena/0 0174:SETWORD 20/00=0x642`
+  - `irena/0 01fc:SETWORD 20/00=0x642`
+  - `irena/0 0320:SETWORD 20/00=0x642`
+
+### WHITE2
+- D1 MAPJUMP (1):
+  - `lin0/3 0010:MAPJUMP #637`
+- D1 MUSIC (2):
+  - `mf/31 0023:MUSIC id=0`
+  - `cl/31 002a:MUSIC id=1`
+- D1 SETWORD (1):
+  - `ev0/3 001f:SETWORD 20/00=0x578`
+- D2 MAPJUMP (1):
+  - `lin0/3 0010:MAPJUMP #637`
+- D2 MUSIC (2):
+  - `mf/31 0023:MUSIC id=0`
+  - `cl/31 002a:MUSIC id=1`
+- D2 SETWORD (1):
+  - `ev0/3 001f:SETWORD 20/00=0x578`
+- SD MAPJUMP (1):
+  - `lin0/3 0010:MAPJUMP #637`
+- SD MUSIC (2):
+  - `mf/31 0023:MUSIC id=0`
+  - `cl/31 002a:MUSIC id=1`
+- SD SETWORD (1):
+  - `ev0/3 001f:SETWORD 20/00=0x578`
+
+### WHITEBG3
+- D1 MAPJUMP (1):
+  - `tcl/1 010b:MAPJUMP #725`
+- D1 MUSIC (1):
+  - `tcl/1 00fb:MUSIC id=0`
+- D1 SETWORD (1):
+  - `tcl/1 00f3:SETWORD 20/00=0x49c`
+- D2 MAPJUMP (1):
+  - `tcl/1 010b:MAPJUMP #725`
+- D2 MUSIC (1):
+  - `tcl/1 00fb:MUSIC id=0`
+- D2 SETWORD (1):
+  - `tcl/1 00f3:SETWORD 20/00=0x49c`
+- SD MAPJUMP (1):
+  - `tcl/1 010b:MAPJUMP #725`
+- SD MUSIC (1):
+  - `tcl/1 00fb:MUSIC id=0`
+- SD SETWORD (1):
+  - `tcl/1 00f3:SETWORD 20/00=0x49c`
+
+### ZCOAL_1
+- D1 MAPJUMP (2):
+  - `cid/1 0055:MAPJUMP #729`
+  - `tm_out/0 0069:MAPJUMP #450`
+- D1 MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `tm_out/0 0031:MUSIC id=2`
+- D1 BITON (2):
+  - `tm_out/0 0048:BITON f0/91#4`
+  - `tm_out/0 004c:BITON f0/91#5`
+- D1 SETWORD (3):
+  - `view/31 0000:SETWORD 60/1d=0xfec0`
+  - `tm_out/0 0064:SETWORD 20/00=0x45c`
+  - `torokko/0 001f:SETWORD 60/0e=0x100`
+- D2 MAPJUMP (2):
+  - `cid/1 0055:MAPJUMP #729`
+  - `tm_out/0 0069:MAPJUMP #450`
+- D2 MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `tm_out/0 0031:MUSIC id=2`
+- D2 BITON (2):
+  - `tm_out/0 0048:BITON f0/91#4`
+  - `tm_out/0 004c:BITON f0/91#5`
+- D2 SETWORD (3):
+  - `view/31 0000:SETWORD 60/1d=0xfec0`
+  - `tm_out/0 0064:SETWORD 20/00=0x45c`
+  - `torokko/0 001f:SETWORD 60/0e=0x100`
+- SD MAPJUMP (2):
+  - `cid/1 0055:MAPJUMP #729`
+  - `tm_out/0 0069:MAPJUMP #450`
+- SD MUSIC (2):
+  - `init/0 0002:MUSIC id=0`
+  - `tm_out/0 0031:MUSIC id=2`
+- SD BITON (2):
+  - `tm_out/0 0048:BITON f0/91#4`
+  - `tm_out/0 004c:BITON f0/91#5`
+- SD SETWORD (3):
+  - `view/31 0000:SETWORD 60/1d=0xfec0`
+  - `tm_out/0 0064:SETWORD 20/00=0x45c`
+  - `torokko/0 001f:SETWORD 60/0e=0x100`
+
+### ZCOAL_3
+- D1 MAPJUMP (2):
+  - `cid/0 04c3:MAPJUMP #452`
+  - `cid/31 0047:MAPJUMP #456`
+- D1 MUSIC (4):
+  - `init/0 0002:MUSIC id=0`
+  - `cid/0 018f:MUSIC id=1`
+  - `cid/0 046b:MUSIC id=2`
+  - `tm_out/0 0027:MUSIC id=2`
+- D1 BITON (4):
+  - `cid/0 048f:BITON f0/91#3`
+  - `cid/0 0493:BITON f0/91#5`
+  - `cid/31 0000:BITON f0/91#2`
+  - `cid/31 0004:BITON f0/91#5`
+- D1 SETWORD (11):
+  - `shake/31 0000:SETWORD 60/0a=0x0`
+  - `shake/31 0005:SETWORD 60/0c=0x0`
+  - `shake/31 000a:SETWORD 60/0e=0x0`
+  - `shake/31 000f:SETWORD 60/10=0x0`
+  - `shake/31 0014:SETWORD 60/12=0x4`
+  - `shake/31 001a:SETWORD 66/0a=0x8`
+  - `shake/31 001f:SETWORD 66/0c=0x8`
+  - `shake/31 0061:SETWORD 60/0e=0x0`
+  - `shake/31 0066:SETWORD 60/10=0x0`
+  - `cid/0 049d:SETWORD 20/00=0x45c`
+  - `cid/31 0023:SETWORD 20/00=0x45c`
+- D2 MAPJUMP (2):
+  - `cid/0 04c6:MAPJUMP #452`
+  - `cid/31 0046:MAPJUMP #456`
+- D2 MUSIC (4):
+  - `init/0 0002:MUSIC id=0`
+  - `cid/0 0193:MUSIC id=1`
+  - `cid/0 046f:MUSIC id=2`
+  - `tm_out/0 0027:MUSIC id=2`
+- D2 BITON (4):
+  - `cid/0 0493:BITON f0/91#3`
+  - `cid/0 0497:BITON f0/91#5`
+  - `cid/31 0000:BITON f0/91#2`
+  - `cid/31 0004:BITON f0/91#5`
+- D2 SETWORD (11):
+  - `shake/31 0000:SETWORD 60/0a=0x0`
+  - `shake/31 0005:SETWORD 60/0c=0x0`
+  - `shake/31 000a:SETWORD 60/0e=0x0`
+  - `shake/31 000f:SETWORD 60/10=0x0`
+  - `shake/31 0014:SETWORD 60/12=0x4`
+  - `shake/31 001a:SETWORD 66/0a=0x8`
+  - `shake/31 001f:SETWORD 66/0c=0x8`
+  - `shake/31 0061:SETWORD 60/0e=0x0`
+  - `shake/31 0066:SETWORD 60/10=0x0`
+  - `cid/0 04a1:SETWORD 20/00=0x45c`
+  - `cid/31 0023:SETWORD 20/00=0x45c`
+- SD MAPJUMP (2):
+  - `cid/0 04c6:MAPJUMP #452`
+  - `cid/31 0046:MAPJUMP #456`
+- SD MUSIC (4):
+  - `init/0 0002:MUSIC id=0`
+  - `cid/0 0193:MUSIC id=1`
+  - `cid/0 046f:MUSIC id=2`
+  - `tm_out/0 0027:MUSIC id=2`
+- SD BITON (4):
+  - `cid/0 0493:BITON f0/91#3`
+  - `cid/0 0497:BITON f0/91#5`
+  - `cid/31 0000:BITON f0/91#2`
+  - `cid/31 0004:BITON f0/91#5`
+- SD SETWORD (11):
+  - `shake/31 0000:SETWORD 60/0a=0x0`
+  - `shake/31 0005:SETWORD 60/0c=0x0`
+  - `shake/31 000a:SETWORD 60/0e=0x0`
+  - `shake/31 000f:SETWORD 60/10=0x0`
+  - `shake/31 0014:SETWORD 60/12=0x4`
+  - `shake/31 001a:SETWORD 66/0a=0x8`
+  - `shake/31 001f:SETWORD 66/0c=0x8`
+  - `shake/31 0061:SETWORD 60/0e=0x0`
+  - `shake/31 0066:SETWORD 60/10=0x0`
+  - `cid/0 04a1:SETWORD 20/00=0x45c`
+  - `cid/31 0023:SETWORD 20/00=0x45c`
+
+### ZMIND1
+- D1 MAPJUMP (2):
+  - `door1/5 002c:MAPJUMP #280`
+  - `door2/5 0020:MAPJUMP #280`
+- D1 MUSIC (1):
+  - `dic/0 0067:MUSIC id=0`
+- D1 SETWORD (2):
+  - `door1/5 0012:SETWORD 20/00=0x464`
+  - `door2/5 0012:SETWORD 20/00=0x49d`
+- D2 MAPJUMP (3):
+  - `door1/5 002e:MAPJUMP #280`
+  - `door2/5 002d:MAPJUMP #727`
+  - `door2/5 0037:MAPJUMP #280`
+- D2 MUSIC (1):
+  - `dic/0 0055:MUSIC id=0`
+- D2 SETWORD (3):
+  - `door1/5 0012:SETWORD 20/00=0x464`
+  - `door2/5 0012:SETWORD 20/00=0x49d`
+  - `door2/5 0028:SETWORD 20/00=0x4a4`
+- SD MAPJUMP (3):
+  - `door1/5 002e:MAPJUMP #280`
+  - `door2/5 002d:MAPJUMP #727`
+  - `door2/5 0037:MAPJUMP #280`
+- SD MUSIC (1):
+  - `dic/0 0055:MUSIC id=0`
+- SD SETWORD (3):
+  - `door1/5 0012:SETWORD 20/00=0x464`
+  - `door2/5 0012:SETWORD 20/00=0x49d`
+  - `door2/5 0028:SETWORD 20/00=0x4a4`

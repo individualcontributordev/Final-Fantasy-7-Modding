@@ -9,6 +9,13 @@ workspace/*
 workspace/ghidra/*
 !workspace/ghidra/.gitkeep
 
+# Ghidra exports (raw game data - keep local only)
+workspace/ghidra-exports/
+
+# Ghidra analysis (structured output - committed)
+!workspace/ghidra-analysis/
+!workspace/ghidra-analysis/**
+
 # Common disc / dump companions (anywhere under workspace)
 workspace/**/*.bin
 workspace/**/*.BIN

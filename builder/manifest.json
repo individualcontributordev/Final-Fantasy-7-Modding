@@ -896,7 +896,7 @@
       "name": "disc1\u21922 forest music",
       "version": "0.1.35",
       "description": "LOST2: bank3/0x84 bit4 OFF at D1\u21922 \u2192 play forest MUSIC instead of silent RET (IFUB fail E 0x1c\u21920x24). No COS_BTM2 force. Replaces failed v0.1.34.",
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.33"
@@ -908,6 +908,26 @@
       "discs": {
         "1": "./single-disc-on-csr-v0.1.35/layers/disc1.layer.json"
       }
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.36",
+      "displayName": "Single-Disc v0.1.36 (test)",
+      "version": "0.1.36",
+      "layerUrl": "./single-disc-on-csr-v0.1.36-disc1.layer.json",
+      "compatibleBases": [
+        "csr-v0.14.1",
+        "highwind-v0.2.0"
+      ],
+      "discs": [
+        1
+      ],
+      "badgeText": "v0.1.36",
+      "description": "LOST2 forest music + ambient AKAOs",
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr-v0.1.33"
+      },
+      "enabled": true,
+      "hidden": true
     },
     {
       "id": "single-disc-on-csr-v0.1.34",
