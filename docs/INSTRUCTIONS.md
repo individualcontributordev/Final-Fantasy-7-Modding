@@ -63,19 +63,20 @@ print('Wrote workspace/tmp/LOST2-d2-pristine.dec')
    - Click at address `0x434`
    - Shift+Click at address `0x4F0` (selects ~188 bytes covering the full init/0 script)
 
-6. **Export the selection:**
+6. **Export the selection as listing:**
+   - With the range still selected (`0x434` to `0x4F0`)
    - File → Export Program
-   - Format: **ASCII**
+   - Format: **HTML** (or **Text** if available)
    - Output file: `workspace/ghidra/LOST2-init-script-pristine-d2.txt`
-   - Options: Check "Selection Only"
-   - Include: Addresses and Bytes
+   - Options: Check "Selection Only" if available
    - Click OK
+   - (If HTML is the only option, save as `.html` and rename to `.txt` after)
 
-7. **Also export raw hex for verification:**
+7. **Export raw hex for verification:**
    - With the same range still selected (`0x434` to `0x4F0`)
-   - Right-click → Copy Special → **Byte String**
-   - Paste into: `workspace/ghidra/LOST2-init-script-pristine-d2.hex`
-   - Save the file
+   - Right-click in the Listing window → Copy Special → **Byte String** (or **Python Byte String**)
+   - Open a text editor, paste the hex bytes
+   - Save as: `workspace/ghidra/LOST2-init-script-pristine-d2.hex`
 
 8. **Commit the exports:**
 
