@@ -2,7 +2,7 @@
 
 ## What this is
 
-Setting up a Ghidra CLI tool so Agent can write automated scripts that:
+Setting up ghidra-cli so Agent can write automated scripts that:
 1. Import game files into Ghidra
 2. Run analysis automatically
 3. Extract structured metadata (functions, symbols, control flow)
@@ -10,112 +10,89 @@ Setting up a Ghidra CLI tool so Agent can write automated scripts that:
 
 You'll run one command instead of 6 manual export steps. Agent gets exact game structure data for faster modding.
 
-## Your task: Install Ghidra CLI tool (one-time setup)
+## Your task: Install ghidra-cli (one-time setup)
 
-**Choose ONE option below** (I recommend Option A for Windows + Git Bash):
-
-### Option A: ghidra-rpc (Python-based, recommended for Windows)
+**Using pre-built Windows binary** (no Rust/compilation needed):
 
 **Prerequisites:**
-- Ghidra 11.0+ installed on Windows
-- Python 3.11+ (check: `python --version` in Git Bash)
-- Java 17+ (check: `java --version`)
+- Ghidra 10.0+ installed on Windows
+- Java 17+ (check: `java --version` in Git Bash)
 
 **Steps:**
 
-1. **Install uv (Python package installer):**
+1. **Download pre-built Windows binary:**
 
 ```bash
 # In Git Bash on your Windows Ghidra machine:
-curl -LsSf https://astral.sh/uv/install.sh | sh
-# Close and reopen Git Bash after install
+cd ~/
+mkdir -p ghidra-cli
+cd ghidra-cli
+
+# Download latest release (v0.2.1 as of now):
+curl -L -o ghidra-cli.zip https://github.com/akiselev/ghidra-cli/releases/download/v0.2.1/ghidra-cli-v0.2.1-x86_64-pc-windows-msvc.zip
+
+# Extract:
+unzip ghidra-cli.zip
+# Should create ghidra.exe
 ```
 
-2. **Set GHIDRA_INSTALL_DIR environment variable:**
+2. **Add to PATH:**
 
 ```bash
-# Find your Ghidra install directory (contains ghidraRun.bat)
-# Example: C:/ghidra_11.3_PUBLIC
+# Add ghidra-cli directory to PATH in ~/.bashrc:
+echo 'export PATH="$HOME/ghidra-cli:$PATH"' >> ~/.bashrc
+source ~/.bashrc
 
-# Add to ~/.bashrc (create if doesn't exist):
+# Verify it's in PATH:
+which ghidra
+# Should print: /c/Users/YourName/ghidra-cli/ghidra
+```
+
+3. **Set GHIDRA_INSTALL_DIR environment variable:**
+
+```bash
+# Find your Ghidra install directory (folder with ghidraRun.bat)
+# Example: C:/ghidra_11.3_PUBLIC or C:/Program Files/ghidra_11.3_PUBLIC
+
+# Add to ~/.bashrc:
 echo 'export GHIDRA_INSTALL_DIR="/c/ghidra_11.3_PUBLIC"' >> ~/.bashrc
 source ~/.bashrc
 
 # Verify:
 echo $GHIDRA_INSTALL_DIR
-# Should print: /c/ghidra_11.3_PUBLIC (or your path)
-```
-
-3. **Clone and install ghidra-rpc:**
-
-```bash
-cd ~/
-git clone https://github.com/cellebrite-labs/ghidra-rpc.git
-cd ghidra-rpc
-uv tool install .
-
-# Verify:
-ghidra-rpc --version
-# Should print: ghidra-rpc, version 0.1.0
+# Should print: /c/ghidra_11.3_PUBLIC (or your actual path)
 ```
 
 4. **Test it works:**
 
 ```bash
-ghidra-rpc doctor
-# Should show:
-#   ✓ Ghidra installation directory
-#   ✓ analyzeHeadless
-#   ✓ Project directory
-```
-
-**Done!** Skip to "After installation" section below.
-
----
-
-### Option B: ghidra-cli (Rust-based, original tool you linked)
-
-**Prerequisites:**
-- Ghidra 10.0+ installed
-- Java 17+
-- Rust 1.70+ toolchain
-
-**Steps:**
-
-1. **Install Rust (if not already installed):**
-
-```bash
-# In Git Bash:
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source ~/.cargo/env
-```
-
-2. **Set GHIDRA_INSTALL_DIR:**
-
-```bash
-echo 'export GHIDRA_INSTALL_DIR="/c/ghidra_11.3_PUBLIC"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-3. **Clone and build ghidra-cli:**
-
-```bash
-cd ~/
-git clone https://github.com/akiselev/ghidra-cli.git
-cd ghidra-cli
-cargo install --path .
-
-# Verify:
 ghidra doctor
+# Should show:
+#   ✓ Ghidra installation found
+#   ✓ analyzeHeadless executable found
+#   ✓ Java runtime found
 ```
+
+**Paste here:** The output of `ghidra doctor` so Agent can confirm it's working.
 
 ---
 
-## After installation (either option)
+## After successful installation
 
-**Paste here which option you chose** and the output of the doctor/version check command.
+Agent will write automated Ghidra scripts that you run with simple commands like:
 
-Agent will then write automation scripts for your chosen CLI tool!
+```bash
+cd ~/Final-Fantasy-7-Modding
+python scripts/ghidra/analyze_field_bin.py
+```
+
+This will:
+- Import FIELD.BIN into Ghidra automatically
+- Run analysis
+- Extract functions, symbols, control flow to JSON
+- Output to `workspace/ghidra-analysis/field-functions.json`
+- You commit the JSON (no raw game code)
+- Agent can query it in future sessions!
 
 ## Why this matters
 
