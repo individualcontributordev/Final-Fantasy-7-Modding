@@ -50,9 +50,9 @@ print('Wrote workspace/tmp/LOST2-d2-pristine.dec')
    - Open Ghidra
    - File → Import File → Browse to `workspace/tmp/LOST2-d2-pristine.dec`
    - Format: **Raw Binary**
-   - Language: **Data:LE:8:default** (NOT MIPS — field scripts are bytecode)
+   - Language: **MIPS:LE:32:default** (same as you used before)
    - Base address: `0x00000000`
-   - Click OK → Analyze with default settings
+   - Click OK → Skip analysis (we only need to view bytes, not disassemble)
 
 4. **Navigate to init/0 script:**
    - Navigation → Go To → `0x434` (this is where init/0 starts)
