@@ -264,3 +264,24 @@ git push
 Agent can then query the JSON files in future sessions for accurate patching!
 
 See `docs/06-ghidra-automation.md` for full workflow documentation.
+
+
+
+➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
+======================================================================
+FF7 FIELD.BIN Ghidra Analysis
+======================================================================
+Checking prerequisites...
+✅ FIELD.BIN.dec found (264,008 bytes)
+✅ ghidra-cli available
+
+======================================================================
+Analysis complete!
+======================================================================
+
+Structured metadata written to: D:\projects\Final-Fantasy-7-Modding\workspace\ghidra-analysis/
+
+Next steps:
+  1. Review the JSON files
+  2. Commit to repo: git add workspace/ghidra-analysis/
+  3. Agent can now query game structure!
