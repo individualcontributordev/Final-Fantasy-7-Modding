@@ -1,96 +1,130 @@
-# INSTRUCTIONS — Export FIELD.BIN from Ghidra for Agent analysis
+# INSTRUCTIONS — Set up automated Ghidra analysis (Windows + Git Bash)
 
 ## What this is
 
-Creating a proof-of-concept workflow where:
-1. You export decompiled FIELD.BIN from Ghidra (stays local, gitignored)
-2. You run a parser script that extracts structured metadata
-3. You commit the structured output (no raw game code)
-4. Agent can read the metadata in future sessions for faster modding
+Setting up a Ghidra CLI tool so Agent can write automated scripts that:
+1. Import game files into Ghidra
+2. Run analysis automatically
+3. Extract structured metadata (functions, symbols, control flow)
+4. Output to JSON that Agent can read
 
-This will make field script patching much faster - Agent can query function addresses, control flow, and symbols instead of blind pattern-matching.
+You'll run one command instead of 6 manual export steps. Agent gets exact game structure data for faster modding.
 
-## Your task: Export FIELD.BIN from Ghidra (one-time setup)
+## Your task: Install Ghidra CLI tool (one-time setup)
+
+**Choose ONE option below** (I recommend Option A for Windows + Git Bash):
+
+### Option A: ghidra-rpc (Python-based, recommended for Windows)
 
 **Prerequisites:**
-- Ghidra installed
-- FIELD.BIN already decompressed
+- Ghidra 11.0+ installed on Windows
+- Python 3.11+ (check: `python --version` in Git Bash)
+- Java 17+ (check: `java --version`)
 
 **Steps:**
 
-1. **Decompress FIELD.BIN if you haven't already:**
+1. **Install uv (Python package installer):**
 
 ```bash
-cd ~/Final-Fantasy-7-Modding
-python scripts/decompress_gzipps.py \
-  workspace/iso-extract/FIELD.BIN \
-  workspace/iso-extract/FIELD.BIN.dec
+# In Git Bash on your Windows Ghidra machine:
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Close and reopen Git Bash after install
 ```
 
-2. **Import FIELD.BIN into Ghidra:**
-   - Open Ghidra → New Project (or use existing)
-   - File → Import File → Browse to `workspace/iso-extract/FIELD.BIN.dec`
-   - Format: **Raw Binary**
-   - Language: **MIPS:LE:32:default**
-   - Base address: **`0x800A0000`** (US FIELD.BIN module base)
-   - Click OK
-
-3. **Let Ghidra analyze:**
-   - Click "Yes" when prompted to analyze
-   - Wait for auto-analysis to complete (may take 5-10 minutes)
-   - Check status in bottom-right corner
-
-4. **Export the full listing:**
-   - File → Export Program
-   - Format: Choose the best text-based option (HTML, Text, or C/C++)
-   - Output file: `workspace/ghidra-exports/FIELD.BIN.listing.txt`
-     (create the `ghidra-exports` directory if it doesn't exist)
-   - Include: Everything (full program)
-   - Click OK
-   - **Note:** This file will be large and is gitignored - stays local only
-
-5. **Export functions list:**
-   - Window → Functions (or press Ctrl+F to open Functions window)
-   - Select All (Ctrl+A)
-   - Right-click → Export → CSV
-   - Save as: `workspace/ghidra-exports/FIELD.BIN.functions.csv`
-
-6. **Export symbol table:**
-   - Window → Symbol Table
-   - Right-click in the table → Export → CSV
-   - Save as: `workspace/ghidra-exports/FIELD.BIN.symbols.csv`
-
-7. **Verify exports exist:**
+2. **Set GHIDRA_INSTALL_DIR environment variable:**
 
 ```bash
-cd ~/Final-Fantasy-7-Modding
-mkdir -p workspace/ghidra-exports
-ls -lh workspace/ghidra-exports/
+# Find your Ghidra install directory (contains ghidraRun.bat)
+# Example: C:/ghidra_11.3_PUBLIC
+
+# Add to ~/.bashrc (create if doesn't exist):
+echo 'export GHIDRA_INSTALL_DIR="/c/ghidra_11.3_PUBLIC"' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify:
+echo $GHIDRA_INSTALL_DIR
+# Should print: /c/ghidra_11.3_PUBLIC (or your path)
+```
+
+3. **Clone and install ghidra-rpc:**
+
+```bash
+cd ~/
+git clone https://github.com/cellebrite-labs/ghidra-rpc.git
+cd ghidra-rpc
+uv tool install .
+
+# Verify:
+ghidra-rpc --version
+# Should print: ghidra-rpc, version 0.1.0
+```
+
+4. **Test it works:**
+
+```bash
+ghidra-rpc doctor
 # Should show:
-#   FIELD.BIN.listing.txt (large file)
-#   FIELD.BIN.functions.csv
-#   FIELD.BIN.symbols.csv
+#   ✓ Ghidra installation directory
+#   ✓ analyzeHeadless
+#   ✓ Project directory
 ```
 
-8. **Paste here the first 30 lines** of `FIELD.BIN.listing.txt` so Agent can see the format and update the parser script.
+**Done!** Skip to "After installation" section below.
 
-## After you paste the sample
+---
 
-Agent will:
-1. Update `scripts/ghidra/parse_field_listing.py` to parse your listing format
-2. You'll run: `python scripts/ghidra/parse_field_listing.py`
-3. It will output to: `workspace/ghidra-analysis/field-functions.json`
-4. You commit and push that JSON file
-5. Agent can now query FIELD.BIN structure in future sessions!
+### Option B: ghidra-cli (Rust-based, original tool you linked)
+
+**Prerequisites:**
+- Ghidra 10.0+ installed
+- Java 17+
+- Rust 1.70+ toolchain
+
+**Steps:**
+
+1. **Install Rust (if not already installed):**
+
+```bash
+# In Git Bash:
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+```
+
+2. **Set GHIDRA_INSTALL_DIR:**
+
+```bash
+echo 'export GHIDRA_INSTALL_DIR="/c/ghidra_11.3_PUBLIC"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+3. **Clone and build ghidra-cli:**
+
+```bash
+cd ~/
+git clone https://github.com/akiselev/ghidra-cli.git
+cd ghidra-cli
+cargo install --path .
+
+# Verify:
+ghidra doctor
+```
+
+---
+
+## After installation (either option)
+
+**Paste here which option you chose** and the output of the doctor/version check command.
+
+Agent will then write automation scripts for your chosen CLI tool!
 
 ## Why this matters
 
-Currently when patching field code, Agent has to:
-- Guess where functions are
-- Pattern-match blind through bytecode
-- Ask you to check addresses in Ghidra
+**Before (manual):**
+- You: manually export from Ghidra (6+ steps)
+- Agent: pattern-matches blind, guesses addresses
+- Slow, error-prone
 
-After this workflow:
-- Agent reads `field-functions.json` directly
-- Knows exact addresses, function sizes, call graphs
-- Patches with confidence, not guesswork
+**After (automated):**
+- You: run one command Agent writes
+- Agent: reads exact structure from JSON
+- Fast, accurate patches
