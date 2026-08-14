@@ -304,3 +304,19 @@ error: unexpected argument 'D:\projects\Final-Fantasy-7-Modding\workspace\iso-ex
 Usage: ghidra analyze [OPTIONS]
 
 For more information, try '--help'.
+
+
+
+➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
+======================================================================
+FF7 FIELD.BIN Ghidra Analysis
+======================================================================
+Checking prerequisites...
+✅ FIELD.BIN.dec found (264,008 bytes)
+✅ ghidra-cli available
+
+Running Ghidra script → field-functions.json...
+  Importing FIELD.BIN.dec into Ghidra...
+❌ Import failed:
+Initializing project (importing D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\FIELD.BIN.dec)...
+Error: Ghidra import did not report success
