@@ -48,6 +48,9 @@ which ghidra
 # Should print: /c/Users/YourName/ghidra-cli/ghidra
 ```
 
+➜  Final-Fantasy-7-Modding git:(main) which ghidra
+/d/ghidra-cli-v0.2.2/ghidra
+
 3. **Set GHIDRA_INSTALL_DIR environment variable:**
 
 ```bash
@@ -66,6 +69,9 @@ echo $GHIDRA_INSTALL_DIR
 # Should print your Ghidra path
 ```
 
+➜  Final-Fantasy-7-Modding git:(main) ✗ echo $GHIDRA_INSTALL_DIR
+/d/ghidra-cli-v0.2.2
+
 4. **Test it works:**
 
 ```bash
@@ -76,6 +82,30 @@ ghidra doctor
 #   ✓ Java runtime found
 # (or similar success messages)
 ```
+
+➜  Final-Fantasy-7-Modding git:(main) ✗ ghidra doctor
+Ghidra CLI Doctor
+=================
+
+Checking Ghidra installation... OK
+  Location: D:/ghidra-cli-v0.2.2
+  analyzeHeadless: NOT FOUND
+
+Checking Java (full JDK 21+)... OK
+  JDK 21 at C:/Users/David/.sdkman/candidates/java/current (selected via JAVA_HOME)
+
+Checking bridge script compiles... FAILED
+  No Ghidra jars found to compile against
+
+Checking project directory... OK
+  Location: C:\Users\David\AppData\Local\ghidra-cli\projects
+  Exists: yes
+
+Config file... OK
+  Location: C:\Users\David\AppData\Roaming\ghidra-cli\config.yaml
+  Exists: no
+
+Done!
 
 5. **Report back:**
 
