@@ -155,3 +155,27 @@ This will:
 - You: run one command Agent writes
 - Agent: reads exact structure from JSON
 - Fast, accurate patches
+
+
+➜  Final-Fantasy-7-Modding git:(main) ghidra doctor
+Ghidra CLI Doctor
+=================
+
+Checking Ghidra installation... OK
+  Location: D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC
+  analyzeHeadless: OK
+
+Checking Java (full JDK 21+)... OK
+  JDK 21 at C:/Users/David/.sdkman/candidates/java/current (selected via JAVA_HOME)
+
+Checking bridge script compiles... OK
+
+Checking project directory... OK
+  Location: C:\Users\David\AppData\Local\ghidra-cli\projects
+  Exists: yes
+
+Config file... OK
+  Location: C:\Users\David\AppData\Roaming\ghidra-cli\config.yaml
+  Exists: no
+
+Done!
