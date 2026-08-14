@@ -51,16 +51,17 @@ print('Wrote workspace/tmp/LOST2-d2-pristine.dec')
    - File → Import File → Browse to `workspace/tmp/LOST2-d2-pristine.dec`
    - Format: **Raw Binary**
    - Language: **MIPS:LE:32:default**
-   - Base address: **`0x800A0000`** (same as FIELD.BIN for consistency)
-   - Click OK → Analyze with defaults if prompted (enables disassembly if needed)
+   - Base address: **`0x00000000`** (file offsets match addresses directly)
+   - Click OK → Skip analysis (field scripts are bytecode, not MIPS - decompiler won't work)
+   - **Note:** The decompiler won't show code because these are script data bytes, not MIPS instructions
 
 4. **Navigate to init/0 script:**
-   - Navigation → Go To → `0x800A0434` (base `0x800A0000` + file offset `0x434`)
+   - Navigation → Go To → `0x434` (this is the file offset where init/0 starts)
    - You should see bytes: `43 00 14 30 84 04 09 05 f0 00 ...`
 
 5. **Select script region for export:**
-   - Click at address `0x800A0434`
-   - Shift+Click at address `0x800A04F0` (selects ~188 bytes covering the full init/0 script)
+   - Click at address `0x434`
+   - Shift+Click at address `0x4F0` (selects ~188 bytes covering the full init/0 script)
 
 6. **Export the selection:**
    - File → Export Program
