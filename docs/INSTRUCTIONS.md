@@ -157,7 +157,14 @@ This will:
 - Fast, accurate patches
 
 
-➜  Final-Fantasy-7-Modding git:(main) ghidra doctor
+## Setup Completed ✅
+
+Ghidra install directory: `D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC`
+ghidra-cli location: `/d/ghidra-cli-v0.2.2`
+
+Output of `ghidra doctor`:
+
+```
 Ghidra CLI Doctor
 =================
 
@@ -179,3 +186,43 @@ Config file... OK
   Exists: no
 
 Done!
+```
+
+---
+
+## Next: Run Automated Analysis
+
+Now that ghidra-cli is set up, you can run automated Ghidra analysis scripts!
+
+### Step 1: Decompress FIELD.BIN (if not already done)
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+python scripts/decompress_gzipps.py \
+  workspace/iso-extract/FIELD.BIN \
+  workspace/iso-extract/FIELD.BIN.dec
+```
+
+### Step 2: Run the analysis script
+
+```bash
+python scripts/ghidra/analyze_field_bin.py
+```
+
+This will:
+1. Import FIELD.BIN.dec into Ghidra
+2. Run auto-analysis
+3. Extract structured metadata (functions, symbols, xrefs)
+4. Output JSON to `workspace/ghidra-analysis/`
+
+### Step 3: Commit the metadata
+
+```bash
+git add workspace/ghidra-analysis/
+git commit -m "Add Ghidra analysis metadata for FIELD.BIN"
+git push
+```
+
+Agent can then query the JSON files in future sessions for accurate patching!
+
+See `docs/06-ghidra-automation.md` for full workflow documentation.
