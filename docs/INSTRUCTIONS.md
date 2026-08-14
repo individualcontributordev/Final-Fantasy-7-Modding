@@ -28,12 +28,22 @@ python scripts/extract_field_dat.py \
   -o workspace/tmp/LOST2-d2-pristine.DAT
 ```
 
-2. **Decompress it:**
+2. **Decompress it (field maps use LZS compression, not GZIP):**
 
 ```bash
-python scripts/decompress_field_bin.py \
-  workspace/tmp/LOST2-d2-pristine.DAT \
-  workspace/tmp/LOST2-d2-pristine.dec
+cd ~/Final-Fantasy-7-Modding
+python3 -c "
+import sys
+sys.path.insert(0, 'scripts')
+from lzs import decompress_all_with_header
+from pathlib import Path
+
+dat = Path('workspace/tmp/LOST2-d2-pristine.DAT').read_bytes()
+dec = decompress_all_with_header(dat)
+Path('workspace/tmp/LOST2-d2-pristine.dec').write_bytes(dec)
+print(f'Decompressed {len(dat)} -> {len(dec)} bytes')
+print('Wrote workspace/tmp/LOST2-d2-pristine.dec')
+"
 ```
 
 3. **Import into Ghidra:**
