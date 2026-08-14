@@ -265,6 +265,27 @@ Agent can then query the JSON files in future sessions for accurate patching!
 
 See `docs/06-ghidra-automation.md` for full workflow documentation.
 
+---
+
+## DEBUG: ghidra import troubleshooting
+
+If the script fails, try these commands manually to see the actual error:
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+
+# Check ghidra import help
+ghidra import --help
+
+# Try manual import
+ghidra import workspace/iso-extract/FIELD.BIN.dec --project ff7-field-analysis
+
+# Check what happened
+ghidra project list
+```
+
+Paste the output here so Agent can fix the import command.
+
 
 
 ➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
