@@ -23,11 +23,20 @@ This creates a reference export for Agent to verify the patch and for future fie
 ```bash
 cd ~/Final-Fantasy-7-Modding
 python scripts/extract_field_dat.py \
-  workspace/pristine/FINALFANTASY7_D2.bin:FIELD/LOST2.DAT \
+  --from pristine:2 \
+  --field LOST2 \
+  -o workspace/tmp/LOST2-d2-pristine.DAT
+```
+
+2. **Decompress it:**
+
+```bash
+python scripts/decompress_field_bin.py \
+  workspace/tmp/LOST2-d2-pristine.DAT \
   workspace/tmp/LOST2-d2-pristine.dec
 ```
 
-2. **Import into Ghidra:**
+3. **Import into Ghidra:**
    - Open Ghidra
    - File → Import File → Browse to `workspace/tmp/LOST2-d2-pristine.dec`
    - Format: **Raw Binary**
@@ -35,15 +44,15 @@ python scripts/extract_field_dat.py \
    - Base address: `0x00000000`
    - Click OK → Analyze with default settings
 
-3. **Navigate to init/0 script:**
+4. **Navigate to init/0 script:**
    - Navigation → Go To → `0x434` (this is where init/0 starts)
    - You should see bytes: `43 00 14 30 84 04 09 05 f0 00 ...`
 
-4. **Select script region for export:**
+5. **Select script region for export:**
    - Click at offset `0x434`
    - Shift+Click at offset `0x4F0` (selects ~188 bytes covering the full init/0 script)
 
-5. **Export the selection:**
+6. **Export the selection:**
    - File → Export Program
    - Format: **ASCII**
    - Output file: `workspace/ghidra/LOST2-init-script-pristine-d2.txt`
@@ -51,13 +60,13 @@ python scripts/extract_field_dat.py \
    - Include: Addresses and Bytes
    - Click OK
 
-6. **Also export raw hex for verification:**
+7. **Also export raw hex for verification:**
    - With the same range still selected (`0x434` to `0x4F0`)
    - Right-click → Copy Special → **Byte String**
    - Paste into: `workspace/ghidra/LOST2-init-script-pristine-d2.hex`
    - Save the file
 
-7. **Commit the exports:**
+8. **Commit the exports:**
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
