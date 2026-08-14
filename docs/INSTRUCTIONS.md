@@ -194,7 +194,35 @@ Done!
 
 Now that ghidra-cli is set up, you can run automated Ghidra analysis scripts!
 
-### Step 1: Decompress FIELD.BIN (if not already done)
+### Step 1: Extract FIELD.BIN from your ISO
+
+First, check if FIELD.BIN already exists:
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+ls -lh workspace/iso-extract/FIELD.BIN
+```
+
+If it doesn't exist, extract it from your ISO:
+
+```bash
+# Option A: If you have the ISO mounted or extracted to a folder
+# (Replace D:/ff7-disc1 with wherever your ISO contents are)
+cp /d/ff7-disc1/FIELD/FIELD.BIN workspace/iso-extract/
+
+# Option B: Extract directly from ISO file using 7zip
+# (Replace with your actual ISO path)
+7z e workspace/pristine/FINALFANTASY7_D1.iso FIELD/FIELD.BIN -oworkspace/iso-extract/
+```
+
+Verify it extracted:
+
+```bash
+ls -lh workspace/iso-extract/FIELD.BIN
+# Should show a file around 3-4 MB (compressed)
+```
+
+### Step 2: Decompress FIELD.BIN
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
@@ -203,7 +231,9 @@ python scripts/decompress_gzipps.py \
   workspace/iso-extract/FIELD.BIN.dec
 ```
 
-### Step 2: Run the analysis script
+This should create `FIELD.BIN.dec` (around 6-7 MB uncompressed).
+
+### Step 3: Run the analysis script
 
 ```bash
 python scripts/ghidra/analyze_field_bin.py
@@ -215,7 +245,7 @@ This will:
 3. Extract structured metadata (functions, symbols, xrefs)
 4. Output JSON to `workspace/ghidra-analysis/`
 
-### Step 3: Commit the metadata
+### Step 4: Commit the metadata
 
 ```bash
 git add workspace/ghidra-analysis/
