@@ -52,15 +52,19 @@ which ghidra
 
 ```bash
 # Find your Ghidra install directory (folder with ghidraRun.bat)
-# Example: C:/ghidra_11.3_PUBLIC or C:/Program Files/ghidra_11.3_PUBLIC
+# Example: C:/ghidra_11.3_PUBLIC or D:/ghidra_11.3_PUBLIC
 
-# Add to ~/.bashrc:
-echo 'export GHIDRA_INSTALL_DIR="/c/ghidra_11.3_PUBLIC"' >> ~/.bashrc
+# In Git Bash:
+# First, find where Ghidra is installed on your system
+# It's the directory containing ghidraRun.bat
+
+# Then add to ~/.bashrc (replace with your actual Ghidra path):
+echo 'export GHIDRA_INSTALL_DIR="/d/your-ghidra-path-here"' >> ~/.bashrc
 source ~/.bashrc
 
-# Verify:
+# Verify it's set:
 echo $GHIDRA_INSTALL_DIR
-# Should print: /c/ghidra_11.3_PUBLIC (or your actual path)
+# Should print your Ghidra path
 ```
 
 4. **Test it works:**
@@ -71,9 +75,12 @@ ghidra doctor
 #   ✓ Ghidra installation found
 #   ✓ analyzeHeadless executable found
 #   ✓ Java runtime found
+# (or similar success messages)
 ```
 
-**Paste here:** The output of `ghidra doctor` so Agent can confirm it's working.
+**Paste here:**
+1. What's your Ghidra install directory? (the folder with ghidraRun.bat)
+2. The full output of `ghidra doctor` after setting GHIDRA_INSTALL_DIR
 
 ---
 
