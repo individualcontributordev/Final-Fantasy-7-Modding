@@ -75,18 +75,15 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
     script_file.write_text(script_content)
 
     try:
-        # First, ensure the file is imported into a Ghidra project
-        # ghidra-cli will auto-import if not already in project
+        # First, import the file into a Ghidra project
+        print("  Importing FIELD.BIN.dec into Ghidra...")
         import_cmd = [
             "ghidra",
-            "analyze",
-            str(FIELD_BIN_DEC),
-            "--processor", "MIPS:LE:32:default",
-            "--loader", "BinaryLoader",
-            "--loader-baseAddr", BASE_ADDRESS,
+            "import",
+            str(FIELD_BIN_DEC.absolute()),
+            "--project", PROJECT_NAME,
         ]
 
-        print("  Importing/analyzing FIELD.BIN.dec in Ghidra...")
         result = subprocess.run(
             import_cmd,
             capture_output=True,
@@ -95,8 +92,31 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
             check=False
         )
 
+        if result.returncode != 0 and "already exists" not in result.stderr:
+            print(f"❌ Import failed:")
+            print(result.stderr)
+            if result.stdout:
+                print(result.stdout)
+            return False
+
+        # Run analysis
+        print("  Running Ghidra analysis...")
+        analyze_cmd = [
+            "ghidra",
+            "analyze",
+            "--project", PROJECT_NAME,
+        ]
+
+        result = subprocess.run(
+            analyze_cmd,
+            capture_output=True,
+            text=True,
+            cwd=OUTPUT_DIR,
+            check=False
+        )
+
         if result.returncode != 0:
-            print(f"❌ Import/analysis failed:")
+            print(f"❌ Analysis failed:")
             print(result.stderr)
             if result.stdout:
                 print(result.stdout)
@@ -108,7 +128,7 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
             "ghidra",
             "script", "run",
             str(script_file.absolute()),
-            str(FIELD_BIN_DEC),
+            "--project", PROJECT_NAME,
         ]
 
         result = subprocess.run(
