@@ -285,3 +285,22 @@ Next steps:
   1. Review the JSON files
   2. Commit to repo: git add workspace/ghidra-analysis/
   3. Agent can now query game structure!
+
+
+
+   Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
+======================================================================
+FF7 FIELD.BIN Ghidra Analysis
+======================================================================
+Checking prerequisites...
+✅ FIELD.BIN.dec found (264,008 bytes)
+✅ ghidra-cli available
+
+Running Ghidra script → field-functions.json...
+  Importing/analyzing FIELD.BIN.dec in Ghidra...
+❌ Import/analysis failed:
+error: unexpected argument 'D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\FIELD.BIN.dec' found
+
+Usage: ghidra analyze [OPTIONS]
+
+For more information, try '--help'.
