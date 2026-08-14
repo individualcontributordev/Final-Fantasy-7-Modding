@@ -54,13 +54,12 @@ which ghidra
 # Find your Ghidra install directory (folder with ghidraRun.bat)
 # Example: C:/ghidra_11.3_PUBLIC or D:/ghidra_11.3_PUBLIC
 
-# In Git Bash:
-# First, find where Ghidra is installed on your system
-# It's the directory containing ghidraRun.bat
+# Manually add this line to your ~/.zshrc file:
+#   export GHIDRA_INSTALL_DIR="/d/your-ghidra-path-here"
+# (replace with your actual Ghidra installation path)
 
-# Then add to ~/.bashrc (replace with your actual Ghidra path):
-echo 'export GHIDRA_INSTALL_DIR="/d/your-ghidra-path-here"' >> ~/.bashrc
-source ~/.bashrc
+# After editing ~/.zshrc, reload it:
+source ~/.zshrc
 
 # Verify it's set:
 echo $GHIDRA_INSTALL_DIR
@@ -78,9 +77,23 @@ ghidra doctor
 # (or similar success messages)
 ```
 
-**Paste here:**
-1. What's your Ghidra install directory? (the folder with ghidraRun.bat)
-2. The full output of `ghidra doctor` after setting GHIDRA_INSTALL_DIR
+5. **Report back:**
+
+Add a section to this file with:
+
+```markdown
+## Setup completed
+
+Ghidra install directory: /d/your-path-here
+ghidra-cli location: /d/ghidra-cli-v0.2.2
+
+Output of `ghidra doctor`:
+```
+[paste output here]
+```
+```
+
+Then commit and push this file.
 
 ---
 
