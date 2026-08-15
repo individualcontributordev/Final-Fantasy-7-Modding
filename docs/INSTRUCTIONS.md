@@ -30,6 +30,14 @@ ls -la /d/tools/ghidra*/support/analyzeHeadless.bat
 ls -la "$PROGRAMFILES/ghidra"*/support/analyzeHeadless.bat
 ```
 
+➜  Final-Fantasy-7-Modding git:(main) ls -la "D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat"
+ls: cannot access 'D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat': No such file or directory
+➜  Final-Fantasy-7-Modding git:(main) ls -la /c/ghidra*/support/analyzeHeadless.bat
+ls -la /d/tools/ghidra*/support/analyzeHeadless.bat
+ls -la "$PROGRAMFILES/ghidra"*/support/analyzeHeadless.bat
+zsh: no matches found: /c/ghidra*/support/analyzeHeadless.bat
+zsh: no matches found: /d/tools/ghidra*/support/analyzeHeadless.bat
+
 **Paste the path you find.**
 
 ---
