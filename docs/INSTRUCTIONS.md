@@ -43,23 +43,33 @@ Since you already have all the files imported, just run the extraction script on
 
 ## Step 2: Collect all the JSON files
 
+**IMPORTANT:** The script was just fixed to use unique filenames per binary.
+Pull the latest version first:
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+git pull
+```
+
+Then refresh the script in Ghidra Script Manager and re-run on all files.
+
 After running on all files, you should have:
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
 ls -lh scripts/ghidra/*.json
 
-# Expected output:
-# field-functions.json (26 KB) ✅
-# field-symbols.json (4 B) ✅
-# battle-functions.json (new)
-# battle-symbols.json (new)
-# batres-functions.json (new)
-# batres-symbols.json (new)
-# world-functions.json (new)
-# world-symbols.json (new)
-# scus-functions.json (new)
-# scus-symbols.json (new)
+# Expected output (note the unique prefixes):
+# field-bin-functions.json (from FIELD.BIN.dec)
+# field-bin-symbols.json
+# battle-x-functions.json (from BATTLE.X.dec)
+# battle-x-symbols.json
+# batres-x-functions.json (from BATRES.X.dec)
+# batres-x-symbols.json
+# world-bin-functions.json (from WORLD.BIN.dec)
+# world-bin-symbols.json
+# scus-941-63-functions.json (from SCUS_941.63)
+# scus-941-63-symbols.json
 ```
 
 ---
