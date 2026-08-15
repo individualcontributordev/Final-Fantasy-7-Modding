@@ -250,7 +250,7 @@ This should create `FIELD.BIN.dec` (around 264 KB uncompressed).
 
 2. **Create a new project** (if you don't have one):
    - File → New Project → Non-Shared Project
-   - Project name: `ff7-analysis`
+   - Project name: `FF7`
    - Location: anywhere you want (doesn't need to be in the repo)
 
 3. **Import FIELD.BIN.dec:**
