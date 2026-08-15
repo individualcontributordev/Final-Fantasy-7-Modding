@@ -1,124 +1,126 @@
-# INSTRUCTIONS — Debug Ghidra Headless Extraction
+# INSTRUCTIONS — Extract Metadata from All Game Binaries
 
 ## Goal
 
-Get Ghidra's `analyzeHeadless` working so we can batch-extract metadata from all game binaries automatically.
+Extract functions and symbols from all FF7 game binaries in your Ghidra project as JSON files.
 
-## Prerequisites
+## What You Already Have ✅
 
-- Ghidra installed and working in GUI
-- FF7 project with FIELD.BIN.dec already imported and analyzed
-- Git Bash or similar terminal
+Based on your Ghidra project logs, these files are already imported and analyzed:
+- **FIELD.BIN.dec** (186 functions) ✅ metadata extracted
+- **BATTLE.X.dec** (615 functions) ← extract this next
+- **BATRES.X.dec** (18 functions)
+- **WORLD.BIN.dec** (446 functions)
+- **SCUS_941.63** (1145 functions)
+
+**Total: 5 files, ~2410 functions ready to extract!**
 
 ---
 
-## Step 1: Find analyzeHeadless.bat
+## Step 1: Extract metadata in Ghidra GUI
 
-First, locate your Ghidra installation's `analyzeHeadless.bat`:
+Since you already have all the files imported, just run the extraction script on each one:
+
+**For each file:**
+
+1. Open Ghidra GUI
+2. Open your `FF7` project  
+3. Double-click the file (e.g., `BATTLE.X.dec`)
+4. Open Script Manager: **Window → Script Manager** (`Ctrl+Shift+S`)
+5. Browse to: `D:/projects/Final-Fantasy-7-Modding/scripts/ghidra/`
+6. Double-click `ExtractFieldMetadata.java` to run it
+7. Wait 10-30 seconds
+8. Check Console for "Extraction complete!"
+
+**Files to extract (in order of importance):**
+1. ✅ FIELD.BIN.dec (already done - 26 KB JSON)
+2. **BATTLE.X.dec** (battle engine - important for single-disc)
+3. **BATRES.X.dec** (victory fanfare)
+4. **WORLD.BIN.dec** (world map - may have disc checks)
+5. SCUS_941.63 (main executable - optional)
+
+---
+
+## Step 2: Collect all the JSON files
+
+After running on all files, you should have:
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
-ls -la "D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat"
+ls -lh scripts/ghidra/*.json
+
+# Expected output:
+# field-functions.json (26 KB) ✅
+# field-symbols.json (4 B) ✅
+# battle-functions.json (new)
+# battle-symbols.json (new)
+# batres-functions.json (new)
+# batres-symbols.json (new)
+# world-functions.json (new)
+# world-symbols.json (new)
+# scus-functions.json (new)
+# scus-symbols.json (new)
 ```
-
-If that path doesn't exist, find it:
-
-```bash
-# Common locations on Windows:
-ls -la /c/ghidra*/support/analyzeHeadless.bat
-ls -la /d/tools/ghidra*/support/analyzeHeadless.bat
-ls -la "$PROGRAMFILES/ghidra"*/support/analyzeHeadless.bat
-```
-
-➜  Final-Fantasy-7-Modding git:(main) ls -la "D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat"
-ls: cannot access 'D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat': No such file or directory
-➜  Final-Fantasy-7-Modding git:(main) ls -la /c/ghidra*/support/analyzeHeadless.bat
-ls -la /d/tools/ghidra*/support/analyzeHeadless.bat
-ls -la "$PROGRAMFILES/ghidra"*/support/analyzeHeadless.bat
-zsh: no matches found: /c/ghidra*/support/analyzeHeadless.bat
-zsh: no matches found: /d/tools/ghidra*/support/analyzeHeadless.bat
-
-**Paste the path you find.**
 
 ---
 
-## Step 2: Test analyzeHeadless directly
-
-Once you have the path, test it with a simple command:
+## Step 3: Copy to workspace
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
+mkdir -p workspace/ghidra-analysis
 
-# Replace D:/tools/ghidra_12.1_PUBLIC with YOUR actual Ghidra path
-"D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat" --help
+# Copy all JSON files
+cp scripts/ghidra/*-functions.json workspace/ghidra-analysis/
+cp scripts/ghidra/*-symbols.json workspace/ghidra-analysis/
+
+# Verify
+ls -lh workspace/ghidra-analysis/
 ```
-
-**What happens?**
-- ✅ Shows help text → Good!
-- ❌ Hangs → Ghidra installation issue
-- ❌ "command not found" → Wrong path
-
-**Paste the output.**
 
 ---
 
-## Step 3: List programs in your FF7 project
+## Step 4: Commit the metadata
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
+git add workspace/ghidra-analysis/
+git commit -m "Add Ghidra metadata for all game binaries
 
-# Replace with your actual Ghidra path and project location
-"D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat" \
-  "D:/your-ghidra-projects-dir/" \
-  FF7 \
-  -process / \
-  -noanalysis
+Extracted functions and symbols from:
+- FIELD.BIN.dec (186 functions)
+- BATTLE.X.dec (615 functions)
+- BATRES.X.dec (18 functions)
+- WORLD.BIN.dec (446 functions)
+- SCUS_941.63 (1145 functions)
+
+Total: ~2410 functions across 5 core modules.
+Agent can now query complete game structure."
+git push
 ```
-
-**Expected:** Should list "FIELD.BIN.dec" and exit.
-
-**Paste what happens:**
-- Does it print the program name?
-- Does it hang?
-- Any errors?
 
 ---
 
-## Step 4: Run extraction script on FIELD.BIN.dec
+## Step 5: Paste evidence
 
-If Step 3 worked, try running the extraction script:
+Once committed, paste:
 
 ```bash
-cd ~/Final-Fantasy-7-Modding
-
-# Replace paths as needed
-"D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat" \
-  "D:/your-ghidra-projects-dir/" \
-  FF7 \
-  -process FIELD.BIN.dec \
-  -postScript "D:/projects/Final-Fantasy-7-Modding/scripts/ghidra/ExtractFieldMetadata.java" \
-  -noanalysis
+git log -1 --stat
+ls -lh workspace/ghidra-analysis/
 ```
 
-**Expected:** Should run the script and create JSON files.
-
-**What happens:**
-- Does it complete?
-- Does it hang? (If so, **Ctrl+C after 30 seconds** and paste output)
-- Any errors?
-
-**Paste the full output.**
+✅ **Done!** Agent now has complete metadata for the entire FF7 PSX engine.
 
 ---
 
-## Step 5: Paste evidence and we'll fix it
+## Why This Matters
 
-Once you've run Steps 1-4 and pasted the output, Agent will:
-1. Identify exactly why it's hanging
-2. Fix the script or workflow
-3. Get batch extraction working
+With metadata for all these files, Agent can:
+- Find all disc-related code across all modules
+- Map cross-module calls (FIELD→BATTLE, BATRES→BATTLE, etc.)
+- Identify hardcoded addresses for patching
+- Plan new features (button combos, debug menus, etc.)
+- Verify no disc checks remain in single-disc mod
 
-Then we can extract all 10+ game files automatically!
-
-
-
+**Files extracted = complete game logic database!**
