@@ -109,7 +109,8 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
             capture_output=True,
             text=True,
             cwd=OUTPUT_DIR,
-            check=False
+            check=False,
+            timeout=300  # 5 minute timeout to prevent infinite hang
         )
 
         if result.returncode != 0:
@@ -118,6 +119,19 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
             if result.stdout:
                 print(result.stdout)
             return False
+    except subprocess.TimeoutExpired:
+        print(f"❌ Script timed out after 5 minutes")
+        print("This usually means:")
+        print("  - Ghidra bridge failed to connect")
+        print("  - The extraction script is stuck")
+        print("\nTry these fixes:")
+        print("  1. Make sure Ghidra GUI is completely closed")
+        print("  2. Kill any java.exe processes in Task Manager")
+        print("  3. Re-run the script")
+        return False
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        return False
 
         # Check output was created
         if not output_file.exists():
