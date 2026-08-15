@@ -288,22 +288,37 @@ This should create `FIELD.BIN.dec` (around 264 KB uncompressed).
 
 Now that FIELD.BIN.dec is configured in Ghidra, you can extract metadata automatically.
 
-#### Step 4: Run the extraction script
+#### Step 4: Run the extraction script in Ghidra
 
-```bash
-cd ~/Final-Fantasy-7-Modding
-python scripts/ghidra/analyze_field_bin.py
-```
+1. **Open Ghidra GUI** (if not already open)
+2. **Open your FF7 project**
+3. **Open FIELD.BIN.dec** (double-click it)
+4. **Open Script Manager**: Window → Script Manager (or press `Ctrl+Shift+S`)
+5. **Navigate to the script**:
+   - In Script Manager, click the folder icon at the top-left
+   - Browse to: `<your-repo>/Final-Fantasy-7-Modding/scripts/ghidra/`
+   - You should see `extract_field_metadata.py`
+6. **Run the script**:
+   - Double-click `extract_field_metadata.py` in the Script Manager
+   - Watch the Console window at the bottom for progress
+   - Should take 10-30 seconds
+7. **Check the output**:
+   - The script will print file locations when done
+   - Look for: `field-functions.json` and `field-symbols.json`
+   - They're saved in `scripts/ghidra/` directory
 
-This will:
-1. Connect to your Ghidra project
-2. Extract functions (names, addresses, sizes, callers)
-3. Extract symbols (labels, global variables)
-4. Output JSON to `workspace/ghidra-analysis/`
+8. **Copy to workspace**:
+   ```bash
+   cd ~/Final-Fantasy-7-Modding
+   cp scripts/ghidra/field-*.json workspace/ghidra-analysis/
+   ```
+
+9. **Close Ghidra GUI**
 
 #### Step 5: Commit the metadata
 
 ```bash
+cd ~/Final-Fantasy-7-Modding
 git add workspace/ghidra-analysis/
 git commit -m "Add Ghidra analysis metadata for FIELD.BIN"
 git push
