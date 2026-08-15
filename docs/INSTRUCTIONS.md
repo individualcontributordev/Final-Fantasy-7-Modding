@@ -48,3 +48,15 @@ git push
 ```
 
 ✅ **Done!** Agent can now query these JSON files for accurate modding work.
+
+
+> Unable to load script: extract_field_metadata.py
+>   detail: Ghidra was not started with PyGhidra. Python is not available
+ExtractFieldMetadata.java:24: error: cannot find symbol
+        String scriptDir = getScriptFile().getParent();
+                           ^
+  symbol:   method getScriptFile()
+  location: class ExtractFieldMetadata
+skipping D:\projects\Final-Fantasy-7-Modding\scripts\ghidra\ExtractFieldMetadata.java
+> Unable to load script: ExtractFieldMetadata.java
+>   detail: The class could not be found. It must be the public class of the .java file: ExtractFieldMetadata not found by acfab9cb [2]
