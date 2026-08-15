@@ -1,124 +1,116 @@
-# INSTRUCTIONS — Extract FF7 Metadata from Ghidra
+# INSTRUCTIONS — Debug Ghidra Headless Extraction
 
 ## Goal
 
-Extract FIELD.BIN functions and symbols from Ghidra as JSON files so Agent can query game structure for modding work.
+Get Ghidra's `analyzeHeadless` working so we can batch-extract metadata from all game binaries automatically.
 
-## Prerequisites (already done ✅)
+## Prerequisites
 
-- Ghidra 12.1+ installed
-- Java 17+
-- FF7 Ghidra project created with FIELD.BIN.dec imported and analyzed
+- Ghidra installed and working in GUI
+- FF7 project with FIELD.BIN.dec already imported and analyzed
+- Git Bash or similar terminal
 
 ---
 
-## Extract Metadata from Ghidra
+## Step 1: Find analyzeHeadless.bat
 
-### Step 1: Run the extraction script in Ghidra
-
-1. Open Ghidra GUI
-2. Open your `FF7` project
-3. Double-click `FIELD.BIN.dec` to open it
-4. Open Script Manager: **Window → Script Manager** (or `Ctrl+Shift+S`)
-5. In Script Manager, click the folder icon (top-left) and browse to:
-   ```
-   <your-repo-path>/Final-Fantasy-7-Modding/scripts/ghidra/
-   ```
-6. Double-click `ExtractFieldMetadata.java` to run it
-7. Watch the Console window (bottom of Ghidra) for progress
-8. Should complete in 10-30 seconds
-9. Output files are saved to `scripts/ghidra/`:
-   - `field-functions.json`
-   - `field-symbols.json`
-
-### Step 2: Copy files to workspace
+First, locate your Ghidra installation's `analyzeHeadless.bat`:
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
-mkdir -p workspace/ghidra-analysis
-cp scripts/ghidra/field-*.json workspace/ghidra-analysis/
+ls -la "D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat"
 ```
 
-### Step 3: Commit the metadata
+If that path doesn't exist, find it:
 
 ```bash
-git add workspace/ghidra-analysis/
-git commit -m "Add Ghidra metadata for FIELD.BIN"
-git push
+# Common locations on Windows:
+ls -la /c/ghidra*/support/analyzeHeadless.bat
+ls -la /d/tools/ghidra*/support/analyzeHeadless.bat
+ls -la "$PROGRAMFILES/ghidra"*/support/analyzeHeadless.bat
 ```
 
-✅ **Done!** Agent can now query these JSON files for accurate modding work.
+**Paste the path you find.**
 
+---
 
-> Unable to load script: extract_field_metadata.py
->   detail: Ghidra was not started with PyGhidra. Python is not available
-ExtractFieldMetadata.java:24: error: cannot find symbol
-        String scriptDir = getScriptFile().getParent();
-                           ^
-  symbol:   method getScriptFile()
-  location: class ExtractFieldMetadata
-skipping D:\projects\Final-Fantasy-7-Modding\scripts\ghidra\ExtractFieldMetadata.java
-> Unable to load script: ExtractFieldMetadata.java
->   detail: The class could not be found. It must be the public class of the .java file: ExtractFieldMetadata not found by acfab9cb [2]
+## Step 2: Test analyzeHeadless directly
 
+Once you have the path, test it with a simple command:
 
-> Unable to load script: extract_field_metadata.py
->   detail: Ghidra was not started with PyGhidra. Python is not available
-ExtractFieldMetadata.java:24: error: cannot find symbol
-        String scriptDir = getScriptFile().getParent();
-                           ^
-  symbol:   method getScriptFile()
-  location: class ExtractFieldMetadata
-skipping D:\projects\Final-Fantasy-7-Modding\scripts\ghidra\ExtractFieldMetadata.java
-> Unable to load script: ExtractFieldMetadata.java
->   detail: The class could not be found. It must be the public class of the .java file: ExtractFieldMetadata not found by acfab9cb [2]
-ExtractFieldMetadata.java:25: error: cannot find symbol
-        String scriptDir = sourceFile.getParent();
-                                     ^
-  symbol:   method getParent()
-  location: variable sourceFile of type generic.jar.ResourceFile
-skipping D:\projects\Final-Fantasy-7-Modding\scripts\ghidra\ExtractFieldMetadata.java
-> Unable to load script: ExtractFieldMetadata.java
->   detail: The class could not be found. It must be the public class of the .java file: ExtractFieldMetadata not found by acfab9cb [3]
+```bash
+cd ~/Final-Fantasy-7-Modding
 
+# Replace D:/tools/ghidra_12.1_PUBLIC with YOUR actual Ghidra path
+"D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat" --help
+```
 
+**What happens?**
+- ✅ Shows help text → Good!
+- ❌ Hangs → Ghidra installation issue
+- ❌ "command not found" → Wrong path
 
-.bat file to run ghidra
+**Paste the output.**
 
-:: ###
-:: IP: GHIDRA
-::
-:: Licensed under the Apache License, Version 2.0 (the "License");
-:: you may not use this file except in compliance with the License.
-:: You may obtain a copy of the License at
-::
-::      http://www.apache.org/licenses/LICENSE-2.0
-::
-:: Unless required by applicable law or agreed to in writing, software
-:: distributed under the License is distributed on an "AS IS" BASIS,
-:: WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-:: See the License for the specific language governing permissions and
-:: limitations under the License.
-:: ##
-:: Ghidra launch
+---
 
-@echo off
-setlocal
+## Step 3: List programs in your FF7 project
 
-:: Optionally override the default Java heap memory, which is typically 1/4 of system RAM.
-:: Supported values are of the regular expression form "\d+[gGmMkK]", allowing the value to be 
-:: specified in gigabytes, megabytes, or kilobytes (for example: 8G, 4096m, etc).
-set MAXMEM_DEFAULT=
+```bash
+cd ~/Final-Fantasy-7-Modding
 
-:: Allow the above MAXMEM_DEFAULT to be overridden by externally set environment variables
-:: - GHIDRA_MAXMEM: Desired maximum heap memory for all Ghidra instances
-:: - GHIDRA_GUI_MAXMEM: Desired maximum heap memory only for Ghidra GUI instances
-if not defined GHIDRA_MAXMEM set "GHIDRA_MAXMEM=%MAXMEM_DEFAULT%"
-if not defined GHIDRA_GUI_MAXMEM set "GHIDRA_GUI_MAXMEM=%GHIDRA_MAXMEM%"
+# Replace with your actual Ghidra path and project location
+"D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat" \
+  "D:/your-ghidra-projects-dir/" \
+  FF7 \
+  -process / \
+  -noanalysis
+```
 
-:: Apply Java options from externally set environment variables
-set VMARG_LIST=%GHIDRA_JAVA_OPTIONS% %GHIDRA_GUI_JAVA_OPTIONS%
+**Expected:** Should list "FIELD.BIN.dec" and exit.
 
-call "%~dp0support\launch.bat" bg jdk Ghidra "%GHIDRA_GUI_MAXMEM%" "%VMARG_LIST%" ghidra.GhidraRun %*
+**Paste what happens:**
+- Does it print the program name?
+- Does it hang?
+- Any errors?
+
+---
+
+## Step 4: Run extraction script on FIELD.BIN.dec
+
+If Step 3 worked, try running the extraction script:
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+
+# Replace paths as needed
+"D:/tools/ghidra_12.1_PUBLIC/support/analyzeHeadless.bat" \
+  "D:/your-ghidra-projects-dir/" \
+  FF7 \
+  -process FIELD.BIN.dec \
+  -postScript "D:/projects/Final-Fantasy-7-Modding/scripts/ghidra/ExtractFieldMetadata.java" \
+  -noanalysis
+```
+
+**Expected:** Should run the script and create JSON files.
+
+**What happens:**
+- Does it complete?
+- Does it hang? (If so, **Ctrl+C after 30 seconds** and paste output)
+- Any errors?
+
+**Paste the full output.**
+
+---
+
+## Step 5: Paste evidence and we'll fix it
+
+Once you've run Steps 1-4 and pasted the output, Agent will:
+1. Identify exactly why it's hanging
+2. Fix the script or workflow
+3. Get batch extraction working
+
+Then we can extract all 10+ game files automatically!
+
 
 
