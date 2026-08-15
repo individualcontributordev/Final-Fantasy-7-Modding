@@ -1,136 +1,156 @@
-# INSTRUCTIONS — Extract Metadata from All Game Binaries
+# INSTRUCTIONS — Investigate WORLD.BIN Disc Check
 
-## Goal
+## Context
 
-Extract functions and symbols from all FF7 game binaries in your Ghidra project as JSON files.
+Complete Ghidra metadata extracted from all 5 core FF7 PSX binaries (2,410 functions).
 
-## What You Already Have ✅
+**Analysis result:** Single-disc mod is **functionally complete** except one potential issue in WORLD.BIN.
 
-Based on your Ghidra project logs, these files are already imported and analyzed:
-- **FIELD.BIN.dec** (186 functions) ✅ metadata extracted
-- **BATTLE.X.dec** (615 functions) ← extract this next
-- **BATRES.X.dec** (18 functions)
-- **WORLD.BIN.dec** (446 functions)
-- **SCUS_941.63** (1145 functions)
-
-**Total: 5 files, ~2410 functions ready to extract!**
+See: `docs/findings/2026-08-15-ghidra-metadata-single-disc-analysis.md`
 
 ---
 
-## Step 1: Extract metadata in Ghidra GUI
+## The Question
 
-Since you already have all the files imported, just run the extraction script on each one:
+**Does WORLD.BIN function `FUN_800c5cd4` check disc ID?**
 
-**For each file:**
+- Address: `0x800c5cd4`
+- Size: 1072 bytes
+- Callers: 1
 
-1. Open Ghidra GUI
-2. Open your `FF7` project  
-3. Double-click the file (e.g., `BATTLE.X.dec`)
-4. Open Script Manager: **Window → Script Manager** (`Ctrl+Shift+S`)
-5. Browse to: `D:/projects/Final-Fantasy-7-Modding/scripts/ghidra/`
-6. Double-click `ExtractFieldMetadata.java` to run it
-7. Wait 10-30 seconds
-8. Check Console for "Extraction complete!"
-
-**Files to extract (in order of importance):**
-1. ✅ FIELD.BIN.dec (already done - 26 KB JSON)
-2. **BATTLE.X.dec** (battle engine - important for single-disc)
-3. **BATRES.X.dec** (victory fanfare)
-4. **WORLD.BIN.dec** (world map - may have disc checks)
-5. SCUS_941.63 (main executable - optional)
+If it does, we need to patch it. If not, single-disc mod is done.
 
 ---
 
-## Step 2: Collect all the JSON files
+## Step 1: Open WORLD.BIN in Ghidra
 
-**IMPORTANT:** The script was just fixed to use unique filenames per binary.
-Pull the latest version first:
-
-```bash
-cd ~/Final-Fantasy-7-Modding
-git pull
-```
-
-Then refresh the script in Ghidra Script Manager and re-run on all files.
-
-After running on all files, you should have:
-
-```bash
-cd ~/Final-Fantasy-7-Modding
-ls -lh scripts/ghidra/*.json
-
-# Expected output (note the unique prefixes):
-# field-bin-functions.json (from FIELD.BIN.dec)
-# field-bin-symbols.json
-# battle-x-functions.json (from BATTLE.X.dec)
-# battle-x-symbols.json
-# batres-x-functions.json (from BATRES.X.dec)
-# batres-x-symbols.json
-# world-bin-functions.json (from WORLD.BIN.dec)
-# world-bin-symbols.json
-# scus-941-63-functions.json (from SCUS_941.63)
-# scus-941-63-symbols.json
-```
+1. **Open Ghidra GUI**
+2. **Open your `FF7` project**
+3. **Double-click `WORLD.BIN.dec`**
+4. **Wait for CodeBrowser to load**
 
 ---
 
-## Step 3: Copy to workspace
+## Step 2: Navigate to the function
 
-```bash
-cd ~/Final-Fantasy-7-Modding
-mkdir -p workspace/ghidra-analysis
+1. In CodeBrowser, press **`G`** (Go To...)
+2. Enter: `800c5cd4`
+3. Press Enter
 
-# Copy all JSON files
-cp scripts/ghidra/*-functions.json workspace/ghidra-analysis/
-cp scripts/ghidra/*-symbols.json workspace/ghidra-analysis/
-
-# Verify
-ls -lh workspace/ghidra-analysis/
-```
+You should see the function `FUN_800c5cd4` highlighted.
 
 ---
 
-## Step 4: Commit the metadata
+## Step 3: Analyze the disassembly
 
-```bash
-cd ~/Final-Fantasy-7-Modding
-git add workspace/ghidra-analysis/
-git commit -m "Add Ghidra metadata for all game binaries
+Look for these patterns:
 
-Extracted functions and symbols from:
-- FIELD.BIN.dec (186 functions)
-- BATTLE.X.dec (615 functions)
-- BATRES.X.dec (18 functions)
-- WORLD.BIN.dec (446 functions)
-- SCUS_941.63 (1145 functions)
+### Pattern 1: Disc-ID comparison
 
-Total: ~2410 functions across 5 core modules.
-Agent can now query complete game structure."
-git push
+```mips
+li      v0, 0x1      # Load immediate 1 (disc 1)
+li      v1, 0x2      # Load immediate 2 (disc 2)
+li      v1, 0x3      # Load immediate 3 (disc 3)
+beq     ...          # Branch if equal
+bne     ...          # Branch if not equal
 ```
+
+### Pattern 2: CD-ROM BIOS calls
+
+```mips
+jal     CdControl    # Call CD control
+jal     CdRead2      # Call CD read
+jal     CdStatus     # Call CD status
+```
+
+Look at the **argument registers** (`a0`, `a1`, `a2`, `a3`) to see if disc-specific values are passed.
+
+### Pattern 3: Memory reads from disc-ID location
+
+Known disc-ID addresses from PSX memory map:
+- `0x1F801800` (CD-ROM status register)
+- Custom game variables (check cross-references)
+
+---
+
+## Step 4: Export the disassembly
+
+If you find **ANY** of the above patterns:
+
+1. In CodeBrowser, click the function name `FUN_800c5cd4`
+2. Right-click → **Export Function**
+3. Save as: `~/Desktop/WORLD_FUN_800c5cd4.txt`
 
 ---
 
 ## Step 5: Paste evidence
 
-Once committed, paste:
-
 ```bash
-git log -1 --stat
-ls -lh workspace/ghidra-analysis/
+cd ~/Final-Fantasy-7-Modding
+git pull
+
+# Paste the function disassembly here (or just the relevant lines showing disc checks)
 ```
 
-✅ **Done!** Agent now has complete metadata for the entire FF7 PSX engine.
+**If no disc checks found:** Just reply "No disc checks in WORLD.BIN function"
+
+**If disc checks found:** Attach the exported disassembly and Agent will write a patch script.
 
 ---
 
-## Why This Matters
+## Alternative: Quick grep for disc values
 
-With metadata for all these files, Agent can:
-- Find all disc-related code across all modules
-- Map cross-module calls (FIELD→BATTLE, BATRES→BATTLE, etc.)
-- Identify hardcoded addresses for patching
-- Plan new features (button combos, debug menus, etc.)
-- Verify no disc checks remain in single-disc mod
+If you don't want to read assembly, just search the binary:
 
-**Files extracted = complete game logic database!**
+```bash
+cd ~/Final-Fantasy-7-Modding
+
+# Extract WORLD.BIN to check for hardcoded disc values
+python3 << 'PYEOF'
+import json
+
+# Load WORLD.BIN functions
+with open('scripts/ghidra/world-functions.json') as f:
+    funcs = json.load(f)
+
+# Find the function
+target = next(f for f in funcs if f['address'] == '800c5cd4')
+
+print(f"Function: {target['name']}")
+print(f"Address: {target['address']}")
+print(f"Size: {target['size']} bytes")
+print(f"Callers: {len(target['callers'])}")
+
+if target['callers']:
+    print(f"\nCalled by:")
+    for caller in target['callers']:
+        caller_func = next((f for f in funcs if f['address'] == caller), None)
+        if caller_func:
+            print(f"  {caller_func['name']} @ {caller}")
+
+PYEOF
+```
+
+---
+
+## What Happens Next
+
+**Scenario A: No disc checks**
+→ Single-disc mod is **complete**! Ship it.
+
+**Scenario B: Disc checks found**
+→ Agent writes a patch script similar to `inject_snova_d3_to_d1.py` to neutralize the check.
+
+---
+
+## Summary
+
+The Ghidra metadata **confirms** the single-disc mod is **functionally complete** for:
+- ✅ FIELD.BIN (Ask-for-disc stripped via Makou)
+- ✅ BATTLE.X (SNOVA LBAs patched)
+- ✅ BATRES.X (no disc code)
+- ✅ SCUS_941.63 (only CD BIOS APIs)
+
+**Only unknown:** WORLD.BIN `FUN_800c5cd4`.
+
+Once you investigate this function, we'll know if the single-disc mod needs any final patches.
