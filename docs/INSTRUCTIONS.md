@@ -1,460 +1,50 @@
-# INSTRUCTIONS — Set up automated Ghidra analysis (Windows + Git Bash)
+# INSTRUCTIONS — Extract FF7 Metadata from Ghidra
 
-## What this is
+## Goal
 
-Setting up ghidra-cli so Agent can write automated scripts that:
-1. Import game files into Ghidra
-2. Run analysis automatically
-3. Extract structured metadata (functions, symbols, control flow)
-4. Output to JSON that Agent can read
+Extract FIELD.BIN functions and symbols from Ghidra as JSON files so Agent can query game structure for modding work.
 
-You'll run one command instead of 6 manual export steps. Agent gets exact game structure data for faster modding.
+## Prerequisites (already done ✅)
 
-## Your task: Install ghidra-cli (one-time setup)
-
-**Using pre-built Windows binary** (no Rust/compilation needed):
-
-**Prerequisites:**
-- Ghidra 10.0+ installed on Windows
-- Java 17+ (check: `java --version` in Git Bash)
-
-**Steps:**
-
-1. **Download pre-built Windows binary:**
-
-```bash
-# In Git Bash on your Windows Ghidra machine:
-cd ~/
-mkdir -p ghidra-cli
-cd ghidra-cli
-
-# Download latest release (v0.2.1 as of now):
-curl -L -o ghidra-cli.zip https://github.com/akiselev/ghidra-cli/releases/download/v0.2.1/ghidra-cli-v0.2.1-x86_64-pc-windows-msvc.zip
-
-# Extract:
-unzip ghidra-cli.zip
-# Should create ghidra.exe
-```
-
-2. **Add to PATH:**
-
-```bash
-# Add ghidra-cli directory to PATH in ~/.bashrc:
-echo 'export PATH="$HOME/ghidra-cli:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-
-# Verify it's in PATH:
-which ghidra
-# Should print: /c/Users/YourName/ghidra-cli/ghidra
-```
-
-➜  Final-Fantasy-7-Modding git:(main) which ghidra
-/d/ghidra-cli-v0.2.2/ghidra
-
-3. **Set GHIDRA_INSTALL_DIR environment variable:**
-
-```bash
-# Find your Ghidra install directory (folder with ghidraRun.bat)
-# Example: C:/ghidra_11.3_PUBLIC or D:/ghidra_11.3_PUBLIC
-
-# Manually add this line to your ~/.zshrc file:
-#   export GHIDRA_INSTALL_DIR="/d/your-ghidra-path-here"
-# (replace with your actual Ghidra installation path)
-
-# After editing ~/.zshrc, reload it:
-source ~/.zshrc
-
-# Verify it's set:
-echo $GHIDRA_INSTALL_DIR
-# Should print your Ghidra path
-```
-
-➜  Final-Fantasy-7-Modding git:(main) ✗ echo $GHIDRA_INSTALL_DIR
-/d/ghidra-cli-v0.2.2
-
-4. **Test it works:**
-
-```bash
-ghidra doctor
-# Should show:
-#   ✓ Ghidra installation found
-#   ✓ analyzeHeadless executable found
-#   ✓ Java runtime found
-# (or similar success messages)
-```
-
-➜  Final-Fantasy-7-Modding git:(main) ✗ ghidra doctor
-Ghidra CLI Doctor
-=================
-
-Checking Ghidra installation... OK
-  Location: D:/ghidra-cli-v0.2.2
-  analyzeHeadless: NOT FOUND
-
-Checking Java (full JDK 21+)... OK
-  JDK 21 at C:/Users/David/.sdkman/candidates/java/current (selected via JAVA_HOME)
-
-Checking bridge script compiles... FAILED
-  No Ghidra jars found to compile against
-
-Checking project directory... OK
-  Location: C:\Users\David\AppData\Local\ghidra-cli\projects
-  Exists: yes
-
-Config file... OK
-  Location: C:\Users\David\AppData\Roaming\ghidra-cli\config.yaml
-  Exists: no
-
-Done!
-
-5. **Report back:**
-
-Add a section to this file with:
-
-```markdown
-## Setup completed
-
-Ghidra install directory: /d/your-path-here
-ghidra-cli location: /d/ghidra-cli-v0.2.2
-
-Output of `ghidra doctor`:
-```
-[paste output here]
-```
-```
-
-Then commit and push this file.
+- Ghidra 12.1+ installed
+- Java 17+
+- FF7 Ghidra project created with FIELD.BIN.dec imported and analyzed
 
 ---
 
-## After successful installation
+## Extract Metadata from Ghidra
 
-Agent will write automated Ghidra scripts that you run with simple commands like:
+### Step 1: Run the extraction script in Ghidra
 
-```bash
-cd ~/Final-Fantasy-7-Modding
-python scripts/ghidra/analyze_field_bin.py
-```
-
-This will:
-- Import FIELD.BIN into Ghidra automatically
-- Run analysis
-- Extract functions, symbols, control flow to JSON
-- Output to `workspace/ghidra-analysis/field-functions.json`
-- You commit the JSON (no raw game code)
-- Agent can query it in future sessions!
-
-## Why this matters
-
-**Before (manual):**
-- You: manually export from Ghidra (6+ steps)
-- Agent: pattern-matches blind, guesses addresses
-- Slow, error-prone
-
-**After (automated):**
-- You: run one command Agent writes
-- Agent: reads exact structure from JSON
-- Fast, accurate patches
-
-
-## Setup Completed ✅
-
-Ghidra install directory: `D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC`
-ghidra-cli location: `/d/ghidra-cli-v0.2.2`
-
-Output of `ghidra doctor`:
-
-```
-Ghidra CLI Doctor
-=================
-
-Checking Ghidra installation... OK
-  Location: D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC
-  analyzeHeadless: OK
-
-Checking Java (full JDK 21+)... OK
-  JDK 21 at C:/Users/David/.sdkman/candidates/java/current (selected via JAVA_HOME)
-
-Checking bridge script compiles... OK
-
-Checking project directory... OK
-  Location: C:\Users\David\AppData\Local\ghidra-cli\projects
-  Exists: yes
-
-Config file... OK
-  Location: C:\Users\David\AppData\Roaming\ghidra-cli\config.yaml
-  Exists: no
-
-Done!
-```
-
----
-
-## Next: Set Up Ghidra Analysis (Two Phases)
-
-### Phase 1: One-Time Manual Setup in Ghidra GUI
-
-Raw binaries like FIELD.BIN need initial configuration through Ghidra's GUI.
-You do this once, then the extraction scripts work forever.
-
-#### Step 1: Extract FIELD.BIN from your disc image
-
-First, check if FIELD.BIN already exists:
-
-```bash
-cd ~/Final-Fantasy-7-Modding
-ls -lh workspace/iso-extract/FIELD.BIN
-```
-
-If it doesn't exist, extract it from your disc `.bin` file:
-
-```bash
-# Extract FIELD.BIN from disc 1
-# (Replace workspace/pristine/FINALFANTASY7_D1.bin with your actual disc path)
-python scripts/extract_from_iso.py \
-  workspace/pristine/FINALFANTASY7_D1.bin \
-  FIELD/FIELD.BIN \
-  workspace/iso-extract/FIELD.BIN
-```
-
-If you don't know where your disc `.bin` files are, search for them:
-
-```bash
-# Common locations:
-ls -lh workspace/pristine/*.bin
-ls -lh ~/ff7/*.bin
-ls -lh /d/*.bin
-```
-
-Verify it extracted:
-
-```bash
-ls -lh workspace/iso-extract/FIELD.BIN
-# Should show a file around 3-4 MB (compressed)
-```
-
-#### Step 2: Decompress FIELD.BIN
-
-```bash
-cd ~/Final-Fantasy-7-Modding
-python scripts/decompress_gzipps.py \
-  workspace/iso-extract/FIELD.BIN \
-  workspace/iso-extract/FIELD.BIN.dec
-```
-
-This should create `FIELD.BIN.dec` (around 264 KB uncompressed).
-
-#### Step 3: Import FIELD.BIN.dec into Ghidra (one-time setup)
-
-1. **Open Ghidra** (the GUI application, not ghidra-cli)
-
-2. **Create a new project** (if you don't have one):
-   - File → New Project → Non-Shared Project
-   - Project name: `FF7`
-   - Location: anywhere you want (doesn't need to be in the repo)
-
-3. **Import FIELD.BIN.dec:**
-   - File → Import File
-   - Browse to: `workspace/iso-extract/FIELD.BIN.dec`
-   - Click "Select File To Import"
-
-4. **Configure import settings:**
-   - Format: **Raw Binary**
-   - Language: **MIPS:LE:32:default**
-     (Find it by typing "MIPS" in the language search)
-   - Click "Options..." button
-   - Set Base Address: **0x800A0000**
-   - Click OK
-
-5. **Analyze the file:**
-   - When prompted "Would you like to analyze now?", click **Yes**
-   - Use default analysis options (just click "Analyze")
-   - Wait for analysis to complete (watch bottom-right corner)
-   - This may take 1-2 minutes
-
-6. **Verify it worked:**
-   - You should see functions in the Symbol Tree
-   - The Listing window should show disassembly
-   - Search → Memory → search for hex: `B1 CA EE 6C 5A 71 2E 55`
-   - Should find the RNG table (if not, wrong base address or file)
-
-7. **Save and close Ghidra GUI**
-
-✅ **You're done with manual setup!** The file is now configured in Ghidra.
-
----
-
-### Phase 2: Automated Metadata Extraction
-
-Now that FIELD.BIN.dec is configured in Ghidra, you can extract metadata automatically.
-
-#### Step 4: Run the extraction script in Ghidra
-
-1. **Open Ghidra GUI** (if not already open)
-2. **Open your FF7 project**
-3. **Open FIELD.BIN.dec** (double-click it)
-4. **Open Script Manager**: Window → Script Manager (or press `Ctrl+Shift+S`)
-5. **Navigate to the script**:
-   - In Script Manager, click the folder icon at the top-left
-   - Browse to: `<your-repo>/Final-Fantasy-7-Modding/scripts/ghidra/`
-   - You should see `extract_field_metadata.py`
-6. **Run the script**:
-   - Double-click `extract_field_metadata.py` in the Script Manager
-   - Watch the Console window at the bottom for progress
-   - Should take 10-30 seconds
-7. **Check the output**:
-   - The script will print file locations when done
-   - Look for: `field-functions.json` and `field-symbols.json`
-   - They're saved in `scripts/ghidra/` directory
-
-8. **Copy to workspace**:
-   ```bash
-   cd ~/Final-Fantasy-7-Modding
-   cp scripts/ghidra/field-*.json workspace/ghidra-analysis/
+1. Open Ghidra GUI
+2. Open your `FF7` project
+3. Double-click `FIELD.BIN.dec` to open it
+4. Open Script Manager: **Window → Script Manager** (or `Ctrl+Shift+S`)
+5. In Script Manager, click the folder icon (top-left) and browse to:
    ```
+   <your-repo-path>/Final-Fantasy-7-Modding/scripts/ghidra/
+   ```
+6. Double-click `extract_field_metadata.py` to run it
+7. Watch the Console window (bottom of Ghidra) for progress
+8. Should complete in 10-30 seconds
+9. Output files are saved to `scripts/ghidra/`:
+   - `field-functions.json`
+   - `field-symbols.json`
 
-9. **Close Ghidra GUI**
-
-#### Step 5: Commit the metadata
+### Step 2: Copy files to workspace
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
+mkdir -p workspace/ghidra-analysis
+cp scripts/ghidra/field-*.json workspace/ghidra-analysis/
+```
+
+### Step 3: Commit the metadata
+
+```bash
 git add workspace/ghidra-analysis/
-git commit -m "Add Ghidra analysis metadata for FIELD.BIN"
+git commit -m "Add Ghidra metadata for FIELD.BIN"
 git push
 ```
 
-Agent can then query the JSON files in future sessions for accurate patching!
-
-See `docs/06-ghidra-automation.md` for full workflow documentation.
-
----
-
-## DEBUG: ghidra import troubleshooting
-
-If the script fails, try these commands manually to see the actual error:
-
-```bash
-cd ~/Final-Fantasy-7-Modding
-
-# Check ghidra import help
-ghidra import --help
-
-# Try manual import
-ghidra import workspace/iso-extract/FIELD.BIN.dec --project ff7-field-analysis
-
-# Check what happened
-ghidra project list
-```
-
-Paste the output here so Agent can fix the import command.
-
-
-
-➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
-======================================================================
-FF7 FIELD.BIN Ghidra Analysis
-======================================================================
-Checking prerequisites...
-✅ FIELD.BIN.dec found (264,008 bytes)
-✅ ghidra-cli available
-
-======================================================================
-Analysis complete!
-======================================================================
-
-Structured metadata written to: D:\projects\Final-Fantasy-7-Modding\workspace\ghidra-analysis/
-
-Next steps:
-  1. Review the JSON files
-  2. Commit to repo: git add workspace/ghidra-analysis/
-  3. Agent can now query game structure!
-
-
-
-   Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
-======================================================================
-FF7 FIELD.BIN Ghidra Analysis
-======================================================================
-Checking prerequisites...
-✅ FIELD.BIN.dec found (264,008 bytes)
-✅ ghidra-cli available
-
-Running Ghidra script → field-functions.json...
-  Importing/analyzing FIELD.BIN.dec in Ghidra...
-❌ Import/analysis failed:
-error: unexpected argument 'D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\FIELD.BIN.dec' found
-
-Usage: ghidra analyze [OPTIONS]
-
-For more information, try '--help'.
-
-
-
-➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
-======================================================================
-FF7 FIELD.BIN Ghidra Analysis
-======================================================================
-Checking prerequisites...
-✅ FIELD.BIN.dec found (264,008 bytes)
-✅ ghidra-cli available
-
-Running Ghidra script → field-functions.json...
-  Importing FIELD.BIN.dec into Ghidra...
-❌ Import failed:
-Initializing project (importing D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\FIELD.BIN.dec)...
-Error: Ghidra import did not report success
-
-
-
-
-
-Available projects:
-Projects:
-  ff7-field-analysis.rep
-
-
-
-➜  Final-Fantasy-7-Modding git:(main) ✗ python scripts/ghidra/analyze_field_bin.py
-======================================================================
-FF7 FIELD.BIN Ghidra Analysis
-======================================================================
-Checking prerequisites...
-✅ ghidra-cli available
-
-Checking Ghidra project 'ff7-field-analysis'...
-✅ Project 'ff7-field-analysis' found
-
-Running Ghidra script → field-functions.json...
-  Using existing project: ff7-field-analysis
-  Program: FIELD.BIN.dec
-  Running extraction script...
-❌ Script failed:
-Starting Ghidra bridge...
-Error: Ghidra process exited before the bridge became ready: ERROR Abort due to Headless analyzer error: Requested project program file(s) not found: FIELD.BIN.dec (HeadlessAnalyzer) java.io.IOException: Requested project program file(s) not found: FIELD.BIN.dec
-
-➜  Final-Fantasy-7-Modding git:(main) ✗ ghidra program list --project ff7-field-analysis
-Starting Ghidra bridge...
-Error: Ghidra process exited before the bridge became ready: ERROR Abort due to Headless analyzer error: No program files found within specified project folder: / (HeadlessAnalyzer) java.io.IOException: No program files found within specified project folder: /
-
-
-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
-======================================================================
-FF7 FIELD.BIN Ghidra Analysis
-======================================================================
-Checking prerequisites...
-✅ ghidra-cli available
-
-Checking Ghidra project 'FF7'...
-❌ Ghidra project 'FF7' not found
-
-Available projects:
-Projects:
-  ff7-field-analysis.rep
-
-
-⚠️  You need to import FIELD.BIN.dec through Ghidra GUI first!
-See docs/INSTRUCTIONS.md 'Phase 1: One-Time Manual Setup'
-➜  Final-Fantasy-7-Modding git:(main)
+✅ **Done!** Agent can now query these JSON files for accurate modding work.
