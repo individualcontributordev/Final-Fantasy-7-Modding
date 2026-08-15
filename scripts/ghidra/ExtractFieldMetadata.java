@@ -21,20 +21,20 @@ public class ExtractFieldMetadata extends GhidraScript {
 
     @Override
     public void run() throws Exception {
-        // Get script directory from source file
-        String scriptDir = sourceFile.getParent();
+        // Get script directory - use ResourceFile API
+        String scriptDir = sourceFile.getParentFile().getAbsolutePath();
 
         println("FF7 FIELD.BIN Metadata Extraction");
         println("======================================================================");
         println("Output directory: " + scriptDir);
         println("");
-        
+
         // Extract functions
         extractFunctions(scriptDir);
-        
+
         // Extract symbols
         extractSymbols(scriptDir);
-        
+
         println("======================================================================");
         println("Extraction complete!");
         println("");
