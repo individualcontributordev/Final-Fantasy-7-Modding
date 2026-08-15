@@ -1,18 +1,20 @@
-# INSTRUCTIONS — Debug Single-Disc × CSR Breakage
+# INSTRUCTIONS — CSR × Single-Disc Conflict Resolution
 
-## Context
+## Root Cause Found!
 
-You reported: **"build a .bin from pristine d1 and layer on the csr mod, check this bin, it is working as expected, then add the single-disc mod, adding this and the related manip-movies breaks the csr changes"**
+**Problem:** Single-disc layer has **926 conflicts with CSR Disc 1** where it writes different bytes.
 
-I checked both repos and found:
+**Analysis** (see `docs/findings/2026-08-15-csr-single-disc-layer-conflict-analysis.md`):
+- CSR D1 ∩ Single-disc: 926 offsets, **0% same bytes** (100% different)
+- CSR D2 ∩ Single-disc: 15,154 offsets, **95% same bytes** (only 4% different)
 
-✅ **CSR layers have content** (Final-Fantasy-7-CSR):
-- `builder/csr-v0.14.1/layers/disc1.layer.json` - **12.9MB**, 94,148 records
+**Diagnosis:**
+- ✅ Single-disc was built **FROM CSR D2** (95% match proves this)
+- ❌ Single-disc was built **FROM PRISTINE D1** (0% match suggests this)
 
-✅ **Single-disc layers have content** (Final-Fantasy-7-Modding):
-- `builder/single-disc-on-csr-v0.1.33/layers/disc1.layer.json` - **84MB**, 834,218 records
+When `CSR D1 → Single-disc D1` is applied, single-disc **overwrites 926 CSR D1 field edits** with pristine bytes, breaking CSR.
 
-The layers are **NOT** empty in the repos!
+**Ship script check:** `mods/single-disc/scripts/ship_v025b.py` line 183-198 loads `cache/csr/FINALFANTASY7_D1.bin`, so the script **does** use CSR as baseline. But the published layer in `builder/single-disc-on-csr-v0.1.33/` may be from an older build that used pristine D1.
 
 ---
 
