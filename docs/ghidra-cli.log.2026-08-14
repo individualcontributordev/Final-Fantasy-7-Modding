@@ -1,0 +1,98 @@
+2026-08-14T23:55:58.620074Z  INFO ghidra::ghidra::bridge: Importing binary into new project (one-shot)...
+2026-08-14T23:55:58.750227Z  INFO ghidra::ghidra::bridge: Using JDK 21 at C:/Users/David/.sdkman/candidates/java/current (JAVA_HOME)
+2026-08-14T23:55:58.750282Z  INFO ghidra::ghidra::bridge: Ghidra one-shot import command: "D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC\\support\\analyzeHeadless.bat" "C:\\Users\\David\\AppData\\Local\\ghidra-cli\\projects" "ff7-field-analysis" "-import" "D:\\projects\\Final-Fantasy-7-Modding\\workspace\\iso-extract\\FIELD.BIN.dec" "-noanalysis" "-overwrite"
+2026-08-14T23:56:00.319645Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Using log config file: jar:file:/D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+2026-08-14T23:56:00.327145Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Using log file: C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\application.log (LoggingInitialization)  
+2026-08-14T23:56:00.387622Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Loading user preferences: C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\preferences (Preferences)  
+2026-08-14T23:56:00.408951Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Loading previous preferences: C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\preferences (Preferences)  
+2026-08-14T23:56:00.411400Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Searching for classes... (ClassSearcher)  
+2026-08-14T23:56:01.461413Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Ignoring class 'ghidra.app.plugin.core.analysis.MipsPreAnalyzer' from 'C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\Extensions\ghidra_psx_ldr\lib\ghidra_psx_ldr.jar'. Already found at 'D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\MIPS\lib\MIPS.jar'. (ClassSearcher)  
+2026-08-14T23:56:01.467124Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Class search complete (1054 ms) (ClassSearcher)  
+2026-08-14T23:56:01.576002Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+2026-08-14T23:56:01.623465Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+2026-08-14T23:56:01.629083Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Random Number Generator initialization complete: SHA1PRNG (SecureRandomFactory)  
+2026-08-14T23:56:01.630136Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+2026-08-14T23:56:02.166917Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Headless startup complete (2711 ms) (AnalyzeHeadless)  
+2026-08-14T23:56:02.168016Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Class searcher loaded 60 extension points (20 false positives) (ClassSearcher)  
+2026-08-14T23:56:02.358198Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  HEADLESS Script Paths:
+2026-08-14T23:56:02.358221Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+2026-08-14T23:56:02.358226Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+2026-08-14T23:56:02.358230Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+2026-08-14T23:56:02.358233Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+2026-08-14T23:56:02.358237Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+2026-08-14T23:56:02.358240Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+2026-08-14T23:56:02.358279Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+2026-08-14T23:56:02.358287Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+2026-08-14T23:56:02.358291Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\Extensions\ghidra_psx_ldr\ghidra_scripts
+2026-08-14T23:56:02.358294Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+2026-08-14T23:56:02.358297Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+2026-08-14T23:56:02.358301Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+2026-08-14T23:56:02.358304Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+2026-08-14T23:56:02.358307Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+2026-08-14T23:56:02.358310Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+2026-08-14T23:56:02.358313Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+2026-08-14T23:56:02.358316Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+2026-08-14T23:56:02.358320Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+2026-08-14T23:56:02.358323Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+2026-08-14T23:56:02.358326Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+2026-08-14T23:56:02.358330Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+2026-08-14T23:56:02.358333Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+2026-08-14T23:56:02.358336Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\Base\ghidra_scripts (HeadlessAnalyzer)  
+2026-08-14T23:56:02.358599Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  HEADLESS: execution starts (HeadlessAnalyzer)  
+2026-08-14T23:56:02.361851Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Creating project: C:\Users\David\AppData\Local\ghidra-cli\projects\ff7-field-analysis (HeadlessAnalyzer)  
+2026-08-14T23:56:02.471745Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Creating project: C:\Users\David\AppData\Local\ghidra-cli\projects\ff7-field-analysis (DefaultProject)  
+2026-08-14T23:56:02.507734Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  REPORT: Processing input files:  (HeadlessAnalyzer)  
+2026-08-14T23:56:02.507924Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO       project: C:\Users\David\AppData\Local\ghidra-cli\projects\ff7-field-analysis (HeadlessAnalyzer)  
+2026-08-14T23:56:02.510698Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  IMPORTING: file:///D:/projects/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN.dec (HeadlessAnalyzer)  
+2026-08-14T23:56:03.553741Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  No load spec found for import file: FIELD.BIN.dec (ProgramLoader)  
+2026-08-14T23:56:03.554122Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] ERROR The ProgramLoader could not successfully load file:///D:/projects/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN.dec with the provided import parameters. Please ensure that any specified processor/cspec arguments are compatible with the loader that is used during import and try again. (HeadlessAnalyzer)  
+2026-08-14T23:56:03.554615Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] ERROR REPORT: Import failed for file: file:///D:/projects/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN.dec (HeadlessAnalyzer)  
+2026-08-14T23:59:29.674593Z  INFO ghidra::ghidra::bridge: Importing binary into new project (one-shot)...
+2026-08-14T23:59:29.804685Z  INFO ghidra::ghidra::bridge: Using JDK 21 at C:/Users/David/.sdkman/candidates/java/current (JAVA_HOME)
+2026-08-14T23:59:29.804717Z  INFO ghidra::ghidra::bridge: Ghidra one-shot import command: "D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC\\support\\analyzeHeadless.bat" "C:\\Users\\David\\AppData\\Local\\ghidra-cli\\projects" "ff7-field-analysis" "-import" "D:\\projects\\Final-Fantasy-7-Modding\\workspace\\iso-extract\\FIELD.BIN.dec" "-noanalysis" "-overwrite"
+2026-08-14T23:59:31.313384Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Using log config file: jar:file:/D:/ghidra_12.1_PUBLIC/ghidra_12.1_PUBLIC/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+2026-08-14T23:59:31.320735Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Using log file: C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\application.log (LoggingInitialization)  
+2026-08-14T23:59:31.375532Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Loading user preferences: C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\preferences (Preferences)  
+2026-08-14T23:59:31.384806Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Loading previous preferences: C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1.2_PUBLIC\preferences (Preferences)  
+2026-08-14T23:59:31.387199Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Searching for classes... (ClassSearcher)  
+2026-08-14T23:59:32.436647Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Ignoring class 'ghidra.app.plugin.core.analysis.MipsPreAnalyzer' from 'C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\Extensions\ghidra_psx_ldr\lib\ghidra_psx_ldr.jar'. Already found at 'D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\MIPS\lib\MIPS.jar'. (ClassSearcher)  
+2026-08-14T23:59:32.442261Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Class search complete (1053 ms) (ClassSearcher)  
+2026-08-14T23:59:32.551438Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+2026-08-14T23:59:32.602716Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+2026-08-14T23:59:32.604379Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Random Number Generator initialization complete: SHA1PRNG (SecureRandomFactory)  
+2026-08-14T23:59:32.605611Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+2026-08-14T23:59:33.041573Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Headless startup complete (2575 ms) (AnalyzeHeadless)  
+2026-08-14T23:59:33.042590Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Class searcher loaded 60 extension points (20 false positives) (ClassSearcher)  
+2026-08-14T23:59:33.232170Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  HEADLESS Script Paths:
+2026-08-14T23:59:33.232194Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Debug\Debugger-rmi-trace\ghidra_scripts
+2026-08-14T23:59:33.232199Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\PyGhidra\ghidra_scripts
+2026-08-14T23:59:33.232238Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\SystemEmulation\ghidra_scripts
+2026-08-14T23:59:33.232245Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\Atmel\ghidra_scripts
+2026-08-14T23:59:33.232249Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\BSim\ghidra_scripts
+2026-08-14T23:59:33.232252Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\VersionTracking\ghidra_scripts
+2026-08-14T23:59:33.232255Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\GnuDemangler\ghidra_scripts
+2026-08-14T23:59:33.232259Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\PDB\ghidra_scripts
+2026-08-14T23:59:33.232262Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     C:\Users\David\AppData\Roaming\ghidra\ghidra_12.1_PUBLIC\Extensions\ghidra_psx_ldr\ghidra_scripts
+2026-08-14T23:59:33.232265Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\DATA\ghidra_scripts
+2026-08-14T23:59:33.232268Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\Decompiler\ghidra_scripts
+2026-08-14T23:59:33.232271Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\8051\ghidra_scripts
+2026-08-14T23:59:33.232274Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\SwiftDemangler\ghidra_scripts
+2026-08-14T23:59:33.232278Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Debug\Debugger\ghidra_scripts
+2026-08-14T23:59:33.232281Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\FileFormats\ghidra_scripts
+2026-08-14T23:59:33.232284Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\JVM\ghidra_scripts
+2026-08-14T23:59:33.232287Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\DecompilerDependent\ghidra_scripts
+2026-08-14T23:59:33.232291Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\FunctionID\ghidra_scripts
+2026-08-14T23:59:33.232294Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Processors\PIC\ghidra_scripts
+2026-08-14T23:59:33.232297Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\WildcardAssembler\ghidra_scripts
+2026-08-14T23:59:33.232300Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\MicrosoftCodeAnalyzer\ghidra_scripts
+2026-08-14T23:59:33.232303Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\BytePatterns\ghidra_scripts
+2026-08-14T23:59:33.232306Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout]     D:\ghidra_12.1_PUBLIC\ghidra_12.1_PUBLIC\Ghidra\Features\Base\ghidra_scripts (HeadlessAnalyzer)  
+2026-08-14T23:59:33.232451Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  HEADLESS: execution starts (HeadlessAnalyzer)  
+2026-08-14T23:59:33.235312Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Opening existing project: C:\Users\David\AppData\Local\ghidra-cli\projects\ff7-field-analysis (HeadlessAnalyzer)  
+2026-08-14T23:59:33.335607Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  Opening project: C:\Users\David\AppData\Local\ghidra-cli\projects\ff7-field-analysis (HeadlessProject)  
+2026-08-14T23:59:33.389669Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  REPORT: Processing input files:  (HeadlessAnalyzer)  
+2026-08-14T23:59:33.389880Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO       project: C:\Users\David\AppData\Local\ghidra-cli\projects\ff7-field-analysis (HeadlessAnalyzer)  
+2026-08-14T23:59:33.392458Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  IMPORTING: file:///D:/projects/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN.dec (HeadlessAnalyzer)  
+2026-08-14T23:59:34.416578Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] INFO  No load spec found for import file: FIELD.BIN.dec (ProgramLoader)  
+2026-08-14T23:59:34.416953Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] ERROR The ProgramLoader could not successfully load file:///D:/projects/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN.dec with the provided import parameters. Please ensure that any specified processor/cspec arguments are compatible with the loader that is used during import and try again. (HeadlessAnalyzer)  
+2026-08-14T23:59:34.417452Z  INFO ghidra::ghidra::bridge: [Ghidra import stdout] ERROR REPORT: Import failed for file: file:///D:/projects/Final-Fantasy-7-Modding/workspace/iso-extract/FIELD.BIN.dec (HeadlessAnalyzer)  
