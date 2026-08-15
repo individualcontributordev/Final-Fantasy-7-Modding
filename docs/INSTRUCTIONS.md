@@ -421,3 +421,25 @@ Error: Ghidra process exited before the bridge became ready: ERROR Abort due to 
 ➜  Final-Fantasy-7-Modding git:(main) ✗ ghidra program list --project ff7-field-analysis
 Starting Ghidra bridge...
 Error: Ghidra process exited before the bridge became ready: ERROR Abort due to Headless analyzer error: No program files found within specified project folder: / (HeadlessAnalyzer) java.io.IOException: No program files found within specified project folder: /
+
+
+
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+➜  Final-Fantasy-7-Modding git:(main) python scripts/ghidra/analyze_field_bin.py
+======================================================================
+FF7 FIELD.BIN Ghidra Analysis
+======================================================================
+Checking prerequisites...
+✅ ghidra-cli available
+
+Checking Ghidra project 'FF7'...
+❌ Ghidra project 'FF7' not found
+
+Available projects:
+Projects:
+  ff7-field-analysis.rep
+
+
+⚠️  You need to import FIELD.BIN.dec through Ghidra GUI first!
+See docs/INSTRUCTIONS.md 'Phase 1: One-Time Manual Setup'
+➜  Final-Fantasy-7-Modding git:(main)
