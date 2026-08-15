@@ -389,3 +389,35 @@ Running Ghidra script → field-functions.json...
 ❌ Import failed:
 Initializing project (importing D:\projects\Final-Fantasy-7-Modding\workspace\iso-extract\FIELD.BIN.dec)...
 Error: Ghidra import did not report success
+
+
+
+
+
+Available projects:
+Projects:
+  ff7-field-analysis.rep
+
+
+
+➜  Final-Fantasy-7-Modding git:(main) ✗ python scripts/ghidra/analyze_field_bin.py
+======================================================================
+FF7 FIELD.BIN Ghidra Analysis
+======================================================================
+Checking prerequisites...
+✅ ghidra-cli available
+
+Checking Ghidra project 'ff7-field-analysis'...
+✅ Project 'ff7-field-analysis' found
+
+Running Ghidra script → field-functions.json...
+  Using existing project: ff7-field-analysis
+  Program: FIELD.BIN.dec
+  Running extraction script...
+❌ Script failed:
+Starting Ghidra bridge...
+Error: Ghidra process exited before the bridge became ready: ERROR Abort due to Headless analyzer error: Requested project program file(s) not found: FIELD.BIN.dec (HeadlessAnalyzer) java.io.IOException: Requested project program file(s) not found: FIELD.BIN.dec
+
+➜  Final-Fantasy-7-Modding git:(main) ✗ ghidra program list --project ff7-field-analysis
+Starting Ghidra bridge...
+Error: Ghidra process exited before the bridge became ready: ERROR Abort due to Headless analyzer error: No program files found within specified project folder: / (HeadlessAnalyzer) java.io.IOException: No program files found within specified project folder: /
