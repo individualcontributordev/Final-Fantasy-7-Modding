@@ -1,0 +1,127 @@
+[
+  {
+    "name": "FUN_801b09c0",
+    "address": "801b09c0",
+    "size": 692,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_801b0c74",
+    "address": "801b0c74",
+    "size": 160,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_801b0d14",
+    "address": "801b0d14",
+    "size": 268,
+    "callers": []
+  }
+,
+  {
+    "name": "batres_clear_battle_ui",
+    "address": "801b0e20",
+    "size": 216,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_801b0ef8",
+    "address": "801b0ef8",
+    "size": 272,
+    "callers": ["801b0d14"]
+  }
+,
+  {
+    "name": "FUN_801b1008",
+    "address": "801b1008",
+    "size": 132,
+    "callers": ["801b0ef8"]
+  }
+,
+  {
+    "name": "FUN_801b108c",
+    "address": "801b108c",
+    "size": 256,
+    "callers": ["801b0ef8"]
+  }
+,
+  {
+    "name": "FUN_801b118c",
+    "address": "801b118c",
+    "size": 120,
+    "callers": ["801b0ef8"]
+  }
+,
+  {
+    "name": "FUN_801b1204",
+    "address": "801b1204",
+    "size": 284,
+    "callers": ["801b0ef8"]
+  }
+,
+  {
+    "name": "FUN_801b1320",
+    "address": "801b1320",
+    "size": 212,
+    "callers": ["801b1204", "801b1204"]
+  }
+,
+  {
+    "name": "FUN_801b13f4",
+    "address": "801b13f4",
+    "size": 84,
+    "callers": ["801b1564", "801b15e4", "801b16d8"]
+  }
+,
+  {
+    "name": "FUN_801b1448",
+    "address": "801b1448",
+    "size": 100,
+    "callers": ["801b1564"]
+  }
+,
+  {
+    "name": "FUN_801b14ac",
+    "address": "801b14ac",
+    "size": 84,
+    "callers": ["801b15e4", "801b15e4"]
+  }
+,
+  {
+    "name": "FUN_801b1500",
+    "address": "801b1500",
+    "size": 100,
+    "callers": ["801b16d8", "801b16d8"]
+  }
+,
+  {
+    "name": "FUN_801b1564",
+    "address": "801b1564",
+    "size": 128,
+    "callers": ["801b1204"]
+  }
+,
+  {
+    "name": "FUN_801b15e4",
+    "address": "801b15e4",
+    "size": 244,
+    "callers": ["801b1204"]
+  }
+,
+  {
+    "name": "FUN_801b16d8",
+    "address": "801b16d8",
+    "size": 244,
+    "callers": ["801b1204"]
+  }
+,
+  {
+    "name": "FUN_801b17cc",
+    "address": "801b17cc",
+    "size": 364,
+    "callers": []
+  }
+]

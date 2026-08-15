@@ -1,0 +1,3123 @@
+[
+  {
+    "name": "FUN_800a0b40",
+    "address": "800a0b40",
+    "size": 8,
+    "callers": ["800a0be4", "800ab6e4", "800a8a1c", "800a7f38", "800a4f78", "800a53a8", "800a57c8", "800a5ad8", "800a5e28", "800a5e28", "800a64ac", "800a71e8", "800a71e8", "800a71e8", "800a71e8", "800ac3c0", "800abb24", "800abb24", "800ac700", "800b1c80", "800b1c80", "800b10ac", "800b6efc", "800b7228", "800add4c", "800a86c4", "800abe58", "800abe58", "800abe58"]
+  }
+,
+  {
+    "name": "FUN_800a0b48",
+    "address": "800a0b48",
+    "size": 140,
+    "callers": ["800a1370"]
+  }
+,
+  {
+    "name": "FUN_800a0bd4",
+    "address": "800a0bd4",
+    "size": 16,
+    "callers": ["800a141c", "800a141c", "800ae5b8", "800ae5f0", "800a4268", "800a460c", "800aab18", "800ae638", "800aea48", "800af3a4", "800afcc8", "800b0bf4", "800b40b4", "800b4244", "800b5c7c", "800b85d4", "800bc420"]
+  }
+,
+  {
+    "name": "FUN_800a0be4",
+    "address": "800a0be4",
+    "size": 112,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a0c54",
+    "address": "800a0c54",
+    "size": 200,
+    "callers": ["800a0d2c", "800a0d2c"]
+  }
+,
+  {
+    "name": "FUN_800a0d2c",
+    "address": "800a0d2c",
+    "size": 1408,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a12ac",
+    "address": "800a12ac",
+    "size": 196,
+    "callers": ["800a460c", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800a1370",
+    "address": "800a1370",
+    "size": 172,
+    "callers": ["800a460c", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800a141c",
+    "address": "800a141c",
+    "size": 692,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a16d0",
+    "address": "800a16d0",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a16e0",
+    "address": "800a16e0",
+    "size": 48,
+    "callers": ["800aea48"]
+  }
+,
+  {
+    "name": "FUN_800a1710",
+    "address": "800a1710",
+    "size": 748,
+    "callers": ["800a19fc", "800a19fc"]
+  }
+,
+  {
+    "name": "FUN_800a19fc",
+    "address": "800a19fc",
+    "size": 776,
+    "callers": ["800a6c3c", "800a6c3c", "800aa6d0", "800b0d98", "800b1c80"]
+  }
+,
+  {
+    "name": "FUN_800a1d04",
+    "address": "800a1d04",
+    "size": 16,
+    "callers": ["800b7480", "800b7480", "800bc420", "800bc420", "800b5314", "800b5314"]
+  }
+,
+  {
+    "name": "FUN_800a1d14",
+    "address": "800a1d14",
+    "size": 16,
+    "callers": ["800b307c", "800b40b4", "800b7480", "800b2304", "800b2304"]
+  }
+,
+  {
+    "name": "FUN_800a1d24",
+    "address": "800a1d24",
+    "size": 20,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a1d38",
+    "address": "800a1d38",
+    "size": 28,
+    "callers": ["800b7228", "800b7480", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a1d54",
+    "address": "800a1d54",
+    "size": 92,
+    "callers": ["800b2e90", "800b29cc", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a1db0",
+    "address": "800a1db0",
+    "size": 16,
+    "callers": ["800a6994", "800a6c00"]
+  }
+,
+  {
+    "name": "FUN_800a1dc0",
+    "address": "800a1dc0",
+    "size": 16,
+    "callers": ["800aab18", "800ae638", "800aea48", "800b45dc", "800b5c7c"]
+  }
+,
+  {
+    "name": "FUN_800a1dd0",
+    "address": "800a1dd0",
+    "size": 16,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a1de0",
+    "address": "800a1de0",
+    "size": 16,
+    "callers": ["800aa580", "800a806c", "800a54f0", "800a835c", "800af110", "800af110", "800b45dc", "800b45dc", "800b45dc", "800b5e28", "800b7480", "800b7480", "800b832c", "800bbd20", "800bc420", "800b7a40", "800b7a40"]
+  }
+,
+  {
+    "name": "FUN_800a1df0",
+    "address": "800a1df0",
+    "size": 444,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a1fac",
+    "address": "800a1fac",
+    "size": 148,
+    "callers": ["800a71e8", "800a71e8", "800a71e8", "800a71e8", "800aa8f8", "800ae638", "800b59f4", "800a6c00"]
+  }
+,
+  {
+    "name": "FUN_800a2040",
+    "address": "800a2040",
+    "size": 56,
+    "callers": ["800b3c40"]
+  }
+,
+  {
+    "name": "FUN_800a2078",
+    "address": "800a2078",
+    "size": 16,
+    "callers": ["800b40b4"]
+  }
+,
+  {
+    "name": "FUN_800a2088",
+    "address": "800a2088",
+    "size": 128,
+    "callers": ["800a3304", "800a3304", "800a21b4", "800a21b4", "800a40b8", "800a460c", "800b7228"]
+  }
+,
+  {
+    "name": "FUN_800a2108",
+    "address": "800a2108",
+    "size": 156,
+    "callers": ["800a3304", "800a21b4", "800a3dfc", "800a3e4c", "800a3ec8", "800a3f4c", "800a4008", "800a41e8", "800a41e8", "800b2e90", "800b29cc", "800bbd20", "800bbd20", "800bbc4c", "800a3964", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a21a4",
+    "address": "800a21a4",
+    "size": 16,
+    "callers": ["800ad63c", "800b832c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a21b4",
+    "address": "800a21b4",
+    "size": 4108,
+    "callers": ["800a460c", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a31c0",
+    "address": "800a31c0",
+    "size": 40,
+    "callers": ["800b76a8", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a31e8",
+    "address": "800a31e8",
+    "size": 16,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a31f8",
+    "address": "800a31f8",
+    "size": 252,
+    "callers": ["800a3304", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a32f4",
+    "address": "800a32f4",
+    "size": 16,
+    "callers": ["800a71e8", "800a71e8", "800aa8f8", "800aea48"]
+  }
+,
+  {
+    "name": "FUN_800a3304",
+    "address": "800a3304",
+    "size": 904,
+    "callers": ["800a1df0"]
+  }
+,
+  {
+    "name": "FUN_800a368c",
+    "address": "800a368c",
+    "size": 16,
+    "callers": ["800bba5c", "800bba5c", "800bbd20", "800bbc4c"]
+  }
+,
+  {
+    "name": "FUN_800a369c",
+    "address": "800a369c",
+    "size": 16,
+    "callers": ["800b45dc", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a36ac",
+    "address": "800a36ac",
+    "size": 540,
+    "callers": ["800b5e28"]
+  }
+,
+  {
+    "name": "FUN_800a38c8",
+    "address": "800a38c8",
+    "size": 64,
+    "callers": ["800a460c", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800a3908",
+    "address": "800a3908",
+    "size": 92,
+    "callers": ["800a460c", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800a3964",
+    "address": "800a3964",
+    "size": 784,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a3c74",
+    "address": "800a3c74",
+    "size": 392,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a3dfc",
+    "address": "800a3dfc",
+    "size": 80,
+    "callers": ["800a21b4", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a3e4c",
+    "address": "800a3e4c",
+    "size": 80,
+    "callers": ["800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800a3e9c",
+    "address": "800a3e9c",
+    "size": 44,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a3ec8",
+    "address": "800a3ec8",
+    "size": 132,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a3f4c",
+    "address": "800a3f4c",
+    "size": 188,
+    "callers": ["800b832c", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a4008",
+    "address": "800a4008",
+    "size": 120,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a4080",
+    "address": "800a4080",
+    "size": 56,
+    "callers": ["800abb24"]
+  }
+,
+  {
+    "name": "FUN_800a40b8",
+    "address": "800a40b8",
+    "size": 56,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a40f0",
+    "address": "800a40f0",
+    "size": 72,
+    "callers": ["800b7ac0"]
+  }
+,
+  {
+    "name": "FUN_800a4138",
+    "address": "800a4138",
+    "size": 176,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a41e8",
+    "address": "800a41e8",
+    "size": 128,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a4268",
+    "address": "800a4268",
+    "size": 556,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a4494",
+    "address": "800a4494",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a44a4",
+    "address": "800a44a4",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a44b4",
+    "address": "800a44b4",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a44c4",
+    "address": "800a44c4",
+    "size": 256,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a45c4",
+    "address": "800a45c4",
+    "size": 16,
+    "callers": ["800b2e90"]
+  }
+,
+  {
+    "name": "FUN_800a45d4",
+    "address": "800a45d4",
+    "size": 16,
+    "callers": ["800b2e90"]
+  }
+,
+  {
+    "name": "FUN_800a45e4",
+    "address": "800a45e4",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a45f4",
+    "address": "800a45f4",
+    "size": 16,
+    "callers": ["800a1710"]
+  }
+,
+  {
+    "name": "FUN_800a460c",
+    "address": "800a460c",
+    "size": 2000,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800a4ddc",
+    "address": "800a4ddc",
+    "size": 300,
+    "callers": ["800a7ea4"]
+  }
+,
+  {
+    "name": "FUN_800a4f08",
+    "address": "800a4f08",
+    "size": 112,
+    "callers": ["800a4f78"]
+  }
+,
+  {
+    "name": "FUN_800a4f78",
+    "address": "800a4f78",
+    "size": 656,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a5208",
+    "address": "800a5208",
+    "size": 156,
+    "callers": ["800a4f78", "800a64ac"]
+  }
+,
+  {
+    "name": "FUN_800a52a4",
+    "address": "800a52a4",
+    "size": 164,
+    "callers": ["800a5208"]
+  }
+,
+  {
+    "name": "FUN_800a5348",
+    "address": "800a5348",
+    "size": 96,
+    "callers": ["800a53a8"]
+  }
+,
+  {
+    "name": "FUN_800a53a8",
+    "address": "800a53a8",
+    "size": 328,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a54f0",
+    "address": "800a54f0",
+    "size": 728,
+    "callers": ["800a5348"]
+  }
+,
+  {
+    "name": "FUN_800a57c8",
+    "address": "800a57c8",
+    "size": 348,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a5924",
+    "address": "800a5924",
+    "size": 76,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800a5970",
+    "address": "800a5970",
+    "size": 48,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a59a0",
+    "address": "800a59a0",
+    "size": 128,
+    "callers": ["800a7ea4"]
+  }
+,
+  {
+    "name": "FUN_800a5a20",
+    "address": "800a5a20",
+    "size": 116,
+    "callers": ["800a64ac"]
+  }
+,
+  {
+    "name": "FUN_800a5a94",
+    "address": "800a5a94",
+    "size": 68,
+    "callers": ["800a64ac"]
+  }
+,
+  {
+    "name": "FUN_800a5ad8",
+    "address": "800a5ad8",
+    "size": 176,
+    "callers": ["800a5b88", "800a64ac"]
+  }
+,
+  {
+    "name": "FUN_800a5b88",
+    "address": "800a5b88",
+    "size": 128,
+    "callers": ["800a57c8"]
+  }
+,
+  {
+    "name": "FUN_800a5c08",
+    "address": "800a5c08",
+    "size": 248,
+    "callers": ["800a0d2c", "800a5d00"]
+  }
+,
+  {
+    "name": "FUN_800a5d00",
+    "address": "800a5d00",
+    "size": 296,
+    "callers": ["800a5e28"]
+  }
+,
+  {
+    "name": "FUN_800a5e28",
+    "address": "800a5e28",
+    "size": 396,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a5fb4",
+    "address": "800a5fb4",
+    "size": 292,
+    "callers": ["800a64ac"]
+  }
+,
+  {
+    "name": "FUN_800a60d8",
+    "address": "800a60d8",
+    "size": 144,
+    "callers": ["800a7ea4"]
+  }
+,
+  {
+    "name": "FUN_800a6168",
+    "address": "800a6168",
+    "size": 660,
+    "callers": ["800a64ac", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a63fc",
+    "address": "800a63fc",
+    "size": 176,
+    "callers": ["800a64ac", "800a64ac", "800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a64ac",
+    "address": "800a64ac",
+    "size": 764,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a67a8",
+    "address": "800a67a8",
+    "size": 220,
+    "callers": ["800a64ac"]
+  }
+,
+  {
+    "name": "FUN_800a6884",
+    "address": "800a6884",
+    "size": 168,
+    "callers": ["800a806c", "800a64ac", "800a71e8", "800a71e8", "800a71e8", "800a6fc0", "800a6fc0", "800a6fc0", "800a6fc0", "800a6fc0", "800aa6d0", "800aba78", "800b0d98", "800b3418", "800b3828", "800a6bcc"]
+  }
+,
+  {
+    "name": "FUN_800a692c",
+    "address": "800a692c",
+    "size": 104,
+    "callers": ["800a6994", "800a9c64"]
+  }
+,
+  {
+    "name": "FUN_800a6994",
+    "address": "800a6994",
+    "size": 504,
+    "callers": ["800a2108", "800a71e8", "800bba5c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a6b8c",
+    "address": "800a6b8c",
+    "size": 64,
+    "callers": ["800a71e8", "800aab18", "800b0bf4", "800b40b4"]
+  }
+,
+  {
+    "name": "FUN_800a6bcc",
+    "address": "800a6bcc",
+    "size": 52,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800a6c00",
+    "address": "800a6c00",
+    "size": 60,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800a6c3c",
+    "address": "800a6c3c",
+    "size": 900,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a6fc0",
+    "address": "800a6fc0",
+    "size": 552,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a71e8",
+    "address": "800a71e8",
+    "size": 3220,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a7e7c",
+    "address": "800a7e7c",
+    "size": 16,
+    "callers": ["800b3418", "800b7480"]
+  }
+,
+  {
+    "name": "FUN_800a7e8c",
+    "address": "800a7e8c",
+    "size": 16,
+    "callers": ["800b7228"]
+  }
+,
+  {
+    "name": "FUN_800a7e9c",
+    "address": "800a7e9c",
+    "size": 8,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800a7ea4",
+    "address": "800a7ea4",
+    "size": 116,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a7f18",
+    "address": "800a7f18",
+    "size": 32,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a7f38",
+    "address": "800a7f38",
+    "size": 272,
+    "callers": ["800a7f18", "800adc80", "800b6c84"]
+  }
+,
+  {
+    "name": "FUN_800a8048",
+    "address": "800a8048",
+    "size": 20,
+    "callers": ["800b6e78", "800add4c"]
+  }
+,
+  {
+    "name": "FUN_800a806c",
+    "address": "800a806c",
+    "size": 624,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a82dc",
+    "address": "800a82dc",
+    "size": 20,
+    "callers": ["800bbd20", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a82f0",
+    "address": "800a82f0",
+    "size": 16,
+    "callers": ["800a21b4", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a8300",
+    "address": "800a8300",
+    "size": 92,
+    "callers": ["800b0bf4"]
+  }
+,
+  {
+    "name": "FUN_800a835c",
+    "address": "800a835c",
+    "size": 872,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a86c4",
+    "address": "800a86c4",
+    "size": 424,
+    "callers": ["800b6c84"]
+  }
+,
+  {
+    "name": "FUN_800a886c",
+    "address": "800a886c",
+    "size": 28,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a8888",
+    "address": "800a8888",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a8898",
+    "address": "800a8898",
+    "size": 132,
+    "callers": ["800aab18"]
+  }
+,
+  {
+    "name": "FUN_800a891c",
+    "address": "800a891c",
+    "size": 256,
+    "callers": ["800b7228"]
+  }
+,
+  {
+    "name": "FUN_800a8a1c",
+    "address": "800a8a1c",
+    "size": 108,
+    "callers": ["800b307c", "800b7228", "800bbd20", "800bbd20", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a8a88",
+    "address": "800a8a88",
+    "size": 52,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a8abc",
+    "address": "800a8abc",
+    "size": 56,
+    "callers": ["800a8a1c", "800a891c", "800a891c"]
+  }
+,
+  {
+    "name": "FUN_800a8af4",
+    "address": "800a8af4",
+    "size": 60,
+    "callers": ["800a8fa0", "800a9018", "800a8f74", "800a8fcc"]
+  }
+,
+  {
+    "name": "FUN_800a8b30",
+    "address": "800a8b30",
+    "size": 320,
+    "callers": ["800a8af4", "800a8ce4", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a8c70",
+    "address": "800a8c70",
+    "size": 52,
+    "callers": ["800a8e50", "800a8d58"]
+  }
+,
+  {
+    "name": "FUN_800a8ca4",
+    "address": "800a8ca4",
+    "size": 64,
+    "callers": ["800b6e78"]
+  }
+,
+  {
+    "name": "FUN_800a8ce4",
+    "address": "800a8ce4",
+    "size": 116,
+    "callers": ["800bba5c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a8d58",
+    "address": "800a8d58",
+    "size": 248,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a8e50",
+    "address": "800a8e50",
+    "size": 248,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a8f48",
+    "address": "800a8f48",
+    "size": 44,
+    "callers": ["800b28cc"]
+  }
+,
+  {
+    "name": "FUN_800a8f74",
+    "address": "800a8f74",
+    "size": 44,
+    "callers": ["800bba5c"]
+  }
+,
+  {
+    "name": "FUN_800a8fa0",
+    "address": "800a8fa0",
+    "size": 44,
+    "callers": ["800b28cc", "800b28cc", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a8fcc",
+    "address": "800a8fcc",
+    "size": 76,
+    "callers": ["800bba5c"]
+  }
+,
+  {
+    "name": "FUN_800a9018",
+    "address": "800a9018",
+    "size": 76,
+    "callers": ["800b28cc"]
+  }
+,
+  {
+    "name": "FUN_800a9064",
+    "address": "800a9064",
+    "size": 136,
+    "callers": ["800a67a8"]
+  }
+,
+  {
+    "name": "FUN_800a90ec",
+    "address": "800a90ec",
+    "size": 36,
+    "callers": ["800a21b4", "800b307c", "800a806c", "800bb8e8", "800bbd20", "800bc420"]
+  }
+,
+  {
+    "name": "FUN_800a9110",
+    "address": "800a9110",
+    "size": 36,
+    "callers": ["800b28cc", "800bba5c", "800bbd20", "800bbd20", "800bbd20", "800bbd20", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a9134",
+    "address": "800a9134",
+    "size": 32,
+    "callers": ["800a6c3c"]
+  }
+,
+  {
+    "name": "FUN_800a9154",
+    "address": "800a9154",
+    "size": 32,
+    "callers": ["800a6c3c", "800b271c", "800b28cc", "800bba5c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a9174",
+    "address": "800a9174",
+    "size": 32,
+    "callers": ["800a1710", "800a3304", "800a21b4", "800bc9e8", "800a460c", "800a460c", "800a71e8", "800b0e84", "800b5e28", "800b7480", "800bb8e8", "800bba5c", "800bba5c", "800bba5c", "800bbd20", "800bbd20", "800bbd20", "800bbd20", "800bbc4c", "800bbbb0", "800bc420", "800abb24"]
+  }
+,
+  {
+    "name": "FUN_800a9194",
+    "address": "800a9194",
+    "size": 16,
+    "callers": ["800b57dc"]
+  }
+,
+  {
+    "name": "FUN_800a91a4",
+    "address": "800a91a4",
+    "size": 60,
+    "callers": ["800a21b4", "800a21b4", "800a21b4", "800a21b4", "800a460c", "800ad804", "800ad804", "800b0e84", "800b0810", "800b832c", "800b7c7c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a921c",
+    "address": "800a921c",
+    "size": 36,
+    "callers": ["800aab18", "800ab398", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc"]
+  }
+,
+  {
+    "name": "FUN_800a9240",
+    "address": "800a9240",
+    "size": 92,
+    "callers": ["800a21b4", "800a6c3c", "800b0e84", "800b0810", "800bbd20", "800bbd20", "800bbbb0"]
+  }
+,
+  {
+    "name": "FUN_800a929c",
+    "address": "800a929c",
+    "size": 92,
+    "callers": ["800bba5c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a92f8",
+    "address": "800a92f8",
+    "size": 60,
+    "callers": ["800ab398", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b7480", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a9334",
+    "address": "800a9334",
+    "size": 332,
+    "callers": ["800b307c", "800b7228", "800bbd20", "800bbd20", "800bbd20", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a9480",
+    "address": "800a9480",
+    "size": 40,
+    "callers": ["800b29cc", "800bbd20", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a94d0",
+    "address": "800a94d0",
+    "size": 36,
+    "callers": ["800a21b4", "800a21b4", "800b307c"]
+  }
+,
+  {
+    "name": "FUN_800a94f4",
+    "address": "800a94f4",
+    "size": 44,
+    "callers": ["800b307c"]
+  }
+,
+  {
+    "name": "FUN_800a9520",
+    "address": "800a9520",
+    "size": 344,
+    "callers": ["800a9678", "800a96a4"]
+  }
+,
+  {
+    "name": "FUN_800a9678",
+    "address": "800a9678",
+    "size": 44,
+    "callers": ["800ad63c"]
+  }
+,
+  {
+    "name": "FUN_800a96a4",
+    "address": "800a96a4",
+    "size": 44,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800a96d0",
+    "address": "800a96d0",
+    "size": 216,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a97a8",
+    "address": "800a97a8",
+    "size": 60,
+    "callers": ["800b307c", "800b76a8"]
+  }
+,
+  {
+    "name": "FUN_800a97e4",
+    "address": "800a97e4",
+    "size": 60,
+    "callers": ["800bb8e8", "800bb8e8"]
+  }
+,
+  {
+    "name": "FUN_800a9820",
+    "address": "800a9820",
+    "size": 44,
+    "callers": ["800a21b4", "800a21b4", "800a21b4", "800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800a984c",
+    "address": "800a984c",
+    "size": 44,
+    "callers": ["800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800a9878",
+    "address": "800a9878",
+    "size": 44,
+    "callers": ["800a3c74", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a98a4",
+    "address": "800a98a4",
+    "size": 64,
+    "callers": ["800a460c", "800bba5c", "800bba5c", "800bbd20", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800a98e4",
+    "address": "800a98e4",
+    "size": 44,
+    "callers": ["800b45dc", "800bb8e8", "800bbd20", "800bbd20", "800bbc4c", "800a1710"]
+  }
+,
+  {
+    "name": "FUN_800a9910",
+    "address": "800a9910",
+    "size": 44,
+    "callers": ["800a3304", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800a993c",
+    "address": "800a993c",
+    "size": 76,
+    "callers": ["800b307c", "800ab988", "800b271c", "800b29cc", "800b29cc", "800b28cc", "800b57dc", "800b7480", "800b76a8", "800b76a8", "800bbd20", "800bc420", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800abfc0", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a99bc",
+    "address": "800a99bc",
+    "size": 72,
+    "callers": ["800bba5c", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a9a04",
+    "address": "800a9a04",
+    "size": 32,
+    "callers": ["800b7a40"]
+  }
+,
+  {
+    "name": "FUN_800a9a24",
+    "address": "800a9a24",
+    "size": 32,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800a9a44",
+    "address": "800a9a44",
+    "size": 44,
+    "callers": ["800a1710", "800a1710", "800a21b4", "800a21b4", "800a21b4", "800a21b4", "800a21b4", "800a21b4", "800a71e8", "800a9e14", "800aaa00", "800b0e84", "800b0810", "800b3828", "800b7c7c", "800b7c7c", "800b7c7c", "800b7c7c", "800bbd20", "800bbc4c", "800bbbb0"]
+  }
+,
+  {
+    "name": "FUN_800a9a70",
+    "address": "800a9a70",
+    "size": 52,
+    "callers": ["800b7c7c", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800a9aa4",
+    "address": "800a9aa4",
+    "size": 44,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800a9ad0",
+    "address": "800a9ad0",
+    "size": 52,
+    "callers": ["800ad804", "800b832c"]
+  }
+,
+  {
+    "name": "FUN_800a9b04",
+    "address": "800a9b04",
+    "size": 352,
+    "callers": ["800a9c64", "800aa6d0"]
+  }
+,
+  {
+    "name": "FUN_800a9c64",
+    "address": "800a9c64",
+    "size": 248,
+    "callers": ["800a9d5c", "800a9e14", "800a9d88", "800a9db4"]
+  }
+,
+  {
+    "name": "FUN_800a9d5c",
+    "address": "800a9d5c",
+    "size": 44,
+    "callers": ["800b307c", "800b271c", "800b271c", "800b29cc", "800b7228"]
+  }
+,
+  {
+    "name": "FUN_800a9d88",
+    "address": "800a9d88",
+    "size": 44,
+    "callers": ["800b832c"]
+  }
+,
+  {
+    "name": "FUN_800a9db4",
+    "address": "800a9db4",
+    "size": 96,
+    "callers": ["800bbd20", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800a9e14",
+    "address": "800a9e14",
+    "size": 536,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800aa02c",
+    "address": "800aa02c",
+    "size": 32,
+    "callers": ["800a460c", "800a460c", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800aa04c",
+    "address": "800aa04c",
+    "size": 44,
+    "callers": ["800a3304"]
+  }
+,
+  {
+    "name": "FUN_800aa098",
+    "address": "800aa098",
+    "size": 72,
+    "callers": ["800b29cc", "800b7480", "800bba5c", "800bbd20", "800bc420", "800abfc0", "800abfc0", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800aa0e0",
+    "address": "800aa0e0",
+    "size": 72,
+    "callers": ["800a3304", "800a2108", "800a21b4", "800a21b4", "800b307c", "800a460c", "800a460c", "800a460c", "800a806c", "800a806c", "800a6c3c", "800a835c", "800b0794", "800b0e84", "800b0810", "800b21e4", "800b3418", "800b3828", "800b832c", "800b5274", "800bc420", "800b0670", "800b1650", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800aa128",
+    "address": "800aa128",
+    "size": 72,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800aa170",
+    "address": "800aa170",
+    "size": 72,
+    "callers": ["800a3304", "800a806c", "800b832c"]
+  }
+,
+  {
+    "name": "FUN_800aa1b8",
+    "address": "800aa1b8",
+    "size": 128,
+    "callers": ["800aa640", "800bbd20", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800aa238",
+    "address": "800aa238",
+    "size": 128,
+    "callers": ["800a460c", "800a71e8", "800ad804", "800bb8e8"]
+  }
+,
+  {
+    "name": "FUN_800aa2b8",
+    "address": "800aa2b8",
+    "size": 44,
+    "callers": ["800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800aa2e4",
+    "address": "800aa2e4",
+    "size": 32,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800aa304",
+    "address": "800aa304",
+    "size": 636,
+    "callers": ["800aa580"]
+  }
+,
+  {
+    "name": "FUN_800aa580",
+    "address": "800aa580",
+    "size": 192,
+    "callers": ["800aa640"]
+  }
+,
+  {
+    "name": "FUN_800aa640",
+    "address": "800aa640",
+    "size": 68,
+    "callers": ["800a21b4", "800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800aa6a4",
+    "address": "800aa6a4",
+    "size": 44,
+    "callers": ["800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800aa6d0",
+    "address": "800aa6d0",
+    "size": 268,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800aa7dc",
+    "address": "800aa7dc",
+    "size": 252,
+    "callers": ["800a21b4", "800a21b4", "800b29cc", "800bb8e8", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800aa8d8",
+    "address": "800aa8d8",
+    "size": 32,
+    "callers": ["800a21b4", "800a891c"]
+  }
+,
+  {
+    "name": "FUN_800aa8f8",
+    "address": "800aa8f8",
+    "size": 264,
+    "callers": ["800aab18", "800b0bf4", "800b40b4"]
+  }
+,
+  {
+    "name": "FUN_800aaa00",
+    "address": "800aaa00",
+    "size": 280,
+    "callers": ["800aab18"]
+  }
+,
+  {
+    "name": "FUN_800aab18",
+    "address": "800aab18",
+    "size": 2132,
+    "callers": ["800ab570"]
+  }
+,
+  {
+    "name": "FUN_800ab36c",
+    "address": "800ab36c",
+    "size": 44,
+    "callers": ["800b45dc"]
+  }
+,
+  {
+    "name": "FUN_800ab398",
+    "address": "800ab398",
+    "size": 244,
+    "callers": ["800ab570"]
+  }
+,
+  {
+    "name": "FUN_800ab48c",
+    "address": "800ab48c",
+    "size": 104,
+    "callers": ["800ab4f4"]
+  }
+,
+  {
+    "name": "FUN_800ab4f4",
+    "address": "800ab4f4",
+    "size": 124,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ab570",
+    "address": "800ab570",
+    "size": 116,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ab5e4",
+    "address": "800ab5e4",
+    "size": 256,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ab6e4",
+    "address": "800ab6e4",
+    "size": 520,
+    "callers": ["800aba18", "800ab988", "800ab92c", "800aba78"]
+  }
+,
+  {
+    "name": "FUN_800ab8ec",
+    "address": "800ab8ec",
+    "size": 64,
+    "callers": ["800bbd20", "800bbd20", "800bbd20", "800bbd20", "800bbc4c"]
+  }
+,
+  {
+    "name": "FUN_800ab92c",
+    "address": "800ab92c",
+    "size": 92,
+    "callers": ["800ac484"]
+  }
+,
+  {
+    "name": "FUN_800ab988",
+    "address": "800ab988",
+    "size": 144,
+    "callers": ["800ad63c", "800ac484", "800ac484", "800ac484", "800b28cc", "800bbd20", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800aba18",
+    "address": "800aba18",
+    "size": 96,
+    "callers": ["800a21b4", "800a460c", "800a460c", "800ac484", "800b0e84", "800b2e90", "800bbc4c"]
+  }
+,
+  {
+    "name": "FUN_800aba78",
+    "address": "800aba78",
+    "size": 172,
+    "callers": ["800ad804"]
+  }
+,
+  {
+    "name": "FUN_800abb24",
+    "address": "800abb24",
+    "size": 820,
+    "callers": ["800ac484", "800ac484", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800abfc0", "800abfc0", "800ac700", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800ac700", "800ac700", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800ac700", "800ac700", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800ac700", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800ac700", "800ac700", "800abfc0", "800abfc0", "800abfc0", "800abfc0", "800ac700", "800abfc0", "800abfc0", "800ac700", "800abfc0", "800abfc0", "800ac700", "800abfc0", "800abfc0", "800ac700", "800abfc0", "800abfc0", "800abfc0", "800ac700", "800ac700", "800ac700", "800ac700", "800abfc0", "800ac700", "800ac700", "800ac700", "800ac700", "800abfc0", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800abe58",
+    "address": "800abe58",
+    "size": 360,
+    "callers": ["800abfc0"]
+  }
+,
+  {
+    "name": "FUN_800abfc0",
+    "address": "800abfc0",
+    "size": 1024,
+    "callers": ["800ad63c"]
+  }
+,
+  {
+    "name": "FUN_800ac3c0",
+    "address": "800ac3c0",
+    "size": 196,
+    "callers": ["800ad63c"]
+  }
+,
+  {
+    "name": "FUN_800ac484",
+    "address": "800ac484",
+    "size": 636,
+    "callers": ["800ad63c"]
+  }
+,
+  {
+    "name": "FUN_800ac700",
+    "address": "800ac700",
+    "size": 3900,
+    "callers": ["800ad63c"]
+  }
+,
+  {
+    "name": "FUN_800ad63c",
+    "address": "800ad63c",
+    "size": 332,
+    "callers": ["800ad788", "800ad788"]
+  }
+,
+  {
+    "name": "FUN_800ad788",
+    "address": "800ad788",
+    "size": 124,
+    "callers": ["800a460c", "800a460c", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ad804",
+    "address": "800ad804",
+    "size": 292,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ad928",
+    "address": "800ad928",
+    "size": 72,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ad970",
+    "address": "800ad970",
+    "size": 152,
+    "callers": ["800ada08"]
+  }
+,
+  {
+    "name": "FUN_800ada08",
+    "address": "800ada08",
+    "size": 92,
+    "callers": ["800b7480"]
+  }
+,
+  {
+    "name": "FUN_800ada64",
+    "address": "800ada64",
+    "size": 204,
+    "callers": ["800a9334"]
+  }
+,
+  {
+    "name": "FUN_800adb30",
+    "address": "800adb30",
+    "size": 268,
+    "callers": ["800b787c"]
+  }
+,
+  {
+    "name": "FUN_800adc3c",
+    "address": "800adc3c",
+    "size": 52,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800adc70",
+    "address": "800adc70",
+    "size": 16,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800adc80",
+    "address": "800adc80",
+    "size": 204,
+    "callers": ["800a460c", "800a53a8", "800b69a4", "800b6c84", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800add4c",
+    "address": "800add4c",
+    "size": 228,
+    "callers": ["800a5924", "800b6aec", "800b6dcc", "800a3964"]
+  }
+,
+  {
+    "name": "WorldScrambleRand",
+    "address": "800ade30",
+    "size": 120,
+    "callers": ["800adfc0", "800adea8", "800adea8", "800adea8"]
+  }
+,
+  {
+    "name": "WorldSeedRand",
+    "address": "800adea8",
+    "size": 280,
+    "callers": ["800b7228"]
+  }
+,
+  {
+    "name": "WorldRand",
+    "address": "800adfc0",
+    "size": 100,
+    "callers": ["800b0250", "800a1370", "800a1370", "800a21b4", "800b307c", "800b307c", "800b307c", "800b0810", "800b0810", "800b7c7c", "800b7c7c", "800b7c7c", "800b7c7c", "800b7c7c", "800b7c7c", "800b7c7c", "800b7c7c", "800b5314", "800abb24", "800b5314"]
+  }
+,
+  {
+    "name": "FUN_800ae024",
+    "address": "800ae024",
+    "size": 152,
+    "callers": ["800af3a4", "800af96c", "800abfc0", "800abfc0"]
+  }
+,
+  {
+    "name": "FUN_800ae0bc",
+    "address": "800ae0bc",
+    "size": 196,
+    "callers": ["800b307c", "800a806c", "800aab18", "800ae638", "800b0810", "800b0810", "800b0810", "800b29cc", "800b3418", "800bb8e8", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800ae180",
+    "address": "800ae180",
+    "size": 764,
+    "callers": ["800aab18", "800aab18", "800ae47c", "800b3418"]
+  }
+,
+  {
+    "name": "FUN_800ae47c",
+    "address": "800ae47c",
+    "size": 60,
+    "callers": ["800b29cc", "800bbd20", "800af9a0", "800b2304", "800b2304", "800b2304", "800b2304", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800ae4b8",
+    "address": "800ae4b8",
+    "size": 256,
+    "callers": ["800a12ac", "800af3a4"]
+  }
+,
+  {
+    "name": "FUN_800ae5b8",
+    "address": "800ae5b8",
+    "size": 56,
+    "callers": ["800a141c", "800a141c"]
+  }
+,
+  {
+    "name": "FUN_800ae5f0",
+    "address": "800ae5f0",
+    "size": 56,
+    "callers": ["800a141c", "800a141c"]
+  }
+,
+  {
+    "name": "FUN_800ae628",
+    "address": "800ae628",
+    "size": 16,
+    "callers": ["800aea48"]
+  }
+,
+  {
+    "name": "FUN_800ae638",
+    "address": "800ae638",
+    "size": 628,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800ae8ac",
+    "address": "800ae8ac",
+    "size": 412,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800aea48",
+    "address": "800aea48",
+    "size": 1624,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800af0a0",
+    "address": "800af0a0",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af0b0",
+    "address": "800af0b0",
+    "size": 96,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800af110",
+    "address": "800af110",
+    "size": 152,
+    "callers": ["800af0b0", "800b5e28", "800b6724"]
+  }
+,
+  {
+    "name": "FUN_800af1a8",
+    "address": "800af1a8",
+    "size": 64,
+    "callers": ["800abfc0", "800ac700", "800abfc0", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af1e8",
+    "address": "800af1e8",
+    "size": 100,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af24c",
+    "address": "800af24c",
+    "size": 88,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af2a4",
+    "address": "800af2a4",
+    "size": 64,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af2e4",
+    "address": "800af2e4",
+    "size": 32,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af304",
+    "address": "800af304",
+    "size": 32,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af324",
+    "address": "800af324",
+    "size": 64,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af364",
+    "address": "800af364",
+    "size": 64,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af3a4",
+    "address": "800af3a4",
+    "size": 1480,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800af96c",
+    "address": "800af96c",
+    "size": 52,
+    "callers": ["800abfc0"]
+  }
+,
+  {
+    "name": "FUN_800af9a0",
+    "address": "800af9a0",
+    "size": 60,
+    "callers": ["800abfc0", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800af9dc",
+    "address": "800af9dc",
+    "size": 748,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800afcc8",
+    "address": "800afcc8",
+    "size": 756,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800affbc",
+    "address": "800affbc",
+    "size": 220,
+    "callers": ["800a3964", "800a41e8", "800a3964", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b0098",
+    "address": "800b0098",
+    "size": 228,
+    "callers": ["800a21b4", "800a3dfc", "800a3e4c", "800a41e8", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b017c",
+    "address": "800b017c",
+    "size": 72,
+    "callers": ["800b0200"]
+  }
+,
+  {
+    "name": "FUN_800b01c4",
+    "address": "800b01c4",
+    "size": 60,
+    "callers": ["800afcc8"]
+  }
+,
+  {
+    "name": "FUN_800b0200",
+    "address": "800b0200",
+    "size": 64,
+    "callers": ["800b307c", "800b307c"]
+  }
+,
+  {
+    "name": "FUN_800b0240",
+    "address": "800b0240",
+    "size": 16,
+    "callers": ["800a4268", "800a3964", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800b0250",
+    "address": "800b0250",
+    "size": 228,
+    "callers": ["800a0d2c"]
+  }
+,
+  {
+    "name": "FUN_800b0334",
+    "address": "800b0334",
+    "size": 376,
+    "callers": ["800a0d2c"]
+  }
+,
+  {
+    "name": "FUN_800b04ac",
+    "address": "800b04ac",
+    "size": 452,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b0670",
+    "address": "800b0670",
+    "size": 236,
+    "callers": ["800b075c"]
+  }
+,
+  {
+    "name": "FUN_800b075c",
+    "address": "800b075c",
+    "size": 56,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b0794",
+    "address": "800b0794",
+    "size": 108,
+    "callers": ["800b0d98", "800b0e84"]
+  }
+,
+  {
+    "name": "FUN_800b0800",
+    "address": "800b0800",
+    "size": 16,
+    "callers": ["800abb24"]
+  }
+,
+  {
+    "name": "FUN_800b0810",
+    "address": "800b0810",
+    "size": 996,
+    "callers": ["800b0e84"]
+  }
+,
+  {
+    "name": "FUN_800b0bf4",
+    "address": "800b0bf4",
+    "size": 420,
+    "callers": ["800b0e84"]
+  }
+,
+  {
+    "name": "FUN_800b0d98",
+    "address": "800b0d98",
+    "size": 236,
+    "callers": ["800aa6d0"]
+  }
+,
+  {
+    "name": "FUN_800b0e84",
+    "address": "800b0e84",
+    "size": 456,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b104c",
+    "address": "800b104c",
+    "size": 96,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b10ac",
+    "address": "800b10ac",
+    "size": 280,
+    "callers": ["800b1c80", "800b21e4"]
+  }
+,
+  {
+    "name": "FUN_800b11c4",
+    "address": "800b11c4",
+    "size": 1164,
+    "callers": ["800b190c"]
+  }
+,
+  {
+    "name": "FUN_800b1650",
+    "address": "800b1650",
+    "size": 700,
+    "callers": ["800b190c", "800b190c", "800b190c"]
+  }
+,
+  {
+    "name": "FUN_800b190c",
+    "address": "800b190c",
+    "size": 884,
+    "callers": ["800b22e4"]
+  }
+,
+  {
+    "name": "FUN_800b1c80",
+    "address": "800b1c80",
+    "size": 1380,
+    "callers": ["800aa6d0"]
+  }
+,
+  {
+    "name": "FUN_800b21e4",
+    "address": "800b21e4",
+    "size": 256,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800b22e4",
+    "address": "800b22e4",
+    "size": 32,
+    "callers": ["800b2e90"]
+  }
+,
+  {
+    "name": "FUN_800b2304",
+    "address": "800b2304",
+    "size": 820,
+    "callers": ["800b190c"]
+  }
+,
+  {
+    "name": "FUN_800b2638",
+    "address": "800b2638",
+    "size": 228,
+    "callers": ["800b271c", "800b271c", "800b29cc", "800b29cc", "800b29cc"]
+  }
+,
+  {
+    "name": "FUN_800b271c",
+    "address": "800b271c",
+    "size": 432,
+    "callers": ["800b2e90", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b28cc",
+    "address": "800b28cc",
+    "size": 256,
+    "callers": ["800b29cc"]
+  }
+,
+  {
+    "name": "FUN_800b29cc",
+    "address": "800b29cc",
+    "size": 1220,
+    "callers": ["800b2e90"]
+  }
+,
+  {
+    "name": "FUN_800b2e90",
+    "address": "800b2e90",
+    "size": 260,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b2f94",
+    "address": "800b2f94",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b2fa4",
+    "address": "800b2fa4",
+    "size": 44,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b2fd0",
+    "address": "800b2fd0",
+    "size": 72,
+    "callers": ["800b832c", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b3044",
+    "address": "800b3044",
+    "size": 56,
+    "callers": ["800b7228"]
+  }
+,
+  {
+    "name": "FUN_800b307c",
+    "address": "800b307c",
+    "size": 628,
+    "callers": ["800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800b32f0",
+    "address": "800b32f0",
+    "size": 16,
+    "callers": ["800b7480"]
+  }
+,
+  {
+    "name": "FUN_800b3300",
+    "address": "800b3300",
+    "size": 80,
+    "callers": ["800b7228"]
+  }
+,
+  {
+    "name": "FUN_800b3350",
+    "address": "800b3350",
+    "size": 60,
+    "callers": ["800b7480"]
+  }
+,
+  {
+    "name": "FUN_800b338c",
+    "address": "800b338c",
+    "size": 140,
+    "callers": ["800b3418", "800b3828"]
+  }
+,
+  {
+    "name": "FUN_800b3418",
+    "address": "800b3418",
+    "size": 968,
+    "callers": ["800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800b37e0",
+    "address": "800b37e0",
+    "size": 72,
+    "callers": ["800a21b4", "800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800b3828",
+    "address": "800b3828",
+    "size": 260,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b392c",
+    "address": "800b392c",
+    "size": 136,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b39b4",
+    "address": "800b39b4",
+    "size": 652,
+    "callers": ["800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b45dc", "800b5274", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314", "800b5314"]
+  }
+,
+  {
+    "name": "FUN_800b3c40",
+    "address": "800b3c40",
+    "size": 1140,
+    "callers": ["800b40b4"]
+  }
+,
+  {
+    "name": "FUN_800b40b4",
+    "address": "800b40b4",
+    "size": 400,
+    "callers": ["800b57dc"]
+  }
+,
+  {
+    "name": "FUN_800b4244",
+    "address": "800b4244",
+    "size": 920,
+    "callers": ["800b57dc"]
+  }
+,
+  {
+    "name": "FUN_800b45dc",
+    "address": "800b45dc",
+    "size": 3224,
+    "callers": ["800aab18"]
+  }
+,
+  {
+    "name": "FUN_800b5274",
+    "address": "800b5274",
+    "size": 160,
+    "callers": ["800bba5c"]
+  }
+,
+  {
+    "name": "FUN_800b5314",
+    "address": "800b5314",
+    "size": 1160,
+    "callers": ["800b57dc", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b579c",
+    "address": "800b579c",
+    "size": 36,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b57c0",
+    "address": "800b57c0",
+    "size": 28,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b57dc",
+    "address": "800b57dc",
+    "size": 284,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b58f8",
+    "address": "800b58f8",
+    "size": 252,
+    "callers": ["800a9334"]
+  }
+,
+  {
+    "name": "FUN_800b59f4",
+    "address": "800b59f4",
+    "size": 648,
+    "callers": ["800b0bf4", "800b5c7c"]
+  }
+,
+  {
+    "name": "FUN_800b5c7c",
+    "address": "800b5c7c",
+    "size": 348,
+    "callers": ["800ab398"]
+  }
+,
+  {
+    "name": "FUN_800b5dd8",
+    "address": "800b5dd8",
+    "size": 80,
+    "callers": ["800a8b30", "800b5e28"]
+  }
+,
+  {
+    "name": "FUN_800b5e28",
+    "address": "800b5e28",
+    "size": 1060,
+    "callers": ["800aab18", "800aab18"]
+  }
+,
+  {
+    "name": "FUN_800b624c",
+    "address": "800b624c",
+    "size": 252,
+    "callers": ["800b6d10", "800a9334", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b6348",
+    "address": "800b6348",
+    "size": 152,
+    "callers": ["800a0d2c"]
+  }
+,
+  {
+    "name": "FUN_800b63e0",
+    "address": "800b63e0",
+    "size": 16,
+    "callers": ["800a460c", "800b7c7c", "800ac700", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b63f0",
+    "address": "800b63f0",
+    "size": 176,
+    "callers": ["800a36ac", "800a460c", "800b64a0", "800b7c7c", "800bba5c", "800bbd20", "800bbd20", "800ac700", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b64a0",
+    "address": "800b64a0",
+    "size": 40,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b64c8",
+    "address": "800b64c8",
+    "size": 16,
+    "callers": ["800a460c", "800a460c", "800bba5c"]
+  }
+,
+  {
+    "name": "FUN_800b64d8",
+    "address": "800b64d8",
+    "size": 52,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b650c",
+    "address": "800b650c",
+    "size": 100,
+    "callers": ["800a460c", "800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b6570",
+    "address": "800b6570",
+    "size": 52,
+    "callers": ["800a460c", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b65a4",
+    "address": "800b65a4",
+    "size": 60,
+    "callers": ["800a21b4"]
+  }
+,
+  {
+    "name": "FUN_800b65e0",
+    "address": "800b65e0",
+    "size": 156,
+    "callers": ["800a21b4", "800b3828", "800b3828", "800bba5c", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800b667c",
+    "address": "800b667c",
+    "size": 168,
+    "callers": ["800a0d2c"]
+  }
+,
+  {
+    "name": "FUN_800b6724",
+    "address": "800b6724",
+    "size": 640,
+    "callers": ["800b6efc", "800b6a4c"]
+  }
+,
+  {
+    "name": "FUN_800b69a4",
+    "address": "800b69a4",
+    "size": 168,
+    "callers": ["800b6efc"]
+  }
+,
+  {
+    "name": "FUN_800b6a4c",
+    "address": "800b6a4c",
+    "size": 160,
+    "callers": ["800b6aec"]
+  }
+,
+  {
+    "name": "FUN_800b6aec",
+    "address": "800b6aec",
+    "size": 60,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800b6b28",
+    "address": "800b6b28",
+    "size": 348,
+    "callers": ["800b7104"]
+  }
+,
+  {
+    "name": "FUN_800b6c84",
+    "address": "800b6c84",
+    "size": 140,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800b6d10",
+    "address": "800b6d10",
+    "size": 188,
+    "callers": ["800b6dcc"]
+  }
+,
+  {
+    "name": "FUN_800b6dcc",
+    "address": "800b6dcc",
+    "size": 60,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800b6e08",
+    "address": "800b6e08",
+    "size": 112,
+    "callers": ["800b6e78"]
+  }
+,
+  {
+    "name": "FUN_800b6e78",
+    "address": "800b6e78",
+    "size": 132,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b6efc",
+    "address": "800b6efc",
+    "size": 520,
+    "callers": ["800a460c", "800aab18", "800aab18", "800a8b30", "800b624c"]
+  }
+,
+  {
+    "name": "FUN_800b7104",
+    "address": "800b7104",
+    "size": 48,
+    "callers": ["800a0d2c"]
+  }
+,
+  {
+    "name": "FUN_800b7134",
+    "address": "800b7134",
+    "size": 40,
+    "callers": ["800adc80"]
+  }
+,
+  {
+    "name": "FUN_800b715c",
+    "address": "800b715c",
+    "size": 16,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b716c",
+    "address": "800b716c",
+    "size": 16,
+    "callers": ["800b45dc", "800a9334"]
+  }
+,
+  {
+    "name": "FUN_800b717c",
+    "address": "800b717c",
+    "size": 132,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b7200",
+    "address": "800b7200",
+    "size": 24,
+    "callers": ["800bba5c"]
+  }
+,
+  {
+    "name": "FUN_800b7218",
+    "address": "800b7218",
+    "size": 16,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b7228",
+    "address": "800b7228",
+    "size": 600,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b7480",
+    "address": "800b7480",
+    "size": 416,
+    "callers": ["800b7620", "800a3964"]
+  }
+,
+  {
+    "name": "FUN_800b7620",
+    "address": "800b7620",
+    "size": 136,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b76a8",
+    "address": "800b76a8",
+    "size": 108,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b7714",
+    "address": "800b7714",
+    "size": 148,
+    "callers": ["800a3dfc", "800a3e4c", "800a3e9c", "800a3ec8", "800b77a8"]
+  }
+,
+  {
+    "name": "FUN_800b77a8",
+    "address": "800b77a8",
+    "size": 76,
+    "callers": ["800a3f4c"]
+  }
+,
+  {
+    "name": "FUN_800b77f4",
+    "address": "800b77f4",
+    "size": 44,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b7820",
+    "address": "800b7820",
+    "size": 24,
+    "callers": ["800b7228"]
+  }
+,
+  {
+    "name": "FUN_800b7838",
+    "address": "800b7838",
+    "size": 36,
+    "callers": ["800a4008"]
+  }
+,
+  {
+    "name": "FUN_800b785c",
+    "address": "800b785c",
+    "size": 16,
+    "callers": ["800abb24"]
+  }
+,
+  {
+    "name": "FUN_800b786c",
+    "address": "800b786c",
+    "size": 16,
+    "callers": ["800abb24"]
+  }
+,
+  {
+    "name": "FUN_800b787c",
+    "address": "800b787c",
+    "size": 316,
+    "callers": ["800b7228", "800b7a40"]
+  }
+,
+  {
+    "name": "FUN_800b79b8",
+    "address": "800b79b8",
+    "size": 136,
+    "callers": ["800a460c", "800bbd20", "800b7a40", "800abb24"]
+  }
+,
+  {
+    "name": "FUN_800b7a40",
+    "address": "800b7a40",
+    "size": 128,
+    "callers": ["800a3964"]
+  }
+,
+  {
+    "name": "FUN_800b7ac0",
+    "address": "800b7ac0",
+    "size": 92,
+    "callers": ["800a3964"]
+  }
+,
+  {
+    "name": "FUN_800b7b1c",
+    "address": "800b7b1c",
+    "size": 16,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7b2c",
+    "address": "800b7b2c",
+    "size": 16,
+    "callers": ["800abb24"]
+  }
+,
+  {
+    "name": "FUN_800b7b3c",
+    "address": "800b7b3c",
+    "size": 24,
+    "callers": ["800abb24"]
+  }
+,
+  {
+    "name": "world_lure_factor",
+    "address": "800b7b54",
+    "size": 36,
+    "callers": ["800b7c7c", "800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7b78",
+    "address": "800b7b78",
+    "size": 40,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7ba0",
+    "address": "800b7ba0",
+    "size": 16,
+    "callers": ["800b7c7c", "800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7bb0",
+    "address": "800b7bb0",
+    "size": 16,
+    "callers": ["800b7c7c", "800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7bc0",
+    "address": "800b7bc0",
+    "size": 16,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7bd0",
+    "address": "800b7bd0",
+    "size": 8,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7bd8",
+    "address": "800b7bd8",
+    "size": 60,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7c14",
+    "address": "800b7c14",
+    "size": 8,
+    "callers": ["800b7c7c"]
+  }
+,
+  {
+    "name": "FUN_800b7c1c",
+    "address": "800b7c1c",
+    "size": 40,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b7c44",
+    "address": "800b7c44",
+    "size": 20,
+    "callers": ["800a3f4c", "800b7c1c"]
+  }
+,
+  {
+    "name": "FUN_800b7c58",
+    "address": "800b7c58",
+    "size": 20,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800b7c6c",
+    "address": "800b7c6c",
+    "size": 16,
+    "callers": ["800a460c", "800ac700"]
+  }
+,
+  {
+    "name": "world_encounter_check",
+    "address": "800b7c7c",
+    "size": 1712,
+    "callers": ["800b832c"]
+  }
+,
+  {
+    "name": "FUN_800b832c",
+    "address": "800b832c",
+    "size": 348,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b8488",
+    "address": "800b8488",
+    "size": 80,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b84d8",
+    "address": "800b84d8",
+    "size": 68,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b851c",
+    "address": "800b851c",
+    "size": 96,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b857c",
+    "address": "800b857c",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b858c",
+    "address": "800b858c",
+    "size": 72,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b85d4",
+    "address": "800b85d4",
+    "size": 240,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800b86c4",
+    "address": "800b86c4",
+    "size": 36,
+    "callers": ["800abb24", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b86e8",
+    "address": "800b86e8",
+    "size": 56,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b8720",
+    "address": "800b8720",
+    "size": 48,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800b8750",
+    "address": "800b8750",
+    "size": 8,
+    "callers": ["800b87d8", "800b8b00", "800b8b00", "800b8b00", "800b8b00", "800b962c", "800b98f0", "800b9b2c", "800ba938", "800baa00", "800bab60", "800bac70", "800b9b2c", "800b9b2c", "800b9b2c"]
+  }
+,
+  {
+    "name": "FUN_800b8758",
+    "address": "800b8758",
+    "size": 8,
+    "callers": ["800b962c", "800bb650", "800bb7dc"]
+  }
+,
+  {
+    "name": "FUN_800b8760",
+    "address": "800b8760",
+    "size": 120,
+    "callers": ["800b8488"]
+  }
+,
+  {
+    "name": "FUN_800b87d8",
+    "address": "800b87d8",
+    "size": 492,
+    "callers": ["800b8760"]
+  }
+,
+  {
+    "name": "FUN_800b89c4",
+    "address": "800b89c4",
+    "size": 152,
+    "callers": ["800b858c"]
+  }
+,
+  {
+    "name": "FUN_800b8a5c",
+    "address": "800b8a5c",
+    "size": 60,
+    "callers": ["800b8720"]
+  }
+,
+  {
+    "name": "FUN_800b8b00",
+    "address": "800b8b00",
+    "size": 444,
+    "callers": ["800b86e8"]
+  }
+,
+  {
+    "name": "FUN_800b8d4c",
+    "address": "800b8d4c",
+    "size": 884,
+    "callers": ["800b85d4", "800b84d8"]
+  }
+,
+  {
+    "name": "FUN_800b90c0",
+    "address": "800b90c0",
+    "size": 1320,
+    "callers": ["800b85d4", "800b851c"]
+  }
+,
+  {
+    "name": "FUN_800b95e8",
+    "address": "800b95e8",
+    "size": 68,
+    "callers": ["800b90c0", "800b90c0", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800b962c",
+    "address": "800b962c",
+    "size": 708,
+    "callers": ["800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800b98f0",
+    "address": "800b98f0",
+    "size": 572,
+    "callers": ["800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800b9b2c",
+    "address": "800b9b2c",
+    "size": 3596,
+    "callers": ["800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800ba938",
+    "address": "800ba938",
+    "size": 200,
+    "callers": ["800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800baa00",
+    "address": "800baa00",
+    "size": 352,
+    "callers": ["800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800bab60",
+    "address": "800bab60",
+    "size": 272,
+    "callers": ["800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800bac70",
+    "address": "800bac70",
+    "size": 496,
+    "callers": ["800b8d4c", "800b90c0", "800b8d4c", "800b90c0"]
+  }
+,
+  {
+    "name": "FUN_800bae60",
+    "address": "800bae60",
+    "size": 1264,
+    "callers": ["800b9b2c"]
+  }
+,
+  {
+    "name": "FUN_800bb350",
+    "address": "800bb350",
+    "size": 256,
+    "callers": ["800b9b2c"]
+  }
+,
+  {
+    "name": "FUN_800bb450",
+    "address": "800bb450",
+    "size": 280,
+    "callers": ["800b9b2c"]
+  }
+,
+  {
+    "name": "FUN_800bb568",
+    "address": "800bb568",
+    "size": 232,
+    "callers": ["800b9b2c"]
+  }
+,
+  {
+    "name": "FUN_800bb650",
+    "address": "800bb650",
+    "size": 396,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800bb7dc",
+    "address": "800bb7dc",
+    "size": 212,
+    "callers": []
+  }
+,
+  {
+    "name": "FUN_800bb8b0",
+    "address": "800bb8b0",
+    "size": 56,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800bb8e8",
+    "address": "800bb8e8",
+    "size": 184,
+    "callers": ["800a806c"]
+  }
+,
+  {
+    "name": "FUN_800bb9a0",
+    "address": "800bb9a0",
+    "size": 48,
+    "callers": ["800bba5c", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800bb9d0",
+    "address": "800bb9d0",
+    "size": 60,
+    "callers": ["800bbd20", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800bba0c",
+    "address": "800bba0c",
+    "size": 40,
+    "callers": ["800b7480", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800bba34",
+    "address": "800bba34",
+    "size": 16,
+    "callers": ["800b7a40"]
+  }
+,
+  {
+    "name": "FUN_800bba44",
+    "address": "800bba44",
+    "size": 24,
+    "callers": ["800b7a40"]
+  }
+,
+  {
+    "name": "FUN_800bba5c",
+    "address": "800bba5c",
+    "size": 340,
+    "callers": ["800b76a8", "800b76a8", "800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800bbbb0",
+    "address": "800bbbb0",
+    "size": 156,
+    "callers": ["800bbc4c"]
+  }
+,
+  {
+    "name": "FUN_800bbc4c",
+    "address": "800bbc4c",
+    "size": 192,
+    "callers": ["800bbd20", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800bbd0c",
+    "address": "800bbd0c",
+    "size": 20,
+    "callers": ["800b28cc"]
+  }
+,
+  {
+    "name": "FUN_800bbd20",
+    "address": "800bbd20",
+    "size": 1164,
+    "callers": ["800a460c", "800ac700"]
+  }
+,
+  {
+    "name": "FUN_800bc1ac",
+    "address": "800bc1ac",
+    "size": 16,
+    "callers": ["800a806c", "800a6c3c", "800a1710", "800a1710", "800a1710", "800a1710", "800a1710", "800a1710", "800a1710"]
+  }
+,
+  {
+    "name": "FUN_800bc1bc",
+    "address": "800bc1bc",
+    "size": 16,
+    "callers": ["800ac700"]
+  }
+,
+  {
+    "name": "FUN_800bc1cc",
+    "address": "800bc1cc",
+    "size": 596,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800bc420",
+    "address": "800bc420",
+    "size": 1480,
+    "callers": ["800a460c"]
+  }
+,
+  {
+    "name": "FUN_800bc9e8",
+    "address": "800bc9e8",
+    "size": 80,
+    "callers": ["800a21b4", "800a40b8", "800b7228"]
+  }
+,
+  {
+    "name": "FUN_800bca38",
+    "address": "800bca38",
+    "size": 16,
+    "callers": ["800a21b4", "800a21b4", "800a4080", "800b7480"]
+  }
+,
+  {
+    "name": "FUN_800bca48",
+    "address": "800bca48",
+    "size": 48,
+    "callers": ["800bbd20"]
+  }
+,
+  {
+    "name": "FUN_800bca78",
+    "address": "800bca78",
+    "size": 180,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800bcb2c",
+    "address": "800bcb2c",
+    "size": 188,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800bcbe8",
+    "address": "800bcbe8",
+    "size": 740,
+    "callers": ["800a71e8", "800a71e8"]
+  }
+,
+  {
+    "name": "FUN_800bcecc",
+    "address": "800bcecc",
+    "size": 612,
+    "callers": ["800a19fc", "800a19fc"]
+  }
+,
+  {
+    "name": "FUN_800bfbf0",
+    "address": "800bfbf0",
+    "size": 188,
+    "callers": ["800b6b28", "800b6efc", "800b6a4c"]
+  }
+,
+  {
+    "name": "FUN_800bfcac",
+    "address": "800bfcac",
+    "size": 2908,
+    "callers": ["800bfbf0"]
+  }
+,
+  {
+    "name": "FUN_800c0808",
+    "address": "800c0808",
+    "size": 160,
+    "callers": ["800a0d2c", "800b6a4c"]
+  }
+,
+  {
+    "name": "FUN_800c08a8",
+    "address": "800c08a8",
+    "size": 672,
+    "callers": ["800b5e28"]
+  }
+,
+  {
+    "name": "FUN_800c0b48",
+    "address": "800c0b48",
+    "size": 2376,
+    "callers": ["800c08a8"]
+  }
+,
+  {
+    "name": "FUN_800c1490",
+    "address": "800c1490",
+    "size": 2248,
+    "callers": ["800b5e28", "800b5e28", "800b6724"]
+  }
+,
+  {
+    "name": "FUN_800c1d58",
+    "address": "800c1d58",
+    "size": 640,
+    "callers": ["800bfbf0"]
+  }
+,
+  {
+    "name": "FUN_800c1fd8",
+    "address": "800c1fd8",
+    "size": 344,
+    "callers": ["800c1d58"]
+  }
+,
+  {
+    "name": "FUN_800c2130",
+    "address": "800c2130",
+    "size": 800,
+    "callers": ["800c1d58"]
+  }
+,
+  {
+    "name": "FUN_800c2450",
+    "address": "800c2450",
+    "size": 212,
+    "callers": ["800b6724", "800b6724", "800b624c"]
+  }
+,
+  {
+    "name": "FUN_800c2524",
+    "address": "800c2524",
+    "size": 3276,
+    "callers": ["800c2450"]
+  }
+,
+  {
+    "name": "FUN_800c31f0",
+    "address": "800c31f0",
+    "size": 1880,
+    "callers": ["800b6724"]
+  }
+,
+  {
+    "name": "FUN_800c3948",
+    "address": "800c3948",
+    "size": 1128,
+    "callers": ["800c31f0"]
+  }
+,
+  {
+    "name": "FUN_800c3db0",
+    "address": "800c3db0",
+    "size": 920,
+    "callers": ["800b6b28"]
+  }
+,
+  {
+    "name": "FUN_800c4148",
+    "address": "800c4148",
+    "size": 3692,
+    "callers": ["800b5e28", "800b5e28"]
+  }
+,
+  {
+    "name": "FUN_800c4fb4",
+    "address": "800c4fb4",
+    "size": 3360,
+    "callers": ["800c4148"]
+  }
+,
+  {
+    "name": "FUN_800c5cd4",
+    "address": "800c5cd4",
+    "size": 1072,
+    "callers": ["800b5e28"]
+  }
+,
+  {
+    "name": "FUN_800c6104",
+    "address": "800c6104",
+    "size": 1172,
+    "callers": ["800c5cd4"]
+  }
+,
+  {
+    "name": "FUN_800c6598",
+    "address": "800c6598",
+    "size": 84,
+    "callers": ["800b6efc"]
+  }
+]
