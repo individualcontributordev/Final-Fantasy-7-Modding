@@ -30,7 +30,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parent.parent.parent
 FIELD_BIN_DEC = REPO_ROOT / "workspace" / "iso-extract" / "FIELD.BIN.dec"
 OUTPUT_DIR = REPO_ROOT / "workspace" / "ghidra-analysis"
-PROJECT_NAME = "ff7-field-analysis"  # Must match the project name you created in Ghidra GUI
+PROJECT_NAME = "FF7"  # Must match the project name you created in Ghidra GUI
 PROGRAM_NAME = "FIELD.BIN.dec"  # The program name within the project
 
 
