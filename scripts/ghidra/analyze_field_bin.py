@@ -30,22 +30,14 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).parent.parent.parent
 FIELD_BIN_DEC = REPO_ROOT / "workspace" / "iso-extract" / "FIELD.BIN.dec"
 OUTPUT_DIR = REPO_ROOT / "workspace" / "ghidra-analysis"
-PROJECT_NAME = "ff7-field-analysis"
-BASE_ADDRESS = "0x800A0000"  # US FIELD.BIN module base address
+PROJECT_NAME = "ff7-analysis"  # Must match the project name you created in Ghidra GUI
+PROGRAM_NAME = "FIELD.BIN.dec"  # The program name within the project
 
 
 def check_prerequisites():
     """Verify all required files and tools exist."""
     print("Checking prerequisites...")
-    
-    if not FIELD_BIN_DEC.exists():
-        print(f"❌ FIELD.BIN.dec not found at: {FIELD_BIN_DEC}")
-        print("\nRun this first:")
-        print("  python scripts/decompress_gzipps.py \\")
-        print("    workspace/iso-extract/FIELD.BIN \\")
-        print("    workspace/iso-extract/FIELD.BIN.dec")
-        return False
-    
+
     # Check ghidra-cli is available
     try:
         result = subprocess.run(
@@ -57,12 +49,34 @@ def check_prerequisites():
         if result.returncode != 0:
             print("❌ ghidra command not found. Is ghidra-cli installed and in PATH?")
             return False
+        print(f"✅ ghidra-cli available")
     except FileNotFoundError:
         print("❌ ghidra command not found. Is ghidra-cli installed and in PATH?")
         return False
-    
-    print(f"✅ FIELD.BIN.dec found ({FIELD_BIN_DEC.stat().st_size:,} bytes)")
-    print(f"✅ ghidra-cli available")
+
+    # Check if project exists
+    print(f"\nChecking Ghidra project '{PROJECT_NAME}'...")
+    result = subprocess.run(
+        ["ghidra", "project", "list"],
+        capture_output=True,
+        text=True,
+        check=False
+    )
+
+    if result.returncode != 0:
+        print("❌ Could not list Ghidra projects")
+        print(result.stderr)
+        return False
+
+    if PROJECT_NAME not in result.stdout:
+        print(f"❌ Ghidra project '{PROJECT_NAME}' not found")
+        print("\nAvailable projects:")
+        print(result.stdout)
+        print(f"\n⚠️  You need to import FIELD.BIN.dec through Ghidra GUI first!")
+        print("See docs/INSTRUCTIONS.md 'Phase 1: One-Time Manual Setup'")
+        return False
+
+    print(f"✅ Project '{PROJECT_NAME}' found")
     return True
 
 
@@ -75,57 +89,19 @@ def run_ghidra_script(script_content: str, output_file: Path) -> bool:
     script_file.write_text(script_content)
 
     try:
-        # Import and analyze in one step
-        # ghidra-cli auto-detects format, but for raw binaries you may need to:
-        # 1. Import once through Ghidra GUI with correct settings
-        # 2. Then use ghidra-cli to run scripts
-        print("  Importing and analyzing FIELD.BIN.dec...")
-        print("  (This may take 1-2 minutes on first run)")
+        # The file should already be imported through Ghidra GUI
+        # We just run the extraction script on the existing project
+        print(f"  Using existing project: {PROJECT_NAME}")
+        print(f"  Program: {PROGRAM_NAME}")
 
-        import_cmd = [
-            "ghidra",
-            "import",
-            str(FIELD_BIN_DEC.absolute()),
-            "--project", PROJECT_NAME,
-            # Don't skip analysis - we need it for extracting functions
-        ]
-
-        result = subprocess.run(
-            import_cmd,
-            capture_output=True,
-            text=True,
-            cwd=OUTPUT_DIR,
-            check=False
-        )
-
-        # Check for success or "already exists"
-        success = result.returncode == 0
-        already_exists = "already exists" in result.stderr or "already exists" in result.stdout
-
-        if not success and not already_exists:
-            print(f"❌ Import failed:")
-            print("STDERR:", result.stderr)
-            print("STDOUT:", result.stdout)
-            print("\n⚠️  Note: For raw binaries like FIELD.BIN.dec, you may need to:")
-            print("  1. Import it once manually through Ghidra GUI")
-            print("  2. Set processor to MIPS:LE:32:default")
-            print("  3. Set base address to 0x800A0000")
-            print("  4. Run analysis")
-            print("  5. Then this script can extract the data")
-            return False
-
-        if already_exists:
-            print("  ✅ Already imported (using existing)")
-        else:
-            print("  ✅ Import and analysis complete")
-
-        # Now run the extraction script
+        # Now run the extraction script on the existing program
         print("  Running extraction script...")
         script_cmd = [
             "ghidra",
             "script", "run",
             str(script_file.absolute()),
             "--project", PROJECT_NAME,
+            "--program", PROGRAM_NAME,
         ]
 
         result = subprocess.run(

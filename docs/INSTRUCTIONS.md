@@ -190,11 +190,14 @@ Done!
 
 ---
 
-## Next: Run Automated Analysis
+## Next: Set Up Ghidra Analysis (Two Phases)
 
-Now that ghidra-cli is set up, you can run automated Ghidra analysis scripts!
+### Phase 1: One-Time Manual Setup in Ghidra GUI
 
-### Step 1: Extract FIELD.BIN from your disc image
+Raw binaries like FIELD.BIN need initial configuration through Ghidra's GUI.
+You do this once, then the extraction scripts work forever.
+
+#### Step 1: Extract FIELD.BIN from your disc image
 
 First, check if FIELD.BIN already exists:
 
@@ -230,7 +233,7 @@ ls -lh workspace/iso-extract/FIELD.BIN
 # Should show a file around 3-4 MB (compressed)
 ```
 
-### Step 2: Decompress FIELD.BIN
+#### Step 2: Decompress FIELD.BIN
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
@@ -239,21 +242,66 @@ python scripts/decompress_gzipps.py \
   workspace/iso-extract/FIELD.BIN.dec
 ```
 
-This should create `FIELD.BIN.dec` (around 6-7 MB uncompressed).
+This should create `FIELD.BIN.dec` (around 264 KB uncompressed).
 
-### Step 3: Run the analysis script
+#### Step 3: Import FIELD.BIN.dec into Ghidra (one-time setup)
+
+1. **Open Ghidra** (the GUI application, not ghidra-cli)
+
+2. **Create a new project** (if you don't have one):
+   - File → New Project → Non-Shared Project
+   - Project name: `ff7-analysis`
+   - Location: anywhere you want (doesn't need to be in the repo)
+
+3. **Import FIELD.BIN.dec:**
+   - File → Import File
+   - Browse to: `workspace/iso-extract/FIELD.BIN.dec`
+   - Click "Select File To Import"
+
+4. **Configure import settings:**
+   - Format: **Raw Binary**
+   - Language: **MIPS:LE:32:default**
+     (Find it by typing "MIPS" in the language search)
+   - Click "Options..." button
+   - Set Base Address: **0x800A0000**
+   - Click OK
+
+5. **Analyze the file:**
+   - When prompted "Would you like to analyze now?", click **Yes**
+   - Use default analysis options (just click "Analyze")
+   - Wait for analysis to complete (watch bottom-right corner)
+   - This may take 1-2 minutes
+
+6. **Verify it worked:**
+   - You should see functions in the Symbol Tree
+   - The Listing window should show disassembly
+   - Search → Memory → search for hex: `B1 CA EE 6C 5A 71 2E 55`
+   - Should find the RNG table (if not, wrong base address or file)
+
+7. **Save and close Ghidra GUI**
+
+✅ **You're done with manual setup!** The file is now configured in Ghidra.
+
+---
+
+### Phase 2: Automated Metadata Extraction
+
+Now that FIELD.BIN.dec is configured in Ghidra, you can extract metadata automatically.
+
+#### Step 4: Run the extraction script
 
 ```bash
+cd ~/Final-Fantasy-7-Modding
 python scripts/ghidra/analyze_field_bin.py
 ```
 
 This will:
-1. Import FIELD.BIN.dec into Ghidra
-2. Run auto-analysis
-3. Extract structured metadata (functions, symbols, xrefs)
+1. Connect to your Ghidra project
+2. Extract functions (names, addresses, sizes, callers)
+3. Extract symbols (labels, global variables)
 4. Output JSON to `workspace/ghidra-analysis/`
 
-### Step 4: Commit the metadata
+#### Step 5: Commit the metadata
 
 ```bash
 git add workspace/ghidra-analysis/
