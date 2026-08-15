@@ -24,45 +24,59 @@ public class ExtractFieldMetadata extends GhidraScript {
         // Get script directory - use ResourceFile API
         String scriptDir = sourceFile.getParentFile().getAbsolutePath();
 
-        println("FF7 FIELD.BIN Metadata Extraction");
+        // Get current program name and derive output prefix
+        String programName = currentProgram.getName();
+        String prefix = programName.toLowerCase()
+            .replace(".bin.dec", "")
+            .replace(".x.dec", "")
+            .replace(".dec", "")
+            .replace("_", "-")
+            .replace(".", "-");
+
+        println("FF7 Metadata Extraction: " + programName);
         println("======================================================================");
         println("Output directory: " + scriptDir);
+        println("Output prefix: " + prefix);
         println("");
 
         // Extract functions
-        extractFunctions(scriptDir);
+        extractFunctions(scriptDir, prefix);
 
         // Extract symbols
-        extractSymbols(scriptDir);
+        extractSymbols(scriptDir, prefix);
 
         println("======================================================================");
         println("Extraction complete!");
         println("");
-        println("Copy these files to workspace/ghidra-analysis/ in your repo, then commit!");
+        println("Files created:");
+        println("  " + prefix + "-functions.json");
+        println("  " + prefix + "-symbols.json");
+        println("");
+        println("Copy these to workspace/ghidra-analysis/ in your repo, then commit!");
     }
     
-    private void extractFunctions(String outputDir) throws IOException {
+    private void extractFunctions(String outputDir, String prefix) throws IOException {
         println("Extracting functions...");
-        
+
         List<String> lines = new ArrayList<>();
         lines.add("[");
-        
+
         FunctionManager fm = currentProgram.getFunctionManager();
         FunctionIterator iter = fm.getFunctions(true);
-        
+
         boolean first = true;
         int count = 0;
-        
+
         while (iter.hasNext() && !monitor.isCancelled()) {
             Function func = iter.next();
             Address entry = func.getEntryPoint();
-            
+
             // Get function size
             long size = 0;
             for (var range : func.getBody()) {
                 size += range.getLength();
             }
-            
+
             // Get callers
             List<String> callers = new ArrayList<>();
             for (Reference ref : func.getSymbol().getReferences()) {
@@ -74,77 +88,77 @@ public class ExtractFieldMetadata extends GhidraScript {
                     }
                 }
             }
-            
+
             // Build JSON object
             if (!first) {
                 lines.add(",");
             }
             first = false;
-            
+
             lines.add("  {");
             lines.add("    \"name\": \"" + escapeJson(func.getName()) + "\",");
             lines.add("    \"address\": \"" + entry.toString() + "\",");
             lines.add("    \"size\": " + size + ",");
             lines.add("    \"callers\": [" + String.join(", ", callers) + "]");
             lines.add("  }");
-            
+
             count++;
         }
-        
+
         lines.add("]");
-        
+
         // Write file
-        String outputFile = outputDir + "/field-functions.json";
+        String outputFile = outputDir + "/" + prefix + "-functions.json";
         writeFile(outputFile, lines);
-        
+
         println("✅ Functions extracted: " + count);
         println("   Saved to: " + outputFile);
         println("");
     }
     
-    private void extractSymbols(String outputDir) throws IOException {
+    private void extractSymbols(String outputDir, String prefix) throws IOException {
         println("Extracting symbols...");
-        
+
         List<String> lines = new ArrayList<>();
         lines.add("[");
-        
+
         SymbolTable symbolTable = currentProgram.getSymbolTable();
         SymbolIterator iter = symbolTable.getAllSymbols(true);
-        
+
         boolean first = true;
         int count = 0;
-        
+
         while (iter.hasNext() && !monitor.isCancelled()) {
             Symbol symbol = iter.next();
-            
+
             // Skip default/analysis symbols
             SourceType source = symbol.getSource();
             if (source == SourceType.DEFAULT || source == SourceType.ANALYSIS) {
                 continue;
             }
-            
+
             // Build JSON object
             if (!first) {
                 lines.add(",");
             }
             first = false;
-            
+
             lines.add("  {");
             lines.add("    \"name\": \"" + escapeJson(symbol.getName()) + "\",");
             lines.add("    \"address\": \"" + symbol.getAddress().toString() + "\",");
             lines.add("    \"type\": \"" + symbol.getSymbolType().toString() + "\",");
             lines.add("    \"namespace\": \"" + escapeJson(symbol.getParentNamespace().getName()) + "\"");
             lines.add("  }");
-            
+
             count++;
         }
-        
+
         lines.add("]");
-        
+
         // Write file
-        String outputFile = outputDir + "/field-symbols.json";
+        String outputFile = outputDir + "/" + prefix + "-symbols.json";
         writeFile(outputFile, lines);
-        
+
         println("✅ Symbols extracted: " + count);
         println("   Saved to: " + outputFile);
         println("");
