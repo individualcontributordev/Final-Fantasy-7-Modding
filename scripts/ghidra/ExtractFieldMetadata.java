@@ -21,8 +21,9 @@ public class ExtractFieldMetadata extends GhidraScript {
 
     @Override
     public void run() throws Exception {
-        String scriptDir = getScriptFile().getParent();
-        
+        // Get script directory from source file
+        String scriptDir = sourceFile.getParent();
+
         println("FF7 FIELD.BIN Metadata Extraction");
         println("======================================================================");
         println("Output directory: " + scriptDir);
