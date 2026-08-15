@@ -24,7 +24,7 @@ Extract FIELD.BIN functions and symbols from Ghidra as JSON files so Agent can q
    ```
    <your-repo-path>/Final-Fantasy-7-Modding/scripts/ghidra/
    ```
-6. Double-click `extract_field_metadata.py` to run it
+6. Double-click `ExtractFieldMetadata.java` to run it
 7. Watch the Console window (bottom of Ghidra) for progress
 8. Should complete in 10-30 seconds
 9. Output files are saved to `scripts/ghidra/`:
