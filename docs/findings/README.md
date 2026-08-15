@@ -13,7 +13,8 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 **How to add:** copy `_template.md` → `YYYY-MM-DD-slug.md` → add a row below.
 
 | Date | Slug | Summary | Confidence |
-|------|------|---------|------------|
+|------|------|---------|
+| 2026-08-15 | [ghidra-metadata-single-disc-analysis](2026-08-15-ghidra-metadata-single-disc-analysis.md) | Complete Ghidra metadata extraction (2,410 functions) confirms single-disc mod is functionally complete; only WORLD.BIN `FUN_800c5cd4` needs investigation |------------|
 | 2026-08-14 | [gate1-cos-ifsw-e-ret](2026-08-14-gate1-cos-ifsw-e-ret.md) | COS IFSW E=5 RET before break ASK (v0.1.32) | shipped |
 | 2026-08-13 | [csr-vs-sd-all-field-scripts](2026-08-13-csr-vs-sd-all-field-scripts.md) | Full 787-field script compare CSR D1/D2 vs SD stack |
 | 2026-08-13 | [v035-music-fail-save-ok](2026-08-13-v035-music-fail-save-ok.md) | v0.1.35 LOST2 music still silent; save page OK |

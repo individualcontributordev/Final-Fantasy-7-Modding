@@ -1,136 +1,92 @@
-# INSTRUCTIONS — Extract Metadata from All Game Binaries
+# INSTRUCTIONS — Investigate Single-Disc Layer Corruption
 
-## Goal
+## Problem
 
-Extract functions and symbols from all FF7 game binaries in your Ghidra project as JSON files.
+You reported: "the current single-disc mod when used with the csr layers is broken"
 
-## What You Already Have ✅
+## What I Found
 
-Based on your Ghidra project logs, these files are already imported and analyzed:
-- **FIELD.BIN.dec** (186 functions) ✅ metadata extracted
-- **BATTLE.X.dec** (615 functions) ← extract this next
-- **BATRES.X.dec** (18 functions)
-- **WORLD.BIN.dec** (446 functions)
-- **SCUS_941.63** (1145 functions)
-
-**Total: 5 files, ~2410 functions ready to extract!**
-
----
-
-## Step 1: Extract metadata in Ghidra GUI
-
-Since you already have all the files imported, just run the extraction script on each one:
-
-**For each file:**
-
-1. Open Ghidra GUI
-2. Open your `FF7` project  
-3. Double-click the file (e.g., `BATTLE.X.dec`)
-4. Open Script Manager: **Window → Script Manager** (`Ctrl+Shift+S`)
-5. Browse to: `D:/projects/Final-Fantasy-7-Modding/scripts/ghidra/`
-6. Double-click `ExtractFieldMetadata.java` to run it
-7. Wait 10-30 seconds
-8. Check Console for "Extraction complete!"
-
-**Files to extract (in order of importance):**
-1. ✅ FIELD.BIN.dec (already done - 26 KB JSON)
-2. **BATTLE.X.dec** (battle engine - important for single-disc)
-3. **BATRES.X.dec** (victory fanfare)
-4. **WORLD.BIN.dec** (world map - may have disc checks)
-5. SCUS_941.63 (main executable - optional)
-
----
-
-## Step 2: Collect all the JSON files
-
-**IMPORTANT:** The script was just fixed to use unique filenames per binary.
-Pull the latest version first:
+**CRITICAL BUG:** The single-disc layer files are EMPTY!
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
-git pull
+
+# Check layer sizes
+wc -l builder/single-disc-on-csr-v0.1.33/layers/disc1.layer.json
+wc -l builder/single-disc-on-csr-v0.1.35/layers/disc1.layer.json
+wc -l builder/single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json
 ```
 
-Then refresh the script in Ghidra Script Manager and re-run on all files.
-
-After running on all files, you should have:
-
-```bash
-cd ~/Final-Fantasy-7-Modding
-ls -lh scripts/ghidra/*.json
-
-# Expected output (note the unique prefixes):
-# field-bin-functions.json (from FIELD.BIN.dec)
-# field-bin-symbols.json
-# battle-x-functions.json (from BATTLE.X.dec)
-# battle-x-symbols.json
-# batres-x-functions.json (from BATRES.X.dec)
-# batres-x-symbols.json
-# world-bin-functions.json (from WORLD.BIN.dec)
-# world-bin-symbols.json
-# scus-941-63-functions.json (from SCUS_941.63)
-# scus-941-63-symbols.json
+All three show just 4 lines (empty operations array):
 ```
+{
+  "version": "ic-layer-v1",
+  "operations": []
+}
+```
+
+**This is why single-disc breaks CSR - the layers have no patches!**
 
 ---
 
-## Step 3: Copy to workspace
+## Root Cause
 
-```bash
-cd ~/Final-Fantasy-7-Modding
-mkdir -p workspace/ghidra-analysis
+From CHANGELOG line 42:
+> "Core layer bytes still shared from builder/single-disc-on-csr-v0.1.24/."
 
-# Copy all JSON files
-cp scripts/ghidra/*-functions.json workspace/ghidra-analysis/
-cp scripts/ghidra/*-symbols.json workspace/ghidra-analysis/
+But v0.1.24 was deleted during the v0.1.33 repo purge (CHANGELOG line 23).
 
-# Verify
-ls -lh workspace/ghidra-analysis/
-```
+**The actual layer content is missing from the repo.**
 
 ---
 
-## Step 4: Commit the metadata
+## Step 1: Check ship scripts
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
-git add workspace/ghidra-analysis/
-git commit -m "Add Ghidra metadata for all game binaries
-
-Extracted functions and symbols from:
-- FIELD.BIN.dec (186 functions)
-- BATTLE.X.dec (615 functions)
-- BATRES.X.dec (18 functions)
-- WORLD.BIN.dec (446 functions)
-- SCUS_941.63 (1145 functions)
-
-Total: ~2410 functions across 5 core modules.
-Agent can now query complete game structure."
-git push
+ls -la mods/single-disc/scripts/ship_*.py
 ```
+
+Paste the output. We need to find the latest ship script to rebuild the layers.
 
 ---
 
-## Step 5: Paste evidence
+## Step 2: Also paste this info
 
-Once committed, paste:
+1. **Which CSR version are you using?**
+   ```bash
+   # If you have a built image, check APPLIED.txt
+   cat path/to/APPLIED.txt | grep csr
+   ```
 
-```bash
-git log -1 --stat
-ls -lh workspace/ghidra-analysis/
-```
+2. **What breaks specifically?**
+   - Wrong field behavior?
+   - Crashes?
+   - Wrong movies?
+   - Disc-ask prompts reappear?
 
-✅ **Done!** Agent now has complete metadata for the entire FF7 PSX engine.
+3. **Where does it break?**
+   - Immediately on boot?
+   - At specific story point (e.g., LOSIN2 → LOST2)?
 
 ---
 
 ## Why This Matters
 
-With metadata for all these files, Agent can:
-- Find all disc-related code across all modules
-- Map cross-module calls (FIELD→BATTLE, BATRES→BATTLE, etc.)
-- Identify hardcoded addresses for patching
-- Plan new features (button combos, debug menus, etc.)
-- Verify no disc checks remain in single-disc mod
+The empty layers mean:
+- ❌ No Ask-for-disc removal
+- ❌ No SNOVA LBA patches  
+- ❌ No field movie handling
+- ❌ No disc-break choreography
 
-**Files extracted = complete game logic database!**
+Basically the "single-disc" mod does **nothing** when applied, so CSR multi-disc behavior is intact and breaks on a single disc image.
+
+---
+
+## Next Steps
+
+Once you paste the ship script list and problem details, I'll:
+1. Run/write the build script to regenerate layers
+2. Commit the rebuilt layers with proper content
+3. Fix the manifest references
+4. Verify against CSR
