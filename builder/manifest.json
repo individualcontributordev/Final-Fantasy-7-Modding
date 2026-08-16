@@ -874,6 +874,27 @@
       "id": "single-disc-on-csr-v0.1.33",
       "name": "Single-disc",
       "kind": "mod",
+      "version": "0.1.35",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.34: disc-break scene (LOSIN2 keeps break bit; COS_BTM2 ASK).",
+      "hint": "CSR. Movies + endings auto-apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.33/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": false,
+      "hidden": false,
+      "beta": true,
+      "status": "beta"
+    },
+    {
+      "id": "single-disc-on-csr-v0.1.37",
+      "name": "Single-disc",
+      "kind": "mod",
       "version": "0.1.37",
       "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.37: D1→D2 break scene music fix (LOST2 IFUW patch).",
       "hint": "CSR. Movies + endings auto-apply.",
