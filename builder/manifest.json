@@ -931,28 +931,26 @@
     },
     {
       "id": "single-disc-on-csr-v0.1.37",
-      "displayName": "Single-Disc v0.1.37",
-      "version": "0.1.37",
-      "description": "Fix disc 1\u21922 break scene (LOSIN2 BITON patch)",
+      "name": "(auto) disc-break fix",
+      "kind": "mod",
+      "blurb": "Internal auto: force D1→D2 break scene by patching LOST2 IFUW.",
+      "hint": "Always with Single-disc.",
+      "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
-        "highwind-v0.2.0"
+        "csr-v0.14.1"
       ],
-      "discs": [
-        1
-      ],
-      "badgeText": "v0.1.37",
-      "layers": [
-        {
-          "disc": 1,
-          "url": "./single-disc-on-csr-v0.1.37/layers/disc1.layer.json"
-        }
-      ],
+      "discs": {
+        "1": "./single-disc-on-csr-v0.1.37/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr-v0.1.33"
       },
-      "enabled": true,
-      "uiHidden": true
+      "version": "0.1.37"
     },
     {
       "id": "single-disc-on-csr-v0.1.34",
