@@ -1,116 +1,138 @@
-# INSTRUCTIONS — Single-Disc Disc 1→2 Transition Fix
+# Agent Task: Single-Disc D1→D2 Break Scene Investigation
 
-## 🔬 NEW FINDING: BLACKBGB Has No MAPJUMP on Pristine
+## Current Status
 
-**Analyzed pristine BLACKBGB.DAT from both Disc 1 and Disc 2:**
-- ✅ MUSIC opcodes present (in cloud/script31)
-- ❌ **NO MAPJUMP opcodes at all**
+**Problem:** Single-disc skips the Cosmo Canyon break scene and has no music after the D1→D2 transition.
 
-This means the MAPJUMP #634 we see in single-disc is **added by CSR**, not from the base game!
+**Root Cause Identified:**
+- CSR multi-disc relies on `bank3[0x84]` bit4 being set during disc swap
+- LOST2 (D2) init script checks bit4 before jumping to COS_BTM2 break scene
+- Single-disc never sets bit4 (no physical disc swap), so LOST2 RETs early
 
-On pristine multi-disc, BLACKBGB is a simple "disc swap hub" that probably shows a message, then the game's kernel/CD code handles the disc transition automatically.
+## Investigation Findings
+
+### Database Analysis Complete
+Built SQLite database at `docs/reference/field-scripts.db` with CSR and pristine field scripts:
+
+```bash
+# Query examples
+python scripts/query_field_scripts.py --field LOST2
+python scripts/query_field_scripts.py --opcode MAPJUMP
+```
+
+**Key Findings:**
+1. **LOST2 CSR D2** init script (268 bytes total):
+   - Raw hex: `430014308404091c1820000055a40112da...`
+   - Contains reference to field #526 at offset 0x46: `0e 02` (COS_BTM2)
+   - BUT: This is NOT in a MAPJUMP opcode - it's embedded in parameters
+   - The actual flow logic is more complex than expected
+
+2. **LOSIN2** (end of D1):
+   - No `BITOFF bank3[0x84]` found in pristine OR CSR
+   - The bit manipulation must happen elsewhere or be disc-init code
+
+3. **BLACKBGB** (disc swap trigger):
+   - No MAPJUMP opcodes in pristine or CSR
+   - Transition logic added by CSR in a way not visible in our field script database
+
+### Attempts Made
+
+**v0.1.34 (disabled):** Malformed offset-based layer with 544 empty-path records
+**v0.1.35 (disabled):** Incomplete, no pack.json
+**v0.1.36 (disabled):** Similar malformed state
+**v0.1.37 (enabled but broken):** Tried to patch LOSIN2 BITOFF→BITON, but byte pattern not found
+
+**Current Manifest State:**
+- ✓ single-disc-on-csr-v0.1.33 (core, enabled)
+- ✗ single-disc-on-csr-v0.1.34 (auto fix, disabled)
+- ✗ single-disc-on-csr-v0.1.35 (disabled)
+- ✗ single-disc-on-csr-v0.1.36 (disabled)  
+- ✓ single-disc-on-csr-v0.1.37 (enabled but empty fix)
+
+## What You Need to Do
+
+### 1. Test Current CSR Multi-Disc Behavior
+
+Build a clean CSR multi-disc set and play through the D1→D2 transition:
+
+```bash
+cd ~/Final-Fantasy-7-CSR
+# Follow CSR build instructions to create discs
+# Load save at Cosmo Canyon before rocket launch
+# Play through rocket sequence → disc swap → observe
+```
+
+**Record:**
+- Does the break scene play?
+- What music plays in LOST2 forest after?
+- Any visual glitches or black screens?
+
+### 2. Decode LOST2 Init Script Properly
+
+The raw bytes at offset 0x3D-0x50 need proper decoding:
+
+```
+0x3d: 18 20 00 00 55 a4 00 0b 60 0e 02 7b ff 1c fa 65 00 e0 16
+```
+
+**Questions:**
+- What is opcode 0x18? (Might be IFUB/IFUW with different encoding)
+- The `0e 02` at 0x46 is field #526 - what opcode uses it?
+- What does `0b` at offset 0x44 control? (else-offset?)
+
+**Tools to use:**
+- Makou Reactor (open LOST2.DAT directly)
+- Black Chocobo save editor (set GM to 0xa455 for testing)
+- Compare pristine vs CSR LOST2 byte-by-byte
+
+### 3. Find the Actual Bit Flag
+
+Search CSR executable or disc-init code for bank3[0x84] manipulation:
+
+```bash
+# In CSR repo if you have SLUS decompressed
+strings SLUS_014.46 | grep -i "bank\|0x84"
+
+# Or search in Ghidra (if you have the project)
+```
+
+### 4. Simpler Fix Approach
+
+Instead of finding the exact bit, try **bypassing the check entirely**:
+
+**Option A:** Patch LOST2 to always jump to COS_BTM2
+- Find the conditional jump that checks bit4
+- Replace with unconditional MAPJUMP to field #526
+
+**Option B:** Force bit4 ON at game start
+- Patch BLACKBGB or game init to set `bank3[0x84]#4 = 1`
+- This mirrors what disc-swap does
+
+**Option C:** Use v0.1.31 approach (from CHANGELOG)**
+> LOST2 init IFUW !=0xa455 fail else 0x12 to 0x13 lands MAPJUMP #526
+
+This suggests changing an `else` offset byte to shift the jump target.
+- Find offset 0x12 in the init script
+- Change to 0x13
+- Test if this reaches the MAPJUMP
+
+## Questions for Me
+
+When you test and gather evidence, tell me:
+
+1. **CSR multi-disc test results** - does break scene work?
+2. **LOST2 script structure** - what does Makou show for init/script0?
+3. **Byte pattern search** - can you find `83 03 84 04` (BITOFF bank3[0x84]) anywhere in CSR D1/D2?
+4. **v0.1.31 patch** - where exactly is the byte `0x12` that should become `0x13`?
+
+I'll use your evidence to create the correct fix.
+
+## Context Files
+
+- `docs/reference/disc-transition-knowledge-base.md` - Current findings
+- `mods/single-disc/CHANGELOG.md` - History of attempts (v0.1.31-v0.1.36)
+- `docs/findings/2026-08-14-break-losin2-bit-and-cos-ask.md` - v0.1.31 gate details
 
 ---
 
-## Current Status: ⏸️ WAITING FOR USER TEST
-
-You reported that **CSR + Single-disc** has issues:
-- ✅ Disc 1→2 transition loads field 634 (LOST2 forest)
-- ❌ Missing break scene at start of Disc 2
-- ❌ No music on field 634
-
-The expected flow on **CSR multi-disc** should be:
-1. End of D1: LOSIN2 (field 632) → asks for Disc 2
-2. Start of D2: BLACKBGB hub → **COS_BTM2 break scene (field 526)**
-3. After break: **LOST2 forest (field 634) with music**
-
-On **CSR + Single-disc**, the flow is:
-1. End of D1: LOSIN2 → transition
-2. ❌ **Goes directly to field 634**, skipping COS_BTM2 (field 526)
-3. ❌ **No music** on field 634
-
----
-
-## Root Cause (from CHANGELOG v0.1.33-0.1.35)
-
-**Current single-disc state (v0.1.33 core):**
-- LOSIN2 = CSR Disc 1 (sets GM=0xa455, **clears** bit4)
-- BLACKBGB = Ask-stripped (DSKCG removed)
-- LOST2 = **pure CSR Disc 2**
-- COS_BTM2 = pure CSR Disc 2
-
-**The problem:**
-
-> Pure CSR D2 LOST2 never MAPJUMPs COS_BTM2 after LOSIN2: LOSIN2 sets GM 0xa455 and BITOFFs bank3/0x84#4, so LOST2 init RETs (no break, no music path).
-
-On **CSR multi-disc**, when you swap from Disc 1 to Disc 2:
-- Disc 2 has different initialization code that sets bit4
-- LOST2 on D2 checks bit4 and forwards to COS_BTM2 when set
-- On **single-disc**, there's no disc swap, so bit4 stays cleared → LOST2 just RETurns
-
-**From v0.1.35 finding:**
-
-> BLACKBGB disc-2 arms still run MAPJUMP #634 then MUSIC id=3 — MUSIC is after MAPJUMP (never runs on hub).
-
-So BLACKBGB is jumping to LOST2 (#634), but LOST2 can't forward to the break scene because the flag isn't set.
-
-**Questions we need answered by testing CSR multi-disc:**
-1. What does BLACKBGB do on actual Disc 2? Jump to #526 or #634?
-2. If it jumps to #634, how does LOST2 know to forward to COS_BTM2?
-3. Where does the break scene actually happen - is it a cutscene in COS_BTM2?
-
----
-
-## Analysis Needed
-
-Before creating a fix, I need to confirm the expected behavior.
-
-### Test: CSR Multi-Disc Behavior
-
-On Windows, test a clean CSR multi-disc build (D1 + D2, NO single-disc) to see what actually happens:
-
-1. **Build CSR discs** (NO mods):
-   - Go to https://individualcontributor.dev/builder/
-   - Select "Base Experience: CSR v0.14.1"
-   - Select "Disc 1", click "Build Disc 1"
-   - Save the .zip, extract, get the .bin
-   - Select "Disc 2", click "Build Disc 2"  
-   - Save the .zip, extract, get the .bin
-
-2. **Load in DuckStation:**
-   - Load CSR Disc 1 .bin
-   - Play to end of Disc 1 (or load a save state near the disc break)
-
-3. **At "Please insert Disc 2" prompt:**
-   - In DuckStation: "System" → "Change Disc" → select CSR Disc 2 .bin
-   - Continue
-
-4. **Record what happens:**
-   - What field loads? (You can watch field ID in Cheat Engine: `DuckStation.exe+7F1600+0x11C2A4`, 2-byte hex)
-   - Do you see any cutscene/dialogue at Cosmo Canyon?
-   - Do you hear music when you reach the forest?
-   - Can you move and play normally?
-
-### Paste Here
-
-**CSR multi-disc test results:**
-- Field ID when D2 starts: ____
-- Break scene at Cosmo: YES / NO / (describe what you saw)
-- Music in forest: YES / NO
-- Able to continue playing: YES / NO
-
----
-
-## Next: Fix After Confirmation
-
-Once you confirm the CSR multi-disc behavior, I will create **v0.1.36** that:
-
-1. Patches BLACKBGB to MAPJUMP #526 (break scene) instead of #634
-2. Moves MUSIC before MAPJUMP so it actually plays
-3. Ensures break scene works on single-disc
-
----
-
-## Hold
-
-No code changes yet. Run the CSR multi-disc test above, paste results here, then say **check**.
+**Agent Note:** This task requires human investigation with tools I can't run (Makou Reactor, DuckStation, disc burning). Once you provide the evidence, I can create the exact byte patches needed.

@@ -25,6 +25,7 @@ DB_PATH = ROOT / "docs/reference/field-scripts.db"
 OPCODE_NAMES = {
     0x00: 'RET', 0x2B: 'MAPJUMP', 0x2C: 'SETBYTE', 0x31: 'MUSIC',
     0x33: 'IFUW', 0x34: 'IFSW', 0x35: 'IFUB', 0x36: 'IFUBL',
+    0x82: 'BITON', 0x83: 'BITOFF', 0x84: 'BITXOR',
 }
 
 
@@ -114,6 +115,12 @@ def analyze_field(conn, img_bytes, field_path, disc, source):
                             param1 = script.raw[pos+1]
                             param2 = script.raw[pos+2]
                             param_text = f"bank={param1} val={param2}"
+                    elif op in [0x82, 0x83, 0x84]:  # BITON, BITOFF, BITXOR
+                        if pos+5 < len(script.raw):
+                            bank = script.raw[pos+1]
+                            bit = script.raw[pos+2]
+                            param1 = (bank << 8) | bit
+                            param_text = f"bank{bank}[0x{script.raw[pos+3]:02x}]#{bit}"
                     elif op in [0x33, 0x34, 0x35, 0x36]:  # IF opcodes
                         if pos+5 < len(script.raw):
                             param1 = struct.unpack("<H", script.raw[pos+1:pos+3])[0]
@@ -154,17 +161,17 @@ def main():
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     
     conn = init_db()
-    
+
     # Analyze pristine discs
     if 'pristine' in args.sources:
         print("\n📊 Analyzing pristine discs...")
         pristine_d1 = ROOT / "workspace/pristine/FINALFANTASY7_D1.bin"
         pristine_d2 = ROOT / "workspace/pristine/FINALFANTASY7_D2.bin"
-        
+
         if pristine_d1.exists() and pristine_d2.exists():
             d1_img = pristine_d1.read_bytes()
             d2_img = pristine_d2.read_bytes()
-            
+
             for field in fields:
                 print(f"  {field}...", end=' ')
                 ok1 = analyze_field(conn, d1_img, f"FIELD/{field}.DAT", 1, "pristine")
@@ -172,7 +179,25 @@ def main():
                 print("✅" if ok1 and ok2 else "")
         else:
             print(f"  ⚠️  Pristine discs not found in workspace/pristine/")
-    
+
+    # Analyze CSR discs
+    if 'csr' in args.sources:
+        print("\n📊 Analyzing CSR discs...")
+        csr_d1 = ROOT.parent / "Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin"
+        csr_d2 = ROOT.parent / "Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D2.bin"
+
+        if csr_d1.exists() and csr_d2.exists():
+            d1_img = csr_d1.read_bytes()
+            d2_img = csr_d2.read_bytes()
+
+            for field in fields:
+                print(f"  {field}...", end=' ')
+                ok1 = analyze_field(conn, d1_img, f"FIELD/{field}.DAT", 1, "csr")
+                ok2 = analyze_field(conn, d2_img, f"FIELD/{field}.DAT", 2, "csr")
+                print("✅" if ok1 and ok2 else "")
+        else:
+            print(f"  ⚠️  CSR discs not found in ../Final-Fantasy-7-CSR/cache/csr/")
+
     conn.close()
     print(f"\n✅ Database saved: {DB_PATH}")
     print(f"\n📖 Query with: python scripts/query_field_scripts.py --help")
