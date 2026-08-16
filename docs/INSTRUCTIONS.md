@@ -1,5 +1,17 @@
 # INSTRUCTIONS — Single-Disc Disc 1→2 Transition Fix
 
+## 🔬 NEW FINDING: BLACKBGB Has No MAPJUMP on Pristine
+
+**Analyzed pristine BLACKBGB.DAT from both Disc 1 and Disc 2:**
+- ✅ MUSIC opcodes present (in cloud/script31)
+- ❌ **NO MAPJUMP opcodes at all**
+
+This means the MAPJUMP #634 we see in single-disc is **added by CSR**, not from the base game!
+
+On pristine multi-disc, BLACKBGB is a simple "disc swap hub" that probably shows a message, then the game's kernel/CD code handles the disc transition automatically.
+
+---
+
 ## Current Status: ⏸️ WAITING FOR USER TEST
 
 You reported that **CSR + Single-disc** has issues:
