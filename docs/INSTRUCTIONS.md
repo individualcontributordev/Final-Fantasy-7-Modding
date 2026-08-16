@@ -1,13 +1,13 @@
-# INSTRUCTIONS — Single-Disc Disc 1→2 Transition Analysis
+# INSTRUCTIONS — Single-Disc Disc 1→2 Transition Fix
 
-## Problem Report
+## Current Status: ⏸️ WAITING FOR USER TEST
 
-You tested **CSR + Single-disc** and found:
+You reported that **CSR + Single-disc** has issues:
 - ✅ Disc 1→2 transition loads field 634 (LOST2 forest)
 - ❌ Missing break scene at start of Disc 2
 - ❌ No music on field 634
 
-On **CSR multi-disc**, the correct flow should be:
+The expected flow on **CSR multi-disc** should be:
 1. End of D1: LOSIN2 (field 632) → asks for Disc 2
 2. Start of D2: BLACKBGB hub → **COS_BTM2 break scene (field 526)**
 3. After break: **LOST2 forest (field 634) with music**
