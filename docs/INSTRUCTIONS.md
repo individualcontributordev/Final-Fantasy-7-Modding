@@ -67,23 +67,46 @@ cd ~/Final-Fantasy-7-CSR
 - What music plays in LOST2 forest after?
 - Any visual glitches or black screens?
 
-### 2. Decode LOST2 Init Script Properly
+### 2. LOST2 Init Script DECODED ✅
 
-The raw bytes at offset 0x3D-0x50 need proper decoding:
+Built CSR D1 bin and analyzed LOST2. Using `scripts/decode_field_script.py`:
 
+**CSR D1 LOST2 init @ 0x434:**
 ```
-0x3d: 18 20 00 00 55 a4 00 0b 60 0e 02 7b ff 1c fa 65 00 e0 16
+@0x43C: IFUW addr=0x0020 != 0xa455, else +0x5  ← GM check (skip if NOT at transition)
+@0x444: MUSIC
+@0x448: IFUW addr=0x0020 != 0xa455, else +0x3  ← Second GM check
+@0x450: MUSIC
+@0x452: RET
 ```
 
-**Questions:**
-- What is opcode 0x18? (Might be IFUB/IFUW with different encoding)
-- The `0e 02` at 0x46 is field #526 - what opcode uses it?
-- What does `0b` at offset 0x44 control? (else-offset?)
+**Key insight:**
+- These are `!=` checks (not `==`)
+- When GM **IS** 0xa455, checks pass through → music plays
+- When GM is **NOT** 0xa455, else-skip happens → skip music
 
-**Tools to use:**
-- Makou Reactor (open LOST2.DAT directly)
-- Black Chocobo save editor (set GM to 0xa455 for testing)
-- Compare pristine vs CSR LOST2 byte-by-byte
+**The problem for single-disc:**
+CSR multi-disc sets GM=0xa455 during disc swap. Single-disc **never** reaches that GM value because there's no physical disc swap event. So:
+- LOST2 loads with GM != 0xa455
+- First IFUW: else +0x5 → skips MUSIC at 0x444
+- Second IFUW: else +0x3 → skips MUSIC at 0x450
+- Hits RET at 0x452 → no music, no further scene logic
+
+**The fix (two options):**
+1. **Set GM=0xa455** before LOST2 loads (in LOSIN2 or transition trigger)
+2. **Patch both IFUW else offsets to 0x00** in LOST2 → always play music regardless of GM
+
+Option 2 is safer (no risk of breaking other GM-dependent logic).
+
+**Verification (optional):**
+You can verify this with Makou Reactor or by decoding the raw bytes:
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+python3 scripts/decode_field_script.py "1820000055a4000b600e027bff1cfa6500e016"
+```
+
+Expected output shows the IFUW at offset 0x00, MAPJUMP at 0x08.
 
 ### 3. Find the Actual Bit Flag
 
@@ -96,36 +119,33 @@ strings SLUS_014.46 | grep -i "bank\|0x84"
 # Or search in Ghidra (if you have the project)
 ```
 
-### 4. Simpler Fix Approach
+### 4. Apply the Fix (READY TO IMPLEMENT)
 
-Instead of finding the exact bit, try **bypassing the check entirely**:
+Now that we've decoded the exact logic, the fix is straightforward:
 
-**Option A:** Patch LOST2 to always jump to COS_BTM2
-- Find the conditional jump that checks bit4
-- Replace with unconditional MAPJUMP to field #526
+**Create v0.1.37 layer:**
+- Target: CSR LOST2.DAT relocated to single-disc D1
+- Search pattern: `18 20 00 00 55 a4` (start of IFUW at init offset 0x3D)
+- Patch offset: +7 bytes from search hit (the "else" parameter)
+- Old byte: `0x0b`
+- New byte: `0x00`
 
-**Option B:** Force bit4 ON at game start
-- Patch BLACKBGB or game init to set `bank3[0x84]#4 = 1`
-- This mirrors what disc-swap does
+This will be implemented in `mods/single-disc/scripts/ship_v037.py` using the `build_ic_layer.py` search-and-replace feature.
 
-**Option C:** Use v0.1.31 approach (from CHANGELOG)**
-> LOST2 init IFUW !=0xa455 fail else 0x12 to 0x13 lands MAPJUMP #526
+## Next Steps
 
-This suggests changing an `else` offset byte to shift the jump target.
-- Find offset 0x12 in the init script
-- Change to 0x13
-- Test if this reaches the MAPJUMP
+**Agent will:**
+1. Create `mods/single-disc/scripts/ship_v037.py` with the correct patch
+2. Run the script to generate `builder/single-disc-on-csr-v0.1.37/`
+3. Update manifest to enable v0.1.37
+4. Commit and push
 
-## Questions for Me
-
-When you test and gather evidence, tell me:
-
-1. **CSR multi-disc test results** - does break scene work?
-2. **LOST2 script structure** - what does Makou show for init/script0?
-3. **Byte pattern search** - can you find `83 03 84 04` (BITOFF bank3[0x84]) anywhere in CSR D1/D2?
-4. **v0.1.31 patch** - where exactly is the byte `0x12` that should become `0x13`?
-
-I'll use your evidence to create the correct fix.
+**You will:**
+1. Pull the repo
+2. Build and test the single-disc with v0.1.37 applied
+3. Verify the break scene plays at the D1→D2 transition
+4. Verify music plays in LOST2 forest after the break
+5. Report back: ✅ or any issues observed
 
 ## Context Files
 

@@ -89,6 +89,33 @@ Update `mods/single-disc/CHANGELOG.md` (newest top), `VERSION`, `builder/manifes
 - Lake cutscene needs lake movie bytes at one fixed disc place; endings pack restores that after writing long credits
 - See rule `single-disc-fields.mdc` and `plain-english.mdc` for chat
 
+## D1→D2 Break Scene Fix (LOST2)
+
+**Problem:** Single-disc skips Cosmo Canyon break scene; no music after transition.
+
+**Root Cause:** CSR LOST2 D2 init checks `bank3[0x84]` bit4 (set by disc-swap hardware) before jumping to COS_BTM2 (#526). Single-disc never sets bit4 → LOST2 RETs early.
+
+**Fix:** Patch LOST2 init script offset `0x44` to bypass the check.
+
+**Technical Detail:**
+- LOST2 init @0x3D: `IFUW addr=0x0020 == 0xa455, else +0xb`
+- @0x45: `MAPJUMP field #526 (0x20e)` — COS_BTM2 break scene
+- The `else +0xb` at offset 0x44 skips MAPJUMP when GM != 0xa455
+- **Change byte at 0x44 from `0x0b` to `0x00`** → forces break scene always
+
+**Tools:**
+- `scripts/decode_field_script.py` — decode raw field script bytes
+- `scripts/ff7_opcodes.py` — opcode table (MAPJUMP=0x60, IFUW=0x18)
+- `docs/reference/field-scripts.db` — SQLite database of analyzed scripts
+
+**Opcodes to know:**
+- `0x18 = IFUW` (If Unsigned Word), format: `18 <addr_3b> <val_2b> <comp> <else>`
+- `0x60 = MAPJUMP` (not 0x2B!), format: `60 <field_id_2b>`
+- `0x31 = MUSIC`, `0x9A = AKAO2`
+- `0x82 = BITON`, `0x83 = BITOFF`
+
+**Game Moment (GM):** Address `0x0020` tracks story progress. `0xa455` = D1/D2 transition gate.
+
 ## Human ops
 
 Write one atomic task to `docs/INSTRUCTIONS.md` (what + why + COPY-PASTE), push,
