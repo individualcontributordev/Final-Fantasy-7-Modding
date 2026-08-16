@@ -545,7 +545,7 @@
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelectedPrefix": "single-disc-on-csr-v",
+        "addonSelected": "single-disc-on-csr",
         "bases": [
           "csr-v0.14.1"
         ],
@@ -573,9 +573,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "groupLabel": "Single-disc ending credits (always on)",
@@ -605,9 +605,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -638,9 +638,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -671,9 +671,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -704,9 +704,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -737,9 +737,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
@@ -770,9 +770,9 @@
           "csr-v0.14.1",
           "highwind-v0.2.0"
         ],
-        "addonSelectedAnyPrefix": [
-          "single-disc-on-csr-v",
-          "single-disc-on-highwind-v"
+        "addonSelectedAny": [
+          "single-disc-on-csr",
+          "single-disc-on-highwind-v0.1.0"
         ]
       },
       "version": "0.1.0",
