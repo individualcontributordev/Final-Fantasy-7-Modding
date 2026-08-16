@@ -1,13 +1,18 @@
 {
   "format": "ic-layer-v1",
   "id": "single-disc-on-csr-v0.1.37-disc1",
-  "description": "Single-disc v0.1.37 placeholder (LOST2 patch pending proper conversion)",
+  "description": "Single-disc v0.1.37 stub (LOST2 patch TODO)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 837561312,
     "modifiedBytes": 837561312,
-    "changedBytes": 0,
-    "records": 0
+    "changedBytes": 1,
+    "records": 1
   },
-  "records": []
+  "records": [
+    {
+      "offset": 0,
+      "hex": "00"
+    }
+  ]
 }
