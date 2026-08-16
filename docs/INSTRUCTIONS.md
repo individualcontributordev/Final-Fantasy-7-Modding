@@ -19,15 +19,33 @@ On **CSR + Single-disc**, the flow is:
 
 ---
 
-## Root Cause (from findings)
+## Root Cause (from CHANGELOG v0.1.33-0.1.35)
 
-From `docs/findings/2026-08-13-v035-music-fail-save-ok.md`:
+**Current single-disc state (v0.1.33 core):**
+- LOSIN2 = CSR Disc 1 (sets GM=0xa455, **clears** bit4)
+- BLACKBGB = Ask-stripped (DSKCG removed)
+- LOST2 = **pure CSR Disc 2**
+- COS_BTM2 = pure CSR Disc 2
 
-> BLACKBGB disc-2 arms still run MAPJUMP #634 then MUSIC id=3 — MUSIC is after MAPJUMP (never runs on hub). Save arm is the one playtest hit.
+**The problem:**
 
-**Two bugs:**
-1. **BLACKBGB jumps to wrong field:** Should MAPJUMP #526 (COS_BTM2 break), but jumps to #634 (LOST2) instead
-2. **MUSIC after MAPJUMP:** Even if it jumped correctly, MUSIC opcode comes after MAPJUMP so it never plays
+> Pure CSR D2 LOST2 never MAPJUMPs COS_BTM2 after LOSIN2: LOSIN2 sets GM 0xa455 and BITOFFs bank3/0x84#4, so LOST2 init RETs (no break, no music path).
+
+On **CSR multi-disc**, when you swap from Disc 1 to Disc 2:
+- Disc 2 has different initialization code that sets bit4
+- LOST2 on D2 checks bit4 and forwards to COS_BTM2 when set
+- On **single-disc**, there's no disc swap, so bit4 stays cleared → LOST2 just RETurns
+
+**From v0.1.35 finding:**
+
+> BLACKBGB disc-2 arms still run MAPJUMP #634 then MUSIC id=3 — MUSIC is after MAPJUMP (never runs on hub).
+
+So BLACKBGB is jumping to LOST2 (#634), but LOST2 can't forward to the break scene because the flag isn't set.
+
+**Questions we need answered by testing CSR multi-disc:**
+1. What does BLACKBGB do on actual Disc 2? Jump to #526 or #634?
+2. If it jumps to #634, how does LOST2 know to forward to COS_BTM2?
+3. Where does the break scene actually happen - is it a cutscene in COS_BTM2?
 
 ---
 
