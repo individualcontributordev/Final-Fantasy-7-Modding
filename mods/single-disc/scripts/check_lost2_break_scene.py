@@ -38,46 +38,44 @@ def check_lost2_ifuw(field_raw: bytes, label: str):
         for i, (raw_bytes, name) in enumerate(ops):
             if name == "IFUW":
                 ifuw_found.append((script.entity, script.slot, i, raw_bytes, ops))
-    
+
     print(f"Found {len(ifuw_found)} IFUW operations in LOST2\n")
-    
-    # Find the specific one at or near position 1201
-    # (position might shift slightly depending on version)
+
+    # Show ALL IFUW operations to find the break scene one
     for entity, slot, pos, raw_bytes, ops in ifuw_found:
         # IFUW: opcode 0x18 + 5-byte argument
         # byte[5] (index 5) is the else-jump offset
         if len(raw_bytes) >= 6:
             else_jump = raw_bytes[5]
-            
-            # Show context for IFUW operations near position 1201 or with interesting jumps
-            if abs(pos - 1201) < 50 or else_jump in (0x00, 0x0B):
-                print(f"{entity} / Slot {slot}, opcode position {pos}:")
-                print(f"  IFUW bytes: {raw_bytes.hex()}")
-                print(f"  Else-jump: 0x{else_jump:02X}")
-                
-                # Show what comes after
-                if pos + 1 < len(ops):
-                    next_raw, next_name = ops[pos + 1]
-                    print(f"  Next op: {next_name} {next_raw.hex()}")
-                    
-                    # Check if next is MAPJUMP to cos_btm2 (field 526 = 0x020e)
-                    if next_name == "MAPJUMP" and len(next_raw) >= 3:
-                        field_id = next_raw[1] | (next_raw[2] << 8)
-                        print(f"    → MAPJUMP to field {field_id} (0x{field_id:04X})")
-                        if field_id == 526:
-                            print(f"    → ✅ This is cos_btm2 (the break scene!)")
-                
-                # Interpret the fix
-                if else_jump == 0x00:
-                    print(f"  ✅ FIXED: else-jump=0x00 means always execute next op")
-                    if pos + 1 < len(ops) and ops[pos + 1][1] == "MAPJUMP":
-                        print(f"     → Single-disc will always MAPJUMP to break scene")
-                elif else_jump == 0x0B:
-                    print(f"  ❌ BROKEN: else-jump=0x0B means skip 11 bytes")
-                    print(f"     → On single-disc, IFUW condition fails and skips MAPJUMP")
-                    print(f"     → NO BREAK SCENE AT START OF DISC 2!")
-                
-                print()
+
+            # Show ALL IFUW operations
+            print(f"{entity} / Slot {slot}, opcode position {pos}:")
+            print(f"  IFUW bytes: {raw_bytes.hex()}")
+            print(f"  Else-jump: 0x{else_jump:02X}")
+
+            # Show what comes after
+            if pos + 1 < len(ops):
+                next_raw, next_name = ops[pos + 1]
+                print(f"  Next op: {next_name} {next_raw.hex()}")
+
+                # Check if next is MAPJUMP to cos_btm2 (field 526 = 0x020e)
+                if next_name == "MAPJUMP" and len(next_raw) >= 3:
+                    field_id = next_raw[1] | (next_raw[2] << 8)
+                    print(f"    → MAPJUMP to field {field_id} (0x{field_id:04X})")
+                    if field_id == 526:
+                        print(f"    → ✅ This is cos_btm2 (the break scene!)")
+
+            # Interpret the fix
+            if else_jump == 0x00:
+                print(f"  ✅ FIXED: else-jump=0x00 means always execute next op")
+                if pos + 1 < len(ops) and ops[pos + 1][1] == "MAPJUMP":
+                    print(f"     → Single-disc will always MAPJUMP to break scene")
+            elif else_jump == 0x0B:
+                print(f"  ❌ BROKEN: else-jump=0x0B means skip 11 bytes")
+                print(f"     → On single-disc, IFUW condition fails and skips MAPJUMP")
+                print(f"     → NO BREAK SCENE AT START OF DISC 2!")
+
+            print()
 
 
 def main() -> int:
