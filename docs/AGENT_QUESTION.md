@@ -4,6 +4,10 @@
 **Context:** v0.1.39 regression - missing DSKCG removals and CSR field changes
 **Status:** ✅ FULLY CLARIFIED - Correct architecture documented
 
+**⚠️ CRITICAL RULE: NEVER MODIFY CSR LAYERS - They are correct as-is!**
+
+All changes are to `builder/single-disc-on-csr/layers/disc1.layer.json` ONLY.
+
 ## The Critical Insight
 
 User's clarification: **The same field may be edited in disc 1 and disc 2 for different parts of the game**
