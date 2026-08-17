@@ -1,3 +1,23 @@
+## 0.1.2-rollback — 2026-08-17
+
+**Rolled back from v0.1.40 to v0.1.2 (last known working version)**
+
+- User tested manually-built bin matching v0.1.2 pattern — complete and working
+- Only known issue: Movie audio flickers (ending + loslake1 field 637)
+- v0.1.3 through v0.1.40 introduced regressions in disc 1→2 transition
+- Rebuilding v0.1.2 from analysis of working bin
+
+**Build pattern:**
+- LOST2: CSR D2 (break scene IFUW else=0xA4 works as-is)
+- DEL1: CSR D1
+- LOSIN2: CSR D1
+- CANON_2: CSR D2
+- BLACKBGB/E/3: DSKCG removed (19 operations deleted)
+- SNOVA: Disc 3 → Disc 1
+- Movies: manip-movies v0.1.2 (cumulative seed + LBA alias)
+
+Next: Fix movie audio flickers, then publish v0.1.41
+
 ## 0.1.34 (disc-break scene: LOSIN2 bit + COS ASK)
 
 ## 0.1.35 — 2026-08-13
