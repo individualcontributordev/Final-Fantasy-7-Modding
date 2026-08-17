@@ -1,0 +1,201 @@
+---
+description: All mod builds must be automated scripts, no manual Makou Reactor edits
+globs:
+  - "mods/**"
+  - "builder/**"
+  - "scripts/**"
+alwaysApply: true
+---
+
+# Build Automation (No Manual Edits)
+
+## Core Principle
+
+**All mod builds must be fully automated, reproducible scripts. No manual Makou Reactor edits.**
+
+## Historical Context
+
+v0.1.39 single-disc layer became corrupted because:
+- Manual edit in Makou Reactor (no script)
+- LOST2 field LZS decompression failed
+- No way to reproduce the build
+- No validation before commit
+
+v0.1.40 had catastrophic corruption because:
+- Manual DSKCG removal attempt
+- Used wrong opcode (0x13 instead of 0x0E)
+- 169,931 records instead of ~17,000
+- No automated validation
+
+See: `docs/findings/2026-08-17-v012-to-v0140-failure-analysis.md`
+
+## Mandatory Requirements
+
+### Every Mod Build Must Have
+
+1. **Build script** in `mods/<name>/scripts/build_v*.py`
+   - Full automation from pristine → final layer
+   - No manual steps
+   - Reproducible on any machine
+
+2. **Inputs documented** (what sources, what fields)
+   - CSR layers (which discs)
+   - Custom field exports (if any)
+   - Movie/music patches
+   - SNOVA injections
+
+3. **Validation checks** in the build script
+   - Layer record count (sanity check)
+   - Layer file size (MB range)
+   - Critical field decompression tests
+   - Field checksums against reference
+
+4. **Script docstring** with usage
+   - What the script builds
+   - Required inputs (pristine bins, CSR layers)
+   - Expected outputs (layer JSON, test bin)
+   - Validation thresholds
+
+### Build Script Pattern
+
+```python
+#!/usr/bin/env python3
+"""Build single-disc v0.1.2 layer.
+
+Inputs:
+  - workspace/pristine/FINALFANTASY7_D1.bin
+  - CSR D1 layer (from CSR repo)
+  - CSR D2 layer (from CSR repo)
+  - workspace/v012-exports/BLACKBGB.DAT (DSKCG stripped)
+  - workspace/v012-exports/BLACKBGE.DAT (DSKCG stripped)
+  - workspace/v012-exports/BLACKBG3.DAT (DSKCG stripped)
+
+Outputs:
+  - builder/single-disc-on-csr/layers/disc1.layer.json
+  - workspace/v012-build/single-disc-v0.1.2-test.bin (smoke test)
+
+Validation:
+  - Layer record count: 180-200 (not 169,931!)
+  - Layer file size: 20-25 MB (not 21 MB corruption)
+  - LOST2 decompresses successfully
+  - BLACKBGB/E/3 decompress successfully
+
+Usage:
+  python3 mods/single-disc/scripts/build_v012.py
+"""
+import sys
+sys.path.insert(0, 'scripts')
+from pathlib import Path
+from disc_sources import find_csr_layer
+# ... build logic ...
+
+# VALIDATION CHECKS
+layer_data = json.loads(layer_out.read_text())
+record_count = len(layer_data['records'])
+
+if record_count < 180 or record_count > 200:
+    raise ValueError(f"Layer record count {record_count} out of range 180-200!")
+
+layer_size_mb = layer_out.stat().st_size / (1024 * 1024)
+if layer_size_mb < 20 or layer_size_mb > 25:
+    raise ValueError(f"Layer size {layer_size_mb:.1f} MB out of range 20-25 MB!")
+
+# Test critical field decompression
+from lzs import decompress_lzs
+from psx_mode2_iso import PSXMode2ISO
+
+test_bin = Path("workspace/v012-build/test.bin")
+# ... apply layer to test bin ...
+iso = PSXMode2ISO(test_bin)
+
+for field in ["LOST2", "BLACKBGB", "BLACKBGE", "BLACKBG3"]:
+    compressed = iso.read_file_by_name(f"FIELD/{field}.DAT")
+    try:
+        decompressed = decompress_lzs(compressed)
+        print(f"✅ {field} decompression OK")
+    except Exception as e:
+        raise ValueError(f"❌ {field} decompression FAILED: {e}")
+
+print(f"\n✅ Validation passed!")
+print(f"   Record count: {record_count}")
+print(f"   Layer size: {layer_size_mb:.1f} MB")
+```
+
+## What is NOT Allowed
+
+❌ **Manual Makou Reactor edits** without automation  
+❌ **"Open bin in Makou, remove DSKCG, export"** without script  
+❌ **One-off field exports** without reproducible extraction  
+❌ **Committing layers without build script**  
+❌ **"Build v0.1.N" in changelog without mods/*/scripts/build_v*.py**
+
+## What IS Allowed
+
+✅ **Use Makou Reactor for analysis** (view fields, understand structure)  
+✅ **Export reference fields once** (workspace/exports/, documented in script)  
+✅ **Manual testing** (burn disc, playtest, report bugs)  
+✅ **Scripts that use exported reference files** (documented inputs)
+
+## When Manual Export is Required
+
+Sometimes you need to export a field from a working bin (e.g., DSKCG stripped):
+
+1. **Export ONCE** to workspace/exports/
+2. **Document the export** in the build script:
+   ```python
+   # Required: workspace/v012-exports/BLACKBGB.DAT
+   # Source: /Users/david.morton/Downloads/ff7-d1-csr-sd-mov-end.bin
+   # Exported: 2026-08-17 via Makou Reactor
+   # Field ID 103, 13,013 bytes, DSKCG removed (0 operations)
+   blackbgb = Path("workspace/v012-exports/BLACKBGB.DAT").read_bytes()
+   ```
+3. **Automate injection** in the build script
+4. **Commit export to workspace/** (if small <1MB) or document download location
+5. **Script reads the export** (reproducible on any machine)
+
+## Build Script Naming Convention
+
+- `build_v{VERSION}.py` for version-specific builds
+- `build_{BASE}_layers.py` for multi-base builds (CSR, Highwind, etc.)
+- `ship_v{VERSION}.py` for publish-ready builds (includes manifest update)
+
+Examples:
+- `mods/single-disc/scripts/build_v012.py`
+- `mods/single-disc/scripts/build_csrplus_and_highwind_d1_layers.py`
+- `mods/field-random-encounters/scripts/build_all_rates.py`
+
+## Validation Thresholds
+
+Every build script must validate:
+
+| Check | Threshold | Why |
+|-------|-----------|-----|
+| Record count | Within 10% of expected | Detect massive corruption (169,931 vs 200) |
+| Layer size | Within 20% of expected | Detect bloat or truncation |
+| Critical field decompression | All succeed | Catch LZS corruption early |
+| Field checksums (if reference exists) | Exact match | Ensure field bytes are correct |
+
+## Integration with Other Rules
+
+- **analyze-working-first.mdc:** Build scripts replicate analyzed working pattern
+- **validate-before-publish.mdc:** Build scripts run validation before layer commit
+- **agent-human-workflow.mdc:** Agent writes/runs build scripts; user tests output
+
+## Enforcement
+
+**Before committing any layer:**
+1. Check if build script exists for this version
+2. If NO, write the build script first
+3. Run build script, verify validation passes
+4. Commit script + layer together
+
+**When updating a mod version:**
+1. Create new build_vNNN.py script
+2. Document inputs, outputs, validation
+3. Run script, generate layer
+4. Commit script + layer + manifest update together
+
+**Red flag in PR/commit:**
+- Layer JSON without corresponding build script
+- "Manual edit" in commit message
+- Layer size change >50% without explanation

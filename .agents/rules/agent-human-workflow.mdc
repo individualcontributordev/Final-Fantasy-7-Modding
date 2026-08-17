@@ -9,8 +9,27 @@ alwaysApply: true
 
 | Who | Does |
 |-----|------|
-| **Agent (this chat)** | Plans; **writes work into `docs/INSTRUCTIONS.md` and pushes** before the human runs it; short chat pointer only. On **check**: pull and review **repo** evidence. |
-| **Human** | **Everything operational:** discs, Ghidra, DuckStation, shell, **all** scripts, builds, commits, pushes. |
+| **Agent (this chat)** | **Builds and publishes mods:** writes build scripts, generates layers, validates, commits to builder/, pushes. **Writes `docs/INSTRUCTIONS.md`** only for human testing/validation tasks (playtest, Ghidra, hardware burn). On **check**: pull and review **repo** evidence. |
+| **Human** | **Testing only:** downloads from builder/, burns discs, playtests, reports bugs. **No building, no layer generation, no manual Makou edits.** Ghidra analysis when needed. |
+
+**Agent builds. Human tests.**
+
+### Historical Context (Never Repeat)
+
+v0.1.2 → v0.1.40 failure (38 versions, 76-152 hours wasted):
+- Agent told human to export fields from Makou Reactor
+- Agent told human to run build scripts
+- Agent told human to generate layers
+- **Result:** Manual errors, no validation, massive corruption
+
+**New workflow:**
+- Agent writes build scripts with validation
+- Agent runs build scripts
+- Agent commits layers to builder/
+- Agent updates manifest
+- Human downloads and tests only
+
+See: `docs/findings/2026-08-17-v012-to-v0140-failure-analysis.md`
 
 No second agent on the disc/build machine.
 
