@@ -1,158 +1,215 @@
-# Agent Task: Single-Disc D1→D2 Break Scene Investigation
+# Single-Disc v0.1.38 → v0.1.39: Restore LOST2 IFUW Patch
 
-## Current Status
+**Problem:** v0.1.38 uses a stub layer (1 dummy byte) that doesn't include the LOST2 IFUW patch. The "insert disc 2" prompt appears during the D1→D2 transition.
 
-**Problem:** Single-disc skips the Cosmo Canyon break scene and has no music after the D1→D2 transition.
+**Root cause:** v0.1.37's `ship_v037.py` script generated a `path/data` format layer (whole LOST2.DAT file replacement) which is unsupported by the browser builder. The consolidation to v0.1.38 used a stub to unblock the builder, but lost the actual patch.
 
-**Root Cause Identified:**
-- CSR multi-disc relies on `bank3[0x84]` bit4 being set during disc swap
-- LOST2 (D2) init script checks bit4 before jumping to COS_BTM2 break scene
-- Single-disc never sets bit4 (no physical disc swap), so LOST2 RETs early
+**Solution:** Regenerate the LOST2 patch as proper `offset/hex` records for the disc image.
 
-## Investigation Findings
+## Background
 
-### Database Analysis Complete
-Built SQLite database at `docs/reference/field-scripts.db` with CSR and pristine field scripts:
+The LOST2 field script has two IFUW (if-word) checks that skip the break scene music when Game Moment (GM) at address 0x0020 != 0xa455:
 
-```bash
-# Query examples
-python scripts/query_field_scripts.py --field LOST2
-python scripts/query_field_scripts.py --opcode MAPJUMP
-```
+- CSR multi-disc sets GM=0xa455 during the disc swap hardware event
+- Single-disc never triggers disc swap, so GM stays at default value
+- Result: LOST2 checks fail, music doesn't play, "insert disc 2" prompt appears
 
-**Key Findings:**
-1. **LOST2 CSR D2** init script (268 bytes total):
-   - Raw hex: `430014308404091c1820000055a40112da...`
-   - Contains reference to field #526 at offset 0x46: `0e 02` (COS_BTM2)
-   - BUT: This is NOT in a MAPJUMP opcode - it's embedded in parameters
-   - The actual flow logic is more complex than expected
+**v0.1.37 Fix (now missing):**
+Patch LOST2.DAT decompressed init script at two offsets:
+- Offset 0x443: Change IFUW else-offset from 0x05 → 0x00
+- Offset 0x44F: Change IFUW else-offset from 0x03 → 0x00
 
-2. **LOSIN2** (end of D1):
-   - No `BITOFF bank3[0x84]` found in pristine OR CSR
-   - The bit manipulation must happen elsewhere or be disc-init code
+This forces the music to play regardless of GM state.
 
-3. **BLACKBGB** (disc swap trigger):
-   - No MAPJUMP opcodes in pristine or CSR
-   - Transition logic added by CSR in a way not visible in our field script database
+## Task: Regenerate v0.1.39 Layer
 
-### Attempts Made
+### Step 1: Build CSR D1 Base
 
-**v0.1.34 (disabled):** Malformed offset-based layer with 544 empty-path records
-**v0.1.35 (disabled):** Incomplete, no pack.json
-**v0.1.36 (disabled):** Similar malformed state
-**v0.1.37 (enabled but broken):** Tried to patch LOSIN2 BITOFF→BITON, but byte pattern not found
-
-**Current Manifest State:**
-- ✓ single-disc-on-csr-v0.1.33 (core, enabled)
-- ✗ single-disc-on-csr-v0.1.34 (auto fix, disabled)
-- ✗ single-disc-on-csr-v0.1.35 (disabled)
-- ✗ single-disc-on-csr-v0.1.36 (disabled)  
-- ✓ single-disc-on-csr-v0.1.37 (enabled but empty fix)
-
-## What You Need to Do
-
-### 1. Test Current CSR Multi-Disc Behavior
-
-Build a clean CSR multi-disc set and play through the D1→D2 transition:
+The ship script needs CSR D1 bin to extract and patch LOST2.DAT:
 
 ```bash
 cd ~/Final-Fantasy-7-CSR
-# Follow CSR build instructions to create discs
-# Load save at Cosmo Canyon before rocket launch
-# Play through rocket sequence → disc swap → observe
+
+# Build CSR v0.14.1 disc 1
+python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1
+
+# Verify
+ls -lh cache/csr/FINALFANTASY7_D1.bin
 ```
 
-**Record:**
-- Does the break scene play?
-- What music plays in LOST2 forest after?
-- Any visual glitches or black screens?
+**Expected:** `cache/csr/FINALFANTASY7_D1.bin` (~798 MB)
 
-### 2. LOST2 Init Script DECODED ✅
-
-Built CSR D1 bin and analyzed LOST2. Using `scripts/decode_field_script.py`:
-
-**CSR D1 LOST2 init @ 0x434:**
-```
-@0x43C: IFUW addr=0x0020 != 0xa455, else +0x5  ← GM check (skip if NOT at transition)
-@0x444: MUSIC
-@0x448: IFUW addr=0x0020 != 0xa455, else +0x3  ← Second GM check
-@0x450: MUSIC
-@0x452: RET
-```
-
-**Key insight:**
-- These are `!=` checks (not `==`)
-- When GM **IS** 0xa455, checks pass through → music plays
-- When GM is **NOT** 0xa455, else-skip happens → skip music
-
-**The problem for single-disc:**
-CSR multi-disc sets GM=0xa455 during disc swap. Single-disc **never** reaches that GM value because there's no physical disc swap event. So:
-- LOST2 loads with GM != 0xa455
-- First IFUW: else +0x5 → skips MUSIC at 0x444
-- Second IFUW: else +0x3 → skips MUSIC at 0x450
-- Hits RET at 0x452 → no music, no further scene logic
-
-**The fix (two options):**
-1. **Set GM=0xa455** before LOST2 loads (in LOSIN2 or transition trigger)
-2. **Patch both IFUW else offsets to 0x00** in LOST2 → always play music regardless of GM
-
-Option 2 is safer (no risk of breaking other GM-dependent logic).
-
-**Verification (optional):**
-You can verify this with Makou Reactor or by decoding the raw bytes:
+### Step 2: Run Original Ship Script (Generates path/data)
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
-python3 scripts/decode_field_script.py "1820000055a4000b600e027bff1cfa6500e016"
+
+# Run v0.1.37 ship script
+python3 mods/single-disc/scripts/ship_v037.py
 ```
 
-Expected output shows the IFUW at offset 0x00, MAPJUMP at 0x08.
+**Output:**
+- `builder/single-disc-on-csr-v0.1.37/layers/disc1.layer.json` (path/data format)
+- `builder/single-disc-on-csr-v0.1.37/pack.json`
 
-### 3. Find the Actual Bit Flag
+**Don't commit yet!** This layer is in the wrong format.
 
-Search CSR executable or disc-init code for bank3[0x84] manipulation:
+### Step 3: Convert path/data to offset/hex
+
+The layer has one record with the entire patched LOST2.DAT file. We need to convert this to disc image offset/hex records.
+
+**Python conversion script:**
 
 ```bash
-# In CSR repo if you have SLUS decompressed
-strings SLUS_014.46 | grep -i "bank\|0x84"
+cd ~/Final-Fantasy-7-Modding
 
-# Or search in Ghidra (if you have the project)
+cat > /tmp/convert_lost2_layer.py << 'SCRIPT_END'
+import json
+import sys
+from pathlib import Path
+
+# Add scripts to path
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from psx_mode2_iso import find_file_lba, extract_file
+
+# Load CSR D1 bin
+csr_bin_path = Path("../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin")
+if not csr_bin_path.exists():
+    print(f"ERROR: CSR bin not found at {csr_bin_path}")
+    print("Run: cd ../Final-Fantasy-7-CSR && python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1")
+    sys.exit(1)
+
+csr_bin = csr_bin_path.read_bytes()
+
+# Load path/data layer generated by ship_v037.py
+layer_path = Path("builder/single-disc-on-csr-v0.1.37/layers/disc1.layer.json")
+if not layer_path.exists():
+    print(f"ERROR: v0.1.37 layer not found at {layer_path}")
+    print("Run: python3 mods/single-disc/scripts/ship_v037.py")
+    sys.exit(1)
+
+layer = json.loads(layer_path.read_text())
+
+# Get the patched LOST2.DAT from path/data record
+path_rec = layer["records"][0]
+assert path_rec["path"] == "FIELD/LOST2.DAT", "Expected LOST2.DAT"
+patched_lost2_hex = path_rec["data"]
+patched_lost2 = bytes.fromhex(patched_lost2_hex)
+
+# Find LOST2.DAT location in disc
+lost2_lba = find_file_lba(csr_bin, "FIELD/LOST2.DAT")
+lost2_offset = lost2_lba * 2352 + 24  # Mode 2 Form 1 data offset
+print(f"LOST2.DAT starts at LBA {lost2_lba}, disc offset {lost2_offset:#x}")
+
+# Extract original LOST2.DAT from disc
+original_lost2 = extract_file(csr_bin, "FIELD/LOST2.DAT")
+print(f"Original: {len(original_lost2)} bytes")
+print(f"Patched:  {len(patched_lost2)} bytes")
+
+# Create offset/hex records for changed bytes
+records = []
+for i in range(min(len(original_lost2), len(patched_lost2))):
+    if original_lost2[i] != patched_lost2[i]:
+        records.append({
+            "offset": lost2_offset + i,
+            "hex": f"{patched_lost2[i]:02x}"
+        })
+
+# Handle size difference if patched file is longer
+if len(patched_lost2) > len(original_lost2):
+    for i in range(len(original_lost2), len(patched_lost2)):
+        records.append({
+            "offset": lost2_offset + i,
+            "hex": f"{patched_lost2[i]:02x}"
+        })
+
+print(f"\nChanged bytes: {len(records)}")
+print(f"First few changes:")
+for r in records[:5]:
+    print(f"  offset {r['offset']:#x}: {r['hex']}")
+
+# Create proper builder format layer
+builder_layer = {
+    "format": "ic-layer-v1",
+    "id": "single-disc-on-csr-v0.1.39-disc1",
+    "description": "Single-disc v0.1.39: LOST2 IFUW patch (force break scene music)",
+    "target": "disc-image",
+    "stats": {
+        "originalBytes": len(csr_bin),
+        "modifiedBytes": len(csr_bin),
+        "changedBytes": len(records),
+        "records": len(records)
+    },
+    "records": records
+}
+
+# Write to v0.1.39 directory (consolidated path)
+output_dir = Path("builder/single-disc-on-csr/layers")
+output_dir.mkdir(parents=True, exist_ok=True)
+output_file = output_dir / "disc1.layer.json"
+output_file.write_text(json.dumps(builder_layer, indent=2))
+
+print(f"\n✅ Created {output_file}")
+print(f"Format: {builder_layer['format']}")
+print(f"Records: {len(records)}")
+print(f"Changed bytes: {builder_layer['stats']['changedBytes']}")
+
+# Validate
+assert builder_layer["format"] == "ic-layer-v1"
+assert len(records) > 0
+assert builder_layer["stats"]["changedBytes"] > 0
+print("\n✅ Layer validation passed")
+SCRIPT_END
+
+python3 /tmp/convert_lost2_layer.py
 ```
 
-### 4. Apply the Fix (READY TO IMPLEMENT)
+**Expected output:**
+```
+LOST2.DAT starts at LBA XXXXX, disc offset 0xXXXXXXXX
+Original: XXXX bytes
+Patched:  XXXX bytes
 
-Now that we've decoded the exact logic, the fix is straightforward:
+Changed bytes: XX
+First few changes:
+  offset 0xXXXXXXXX: 00
+  offset 0xXXXXXXXX: 00
+  ...
 
-**Create v0.1.37 layer:**
-- Target: CSR LOST2.DAT relocated to single-disc D1
-- Search pattern: `18 20 00 00 55 a4` (start of IFUW at init offset 0x3D)
-- Patch offset: +7 bytes from search hit (the "else" parameter)
-- Old byte: `0x0b`
-- New byte: `0x00`
+✅ Created builder/single-disc-on-csr/layers/disc1.layer.json
+```
 
-This will be implemented in `mods/single-disc/scripts/ship_v037.py` using the `build_ic_layer.py` search-and-replace feature.
+### Step 4: Update Manifest to v0.1.39
 
-## Next Steps
+```bash
+python3 << 'EOF'
+import json
+from pathlib import Path
 
-**Agent will:**
-1. Create `mods/single-disc/scripts/ship_v037.py` with the correct patch
-2. Run the script to generate `builder/single-disc-on-csr-v0.1.37/`
-3. Update manifest to enable v0.1.37
-4. Commit and push
+manifest_path = Path("builder/manifest.json")
+manifest = json.loads(manifest_path.read_text())
 
-**You will:**
-1. Pull the repo
-2. Build and test the single-disc with v0.1.37 applied
-3. Verify the break scene plays at the D1→D2 transition
-4. Verify music plays in LOST2 forest after the break
-5. Report back: ✅ or any issues observed
+for addon in manifest["addons"]:
+    if addon["id"] == "single-disc-on-csr":
+        addon["version"] = "0.1.39"
+        addon["blurb"] = "Play the whole game from one Disc 1 image on CSR. v0.1.39: D1→D2 break scene music fix (LOST2 IFUW patch)."
+        break
 
-## Context Files
+manifest_path.write_text(json.dumps(manifest, indent=2))
+print("✅ Updated manifest to v0.1.39")
+EOF
+```
 
-- `docs/reference/disc-transition-knowledge-base.md` - Current findings
-- `mods/single-disc/CHANGELOG.md` - History of attempts (v0.1.31-v0.1.36)
-- `docs/findings/2026-08-14-break-losin2-bit-and-cos-ask.md` - v0.1.31 gate details
+### Step 5: Commit and Push
 
----
+```bash
+git add builder/single-disc-on-csr/layers/disc1.layer.json builder/manifest.json
+git commit --author="individualcontributordev <contributorindividual@gmail.com>" -m "single-disc v0.1.39: Restore LOST2 IFUW patch (proper offset/hex)"
+git push origin main
+```
 
-**Agent Note:** This task requires human investigation with tools I can't run (Makou Reactor, DuckStation, disc burning). Once you provide the evidence, I can create the exact byte patches needed.
+### Step 6: Test
+
+Wait ~5 min for CDN, then test at https://individualcontributor.dev/builder/
+
+## Paste Evidence Here
