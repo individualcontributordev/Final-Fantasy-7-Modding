@@ -1,92 +1,83 @@
-# TASK: Build single-disc v0.1.40 with complete CSR D1+D2+D3 merge
+# TASK: Analyze Working v0.1.2 to Build Correct v0.1.40
 
-**Status:** ✅ Automated script ready  
-**Agent session:** 2026-08-17  
-**Target:** `builder/single-disc-on-csr/layers/disc1.layer.json` v0.1.40  
+**Status:** ⏳ BLOCKED - Waiting for v0.1.2 bin path from user  
+**Critical Issue:** LOST2 break scene missing (disc 1→2 transition broken)
 
-**⚠️ CRITICAL: CSR layers are NEVER modified - only single-disc layer is rebuilt!**
+## Problem Summary
 
-## Quick Start
+**v0.1.39 and v0.1.40 are both broken:**
+- v0.1.39: LOST2 field corrupted (bad LZS compression)
+- v0.1.40: Massive corruption from wrong DSKCG opcode (0x13 vs 0x0E)
 
-```bash
-cd ~/Final-Fantasy-7-Modding
-git pull --ff-only
+**Missing:** LOST2 break scene IFUW patch
+- IFUW @ position ~1201 checks disc flags
+- On single-disc, else-jump 0x0B skips MAPJUMP to cos_btm2 break scene
+- **Fix:** Change else-jump 0x0B → 0x00 (always MAPJUMP)
+- **Result:** Disc 1→2 transition works with proper break scene
 
-# Run the automated build script
-python3 mods/single-disc/scripts/build_v0140.py
-```
+## When User Provides v0.1.2 Bin Path
 
-The script will:
-1. ✅ Merge CSR D1+D2+D3 fields onto pristine D1 (following prefer policy)
-2. ⏸️  **PAUSE** for manual DSKCG removal in Makou Reactor
-3. ✅ After you complete step 2, re-run to inject SNOVA
-4. ✅ Build layer by diffing against pristine
-5. ✅ Merge v0.1.39 LOST2 patch (16,726 records)
-6. ✅ Update VERSION, pack.json, manifest.json
+User is downloading: https://drive.google.com/file/d/1DR7nCRQeANr_qY4jRwR2y_0JNHVEGWnQ
 
-## Manual Step: DSKCG Removal
-
-When the script pauses, it will print:
-
-```
-Open this bin in Makou Reactor: workspace/iso-extract/single-disc-v0140-build/ff7_d1_single_disc_work_pre_makou.bin
-
-Remove ALL 'Ask for disc' (DSKCG) operations from these fields:
-  - Field 103 (BLACKBGB): 4 asks in init/S0 - Main (lines 43, 64, 73, 95)
-  - Field 106 (BLACKBGE): 1 ask in AD/Script 4 (line 2)
-  - Field 95 (BLACKBG3): 14 asks in p7/p8 S1 - Talk scripts
-```
-
-**How to remove DSKCG in Makou Reactor:**
-1. Open the bin
-2. Navigate to FIELD folder → BLACKBGB.DAT → Field editor
-3. Expand init → S0 - Main script
-4. Find each "Ask for disc" operation and DELETE it (keep surrounding code)
-5. Save field (Ctrl+S)
-6. Repeat for BLACKBGE and BLACKBG3
-7. Save the bin and copy it to `workspace/iso-extract/single-disc-v0140-build/ff7_d1_single_disc_work_post_makou.bin`
-8. Re-run the script to continue
-
-## After Build Completes
+**Agent will run these analyses:**
 
 ```bash
-# Review the layer
-cat builder/single-disc-on-csr/layers/disc1.layer.json | head -50
+# 1. Full field comparison
+python3 mods/single-disc/scripts/analyze_working_v012.py \
+  --bin USER_PROVIDED_PATH \
+  --fields BLACKBGB,BLACKBGE,BLACKBG3,LOST2,DEL1,LOSIN2,CANON_2
 
-# Commit and push
+# 2. LOST2 break scene check
+python3 mods/single-disc/scripts/check_lost2_break_scene.py \
+  --bin USER_PROVIDED_PATH
+
+# 3. DSKCG verification
+python3 mods/single-disc/scripts/analyze_dskcg.py \
+  --from USER_PROVIDED_PATH \
+  --fields BLACKBGB,BLACKBGE,BLACKBG3
+```
+
+**Expected Results:**
+- DSKCG count: 0 (all 19 removed)
+- LOST2 IFUW else-jump: 0x00 (break scene enabled)
+- Field sources identified: Which CSR disc (D1/D2/D3) each field comes from
+
+## Tools Ready
+
+✅ **analyze_working_v012.py** - Compare v0.1.2 against pristine D1 and CSR D1/D2/D3
+✅ **check_lost2_break_scene.py** - Verify LOST2 IFUW patch (0x00 = fixed, 0x0B = broken)
+✅ **analyze_dskcg.py** - Count DSKCG operations with full context
+✅ **build_v0140.py** - Automated build (needs update after v0.1.2 analysis)
+
+## Next: Build Correct v0.1.40
+
+After analysis, agent will:
+
+1. **Document findings** in `docs/findings/2026-08-17-v012-analysis.md`
+2. **Update build_v0140.py** with correct:
+   - CSR field source preferences (verified from v0.1.2)
+   - LOST2 IFUW patch application
+   - DSKCG removal verification
+3. **Run build** and verify layer
+4. **Commit and publish**
+
+```bash
 git add -A
-git commit --author="individualcontributordev <contributorindividual@gmail.com>" -m "single-disc v0.1.40: Complete CSR D1+D2+D3 merge + DSKCG + LOST2 + SNOVA
+git commit --author="individualcontributordev <contributorindividual@gmail.com>" \
+  -m "single-disc v0.1.40: Complete rebuild based on working v0.1.2
 
-Automated build using build_v0140.py script.
+Analysis of working v0.1.2 bin identified:
+- Correct CSR D1/D2/D3 field merge patterns
+- LOST2 break scene IFUW patch (else-jump 0x00)
+- All 19 DSKCG operations removed
+- SNOVA injection verified
 
-Changes:
-- CSR D1 field edits (174 files)
-- CSR D2/D3 field merges (77 files, following prefer policy)
-- DSKCG removals (19 operations)
-- LOST2 IFUW patch (16,726 records from v0.1.39)
-- SNOVA inject from pristine D3
-
-Layer size: ~850k+ records (complete CSR story + single-disc patches)"
-
+Fixes disc 1→2 transition with proper cos_btm2 break scene."
 git push origin main
 ```
 
-## Test on Builder Site
+Then test on https://individualcontributor.dev/builder/ after ~5 min CDN.
 
-Wait ~5 min for CDN propagation, then:
+## Critical Requirement
 
-1. Go to https://individualcontributor.dev/builder/
-2. Clear cache: DevTools Console → `localStorage.clear(); location.reload()`
-3. Build: CSR + Single-disc
-4. Verify in Makou: Field 103 has no "Ask for disc" operations
-5. Playtest in DuckStation: Kalm flashback end should continue without disc swap
-
-## Architecture Notes
-
-See `docs/AGENT_QUESTION.md` for full architecture details.
-
-**Key points:**
-- Same field can be edited on D1 AND D2 for different game moments
-- 10 fields have conflicts resolved via `csr-field-disc-prefer.txt`
-- 77 files merged from D2/D3 via `csr-d2d3-field-merge-on-d1.md`
-- CSR layers are never modified - only single-disc layer is rebuilt
+**Console Hardware Compatibility:** Final mod must burn to disc and run on original PSX/PS2 hardware.
