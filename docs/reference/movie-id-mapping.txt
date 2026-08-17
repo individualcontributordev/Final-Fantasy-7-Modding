@@ -1,0 +1,132 @@
+# FF7 Movie ID to Filename Mapping
+# Source: Makou Reactor (makoureactor/src/Data.cpp)
+# Total: 106 movies (0-105)
+#
+# Disc Distribution:
+#   Movies 0-19:  Common across all discs (Disc 1, 2, 3)
+#   Movies 20-53: Disc 1 only
+#   Movies 54-95: Disc 2 only
+#   Movies 96-105: Disc 3 only
+#
+# Format: ID FILENAME DISC
+# PMVIE opcode references these IDs (e.g., PMVIE f82f = movie 0x2F = 47)
+
+# Common Movies (All Discs)
+0 fship2 Common
+1 fship2n Common
+2 d_ropego Common
+3 d_ropein Common
+4 u_ropein Common
+5 u_ropego Common
+6 gold2 Common
+7 gold3 Common
+8 gold4 Common
+9 gold6 Common
+10 gold5 Common
+11 boogup Common
+12 boogdown Common
+13 junair_u Common
+14 junair_d Common
+15 junelein Common
+16 junelego Common
+17 junin_in Common
+18 junin_go Common
+19 moriya Common
+
+# Disc 1 Exclusive (20-53)
+20 mkup Disc1
+21 northmk Disc1
+22 mk8 Disc1
+23 ontrain Disc1
+24 mainplr Disc1
+25 smk Disc1
+26 southmk Disc1
+27 plrexp Disc1
+28 fallpl Disc1
+29 monitor Disc1
+30 bike Disc1
+31 mtnvl Disc1
+32 mtnvl2 Disc1
+33 brgnvl Disc1
+34 nvlmk Disc1
+35 nivlsfs Disc1
+36 jenova_e Disc1
+37 junon Disc1
+38 hiwind0 Disc1
+39 mtcrl Disc1
+40 gold1 Disc1
+41 biskdead Disc1
+42 boogdemo Disc1
+43 boogstar Disc1
+44 setogake Disc1
+45 rcktfail Disc1
+46 jairofly Disc1
+47 jairofal Disc1  # Movie 0x2F - LOSLAKE1 flicker issue
+48 gold7 Disc1
+49 gold7_2 Disc1
+50 earithdd Disc1
+51 funeral Disc1
+52 car_1209 Disc1
+53 opening Disc1
+
+# Disc 2 Exclusive (54-95)
+54 greatpit Disc2
+55 c_scene1 Disc2
+56 c_scene2 Disc2
+57 c_scene3 Disc2
+58 biglight Disc2
+59 meteosky Disc2
+60 weapon0 Disc2
+61 weapon1 Disc2
+62 weapon2 Disc2
+63 weapon3 Disc2
+64 weapon4 Disc2
+65 weapon5 Disc2
+66 hwindfly Disc2
+67 phoenix Disc2
+68 nrcrl Disc2
+69 nrcrl_b Disc2
+70 dumcrush Disc2
+71 zmind01 Disc2
+72 zmind02 Disc2
+73 zmind03 Disc2
+74 gelnica Disc2
+75 rcketoff Disc2
+76 white2 Disc2
+77 junsea Disc2
+78 rckethit0 Disc2
+79 rckethit1 Disc2
+80 meteofix Disc2
+81 canonon Disc2
+82 feelwin0 Disc2
+83 feelwin1 Disc2
+84 canonht1 Disc2
+85 canonht2 Disc2
+86 canonh3f Disc2
+87 parashot Disc2
+88 hwindjet Disc2
+89 canonht0 Disc2
+90 wh2e2 Disc2
+91 loslake1 Disc2  # Related to LOSLAKE1 field?
+92 lslmv Disc2
+93 canonh1p Disc2
+94 canon Disc2
+95 (empty) Disc2
+
+# Disc 3 Exclusive (96-105)
+96 last4_2 Disc3
+97 last4_3 Disc3
+98 last4_4 Disc3
+99 lastmap Disc3
+100 lastflor Disc3
+101 ending1 Disc3  # Ending movie - audio flicker issue
+102 ending3 Disc3
+103 fcar Disc3
+104 white2 Disc3
+105 ending2 Disc3  # Another ending movie
+
+# Notes:
+# - Movie 0x2F (47) = "jairofal" plays in LOSLAKE1 (field 637)
+# - Ending movies (101, 102, 105) are on Disc 3
+# - For single-disc builds, Disc 2 and Disc 3 movies must be moved/referenced from Disc 1
+# - PMVIE opcode format: f8 XX where XX is the movie ID in hex
