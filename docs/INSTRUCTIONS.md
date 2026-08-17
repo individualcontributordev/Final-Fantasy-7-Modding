@@ -1,187 +1,171 @@
-# Single-Disc v0.1.38 → v0.1.39: Restore LOST2 IFUW Patch
+# TASK: Restore full single-disc layer with all Ask-for-disc removals
 
-**Problem:** v0.1.38 uses a stub layer (1 dummy byte) that doesn't include the LOST2 IFUW patch. The "insert disc 2" prompt appears during the D1→D2 transition.
+**Status:** ready to execute
+**Agent session:** 2026-08-17
+**Target:** v0.1.40 single-disc layer with DSKCG removals + LOST2 music patch
 
-**Root cause:** v0.1.37's `ship_v037.py` script generated a `path/data` format layer (whole LOST2.DAT file replacement) which is unsupported by the browser builder. The consolidation to v0.1.38 used a stub to unblock the builder, but lost the actual patch.
+## Problem
 
-**Solution:** Regenerate the LOST2 patch as proper `offset/hex` records for the disc image.
+v0.1.39 layer contains **only** the LOST2 IFUW music patch (16,726 records). It's **missing** the core single-disc functionality: removal of all 19 "Ask for disc" (DSKCG) operations from fields 103, 106, and 95.
 
-## Background
+This regression was introduced in commit 7fd1dc2 (Aug 16) when versioned directories were deleted during a refactor. The field script patches were in those deleted directories and never restored.
 
-The LOST2 field script has two IFUW (if-word) checks that skip the break scene music when Game Moment (GM) at address 0x0020 != 0xa455:
+## Evidence
 
-- CSR multi-disc sets GM=0xa455 during the disc swap hardware event
-- Single-disc never triggers disc swap, so GM stays at default value
-- Result: LOST2 checks fail, music doesn't play, "insert disc 2" prompt appears
+User opened the v0.1.39 disc in Makou Reactor and confirmed Field 103 (`BLACKBGB`) still contains "Ask for disc" operations, which should be removed for a single-disc run.
 
-**v0.1.37 Fix (now missing):**
-Patch LOST2.DAT decompressed init script at two offsets:
-- Offset 0x443: Change IFUW else-offset from 0x05 → 0x00
-- Offset 0x44F: Change IFUW else-offset from 0x03 → 0x00
-
-This forces the music to play regardless of GM state.
-
-## Task: Regenerate v0.1.39 Layer
-
-### Step 1: Build CSR D1 Base
-
-The ship script needs CSR D1 bin to extract and patch LOST2.DAT:
-
-```bash
-cd ~/Final-Fantasy-7-CSR
-
-# Build CSR v0.14.1 disc 1
-python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1
-
-# Verify
-ls -lh cache/csr/FINALFANTASY7_D1.bin
+Current layer analysis:
+```
+Total records: 16,726
+FIELD file range records: 0
+LOST2 file range records: 10,297
 ```
 
-**Expected:** `cache/csr/FINALFANTASY7_D1.bin` (~798 MB)
+Expected from docs/findings/2026-08-02-single-disc-ask-for-disc-inventory.md:
+- Field 103 (`blackbgb`): 4 asks in S0 - Main
+- Field 106 (`blackbge`): 1 ask
+- Field 95 (`blackbg3`): 14 asks in p7/p8 talk scripts
+- **Total: 19 DSKCG removals required**
 
-### Step 2: Run Original Ship Script (Generates path/data)
+## Solution
+
+Follow the rebuild recipe from mods/single-disc/README.md (lines 59-126) to create a new work bin with:
+
+1. DSKCG (Ask for disc) removals via Makou Reactor
+2. LOST2 IFUW music patch applied
+3. SNOVA + BATTLE.X inject
+
+Then build a new v0.1.40 layer from the combined work bin.
+
+## Execution steps
+
+### 1. Fresh work copy
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+git pull --ff-only
+cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_single_disc_work.bin
+```
+
+### 2. Makou — remove every Ask for disc
+
+**Open work image** (not pristine) in Makou Reactor.
+
+For each field, delete the "Ask for disc" (DSKCG) operations **only**. Keep Bit clears, conditions, and map jumps after each ask.
+
+**Maps to edit:**
+
+| Map | Field # | Script | Lines | Asks |
+|-----|---------|--------|-------|------|
+| BLACKBGB | 103 | init / S0 - Main | 43, 64, 73, 95 | 4 |
+| BLACKBGE | 106 | AD / Script 4 | 2 | 1 |
+| BLACKBG3 | 95 | p8 / S1 - Talk | 27, 33, 42, 52, 58, 87, 100, 113, 132, 166, 178, 185, 207 | 13 |
+| BLACKBG3 | 95 | p7 / S1 - Talk | 25 | 1 |
+
+**Total DSKCG operations to remove: 19**
+
+**After each field edit:** Save FIELD back into the work bin so the ISO is updated.
+
+**Verification:** Run Find All on "Ask for disc" in the work image. Should return 0 results.
+
+### 3. SNOVA + BATTLE.X inject
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
 
-# Run v0.1.37 ship script
-python3 mods/single-disc/scripts/ship_v037.py
+cp -f workspace/iso-extract/ff7_d1_single_disc_work.bin \
+      workspace/iso-extract/ff7_d1_single_disc_work.pre_snova.bak
+
+python3 mods/single-disc/scripts/inject_snova_d3_to_d1.py \
+  --d1 workspace/iso-extract/ff7_d1_single_disc_work.bin \
+  --d3 workspace/pristine/FINALFANTASY7_D3.bin \
+  --in-place
 ```
 
-**Output:**
-- `builder/single-disc-on-csr-v0.1.37/layers/disc1.layer.json` (path/data format)
-- `builder/single-disc-on-csr-v0.1.37/pack.json`
+**Must print:**
+- raw-copy + BATTLE.X LBA patch v3
+- verify: BATTLE.X 17 LBA entries remapped
+- verify: all SNOVA files match D3
 
-**Don't commit yet!** This layer is in the wrong format.
+### 4. Build v0.1.40 layer against pristine
 
-### Step 3: Convert path/data to offset/hex
-
-The layer has one record with the entire patched LOST2.DAT file. We need to convert this to disc image offset/hex records.
-
-**Python conversion script:**
+This generates offset/hex records for all changes (DSKCG removals + SNOVA):
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
 
-cat > /tmp/convert_lost2_layer.py << 'SCRIPT_END'
-import json
-import sys
-from pathlib import Path
-
-# Add scripts to path
-sys.path.insert(0, str(Path.cwd() / "scripts"))
-from psx_mode2_iso import find_file_lba, extract_file
-
-# Load CSR D1 bin
-csr_bin_path = Path("../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin")
-if not csr_bin_path.exists():
-    print(f"ERROR: CSR bin not found at {csr_bin_path}")
-    print("Run: cd ../Final-Fantasy-7-CSR && python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1")
-    sys.exit(1)
-
-csr_bin = csr_bin_path.read_bytes()
-
-# Load path/data layer generated by ship_v037.py
-layer_path = Path("builder/single-disc-on-csr-v0.1.37/layers/disc1.layer.json")
-if not layer_path.exists():
-    print(f"ERROR: v0.1.37 layer not found at {layer_path}")
-    print("Run: python3 mods/single-disc/scripts/ship_v037.py")
-    sys.exit(1)
-
-layer = json.loads(layer_path.read_text())
-
-# Get the patched LOST2.DAT from path/data record
-path_rec = layer["records"][0]
-assert path_rec["path"] == "FIELD/LOST2.DAT", "Expected LOST2.DAT"
-patched_lost2_hex = path_rec["data"]
-patched_lost2 = bytes.fromhex(patched_lost2_hex)
-
-# Find LOST2.DAT location in disc
-lost2_lba = find_file_lba(csr_bin, "FIELD/LOST2.DAT")
-lost2_offset = lost2_lba * 2352 + 24  # Mode 2 Form 1 data offset
-print(f"LOST2.DAT starts at LBA {lost2_lba}, disc offset {lost2_offset:#x}")
-
-# Extract original LOST2.DAT from disc
-original_lost2 = extract_file(csr_bin, "FIELD/LOST2.DAT")
-print(f"Original: {len(original_lost2)} bytes")
-print(f"Patched:  {len(patched_lost2)} bytes")
-
-# Create offset/hex records for changed bytes
-records = []
-for i in range(min(len(original_lost2), len(patched_lost2))):
-    if original_lost2[i] != patched_lost2[i]:
-        records.append({
-            "offset": lost2_offset + i,
-            "hex": f"{patched_lost2[i]:02x}"
-        })
-
-# Handle size difference if patched file is longer
-if len(patched_lost2) > len(original_lost2):
-    for i in range(len(original_lost2), len(patched_lost2)):
-        records.append({
-            "offset": lost2_offset + i,
-            "hex": f"{patched_lost2[i]:02x}"
-        })
-
-print(f"\nChanged bytes: {len(records)}")
-print(f"First few changes:")
-for r in records[:5]:
-    print(f"  offset {r['offset']:#x}: {r['hex']}")
-
-# Create proper builder format layer
-builder_layer = {
-    "format": "ic-layer-v1",
-    "id": "single-disc-on-csr-v0.1.39-disc1",
-    "description": "Single-disc v0.1.39: LOST2 IFUW patch (force break scene music)",
-    "target": "disc-image",
-    "stats": {
-        "originalBytes": len(csr_bin),
-        "modifiedBytes": len(csr_bin),
-        "changedBytes": len(records),
-        "records": len(records)
-    },
-    "records": records
-}
-
-# Write to v0.1.39 directory (consolidated path)
-output_dir = Path("builder/single-disc-on-csr/layers")
-output_dir.mkdir(parents=True, exist_ok=True)
-output_file = output_dir / "disc1.layer.json"
-output_file.write_text(json.dumps(builder_layer, indent=2))
-
-print(f"\n✅ Created {output_file}")
-print(f"Format: {builder_layer['format']}")
-print(f"Records: {len(records)}")
-print(f"Changed bytes: {builder_layer['stats']['changedBytes']}")
-
-# Validate
-assert builder_layer["format"] == "ic-layer-v1"
-assert len(records) > 0
-assert builder_layer["stats"]["changedBytes"] > 0
-print("\n✅ Layer validation passed")
-SCRIPT_END
-
-python3 /tmp/convert_lost2_layer.py
+python3 mods/single-disc/scripts/build_csrplus_and_highwind_d1_layers.py \
+  --work workspace/iso-extract/ff7_d1_single_disc_work.bin \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --version 0.1.40 \
+  --base csr
 ```
 
 **Expected output:**
-```
-LOST2.DAT starts at LBA XXXXX, disc offset 0xXXXXXXXX
-Original: XXXX bytes
-Patched:  XXXX bytes
+- Layer file: `builder/single-disc-on-csr/layers/disc1.layer.json`
+- Record count should be significant (FIELD + SNOVA patches)
 
-Changed bytes: XX
-First few changes:
-  offset 0xXXXXXXXX: 00
-  offset 0xXXXXXXXX: 00
-  ...
+### 5. Merge LOST2 patch into layer
 
-✅ Created builder/single-disc-on-csr/layers/disc1.layer.json
-```
-
-### Step 4: Update Manifest to v0.1.39
+The v0.1.39 layer has the LOST2 IFUW patch (16,726 records). Merge those into the v0.1.40 layer:
 
 ```bash
+cd ~/Final-Fantasy-7-Modding
+
+python3 << 'EOF'
+import json
+from pathlib import Path
+
+# Load v0.1.39 LOST2-only layer
+v39_layer = json.loads(Path("builder/single-disc-on-csr/layers/disc1.layer.json").read_text())
+lost2_records = v39_layer["records"]
+print(f"v0.1.39 LOST2 records: {len(lost2_records)}")
+
+# Load v0.1.40 base layer (DSKCG + SNOVA but no LOST2)
+v40_path = Path("builder/single-disc-on-csr/layers/disc1.layer.json")
+v40_layer = json.loads(v40_path.read_text())
+print(f"v0.1.40 base records: {len(v40_layer['records'])}")
+
+# Merge: v40 base + v39 LOST2
+all_records = v40_layer["records"] + lost2_records
+print(f"Merged records: {len(all_records)}")
+
+# Update layer
+v40_layer["id"] = "single-disc-on-csr-v0.1.40-disc1"
+v40_layer["description"] = "Single-disc v0.1.40: Complete DSKCG removals + LOST2 music patch + SNOVA"
+v40_layer["records"] = all_records
+v40_layer["stats"]["records"] = len(all_records)
+v40_layer["stats"]["changedBytes"] = len(all_records)
+
+# Write merged layer
+v40_path.write_text(json.dumps(v40_layer, indent=2))
+print(f"\n✅ Merged layer saved: {v40_path}")
+print(f"Total records: {len(all_records)}")
+EOF
+```
+
+### 6. Update pack version and manifest
+
+```bash
+cd ~/Final-Fantasy-7-Modding
+
+# Update VERSION file
+echo "0.1.40" > mods/single-disc/VERSION
+
+# Update pack.json
+python3 << 'EOF'
+import json
+from pathlib import Path
+
+pack_path = Path("builder/single-disc-on-csr/pack.json")
+pack = json.loads(pack_path.read_text())
+pack["version"] = "0.1.40"
+pack["blurb"] = "Play the whole game from one Disc 1 image on CSR. v0.1.40: Complete DSKCG removals + LOST2 music patch."
+pack_path.write_text(json.dumps(pack, indent=2))
+print("✅ Updated pack.json")
+EOF
+
+# Update manifest.json
 python3 << 'EOF'
 import json
 from pathlib import Path
@@ -191,25 +175,44 @@ manifest = json.loads(manifest_path.read_text())
 
 for addon in manifest["addons"]:
     if addon["id"] == "single-disc-on-csr":
-        addon["version"] = "0.1.39"
-        addon["blurb"] = "Play the whole game from one Disc 1 image on CSR. v0.1.39: D1→D2 break scene music fix (LOST2 IFUW patch)."
+        addon["version"] = "0.1.40"
+        addon["blurb"] = "Play the whole game from one Disc 1 image on CSR. v0.1.40: Complete DSKCG removals + LOST2 music patch."
         break
 
 manifest_path.write_text(json.dumps(manifest, indent=2))
-print("✅ Updated manifest to v0.1.39")
+print("✅ Updated manifest.json")
 EOF
 ```
 
-### Step 5: Commit and Push
+### 7. Commit and push
 
 ```bash
-git add builder/single-disc-on-csr/layers/disc1.layer.json builder/manifest.json
-git commit --author="individualcontributordev <contributorindividual@gmail.com>" -m "single-disc v0.1.39: Restore LOST2 IFUW patch (proper offset/hex)"
+cd ~/Final-Fantasy-7-Modding
+
+git add -A
+git commit --author="individualcontributordev <contributorindividual@gmail.com>" -m "single-disc v0.1.40: Restore full DSKCG removals + LOST2 patch
+
+Regression fix from v0.1.39 (LOST2-only) and v0.1.38 refactor.
+
+Combined changes:
+- All 19 Ask-for-disc (DSKCG) removals from fields 103, 106, 95
+- LOST2 IFUW music patch (16,726 records) for D1→D2 break scene
+- SNOVA + BATTLE.X inject for final battle
+
+This is the first complete single-disc layer since the Aug 16 refactor.
+
+Verified in Makou: Field 103 has no DSKCG operations."
+
 git push origin main
 ```
 
-### Step 6: Test
+### 8. Test
 
-Wait ~5 min for CDN, then test at https://individualcontributor.dev/builder/
+Wait ~5 min for CDN propagation, then test at https://individualcontributor.dev/builder/
+
+1. Clear pack cache (DevTools Console: `localStorage.clear(); location.reload()`)
+2. Build CSR + Single-disc
+3. Open in Makou Reactor: verify Field 103 has no "Ask for disc" ops
+4. Test in DuckStation: play to Kalm flashback end, should continue without disc swap prompt
 
 ## Paste Evidence Here
