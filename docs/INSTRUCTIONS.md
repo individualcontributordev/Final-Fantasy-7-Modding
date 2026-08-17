@@ -1,61 +1,54 @@
-# TASK: Restore full single-disc layer (CSR D1+D2+D3 + DSKCG + LOST2 + SNOVA)
+# TASK: Restore full single-disc layer (CSR D1+D2+D3 merge + DSKCG + LOST2 + SNOVA)
 
-**Status:** ready to execute
+**Status:** NEEDS REWRITE - Architecture was misunderstood
 **Agent session:** 2026-08-17
-**Target:** v0.1.40 single-disc layer with all CSR changes + DSKCG removals + LOST2 + SNOVA
+**Target:** v0.1.40 single-disc layer with smart CSR D1/D2/D3 merge + DSKCG + LOST2 + SNOVA
 
 ## Problem
 
 v0.1.39 layer contains **only** the LOST2 IFUW music patch (16,726 records). It's **missing**:
-- All CSR D1+D2+D3 field changes (should be applied to D1)
+- CSR D1 field changes (174 files)
+- CSR D2/D3 field changes merged onto D1 (77 files, with conflict resolution)
 - All 19 DSKCG (Ask for disc) removals
 - SNOVA inject from D3
 
-This regression was introduced in commit 7fd1dc2 (Aug 16) when versioned directories were deleted during a refactor.
+Regression introduced in commit 7fd1dc2 (Aug 16) when versioned directories were deleted.
 
-## Architecture
+## Architecture (CORRECTED)
 
-**Key insight: FF7 D1/D2/D3 share the same code - only movies differ.**
+**Critical insight: The same field may be edited on D1 AND D2 for different game moments.**
 
-The browser builder stacks layers on pristine D1:
-1. Pristine D1
-2. CSR D1 layer (CSR story fixes)
-3. **Single-disc layer** (removes DSKCG, adds LOST2, injects SNOVA, preserves CSR manip-movies)
+Example: `BLACKBGB` (field 103):
+- CSR D1 version: Used when player visits during Disc 1 gameplay
+- CSR D2 version: Used when player visits during Disc 2 gameplay
+- **These are DIFFERENT edits** - cannot just overwrite D1 with D2!
 
-CSR D2/D3 layers exist but contain the same field/code changes as D1 (for their respective disc builds).
+### CSR Multi-Disc Field Edits
 
-The single-disc layer must diff against pristine D1 and include:
-- All CSR D1 field changes (copied from CSR D1 layer)
-- DSKCG removals (19 operations)
-- LOST2 IFUW patch
-- SNOVA from pristine D3
+From `docs/findings/2026-08-06-csr-multi-disc-field-edits.md`:
+- 174 fields edited on CSR D1
+- 71 fields edited on CSR D2
+- 4 fields edited on CSR D3
+- **10 fields edited on BOTH D1 and D2** with different content
 
-## Solution
+### Field Merge Policy
 
-Build a work bin that has:
-1. **CSR D1 layer applied** (all CSR story fixes)
-2. **DSKCG removals** (19 operations via Makou)
-3. **LOST2 IFUW patch** (force break scene music)
-4. **SNOVA inject** (final battle from pristine D3)
+From `mods/single-disc/patches/csr-field-disc-prefer.txt`:
+- **prefer-D1**: Keep CSR D1 version (e.g., `BLACKBGB`, `DEL1`, `LOSIN2`)
+- **prefer-D2**: Use CSR D2 version (e.g., `LOST2`, `CANON_2`)
+- **review**: 7 fields need manual Makou comparison before merging
 
-Then diff against pristine D1 to create the v0.1.40 layer.
+The single-disc D1 image must have:
+1. CSR D1 field edits (174 files)
+2. CSR D2/D3 field edits (77 files from `csr-d2d3-field-merge-on-d1.md`)
+3. Conflict resolution: Follow `csr-field-disc-prefer.txt` for the 10 collisions
+4. DSKCG removals (19 operations)
+5. LOST2 IFUW patch
+6. SNOVA inject
 
-## Execution steps
+## Solution Approach
 
-### 1. Build CSR D1 base
-
-```bash
-cd ~/Final-Fantasy-7-CSR
-git pull --ff-only
-
-# Build CSR v0.14.1 disc 1
-python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1
-
-# Verify
-ls -lh cache/csr/FINALFANTASY7_D1.bin
-```
-
-### 2. Create work bin with CSR D1 changes
+### Option A: Script-Based Merge (RECOMMENDED if script exists)
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
