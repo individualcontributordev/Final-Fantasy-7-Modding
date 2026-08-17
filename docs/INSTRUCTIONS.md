@@ -18,13 +18,34 @@ python3 mods/single-disc/scripts/build_v0140.py
 
 The script will:
 1. ✅ Merge CSR D1+D2+D3 fields onto pristine D1 (following prefer policy)
-2. ✅ Remove DSKCG operations automatically (19 operations)
-3. ✅ Inject SNOVA from pristine D3
+2. ⏸️  **PAUSE** for manual DSKCG removal in Makou Reactor
+3. ✅ After you complete step 2, re-run to inject SNOVA
 4. ✅ Build layer by diffing against pristine
 5. ✅ Merge v0.1.39 LOST2 patch (16,726 records)
 6. ✅ Update VERSION, pack.json, manifest.json
 
-**Everything is automated!** Just run the script once and it completes the full build.
+## Manual Step: DSKCG Removal
+
+When the script pauses, it will print:
+
+```
+Open this bin in Makou Reactor: workspace/iso-extract/single-disc-v0140-build/ff7_d1_single_disc_work_pre_makou.bin
+
+Remove ALL 'Ask for disc' (DSKCG) operations from these fields:
+  - Field 103 (BLACKBGB): 4 asks in init/S0 - Main (lines 43, 64, 73, 95)
+  - Field 106 (BLACKBGE): 1 ask in AD/Script 4 (line 2)
+  - Field 95 (BLACKBG3): 14 asks in p7/p8 S1 - Talk scripts
+```
+
+**How to remove DSKCG in Makou Reactor:**
+1. Open the bin
+2. Navigate to FIELD folder → BLACKBGB.DAT → Field editor
+3. Expand init → S0 - Main script
+4. Find each "Ask for disc" operation and DELETE it (keep surrounding code)
+5. Save field (Ctrl+S)
+6. Repeat for BLACKBGE and BLACKBG3
+7. Save the bin and copy it to `workspace/iso-extract/single-disc-v0140-build/ff7_d1_single_disc_work_post_makou.bin`
+8. Re-run the script to continue
 
 ## After Build Completes
 
