@@ -17,8 +17,14 @@ Agent has built and published v0.1.2 layer automatically.
 
 **Build pattern:**
 - CSR D1 base (94,148 records)
-- CSR D2 LOST2 + CANON_2 overlay
+- CSR D2 overlay: LOST2, CANON_2, LOSLAKE1
 - DSKCG-stripped: BLACKBGB, BLACKBGE, BLACKBG3
+
+**Verification complete:**
+- ✅ All 6 critical fields match working bin EXACTLY
+- ✅ Layer reproduces v0.1.2 field changes byte-for-byte
+- ✅ 96,497 records, 12.6 MB
+- ✅ All fields decompress successfully
 
 ## What You Do
 
