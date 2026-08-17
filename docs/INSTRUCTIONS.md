@@ -1,50 +1,74 @@
-# TASK: Restore full single-disc layer with all Ask-for-disc removals
+# TASK: Restore full single-disc layer (CSR D1+D2+D3 + DSKCG + LOST2 + SNOVA)
 
 **Status:** ready to execute
 **Agent session:** 2026-08-17
-**Target:** v0.1.40 single-disc layer with DSKCG removals + LOST2 music patch
+**Target:** v0.1.40 single-disc layer with all CSR changes + DSKCG removals + LOST2 + SNOVA
 
 ## Problem
 
-v0.1.39 layer contains **only** the LOST2 IFUW music patch (16,726 records). It's **missing** the core single-disc functionality: removal of all 19 "Ask for disc" (DSKCG) operations from fields 103, 106, and 95.
+v0.1.39 layer contains **only** the LOST2 IFUW music patch (16,726 records). It's **missing**:
+- All CSR D1+D2+D3 field changes (should be applied to D1)
+- All 19 DSKCG (Ask for disc) removals
+- SNOVA inject from D3
 
-This regression was introduced in commit 7fd1dc2 (Aug 16) when versioned directories were deleted during a refactor. The field script patches were in those deleted directories and never restored.
+This regression was introduced in commit 7fd1dc2 (Aug 16) when versioned directories were deleted during a refactor.
 
-## Evidence
+## Architecture
 
-User opened the v0.1.39 disc in Makou Reactor and confirmed Field 103 (`BLACKBGB`) still contains "Ask for disc" operations, which should be removed for a single-disc run.
+**Key insight: FF7 D1/D2/D3 share the same code - only movies differ.**
 
-Current layer analysis:
-```
-Total records: 16,726
-FIELD file range records: 0
-LOST2 file range records: 10,297
-```
+The browser builder stacks layers on pristine D1:
+1. Pristine D1
+2. CSR D1 layer (CSR story fixes)
+3. **Single-disc layer** (removes DSKCG, adds LOST2, injects SNOVA, preserves CSR manip-movies)
 
-Expected from docs/findings/2026-08-02-single-disc-ask-for-disc-inventory.md:
-- Field 103 (`blackbgb`): 4 asks in S0 - Main
-- Field 106 (`blackbge`): 1 ask
-- Field 95 (`blackbg3`): 14 asks in p7/p8 talk scripts
-- **Total: 19 DSKCG removals required**
+CSR D2/D3 layers exist but contain the same field/code changes as D1 (for their respective disc builds).
+
+The single-disc layer must diff against pristine D1 and include:
+- All CSR D1 field changes (copied from CSR D1 layer)
+- DSKCG removals (19 operations)
+- LOST2 IFUW patch
+- SNOVA from pristine D3
 
 ## Solution
 
-Follow the rebuild recipe from mods/single-disc/README.md (lines 59-126) to create a new work bin with:
+Build a work bin that has:
+1. **CSR D1 layer applied** (all CSR story fixes)
+2. **DSKCG removals** (19 operations via Makou)
+3. **LOST2 IFUW patch** (force break scene music)
+4. **SNOVA inject** (final battle from pristine D3)
 
-1. DSKCG (Ask for disc) removals via Makou Reactor
-2. LOST2 IFUW music patch applied
-3. SNOVA + BATTLE.X inject
-
-Then build a new v0.1.40 layer from the combined work bin.
+Then diff against pristine D1 to create the v0.1.40 layer.
 
 ## Execution steps
 
-### 1. Fresh work copy
+### 1. Build CSR D1 base
+
+```bash
+cd ~/Final-Fantasy-7-CSR
+git pull --ff-only
+
+# Build CSR v0.14.1 disc 1
+python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1
+
+# Verify
+ls -lh cache/csr/FINALFANTASY7_D1.bin
+```
+
+### 2. Create work bin with CSR D1 changes
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
 git pull --ff-only
+
+# Start with pristine D1
 cp -f workspace/pristine/FINALFANTASY7_D1.bin workspace/iso-extract/ff7_d1_single_disc_work.bin
+
+# Apply CSR D1 layer (all CSR story fixes)
+python3 scripts/apply_layer.py \
+  --bin workspace/iso-extract/ff7_d1_single_disc_work.bin \
+  --layer ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
+  --in-place
 ```
 
 ### 2. Makou — remove every Ask for disc
@@ -87,23 +111,28 @@ python3 mods/single-disc/scripts/inject_snova_d3_to_d1.py \
 - verify: BATTLE.X 17 LBA entries remapped
 - verify: all SNOVA files match D3
 
-### 4. Build v0.1.40 layer against pristine
+### 4. Build v0.1.40 base layer against pristine
 
-This generates offset/hex records for all changes (DSKCG removals + SNOVA):
+This generates offset/hex records for all changes (CSR fields + DSKCG removals + SNOVA):
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
 
-python3 mods/single-disc/scripts/build_csrplus_and_highwind_d1_layers.py \
+# Backup v0.1.39 for reference
+cp builder/single-disc-on-csr/layers/disc1.layer.json \
+   builder/single-disc-on-csr/layers/disc1.layer.json.v0.1.39.bak
+
+# Build new layer
+python3 scripts/bin_diff_to_layer.py \
+  --base workspace/pristine/FINALFANTASY7_D1.bin \
   --work workspace/iso-extract/ff7_d1_single_disc_work.bin \
-  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-  --version 0.1.40 \
-  --base csr
+  --out builder/single-disc-on-csr/layers/disc1.layer.json \
+  --id single-disc-on-csr-v0.1.40-disc1 \
+  --description "Single-disc v0.1.40: CSR fields + DSKCG removals + SNOVA (no LOST2 yet)"
 ```
 
 **Expected output:**
-- Layer file: `builder/single-disc-on-csr/layers/disc1.layer.json`
-- Record count should be significant (FIELD + SNOVA patches)
+- Record count should be large (~850k+ records: CSR field changes + DSKCG + SNOVA)
 
 ### 5. Merge LOST2 patch into layer
 
@@ -116,8 +145,8 @@ python3 << 'EOF'
 import json
 from pathlib import Path
 
-# Load v0.1.39 LOST2-only layer
-v39_layer = json.loads(Path("builder/single-disc-on-csr/layers/disc1.layer.json").read_text())
+# Load v0.1.39 LOST2-only layer (from backup)
+v39_layer = json.loads(Path("builder/single-disc-on-csr/layers/disc1.layer.json.v0.1.39.bak").read_text())
 lost2_records = v39_layer["records"]
 print(f"v0.1.39 LOST2 records: {len(lost2_records)}")
 
