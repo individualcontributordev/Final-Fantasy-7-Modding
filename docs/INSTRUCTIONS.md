@@ -2,7 +2,11 @@
 
 **Status:** NEEDS REWRITE - Architecture was misunderstood
 **Agent session:** 2026-08-17
-**Target:** v0.1.40 single-disc layer with smart CSR D1/D2/D3 merge + DSKCG + LOST2 + SNOVA
+**Target:** `builder/single-disc-on-csr/layers/disc1.layer.json` v0.1.40
+
+**⚠️ CRITICAL: CSR layers (`Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/*.json`) are NEVER modified!**
+
+All work is on the single-disc mod layer only.
 
 ## Problem
 
