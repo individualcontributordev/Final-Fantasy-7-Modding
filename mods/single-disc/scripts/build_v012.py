@@ -16,7 +16,7 @@ Outputs:
 Build pattern (from working v0.1.2 analysis):
   - Start with pristine D1
   - Apply CSR D1 layer (174 field edits)
-  - Overlay CSR D2 fields: LOST2, CANON_2
+  - Overlay CSR D2 fields: LOST2, CANON_2, LOSLAKE1
   - Inject DSKCG-stripped fields: BLACKBGB, BLACKBGE, BLACKBG3
   - Generate layer from diff
 
@@ -83,14 +83,14 @@ def validate_layer(layer_path: Path, test_bin: Path):
     print(f"Record count: {record_count}")
 
     # This layer is built against pristine D1, so it includes all CSR D1 changes (~94K)
-    # plus our 5 field overlays. Expected: 94K-96K records
-    if record_count < 94000 or record_count > 96000:
+    # plus our 6 field overlays. Expected: 94K-97K records
+    if record_count < 94000 or record_count > 97000:
         raise ValueError(
-            f"❌ Layer record count {record_count} out of range 94000-96000!\n"
-            f"   Expected: CSR D1 (~94K) + 5 field changes\n"
+            f"❌ Layer record count {record_count} out of range 94000-97000!\n"
+            f"   Expected: CSR D1 (~94K) + 6 field changes\n"
             f"   This suggests corruption or wrong build parameters."
         )
-    print(f"✅ Record count OK (94000-96000)")
+    print(f"✅ Record count OK (94000-97000)")
     
     # 2. Layer size
     layer_size_mb = layer_path.stat().st_size / (1024 * 1024)
@@ -106,7 +106,7 @@ def validate_layer(layer_path: Path, test_bin: Path):
     
     # 3. Critical field decompression
     img = bytearray(test_bin.read_bytes())
-    critical_fields = ["LOST2", "BLACKBGB", "BLACKBGE", "BLACKBG3"]
+    critical_fields = ["LOST2", "LOSLAKE1", "BLACKBGB", "BLACKBGE", "BLACKBG3"]
     
     for field in critical_fields:
         try:
@@ -154,25 +154,28 @@ def main() -> int:
     apply_layer_to_bin(work_bin, csr_d1_data)
     print(f"   Applied {len(csr_d1_data['records'])} records from CSR D1")
     
-    # Step 3: Overlay CSR D2 fields (LOST2, CANON_2)
-    print("Step 3: Overlay CSR D2 fields (LOST2, CANON_2)...")
+    # Step 3: Overlay CSR D2 fields (LOST2, CANON_2, LOSLAKE1)
+    print("Step 3: Overlay CSR D2 fields (LOST2, CANON_2, LOSLAKE1)...")
     temp_d2 = work_dir / "temp_d2.bin"
     temp_d2.write_bytes(pristine.read_bytes())
     csr_d2_data = load_layer(csr_d2_layer)
     apply_layer_to_bin(temp_d2, csr_d2_data)
-    
-    # Extract LOST2 and CANON_2 from temp D2 bin
+
+    # Extract LOST2, CANON_2, and LOSLAKE1 from temp D2 bin
     img_d2 = bytearray(temp_d2.read_bytes())
     lost2 = psx_mode2_iso.extract_file(img_d2, "FIELD/LOST2.DAT")
     canon2 = psx_mode2_iso.extract_file(img_d2, "FIELD/CANON_2.DAT")
-    
+    loslake1 = psx_mode2_iso.extract_file(img_d2, "FIELD/LOSLAKE1.DAT")
+
     # Inject into work bin
     img_work = bytearray(work_bin.read_bytes())
     psx_mode2_iso.replace_file_within_sectors(img_work, "FIELD/LOST2.DAT", lost2)
     psx_mode2_iso.replace_file_within_sectors(img_work, "FIELD/CANON_2.DAT", canon2)
+    psx_mode2_iso.replace_file_within_sectors(img_work, "FIELD/LOSLAKE1.DAT", loslake1)
     work_bin.write_bytes(img_work)
     print(f"   Injected LOST2 ({len(lost2):,} bytes)")
     print(f"   Injected CANON_2 ({len(canon2):,} bytes)")
+    print(f"   Injected LOSLAKE1 ({len(loslake1):,} bytes)")
     
     # Step 4: Inject DSKCG-stripped fields
     print("Step 4: Inject DSKCG-stripped fields...")
