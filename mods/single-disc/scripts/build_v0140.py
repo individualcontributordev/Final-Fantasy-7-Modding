@@ -198,30 +198,43 @@ def build_work_bin() -> Path:
 
 
 def remove_dskcg_from_field(img: bytearray, field_path: str) -> int:
-    """Remove all DSKCG (0x13) opcodes from a field file.
+    """Remove all DSKCG (0x0E) opcodes from a field file by parsing script structure.
 
     Returns number of DSKCG operations removed.
     """
+    # Import opcode data
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from ff7_opcodes import OPCODE_LENGTH, OPCODE_NAMES  # noqa: E402
+
     # Extract and decompress field
     field_enc = extract_file(img, field_path)
     field_dec = bytearray(decompress(field_enc))
 
-    # DSKCG opcode is 0x13
-    # Format: 0x13 <arg> where arg is disc number (1, 2, or 3)
-    # We need to remove the 0x13 byte AND the following arg byte
+    # DSKCG opcode is 0x0E (not 0x13!)
+    # Format: 0x0E <arg> where arg is disc number (1, 2, or 3)
+    # Length: 2 bytes according to OPCODE_LENGTH
 
+    # We need to parse the script properly to find DSKCG opcodes
+    # Cannot just scan for 0x0E bytes since that might appear in data
+
+    # Build a new field with DSKCG removed
     removed = 0
     i = 0
     new_field = bytearray()
 
     while i < len(field_dec):
-        if field_dec[i] == 0x13:  # DSKCG opcode
-            # Skip this byte and the next arg byte
+        op = field_dec[i]
+
+        if op == 0x0E:  # DSKCG opcode
+            # Skip this opcode and its argument
             removed += 1
-            i += 2  # Skip opcode + arg
+            op_len = OPCODE_LENGTH[op] if op < len(OPCODE_LENGTH) else 1
+            i += op_len
         else:
-            new_field.append(field_dec[i])
-            i += 1
+            # Copy this opcode and advance
+            op_len = OPCODE_LENGTH[op] if op < len(OPCODE_LENGTH) else 1
+            new_field.extend(field_dec[i:i+op_len])
+            i += op_len
 
     if removed > 0:
         # Recompress and replace
