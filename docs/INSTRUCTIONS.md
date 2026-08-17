@@ -1,89 +1,97 @@
-# Task: Test Single-Disc v0.1.2 Rebuild (Agent Built)
+# Task: Test Single-Disc v0.1.2 Automated Rebuild
 
-## Context
+## Status: ✅ BUILD COMPLETE - READY TO TEST
 
-You tested the manually-built bin at `/Users/david.morton/Downloads/ff7-d1-csr-sd-mov-end.bin` and confirmed it works (disc 1→2 transition, break scene, gameplay complete). The only issues are movie audio flickers (ending + loslake1).
+Agent has built and published v0.1.2 layer automatically.
 
-Agent has analyzed the working v0.1.2 pattern and will rebuild it automatically with validation.
+## Build Summary
 
-## What Agent Will Do
+**Automated build script:** `mods/single-disc/scripts/build_v012.py`
 
-1. ✅ Analyze working v0.1.2 bin (already done)
-2. ✅ Write automated build script with validation
-3. ✅ Generate v0.1.2 layer (CSR D1 + D2 overlays + DSKCG stripped)
-4. ✅ Validate layer (record count, size, decompression)
-5. ✅ Commit to builder/single-disc-on-csr/
-6. → **You test the rebuild**
+**What was done:**
+1. ✅ Extracted DSKCG-stripped fields from working v0.1.2 bin
+2. ✅ Generated v0.1.2 layer programmatically
+3. ✅ Validated layer (95,636 records, 12.6 MB)
+4. ✅ All critical fields decompress successfully
+5. ✅ Committed to `builder/single-disc-on-csr/layers/disc1.layer.json`
 
-## What You'll Do
+**Build pattern:**
+- CSR D1 base (94,148 records)
+- CSR D2 LOST2 + CANON_2 overlay
+- DSKCG-stripped: BLACKBGB, BLACKBGE, BLACKBG3
 
-**After agent commits the layer:**
+## What You Do
 
-1. Download from builder (or pull latest)
-2. Test the rebuilt v0.1.2
-3. Report movie flicker details
-
-## Step 1: Wait for Agent to Build
-
-Agent is building v0.1.2 layer automatically:
-- Analyzed working v0.1.2 bin (done)
-- Extracting DSKCG-stripped fields
-- Writing build script with validation
-- Generating layer
-- Committing to builder/
-
-**You'll be notified when ready to test.**
-
-## Step 2: Pull Latest and Test
-
-After agent commits v0.1.2 layer, download and test using the builder:
+### Step 1: Pull Latest
 
 ```bash
 cd ~/Final-Fantasy-7-Modding
 git pull --ff-only
+```
 
-# The builder will have the new v0.1.2 layer
-# Test via https://individualcontributor.dev/builder/
-# Or build locally:
+### Step 2: Build Test Disc
+
+Apply the v0.1.2 layer:
+
+```bash
+cd ~/Final-Fantasy-7-Modding
 
 python3 scripts/apply_layer.py \
   workspace/pristine/FINALFANTASY7_D1.bin \
   builder/single-disc-on-csr/layers/disc1.layer.json \
-  -o workspace/test-v012.bin
-
-# Apply movies + endings (agent will provide exact commands)
+  -o workspace/test-v012-rebuild.bin
 ```
+
+### Step 3: Test in DuckStation
+
+Load `workspace/test-v012-rebuild.bin` in DuckStation.
 
 **Test checklist:**
 - [ ] Game boots
-- [ ] Disc 1 content plays (up to LOST2)
+- [ ] Disc 1 content plays normally (up to LOST2)
 - [ ] Disc 1→2 transition works (no "Insert Disc 2" prompt)
 - [ ] Break scene plays at COS_BTM2
-- [ ] Music on LOST2 field
+- [ ] Music plays on LOST2 field
+- [ ] Can continue gameplay after break scene
 - [ ] Ending plays (note if audio flickers)
-- [ ] LOSLAKE1 movie (field 637) - note if audio flickers
+- [ ] LOSLAKE1 movie (field 637) plays (note if audio flickers)
 
-## Step 3: Report Results
+### Step 4: Report Results
 
-Paste evidence:
+Edit this file with your test results:
+
 ```
-✅ or ❌ for each test checklist item
-Movie flicker details (which movies, when)
-Any other issues
+=== TEST RESULTS ===
+
+✅ or ❌ for each checklist item above
+
+Movie flicker observations:
+- Ending movies: [flickers / no flickers / details]
+- LOSLAKE1 movie (0x2F): [flickers / no flickers / details]
+
+Other issues:
+
+
 ```
 
-Then commit evidence:
+### Step 5: Commit Evidence
+
 ```bash
+cd ~/Final-Fantasy-7-Modding
 git add docs/INSTRUCTIONS.md
-git commit -m "ops: Tested v0.1.2 rebuild - [PASS/FAIL]"
+git commit -m "ops: Tested v0.1.2 automated rebuild - [PASS/FAIL]"
 git push
 ```
 
-Agent will investigate movie flicker root cause and build v0.1.41 with the fix.
+Then say **check** so agent can review results and proceed.
 
-## Why This Approach
+## Why This Matters
 
-- **Agent builds automatically** (no manual exports, no manual scripts)
-- **Validation built-in** (record count, size, decompression)
-- **v0.1.2 was tested and works** (except movie flickers)
-- **Rollback to known-good** before fixing the remaining issue
+- **No manual Makou edits** - fully automated build
+- **Validation passed** - record count, size, field decompression all OK
+- **Exact replication** of working v0.1.2 pattern
+- **Next:** Agent investigates movie flicker root cause for v0.1.41
+
+## Evidence
+
+(Your test results go here)
