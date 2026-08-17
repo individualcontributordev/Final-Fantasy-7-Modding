@@ -1,0 +1,128 @@
+---
+description: Use canonical reference data instead of guessing IDs or searching manually
+globs:
+  - "**/*.py"
+  - "**/*.md"
+  - "mods/**"
+  - "scripts/**"
+---
+
+# Reference Data Usage Rule
+
+## Core Principle
+
+**Always use the canonical reference data** in `docs/reference/` for field IDs, movie IDs, music IDs, and PSX memory addresses. **Never guess, assume, or search manually** when the data is indexed.
+
+## Available Reference Data
+
+| Type | File | Query Tool | Count |
+|------|------|------------|-------|
+| **Field IDs** | `docs/reference/field-id-mapping.txt` | `python3 scripts/query_ff7_ids.py field <id-or-name>` | 788 fields |
+| **Movie IDs** | `docs/reference/movie-id-mapping.txt` | `python3 scripts/query_ff7_ids.py movie <id>` | 106 movies |
+| **Music IDs** | `docs/reference/music-id-mapping.txt` | `python3 scripts/query_ff7_ids.py music <id>` | 100 tracks |
+| **PSX Memory** | `docs/reference/ff7-psx-memory/*.txt` | `python3 docs/reference/ff7-psx-memory/query_memory.py <addr-or-keyword>` | ~300 regions |
+
+**Index:** `docs/reference/INDEX.md` — complete documentation and Python API examples.
+
+## When to Use Reference Data
+
+### Field Analysis
+✅ **DO:** Query field IDs before analyzing scripts
+```bash
+# Find field name from ID
+python3 scripts/query_ff7_ids.py field 637  # → loslake1
+
+# Find field ID from name
+python3 scripts/query_ff7_ids.py field loslake1  # → 637 (0x27D)
+
+# Fuzzy search
+python3 scripts/query_ff7_ids.py field lost  # → lost1, lost2, lost3, loslake*
+```
+
+❌ **DON'T:** Manually search through field files or guess field IDs
+
+### Movie/Music Opcodes
+✅ **DO:** Decode PMVIE/MUSIC opcodes using reference data
+```bash
+# PMVIE f82f → which movie?
+python3 scripts/query_ff7_ids.py movie 0x2f  # → jairofal (Disc1)
+
+# MUSIC f052 → which track?
+python3 scripts/query_ff7_ids.py music 82  # → One-Winged Angel
+```
+
+❌ **DON'T:** Hardcode movie/music names without verifying IDs
+
+### Single-Disc Modding
+✅ **DO:** Reference critical field/movie mappings from `docs/reference/INDEX.md`
+- Fields 103/104/105: DSKCG removal targets
+- Field 634 (lost2): Disc 1→2 transition (IFUW patch)
+- Field 526 (cos_btm2): Break scene entry point
+- Movie 0x2F (47): jairofal in loslake1 (flicker issue)
+
+❌ **DON'T:** Guess which fields need DSKCG removal or disc transition patches
+
+### Python Scripts
+✅ **DO:** Load reference data from text files (see `docs/reference/INDEX.md` for Python API)
+```python
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+# Load field mapping
+fields = {}
+for line in (ROOT / "docs/reference/field-id-mapping.txt").read_text().splitlines():
+    if line and not line.startswith('#'):
+        field_id, name = line.split(maxsplit=1)
+        fields[int(field_id)] = name
+
+field_name = fields[637]  # "loslake1"
+```
+
+❌ **DON'T:** Use SQLite databases or hardcoded lookup tables
+
+## Updating Reference Data
+
+**These files are static** — extracted from Makou Reactor 2.1.0 on 2026-08-17.
+
+**Do NOT modify** unless:
+1. Makou Reactor updates and IDs change (verify first)
+2. New reference data types are added (PSX addresses, opcode tables, etc.)
+
+**When adding new reference data:**
+1. Add file to `docs/reference/` (plain text format preferred)
+2. Update `docs/reference/INDEX.md` with file location and usage
+3. Add query support to existing tools or create new query script
+4. Update this rule if new reference types are critical
+
+## Integration with Findings
+
+When documenting findings in `docs/findings/`, **always cross-reference** IDs:
+```markdown
+## Field Analysis
+- Field 637 (loslake1): Movie 0x2F (jairofal) plays at script 0, line 54
+- Movie 0x2F is natively Disc1 → flicker is NOT a disc placement issue
+```
+
+**Link to reference data** in findings:
+```markdown
+See: `docs/reference/movie-id-mapping.txt` for complete movie→disc mapping
+```
+
+## Enforcement
+
+**Before committing** any field/movie/music analysis:
+1. Verify IDs using `scripts/query_ff7_ids.py`
+2. Cross-reference findings with `docs/reference/INDEX.md`
+3. Document any new ID discoveries in findings (if truly new)
+
+**Red flags** (stop and query reference data):
+- "Field ID XXX is probably..."
+- "I think this movie is..."
+- "Searching for field names..."
+- Hardcoded field/movie/music lookup tables in scripts
+
+## Related Rules
+- `capture-research-findings.mdc` — findings must reference canonical IDs
+- `single-disc-fields.mdc` — field modifications require ID verification
+- `tooling-standards.mdc` — scripts must use reference data API
