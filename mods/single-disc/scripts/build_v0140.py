@@ -5,7 +5,7 @@ Fixes v0.1.39 regression where layer only had LOST2 patch (16,726 records).
 This rebuild includes:
 - CSR D1 field changes (174 files)
 - CSR D2/D3 field changes merged onto D1 (77 files, with conflict resolution)
-- DSKCG removals (19 operations across 3 fields)
+- DSKCG removals (19 operations across 3 fields) - AUTOMATED
 - LOST2 IFUW patch (16,726 records from v0.1.39)
 - SNOVA inject from pristine D3
 
@@ -31,6 +31,7 @@ from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
 from disc_sources import csr_root, pristine_bin  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_within_sectors  # noqa: E402
+from lzs import decompress_all_with_header as decompress, compress_all_with_header as compress  # noqa: E402
 
 CSR = csr_root()
 PRISTINE_D1 = pristine_bin(1)
@@ -98,13 +99,13 @@ def parse_merge_list() -> list[tuple[str, str]]:
 
 
 def build_work_bin() -> Path:
-    """Build the work bin with CSR D1+D2+D3 merge.
-    
+    """Build the work bin with CSR D1+D2+D3 merge + DSKCG removals.
+
     Steps:
     1. Start with pristine D1
     2. Apply CSR D1 layer (174 field edits)
     3. Merge CSR D2/D3 fields (77 files, respecting prefer policy)
-    4. Save for manual DSKCG removal in Makou
+    4. Remove DSKCG operations (19 total)
     
     Returns path to work bin (pre-Makou, pre-SNOVA).
     """
@@ -181,8 +182,14 @@ def build_work_bin() -> Path:
     print(f"  Review (skipped): {n_review} files")
     print(f"  Errors: {n_skip} files")
 
-    # Save work bin (pre-Makou, pre-SNOVA)
-    work_path = WORK_DIR / "ff7_d1_single_disc_work_pre_makou.bin"
+    # Step 4: Remove DSKCG operations
+    print("\n[4/4] Removing DSKCG operations...")
+    dskcg_removed = apply_dskcg_removals(img)
+    if dskcg_removed != 19:
+        print(f"⚠️  WARNING: Expected 19 DSKCG removals, got {dskcg_removed}")
+
+    # Save work bin (ready for SNOVA)
+    work_path = WORK_DIR / "ff7_d1_single_disc_work_pre_snova.bin"
     work_path.write_bytes(img)
     print(f"\nWork bin saved: {work_path}")
     print(f"  Size: {len(img):,} bytes")
@@ -190,27 +197,64 @@ def build_work_bin() -> Path:
     return work_path
 
 
-def apply_dskcg_removals(work_path: Path) -> Path:
-    """Apply DSKCG removals via Makou Reactor.
+def remove_dskcg_from_field(img: bytearray, field_path: str) -> int:
+    """Remove all DSKCG (0x13) opcodes from a field file.
 
-    For now, this prints instructions for manual removal.
-    Returns path to post-Makou work bin.
+    Returns number of DSKCG operations removed.
+    """
+    # Extract and decompress field
+    field_enc = extract_file(img, field_path)
+    field_dec = bytearray(decompress(field_enc))
+
+    # DSKCG opcode is 0x13
+    # Format: 0x13 <arg> where arg is disc number (1, 2, or 3)
+    # We need to remove the 0x13 byte AND the following arg byte
+
+    removed = 0
+    i = 0
+    new_field = bytearray()
+
+    while i < len(field_dec):
+        if field_dec[i] == 0x13:  # DSKCG opcode
+            # Skip this byte and the next arg byte
+            removed += 1
+            i += 2  # Skip opcode + arg
+        else:
+            new_field.append(field_dec[i])
+            i += 1
+
+    if removed > 0:
+        # Recompress and replace
+        field_enc_new = compress(bytes(new_field))
+        replace_file_within_sectors(img, field_path, field_enc_new)
+
+    return removed
+
+
+def apply_dskcg_removals(img: bytearray) -> int:
+    """Remove all DSKCG operations from the 3 affected fields.
+
+    Returns total number of DSKCG operations removed.
     """
     print("\n" + "=" * 70)
-    print("DSKCG Removal - MANUAL STEP REQUIRED")
+    print("DSKCG Removal - AUTOMATED")
     print("=" * 70)
-    print(f"\nOpen this bin in Makou Reactor: {work_path}")
-    print("\nRemove 'Ask for disc' (DSKCG) operations from these fields:")
-    print("  - Field 103 (BLACKBGB): 4 asks in S0 - Main")
-    print("  - Field 106 (BLACKBGE): 1 ask in AD / Script 4")
-    print("  - Field 95 (BLACKBG3): 14 asks in p7/p8 S1 - Talk scripts")
-    print("\nAfter removing all 19 DSKCG operations:")
-    print(f"  1. Save changes in Makou Reactor")
-    print(f"  2. Copy the bin to: {WORK_DIR / 'ff7_d1_single_disc_work_post_makou.bin'}")
-    print(f"  3. Re-run this script to continue")
 
-    post_makou_path = WORK_DIR / "ff7_d1_single_disc_work_post_makou.bin"
-    return post_makou_path
+    fields = [
+        ("FIELD/BLACKBGB.DAT", "Field 103 (BLACKBGB)"),
+        ("FIELD/BLACKBGE.DAT", "Field 106 (BLACKBGE)"),
+        ("FIELD/BLACKBG3.DAT", "Field 95 (BLACKBG3)"),
+    ]
+
+    total_removed = 0
+    for field_path, field_name in fields:
+        removed = remove_dskcg_from_field(img, field_path)
+        if removed > 0:
+            print(f"  ✅ {field_name}: Removed {removed} DSKCG operations")
+        total_removed += removed
+
+    print(f"\nTotal DSKCG operations removed: {total_removed}")
+    return total_removed
 
 
 def inject_snova(work_path: Path) -> Path:
@@ -342,31 +386,14 @@ def main():
     print("=" * 70)
     print("\nThis script will:")
     print("  1. Merge CSR D1+D2+D3 fields onto pristine D1")
-    print("  2. Pause for manual DSKCG removal in Makou Reactor")
+    print("  2. Remove DSKCG operations automatically")
     print("  3. Inject SNOVA from pristine D3")
     print("  4. Build layer by diffing against pristine D1")
     print("  5. Merge v0.1.39 LOST2 patch into layer")
     print("  6. Update VERSION, pack.json, manifest.json")
 
-    # Check if post-Makou bin exists (resume mode)
-    post_makou_path = WORK_DIR / "ff7_d1_single_disc_work_post_makou.bin"
-
-    if post_makou_path.exists():
-        print(f"\n✅ Found post-Makou bin: {post_makou_path.name}")
-        print("Resuming from SNOVA injection...")
-        work_path = post_makou_path
-    else:
-        # Build work bin (CSR merge)
-        work_path = build_work_bin()
-
-        # Pause for manual DSKCG removal
-        post_makou_path = apply_dskcg_removals(work_path)
-
-        print("\n" + "=" * 70)
-        print("⏸️  PAUSED - Manual Makou Reactor step required")
-        print("=" * 70)
-        print("\nAfter completing DSKCG removal, re-run this script to continue.")
-        return
+    # Build work bin (CSR merge + DSKCG removal)
+    work_path = build_work_bin()
 
     # Inject SNOVA
     final_bin = inject_snova(work_path)
