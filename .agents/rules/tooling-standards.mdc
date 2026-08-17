@@ -40,6 +40,10 @@ instead of leaving only chat paste or a disposable `workspace/tmp_*.py`.
 
 ## Discovery
 
-Index: `scripts/README.md`. Field maps: `compare_field_dat`, `extract_field_dat`,
-`put_field_dat`. Layers: `apply_layer`, `bin_diff_to_layer`. Publish checks:
-`verify_builder_config`, `verify_built_disc`.
+**Tools index:** `scripts/README.md`
+**Reference data:** `docs/reference/INDEX.md` — field/movie/music IDs, PSX memory map
+
+Field maps: `compare_field_dat`, `extract_field_dat`, `put_field_dat`
+Layers: `apply_layer`, `bin_diff_to_layer`
+Publish checks: `verify_builder_config`, `verify_built_disc`
+Query tools: `scripts/query_ff7_ids.py`, `docs/reference/ff7-psx-memory/query_memory.py`

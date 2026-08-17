@@ -9,6 +9,7 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 
 | Want | Tool | Notes |
 |------|------|--------|
+| **Look up field/movie/music ID** | `query_ff7_ids.py` | Canonical reference — see `docs/reference/INDEX.md` |
 | Compare two field maps (opcodes, pad vs text) | `compare_field_dat.py` | Prefer over byte-size / compressed diffs |
 | Extract one `FIELD/*.DAT` from pristine/CSR/bin | `extract_field_dat.py` | Read-only |
 | Write one `FIELD/*.DAT` into a work `.bin` | `put_field_dat.py` | Padded slot; refuses longer |
@@ -51,9 +52,15 @@ Integration skips cleanly when disc images are missing. Run **full** suite befor
 
 ```bash
 # Help (every CLI)
+python3 scripts/query_ff7_ids.py -h
 python3 scripts/compare_field_dat.py -h
 python3 scripts/extract_field_dat.py -h
 python3 scripts/put_field_dat.py -h
+
+# Look up field/movie/music IDs (see docs/reference/INDEX.md)
+python3 scripts/query_ff7_ids.py field 637          # → loslake1
+python3 scripts/query_ff7_ids.py movie 0x2f         # → jairofal (Disc1)
+python3 scripts/query_ff7_ids.py music 82           # → One-Winged Angel
 
 # CSR Disc 1 vs Disc 2 for one map
 python3 scripts/compare_field_dat.py csr:1 csr:2 --field DEL1 -o /tmp/del1.md
