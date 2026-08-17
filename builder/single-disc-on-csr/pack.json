@@ -1,0 +1,15 @@
+{
+  "id": "single-disc-on-csr",
+  "version": "0.1.37",
+  "name": "Single-disc",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.37: D1→D2 break scene music fix (LOST2 IFUW patch).",
+  "hint": "CSR. Movies + endings auto-apply.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-v0.14.1"
+  ],
+  "layout": "global",
+  "enabled": true,
+  "beta": true,
+  "status": "beta"
+}

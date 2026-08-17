@@ -1,86 +1,215 @@
-# INSTRUCTIONS — Single-Disc Disc 1→2 Transition Fix
+# Single-Disc v0.1.38 → v0.1.39: Restore LOST2 IFUW Patch
 
-## Current Status: ⏸️ WAITING FOR USER TEST
+**Problem:** v0.1.38 uses a stub layer (1 dummy byte) that doesn't include the LOST2 IFUW patch. The "insert disc 2" prompt appears during the D1→D2 transition.
 
-You reported that **CSR + Single-disc** has issues:
-- ✅ Disc 1→2 transition loads field 634 (LOST2 forest)
-- ❌ Missing break scene at start of Disc 2
-- ❌ No music on field 634
+**Root cause:** v0.1.37's `ship_v037.py` script generated a `path/data` format layer (whole LOST2.DAT file replacement) which is unsupported by the browser builder. The consolidation to v0.1.38 used a stub to unblock the builder, but lost the actual patch.
 
-The expected flow on **CSR multi-disc** should be:
-1. End of D1: LOSIN2 (field 632) → asks for Disc 2
-2. Start of D2: BLACKBGB hub → **COS_BTM2 break scene (field 526)**
-3. After break: **LOST2 forest (field 634) with music**
+**Solution:** Regenerate the LOST2 patch as proper `offset/hex` records for the disc image.
 
-On **CSR + Single-disc**, the flow is:
-1. End of D1: LOSIN2 → transition
-2. ❌ **Goes directly to field 634**, skipping COS_BTM2 (field 526)
-3. ❌ **No music** on field 634
+## Background
 
----
+The LOST2 field script has two IFUW (if-word) checks that skip the break scene music when Game Moment (GM) at address 0x0020 != 0xa455:
 
-## Root Cause (from findings)
+- CSR multi-disc sets GM=0xa455 during the disc swap hardware event
+- Single-disc never triggers disc swap, so GM stays at default value
+- Result: LOST2 checks fail, music doesn't play, "insert disc 2" prompt appears
 
-From `docs/findings/2026-08-13-v035-music-fail-save-ok.md`:
+**v0.1.37 Fix (now missing):**
+Patch LOST2.DAT decompressed init script at two offsets:
+- Offset 0x443: Change IFUW else-offset from 0x05 → 0x00
+- Offset 0x44F: Change IFUW else-offset from 0x03 → 0x00
 
-> BLACKBGB disc-2 arms still run MAPJUMP #634 then MUSIC id=3 — MUSIC is after MAPJUMP (never runs on hub). Save arm is the one playtest hit.
+This forces the music to play regardless of GM state.
 
-**Two bugs:**
-1. **BLACKBGB jumps to wrong field:** Should MAPJUMP #526 (COS_BTM2 break), but jumps to #634 (LOST2) instead
-2. **MUSIC after MAPJUMP:** Even if it jumped correctly, MUSIC opcode comes after MAPJUMP so it never plays
+## Task: Regenerate v0.1.39 Layer
 
----
+### Step 1: Build CSR D1 Base
 
-## Analysis Needed
+The ship script needs CSR D1 bin to extract and patch LOST2.DAT:
 
-Before creating a fix, I need to confirm the expected behavior.
+```bash
+cd ~/Final-Fantasy-7-CSR
 
-### Test: CSR Multi-Disc Behavior
+# Build CSR v0.14.1 disc 1
+python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1
 
-On Windows, test a clean CSR multi-disc build (D1 + D2, NO single-disc) to see what actually happens:
+# Verify
+ls -lh cache/csr/FINALFANTASY7_D1.bin
+```
 
-1. **Build CSR discs** (NO mods):
-   - Go to https://individualcontributor.dev/builder/
-   - Select "Base Experience: CSR v0.14.1"
-   - Select "Disc 1", click "Build Disc 1"
-   - Save the .zip, extract, get the .bin
-   - Select "Disc 2", click "Build Disc 2"  
-   - Save the .zip, extract, get the .bin
+**Expected:** `cache/csr/FINALFANTASY7_D1.bin` (~798 MB)
 
-2. **Load in DuckStation:**
-   - Load CSR Disc 1 .bin
-   - Play to end of Disc 1 (or load a save state near the disc break)
+### Step 2: Run Original Ship Script (Generates path/data)
 
-3. **At "Please insert Disc 2" prompt:**
-   - In DuckStation: "System" → "Change Disc" → select CSR Disc 2 .bin
-   - Continue
+```bash
+cd ~/Final-Fantasy-7-Modding
 
-4. **Record what happens:**
-   - What field loads? (You can watch field ID in Cheat Engine: `DuckStation.exe+7F1600+0x11C2A4`, 2-byte hex)
-   - Do you see any cutscene/dialogue at Cosmo Canyon?
-   - Do you hear music when you reach the forest?
-   - Can you move and play normally?
+# Run v0.1.37 ship script
+python3 mods/single-disc/scripts/ship_v037.py
+```
 
-### Paste Here
+**Output:**
+- `builder/single-disc-on-csr-v0.1.37/layers/disc1.layer.json` (path/data format)
+- `builder/single-disc-on-csr-v0.1.37/pack.json`
 
-**CSR multi-disc test results:**
-- Field ID when D2 starts: ____
-- Break scene at Cosmo: YES / NO / (describe what you saw)
-- Music in forest: YES / NO
-- Able to continue playing: YES / NO
+**Don't commit yet!** This layer is in the wrong format.
 
----
+### Step 3: Convert path/data to offset/hex
 
-## Next: Fix After Confirmation
+The layer has one record with the entire patched LOST2.DAT file. We need to convert this to disc image offset/hex records.
 
-Once you confirm the CSR multi-disc behavior, I will create **v0.1.36** that:
+**Python conversion script:**
 
-1. Patches BLACKBGB to MAPJUMP #526 (break scene) instead of #634
-2. Moves MUSIC before MAPJUMP so it actually plays
-3. Ensures break scene works on single-disc
+```bash
+cd ~/Final-Fantasy-7-Modding
 
----
+cat > /tmp/convert_lost2_layer.py << 'SCRIPT_END'
+import json
+import sys
+from pathlib import Path
 
-## Hold
+# Add scripts to path
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from psx_mode2_iso import find_file_lba, extract_file
 
-No code changes yet. Run the CSR multi-disc test above, paste results here, then say **check**.
+# Load CSR D1 bin
+csr_bin_path = Path("../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin")
+if not csr_bin_path.exists():
+    print(f"ERROR: CSR bin not found at {csr_bin_path}")
+    print("Run: cd ../Final-Fantasy-7-CSR && python3 scripts/build_csr_base_layers.py csr --version 0.14.1 --discs 1")
+    sys.exit(1)
+
+csr_bin = csr_bin_path.read_bytes()
+
+# Load path/data layer generated by ship_v037.py
+layer_path = Path("builder/single-disc-on-csr-v0.1.37/layers/disc1.layer.json")
+if not layer_path.exists():
+    print(f"ERROR: v0.1.37 layer not found at {layer_path}")
+    print("Run: python3 mods/single-disc/scripts/ship_v037.py")
+    sys.exit(1)
+
+layer = json.loads(layer_path.read_text())
+
+# Get the patched LOST2.DAT from path/data record
+path_rec = layer["records"][0]
+assert path_rec["path"] == "FIELD/LOST2.DAT", "Expected LOST2.DAT"
+patched_lost2_hex = path_rec["data"]
+patched_lost2 = bytes.fromhex(patched_lost2_hex)
+
+# Find LOST2.DAT location in disc
+lost2_lba = find_file_lba(csr_bin, "FIELD/LOST2.DAT")
+lost2_offset = lost2_lba * 2352 + 24  # Mode 2 Form 1 data offset
+print(f"LOST2.DAT starts at LBA {lost2_lba}, disc offset {lost2_offset:#x}")
+
+# Extract original LOST2.DAT from disc
+original_lost2 = extract_file(csr_bin, "FIELD/LOST2.DAT")
+print(f"Original: {len(original_lost2)} bytes")
+print(f"Patched:  {len(patched_lost2)} bytes")
+
+# Create offset/hex records for changed bytes
+records = []
+for i in range(min(len(original_lost2), len(patched_lost2))):
+    if original_lost2[i] != patched_lost2[i]:
+        records.append({
+            "offset": lost2_offset + i,
+            "hex": f"{patched_lost2[i]:02x}"
+        })
+
+# Handle size difference if patched file is longer
+if len(patched_lost2) > len(original_lost2):
+    for i in range(len(original_lost2), len(patched_lost2)):
+        records.append({
+            "offset": lost2_offset + i,
+            "hex": f"{patched_lost2[i]:02x}"
+        })
+
+print(f"\nChanged bytes: {len(records)}")
+print(f"First few changes:")
+for r in records[:5]:
+    print(f"  offset {r['offset']:#x}: {r['hex']}")
+
+# Create proper builder format layer
+builder_layer = {
+    "format": "ic-layer-v1",
+    "id": "single-disc-on-csr-v0.1.39-disc1",
+    "description": "Single-disc v0.1.39: LOST2 IFUW patch (force break scene music)",
+    "target": "disc-image",
+    "stats": {
+        "originalBytes": len(csr_bin),
+        "modifiedBytes": len(csr_bin),
+        "changedBytes": len(records),
+        "records": len(records)
+    },
+    "records": records
+}
+
+# Write to v0.1.39 directory (consolidated path)
+output_dir = Path("builder/single-disc-on-csr/layers")
+output_dir.mkdir(parents=True, exist_ok=True)
+output_file = output_dir / "disc1.layer.json"
+output_file.write_text(json.dumps(builder_layer, indent=2))
+
+print(f"\n✅ Created {output_file}")
+print(f"Format: {builder_layer['format']}")
+print(f"Records: {len(records)}")
+print(f"Changed bytes: {builder_layer['stats']['changedBytes']}")
+
+# Validate
+assert builder_layer["format"] == "ic-layer-v1"
+assert len(records) > 0
+assert builder_layer["stats"]["changedBytes"] > 0
+print("\n✅ Layer validation passed")
+SCRIPT_END
+
+python3 /tmp/convert_lost2_layer.py
+```
+
+**Expected output:**
+```
+LOST2.DAT starts at LBA XXXXX, disc offset 0xXXXXXXXX
+Original: XXXX bytes
+Patched:  XXXX bytes
+
+Changed bytes: XX
+First few changes:
+  offset 0xXXXXXXXX: 00
+  offset 0xXXXXXXXX: 00
+  ...
+
+✅ Created builder/single-disc-on-csr/layers/disc1.layer.json
+```
+
+### Step 4: Update Manifest to v0.1.39
+
+```bash
+python3 << 'EOF'
+import json
+from pathlib import Path
+
+manifest_path = Path("builder/manifest.json")
+manifest = json.loads(manifest_path.read_text())
+
+for addon in manifest["addons"]:
+    if addon["id"] == "single-disc-on-csr":
+        addon["version"] = "0.1.39"
+        addon["blurb"] = "Play the whole game from one Disc 1 image on CSR. v0.1.39: D1→D2 break scene music fix (LOST2 IFUW patch)."
+        break
+
+manifest_path.write_text(json.dumps(manifest, indent=2))
+print("✅ Updated manifest to v0.1.39")
+EOF
+```
+
+### Step 5: Commit and Push
+
+```bash
+git add builder/single-disc-on-csr/layers/disc1.layer.json builder/manifest.json
+git commit --author="individualcontributordev <contributorindividual@gmail.com>" -m "single-disc v0.1.39: Restore LOST2 IFUW patch (proper offset/hex)"
+git push origin main
+```
+
+### Step 6: Test
+
+Wait ~5 min for CDN, then test at https://individualcontributor.dev/builder/
+
+## Paste Evidence Here
