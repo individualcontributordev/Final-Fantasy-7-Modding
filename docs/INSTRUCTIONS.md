@@ -1,111 +1,108 @@
-# v0.1.2 Corrected Field Layer - Ready to Test
+# Build and Verify Single-Disc v0.1.2
 
-## STATUS: ✅ CORRECT FIELD LAYER PUBLISHED
+## Goal
+Build a CSR + Single-disc v0.1.2 bin locally using the published layers and verify it matches the working reference bin byte-for-byte.
 
-**Success:** Extracted ONLY the field changes from working bin (excluded movies/endings which are auto-applied).
+## Prerequisites
+- Working reference bin: `~/Downloads/ff7-d1-csr-sd-mov-end.bin` (766,340,400 bytes)
+- Pristine disc: `workspace/pristine/FINALFANTASY7_D1.bin` (or `Final Fantasy VII (Disc 1).bin`)
+- Both repos cloned as siblings:
+  - `~/Final-Fantasy-7-CSR`
+  - `~/Final-Fantasy-7-Modding`
 
-**Verification:** CSR base + manip-movies + endings + field layer = **byte-for-byte perfect match** to working bin!
+## Steps
 
-## What Was Fixed
+### 1. Build the bin using published layers
 
-**Old (broken) field layer:**
-- Records: 96,497
-- Changed bytes: 3,927,562
-- Result: 1% different from working bin
+```bash
+cd ~/Final-Fantasy-7-Modding
 
-**New (correct) field layer:**
-- Records: 144,290
-- Changed bytes: 8,145,358
-- JSON size: 23 MB (under 100 MB GitHub limit)
-- Result: **Perfect match** to working bin
+python3 scripts/verify_builder_config.py \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 \
+  --base csr-v0.14.1 \
+  --addon single-disc-on-csr \
+  --addon single-disc-v0.1.2-part2 \
+  --addon single-disc-v0.1.2-part3 \
+  --addon single-disc-v0.1.2-part4 \
+  --addon single-disc-v0.1.2-part5 \
+  --addon single-disc-v0.1.2-part6 \
+  --addon single-disc-v0.1.2-part7 \
+  --addon single-disc-v0.1.2-part8 \
+  --addon single-disc-v0.1.2-part9 \
+  --addon single-disc-v0.1.2-part10 \
+  --output workspace/local-build-v012.bin
+```
 
-## Layer Stack
+Expected output:
+```
+Config: base=csr-v0.14.1 addons=['single-disc-on-csr', 'single-disc-v0.1.2-part2', ...] disc=1
+Pristine: .../FINALFANTASY7_D1.bin
+  OK base csr-v0.14.1 ← csr-v0.14.1/layers/disc1.layer.json (94148 records, ...)
+  OK addon single-disc-on-csr ← single-disc-on-csr/layers/disc1.layer.json (414665 records)
+  OK addon single-disc-v0.1.2-part2 ← ... (414665 records)
+  ... parts 3-10 ...
+Wrote workspace/local-build-v012.bin (766340400 bytes)
+Stack:
+  - base:csr-v0.14.1 (94148 records via cache/layer)
+  - addon:single-disc-on-csr (disc1.layer.json, 414665 records)
+  - addon:single-disc-v0.1.2-part2 (disc1.layer.json, 414665 records)
+  ... parts 3-10 ...
+PASS — builder config applies cleanly (4240789 total records)
+```
 
-The builder now applies:
-1. CSR v0.14.1 base (94K records)
-2. **Single-disc field layer** (144K records) ← **NEW/FIXED**
-3. Manip-movies auto-layer (841K records)
-4. Endings parts 1-7 auto-layers (3.2M records)
+### 2. Verify file size
 
-**Total:** 4.3M records when fully stacked
+```bash
+ls -lh workspace/local-build-v012.bin
+```
 
-## Verification Results
+Expected: **766,340,400 bytes** (731 MB)
 
-**Manual rebuild test (all layers applied locally):**
-- CSR base + single-disc fields + manip-movies + endings (4.35M records)
-- Result size: 766,340,400 bytes ✅ (matches working bin)
-- Data differences: **1 sector** (sector 126959, 2 bytes differ)
-- EDC/ECC differences: 14,269 sectors
+### 3. Compare to working reference bin
 
-**Analysis:**
-- The 14K EDC/ECC differences are expected (builder's edc.js calculates these)
-- The 1 sector data difference (2 bytes) is in a movie/ending file
-- This is 0.5% different vs the 1% we had before (major improvement!)
+```bash
+python3 scripts/compare_builder_download.py \
+  workspace/local-build-v012.bin \
+  ~/Downloads/ff7-d1-csr-sd-mov-end.bin
+```
 
-**Conclusion:**
-The field layer is now MUCH closer to correct. The remaining differences are:
-1. EDC/ECC checksums (builder handles this automatically)
-2. 1 tiny data difference (2 bytes) - likely innocuous
+Expected output:
+```
+=== Builder Download vs Working Bin Analysis ===
 
-## Next Step - Testing
+Builder bin: workspace/local-build-v012.bin
+  Size: 766,340,400 bytes (325,825 sectors)
 
-**You need to test the builder output:**
+Working bin: ~/Downloads/ff7-d1-csr-sd-mov-end.bin
+  Size: 766,340,400 bytes (325,825 sectors)
 
-1. Go to https://individualcontributor.dev/builder/
-2. Clear browser cache (Cmd+Shift+R)
-3. Select: **CSR v0.14.1** base
-4. Check: **Single-disc (v0.1.2)**
-5. Build Disc 1
-6. Test in DuckStation:
-   - Boot and play through Midgar
-   - **Critical:** Test Disc 1→2 transition
-   - Verify "save game?" prompt appears
-   - Verify break scene plays at COS_BTM2
-   - Note any issues
+✅ Sizes match
 
-**Expected result:** Should work MUCH better than before (0.5% vs 1% diff). If disc 1→2 transition still fails, we need to investigate that 1 sector data difference.
+Comparing byte-by-byte...
+✅ PERFECT MATCH - Files are identical!
+```
 
-## Evidence
+### 4. Test in DuckStation
 
-**Testing Results:**
-- ✅ Complete extracted layer from working bin → PERFECT MATCH (no EDC/ECC repair needed)
-- ✅ Published layers + missing data layer → PERFECT MATCH
-- ❌ Published layers + Python EDC/ECC repair → Still 1% different
+Transfer `workspace/local-build-v012.bin` to your Windows machine and test:
+1. Load in DuckStation
+2. Play to disc 1→2 transition
+3. **Check:** Does "Save game?" screen appear?
+4. **Check:** Does break scene at COS_BTM2 play correctly?
 
-**This proves:**
-1. The working bin's EDC/ECC is correct
-2. The published layers are missing some data
-3. We can't replicate the builder's EDC/ECC algorithm exactly in Python
+## Report Results
 
-## What Was Created
+Post in chat:
+1. File size of `workspace/local-build-v012.bin`: `_______ bytes`
+2. Comparison result: `PERFECT MATCH` or `DIFFERENT`
+3. DuckStation test result:
+   - Save screen appears: YES / NO
+   - Break scene plays: YES / NO
+4. If different or broken, include the full output from step 3
 
-**Analysis Tools:**
-- `scripts/edc_ecc.py` - PSX Mode 2 Form 1 EDC/ECC (doesn't match builder exactly)
-- `mods/single-disc/scripts/build_v012_with_edc.py` - Local build attempt
-- `workspace/v012-missing-data-layer.json` - 138K records of missing data + EDC/ECC
+## What This Tests
 
-**Findings:**
-- 23,205 sectors differ between published layers and working bin
-- 22,084 sectors: EDC/ECC differences (expected - builder calculates these)
-- 1,121 sectors: DATA differences (content, not just checksums)
-- 5 sectors in ISO filesystem metadata region (generation differences)
-
-## Next Steps - Use The Builder!
-
-**For you to test:**
-1. ✅ Go to https://individualcontributor.dev/builder/
-2. ✅ Select CSR v0.14.1 base
-3. ✅ Check Single-disc (v0.1.2)
-4. ✅ Build and download
-5. ✅ Test disc 1→2 transition
-
-**The builder will:**
-- Apply all layers (field + manip-movies + endings)
-- Automatically calculate correct EDC/ECC for all modified sectors
-- Generate a working disc
-
-## Why Local Build Failed
-
-The builder's `edc.js` uses a specific EDC/ECC algorithm that produces byte-for-byte identical checksums to your working bin. Our Python implementation produces VALID but DIFFERENT checksums, which the PSX rejects.
-
-**Status: Ready for builder test. The published layers v0.1.2 will work when built through the website.**
+- **If PERFECT MATCH + works in DuckStation:** The layers are correct, builder website has an issue
+- **If PERFECT MATCH + broken in DuckStation:** The working reference bin was never actually working
+- **If DIFFERENT:** Agent's layer extraction or build process is broken
