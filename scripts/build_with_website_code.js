@@ -116,12 +116,32 @@ async function main() {
     imageBytes = applyLayerSync(imageBytes, csrLayer);
     console.log();
 
-    // Apply single-disc parts 1-10
+    // Apply layers in the same order as builder.js APPLY_ORDER:
+    // manip-movies -> single-disc-on-csr (part1) -> parts2-10 -> endings.
     const modPath = path.join(process.env.HOME, 'Final-Fantasy-7-Modding/builder');
-    for (let i = 1; i <= 10; i++) {
-        const partDir = i === 1 ? 'single-disc-on-csr' : `single-disc-v0.1.2-part${i}`;
+    const partDirs = [
+        'single-disc-csr-manip-movies-v0.1.4',
+        'single-disc-on-csr',
+        'single-disc-v0.1.2-part2',
+        'single-disc-v0.1.2-part3',
+        'single-disc-v0.1.2-part4',
+        'single-disc-v0.1.2-part5',
+        'single-disc-v0.1.2-part6',
+        'single-disc-v0.1.2-part7',
+        'single-disc-v0.1.2-part8',
+        'single-disc-v0.1.2-part9',
+        'single-disc-v0.1.2-part10',
+        'single-disc-endings-v0.1.0-part1',
+        'single-disc-endings-v0.1.0-part2',
+        'single-disc-endings-v0.1.0-part3',
+        'single-disc-endings-v0.1.0-part4',
+        'single-disc-endings-v0.1.0-part5',
+        'single-disc-endings-v0.1.0-part6',
+        'single-disc-endings-v0.1.0-part7',
+    ];
+    for (const partDir of partDirs) {
         const layerPath = path.join(modPath, partDir, 'layers/disc1.layer.json');
-        
+
         console.log(`Applying ${partDir}...`);
         const layer = JSON.parse(fs.readFileSync(layerPath, 'utf8'));
         imageBytes = applyLayerSync(imageBytes, layer);

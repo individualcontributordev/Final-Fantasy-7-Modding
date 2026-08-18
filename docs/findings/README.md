@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-18 | [loslake1-hojo-audio-flicker-on-csr-overwrite](2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md) | single-disc-on-csr reverted manip-movies' Form2 MOVIE_ID fix (rows 47/52), causing audio-only flicker; fixed by stripping 3 stray records | confirmed |
 | 2026-08-15 | [csr-single-disc-layer-conflict-analysis](2026-08-15-csr-single-disc-layer-conflict-analysis.md) | Analyzed 15,154 CSR D2 × single-disc overlaps (95% same bytes = built from CSR); 926 CSR D1 conflicts (100% different = built from pristine) explain breakage | confirmed |
 | 2026-08-15 | [ghidra-metadata-single-disc-analysis](2026-08-15-ghidra-metadata-single-disc-analysis.md) | Complete Ghidra metadata extraction (2,410 functions) confirms single-disc mod is functionally complete; only WORLD.BIN `FUN_800c5cd4` needs investigation | confirmed |
 | 2026-08-14 | [gate1-cos-ifsw-e-ret](2026-08-14-gate1-cos-ifsw-e-ret.md) | COS IFSW E=5 RET before break ASK (v0.1.32) | shipped |
