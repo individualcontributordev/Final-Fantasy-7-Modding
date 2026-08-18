@@ -43,42 +43,53 @@ All layers verified byte-for-byte identical:
 - ✅ All 137 field scripts match working bin
 - ✅ Sectors 58723-58728 identical in local build vs working bin
 
-## Root Cause: EDC/ECC Repair Bug
+## Root Cause: ALPHABETICAL SORTING BUG
 
-**CONFIRMED:** The bug is in the website's `edc.js` - specifically the `repairMode2EdcInImage` function.
-
-### Evidence
-
-**Test 1:** Built bin using website's layer.js code (WITHOUT EDC repair)
-- Result: **✅ Byte-for-byte match to working bin**
-- Proves: Layer application is correct
-
-**Test 2:** Website build (WITH EDC repair)
-- Result: **❌ Black screen at disc transition**
-- Proves: EDC repair is corrupting the disc
+**CONFIRMED:** The bug is in the manifest - the website sorts auto-included addons **alphabetically by ID**, causing parts to apply in wrong order!
 
 ### The Bug
 
-File: `individualcontributordev.github.io/builder/edc.js` line 70-86
+When user selects "Single-disc on CSR", the website auto-includes parts 2-10 via `autoIncludeWhen`.
 
-The `isMode2Form1` function checks if a sector is Form 1 data (needs EDC/ECC) vs Form 2 (FMV/audio, should be skipped).
+Manifest defines parts with IDs:
+- `single-disc-v0.1.2-part2`
+- `single-disc-v0.1.2-part3`
+- ...
+- `single-disc-v0.1.2-part10`
 
-Current logic:
-```javascript
-const submode = sector[off + 18];
-if (submode & 0x20) return false; // Form 2
-if (submode & 0x04) return false; // XA audio
-if (submode & 0x02) return false; // video / STR
-if (!(submode & 0x08)) return false; // require Data bit (ISO file sectors)
-return true;
+Website sorts alphabetically:
+```
+single-disc-v0.1.2-part10  ← Part 10 BEFORE part 2!
+single-disc-v0.1.2-part2
+single-disc-v0.1.2-part3
+...
+single-disc-v0.1.2-part9
 ```
 
-**Hypothesis:** Single-disc FMV/transition sectors have submode flags that pass these checks, causing EDC repair to **overwrite 280 bytes** (2072-2351) of FMV payload data.
+This applies the parts in order: **1, 10, 2, 3, 4, 5, 6, 7, 8, 9** instead of **1, 2, 3, 4, 5, 6, 7, 8, 9, 10**.
 
-This corrupts:
-- Audio/video sync data
-- Field transition logic
-- Disc swap detection
+### Evidence
+
+Downloaded website bin and compared to working bin:
+- **23,145,605 bytes differ** across **10,718 sectors**
+- Differences in **BOTH data area and footer** - not just EDC corruption
+- LBA 17699 has completely different gzip compressed data
+- APPLIED.txt confirms wrong order
+
+### The Fix
+
+Rename part IDs to use zero-padded numbers:
+- `single-disc-v0.1.2-part02` through `single-disc-v0.1.2-part09`
+- Keep `single-disc-v0.1.2-part10` as-is
+
+Now alphabetical sort produces correct order:
+```
+single-disc-v0.1.2-part02
+single-disc-v0.1.2-part03
+...
+single-disc-v0.1.2-part09
+single-disc-v0.1.2-part10
+```
 
 ## Next Steps
 
