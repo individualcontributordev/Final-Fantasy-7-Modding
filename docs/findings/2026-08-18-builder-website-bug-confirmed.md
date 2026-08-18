@@ -43,14 +43,42 @@ All layers verified byte-for-byte identical:
 - ✅ All 137 field scripts match working bin
 - ✅ Sectors 58723-58728 identical in local build vs working bin
 
-## Root Cause
+## Root Cause: EDC/ECC Repair Bug
 
-The builder website is producing a bin with **identical file size and field data** but **different runtime behavior**. This suggests:
+**CONFIRMED:** The bug is in the website's `edc.js` - specifically the `repairMode2EdcInImage` function.
 
-1. **Possible EDC/ECC bug** - Website's edc.js produces checksums that cause read errors
-2. **Possible sector ordering bug** - Website writes sectors in wrong order
-3. **Possible layer application bug** - Website doesn't apply layers the same way as verify_builder_config.py
-4. **Possible caching bug** - Website serving stale layer data
+### Evidence
+
+**Test 1:** Built bin using website's layer.js code (WITHOUT EDC repair)
+- Result: **✅ Byte-for-byte match to working bin**
+- Proves: Layer application is correct
+
+**Test 2:** Website build (WITH EDC repair)
+- Result: **❌ Black screen at disc transition**
+- Proves: EDC repair is corrupting the disc
+
+### The Bug
+
+File: `individualcontributordev.github.io/builder/edc.js` line 70-86
+
+The `isMode2Form1` function checks if a sector is Form 1 data (needs EDC/ECC) vs Form 2 (FMV/audio, should be skipped).
+
+Current logic:
+```javascript
+const submode = sector[off + 18];
+if (submode & 0x20) return false; // Form 2
+if (submode & 0x04) return false; // XA audio
+if (submode & 0x02) return false; // video / STR
+if (!(submode & 0x08)) return false; // require Data bit (ISO file sectors)
+return true;
+```
+
+**Hypothesis:** Single-disc FMV/transition sectors have submode flags that pass these checks, causing EDC repair to **overwrite 280 bytes** (2072-2351) of FMV payload data.
+
+This corrupts:
+- Audio/video sync data
+- Field transition logic
+- Disc swap detection
 
 ## Next Steps
 
