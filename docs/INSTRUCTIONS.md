@@ -1,54 +1,51 @@
-# v0.1.2 Complete Layer Extracted - Decision Needed
+# v0.1.2 Corrected Field Layer - Ready to Test
 
-## STATUS: ✅ CORRECT LAYER EXTRACTED
+## STATUS: ✅ CORRECT FIELD LAYER PUBLISHED
 
-**Success:** Extracted the complete single-disc layer from your working bin by diffing against CSR v0.14.1 base.
+**Success:** Extracted ONLY the field changes from working bin (excluded movies/endings which are auto-applied).
 
-**Verification:** CSR v0.14.1 base + extracted layer = **byte-for-byte perfect match** to working bin!
+**Verification:** CSR base + manip-movies + endings + field layer = **byte-for-byte perfect match** to working bin!
 
-## The Extracted Layer
+## What Was Fixed
 
-**File:** `workspace/v012-single-disc-only-from-csr-base.json`
+**Old (broken) field layer:**
+- Records: 96,497
+- Changed bytes: 3,927,562
+- Result: 1% different from working bin
 
-**Stats:**
-- Records: 4,146,641
-- Changed bytes: 251,540,010 (251 MB of data)
-- JSON size: ~735 MB
-- Contents: Field changes + manip-movies + endings + correct EDC/ECC
+**New (correct) field layer:**
+- Records: 144,290
+- Changed bytes: 8,145,358
+- JSON size: 23 MB (under 100 MB GitHub limit)
+- Result: **Perfect match** to working bin
 
-**Problem:** 735MB is too large for browser to download/apply efficiently.
+## Layer Stack
 
-## Options
+The builder now applies:
+1. CSR v0.14.1 base (94K records)
+2. **Single-disc field layer** (144K records) ← **NEW/FIXED**
+3. Manip-movies auto-layer (841K records)
+4. Endings parts 1-7 auto-layers (3.2M records)
 
-### Option A: Publish as Single 735MB Layer ⚠️
-**Pros:** Simple, guaranteed to work
-**Cons:** Browser may struggle with 735MB JSON download/apply
-**Risk:** Medium - might be slow but should work
+**Total:** 4.3M records when fully stacked
 
-### Option B: Keep Current Split (Field + Movies + Endings)
-**Problem:** Current published layers are WRONG (1% data difference)
-**Solution:** Need to extract field-only from working bin, verify movies/endings layers
-**Risk:** High - complex, multiple pieces to verify
+## Next Step - Testing
 
-### Option C: Investigate Builder Auto-EDC/ECC
-**Theory:** Builder's edc.js calculates EDC/ECC automatically when applying layers
-**If true:** Can publish data-only layers (no EDC/ECC), builder fixes checksums
-**Risk:** Unknown - need to verify builder behavior
+**Ready for you to test:**
 
-## Current Published Layers (BROKEN)
+1. Go to https://individualcontributor.dev/builder/
+2. Clear browser cache (Cmd+Shift+R)
+3. Select: **CSR v0.14.1** base
+4. Check: **Single-disc (v0.1.2)**
+5. Build Disc 1
+6. Test in DuckStation:
+   - Boot and play through Midgar
+   - **Critical:** Test Disc 1→2 transition
+   - Verify "save game?" prompt appears
+   - Verify break scene plays at COS_BTM2
+   - Note any issues
 
-Applying field + manip-movies + endings to CSR base gives:
-- ❌ 1,121 sectors with wrong DATA
-- ❌ 22,084 sectors with wrong EDC/ECC
-- ❌ Total 8,049,388 bytes different (1.05%)
-
-## Recommendation
-
-**Agent recommends Option A:** Publish the 735MB layer as a single-disc "mega layer" for now.
-
-**Reason:** It's proven to work perfectly, and modern browsers can handle 735MB JSON (the builder already loads large layers for CSR+ scenes).
-
-**User decision needed:** Which option do you prefer?
+**Expected result:** Disc 1→2 transition should work perfectly (byte-for-byte match to your working bin).
 
 ## Evidence
 
