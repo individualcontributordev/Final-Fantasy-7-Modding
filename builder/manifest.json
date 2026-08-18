@@ -527,19 +527,19 @@
       "version": "0.1.0"
     },
     {
-      "id": "single-disc-csr-manip-movies-v0.1.4",
-      "name": "CSR manip movies",
+      "id": "single-disc-v0.1.2-part2",
+      "name": "Single-disc part 2",
       "kind": "mod",
-      "version": "0.1.4",
-      "blurb": "D2/D3 manip FMVs on D1. v0.1.4 restores LBA 250450 CANONON Form2 alias for LOSLAKE1 waterfall seek (was rocket/RCKTFAIL). Keeps Form2 MOVIE_ID eng size/aux.",
-      "hint": "Hidden. Auto with Single-disc on CSR when CSR+ off.",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 2/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
       ],
       "layout": "global",
       "discs": {
-        "1": "./single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
+        "1": "./single-disc-v0.1.2-part2/layers/disc1.layer.json"
       },
       "enabled": true,
       "hidden": true,
@@ -548,8 +548,207 @@
         "addonSelected": "single-disc-on-csr",
         "bases": [
           "csr-v0.14.1"
-        ],
-        "unlessAddonIdPrefix": "csr-plus-scene-"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part3",
+      "name": "Single-disc part 3",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 3/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part3/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part4",
+      "name": "Single-disc part 4",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 4/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part4/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part5",
+      "name": "Single-disc part 5",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 5/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part5/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part6",
+      "name": "Single-disc part 6",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 6/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part6/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part7",
+      "name": "Single-disc part 7",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 7/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part7/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part8",
+      "name": "Single-disc part 8",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 8/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part8/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part9",
+      "name": "Single-disc part 9",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 9/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part9/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
+      }
+    },
+    {
+      "id": "single-disc-v0.1.2-part10",
+      "name": "Single-disc part 10",
+      "kind": "mod",
+      "version": "0.1.2",
+      "blurb": "Hidden. Auto-applied with Single-disc on CSR (part 10/10).",
+      "hint": "Hidden. Auto with Single-disc on CSR.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.1"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-v0.1.2-part10/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "hidden": true,
+      "uiHidden": true,
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-on-csr",
+        "bases": [
+          "csr-v0.14.1"
+        ]
       }
     },
     {
@@ -574,8 +773,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "groupLabel": "Single-disc ending credits (always on)",
@@ -606,8 +804,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "version": "0.1.0",
@@ -639,8 +836,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "version": "0.1.0",
@@ -672,8 +868,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "version": "0.1.0",
@@ -705,8 +900,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "version": "0.1.0",
@@ -738,8 +932,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "version": "0.1.0",
@@ -771,8 +964,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "single-disc-on-csr",
-          "single-disc-on-highwind-v0.1.0"
+          "DISABLED-v0.1.2-uses-complete-layer"
         ]
       },
       "version": "0.1.0",
