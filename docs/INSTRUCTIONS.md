@@ -1,44 +1,56 @@
-# Task: Confirm field 637 CSR changes are back, retest movie audio flicker
+# Task: Cache-proof retest of field 637/643 + fresh flicker baseline
 
 ## Why
 
-The last build (v0.1.2.1) accidentally deleted 3 bytes' worth of CSR
-corrective edits from the Single-disc core layer while I was chasing the
-LOSLAKE1/Hojo/ending audio flicker. That deletion is why field 637 lost some
-of its CSR changes. I have reverted that deletion (v0.1.2.2), so field 637
-should be back to normal.
+Your last test reported field 643 CSR changes missing and field 637 flicker
+still present. I diffed the **live CDN file** you'd actually be downloading
+against the repo fix byte-for-byte — they're identical, and both field 643
+(WHITE2) and field 637's CSR bytes are present in that file right now. So
+the content on the CDN is correct; what you saw was almost certainly a
+stale browser cache (IndexedDB) that the "clear pack cache" button missed,
+possibly because it was clicked before GitHub Pages finished publishing.
 
-The movie audio flicker itself is **not fixed yet** — the reference disc
-image I was comparing against turns out to have the same flicker bug, so
-matching it byte-for-byte was the wrong target. I'm redoing that fix from
-first principles. This task is just to confirm the field 637 regression is
-gone and get a fresh flicker baseline; expect flicker to still be present.
+Separately, I derived the correct Form2 audio-engine length for the two
+flicker movies **from the actual FMV file sizes** (not by diffing against
+any existing disc image, which was the mistake last time):
+
+- Hojo `CANONHT2.MOV`: correct Form2 length is 5,977,824 bytes. The current
+  `manip-movies` pack already writes exactly this — should already be
+  flicker-free.
+- Bugenhagen waterfall `LOSLAKE1.MOV`: correct Form2 length is 6,912,224
+  bytes. The current pack instead writes 17,190,624 — clearly wrong (not
+  even a multiple of the Form2 sector size). This is almost certainly your
+  remaining flicker source. Not fixed yet — need your test below before I
+  touch it, so I have a clean before/after.
 
 ## What you do
 
-1. Go to https://individualcontributor.dev/builder/. Use the "clear pack
-   cache" button at the bottom of the page, then reload once (the pack
-   version changed to 0.1.2.2, so this forces a fresh download).
-2. Base: CSR
-3. Mods: Single-disc only (CSR+ off)
-4. Build Disc 1.
-5. Quit DuckStation fully if it was already open, then start fresh (no
+1. Open a **private/incognito browser window** (this guarantees no stale
+   IndexedDB cache — don't rely on the "clear pack cache" button this time).
+2. Go to https://individualcontributor.dev/builder/.
+3. Base: CSR
+4. Mods: Single-disc only (CSR+ off)
+5. Build Disc 1.
+6. Quit DuckStation fully if it was already open, then start fresh (no
    cheat engine / speedhack).
-6. Load field 637 and check that the CSR changes you noticed missing before
-   are present again (describe what you see either way).
-7. Load a save near the Bugenhagen waterfall FD scene (Cosmo Canyon, plays
+7. Load field 637 and check the CSR changes are present.
+8. Load field 643 (WHITE2 / Cosmo Canyon) and check the CSR changes are
+   present.
+9. Load a save near the Bugenhagen waterfall FD scene (Cosmo Canyon, plays
    LOSLAKE1) and play through it, listening for audio flicker/crackle.
-8. If you have a save near the Hojo scene at Corel/Junon (Car_1209, plays
-   CANONHT2), also test that movie's audio.
-9. If reachable, also retest the ending movie audio.
+10. If you have a save near the Hojo scene (Car_1209, plays CANONHT2), also
+    test that movie's audio — this one should already be clean.
+11. If reachable, also retest the ending movie audio.
 
 ## Evidence (paste)
 
 ```
+Used incognito window: YES
 APPLIED single-disc:
 APPLIED movies:
 CSR+: OFF
-Field 637 CSR changes: PRESENT / STILL MISSING / OTHER (describe)
+Field 637 CSR changes: PRESENT / MISSING / OTHER (describe)
+Field 643 CSR changes: PRESENT / MISSING / OTHER (describe)
 LOSLAKE1 audio: CLEAN / FLICKER / OTHER
 Hojo (CANONHT2) audio: CLEAN / FLICKER / OTHER (if tested)
 Ending audio: CLEAN / FLICKER / OTHER (if tested)

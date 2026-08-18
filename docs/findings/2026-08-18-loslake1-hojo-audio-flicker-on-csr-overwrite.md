@@ -55,3 +55,31 @@ any existing built disc image, since none confirmed so far are flicker-free.
 The ENDING2E.MOV LBA-collision corruption (documented separately — ending
 movie clobbers ~13 other movies' sectors) is a distinct, unrelated bug from
 this audio-only flicker. Not touched by this change.
+
+## 2026-08-19 update: first-principles Form2 lengths derived
+
+Human reported field 643 (WHITE2) CSR changes missing and field 637 flicker
+still present after the revert. Diffed the **live CDN** copy of
+`single-disc-on-csr/layers/disc1.layer.json` byte-for-byte against the repo
+(`cc21763`): identical, 414,665 records, field 643/637 bytes both present.
+Conclusion: the report was a stale client cache (IndexedDB), not a content
+regression — the "clear pack cache" button was likely clicked before GitHub
+Pages finished publishing. Retest requested via incognito window to rule
+this out definitively.
+
+Also derived correct Form2 MOVIE_ID engine lengths (`nsec*2336` where
+`nsec = ceil(iso_size / 2048)`) directly from each FMV's real ISO directory
+size on pristine Disc 2 — not from any existing built disc image:
+
+| Movie | Field | ISO size (D2) | nsec | Correct Form2 (nsec*2336) | Current manip-movies value |
+|-------|-------|---------------:|-----:|---------------------------:|----------------------------:|
+| CANONHT2.MOV | 637 (Hojo) | 5,240,832 | 2559 | 5,977,824 | 5,977,824 (matches) |
+| LOSLAKE1.MOV | Bugenhagen waterfall | 6,060,032 | 2959 | 6,912,224 | 17,190,624 (wrong) |
+
+Row 52 (Hojo/CANONHT2) already carries the mathematically-correct Form2
+value, so that movie should already be flicker-free — worth confirming
+independently in the retest. Row 47 (LOSLAKE1) is written with 17,190,624,
+which is not even a multiple of 2336, so it cannot be a valid Form2 length;
+this is the leading suspect for the still-present LOSLAKE1 flicker. Not
+changed yet — waiting on the incognito retest for a clean before/after
+before touching `single-disc-csr-manip-movies-v0.1.4`.
