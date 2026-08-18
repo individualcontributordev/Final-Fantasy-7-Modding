@@ -60,3 +60,240 @@
 [  232.0680] V/PerfMon: FPS: 0.00 VPS: 59.84 CPU: 2.80 GPU: 0.00 Avg: 16.71ms Min: 15.72ms Max: 17.75ms
 [  233.0714] V/PerfMon: FPS: 0.00 VPS: 59.80 CPU: 2.85 GPU: 0.00 Avg: 16.72ms Min: 15.33ms Max: 18.36ms
 [  234.0741] V/PerfMon: FPS: 0.00 VPS: 59.84 CPU: 2.84 GPU: 0.00 Avg: 16.71ms Min: 15.89ms Max: 17.61ms
+
+
+
+working .bin logs
+
+
+[  535.5762] D/CodeCache: Page fault handler invoked at PC=0x7ff6e59b4d73 Address=0x21d95f0000c (write), fastmem offset 1F80000C
+[  535.5762] D/CodeCache: Backpatching store at 0x7ff6e59b4d73[5] (pc 8003BF78 addr 1F80000C): Bitmask E78B8DF0 Addr 0 Data 0 Size 1 Signed 00
+[  535.5762] D/Recompiler: Backpatching 0x7ff6e59b4d73 (guest PC 0x8003BF78) to slowmem
+[  535.5763] D/CodeCache: Page fault handler invoked at PC=0x7ff6e59b4d7f Address=0x21d95f00030 (read), fastmem offset 1F800030
+[  535.5764] D/CodeCache: Backpatching store at 0x7ff6e59b4d7f[5] (pc 8003BF7C addr 1F800030): Bitmask E78B8E20 Addr 0 Data 0 Size 1 Signed 00
+[  535.5764] D/Recompiler: Backpatching 0x7ff6e59b4d7f (guest PC 0x8003BF7C) to slowmem
+[  535.5764] D/CodeCache: Page fault handler invoked at PC=0x7ff6e59b4d8f Address=0x21d95f0000e (write), fastmem offset 1F80000E
+[  535.5765] D/CodeCache: Backpatching store at 0x7ff6e59b4d8f[5] (pc 8003BF80 addr 1F80000E): Bitmask E78B8E50 Addr 0 Data 0 Size 1 Signed 00
+[  535.5765] D/Recompiler: Backpatching 0x7ff6e59b4d8f (guest PC 0x8003BF80) to slowmem
+[  535.5765] D/CodeCache: Page fault handler invoked at PC=0x7ff6e59b4da9 Address=0x21d95f00010 (write), fastmem offset 1F800010
+[  535.5765] D/CodeCache: Backpatching store at 0x7ff6e59b4da9[5] (pc 8003BF88 addr 1F800010): Bitmask E78B8E80 Addr 0 Data 0 Size 1 Signed 00
+[  535.5766] D/Recompiler: Backpatching 0x7ff6e59b4da9 (guest PC 0x8003BF88) to slowmem
+[  536.0582] V/System: Target speed: 100%
+[  536.0583] V/System: Preset timing: immediate
+[  536.0595] V/System: VSync: Disabled
+[  536.1102] V/PerfMon: FPS: 146.58 VPS: 567.36 CPU: 25.26 GPU: 0.00 Avg: 1.76ms Min: 0.42ms Max: 17.80ms
+[  536.6050] V/AudioStream: Audio buffer underflow, resampled 51 frames to 441
+[  536.6349] V/AudioStream: Underrun compensation done (128 frames buffered)
+[  536.9799] V/AudioStream: === Stretcher is now inactive.
+[  537.1133] V/PerfMon: FPS: 29.91 VPS: 59.81 CPU: 4.03 GPU: 0.00 Avg: 16.72ms Min: 15.68ms Max: 18.04ms
+[  538.1160] V/PerfMon: FPS: 29.92 VPS: 59.83 CPU: 4.25 GPU: 0.00 Avg: 16.71ms Min: 15.95ms Max: 17.58ms
+[  539.1193] V/PerfMon: FPS: 29.90 VPS: 59.81 CPU: 4.32 GPU: 0.00 Avg: 16.72ms Min: 15.30ms Max: 19.24ms
+[  540.1234] V/PerfMon: FPS: 29.88 VPS: 59.76 CPU: 4.15 GPU: 0.00 Avg: 16.73ms Min: 15.81ms Max: 17.67ms
+[  540.7745] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x13, 0x02, 0x57]
+[  540.7747] D/CDROM: CDROM setloc command (13, 02, 57)
+[  540.7759] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  540.7760] D/CDROM: Seek time for 28:13:53->13:02:57 (68321 LBA): 15438543 (455.834 ms) (2N/sled backward)
+[  541.1257] V/PerfMon: FPS: 20.95 VPS: 59.87 CPU: 4.21 GPU: 0.00 Avg: 16.70ms Min: 15.32ms Max: 17.73ms
+[  541.2421] D/CDROM: Logical seek to [13:02:57] complete, now reading
+[  541.2423] D/CDROM: Read sector 58707 [13:02:57]: mode 2 submode 0x08 into buffer 1
+[  541.2432] D/CDROM: Read sector 58708 [13:02:58]: mode 2 submode 0x08 into buffer 2
+[  541.2591] D/CDROM: Read sector 58709 [13:02:59]: mode 2 submode 0x08 into buffer 3
+[  541.2593] D/CDROM: Read sector 58710 [13:02:60]: mode 2 submode 0x08 into buffer 4
+[  541.2756] D/CDROM: Read sector 58711 [13:02:61]: mode 2 submode 0x08 into buffer 5
+[  541.2759] D/CDROM: Read sector 58712 [13:02:62]: mode 2 submode 0x08 into buffer 6
+[  541.2763] D/CDROM: Read sector 58713 [13:02:63]: mode 2 submode 0x08 into buffer 7
+[  541.2924] D/CDROM: Read sector 58714 [13:02:64]: mode 2 submode 0x08 into buffer 0
+[  541.2926] D/CDROM: Read sector 58715 [13:02:65]: mode 2 submode 0x08 into buffer 1
+[  541.2927] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  541.3762] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x13, 0x02, 0x66]
+[  541.3762] D/CDROM: CDROM setloc command (13, 02, 66)
+[  541.3767] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  541.3767] D/CDROM: Seek time for 13:02:62->13:02:66 (4 LBA): 903168 (26.667 ms) (forward)
+[  541.4096] D/CDROM: Logical seek to [13:02:66] complete, now reading
+[  541.4099] D/CDROM: Read sector 58716 [13:02:66]: mode 2 submode 0x08 into buffer 1
+[  541.4263] D/CDROM: Read sector 58717 [13:02:67]: mode 2 submode 0x08 into buffer 2
+[  541.4265] D/CDROM: Read sector 58718 [13:02:68]: mode 2 submode 0x08 into buffer 3
+[  541.4266] D/CDROM: Read sector 58719 [13:02:69]: mode 2 submode 0x08 into buffer 4
+[  541.4434] D/CDROM: Read sector 58720 [13:02:70]: mode 2 submode 0x08 into buffer 5
+[  541.4437] D/CDROM: Read sector 58721 [13:02:71]: mode 2 submode 0x08 into buffer 6
+[  541.4596] D/CDROM: Read sector 58722 [13:02:72]: mode 2 submode 0x89 into buffer 7
+[  541.4597] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  541.5107] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x13, 0x02, 0x50]
+[  541.5111] D/CDROM: CDROM setloc command (13, 02, 50)
+[  541.5121] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  541.5123] D/CDROM: Seek time for 13:02:66->13:02:50 (16 LBA): 1693440 (50.000 ms) (NT backward)
+[  541.5600] D/CDROM: Logical seek to [13:02:50] complete, now reading
+[  541.5765] D/CDROM: Read sector 58700 [13:02:50]: mode 2 submode 0x08 into buffer 1
+[  541.5767] D/CDROM: Read sector 58701 [13:02:51]: mode 2 submode 0x08 into buffer 2
+[  541.5768] D/CDROM: Read sector 58702 [13:02:52]: mode 2 submode 0x08 into buffer 3
+[  541.5938] D/CDROM: Read sector 58703 [13:02:53]: mode 2 submode 0x08 into buffer 4
+[  541.5941] D/CDROM: Read sector 58704 [13:02:54]: mode 2 submode 0x08 into buffer 5
+[  541.6104] D/CDROM: Read sector 58705 [13:02:55]: mode 2 submode 0x08 into buffer 6
+[  541.6107] D/CDROM: Read sector 58706 [13:02:56]: mode 2 submode 0x89 into buffer 7
+[  541.6107] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  541.6771] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x13, 0x02, 0x73]
+[  541.6772] D/CDROM: CDROM setloc command (13, 02, 73)
+[  541.6776] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  541.6777] D/CDROM: Seek time for 13:02:50->13:02:73 (23 LBA): 1693440 (50.000 ms) (NT forward)
+[  541.7274] D/CDROM: Logical seek to [13:02:73] complete, now reading
+[  541.7276] D/CDROM: Read sector 58723 [13:02:73]: mode 2 submode 0x08 into buffer 1
+[  541.7281] D/CDROM: Read sector 58724 [13:02:74]: mode 2 submode 0x08 into buffer 2
+[  541.7439] D/CDROM: Read sector 58725 [13:03:00]: mode 2 submode 0x08 into buffer 3
+[  541.7441] D/CDROM: Read sector 58726 [13:03:01]: mode 2 submode 0x08 into buffer 4
+[  541.7606] D/CDROM: Read sector 58727 [13:03:02]: mode 2 submode 0x08 into buffer 5
+[  541.7608] D/CDROM: Read sector 58728 [13:03:03]: mode 2 submode 0x89 into buffer 6
+[  541.7612] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  541.8278] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x28, 0x13, 0x16]
+[  541.8282] D/CDROM: CDROM setloc command (28, 13, 16)
+[  541.8295] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  541.8298] D/CDROM: Seek time for 13:02:72->28:13:16 (68269 LBA): 15435080 (455.732 ms) (2N/sled forward)
+[  542.1286] V/PerfMon: FPS: 0.00 VPS: 59.82 CPU: 4.12 GPU: 0.00 Avg: 16.72ms Min: 15.62ms Max: 17.70ms
+[  542.2787] D/CDROM: Logical seek to [28:13:16] complete, now reading
+[  542.2790] D/CDROM: Read sector 126991 [28:13:16]: mode 2 submode 0x08 into buffer 1
+[  542.2957] D/CDROM: Read sector 126992 [28:13:17]: mode 2 submode 0x08 into buffer 2
+[  542.2958] D/CDROM: Read sector 126993 [28:13:18]: mode 2 submode 0x08 into buffer 3
+[  542.3121] D/CDROM: Read sector 126994 [28:13:19]: mode 2 submode 0x89 into buffer 4
+[  542.3123] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  542.3625] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x28, 0x13, 0x54]
+[  542.3626] D/CDROM: CDROM setloc command (28, 13, 54)
+[  542.3630] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  542.3630] D/CDROM: Seek time for 28:13:11->28:13:54 (43 LBA): 1693440 (50.000 ms) (NT forward)
+[  542.4125] D/CDROM: Logical seek to [28:13:54] complete, now reading
+[  542.4292] D/CDROM: Read sector 127029 [28:13:54]: mode 2 submode 0x08 into buffer 1
+[  542.4295] D/CDROM: Read sector 127030 [28:13:55]: mode 2 submode 0x08 into buffer 2
+[  542.4301] D/CDROM: Read sector 127031 [28:13:56]: mode 2 submode 0x08 into buffer 3
+[  542.4462] D/CDROM: Read sector 127032 [28:13:57]: mode 2 submode 0x08 into buffer 4
+[  542.4464] D/CDROM: Read sector 127033 [28:13:58]: mode 2 submode 0x08 into buffer 5
+[  542.4629] D/CDROM: Read sector 127034 [28:13:59]: mode 2 submode 0x08 into buffer 6
+[  542.4631] D/CDROM: Read sector 127035 [28:13:60]: mode 2 submode 0x89 into buffer 7
+[  542.4634] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  543.1312] V/PerfMon: FPS: 17.95 VPS: 59.84 CPU: 3.74 GPU: 0.00 Avg: 16.71ms Min: 15.05ms Max: 17.77ms
+[  544.1348] V/PerfMon: FPS: 29.89 VPS: 59.78 CPU: 3.35 GPU: 0.00 Avg: 16.73ms Min: 14.21ms Max: 18.99ms
+[  545.1378] V/PerfMon: FPS: 29.91 VPS: 59.83 CPU: 3.34 GPU: 0.00 Avg: 16.72ms Min: 15.45ms Max: 17.78ms
+[  546.1411] V/PerfMon: FPS: 29.90 VPS: 59.80 CPU: 3.36 GPU: 0.00 Avg: 16.72ms Min: 14.58ms Max: 18.97ms
+[  546.5254] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x04]
+[  546.5255] D/CDROM: CDROM setloc command (24, 20, 04)
+[  546.5267] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  546.5269] D/CDROM: Seek time for 28:13:57->24:20:04 (17528 LBA): 11496025 (339.428 ms) (2N/sled backward)
+[  546.8597] D/CDROM: Logical seek to [24:20:04] complete, now reading
+[  546.8760] D/CDROM: Read sector 109504 [24:20:04]: mode 2 submode 0x08 into buffer 1
+[  546.8763] D/CDROM: Read sector 109505 [24:20:05]: mode 2 submode 0x08 into buffer 2
+[  546.8932] D/CDROM: Read sector 109506 [24:20:06]: mode 2 submode 0x08 into buffer 3
+[  546.8934] D/CDROM: Read sector 109507 [24:20:07]: mode 2 submode 0x08 into buffer 4
+[  546.8937] D/CDROM: Read sector 109508 [24:20:08]: mode 2 submode 0x08 into buffer 5
+[  546.9095] D/CDROM: Read sector 109509 [24:20:09]: mode 2 submode 0x08 into buffer 6
+[  546.9099] D/CDROM: Read sector 109510 [24:20:10]: mode 2 submode 0x08 into buffer 7
+[  546.9263] D/CDROM: Read sector 109511 [24:20:11]: mode 2 submode 0x08 into buffer 0
+[  546.9265] D/CDROM: Read sector 109512 [24:20:12]: mode 2 submode 0x08 into buffer 1
+[  546.9269] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  546.9932] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x13]
+[  546.9933] D/CDROM: CDROM setloc command (24, 20, 13)
+[  546.9936] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  546.9937] D/CDROM: Seek time for 24:20:04->24:20:13 (9 LBA): 1806336 (53.333 ms) (forward)
+[  547.0435] D/CDROM: Logical seek to [24:20:13] complete, now reading
+[  547.0437] D/CDROM: Read sector 109513 [24:20:13]: mode 2 submode 0x08 into buffer 1
+[  547.0601] D/CDROM: Read sector 109514 [24:20:14]: mode 2 submode 0x08 into buffer 2
+[  547.0602] D/CDROM: Read sector 109515 [24:20:15]: mode 2 submode 0x08 into buffer 3
+[  547.0604] D/CDROM: Read sector 109516 [24:20:16]: mode 2 submode 0x08 into buffer 4
+[  547.0769] D/CDROM: Read sector 109517 [24:20:17]: mode 2 submode 0x08 into buffer 5
+[  547.0772] D/CDROM: Read sector 109518 [24:20:18]: mode 2 submode 0x08 into buffer 6
+[  547.0933] D/CDROM: Read sector 109519 [24:20:19]: mode 2 submode 0x08 into buffer 7
+[  547.0934] D/CDROM: Read sector 109520 [24:20:20]: mode 2 submode 0x08 into buffer 0
+[  547.0936] D/CDROM: Read sector 109521 [24:20:21]: mode 2 submode 0x08 into buffer 1
+[  547.1102] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  547.1437] V/PerfMon: FPS: 46.88 VPS: 59.85 CPU: 3.79 GPU: 0.00 Avg: 16.71ms Min: 16.04ms Max: 17.50ms
+[  547.1606] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x22]
+[  547.1607] D/CDROM: CDROM setloc command (24, 20, 22)
+[  547.1608] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  547.1608] D/CDROM: Seek time for 24:20:13->24:20:22 (9 LBA): 1806336 (53.333 ms) (forward)
+[  547.2106] D/CDROM: Logical seek to [24:20:22] complete, now reading
+[  547.2275] D/CDROM: Read sector 109522 [24:20:22]: mode 2 submode 0x08 into buffer 1
+[  547.2277] D/CDROM: Read sector 109523 [24:20:23]: mode 2 submode 0x08 into buffer 2
+[  547.2440] D/CDROM: Read sector 109524 [24:20:24]: mode 2 submode 0x08 into buffer 3
+[  547.2441] D/CDROM: Read sector 109525 [24:20:25]: mode 2 submode 0x08 into buffer 4
+[  547.2443] D/CDROM: Read sector 109526 [24:20:26]: mode 2 submode 0x08 into buffer 5
+[  547.2610] D/CDROM: Read sector 109527 [24:20:27]: mode 2 submode 0x08 into buffer 6
+[  547.2616] D/CDROM: Read sector 109528 [24:20:28]: mode 2 submode 0x08 into buffer 7
+[  547.2771] D/CDROM: Read sector 109529 [24:20:29]: mode 2 submode 0x08 into buffer 0
+[  547.2773] D/CDROM: Read sector 109530 [24:20:30]: mode 2 submode 0x08 into buffer 1
+[  547.2773] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  547.3442] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x31]
+[  547.3443] D/CDROM: CDROM setloc command (24, 20, 31)
+[  547.3447] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  547.3448] D/CDROM: Seek time for 24:20:22->24:20:31 (9 LBA): 1806336 (53.333 ms) (forward)
+[  547.3946] D/CDROM: Logical seek to [24:20:31] complete, now reading
+[  547.3949] D/CDROM: Read sector 109531 [24:20:31]: mode 2 submode 0x08 into buffer 1
+[  547.4112] D/CDROM: Read sector 109532 [24:20:32]: mode 2 submode 0x08 into buffer 2
+[  547.4114] D/CDROM: Read sector 109533 [24:20:33]: mode 2 submode 0x08 into buffer 3
+[  547.4115] D/CDROM: Read sector 109534 [24:20:34]: mode 2 submode 0x08 into buffer 4
+[  547.4278] D/CDROM: Read sector 109535 [24:20:35]: mode 2 submode 0x08 into buffer 5
+[  547.4280] D/CDROM: Read sector 109536 [24:20:36]: mode 2 submode 0x08 into buffer 6
+[  547.4446] D/CDROM: Read sector 109537 [24:20:37]: mode 2 submode 0x08 into buffer 7
+[  547.4449] D/CDROM: Read sector 109538 [24:20:38]: mode 2 submode 0x08 into buffer 0
+[  547.4451] D/CDROM: Read sector 109539 [24:20:39]: mode 2 submode 0x08 into buffer 1
+[  547.4452] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  547.5117] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x40]
+[  547.5120] D/CDROM: CDROM setloc command (24, 20, 40)
+[  547.5131] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  547.5132] D/CDROM: Seek time for 24:20:31->24:20:40 (9 LBA): 1806336 (53.333 ms) (forward)
+[  547.5629] D/CDROM: Logical seek to [24:20:40] complete, now reading
+[  547.5783] D/CDROM: Read sector 109540 [24:20:40]: mode 2 submode 0x08 into buffer 1
+[  547.5785] D/CDROM: Read sector 109541 [24:20:41]: mode 2 submode 0x08 into buffer 2
+[  547.5790] D/CDROM: Read sector 109542 [24:20:42]: mode 2 submode 0x08 into buffer 3
+[  547.5952] D/CDROM: Read sector 109543 [24:20:43]: mode 2 submode 0x08 into buffer 4
+[  547.5953] D/CDROM: Read sector 109544 [24:20:44]: mode 2 submode 0x08 into buffer 5
+[  547.6118] D/CDROM: Read sector 109545 [24:20:45]: mode 2 submode 0x08 into buffer 6
+[  547.6121] D/CDROM: Read sector 109546 [24:20:46]: mode 2 submode 0x08 into buffer 7
+[  547.6124] D/CDROM: Read sector 109547 [24:20:47]: mode 2 submode 0x08 into buffer 0
+[  547.6287] D/CDROM: Read sector 109548 [24:20:48]: mode 2 submode 0x08 into buffer 1
+[  547.6288] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  547.6956] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x49]
+[  547.6957] D/CDROM: CDROM setloc command (24, 20, 49)
+[  547.6962] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  547.6962] D/CDROM: Seek time for 24:20:40->24:20:49 (9 LBA): 1806336 (53.333 ms) (forward)
+[  547.7464] D/CDROM: Logical seek to [24:20:49] complete, now reading
+[  547.7466] D/CDROM: Read sector 109549 [24:20:49]: mode 2 submode 0x08 into buffer 1
+[  547.7623] D/CDROM: Read sector 109550 [24:20:50]: mode 2 submode 0x08 into buffer 2
+[  547.7625] D/CDROM: Read sector 109551 [24:20:51]: mode 2 submode 0x08 into buffer 3
+[  547.7626] D/CDROM: Read sector 109552 [24:20:52]: mode 2 submode 0x08 into buffer 4
+[  547.7797] D/CDROM: Read sector 109553 [24:20:53]: mode 2 submode 0x08 into buffer 5
+[  547.7799] D/CDROM: Read sector 109554 [24:20:54]: mode 2 submode 0x08 into buffer 6
+[  547.7957] D/CDROM: Read sector 109555 [24:20:55]: mode 2 submode 0x08 into buffer 7
+[  547.7960] D/CDROM: Read sector 109556 [24:20:56]: mode 2 submode 0x08 into buffer 0
+[  547.7961] D/CDROM: Read sector 109557 [24:20:57]: mode 2 submode 0x08 into buffer 1
+[  547.7961] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  547.8630] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x58]
+[  547.8653] D/CDROM: CDROM setloc command (24, 20, 58)
+[  547.8662] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  547.8663] D/CDROM: Seek time for 24:20:49->24:20:58 (9 LBA): 1806336 (53.333 ms) (forward)
+[  547.9130] D/CDROM: Logical seek to [24:20:58] complete, now reading
+[  547.9292] D/CDROM: Read sector 109558 [24:20:58]: mode 2 submode 0x08 into buffer 1
+[  547.9294] D/CDROM: Read sector 109559 [24:20:59]: mode 2 submode 0x08 into buffer 2
+[  547.9296] D/CDROM: Read sector 109560 [24:20:60]: mode 2 submode 0x08 into buffer 3
+[  547.9462] D/CDROM: Read sector 109561 [24:20:61]: mode 2 submode 0x08 into buffer 4
+[  547.9464] D/CDROM: Read sector 109562 [24:20:62]: mode 2 submode 0x08 into buffer 5
+[  547.9626] D/CDROM: Read sector 109563 [24:20:63]: mode 2 submode 0x08 into buffer 6
+[  547.9628] D/CDROM: Read sector 109564 [24:20:64]: mode 2 submode 0x08 into buffer 7
+[  547.9631] D/CDROM: Read sector 109565 [24:20:65]: mode 2 submode 0x08 into buffer 0
+[  547.9801] D/CDROM: Read sector 109566 [24:20:66]: mode 2 submode 0x08 into buffer 1
+[  547.9802] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  548.0296] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x20, 0x67]
+[  548.0298] D/CDROM: CDROM setloc command (24, 20, 67)
+[  548.0464] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  548.0465] D/CDROM: Seek time for 24:20:58->24:20:67 (9 LBA): 1806336 (53.333 ms) (forward)
+[  548.0968] D/CDROM: Logical seek to [24:20:67] complete, now reading
+[  548.0971] D/CDROM: Read sector 109567 [24:20:67]: mode 2 submode 0x08 into buffer 1
+[  548.0975] D/CDROM: Read sector 109568 [24:20:68]: mode 2 submode 0x08 into buffer 2
+[  548.1135] D/CDROM: Read sector 109569 [24:20:69]: mode 2 submode 0x08 into buffer 3
+[  548.1137] D/CDROM: Read sector 109570 [24:20:70]: mode 2 submode 0x08 into buffer 4
+[  548.1301] D/CDROM: Read sector 109571 [24:20:71]: mode 2 submode 0x08 into buffer 5
+[  548.1303] D/CDROM: Read sector 109572 [24:20:72]: mode 2 submode 0x08 into buffer 6
+[  548.1306] D/CDROM: Read sector 109573 [24:20:73]: mode 2 submode 0x08 into buffer 7
+[  548.1469] V/PerfMon: FPS: 0.00 VPS: 59.81 CPU: 4.00 GPU: 0.00 Avg: 16.72ms Min: 15.37ms Max: 18.59ms
+[  548.1472] D/CDROM: Read sector 109574 [24:20:74]: mode 2 submode 0x08 into buffer 0
+[  548.1474] D/CDROM: Read sector 109575 [24:21:00]: mode 2 submode 0x08 into buffer 1
+[  548.1475] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[  548.2138] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x24, 0x21, 0x01]
+[  548.2142] D/CDROM: CDROM setloc command (24, 21, 01)
+[  548.2158] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[  548.2159] D/CDROM: Seek time for 24:20:67->24:21:01 (9 LBA): 1806336 (53.333 ms) (forward)
