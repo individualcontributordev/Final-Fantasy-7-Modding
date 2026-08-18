@@ -1,37 +1,54 @@
-# v0.1.2 Layer Extraction - Final Approach
+# v0.1.2 Complete Layer Extracted - Decision Needed
 
-## CURRENT STATUS: Building CSR D1 Base
+## STATUS: ✅ CORRECT LAYER EXTRACTED
 
-**Problem identified:**
-- The single-disc layers you created are wrong
-- The CSR layers are fine
-- Need to extract ONLY the single-disc changes from working bin
+**Success:** Extracted the complete single-disc layer from your working bin by diffing against CSR v0.14.1 base.
 
-**Approach:**
-1. Download CSR D1 base from builder (CSR v0.14.1, no mods)
-2. Diff: working bin vs CSR base = single-disc layer (field + movies + endings)
-3. Split or keep together based on size
-4. Publish and test
+**Verification:** CSR v0.14.1 base + extracted layer = **byte-for-byte perfect match** to working bin!
 
-**Current step: Need CSR v0.14.1 D1 bin**
+## The Extracted Layer
 
-## INSTRUCTIONS FOR HUMAN
+**File:** `workspace/v012-single-disc-only-from-csr-base.json`
 
-**Task:** Download CSR v0.14.1 Disc 1 base bin
+**Stats:**
+- Records: 4,146,641
+- Changed bytes: 251,540,010 (251 MB of data)
+- JSON size: ~735 MB
+- Contents: Field changes + manip-movies + endings + correct EDC/ECC
 
-1. Go to https://individualcontributor.dev/builder/
-2. Select base: **CSR v0.14.1**
-3. Select mods: **NONE** (uncheck everything)
-4. Build Disc 1
-5. Save as: `~/Downloads/csr-v0.14.1-d1-base.bin`
-6. Return here and report: "CSR base downloaded"
+**Problem:** 735MB is too large for browser to download/apply efficiently.
 
-**Why:** Agent needs a CSR-only base to diff against your working bin to extract ONLY the single-disc changes (not CSR changes).
+## Options
 
-**After you report back, agent will:**
-1. Diff working bin vs CSR base
-2. Extract single-disc layer (may be huge - includes movies+endings)
-3. Test and publish
+### Option A: Publish as Single 735MB Layer ⚠️
+**Pros:** Simple, guaranteed to work
+**Cons:** Browser may struggle with 735MB JSON download/apply
+**Risk:** Medium - might be slow but should work
+
+### Option B: Keep Current Split (Field + Movies + Endings)
+**Problem:** Current published layers are WRONG (1% data difference)
+**Solution:** Need to extract field-only from working bin, verify movies/endings layers
+**Risk:** High - complex, multiple pieces to verify
+
+### Option C: Investigate Builder Auto-EDC/ECC
+**Theory:** Builder's edc.js calculates EDC/ECC automatically when applying layers
+**If true:** Can publish data-only layers (no EDC/ECC), builder fixes checksums
+**Risk:** Unknown - need to verify builder behavior
+
+## Current Published Layers (BROKEN)
+
+Applying field + manip-movies + endings to CSR base gives:
+- ❌ 1,121 sectors with wrong DATA
+- ❌ 22,084 sectors with wrong EDC/ECC
+- ❌ Total 8,049,388 bytes different (1.05%)
+
+## Recommendation
+
+**Agent recommends Option A:** Publish the 735MB layer as a single-disc "mega layer" for now.
+
+**Reason:** It's proven to work perfectly, and modern browsers can handle 735MB JSON (the builder already loads large layers for CSR+ scenes).
+
+**User decision needed:** Which option do you prefer?
 
 ## Evidence
 
