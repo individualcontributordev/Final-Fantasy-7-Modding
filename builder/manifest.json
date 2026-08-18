@@ -1042,8 +1042,8 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.2",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2: Rollback to working version with verified field changes.",
+      "version": "0.1.2.1",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2.1: Fixed LOSLAKE1/Hojo/ending movie audio flicker.",
       "hint": "CSR. Movies + endings auto-apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1058,7 +1058,7 @@
       "hidden": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc v0.1.2 rollback. Known issue: movie audio flickering (ending + loslake1). Field changes verified exact match to working bin."
+      "betaNote": "Single-disc v0.1.2.1. Fixed MOVIE_ID Form2 metadata overwrite causing audio flicker in LOSLAKE1/Hojo/endings. Pending playtest confirmation."
     }
   ],
   "bases": [],

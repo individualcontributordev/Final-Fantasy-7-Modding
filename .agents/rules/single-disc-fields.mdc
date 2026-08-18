@@ -69,6 +69,24 @@ Locked regressions include: LOSIN2/LOST2/CANON_2 prefer, waterfall LBA 250450,
 FSHIP_12 PARASHOT, MD8_5/52 NRCRL*, path FMV unique LBAs, endings non-clobber,
 2352 image align, EDC Form2/XA skip, movies-before-SD rank.
 
+## Bump `version` on every layer content change
+
+The builder caches layer JSON in IndexedDB keyed by `id@version` (see
+`individualcontributordev.github.io/builder/builder.js` `layerContentKey`).
+If a layer file's **bytes** change but `builder/manifest.json`'s `version`
+field for that pack does not, returning users' browsers keep serving the
+**stale cached layer** indefinitely — the CDN can be fully updated and it
+won't matter. This caused a false "still broken" report after the row
+47/52 audio-flicker fix (2026-08-18) because `single-disc-on-csr` stayed at
+`0.1.2` while its layer file changed underneath it.
+
+**Rule:** any time `single-disc-on-csr` (or any other pack)'s layer JSON
+content changes, bump its `version` string in `builder/manifest.json` in
+the same commit (e.g. `0.1.2` → `0.1.2.1` for a content-only patch, or a
+full minor/major bump for a real release). Never ship a layer fix without
+a version bump — it will not reach existing users without a manual
+"clear pack cache" or the ~stale IndexedDB entry.
+
 ## Instructions language
 
 In `docs/INSTRUCTIONS.md` and chat: **plain English** — map file name, which disc’s
