@@ -1,17 +1,37 @@
-# v0.1.2 Investigation Complete - Solution Identified
+# v0.1.2 Layer Extraction - Final Approach
 
-## ROOT CAUSE IDENTIFIED ✅
+## CURRENT STATUS: Building CSR D1 Base
 
-**The builder website automatically calculates EDC/ECC for all modified sectors.**
+**Problem identified:**
+- The single-disc layers you created are wrong
+- The CSR layers are fine
+- Need to extract ONLY the single-disc changes from working bin
 
-**The problem:**
-1. Published layers contain RAW DATA (no EDC/ECC)
-2. Builder applies layers + calculates EDC/ECC
-3. Your working bin was built BEFORE current layers were published
-4. Working bin has DIFFERENT data in 1,121 sectors (not just EDC/ECC)
+**Approach:**
+1. Download CSR D1 base from builder (CSR v0.14.1, no mods)
+2. Diff: working bin vs CSR base = single-disc layer (field + movies + endings)
+3. Split or keep together based on size
+4. Publish and test
 
-**The solution:**
-We need to use **the builder website** to generate the bin, not local layer application. The builder has the correct EDC/ECC calculation (`builder/edc.js`) that we don't have in Python.
+**Current step: Need CSR v0.14.1 D1 bin**
+
+## INSTRUCTIONS FOR HUMAN
+
+**Task:** Download CSR v0.14.1 Disc 1 base bin
+
+1. Go to https://individualcontributor.dev/builder/
+2. Select base: **CSR v0.14.1**
+3. Select mods: **NONE** (uncheck everything)
+4. Build Disc 1
+5. Save as: `~/Downloads/csr-v0.14.1-d1-base.bin`
+6. Return here and report: "CSR base downloaded"
+
+**Why:** Agent needs a CSR-only base to diff against your working bin to extract ONLY the single-disc changes (not CSR changes).
+
+**After you report back, agent will:**
+1. Diff working bin vs CSR base
+2. Extract single-disc layer (may be huge - includes movies+endings)
+3. Test and publish
 
 ## Evidence
 
