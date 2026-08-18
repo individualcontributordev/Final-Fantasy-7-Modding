@@ -1042,8 +1042,8 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.2.1",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2.1: Fixed LOSLAKE1/Hojo/ending movie audio flicker.",
+      "version": "0.1.2.2",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2.2: Reverted a regression that dropped CSR changes on field 637; movie audio flicker fix still pending.",
       "hint": "CSR. Movies + endings auto-apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
