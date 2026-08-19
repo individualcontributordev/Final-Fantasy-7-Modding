@@ -83,3 +83,48 @@ which is not even a multiple of 2336, so it cannot be a valid Form2 length;
 this is the leading suspect for the still-present LOSLAKE1 flicker. Not
 changed yet — waiting on the incognito retest for a clean before/after
 before touching `single-disc-csr-manip-movies-v0.1.4`.
+
+## 2026-08-19 update: field↔movie mapping was wrong (row index ≠ movie ID)
+
+Human clarified field 637 (internal field name `loslake1`) actually plays a
+**cannon** scene, not the waterfall — the waterfall (`LOSLAKE1.MOV`) plays
+elsewhere. This exposed a second derivation error: I had picked
+`MOVIE_ID.BIN` rows 47/52 by sorting the ISO `MOVIE/` directory
+alphabetically, but rows are indexed by the **`PMVIE` opcode's movie ID**,
+which follows internal build order, not alphabetical filename order.
+
+Decoded the actual `PMVIE` opcodes from field scripts on the CSR base
+(`scripts/field_dat.py` + `ff7_opcodes.py`, cross-checked against Makou
+Reactor's `Opcode.cpp`/`Data.cpp`):
+
+| Field (ID / internal name) | PMVIE id(s) called | Resolves to (via D2 `MINT/MOVIE_ID.BIN` row order) |
+|---|---|---|
+| 637 `loslake1` | 47 | `CANONON.MOV` (cannon scene — matches human's report) |
+| 639 `loslake3` | 57 | `LOSLAKE1.MOV` (the actual waterfall FMV) |
+| 643 `white2` | 28, 42, 56 | `WEAPON2.MOV`, `WHITE2.BIN`, `C_SCENE2.MOV` — **not** LOSLAKE1 |
+
+So field 639, not 643, appears to be the field that actually plays the
+waterfall movie. Field 643 doesn't reference `LOSLAKE1.MOV` at all in the
+CSR base. Also note: earlier `docs/reference/movie-id-mapping.txt` (global
+movie-ID concat: common 0–19, disc1 20–53, disc2 54–95, disc3 96–105) uses
+a **different index space** than PMVIE's per-disc-local row order used by
+`MINT/MOVIE_ID.BIN` — row 47 in that global table is `jairofal`, but PMVIE
+id 47 on disc 2 is `CANONON.MOV`. Do not cross-reference the two tables
+directly.
+
+Re-derived `LOSLAKE1.MOV`'s Form2 engine length by reading Disc 2's own
+`MINT/MOVIE_ID.BIN` row directly (`_movie_id_meta_by_lba` in
+`mods/single-disc/scripts/inject_movies_by_disc_id.py`) instead of
+computing `nsec*2336` from the ISO size — this is strictly more reliable
+since it copies the disc's own aux fields too:
+
+- `LOSLAKE1.MOV` on D2: lba 291219, ISO size 6,060,032, MOVIE_ID row =
+  (size=6,912,224, aux=(0, 0x00FFFFFF, 235)). Matches the previously
+  computed `nsec*2336` value exactly.
+- `CANONHT2.MOV` on D2: lba 268006, ISO size 5,240,832, MOVIE_ID row =
+  (size=5,977,824, aux=(0, 0x00D01050, 206)) — also matches.
+
+**Still unconfirmed:** which field number the human actually sees when
+watching the waterfall/Aeris-face scene (639 vs. 643 vs. something else).
+`docs/INSTRUCTIONS.md` asks for this before any `MOVIE_ID.BIN` edit, so the
+fix targets the correct row this time.
