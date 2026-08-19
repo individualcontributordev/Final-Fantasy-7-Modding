@@ -1042,8 +1042,8 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.2.2",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2.2: Reverted a regression that dropped CSR changes on field 637; movie audio flicker fix still pending.",
+      "version": "0.1.2.3",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2.3: Fixed field 637 (CANONON) movie audio flicker and restored missing CSR script changes on field 643 (Cosmo Canyon/WHITE2).",
       "hint": "CSR. Movies + endings auto-apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1058,7 +1058,7 @@
       "hidden": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc v0.1.2.1. Fixed MOVIE_ID Form2 metadata overwrite causing audio flicker in LOSLAKE1/Hojo/endings. Pending playtest confirmation."
+      "betaNote": "Single-disc v0.1.2.3. Removed 3 stray MOVIE_ID.BIN records that reverted the manip-movies Form2 audio fix for field 637/Hojo; restored dropped CSR script edit on field 643 (WHITE2). Pending playtest confirmation."
     }
   ],
   "bases": [],

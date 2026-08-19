@@ -128,3 +128,59 @@ since it copies the disc's own aux fields too:
 watching the waterfall/Aeris-face scene (639 vs. 643 vs. something else).
 `docs/INSTRUCTIONS.md` asks for this before any `MOVIE_ID.BIN` edit, so the
 fix targets the correct row this time.
+
+## 2026-08-19 update: field 637/643 confirmed, root causes found and fixed
+
+Human confirmed: field 643 (WHITE2/Cosmo Canyon) does **not** play a movie
+(expected — see PMVIE table above) but is missing its CSR script changes.
+Field 637 plays a **cannon** scene (`CANONON.MOV`, matches the PMVIE
+decode) and that movie's audio still flickers. Two independent bugs, both
+now root-caused and fixed in `single-disc-on-csr`:
+
+**Bug 1 — field 637/CANONON flicker (MOVIE_ID.BIN Form2 revert).**
+Diffed the applied byte stack layer-by-layer (`single-disc-csr-manip-movies-v0.1.4`
+→ `single-disc-on-csr`) instead of reading each layer in isolation, and found
+`single-disc-on-csr` carries 3 records that land *after* manip-movies in the
+apply order and silently revert its correct Form2 `MOVIE_ID.BIN` values:
+
+| Offset | Field | Manip-movies (correct, Form2) | on-csr (reverts to, wrong) |
+|---|---|---:|---:|
+| 298608536 (+3 bytes) | row 47 size (CANONON/field 637) | 17,190,624 | 31,848,448 |
+| 298608637 (+1), 298608639 (+1) | row 52 size (CANONHT2/Hojo) | 5,977,824 | 6,027,488 |
+
+This is the same class of bug from the 2026-08-18 retraction above (row
+47/52 reverted), but the earlier fix attempt only checked the manip-movies
+layer's own bytes in isolation and concluded row 47/52 were already correct
+— it never re-checked what `single-disc-on-csr` does to those same bytes
+*after* manip-movies applies. The 3 records were removed from
+`single-disc-on-csr/layers/disc1.layer.json`; both rows now keep their
+Form2 values through the full build (`single-disc-csr-manip-movies-v0.1.4`
+→ `single-disc-on-csr` → parts 2-10 → endings), verified with
+`scripts/build_with_website_code.js` + a decode of `MINT/MOVIE_ID.BIN`
+after each layer.
+
+**Bug 2 — field 643/WHITE2 missing CSR changes.**
+CSR's Disc 2 base actually edits `FIELD/WHITE2.DAT` (`cl` entity, script
+slot 31): inserts a 2-byte `JMPF` before the post-movie `FADE` op (293→295
+bytes decompressed). Disc 1's CSR base does **not** touch this file at all
+(field 643 is Disc-2-exclusive content). `mods/single-disc/patches/csr-d2d3-field-merge-on-d1.md`
+records this file was one of 76 merged from D2/D3 onto D1 in commit
+`c6ccc40` (2026-08-05). Separately, v0.1.4 (`WHITE2 movie crawl fix`,
+CHANGELOG) stripped the `PMVIE`/`MOVIE` opcodes from this same script slot
+to avoid a DuckStation MDEC/DMA crawl — but it stripped them from the
+**pristine** (un-merged) script bytes, silently discarding the CSR `JMPF`
+edit that had been merged in a month earlier. Net effect: single-disc's
+field 643 has the movie-crawl fix but lost the CSR story/script edit.
+
+Fix: rebuilt entity `cl` slot 31 from the CSR Disc-2 script bytes (with the
+`JMPF` edit) and stripped `PMVIE`/`MOVIE` from *that* version instead of the
+pristine one. Verified via round-trip decompress → patch position tables
+(text/AKAO pointers, `nb`-entity offset table) → recompress → decompress →
+reparse: only this one script slot changed, all 56 scripts and all 172 text
+entries otherwise byte-identical, no `PMVIE`/`MOVIE` opcodes remain (crawl
+fix preserved), and the `JMPF` still jumps to the correct instruction after
+the two ops are cut. New compressed size (9451 bytes) still fits the
+existing 5-sector ISO slot (10,240-byte cap).
+
+Both fixes are in `single-disc-on-csr/layers/disc1.layer.json` v0.1.2.3 —
+see `mods/single-disc/CHANGELOG.md`. Awaiting human playtest confirmation.

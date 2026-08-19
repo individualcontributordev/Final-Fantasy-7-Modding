@@ -1,3 +1,27 @@
+## 0.1.2.3 — 2026-08-19
+
+- **Field 637 (CANONON.MOV) audio flicker fix**: `single-disc-on-csr` layer
+  carried 3 stray records (offsets 298608536/298608637/298608639 in
+  `MINT/MOVIE_ID.BIN`) that reverted `single-disc-csr-manip-movies-v0.1.4`'s
+  correct Form2 engine lengths for MOVIE_ID rows 47 (CANONON, field 637) and
+  52 (CANONHT2/Hojo) back to their pre-manip (wrong) ISO-byte-size values,
+  right after manip-movies set them. This regression previously escaped
+  detection because it was only checked by reading the manip-movies layer in
+  isolation, not the full applied stack. Removed the 3 offending records —
+  both rows now keep their correct Form2 values (row 47: 17,190,624; row 52:
+  5,977,824) through the full build.
+- **Field 643 (WHITE2/Cosmo Canyon) missing CSR changes fix**: the CSR base's
+  real Disc-2 story/script edit to `FIELD/WHITE2.DAT` (a `JMPF` bypass added
+  before the FADE in the `cl` entity's post-movie script, entity slot `cl/31`)
+  was dropped when the 0.1.4 movie-crawl fix rewrote this script from the
+  *pristine* (unmerged) version instead of the CSR-D2-merged version. Field
+  637's cannon movie was correctly identified as unrelated to field 643/639
+  (waterfall) — see finding doc. Rebuilt `cl/31`'s script bytes from the CSR
+  Disc-2 version with `PMVIE`/`MOVIE` opcodes stripped (preserving the
+  movie-crawl-avoidance behavior) while keeping the CSR `JMPF` edit intact.
+  Field 643's story/script CSR changes are restored; still does not play the
+  waterfall movie (correct — see field 639 in the finding doc).
+
 ## 0.1.2-rollback — 2026-08-17
 
 **Rolled back from v0.1.40 to v0.1.2 (last known working version)**
