@@ -5,14 +5,16 @@ Pipeline, on top of CSR D1 as the base:
   1. Apply the 66-slot verdict-table merge for the 9 "rework" fields
      (BLACKBGB, BUGIN1A, COS_BTM, COS_BTM2, DEL1, JUNAIR2, LOST2, NIVGATE,
      RCKTIN2) via merge_rework_fields.py's logic.
-  2. Remove DSKCG ("Ask for disc") ops from BLACKBGB/BLACKBGE/BLACKBG3
+  2. Apply the bulk "safe" field merge -- every other CSR field edited on
+     only one non-D1 disc (plus RCKTIN7, a safe D2-superset) -- via
+     merge_safe_fields.py.
+  3. Remove DSKCG ("Ask for disc") ops from BLACKBGB/BLACKBGE/BLACKBG3
      (expect 19 total: 4 + 1 + 14) via remove_dskcg.py's splicer.
-  3. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
+  4. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
      via inject_snova_d3_to_d1.py.
 
-This produces an intermediate work .bin -- NOT a final release layer. The
-remaining ~776 "safe" D2/D3 field merges (non-conflicting supersets) still
-need to be applied on top before diffing into disc1.layer.json.
+This produces the merged single-disc-on-csr work .bin -- NOT a final release
+layer (still needs diffing into disc1.layer.json via bin_diff_to_layer.py).
 
 Usage (from repo root):
   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-work.bin
@@ -37,6 +39,7 @@ from merge_rework_fields import (  # noqa: E402
     WHOLE_FILE_FIELDS,
     merge_slots,
 )
+from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from remove_dskcg import remove_dskcg_from_field  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
@@ -53,6 +56,23 @@ def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
         print(f"  [whole-file] {field}: CSR D{disc} ({len(data)} bytes)")
     for field, slot_discs in SLOT_SPLICE_FIELDS.items():
         merge_slots(img, field, slot_discs, c1, c2)
+
+
+def apply_safe_field_merge(img: bytearray) -> int:
+    print("\nApplying bulk safe-field merge (non-collision D2/D3 edits)...")
+    merges = find_safe_whole_file_merges()
+    src_imgs = {2: bytes(load_csr_image(2)), 3: bytes(load_csr_image(3))}
+    applied = 0
+    for field, disc in sorted(merges.items()):
+        path = f"FIELD/{field}.DAT"
+        data = extract_file(src_imgs[disc], path)
+        current = extract_file(img, path)
+        if data == current:
+            continue
+        replace_file_within_sectors(img, path, data)
+        applied += 1
+    print(f"  Applied {applied}/{len(merges)} safe field merges")
+    return applied
 
 
 def apply_dskcg_removal(img: bytearray) -> int:
@@ -96,6 +116,7 @@ def main() -> int:
     print(f"Base: CSR D1 ({len(img):,} bytes)")
 
     apply_rework_merge(img, c1, c2)
+    apply_safe_field_merge(img)
     apply_dskcg_removal(img)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
