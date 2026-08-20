@@ -73,6 +73,21 @@ current single-disc merge is taking CSR D1's `init:0` for LOST2 instead
 of CSR D2's, that alone explains both the missing break scene and the
 missing music on field 634. Verdict: take CSR D2 for this slot.
 
+**2026-08-20 (later) — v0.1.3 shipped this fix but the *layer* corrupted
+it in transit:** `build_work_bin.py` correctly wrote CSR D2's LOST2 (and
+the other 8 rework fields) into the merged work bin, but the publish step
+diffed that work bin against **pristine** Disc 1 instead of the **CSR
+v0.14.1 base** the builder stacks the layer on top of. Any byte where the
+merge coincidentally matched pristine — while CSR's base layer had
+already changed that byte — produced no diff record, so the stale CSR
+byte silently survived under the layer instead of being overwritten. This
+made `BLACKBGB`, `LOST2`, and `NIVGATE` fail to parse entirely (explains
+both the missing D1→D2 save prompt — BLACKBGB is the disc-swap hub — and
+field 634 failing to load), and left `BUGIN1A`/`RCKTIN2`/`RCKTIN7` with a
+handful of wrong bytes. Fixed in v0.1.3.1 by re-diffing the same work bin
+against the CSR base; see `mods/single-disc/CHANGELOG.md` 0.1.3.1 entry
+and `tests/test_single_disc_stack.py::test_rework_fields_parse_and_match_csr_source`.
+
 ## Investigation Tools
 
 ### Field Scripts Database

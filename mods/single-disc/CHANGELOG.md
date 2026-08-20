@@ -1,3 +1,34 @@
+## 0.1.3.1 — 2026-08-20
+
+**Fixes real layer corruption in v0.1.3**, found via human playtest: no
+save-prompt on the D1→D2 transition, and field 634 (LOST2) failed to load.
+
+- **Root cause**: `bin_diff_to_layer.py` diffed the merged work bin against
+  **pristine** Disc 1 instead of against the **CSR base** the builder
+  actually stacks the layer on top of. Any byte where the v0.1.3 merge
+  happened to land back on the pristine value — but CSR's base layer had
+  already changed that byte — produced no diff record, so the stale CSR
+  byte silently survived underneath instead of being overwritten. Six
+  merged fields hit this: `BLACKBGB`, `LOST2`, and `NIVGATE` ended up
+  byte-mismatched enough to be **unparseable** `FIELD.DAT` files (the game
+  would freeze/fail to load them); `BUGIN1A`, `RCKTIN2`, `RCKTIN7` were
+  parseable but had the wrong bytes in a handful of slots.
+  `BLACKBGB` is the disc-swap hub field, which is why the D1→D2 save
+  prompt disappeared — the field itself was corrupt, not just missing the
+  Ask opcode.
+- **Fix**: re-diffed the same v0.1.3 merged work bin (`build_work_bin.py`
+  output, unchanged) against the CSR v0.14.1 base instead of pristine.
+  Record count drops from 152,740 to 61,030 (the pristine-vs-CSR bytes
+  that CSR itself already sets no longer need re-stating), changed bytes
+  drop from ~5.95MB to ~2.07MB. All 9 rework-merge fields now parse
+  cleanly via `field_dat.py` and the 6 whole-file fields byte-match their
+  intended CSR D1/D2 source exactly.
+- Added `tests/test_single_disc_stack.py::test_rework_fields_parse_and_match_csr_source`
+  to catch this class of bug (parses every rework/splice field post-stack,
+  byte-matches the 6 whole-file fields against their intended CSR source).
+- No change to `build_work_bin.py`, the merge scripts, or the DSKCG/SNOVA
+  steps — this is a diff-baseline fix only.
+
 ## 0.1.3 — 2026-08-20
 
 **Rebuilt from scratch** with automated field-merge tooling, replacing the
