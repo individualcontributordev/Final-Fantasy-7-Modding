@@ -10,6 +10,7 @@ Complete reference data for FF7 PSX modding. All data extracted from [Makou Reac
 | **Movies** | 106 | `movie-id-mapping.txt` | `python3 scripts/query_ff7_ids.py movie <id>` |
 | **Music** | 100 | `music-id-mapping.txt` | `python3 scripts/query_ff7_ids.py music <id>` |
 | **Memory** | ~300 regions | `ff7-psx-memory/*.txt` | `python3 docs/reference/ff7-psx-memory/query_memory.py <addr-or-keyword>` |
+| **Script labels** | scriptID→UI label | `makou-reactor-script-labels.md` | n/a — lookup table |
 
 ## Usage Examples
 
