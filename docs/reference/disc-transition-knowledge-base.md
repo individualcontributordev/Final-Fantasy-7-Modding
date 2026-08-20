@@ -63,6 +63,16 @@ On **CSR + Single-disc**:
 - LOST2 on D2 checks bit4 → if clear, just RETurns (no break scene, no music)
 - On multi-disc, disc initialization code sets bit4 → LOST2 forwards to COS_BTM2
 
+**2026-08-20 Finding — root cause confirmed:** `docs/findings/2026-08-20-slot-edit-origin.md`
+(section "LOST2 (field #634), init:0") decoded the raw script for the
+`init:0` slot of LOST2 (field #634) on both discs. CSR D2's version of
+this slot contains the missing `MAPJUMP field #526 (COS_BTM2)` block
+(gated by the GM 0xa455 check), which CSR D1's version completely lacks
+— D1 only adds a duplicate-music guard, no transition logic. If the
+current single-disc merge is taking CSR D1's `init:0` for LOST2 instead
+of CSR D2's, that alone explains both the missing break scene and the
+missing music on field 634. Verdict: take CSR D2 for this slot.
+
 ## Investigation Tools
 
 ### Field Scripts Database
