@@ -1,8 +1,8 @@
 {
   "id": "single-disc-on-csr",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.2: Rollback to working version with verified field changes.",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.3: Full rebuild-from-scratch field merge (9-field rework merge + 66-field safe bulk D2/D3 merge) + DSKCG removal + SNOVA inject.",
   "hint": "CSR. Movies + endings auto-apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -12,5 +12,5 @@
   "enabled": true,
   "beta": true,
   "status": "beta",
-  "betaNote": "Single-disc v0.1.2 rollback. Known issue: movie audio flickering (ending + loslake1). Field changes verified exact match to working bin."
+  "betaNote": "Single-disc v0.1.3: rebuilt from scratch with automated field-merge tooling (verdict-table rework merge + safe bulk D2/D3 merge) instead of the old manual/hardcoded field lists. Pending playtest confirmation."
 }
