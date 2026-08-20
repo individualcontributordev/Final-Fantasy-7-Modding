@@ -34,6 +34,17 @@ old hand-audited/hardcoded field lists (`csr-field-disc-prefer.txt`,
   pristine Disc 1 (152,740 records, ~5.95MB changed).
 - Movies/endings packs (manip-movies v0.1.4, endings v0.1.0 parts 1-7) are
   unchanged and still auto-apply with Single-disc on CSR.
+- **Manifest fixup (post-release)**: the v0.1.2 whole-bin-diff changeover
+  (`58fd5cd`) had removed manip-movies v0.1.4's `autoIncludeWhen` entirely
+  and pointed endings v0.1.0 parts 1-7 at a disabled sentinel, so the claim
+  above was not actually true in the builder until this fixup. Also
+  disabled the stale `single-disc-v0.1.2-part2..10` whole-bin-diff
+  auto-includes left over from that same changeover, which had been
+  stacking v0.1.2 bytes on top of this v0.1.3 layer. Both manip-movies
+  v0.1.4 and endings v0.1.0 parts 1-7 are now restored to auto-apply with
+  `single-disc-on-csr`, and `verify_builder_config.py` confirms the full
+  9-addon stack (base + mod layer + manip-movies + 7 endings parts,
+  4,360,412 total records) applies cleanly.
 
 ## 0.1.2.3 — 2026-08-19
 
