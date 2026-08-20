@@ -2,7 +2,7 @@
 
 | Field | Slot | D1 edited by CSR? | D2 edited by CSR? | Origin verdict |
 |---|---|---|---|---|
-| BLACKBGB | init:0 | True | True | BOTH edited independently -> needs judgement call |
+| BLACKBGB (field #103) | init:0 | True | True | Identical CSR edits (byte rearrangement only) -> take CSR D1 |
 | BUGIN1A | AD:4 | True | False | D1-ONLY edit -> take D1 |
 | BUGIN1A | AD:7 | False | True | D2-ONLY edit -> take D2 |
 | BUGIN1A | BUGEN:1 | True | False | D1-ONLY edit -> take D1 |
