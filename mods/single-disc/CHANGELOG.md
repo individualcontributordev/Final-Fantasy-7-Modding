@@ -1,3 +1,40 @@
+## 0.1.3 — 2026-08-20
+
+**Rebuilt from scratch** with automated field-merge tooling, replacing the
+old hand-audited/hardcoded field lists (`csr-field-disc-prefer.txt`,
+`csr-d2d3-field-merge-on-d1.md`) that had drifted out of sync with the
+0.1.2/0.1.2.3 shipped bytes.
+
+- **9-field "rework" merge** (`merge_rework_fields.py`): per-slot verdict
+  table for the fields where CSR D1/D2 genuinely diverge on the same
+  entity/slot — BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2 (whole CSR D1),
+  LOST2 (whole CSR D2), and true per-slot splices for BUGIN1A, NIVGATE,
+  RCKTIN2.
+- **66-field safe bulk merge** (`merge_safe_fields.py`, new): programmatically
+  discovers every other field CSR only really edited (vs pristine) on one
+  non-D1 disc and wholesale-swaps it in — 61 D2-only fields (e.g. CONVIL_1/2,
+  FSHIP_1-4/22-25, JUNONE2/22/7, RCKTIN3/5/6, TRNAD_*, ZMIND1-3, etc.) + 4
+  D3-only fields (LAS4_0/2/4, LASTMAP) + RCKTIN7 (re-classified from
+  "collision" to safe auto-merge: CSR D2 is a pure superset of CSR D1's
+  slots for this field). Of the ~776 fields present on 2+ discs, 548 had
+  zero CSR edits on any disc and 163 already matched the D1 base, so only
+  these 66 needed an actual merge.
+- **DSKCG ("Ask for disc") removal**: automated via `field_dat_write.py`
+  splicer instead of manual Makou Reactor edits — 19/19 ops removed
+  (BLACKBGB: 4, BLACKBGE: 1, BLACKBG3: 14), same count as prior manual
+  passes.
+- **SNOVA D3→D1 inject** unchanged (`inject_snova_d3_to_d1.py`): copies
+  Supernova files onto D1 and remaps BATTLE.X's 17 hardcoded LBAs.
+- Confirmed the LOST2/COS_BTM2 disc-break gate needs no extra patch this
+  time: LOSIN2 unconditionally sets the Game Moment break flag as part of
+  its story cutscene (not gated on a disc-swap check), so the merged CSR D2
+  LOST2 fires the break-scene MAPJUMP on its own.
+- Every merged/spliced field verified to parse cleanly via `field_dat.py`
+  and byte-match its intended CSR source. Layer diffed fresh against
+  pristine Disc 1 (152,740 records, ~5.95MB changed).
+- Movies/endings packs (manip-movies v0.1.4, endings v0.1.0 parts 1-7) are
+  unchanged and still auto-apply with Single-disc on CSR.
+
 ## 0.1.2.3 — 2026-08-19
 
 - **Field 637 (CANONON.MOV) audio flicker fix**: `single-disc-on-csr` layer
