@@ -221,6 +221,43 @@ def test_image_under_80_minute_cd(stacked):
     hard = 80 * 60 * 75 - 150  # 80:00:00
     assert max_lba < hard, max_lba
 
+def test_rework_fields_parse_and_match_csr_source(stacked, csr_d1_bytes, csr_d2_bytes, iso_api, scripts_dir):
+    """Regression for v0.1.3->v0.1.3.1: layer was diffed vs pristine instead of
+    vs the CSR base, so any byte where a merged field coincidentally matched
+    pristine silently kept the stale CSR base byte instead. This corrupted
+    BLACKBGB/LOST2/NIVGATE (unparseable FIELD.DAT) and desynced BUGIN1A/
+    RCKTIN2/RCKTIN7. Every field touched by the rework/safe merges must parse
+    cleanly and, for the whole-file fields, byte-match its intended CSR
+    source exactly."""
+    import sys
+
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from field_dat import load_field_dat
+
+    extract_file, _ = iso_api
+
+    whole_file_fields = {
+        "BLACKBGB": 1,
+        "COS_BTM": 1,
+        "COS_BTM2": 1,
+        "DEL1": 1,
+        "JUNAIR2": 1,
+        "LOST2": 2,
+    }
+    slot_splice_fields = ["BUGIN1A", "NIVGATE", "RCKTIN2"]
+
+    for field, disc in whole_file_fields.items():
+        data = extract_file(stacked, f"FIELD/{field}.DAT")
+        load_field_dat(data)  # must not raise
+        src = csr_d1_bytes if disc == 1 else csr_d2_bytes
+        assert data == extract_file(src, f"FIELD/{field}.DAT"), field
+
+    for field in slot_splice_fields:
+        data = extract_file(stacked, f"FIELD/{field}.DAT")
+        load_field_dat(data)  # must not raise
+
+
 def test_d1d2_lost2_music_unmute(stacked, iso_api, csr_d1_bytes, csr_d2_bytes, scripts_dir):
     """D1→2: LOST2 a455+bit4OFF plays MUSIC (v0.1.35); no COS force; LOSIN2 CSR BITOFF."""
     import sys
