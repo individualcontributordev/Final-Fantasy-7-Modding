@@ -1,0 +1,153 @@
+"""Generic FieldDat script-slot splicer + serializer.
+
+Given a FieldDat (from field_dat.load_field_dat) and a set of (entity, slot)
+-> new raw bytes overrides, rebuild the compressed FIELD/*.DAT bytes with
+only those script slots replaced. Handles:
+
+  - Growing/shrinking individual script blobs (offset table + text/akao
+    start addresses shift accordingly).
+  - Re-deriving the 7-section VRAM pointer header when section 0's total
+    size changes.
+  - Recompressing with the game's LZS + u32le-size header.
+
+Does NOT touch walkmesh/background/camera/inf/encounter/model_loader
+(sections 1-6) or the text/akao byte content itself -- only script bytes
+and the offset tables/headers that locate them.
+
+Usage:
+    from field_dat import load_field_dat
+    from field_dat_write import write_field_dat
+
+    fd = load_field_dat(raw_bytes)
+    new_bytes = write_field_dat(fd, {("init", 0): new_script_bytes})
+"""
+from __future__ import annotations
+
+import struct
+
+from field_dat import FieldDat, ScriptSlot, decompress_dat, slice_sections, load_field_dat
+from lzs import compress_all_with_header
+
+
+def write_field_dat(fd: FieldDat, edits: dict[tuple[str, int], bytes]) -> bytes:
+    """Return new compressed FIELD/*.DAT bytes with the given script slots replaced.
+
+    `edits` keys are (entity, slot) matching FieldDat.scripts entries; values
+    are the new raw opcode bytes for that slot (any length, including 0 is
+    not supported -- a slot must remain non-empty).
+    """
+    if not edits:
+        # No-op: re-serialize unchanged (useful for round-trip testing).
+        edits = {}
+
+    sec1 = fd.sections[0]
+    nb, sc = fd.nb, fd.sc
+    pos_scripts = fd.pos_scripts
+    old_pos_texts = fd.pos_texts_val
+    old_pos_akao = fd.pos_akao_val
+    old_pos_after = fd.pos_after
+    akao_tbl_off = fd.akao_tbl_off
+    nb_akao = fd.nb_akao
+
+    # Map (entity, slot) -> ScriptSlot, and find missing keys early.
+    by_key: dict[tuple[str, int], ScriptSlot] = {(s.entity, s.slot): s for s in fd.scripts}
+    for key in edits:
+        if key not in by_key:
+            raise KeyError(f"no such script slot in this FieldDat: {key!r}")
+
+    # Sort all real (non-empty) script slots by their absolute start offset.
+    ordered = sorted(fd.scripts, key=lambda s: s.start)
+    if not ordered:
+        raise ValueError("FieldDat has no script slots to splice")
+
+    blob_region_start = ordered[0].start
+
+    # Boundaries: old_start of slot i, old_end of slot i (= old_start of i+1,
+    # or pos_after for the last one).
+    old_boundaries: list[int] = [s.start for s in ordered] + [old_pos_after]
+
+    # Build the new contiguous blob region, applying edits, and record the
+    # remapping from every old boundary value -> new boundary value.
+    new_blob = bytearray()
+    new_boundaries: list[int] = [blob_region_start]
+    for i, slot in enumerate(ordered):
+        key = (slot.entity, slot.slot)
+        data = edits.get(key, slot.raw)
+        new_blob.extend(data)
+        new_boundaries.append(blob_region_start + len(new_blob))
+
+    # boundary_map: old absolute offset -> new absolute offset, for every
+    # distinct boundary value (covers real slot starts + shared "empty slot"
+    # duplicates + the trailing pos_after sentinel).
+    boundary_map: dict[int, int] = {}
+    for old_b, new_b in zip(old_boundaries, new_boundaries):
+        boundary_map[old_b] = new_b
+
+    new_pos_after = new_boundaries[-1]
+    delta = new_pos_after - old_pos_after
+
+    # --- Rebuild section 1 header + tables on a mutable copy ---
+    sec1_new = bytearray(sec1)
+
+    # 1) Script offset table: nb * sc u16 entries at pos_scripts.
+    for i in range(nb):
+        for j in range(sc):
+            off = pos_scripts + 2 * (sc * i + j)
+            (val,) = struct.unpack_from("<H", sec1_new, off)
+            if val in boundary_map:
+                struct.pack_into("<H", sec1_new, off, boundary_map[val])
+            elif val >= old_pos_after:
+                # Value points past the scripts region entirely (rare, but
+                # keep consistent) -- shift by the same global delta.
+                struct.pack_into("<H", sec1_new, off, val + delta)
+            # else: unexpected value inside scripts region not on a boundary
+            # -- leave as-is (shouldn't happen for well-formed files).
+
+    # 2) AKAO pointer table (nb_akao u32 entries) just before pos_scripts.
+    for i in range(nb_akao):
+        off = akao_tbl_off + 4 * i
+        (val,) = struct.unpack_from("<I", sec1_new, off)
+        struct.pack_into("<I", sec1_new, off, val + delta)
+
+    # 3) Header pos_texts field (u16 @ offset 4).
+    new_pos_texts = old_pos_texts + delta if old_pos_texts else old_pos_texts
+    struct.pack_into("<H", sec1_new, 4, new_pos_texts)
+
+    # 4) Splice in the new blob region, keeping header/tables (already
+    # patched) before it and text/akao raw bytes (unchanged content) after.
+    sec1_final = bytes(sec1_new[:blob_region_start]) + bytes(new_blob) + bytes(sec1_new[old_pos_after:])
+
+    # --- Reassemble the full decompressed DAT with recomputed section header ---
+    new_sections = [sec1_final] + list(fd.sections[1:])
+    vbase = 0x80000000 + 28
+    offs = []
+    cur_pos = 28
+    for s in new_sections:
+        offs.append(vbase + cur_pos)
+        cur_pos += len(s)
+    header = struct.pack("<7I", *offs)
+    new_dat = header + b"".join(new_sections)
+
+    return compress_all_with_header(new_dat)
+
+
+def round_trip_check(raw: bytes) -> bool:
+    """Sanity check: load, re-serialize with no edits, and re-parse to
+    confirm the resulting FieldDat has byte-identical script slots, entity
+    list, and text/akao content as the original. Does NOT require the
+    recompressed bytes to be byte-identical to the input (LZS encoding is
+    not unique), only semantically identical.
+    """
+    fd = load_field_dat(raw)
+    new_raw = write_field_dat(fd, {})
+    fd2 = load_field_dat(new_raw)
+
+    if fd.entities != fd2.entities:
+        return False
+    if fd.texts_raw != fd2.texts_raw:
+        return False
+    if fd.akao != fd2.akao:
+        return False
+    slots1 = {(s.entity, s.slot): s.raw for s in fd.scripts}
+    slots2 = {(s.entity, s.slot): s.raw for s in fd2.scripts}
+    return slots1 == slots2

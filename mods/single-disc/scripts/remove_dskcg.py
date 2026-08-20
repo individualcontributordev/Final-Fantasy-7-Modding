@@ -19,8 +19,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from field_dat import decode_ops, decompress_dat, load_field_dat, slice_sections  # noqa: E402
-from lzs import compress_all_with_header as compress  # noqa: E402
+from field_dat import decode_ops, load_field_dat  # noqa: E402
+from field_dat_write import write_field_dat  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E402
 
 
@@ -46,33 +46,30 @@ def remove_dskcg_from_script(script_raw: bytes) -> tuple[bytes, int]:
 
 def remove_dskcg_from_field(field_raw: bytes, field_name: str) -> tuple[bytes, int]:
     """Remove all DSKCG operations from a field file.
-    
+
     Returns (new_field_raw, total_dskcg_removed).
     """
-    # Decompress
-    dec = decompress_dat(field_raw)
-    
     # Parse field structure
     field_dat = load_field_dat(field_raw, field_name)
-    
+
     # Get all script slots
     total_removed = 0
     modified_scripts: dict[tuple[str, int], bytes] = {}
-    
+
     for script in field_dat.scripts:
         new_raw, removed = remove_dskcg_from_script(script.raw)
         if removed > 0:
             total_removed += removed
             modified_scripts[(script.entity, script.slot)] = new_raw
             print(f"    {script.entity} slot {script.slot}: Removed {removed} DSKCG")
-    
+
     if total_removed == 0:
         return field_raw, 0
-    
-    # Rebuild the field file with modified scripts
-    # This is complex - we need to rebuild section 0 (scripts section)
-    # For now, return error - need to implement section rebuild
-    raise NotImplementedError("Section rebuild not yet implemented - use Makou Reactor for now")
+
+    # Rebuild the field file (recomputes offset tables, AKAO pointers, header,
+    # and recompresses to LZS) via the generic splicer.
+    new_field_raw = write_field_dat(field_dat, modified_scripts)
+    return new_field_raw, total_removed
 
 
 def main() -> int:

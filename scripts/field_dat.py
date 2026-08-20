@@ -103,6 +103,7 @@ class ScriptSlot:
     entity: str
     slot: int
     raw: bytes
+    start: int = 0  # byte offset within section1 (scripts section); 0 if unknown
 
     def ops(self) -> list[str]:
         return [fmt_op(r, n) for r, n in decode_ops(self.raw)]
@@ -122,13 +123,25 @@ class FieldDat:
     akao: bytes
     author: str
     version: int
+    # Layout metadata (byte offsets within sections[0]) needed by field_dat_write.py
+    # to splice script slots without reparsing everything from scratch.
+    nb: int = 0
+    sc: int = 0
+    nb_akao: int = 0
+    akao_tbl_off: int = 0
+    pos_scripts: int = 0
+    pos_texts_val: int = 0
+    pos_akao_val: int = 0
+    pos_after: int = 0
 
     @property
     def section_sizes(self) -> dict[str, int]:
         return {SECTION_NAMES[i]: len(self.sections[i]) for i in range(7)}
 
 
-def _parse_section1(sec: bytes) -> tuple[int, str, list[str], list[ScriptSlot], bytes, list[bytes], int, bytes]:
+def _parse_section1(sec: bytes) -> tuple[
+    int, str, list[str], list[ScriptSlot], bytes, list[bytes], int, bytes, dict
+]:
     version = struct.unpack_from("<H", sec, 0)[0]
     nb = sec[2]
     pos_texts = struct.unpack_from("<H", sec, 4)[0]
@@ -173,14 +186,24 @@ def _parse_section1(sec: bytes) -> tuple[int, str, list[str], list[ScriptSlot], 
         for j in range(sc):
             if positions[j + 1] > positions[j]:
                 blob = sec[positions[j] : positions[j + 1]]
-                slots.append(ScriptSlot(name, j, blob))
+                slots.append(ScriptSlot(name, j, blob, start=positions[j]))
 
     texts_blob = (
         sec[pos_texts:pos_akao] if pos_akao >= pos_texts else sec[pos_texts:]
     )
     entries, pad = _parse_texts(texts_blob)
     akao = sec[pos_akao:] if pos_akao < len(sec) else b""
-    return version, author, entities, slots, texts_blob, entries, pad, akao
+    meta = dict(
+        nb=nb,
+        sc=sc,
+        nb_akao=nb_akao,
+        akao_tbl_off=cur + 8 * nb,
+        pos_scripts=pos_scripts,
+        pos_texts_val=pos_texts,
+        pos_akao_val=pos_akao,
+        pos_after=pos_after,
+    )
+    return version, author, entities, slots, texts_blob, entries, pad, akao, meta
 
 
 def _parse_texts(blob: bytes) -> tuple[list[bytes], int]:
@@ -212,7 +235,7 @@ def load_field_dat(data: bytes, path: str | None = None) -> FieldDat:
     raw_size = len(data)
     dat = decompress_dat(data)
     sections = slice_sections(dat)
-    ver, author, ents, slots, texts, entries, pad, akao = _parse_section1(
+    ver, author, ents, slots, texts, entries, pad, akao, meta = _parse_section1(
         sections[0]
     )
     return FieldDat(
@@ -228,6 +251,7 @@ def load_field_dat(data: bytes, path: str | None = None) -> FieldDat:
         akao=akao,
         author=author,
         version=ver,
+        **meta,
     )
 
 
