@@ -18,14 +18,16 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-PINNED_COMMIT = sys.argv[1] if len(sys.argv) > 1 else "11d6a8d"
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+SWAP_ORDER = "--swap-order" in sys.argv[1:]
+PINNED_COMMIT = ARGS[0] if ARGS else "11d6a8d"
 CSR_REPO = REPO_ROOT.parent / "Final-Fantasy-7-CSR"
 # build_playtest_bin.py looks for the CSR repo as a sibling of its own repo
 # root, so the worktree must live next to CSR_REPO too (no symlink needed).
 WORKTREE = CSR_REPO.parent / ".ff7-aug7-build-tmp"
 BUILT_BIN = "ff7_d1_playtest_csr_sd_movies.bin"
 BUILT_CUE = "ff7_d1_playtest_csr_sd_movies.cue"
-OUT_STEM = f"{PINNED_COMMIT}-repro"
+OUT_STEM = f"{PINNED_COMMIT}-repro" + ("-swapped" if SWAP_ORDER else "")
 OUT_BIN = REPO_ROOT / f"workspace/iso-extract/{OUT_STEM}.bin"
 OUT_CUE = REPO_ROOT / f"workspace/iso-extract/{OUT_STEM}.cue"
 
@@ -86,6 +88,45 @@ def repoint_stale_layer_paths(worktree: Path):
     print(f"repointed layers -> core={core_dir}, movies={movie_dir}")
 
 
+def swap_apply_order(worktree: Path):
+    """DIAGNOSTIC ONLY: swap this commit's build_playtest_bin.py so
+    manip-movies is applied BEFORE the single-disc main pack (matching the
+    production builder's addonApplyRank fix: movies=10, single-disc-on-csr=20,
+    introduced in 6ba3f34's finding docs/findings/2026-08-13-path-fmv-movies-pack-clobber.md).
+    This dev script never got that reordering, so it may be reproducing a
+    bug that's already fixed in the real builder pipeline."""
+    script = worktree / "mods/single-disc/scripts/build_playtest_bin.py"
+    text = script.read_text(encoding="utf-8")
+    old = (
+        '    print("2/3 single-disc main pack...")\n'
+        '    apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))\n'
+        '    print("   ", len(img), "bytes")\n'
+        '    j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")\n'
+        '    van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")\n'
+        '    print("   JAIROFAL after main size", len(j_core), "(still D1-family until movies)")\n'
+        '\n'
+        '    print("3/3 manip-movies v0.1.2 cumulative (seed + LBA 250450)...")\n'
+        '    apply_layer(img, json.loads(movie_layer.read_text(encoding="utf-8")))\n'
+        '    print("   ", len(img), "bytes")\n'
+    )
+    new = (
+        '    print("2/3 manip-movies v0.1.2 cumulative (seed + LBA 250450) [SWAPPED FIRST]...")\n'
+        '    apply_layer(img, json.loads(movie_layer.read_text(encoding="utf-8")))\n'
+        '    print("   ", len(img), "bytes")\n'
+        '\n'
+        '    print("3/3 single-disc main pack [SWAPPED SECOND]...")\n'
+        '    apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))\n'
+        '    print("   ", len(img), "bytes")\n'
+        '    j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")\n'
+        '    van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")\n'
+        '    print("   JAIROFAL after main size", len(j_core), "(still D1-family until movies)")\n'
+    )
+    if old not in text:
+        sys.exit("FAIL: --swap-order could not find expected apply-order block to patch")
+    script.write_text(text.replace(old, new), encoding="utf-8")
+    print("SWAPPED apply order -> movies then single-disc main pack")
+
+
 def main():
     if not CSR_REPO.exists():
         sys.exit(f"FAIL: CSR repo not found at {CSR_REPO}")
@@ -107,6 +148,8 @@ def main():
         link_or_copy(f, worktree_pristine / f.name)
 
     repoint_stale_layer_paths(WORKTREE)
+    if SWAP_ORDER:
+        swap_apply_order(WORKTREE)
 
     try:
         run(
