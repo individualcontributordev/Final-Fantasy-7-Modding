@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
-  "id": "single-disc-on-csr",
-  "description": "v0.1.3.2: fix DSKCG-removal jump-offset corruption (field 103/BLACKBGB Forward-N-bytes)",
+  "id": "single-disc-on-csr-disc1-v0.2.0",
+  "description": "Single-disc rebuild-from-scratch v0.2.0: CSR D1 + D2/D3 field merge (9 rework + 66 safe) + 19 DSKCG removed + SNOVA D3-to-D1 inject",
   "target": "disc-image",
   "stats": {
     "originalBytes": 747435024,
