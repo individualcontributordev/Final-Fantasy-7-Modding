@@ -19,28 +19,118 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from field_dat import decode_ops, load_field_dat  # noqa: E402
+from field_dat import OPCODE_NAMES, load_field_dat, op_size  # noqa: E402
 from field_dat_write import write_field_dat  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E402
 
+# (byte offset of the jump field within the opcode's raw bytes, field width in
+# bytes, jumpShift, is_backward) -- verified against Makou Reactor's
+# Opcode.h struct layouts and Opcode::jumpShift()/Opcode::jump().
+JUMP_INFO: dict[str, tuple[int, int, int, bool]] = {
+    "JMPF": (1, 1, 1, False),
+    "JMPFL": (1, 2, 1, False),
+    "JMPB": (1, 1, 0, True),
+    "JMPBL": (1, 2, 0, True),
+    "IFUB": (5, 1, 5, False),
+    "IFUBL": (5, 2, 5, False),
+    "IFSW": (7, 1, 7, False),
+    "IFSWL": (7, 2, 7, False),
+    "IFUW": (7, 1, 7, False),
+    "IFUWL": (7, 2, 7, False),
+    "IFKEY": (3, 1, 3, False),
+    "IFKEYON": (3, 1, 3, False),
+    "IFKEYOFF": (3, 1, 3, False),
+    "IFPRTYQ": (2, 1, 2, False),
+    "IFMEMBQ": (2, 1, 2, False),
+}
+
+
+def _read_jump_raw(raw: bytes, offset: int, width: int) -> int:
+    return raw[offset] if width == 1 else int.from_bytes(raw[offset : offset + width], "little")
+
+
+def _write_jump_raw(raw: bytearray, offset: int, width: int, value: int) -> None:
+    if width == 1:
+        raw[offset] = value
+    else:
+        raw[offset : offset + width] = value.to_bytes(width, "little")
+
 
 def remove_dskcg_from_script(script_raw: bytes) -> tuple[bytes, int]:
-    """Remove all DSKCG (0x0E) operations from a script slot.
-    
+    """Remove all DSKCG (0x0E) operations from a script slot, fixing up any
+    JMPF/JMPFL/JMPB/JMPBL/IFxx jump targets whose relative byte offset would
+    otherwise be broken by the deleted bytes.
+
+    Deleting an opcode shifts the byte position of everything after it, so a
+    jump instruction whose target lies past a removed DSKCG (or whose own
+    position moved) must have its relative offset re-encoded -- otherwise it
+    silently points at the wrong byte and Makou shows a raw "Forward N
+    byte(s)"/"Back N byte(s)" instead of "Goto label X".
+
     Returns (new_script_bytes, dskcg_count_removed).
     """
-    ops = decode_ops(script_raw)
+    # Decode ops with their absolute start offset in the original script.
+    ops: list[tuple[int, bytes, str]] = []
+    pos = 0
+    while pos < len(script_raw):
+        op = script_raw[pos]
+        sz = max(op_size(script_raw, pos), 1)
+        raw = script_raw[pos : pos + sz]
+        name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else f"OP{op:02X}"
+        ops.append((pos, raw, name))
+        pos += sz
+    end = pos
+
+    if not any(raw[0] == 0x0E for _, raw, _ in ops):
+        return script_raw, 0
+
+    # old_boundaries[i] -> new_boundaries[i]: maps every original instruction
+    # start (plus the trailing end-of-script sentinel) to its position in the
+    # compacted script, collapsing removed DSKCG starts onto whatever now
+    # follows them (same technique as field_dat_write.py's boundary_map).
+    old_boundaries = [p for p, _, _ in ops] + [end]
+    new_boundaries: list[int] = [0]
+    survivors: list[tuple[int, bytearray, str]] = []
     removed = 0
-    new_script = bytearray()
-    
-    for raw_bytes, name in ops:
-        if raw_bytes[0] == 0x0E:  # DSKCG opcode
+    cur = 0
+    for start, raw, name in ops:
+        if raw[0] == 0x0E:  # DSKCG opcode
             removed += 1
-            # Skip this operation entirely
+            new_boundaries.append(cur)
             continue
-        # Keep all other operations
-        new_script.extend(raw_bytes)
-    
+        cur += len(raw)
+        survivors.append((start, bytearray(raw), name))
+        new_boundaries.append(cur)
+
+    boundary_map = dict(zip(old_boundaries, new_boundaries))
+
+    for start, raw, name in survivors:
+        info = JUMP_INFO.get(name)
+        if info is None:
+            continue
+        offset, width, shift, is_back = info
+        raw_val = _read_jump_raw(bytes(raw), offset, width)
+        old_target = start - raw_val if is_back else start + raw_val + shift
+        if old_target not in boundary_map:
+            raise ValueError(
+                f"{name} at old offset {start}: jump target {old_target} is not "
+                "an instruction boundary -- cannot fix up after DSKCG removal"
+            )
+        new_target = boundary_map[old_target]
+        new_start = boundary_map[start]
+        new_val = new_start - new_target if is_back else new_target - new_start - shift
+        max_val = (1 << (8 * width)) - 1
+        if not (0 <= new_val <= max_val):
+            raise ValueError(
+                f"{name} at old offset {start}: fixed-up jump value {new_val} "
+                f"out of range for a {width}-byte field after DSKCG removal"
+            )
+        _write_jump_raw(raw, offset, width, new_val)
+
+    new_script = bytearray()
+    for _, raw, _ in survivors:
+        new_script.extend(raw)
+
     return bytes(new_script), removed
 
 

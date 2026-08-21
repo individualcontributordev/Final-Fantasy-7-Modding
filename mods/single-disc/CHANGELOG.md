@@ -1,3 +1,42 @@
+## 0.1.3.2 — 2026-08-21
+
+**Fixes field 103 (BLACKBGB) jump corruption in v0.1.3.1**, found via human
+playtest with Makou Reactor: several opcodes showed a raw "Forward 87
+byte(s)" jump target instead of "Goto label X" — a jump pointing at a
+non-instruction byte.
+
+- **Root cause**: `remove_dskcg.py`'s `remove_dskcg_from_script` deleted
+  DSKCG (0x0E, "Ask for disc") opcode bytes from a script slot but never
+  fixed up the relative byte offsets encoded in `JMPF`/`JMPFL`/`JMPB`/
+  `JMPBL`/`IFUB`/`IFUBL`/`IFSW`/`IFSWL`/`IFUW`/`IFUWL`/`IFKEY`/`IFKEYON`/
+  `IFKEYOFF`/`IFPRTYQ`/`IFMEMBQ` opcodes elsewhere in the same slot. Every
+  one of these encodes its jump target as a byte count relative to its own
+  position; deleting bytes before or inside that span shifts everything
+  after it, so any jump whose source or target moved no longer lands on an
+  instruction boundary. `BLACKBGB` (field 103) has 4 DSKCG removed — the
+  most of any field — so it was hit hardest, but `BLACKBGE` (1 removed)
+  and `BLACKBG3` (14 removed) had the same latent bug.
+- **Fix**: `remove_dskcg_from_script` now tracks the old→new byte-offset
+  mapping for every surviving instruction as DSKCG ops are dropped (same
+  boundary-map technique as `field_dat_write.py`'s slot splicer), then
+  re-encodes every remaining jump/if opcode's offset field against the
+  compacted script. Opcode field layouts (offset, width, `jumpShift`,
+  forward/backward) verified against Makou Reactor's `Opcode.h` struct
+  definitions and `Opcode::jump()`/`Opcode::jumpShift()`/`Opcode::setJump()`
+  in `workspace/makoureactor/src/core/field/Opcode.cpp`.
+- Re-ran `build_work_bin.py` (DSKCG count unchanged: 19 removed, 0
+  remaining) and re-diffed against the CSR base per the v0.1.3.1 fix.
+  Verified all 974 jump/if opcodes across the 12 rework/DSKCG-touched
+  fields in the full 9-addon stack resolve to real instruction boundaries
+  (previously unverified — this is exactly the check that would have
+  caught the bug).
+- Added `tests/test_single_disc_stack.py::test_dskcg_fields_parse_with_no_bad_jumps`.
+  Also fixed a stale assertion in `test_rework_fields_parse_and_match_csr_source`
+  that incorrectly expected `BLACKBGB` to byte-match CSR D1 exactly post-stack
+  (it can't — DSKCG removal intentionally changes it after the whole-file
+  copy); that test had never actually run due to a pre-existing fixture
+  mismatch, so the bad assertion shipped unnoticed.
+
 ## 0.1.3.1 — 2026-08-20
 
 **Fixes real layer corruption in v0.1.3**, found via human playtest: no

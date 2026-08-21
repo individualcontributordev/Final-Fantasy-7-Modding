@@ -227,8 +227,8 @@ def test_rework_fields_parse_and_match_csr_source(stacked, csr_d1_bytes, csr_d2_
     pristine silently kept the stale CSR base byte instead. This corrupted
     BLACKBGB/LOST2/NIVGATE (unparseable FIELD.DAT) and desynced BUGIN1A/
     RCKTIN2/RCKTIN7. Every field touched by the rework/safe merges must parse
-    cleanly and, for the whole-file fields, byte-match its intended CSR
-    source exactly."""
+    cleanly and, for the whole-file fields not further modified by DSKCG
+    removal, byte-match its intended CSR source exactly."""
     import sys
 
     if str(scripts_dir) not in sys.path:
@@ -237,8 +237,10 @@ def test_rework_fields_parse_and_match_csr_source(stacked, csr_d1_bytes, csr_d2_
 
     extract_file, _ = iso_api
 
+    # BLACKBGB is intentionally NOT byte-identical to CSR D1 post-stack: the
+    # whole-file rework merge copies it from CSR D1, then DSKCG removal
+    # strips its "Ask for disc" ops -- see test below for that field.
     whole_file_fields = {
-        "BLACKBGB": 1,
         "COS_BTM": 1,
         "COS_BTM2": 1,
         "DEL1": 1,
@@ -256,6 +258,64 @@ def test_rework_fields_parse_and_match_csr_source(stacked, csr_d1_bytes, csr_d2_
     for field in slot_splice_fields:
         data = extract_file(stacked, f"FIELD/{field}.DAT")
         load_field_dat(data)  # must not raise
+
+
+def test_dskcg_fields_parse_with_no_bad_jumps(stacked, iso_api, scripts_dir):
+    """Regression for v0.1.3.1->v0.1.3.2: remove_dskcg.py deleted DSKCG (0x0E)
+    bytes without fixing up JMPF/JMPFL/JMPB/JMPBL/IFxx jump offsets elsewhere
+    in the same script slot. Any jump crossing the deleted bytes then pointed
+    at a non-instruction-boundary byte, which Makou Reactor renders as a raw
+    "Forward N byte(s)"/"Back N byte(s)" instead of "Goto label X" -- visibly
+    corrupting field 103 (BLACKBGB). Verify every jump in the DSKCG-touched
+    fields resolves to a real instruction start, and DSKCG is fully gone."""
+    import sys
+
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from field_dat import OPCODE_NAMES, load_field_dat, op_size
+
+    extract_file, _ = iso_api
+
+    jump_info = {
+        "JMPF": (1, 1, 1, False), "JMPFL": (1, 2, 1, False),
+        "JMPB": (1, 1, 0, True), "JMPBL": (1, 2, 0, True),
+        "IFUB": (5, 1, 5, False), "IFUBL": (5, 2, 5, False),
+        "IFSW": (7, 1, 7, False), "IFSWL": (7, 2, 7, False),
+        "IFUW": (7, 1, 7, False), "IFUWL": (7, 2, 7, False),
+        "IFKEY": (3, 1, 3, False), "IFKEYON": (3, 1, 3, False), "IFKEYOFF": (3, 1, 3, False),
+        "IFPRTYQ": (2, 1, 2, False), "IFMEMBQ": (2, 1, 2, False),
+    }
+
+    for field in ["BLACKBGB", "BLACKBGE", "BLACKBG3"]:
+        data = extract_file(stacked, f"FIELD/{field}.DAT")
+        fd = load_field_dat(data)
+        for sc in fd.scripts:
+            blob = sc.raw
+            starts = []
+            pos = 0
+            while pos < len(blob):
+                starts.append(pos)
+                pos += max(op_size(blob, pos), 1)
+            boundaries = set(starts) | {len(blob)}
+            pos = 0
+            while pos < len(blob):
+                op = blob[pos]
+                name = OPCODE_NAMES[op] if op < len(OPCODE_NAMES) else ""
+                assert op != 0x0E, f"{field} {sc.entity} slot {sc.slot}: DSKCG not removed"
+                info = jump_info.get(name)
+                if info:
+                    off, width, shift, is_back = info
+                    raw_val = (
+                        blob[pos + off]
+                        if width == 1
+                        else int.from_bytes(blob[pos + off : pos + off + width], "little")
+                    )
+                    target = pos - raw_val if is_back else pos + raw_val + shift
+                    assert target in boundaries, (
+                        f"{field} {sc.entity} slot {sc.slot}: {name} at {pos} "
+                        f"jumps to non-boundary offset {target}"
+                    )
+                pos += max(op_size(blob, pos), 1)
 
 
 def test_d1d2_lost2_music_unmute(stacked, iso_api, csr_d1_bytes, csr_d2_bytes, scripts_dir):
