@@ -10,7 +10,11 @@ Pipeline, on top of CSR D1 as the base:
      merge_safe_fields.py.
   3. Remove DSKCG ("Ask for disc") ops from BLACKBGB/BLACKBGE/BLACKBG3
      (expect 19 total: 4 + 1 + 14) via remove_dskcg.py's splicer.
-  4. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
+  4. Force LOST2's D1->D2 break-scene IFUW gate open (Var[13][0]==0xa455
+     check before MAPJUMP to COS_BTM2) via force_lost2_break_ifuw.py --
+     this GM flag is never set on single-disc, so without this the break
+     scene / disc-2 prompt never fires.
+  5. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
      via inject_snova_d3_to_d1.py.
 
 This produces the merged single-disc-on-csr work .bin -- NOT a final release
@@ -42,6 +46,8 @@ from merge_rework_fields import (  # noqa: E402
 )
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from remove_dskcg import remove_dskcg_from_field  # noqa: E402
+from force_lost2_break_ifuw import force_lost2_ifuw  # noqa: E402
+from lzs import compress_all_with_header, decompress_all_with_header  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
 EXPECTED_DSKCG_TOTAL = 19
@@ -98,6 +104,22 @@ def apply_dskcg_removal(img: bytearray, fields: list[str] | None = None) -> int:
     return total
 
 
+def apply_lost2_break_fix(img: bytearray) -> int:
+    print("\nForcing LOST2 D1->D2 break-scene IFUW gate open...")
+    path = "FIELD/LOST2.DAT"
+    raw = extract_file(img, path)
+    dec = bytearray(decompress_all_with_header(raw))
+    forced = force_lost2_ifuw(dec)
+    if not forced:
+        print("  no gate cleared (already open, or pattern not found)")
+        return 0
+    for off, old in forced:
+        print(f"  force IFUW else-byte @{off:#x}: {old:#x} -> 0x00")
+    new_raw = compress_all_with_header(bytes(dec))
+    replace_file_within_sectors(img, path, new_raw)
+    return len(forced)
+
+
 def inject_snova(work_bin: Path) -> None:
     print("\nInjecting SNOVA D3 -> D1...")
     d3 = pristine_bin(3)
@@ -131,6 +153,7 @@ def main() -> int:
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
     dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
     apply_dskcg_removal(img, fields=dskcg_fields)
+    apply_lost2_break_fix(img)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(img)
