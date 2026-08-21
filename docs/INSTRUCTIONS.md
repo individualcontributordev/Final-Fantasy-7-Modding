@@ -1,72 +1,66 @@
-# Task: Retest single-disc v0.1.3.2 (fixes field 103/BLACKBGB jump corruption)
+# Task: Retest D1→D2 disc-swap hang fix (v0.1.3.3 / manip-movies v0.1.5)
 
 ## Why
 
-Your v0.1.3.1 playtest found field 103 (BLACKBGB) still broken — Makou
-Reactor showed opcodes like "Forward 87 byte(s)" instead of "Goto label X",
-meaning a jump instruction's target no longer lands on a real instruction.
-Root cause confirmed and fixed:
+Your last playtest hung at the D1→D2 transition: black screen, no "Insert
+Disc 2" prompt, DuckStation log showed normal reads then a hard backward
+seek to LBA 68314 (`13:02:57`) and FPS 0.00 forever.
 
-`remove_dskcg.py` deleted DSKCG ("Ask for disc") opcode bytes from a script
-slot but never fixed up the byte offsets encoded in the jump/if opcodes
-(`JMPF`, `JMPFL`, `JMPB`, `JMPBL`, `IFUB`, `IFUBL`, `IFSW`, `IFSWL`, `IFUW`,
-`IFUWL`, `IFKEY`, `IFKEYON`, `IFKEYOFF`, `IFPRTYQ`, `IFMEMBQ`) elsewhere in
-the same slot. Those opcodes encode their target as a byte count relative
-to their own position; deleting bytes shifts everything after them, so any
-jump whose source or target moved landed on the wrong byte. `BLACKBGB` has
-4 DSKCG removed (most of any field), so it broke worst, but `BLACKBGE` (1)
-and `BLACKBG3` (14) had the same latent bug.
+Root cause: field #779 (`MD8_52`) plays a `PMVIE`/`MOVIE` FMV (Cloud-position
+cutscene, `NRCRL.MOV` on CSR Disc 2) right before jumping into the D1→D2
+break. That FMV has to be copied onto the Disc 1 image's `MTNVL2.STR` movie
+slot for a single-disc build to find it. This inject (and 4 siblings for
+`MD8_5`/`FSHIP_12`) was implemented back in single-disc v0.1.21–23 and
+folded into the `single-disc-csr-manip-movies-v0.1.4` pack, but somewhere
+after that it silently dropped out of the pack — `MOVIE/MTNVL2.STR` was
+still stock D1 content, so the engine tried to stream data that didn't
+match what the field script expected, and the CD-ROM stalled. No prompt
+appears because the hang is *before* the disc-swap fields are ever reached.
 
-**Fix (v0.1.3.2):** `remove_dskcg_from_script` now remaps every surviving
-jump/if opcode's offset against the compacted script as DSKCG ops are
-dropped. Verified all 974 jump/if opcodes across the 12 rework/DSKCG fields
-in the full stack resolve to real instruction boundaries (0 bad, previously
-unverified). Field layouts checked against Makou Reactor's own `Opcode.h`/
-`Opcode.cpp` source in this repo.
+**Fix:** new `single-disc-csr-manip-movies-v0.1.5` pack — a delta pack that
+applies right after v0.1.4 and restores the 5 missing injects: `NRCRLB`→
+`NIVLSFS.MOV` (MD8_5), `NRCRL`→`MTNVL2.STR` (MD8_52 — the hang fix),
+`PARASHOT`→`OPENINGE.MOV`, `METEOFIX`→`MTCRL.STR`, `METEOSKY`→`MTNVL.STR`
+(FSHIP_12). v0.1.4 stays enabled/auto-included as before; v0.1.5 chains on
+top of it automatically.
 
-`verify_builder_config.py` confirms the full 9-addon stack (base +
-single-disc-on-csr v0.1.3.2 + manip-movies + 7 endings parts) applies
-cleanly: 4,268,672 total records, no conflicts.
+`verify_builder_config.py` confirms the full 10-addon stack (base +
+single-disc-on-csr + manip-movies v0.1.4 + v0.1.5 + 7 endings parts) applies
+cleanly: 4,978,843 total records. Confirmed programmatically that
+`MOVIE/MTNVL2.STR` byte-matches pristine D2 `NRCRL.MOV` after the full stack
+is applied.
 
 ## What you do
 
-1. Open a **private/incognito browser window** (avoid any stale cache —
-   version bumped to 0.1.3.2 so your browser won't reuse the broken layer).
+1. Open a **private/incognito browser window** (avoid stale cache).
 2. Go to https://individualcontributor.dev/builder/.
 3. Base: CSR. Mods: Single-disc only (CSR+ off). Build Disc 1.
-4. Check the builder's "applied" list — confirm `single-disc-on-csr` shows
-   version `0.1.3.2` (not `0.1.3.1`).
-5. In Makou Reactor, open the built bin → FIELD folder → `BLACKBGB.DAT` →
-   Field editor → Script editor. Confirm every jump opcode shows
-   "Goto label N" (or "If ... Goto label N"), never a raw "Forward N
-   byte(s)"/"Back N byte(s)". Spot-check `BLACKBGE.DAT` and `BLACKBG3.DAT`
-   the same way.
-6. Quit DuckStation fully if it was already open, then start fresh (no
-   cheat engine / speedhack).
-7. Play through the D1→D2 story break (LOSIN2 → LOST2, near the end of the
-   Corel/Rocket Town sequence) — confirm you get the save/disc-change
-   prompt, and that field 634 (forest near Cosmo Canyon) loads correctly
-   with music and the break-scene cutscene.
-8. Trigger the Supernova (SNOVA) materia/summon in battle — confirm it
-   plays and doesn't freeze or garble.
-9. Load field 637 and trigger the cannon movie (CANONON) — listen for
-   audio flicker/crackle (should be clean, unaffected by this fix).
-10. If reachable, play through to the ending and check the credits movies
-    play correctly.
+4. Check the builder's "applied" list — confirm you see **both**
+   `single-disc-csr-manip-movies-v0.1.4` AND `single-disc-csr-manip-movies-v0.1.5`.
+5. Quit DuckStation fully if it was already open, start fresh (no cheat
+   engine / speedhack).
+6. Play through to the point just before the D1→D2 transition (the scene
+   right after Diamond Weapon/Cloud approaches the Highwind, field #779
+   MD8_52 / "Cloud position" cutscene).
+7. Confirm the Cloud-position FMV plays (not a freeze), then confirm you
+   get the "Insert Disc 2" prompt (should just continue seamlessly on
+   single-disc — no actual disc swap needed, just no hang).
+8. Continue into field 634 (LOST2, forest near Cosmo Canyon) — confirm it
+   loads with music and the break-scene cutscene plays.
+9. If you'd previously seen the FSHIP_12/PARASHOT (Cloud Highwind meteor
+   scene) or MD8_5/NRCRLB (Diamond Weapon approach) sequences, check those
+   FMVs still play correctly too (they use the same inject mechanism).
 
 ## Evidence (paste)
 
 ```
 Used incognito window: YES
-APPLIED single-disc version shown: (should be 0.1.3.2)
-BLACKBGB.DAT in Makou: all jumps show "Goto label N" / STILL SHOWS "Forward N byte(s)"
-BLACKBGE.DAT / BLACKBG3.DAT spot-check: OK / BAD (describe)
-D1->D2 save/disc-change prompt: APPEARED / MISSING
-Field 634 (LOST2 forest) load: OK / FROZE / OTHER (describe)
-D1->D2 break scene cutscene: OK / MISSING / OTHER (describe)
-SNOVA/Supernova: OK / FAILED TO TRIGGER / GARBLED
-Field 637 (CANONON) audio: CLEAN / FLICKER / OTHER
-Ending/credits movies: PLAYED / MISSING / OTHER (describe)
+APPLIED manip-movies versions shown: (should be BOTH 0.1.4 and 0.1.5)
+MD8_52 Cloud-position FMV: PLAYED / FROZE / OTHER (describe)
+D1->D2 transition: NO HANG / STILL HANGS (describe)
+Field 634 (LOST2 forest) load: OK / FROZE / OTHER
+FSHIP_12/PARASHOT scene: OK / MISSING / OTHER
+MD8_5/NRCRLB scene: OK / MISSING / OTHER
 Load method:
 CE: NO
 notes:
@@ -75,6 +69,8 @@ notes:
 ## When done
 
 Commit this file with evidence, push, say check.
+
+## Prior playtest logs (for reference, now fixed)
 
 duckstation logs
 

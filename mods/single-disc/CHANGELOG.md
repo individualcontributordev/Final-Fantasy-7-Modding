@@ -1,3 +1,39 @@
+## 0.1.3.3 — 2026-08-21
+
+**Fixes D1→D2 disc-swap hang** (freeze on black screen, no "Insert Disc 2"
+prompt, CD-ROM stuck on a big backward seek). Root cause: field #779
+(`MD8_52`) plays a `PMVIE`/`MOVIE` FMV (Cloud-position cutscene) right before
+`MAPJUMP`ing into the D1→D2 break; that FMV must be injected onto the D1
+image (multi-disc engines resolve it from Disc 2 by disc-local movie id).
+This inject — along with 4 siblings (`NRCRLB`/`MD8_5`, `PARASHOT`/
+`METEOFIX`/`METEOSKY`/`FSHIP_12`) — was implemented in
+`single-disc-csr-manip-movies-v0.1.4` back in v0.1.21–23, but the pack was
+never updated after that: `docs/findings/2026-08-13-md8-52-nrcrl-cloud-position.md`
+records the fix, yet it silently dropped out of the movies pack at some
+point before this release, leaving `MOVIE/MTNVL2.STR` (and 3 other D1 movie
+slots) pointing at their original stock content instead of the injected D2
+FMVs. The field script itself (`PMVIE`/`MOVIE` opcodes) was never
+corrupted — only the movie *file* injection was missing, so the engine tried
+to stream an FMV that didn't exist at the expected LBA/size in
+`MINT/MOVIE_ID.BIN`, and the CD-ROM stalled.
+
+- New `single-disc-csr-manip-movies-v0.1.5` pack: a **delta pack that applies
+  after v0.1.4** (100MB GitHub file-size limit made a from-scratch cumulative
+  layer too large), restoring the 5 missing injects: `NRCRLB.MOV`→
+  `NIVLSFS.MOV` (MD8_5 #731), `NRCRL.MOV`→`MTNVL2.STR` (MD8_52 #779 — the
+  disc-swap hang fix), `PARASHOT.MOV`→`OPENINGE.MOV`, `METEOFIX.MOV`→
+  `MTCRL.STR`, `METEOSKY.MOV`→`MTNVL.STR` (all FSHIP_12 #67).
+- `builder/manifest.json`: v0.1.4 stays enabled (its `autoIncludeWhen` is
+  unchanged — auto with Single-disc on CSR when CSR+ off); v0.1.5 chains on
+  top via `autoIncludeWhen.addonSelected = single-disc-csr-manip-movies-v0.1.4`.
+- `single-disc-on-csr` core layer/field-merge pipeline unchanged — verified
+  `MD8_52.DAT`'s `PMVIE 34` / `MOVIE` opcodes were intact all along; this was
+  purely a missing movie-file injection in the movies pack.
+- Verified via `verify_builder_config.py`: full 10-addon stack (base +
+  single-disc-on-csr + manip-movies v0.1.4 + v0.1.5 + 7 endings parts,
+  4,978,843 total records) applies cleanly, and `MOVIE/MTNVL2.STR`
+  byte-matches pristine D2 `NRCRL.MOV` after the full stack is applied.
+
 ## 0.1.3.2 — 2026-08-21
 
 **Fixes field 103 (BLACKBGB) jump corruption in v0.1.3.1**, found via human
