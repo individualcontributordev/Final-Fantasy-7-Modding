@@ -1,21 +1,27 @@
-# Task: Build Single-disc v0.2.0 work bin directly (D2 fields only, bypass builder site)
+# Task: Build Single-disc v0.2.0 work bin, D1+D2 CSR only, BLACKBGB-only DSKCG strip
 
 ## Why
 
-v0.2.0 (both the builder-site build and a direct local rebuild) failed at
-the Disc 1→2 transition: field #103 (BLACKBGB) does not prompt to save or
-jump into the CSR Disc-2 break scene. To isolate whether CSR Disc 3's
-"safe" field edits are interfering with the transition, this pass builds
-with `--d2-only-fields`, which **skips all CSR Disc 3 field edits** in the
-bulk safe-field merge (62/62 D2-only fields applied instead of 66/66
-D2+D3). The 9-field rework merge (BLACKBGB/COS_BTM/COS_BTM2/DEL1/
-JUNAIR2/LOST2/BUGIN1A/NIVGATE/RCKTIN2) and SNOVA (from pristine D3) are
-unchanged — only the D3-only "safe" field swaps are removed.
+Both prior v0.2.0 builds (builder-site, and the D2-only-fields direct
+rebuild which ruled out CSR Disc 3 field edits) still failed at the
+Disc 1→2 transition: field #103 (BLACKBGB) does not prompt to save or
+jump into the CSR Disc-2 break scene. Since D3 field edits and the SNOVA
+D3→D1 inject are now ruled out as the cause (D2-only build still broken),
+this pass narrows further: it keeps `--d2-only-fields` (no CSR D3 field
+edits at all) and adds `--blackbgb-only-dskcg`, which strips DSKCG
+**only from BLACKBGB** (4 ops) and leaves BLACKBGE/BLACKBG3 completely
+untouched (their DSKCG stays in, at 1 + 14 ops respectively). This
+isolates whether `remove_dskcg_from_script`'s jump-offset patching in
+BLACKBGB specifically is corrupting the branch that fires the break
+scene, independent of anything happening in the other two disc-hub
+fields.
 
-If BLACKBGB's break scene now fires correctly, a CSR D3 field edit is the
-regression source and we can bisect from there. If it's still broken,
-D3 fields are ruled out and the bug is in the rework merge, DSKCG
-removal, or SNOVA/BATTLE.X remap.
+If BLACKBGB's break scene now fires correctly, the bug was in the
+DSKCG-removal/jump-fixup interaction between BLACKBGB and one of the
+other two fields (unlikely, but would be surprising) — more likely,
+if it's *still* broken, the bug is in the DSKCG jump-offset fixup
+logic itself for BLACKBGB, or in the 9-field rework merge's BLACKBGB
+whole-file replacement (CSR D1) not containing what we think it does.
 
 ## Prerequisites
 
@@ -30,33 +36,35 @@ removal, or SNOVA/BATTLE.X remap.
 
 1. `git pull --ff-only` in this repo (and in the CSR repo if you keep it
    up to date separately).
-2. Build the work bin with D3 field edits excluded:
+2. Build the work bin with D3 field edits excluded and only BLACKBGB's
+   DSKCG stripped:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v0.2.0-d2only-direct.bin --d2-only-fields
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v0.2.0-d1d2-bgbonly.bin --d2-only-fields --blackbgb-only-dskcg
    ```
 
    This applies the 9-field rework merge (D1/D2 only, unchanged), the
    safe-field merge **restricted to CSR D2** (expect "Applied 62/62 safe
-   field merges" — down from 66/66 since 4 D3-only fields are now
-   skipped), DSKCG removal (expect "Total DSKCG removed: 19"), and the
-   SNOVA D3→D1 inject (still uses pristine D3, unaffected by this flag).
-   Watch for any `WARNING` lines in the output and paste them into
-   evidence below if present.
+   field merges"), DSKCG removal **only from BLACKBGB** (expect
+   "Removing DSKCG ('Ask for disc') ops from ['BLACKBGB']..." and
+   "Total DSKCG removed: 4" — BLACKBGE/BLACKBG3 are left completely
+   untouched this pass), and the SNOVA D3→D1 inject (still uses pristine
+   D3, unaffected by these flags). Watch for any `WARNING` lines in the
+   output and paste them into evidence below if present.
 3. A matching `.cue` has already been generated at
-   `workspace/iso-extract/single-disc-v0.2.0-d2only-direct.cue`. If you
+   `workspace/iso-extract/single-disc-v0.2.0-d1d2-bgbonly.cue`. If you
    rebuild the `.bin` yourself and need to regenerate it:
 
    ```bash
    python3 -c "
 from pathlib import Path
-b = Path('workspace/iso-extract/single-disc-v0.2.0-d2only-direct.bin')
+b = Path('workspace/iso-extract/single-disc-v0.2.0-d1d2-bgbonly.bin')
 c = b.with_suffix('.cue')
 c.write_text('FILE \"%s\" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' % b.name, encoding='utf-8')
 print('WROTE', c, c.read_text())
 "
    ```
-4. Open `workspace/iso-extract/single-disc-v0.2.0-d2only-direct.cue` in
+4. Open `workspace/iso-extract/single-disc-v0.2.0-d1d2-bgbonly.cue` in
    DuckStation fresh (no cheats/speedhack, no save state from an older
    build).
 5. Play a normal early-game sequence to confirm baseline sanity:
