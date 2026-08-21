@@ -1,17 +1,21 @@
-# Task: Build Single-disc v0.2.0 work bin directly (bypass builder site)
+# Task: Build Single-disc v0.2.0 work bin directly (D2 fields only, bypass builder site)
 
 ## Why
 
-v0.2.0 (built via the builder site) failed at the Disc 1→2 transition:
-field #103 (BLACKBGB) does not prompt to save or jump into the CSR
-Disc-2 break scene. We're isolating whether that's a builder-layer/apply
-bug or a genuine bug in the merge scripts by building the raw work bin
-straight from the Python pipeline (no builder site, no layer diff/apply
-round-trip) and testing that directly in DuckStation.
+v0.2.0 (both the builder-site build and a direct local rebuild) failed at
+the Disc 1→2 transition: field #103 (BLACKBGB) does not prompt to save or
+jump into the CSR Disc-2 break scene. To isolate whether CSR Disc 3's
+"safe" field edits are interfering with the transition, this pass builds
+with `--d2-only-fields`, which **skips all CSR Disc 3 field edits** in the
+bulk safe-field merge (62/62 D2-only fields applied instead of 66/66
+D2+D3). The 9-field rework merge (BLACKBGB/COS_BTM/COS_BTM2/DEL1/
+JUNAIR2/LOST2/BUGIN1A/NIVGATE/RCKTIN2) and SNOVA (from pristine D3) are
+unchanged — only the D3-only "safe" field swaps are removed.
 
-This produces the **same** fields+DSKCG+SNOVA pipeline as v0.2.0
-(`mods/single-disc/scripts/build_work_bin.py`), just built and boot-tested
-locally instead of through https://individualcontributor.dev/builder/.
+If BLACKBGB's break scene now fires correctly, a CSR D3 field edit is the
+regression source and we can bisect from there. If it's still broken,
+D3 fields are ruled out and the bug is in the rework merge, DSKCG
+removal, or SNOVA/BATTLE.X remap.
 
 ## Prerequisites
 
@@ -26,28 +30,33 @@ locally instead of through https://individualcontributor.dev/builder/.
 
 1. `git pull --ff-only` in this repo (and in the CSR repo if you keep it
    up to date separately).
-2. Build the work bin:
+2. Build the work bin with D3 field edits excluded:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v0.2.0-direct.bin
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v0.2.0-d2only-direct.bin --d2-only-fields
    ```
 
-   This applies the 9-field rework merge, the 66-field safe merge, DSKCG
-   removal (expect "Total DSKCG removed: 19"), and the SNOVA D3→D1 inject
-   in one pass. Watch for any `WARNING` lines in the output and paste them
-   into evidence below if present.
-3. Write a matching `.cue` next to it so DuckStation can load it:
+   This applies the 9-field rework merge (D1/D2 only, unchanged), the
+   safe-field merge **restricted to CSR D2** (expect "Applied 62/62 safe
+   field merges" — down from 66/66 since 4 D3-only fields are now
+   skipped), DSKCG removal (expect "Total DSKCG removed: 19"), and the
+   SNOVA D3→D1 inject (still uses pristine D3, unaffected by this flag).
+   Watch for any `WARNING` lines in the output and paste them into
+   evidence below if present.
+3. A matching `.cue` has already been generated at
+   `workspace/iso-extract/single-disc-v0.2.0-d2only-direct.cue`. If you
+   rebuild the `.bin` yourself and need to regenerate it:
 
    ```bash
    python3 -c "
 from pathlib import Path
-b = Path('workspace/iso-extract/single-disc-v0.2.0-direct.bin')
+b = Path('workspace/iso-extract/single-disc-v0.2.0-d2only-direct.bin')
 c = b.with_suffix('.cue')
 c.write_text('FILE \"%s\" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' % b.name, encoding='utf-8')
 print('WROTE', c, c.read_text())
 "
    ```
-4. Open `workspace/iso-extract/single-disc-v0.2.0-direct.bin`'s `.cue` in
+4. Open `workspace/iso-extract/single-disc-v0.2.0-d2only-direct.cue` in
    DuckStation fresh (no cheats/speedhack, no save state from an older
    build).
 5. Play a normal early-game sequence to confirm baseline sanity:

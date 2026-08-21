@@ -19,6 +19,7 @@ layer (still needs diffing into disc1.layer.json via bin_diff_to_layer.py).
 Usage (from repo root):
   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-work.bin
   python3 mods/single-disc/scripts/build_work_bin.py -o OUT.bin --skip-snova
+  python3 mods/single-disc/scripts/build_work_bin.py -o OUT.bin --d2-only-fields
 """
 from __future__ import annotations
 
@@ -58,9 +59,12 @@ def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
         merge_slots(img, field, slot_discs, c1, c2)
 
 
-def apply_safe_field_merge(img: bytearray) -> int:
-    print("\nApplying bulk safe-field merge (non-collision D2/D3 edits)...")
+def apply_safe_field_merge(img: bytearray, d2_only: bool = False) -> int:
+    label = "D2-only" if d2_only else "D2/D3"
+    print(f"\nApplying bulk safe-field merge (non-collision {label} edits)...")
     merges = find_safe_whole_file_merges()
+    if d2_only:
+        merges = {f: d for f, d in merges.items() if d == 2}
     src_imgs = {2: bytes(load_csr_image(2)), 3: bytes(load_csr_image(3))}
     applied = 0
     for field, disc in sorted(merges.items()):
@@ -106,6 +110,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("-o", "--output", type=Path, required=True)
     ap.add_argument("--skip-snova", action="store_true", help="skip SNOVA D3->D1 inject step")
+    ap.add_argument("--d2-only-fields", action="store_true",
+                     help="safe-field merge: only apply CSR D2 fields, skip D3 fields entirely "
+                          "(isolation test for D1->D2 transition regression)")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -116,7 +123,7 @@ def main() -> int:
     print(f"Base: CSR D1 ({len(img):,} bytes)")
 
     apply_rework_merge(img, c1, c2)
-    apply_safe_field_merge(img)
+    apply_safe_field_merge(img, d2_only=args.d2_only_fields)
     apply_dskcg_removal(img)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
