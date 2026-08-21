@@ -1086,9 +1086,9 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.1.3.2",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.1.3.2: Full rebuild-from-scratch field merge (9-field rework merge + 66-field safe bulk D2/D3 merge) + DSKCG removal + SNOVA inject. Fixes v0.1.3.1 DSKCG-removal bug that corrupted jump offsets (field 103/BLACKBGB showed bad 'Forward N byte(s)' jumps in Makou instead of Goto label).",
-      "hint": "CSR. Manip movies + endings auto-apply.",
+      "version": "0.2.0",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.0: from-scratch rebuild reverted to the Aug 7 known-stable logic \u2014 9-field rework merge + 66-field safe bulk D2/D3 merge + DSKCG removal + SNOVA D3\u2192D1 inject. Manip movies and endings are disabled pending re-validation on this new base.",
+      "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.1"
@@ -1097,12 +1097,12 @@
       "discs": {
         "1": "./single-disc-on-csr/layers/disc1.layer.json"
       },
-      "enabled": false,
+      "enabled": true,
       "uiHidden": false,
       "hidden": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc v0.1.3: rebuilt from scratch with automated field-merge tooling (verdict-table rework merge + safe bulk D2/D3 merge) instead of the old manual/hardcoded field lists. Pending playtest confirmation."
+      "betaNote": "v0.2.0: rebuilt from scratch on the Aug 7 known-stable logic. Manip movies and endings are currently disabled while this core is playtested standalone."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.5",
