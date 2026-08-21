@@ -14,7 +14,13 @@ Pipeline, on top of CSR D1 as the base:
      check before MAPJUMP to COS_BTM2) via force_lost2_break_ifuw.py --
      this GM flag is never set on single-disc, so without this the break
      scene / disc-2 prompt never fires.
-  5. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
+  5. Patch FIELD.BIN's/WORLD.BIN's embedded (location,size) lookup table
+     for every field resized by steps 1-4, via fix_field_bin_table.py --
+     without this, ff7tk (Makou Reactor) fails ANY save of the built bin
+     with "Cannot update game binaries" (InvalidError), because its
+     unconditional reorganizeModifiedFilesAfter() searches FIELD.BIN for
+     each field's current directory-record size and finds the stale one.
+  6. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
      via inject_snova_d3_to_d1.py.
 
 This produces the merged single-disc-on-csr work .bin -- NOT a final release
@@ -47,6 +53,7 @@ from merge_rework_fields import (  # noqa: E402
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from remove_dskcg import remove_dskcg_from_field  # noqa: E402
 from force_lost2_break_ifuw import force_lost2_ifuw  # noqa: E402
+from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
 from lzs import compress_all_with_header, decompress_all_with_header  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
@@ -154,6 +161,10 @@ def main() -> int:
     dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
     apply_dskcg_removal(img, fields=dskcg_fields)
     apply_lost2_break_fix(img)
+
+    print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
+    fixed = fix_field_and_world_bins(img)
+    print(f"  Total table entries patched: {fixed}")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(img)
