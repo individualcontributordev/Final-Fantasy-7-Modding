@@ -1,28 +1,29 @@
-# Task: Bisect — test commit 78e2cff (v0.1.21, midpoint of dc24cb1..a6a14df)
+# Task: Bisect — test commit 8e1f569 (regression test suite commit,
+# midpoint of 78e2cff..a6a14df)
 
 ## Why
 
 Two separate regressions are being tracked, since they diverged between
 `a6b800a` and `main`:
 
-- **Disc-2-prompt regression**: on `11d6a8d` and `dc24cb1` the D1→D2
-  transition goes straight to the break scene (correct single-disc
-  behavior, no disc-swap prompt). Confirmed **reproduces** (shows "insert
-  disc 2") on `a6a14df` — so the regression is somewhere in
-  `dc24cb1..a6a14df` (14 commits). Makou save still works fine on
-  `a6a14df` though.
+- **Disc-2-prompt regression**: confirmed **absent** (works correctly,
+  goes straight to break scene) on `78e2cff` (v0.1.21). Confirmed
+  **reproduces** (shows "insert disc 2") on `a6a14df`. So the regression
+  is somewhere in `78e2cff..a6a14df` (7 commits: 909c4bb, cc87303,
+  6ba3f34, 8e1f569, c89e201, 725e4d2, a6a14df). Makou save works fine on
+  both ends of this range.
 - **Makou save regression**: works fine on `11d6a8d`, `a6b800a`, and
   `a6a14df`, but fails with "Invalid archive" on current `main`. So this
   one was introduced somewhere in `a6b800a..main` — bisect that range
   separately once the disc-2-prompt regression is found.
 
 This step narrows the disc-2-prompt regression's origin by testing the
-midpoint of `dc24cb1..a6a14df`: commit `78e2cff`
-("single-disc-on-csr-v0.1.21: NRCRLB mid53 for MD8_5 (71-67-731 path)").
+midpoint of `78e2cff..a6a14df`: commit `8e1f569` ("Add single-disc/builder
+regression test suite (pytest)").
 
 The build isn't committed (`.bin` files are gitignored) — you rebuild it
 locally with the commands below. It produces
-`workspace/iso-extract/78e2cff-repro.bin` (766,340,400 bytes).
+`workspace/iso-extract/8e1f569-repro.bin` (808,951,584 bytes).
 
 ## Prerequisites
 
@@ -34,21 +35,21 @@ locally with the commands below. It produces
 ## What you do
 
 1. `git pull --ff-only`.
-2. Build `78e2cff-repro.bin`:
+2. Build `8e1f569-repro.bin`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_aug7_repro.py 78e2cff
+   python3 mods/single-disc/scripts/build_aug7_repro.py 8e1f569
    ```
 
    This creates a throwaway git worktree at that commit, runs *that*
    commit's own `build_playtest_bin.py` against your current pristine
    discs and CSR repo, copies the result back, and cleans up the
    worktree. Expect a `WROTE
-   .../workspace/iso-extract/78e2cff-repro.bin (766,340,400 bytes)` line
+   .../workspace/iso-extract/8e1f569-repro.bin (808,951,584 bytes)` line
    at the end with no `FAIL:` lines. If anything differs, paste full
    output before playtesting.
 
-3. Open `workspace/iso-extract/78e2cff-repro.cue` in DuckStation fresh (no
+3. Open `workspace/iso-extract/8e1f569-repro.cue` in DuckStation fresh (no
    save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
@@ -73,11 +74,12 @@ notes:
 
 ## Why this matters
 
-- If the disc-2-prompt bug is **absent** on `78e2cff` (goes straight to
-  break scene): the regression is in `78e2cff..a6a14df`, bisect further
-  within that range.
-- If the disc-2-prompt bug **reproduces** on `78e2cff`: the regression is
-  in `dc24cb1..78e2cff`, bisect within that range instead.
+- If the disc-2-prompt bug is **absent** on `8e1f569` (goes straight to
+  break scene): the regression is in `8e1f569..a6a14df` (c89e201,
+  725e4d2, a6a14df), bisect further within that range.
+- If the disc-2-prompt bug **reproduces** on `8e1f569`: the regression is
+  in `78e2cff..8e1f569` (909c4bb, cc87303, 6ba3f34, 8e1f569), bisect
+  within that range instead.
 
 ## When done
 
