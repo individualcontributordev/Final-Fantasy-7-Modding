@@ -79,10 +79,12 @@ def apply_safe_field_merge(img: bytearray, d2_only: bool = False) -> int:
     return applied
 
 
-def apply_dskcg_removal(img: bytearray) -> int:
-    print("\nRemoving DSKCG ('Ask for disc') ops...")
+def apply_dskcg_removal(img: bytearray, fields: list[str] | None = None) -> int:
+    fields = DSKCG_FIELDS if fields is None else fields
+    expected = EXPECTED_DSKCG_TOTAL if fields == DSKCG_FIELDS else None
+    print(f"\nRemoving DSKCG ('Ask for disc') ops from {fields}...")
     total = 0
-    for field in DSKCG_FIELDS:
+    for field in fields:
         path = f"FIELD/{field}.DAT"
         raw = extract_file(img, path)
         new_raw, removed = remove_dskcg_from_field(raw, field)
@@ -91,8 +93,8 @@ def apply_dskcg_removal(img: bytearray) -> int:
         print(f"  {field}: removed {removed}")
         total += removed
     print(f"  Total DSKCG removed: {total}")
-    if total != EXPECTED_DSKCG_TOTAL:
-        print(f"  WARNING: expected {EXPECTED_DSKCG_TOTAL} total, got {total}")
+    if expected is not None and total != expected:
+        print(f"  WARNING: expected {expected} total, got {total}")
     return total
 
 
@@ -113,6 +115,9 @@ def main() -> int:
     ap.add_argument("--d2-only-fields", action="store_true",
                      help="safe-field merge: only apply CSR D2 fields, skip D3 fields entirely "
                           "(isolation test for D1->D2 transition regression)")
+    ap.add_argument("--blackbgb-only-dskcg", action="store_true",
+                     help="only strip DSKCG from BLACKBGB (skip BLACKBGE/BLACKBG3) -- "
+                          "further isolation of the D1->D2 break-scene regression")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -124,7 +129,8 @@ def main() -> int:
 
     apply_rework_merge(img, c1, c2)
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
-    apply_dskcg_removal(img)
+    dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
+    apply_dskcg_removal(img, fields=dskcg_fields)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(img)
