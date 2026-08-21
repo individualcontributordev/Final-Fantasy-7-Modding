@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Rebuild the Aug 6/7-era single-disc playtest bin for regression testing.
+"""Rebuild a historical single-disc playtest bin for regression bisection.
 
-Checks out commit 11d6a8d (2026-08-06 22:30, last commit before the Aug 7
-ending-credits work started) into a throwaway git worktree, runs *that*
-commit's own build_playtest_bin.py against the current pristine discs and
-CSR repo, then copies the result back as workspace/iso-extract/aug7-repro.bin
-(+.cue). Used to check whether current bugs (Disc 1->2 black screen, Makou
-"Invalid archive") already existed before the FIELD.BIN table fix and
-ending-credits work.
+Checks out a given commit (default 11d6a8d, 2026-08-06 22:30, last commit
+before the Aug 7 ending-credits work started) into a throwaway git worktree,
+runs *that* commit's own build_playtest_bin.py against the current pristine
+discs and CSR repo, then copies the result back as
+workspace/iso-extract/<commit>-repro.bin (+.cue). Used to bisect when
+regressions (Disc 1->2 black screen, Makou "Invalid archive") were
+introduced.
 
 Usage (from repo root):
-    python3 mods/single-disc/scripts/build_aug7_repro.py
+    python3 mods/single-disc/scripts/build_aug7_repro.py [commit]
 """
 import shutil
 import subprocess
@@ -18,15 +18,16 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-PINNED_COMMIT = "11d6a8d"
+PINNED_COMMIT = sys.argv[1] if len(sys.argv) > 1 else "11d6a8d"
 CSR_REPO = REPO_ROOT.parent / "Final-Fantasy-7-CSR"
 # build_playtest_bin.py looks for the CSR repo as a sibling of its own repo
 # root, so the worktree must live next to CSR_REPO too (no symlink needed).
 WORKTREE = CSR_REPO.parent / ".ff7-aug7-build-tmp"
 BUILT_BIN = "ff7_d1_playtest_csr_sd_movies.bin"
 BUILT_CUE = "ff7_d1_playtest_csr_sd_movies.cue"
-OUT_BIN = REPO_ROOT / "workspace/iso-extract/aug7-repro.bin"
-OUT_CUE = REPO_ROOT / "workspace/iso-extract/aug7-repro.cue"
+OUT_STEM = f"{PINNED_COMMIT}-repro"
+OUT_BIN = REPO_ROOT / f"workspace/iso-extract/{OUT_STEM}.bin"
+OUT_CUE = REPO_ROOT / f"workspace/iso-extract/{OUT_STEM}.cue"
 
 
 def run(cmd, **kwargs):
@@ -48,6 +49,43 @@ def link_or_copy(src: Path, dst: Path):
         shutil.copyfile(src, dst)
 
 
+def repoint_stale_layer_paths(worktree: Path):
+    """build_playtest_bin.py hardcodes core/movie layer dirs by version
+    (e.g. single-disc-on-csr-v0.1.2). Older retired versions get purged from
+    builder/ over time, so for commits where that pinned version no longer
+    exists, repoint at the newest single-disc-on-csr-v* / manip-movies-v*
+    layer dir actually present in that commit's builder/ tree."""
+    import re
+
+    script = worktree / "mods/single-disc/scripts/build_playtest_bin.py"
+    text = script.read_text(encoding="utf-8")
+    builder_dir = worktree / "builder"
+
+    def latest(prefix: str):
+        candidates = sorted(
+            (d for d in builder_dir.glob(f"{prefix}-v*") if (d / "layers/disc1.layer.json").is_file()),
+            key=lambda d: [int(x) for x in re.findall(r"\d+", d.name.rsplit("-v", 1)[-1])],
+        )
+        return candidates[-1].name if candidates else None
+
+    core_dir = latest("single-disc-on-csr")
+    movie_dir = latest("single-disc-csr-manip-movies")
+    if core_dir:
+        text = re.sub(
+            r'core_layer = ROOT / "builder/single-disc-on-csr-v[\d.]+/layers/disc1\.layer\.json"',
+            f'core_layer = ROOT / "builder/{core_dir}/layers/disc1.layer.json"',
+            text,
+        )
+    if movie_dir:
+        text = re.sub(
+            r'movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v[\d.]+/layers/disc1\.layer\.json"',
+            f'movie_layer = ROOT / "builder/{movie_dir}/layers/disc1.layer.json"',
+            text,
+        )
+    script.write_text(text, encoding="utf-8")
+    print(f"repointed layers -> core={core_dir}, movies={movie_dir}")
+
+
 def main():
     if not CSR_REPO.exists():
         sys.exit(f"FAIL: CSR repo not found at {CSR_REPO}")
@@ -67,6 +105,8 @@ def main():
     worktree_pristine.mkdir(parents=True, exist_ok=True)
     for f in pristine_bins:
         link_or_copy(f, worktree_pristine / f.name)
+
+    repoint_stale_layer_paths(WORKTREE)
 
     try:
         run(
