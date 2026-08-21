@@ -19,9 +19,10 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PINNED_COMMIT = "11d6a8d"
-WORKTREE = Path("/tmp/ff7-aug7-build")
 CSR_REPO = REPO_ROOT.parent / "Final-Fantasy-7-CSR"
-CSR_SYMLINK = Path("/private/tmp/Final-Fantasy-7-CSR")
+# build_playtest_bin.py looks for the CSR repo as a sibling of its own repo
+# root, so the worktree must live next to CSR_REPO too (no symlink needed).
+WORKTREE = CSR_REPO.parent / ".ff7-aug7-build-tmp"
 BUILT_BIN = "ff7_d1_playtest_csr_sd_movies.bin"
 BUILT_CUE = "ff7_d1_playtest_csr_sd_movies.cue"
 OUT_BIN = REPO_ROOT / "workspace/iso-extract/aug7-repro.bin"
@@ -31,6 +32,20 @@ OUT_CUE = REPO_ROOT / "workspace/iso-extract/aug7-repro.cue"
 def run(cmd, **kwargs):
     print(f"+ {' '.join(str(c) for c in cmd)}")
     subprocess.run(cmd, check=True, **kwargs)
+
+
+def link_or_copy(src: Path, dst: Path):
+    """Hardlink src at dst if possible (same volume, no privilege needed on
+    Windows), else fall back to a full copy. Avoids os.symlink, which needs
+    admin rights / Developer Mode on Windows."""
+    if dst.exists() or dst.is_symlink():
+        dst.unlink()
+    try:
+        import os
+
+        os.link(src, dst)
+    except OSError:
+        shutil.copyfile(src, dst)
 
 
 def main():
@@ -51,14 +66,7 @@ def main():
     worktree_pristine = WORKTREE / "workspace/pristine"
     worktree_pristine.mkdir(parents=True, exist_ok=True)
     for f in pristine_bins:
-        link = worktree_pristine / f.name
-        if link.exists() or link.is_symlink():
-            link.unlink()
-        link.symlink_to(f)
-
-    if CSR_SYMLINK.exists() or CSR_SYMLINK.is_symlink():
-        CSR_SYMLINK.unlink()
-    CSR_SYMLINK.symlink_to(CSR_REPO)
+        link_or_copy(f, worktree_pristine / f.name)
 
     try:
         run(
@@ -79,7 +87,6 @@ def main():
         print(f"WROTE {OUT_BIN} ({OUT_BIN.stat().st_size:,} bytes)")
         print(f"WROTE {OUT_CUE}")
     finally:
-        CSR_SYMLINK.unlink(missing_ok=True)
         run(["git", "worktree", "remove", str(WORKTREE), "--force"], cwd=REPO_ROOT)
 
 
