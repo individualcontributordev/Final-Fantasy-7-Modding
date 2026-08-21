@@ -1,23 +1,19 @@
-# Task: Test the Aug 6/7 build state (pre-FIELD.BIN-table-fix, pre-ending-credits)
+# Task: Bisect — test commit a6b800a (single-disc v0.1.35, roughly midway
+# between confirmed-good 11d6a8d and current main)
 
 ## Why
 
-Both current bugs (Disc 1→2 black screen/no music, Makou "Invalid archive"
-on save) were never documented in the week before Aug 7, and the FIELD.BIN
-table-corruption fix and the LOST2 IFUW break-scene work are both *later*
-discoveries (Aug 11+ and this week respectively). To find out whether these
-bugs already existed back then (i.e. are old/pre-existing, not caused by
-recent work), I rebuilt the exact bin that commit `11d6a8d` (2026-08-06
-22:30, last commit before the Aug 7 ending-credits work started) would have
-produced, using that commit's own `build_playtest_bin.py` script and layers
-(CSR v0.14.1 base + `single-disc-on-csr-v0.1.2` + cumulative
-`single-disc-csr-manip-movies-v0.1.2`). No FIELD.BIN table fix, no LOST2
-IFUW force — this is what shipped/was tested that week, unmodified.
+Confirmed on `11d6a8d` (2026-08-06 22:30): both bugs (Disc 1→2 black
+screen/no music, Makou "Invalid archive" on save) are **absent** — that
+build worked correctly. So the regression is somewhere in the 116 commits
+between `11d6a8d` and `main` that touch `mods/single-disc/` or `scripts/`.
+This step tests the midpoint, `a6b800a` ("single-disc v0.1.35: LOST2 forest
+music unmute; retire v0.1.34"), to narrow down which half of the range
+contains the bug.
 
 The build isn't committed (`.bin` files are gitignored) — you rebuild it
-locally with the commands below. Build succeeds cleanly (script's own
-internal CANONON/LBA-alias checks pass) and produces a 766,340,400-byte
-bin named `aug7-repro.bin`.
+locally with the commands below. It produces `workspace/iso-extract/a6b800a-repro.bin`
+(766,970,736 bytes).
 
 ## Prerequisites
 
@@ -29,21 +25,21 @@ bin named `aug7-repro.bin`.
 ## What you do
 
 1. `git pull --ff-only`.
-2. Build `aug7-repro.bin` from the pinned Aug 6 commit (`11d6a8d`, the
-   last commit before the Aug 7 ending-credits work started):
+2. Build `a6b800a-repro.bin`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_aug7_repro.py
+   python3 mods/single-disc/scripts/build_aug7_repro.py a6b800a
    ```
 
    This creates a throwaway git worktree at that commit, runs *that*
    commit's own `build_playtest_bin.py` against your current pristine
    discs and CSR repo, copies the result back, and cleans up the
-   worktree. Expect a `WROTE workspace/iso-extract/aug7-repro.bin
-   (766,340,400 bytes)` line at the end with no `FAIL:` lines. If
-   anything differs, paste full output before playtesting.
+   worktree. Expect a `WROTE
+   .../workspace/iso-extract/a6b800a-repro.bin (766,970,736 bytes)` line
+   at the end with no `FAIL:` lines. If anything differs, paste full
+   output before playtesting.
 
-3. Open `workspace/iso-extract/aug7-repro.cue` in DuckStation fresh (no
+3. Open `workspace/iso-extract/a6b800a-repro.cue` in DuckStation fresh (no
    save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
@@ -65,15 +61,11 @@ notes:
 
 ## Why this matters
 
-- If **both bugs already reproduce** on this Aug-6/7-era bin: they are old,
-  pre-existing issues unrelated to the ending-credits work, the FIELD.BIN
-  table fix, or the LOST2/IFUW break-scene work done since — the real root
-  cause is still further back (predates this window) or is structural to
-  the single-disc approach itself (e.g. `single-disc-on-csr-v0.1.2` pack
-  content, not later regressions).
-- If the transition or save **worked correctly** on this old bin: the bug
-  was introduced somewhere between Aug 6 and now, and we can bisect forward
-  commit-by-commit from `11d6a8d`.
+- If **both work correctly** on `a6b800a`: the regression is in the second
+  half of the range (`a6b800a..main`), and we bisect further within that
+  half.
+- If **either bug reproduces** on `a6b800a`: the regression is in the
+  first half (`11d6a8d..a6b800a`), and we bisect within that half instead.
 
 ## When done
 
