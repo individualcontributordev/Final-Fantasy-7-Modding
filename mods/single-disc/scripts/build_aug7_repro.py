@@ -20,7 +20,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PINNED_COMMIT = "11d6a8d"
 WORKTREE = Path("/tmp/ff7-aug7-build")
-CSR_REPO = Path("/Users/david.morton/Final-Fantasy-7-CSR")
+CSR_REPO = REPO_ROOT.parent / "Final-Fantasy-7-CSR"
 CSR_SYMLINK = Path("/private/tmp/Final-Fantasy-7-CSR")
 BUILT_BIN = "ff7_d1_playtest_csr_sd_movies.bin"
 BUILT_CUE = "ff7_d1_playtest_csr_sd_movies.cue"
