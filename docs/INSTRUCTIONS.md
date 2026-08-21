@@ -33,26 +33,15 @@ bin named `aug7-repro.bin`.
    last commit before the Aug 7 ending-credits work started):
 
    ```bash
-   git worktree add /tmp/ff7-aug7-build 11d6a8d
-   mkdir -p /tmp/ff7-aug7-build/workspace/pristine
-   for f in workspace/pristine/*.bin; do ln -sf "$(pwd)/$f" "/tmp/ff7-aug7-build/$f"; done
-   ln -sf /Users/david.morton/Final-Fantasy-7-CSR /private/tmp/Final-Fantasy-7-CSR
-   cd /tmp/ff7-aug7-build
-   python3 mods/single-disc/scripts/build_playtest_bin.py
-   cd /Users/david.morton/Final-Fantasy-7-Modding
-   mkdir -p workspace/iso-extract
-   cp /private/tmp/ff7-aug7-build/workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin workspace/iso-extract/aug7-repro.bin
-   cp /private/tmp/ff7-aug7-build/workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.cue workspace/iso-extract/aug7-repro.cue
-   sed -i '' 's/ff7_d1_playtest_csr_sd_movies.bin/aug7-repro.bin/' workspace/iso-extract/aug7-repro.cue
-   git worktree remove /tmp/ff7-aug7-build --force
-   rm -f /private/tmp/Final-Fantasy-7-CSR
-   ls -la workspace/iso-extract/aug7-repro.*
+   python3 mods/single-disc/scripts/build_aug7_repro.py
    ```
 
-   Expect the build script to print `WROTE .../ff7_d1_playtest_csr_sd_movies.bin`
-   with no `FAIL:` lines, and the final `ls` to show `aug7-repro.bin` at
-   766,340,400 bytes. If anything differs, paste full output before
-   playtesting.
+   This creates a throwaway git worktree at that commit, runs *that*
+   commit's own `build_playtest_bin.py` against your current pristine
+   discs and CSR repo, copies the result back, and cleans up the
+   worktree. Expect a `WROTE workspace/iso-extract/aug7-repro.bin
+   (766,340,400 bytes)` line at the end with no `FAIL:` lines. If
+   anything differs, paste full output before playtesting.
 
 3. Open `workspace/iso-extract/aug7-repro.cue` in DuckStation fresh (no
    save states, no cheats).
