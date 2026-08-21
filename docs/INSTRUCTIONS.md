@@ -1,34 +1,41 @@
-# Task: Bisect — test commit 6ba3f34 (v0.1.24, immediately before 8e1f569)
+# Task: Diagnostic — test 6ba3f34 with movies-before-single-disc apply
+# order (--swap-order)
 
 ## Why
 
-Two separate regressions are being tracked, since they diverged between
-`a6b800a` and `main`:
+Bisection hit a dead end: `909c4bb` and `cc87303` both fail to build
+standalone (CANONON mismatch), so the only testable commits between
+`78e2cff` (good) and `a6a14df` (bad) were the endpoints, plus `6ba3f34`
+and `8e1f569` (both reproduce the bug: transition to disc 2 with no
+break scene, no music).
 
-- **Disc-2-prompt regression**: confirmed **absent** (works correctly,
-  goes straight to break scene, music present) on `78e2cff` (v0.1.21).
-  Confirmed **reproduces** — now WORSE, transitions to disc 2 with no
-  break scene and no music at all (not just "insert disc 2" prompt) — on
-  `8e1f569` ("Add single-disc/builder regression test suite (pytest)").
-  Note: `cc87303` (v0.1.23) fails to build at all (CANONON mismatch in
-  the movie layer — an intermediate broken state, not relevant to the
-  disc-2 bug) so it's skipped in this bisection. So the regression is
-  narrowed to `78e2cff..8e1f569`: 909c4bb, 6ba3f34, 8e1f569 (cc87303
-  excluded as unbuildable). Makou save still works fine on `8e1f569`.
-- **Makou save regression**: works fine on `11d6a8d`, `a6b800a`, and
-  `a6a14df`/`8e1f569`, but fails with "Invalid archive" on current
-  `main`. So this one was introduced somewhere in `a6b800a..main` —
-  bisect that range separately once the disc-2-prompt regression is
-  found.
+Investigating `6ba3f34`'s own finding doc
+(`docs/findings/2026-08-13-path-fmv-movies-pack-clobber.md`) revealed the
+likely real cause: it documents that the **manip-movies pack must be
+applied before the single-disc pack**, not after, because the movies
+pack rewrites shared JAIROFAL/MOVIE_ID LBAs that the single-disc path
+injects rely on. The documented fix was to change the **production
+builder's** `addonApplyRank` (movies=10, single-disc-on-csr=20).
 
-This step tests `6ba3f34` ("single-disc-on-csr-v0.1.24: PARASHOT/NRCRL
-unique LBAs after manip-movies") — the commit immediately before
-`8e1f569` — to determine whether the regression is in `8e1f569` itself
-or already present in `909c4bb`/`6ba3f34`.
+However, `mods/single-disc/scripts/build_playtest_bin.py` — the
+standalone dev script this whole bisection has been using — was **never
+updated** to match that reordering. It still hardcodes CSR → single-disc
+→ movies on every commit, including current `main`. That means every
+"disc-2-prompt / no break scene" result from `78e2cff` onward via this
+script may be a **test-harness artifact**, not a bug present in the real
+web builder players actually use.
+
+This step tests that theory directly: rebuild `6ba3f34` with the apply
+order swapped (movies applied first, single-disc second) using a new
+`--swap-order` diagnostic flag. The internal CANONON check already
+passes with this order. If the break scene/music now work in-game too,
+the entire disc-2-prompt "regression" chase has been chasing a dev-script
+bug, not a real one — and the real single-disc mod may never have been
+broken in the shipped builder pack for these versions.
 
 The build isn't committed (`.bin` files are gitignored) — you rebuild it
 locally with the commands below. It produces
-`workspace/iso-extract/6ba3f34-repro.bin` (808,951,584 bytes).
+`workspace/iso-extract/6ba3f34-repro-swapped.bin` (808,951,584 bytes).
 
 ## Prerequisites
 
@@ -40,22 +47,23 @@ locally with the commands below. It produces
 ## What you do
 
 1. `git pull --ff-only`.
-2. Build `6ba3f34-repro.bin`:
+2. Build `6ba3f34-repro-swapped.bin` (movies applied before single-disc):
 
    ```bash
-   python3 mods/single-disc/scripts/build_aug7_repro.py 6ba3f34
+   python3 mods/single-disc/scripts/build_aug7_repro.py 6ba3f34 --swap-order
    ```
 
-   This creates a throwaway git worktree at that commit, runs *that*
-   commit's own `build_playtest_bin.py` against your current pristine
+   This creates a throwaway git worktree at that commit, patches that
+   commit's own `build_playtest_bin.py` to apply manip-movies *before*
+   the single-disc main pack, runs it against your current pristine
    discs and CSR repo, copies the result back, and cleans up the
    worktree. Expect a `WROTE
-   .../workspace/iso-extract/6ba3f34-repro.bin (808,951,584 bytes)` line
-   at the end with no `FAIL:` lines. If anything differs, paste full
-   output before playtesting.
+   .../workspace/iso-extract/6ba3f34-repro-swapped.bin (808,951,584
+   bytes)` line at the end with no `FAIL:` lines. If anything differs,
+   paste full output before playtesting.
 
-3. Open `workspace/iso-extract/6ba3f34-repro.cue` in DuckStation fresh (no
-   save states, no cheats).
+3. Open `workspace/iso-extract/6ba3f34-repro-swapped.cue` in DuckStation
+   fresh (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
    break scene → COS_BTM2). Confirm exactly what happens, in order:
@@ -79,11 +87,18 @@ notes:
 
 ## Why this matters
 
-- If the transition is **correct** on `6ba3f34` (break scene + music):
-  the regression is introduced by `8e1f569` itself — that's the culprit
-  commit, done bisecting this bug.
-- If the bug **already reproduces** on `6ba3f34`: the regression is in
-  `78e2cff..6ba3f34` (909c4bb or 6ba3f34) — test `909c4bb` next.
+- If the transition is **correct** with `--swap-order` (break scene +
+  music): the whole `78e2cff..a6a14df` "regression" was a test-harness
+  artifact — `build_playtest_bin.py` uses the wrong apply order, and the
+  real production builder (which uses `addonApplyRank` from the
+  `6ba3f34` fix) was never actually broken. In that case we'd stop
+  chasing this as a code regression and instead fix/retire the dev
+  script's hardcoded order.
+- If the bug **still reproduces** even with movies-before-single-disc:
+  the harness theory is wrong, and there's a real regression somewhere
+  in `78e2cff..a6a14df` that isn't explained by apply order alone —
+  resume bisecting `909c4bb` (only remaining untested commit; `cc87303`
+  is unbuildable).
 
 ## When done
 
