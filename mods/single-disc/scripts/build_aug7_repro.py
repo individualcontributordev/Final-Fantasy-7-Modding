@@ -70,22 +70,32 @@ def repoint_stale_layer_paths(worktree: Path):
         )
         return candidates[-1].name if candidates else None
 
-    core_dir = latest("single-disc-on-csr")
-    movie_dir = latest("single-disc-csr-manip-movies")
-    if core_dir:
+    core_match = re.search(r'core_layer = ROOT / "builder/(single-disc-on-csr-v[\d.]+)/layers/disc1\.layer\.json"', text)
+    movie_match = re.search(r'movie_layer = ROOT / "builder/(single-disc-csr-manip-movies-v[\d.]+)/layers/disc1\.layer\.json"', text)
+    core_pinned = core_match.group(1) if core_match else None
+    movie_pinned = movie_match.group(1) if movie_match else None
+    core_dir = core_pinned
+    movie_dir = movie_pinned
+    # Only repoint if the commit's own hardcoded version was purged from
+    # builder/ (retired). If it's still present, use it as-is so we don't
+    # pair a commit's core layer with a *newer* movies layer than it was
+    # actually written/tested against.
+    if core_pinned and not (builder_dir / core_pinned / "layers/disc1.layer.json").is_file():
+        core_dir = latest("single-disc-on-csr")
         text = re.sub(
             r'core_layer = ROOT / "builder/single-disc-on-csr-v[\d.]+/layers/disc1\.layer\.json"',
             f'core_layer = ROOT / "builder/{core_dir}/layers/disc1.layer.json"',
             text,
         )
-    if movie_dir:
+    if movie_pinned and not (builder_dir / movie_pinned / "layers/disc1.layer.json").is_file():
+        movie_dir = latest("single-disc-csr-manip-movies")
         text = re.sub(
             r'movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v[\d.]+/layers/disc1\.layer\.json"',
             f'movie_layer = ROOT / "builder/{movie_dir}/layers/disc1.layer.json"',
             text,
         )
     script.write_text(text, encoding="utf-8")
-    print(f"repointed layers -> core={core_dir}, movies={movie_dir}")
+    print(f"layers -> core={core_dir} (pinned={core_pinned}), movies={movie_dir} (pinned={movie_pinned})")
 
 
 def swap_apply_order(worktree: Path):
