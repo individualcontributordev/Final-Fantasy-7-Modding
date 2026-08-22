@@ -1,3 +1,92 @@
+# Task: Manual WHITE2 (#643) fix in CSR itself, then rebuild single-disc
+
+## Why
+
+You want to fix WHITE2's second movie-hang (`cl`/31) by hand in Makou
+Reactor, at the source — CSR's own Disc 2 — instead of patching it in
+this repo's `single-disc` pipeline. Once CSR's Disc 2 layer is fixed,
+`single-disc`'s `build_work_bin.py` pulls CSR Disc 2 via
+`disc_sources.load_csr_image(2)` (pristine D2 + CSR's `disc2.layer.json`),
+so the fix flows through automatically on the next single-disc rebuild
+— no changes needed in this repo's field-patch scripts.
+
+This is a **manual, human-run process** across two repos. Follow every
+step in order; nothing here is scripted end-to-end.
+
+## Part 1 — Edit WHITE2 in CSR's Disc 2 image (Makou Reactor)
+
+1. In `Final-Fantasy-7-CSR`, `git pull --ff-only`.
+2. Open `Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D2.bin` in Makou
+   Reactor (this is the exact edited D2 image CSR's current
+   `csr-v0.14.1` Disc 2 layer was diffed from, and what single-disc
+   pulls from on every rebuild).
+3. Find field 643, `WHITE2.DAT`, script slot `cl` / 31 (the longer
+   Cosmo Canyon cutscene script — the one carrying CSR's story `JMPF`
+   edit). Remove the `PMVIE`/`MOVIE` opcode pair from that slot only.
+   Leave every other opcode in that script (including the `JMPF`
+   edit) untouched.
+4. Save in Makou. Confirm it succeeds (this is a size-neutral-or-not
+   edit on stock CSR D2 — either way should save fine per the earlier
+   Makou save investigation).
+
+## Part 2 — Rebuild CSR's Disc 2 layer from the edited image
+
+Still in `Final-Fantasy-7-CSR`:
+
+```bash
+python3 scripts/build_csr_base_layers.py cache/csr --version 0.14.2 --discs 2
+```
+
+This diffs `pristine/FINALFANTASY7_D2.bin` vs. the edited
+`cache/csr/FINALFANTASY7_D2.bin`, writes
+`builder/csr-v0.14.2/layers/disc2.layer.json` (a **new** versioned
+folder — it will not overwrite `csr-v0.14.1` in place), and verifies
+the layer reapplies cleanly onto pristine to reproduce your edited
+image byte-for-byte.
+
+`csr-v0.14.2` will only have a Disc 2 layer written by this run — Disc
+1 and Disc 3 layers must still come from `csr-v0.14.1` (copy those two
+files into `builder/csr-v0.14.2/layers/` and merge `pack.json`'s
+`discs` map, or re-run the script with `--discs 1,2,3` against the
+full `cache/csr/` set if Disc 1/3 there are already current).
+
+Commit the new `builder/csr-v0.14.2/` folder and the updated
+`builder/manifest.json` bases entry (JSON only — never `.bin`/`.cue`)
+in the CSR repo, then push.
+
+## Part 3 — Point single-disc at the new CSR version
+
+Back in this repo (`Final-Fantasy-7-Modding`):
+
+1. Update every `csr-v0.14.1` reference relevant to single-disc to
+   `csr-v0.14.2`:
+   - `scripts/disc_sources.py`: `csr_layer()`'s
+     `"builder/csr-v0.14.1/layers"` path.
+   - `builder/single-disc-on-csr/pack.json` and the manifest entry's
+     `compatibleBases`.
+   - Any other `single-disc*` pack/manifest entries with
+     `compatibleBases: ["csr-v0.14.1"]`.
+2. Rebuild the single-disc work bin and regenerate its layer exactly
+   as in past releases (`build_work_bin.py` → `bin_diff_to_layer.py`
+   against pristine D1) — this should no longer need
+   `fix_white2_movie_hang.py`'s `cl`/31 branch since the fix now comes
+   from CSR's own Disc 2 layer. Confirm no `PMVIE`/`MOVIE` remain in
+   WHITE2 via the same verification snippet used for v0.2.5 (extract
+   `FIELD/WHITE2.DAT` from pristine+CSR+single-disc-layer and check
+   `decode_ops` for any `PMVIE`/`MOVIE`).
+3. Bump `single-disc-on-csr`'s version, update CHANGELOG, run
+   `verify_builder_config.py --base csr-v0.14.2 --addon single-disc-on-csr`,
+   commit, push.
+
+## When done
+
+Confirm each part above, then playtest WHITE2 end-to-end as in prior
+releases (loads, plays through, no freeze) and re-confirm Makou save
+still works on the new single-disc build. Paste evidence, commit,
+push, say check.
+
+---
+
 # Task: Playtest single-disc-on-csr v0.2.5 (fixes 2nd WHITE2 #643 movie hang)
 
 ## Why
