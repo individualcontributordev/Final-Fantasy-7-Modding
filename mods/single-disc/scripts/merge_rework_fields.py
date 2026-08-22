@@ -14,7 +14,11 @@ agrees with one whole disc's CSR file for that field):
 
 3 fields have genuinely mixed per-slot verdicts (entity/slot sets are
 identical between discs, so a slot-level splice is safe):
-  BUGIN1A, NIVGATE, RCKTIN2
+  BUGIN1A, NIVGATE, RCKTIN2 -- SLOT_SPLICE_FIELDS below omits any slot whose
+  verdict is CSR D1, since the work image's base is already CSR D1 (no-op
+  copy onto themselves). Only slots whose verdict is CSR D2 are listed. The
+  full per-slot verdict record (including the omitted D1 slots) lives in
+  docs/findings/2026-08-20-slot-edit-origin.md.
 
 Usage (from repo root):
   python3 mods/single-disc/scripts/merge_rework_fields.py --bin work.bin --in-place
@@ -45,36 +49,32 @@ WHOLE_FILE_FIELDS = {
     "LOST2": 2,
 }
 
-# Fields needing true per-slot splicing: (entity, slot) -> disc (1 or 2),
-# taken directly from docs/findings/2026-08-20-slot-edit-origin.md.
+# Fields needing true per-slot splicing: (entity, slot) -> disc, taken
+# directly from docs/findings/2026-08-20-slot-edit-origin.md. Only CSR D2
+# verdicts are listed -- CSR D1 verdicts are omitted since the work image's
+# base is already CSR D1 (applying them would be a no-op copy onto
+# themselves). See the module docstring and the findings doc for the full
+# per-slot record, including the omitted D1 verdicts.
 SLOT_SPLICE_FIELDS: dict[str, dict[tuple[str, int], int]] = {
     "BUGIN1A": {
-        ("AD", 4): 1,
         ("AD", 7): 2,
-        ("BUGEN", 1): 1,
     },
     "NIVGATE": {
         ("b_drct", 1): 2,
         ("b_drct", 31): 2,
-        ("cefiros", 3): 1,
         ("cefiros", 6): 2,
         ("cefiros", 7): 2,
-        ("cloud", 3): 1,
         ("cloud", 11): 2,
         ("cloud", 13): 2,
         ("cloud", 17): 2,
-        ("hei1", 3): 1,
         ("hei1", 31): 2,
-        ("hei2", 3): 1,
         ("hei2", 31): 2,
-        ("line_jp", 2): 1,
         ("tifa", 1): 2,
         ("tifa", 5): 2,
         ("tifa", 9): 2,
         ("zax", 5): 2,
     },
     "RCKTIN2": {
-        ("cid", 1): 1,
         ("leader", 0): 2,
     },
 }
