@@ -1,24 +1,24 @@
-# Task: Test D1->D2 transition with DSKCG bytes removed but NO jump fixup
+# Task: Test D1->D2 transition with only the ONE relevant DSKCG removed (with proper jump fixup)
 
 ## Why
 
-Manual testing in Makou Reactor narrowed the bug: jumping *around* the
-single relevant DSKCG (leave bytes in place) works; and manually
-deleting just that one DSKCG (out of 4 in the `init` slot) also works
-and saves fine. The automated `remove_dskcg.py` deletes all 4 DSKCG in
-that slot and recalculates every JMPF/JMPB/IFxx jump target afterward
-— and *that* build hangs, plus later shows "Invalid Archive" in Makou.
+Manual testing in Makou Reactor narrowed the bug down precisely: the
+old automated `remove_dskcg.py` removed **all 4** DSKCG opcodes in
+BLACKBGB's `init` slot 0 and recalculated jumps around all 4 — that
+build hangs on the D1->D2 transition and later shows "Invalid Archive"
+in Makou. But manually deleting **only the one** DSKCG on the actual
+D1->D2 execution path (leaving the other 3 untouched) works perfectly
+and saves fine in Makou.
 
-This build isolates whether the jump-offset **recalculation** itself
-is the bug: `remove_dskcg.py`'s `remove_dskcg_from_script` has been
-temporarily changed to strip the 4 DSKCG opcodes but leave every jump
-instruction's raw bytes untouched (no offset fixup at all). This is
-known to be arithmetically wrong for any jump that used to point past
-a removed DSKCG — but if the field still loads and the transition
-still hangs/corrupts the same way, that proves the jump-fixup math
-was never the cause, and the real bug is elsewhere (e.g. in
-`write_field_dat`'s field-level offset/AKAO table handling, or
-something outside the script referencing an absolute byte position).
+`remove_dskcg.py` now supports removing a specific occurrence index
+of DSKCG per script slot (`only_indices` param), with full, correct
+jump-offset fixup (the earlier no-fixup debug build was rejected
+since it left the script visibly broken/misaligned in Makou Reactor —
+this restores proper fixup math). `build_work_bin.py` now calls
+`apply_dskcg_removal(img, only_indices={0})` by default, removing only
+occurrence index 0 (the first DSKCG encountered in the script, which
+is the one on the D1->D2 path) and leaving the other 3 as-is, matching
+your manual fix exactly.
 
 ## Prerequisites
 
@@ -29,36 +29,38 @@ something outside the script referencing an absolute byte position).
 ## What you do
 
 1. `git pull --ff-only`.
-2. Rebuild the work bin (jump-fixup disabled in `remove_dskcg.py`) and
-   a matching `.cue`:
+2. Rebuild the work bin and a matching `.cue`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-no-jump-fixup-test.bin
-   printf 'FILE "single-disc-no-jump-fixup-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-no-jump-fixup-test.cue
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-single-occ-test.bin
+   printf 'FILE "single-disc-dskcg-single-occ-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-dskcg-single-occ-test.cue
    ```
 
    Expect this line during the DSKCG-removal step:
    ```
-     init slot 0: Removed 4 DSKCG
+   Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB'] (only occurrence(s) [0])...
+       init slot 0: Removed 1 DSKCG
    ```
    No `WARNING:` or uncaught errors.
 
-3. Open `workspace/iso-extract/single-disc-no-jump-fixup-test.cue` in
+3. Open `workspace/iso-extract/single-disc-dskcg-single-occ-test.cue` in
    DuckStation fresh (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1->2 transition (BLACKBGB field #103 -> LOST2
-   -> break scene -> COS_BTM2). Note whether it hangs on black screen,
-   proceeds normally, or does something different (e.g. crashes,
-   garbled script behavior) compared to the earlier "remove all 4 with
-   fixup" build.
+   -> break scene -> COS_BTM2). Confirm it goes straight through with
+   no black-screen hang and no disc-swap prompt (this should now match
+   your manual single-opcode-deletion fix exactly).
 6. Open this bin in Makou Reactor and check BLACKBGB field #103.
-   Confirm whether it opens cleanly or still shows "Invalid Archive".
+   Confirm it opens cleanly (no "Invalid Archive"), and that the
+   script displays with clean "Goto label X" jumps (no "Forward N
+   byte(s)" raw offsets).
 
 ## Evidence (paste)
 
 ```
-D1->2 transition with DSKCG removed, NO jump fixup: NO HANG / HANGS / OTHER (describe)
+D1->2 transition with single-occurrence DSKCG removal: NO HANG / HANGS
 Makou Reactor BLACKBGB open: OK / Invalid Archive
+Script jumps display as clean labels: YES / NO (describe)
 notes:
 ```
 

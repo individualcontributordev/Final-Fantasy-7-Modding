@@ -100,14 +100,17 @@ def apply_safe_field_merge(img: bytearray, d2_only: bool = False) -> int:
     return applied
 
 
-def apply_dskcg_removal(img: bytearray, fields: list[str] | None = None) -> int:
+def apply_dskcg_removal(
+    img: bytearray, fields: list[str] | None = None, only_indices: set[int] | None = None
+) -> int:
     fields = DSKCG_FIELDS if fields is None else fields
-    print(f"\nRemoving DSKCG (ask-for-disc) ops via live splicer for {fields}...")
+    suffix = f" (only occurrence(s) {sorted(only_indices)})" if only_indices is not None else ""
+    print(f"\nRemoving DSKCG (ask-for-disc) ops via live splicer for {fields}{suffix}...")
     total = 0
     for field in fields:
         path = f"FIELD/{field}.DAT"
         current = extract_file(img, path)
-        new_raw, removed = remove_dskcg_from_field(current, field)
+        new_raw, removed = remove_dskcg_from_field(current, field, only_indices)
         if removed > 0:
             replace_file_within_sectors(img, path, new_raw)
             total += 1
@@ -154,7 +157,11 @@ def main() -> int:
     if args.skip_dskcg_removal:
         print("\nSkipping DSKCG removal (--skip-dskcg-removal)")
     else:
-        apply_dskcg_removal(img)
+        # Only remove the single DSKCG on the actual D1->D2 execution path
+        # (occurrence index 0 in BLACKBGB's init slot 0), matching the
+        # manual Makou Reactor edit confirmed to work. Removing all 4 (the
+        # old default) is known to hang/corrupt the field.
+        apply_dskcg_removal(img, only_indices={0})
 
     if args.apply_table_fix:
         print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
