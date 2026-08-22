@@ -15,10 +15,14 @@ of DSKCG per script slot (`only_indices` param), with full, correct
 jump-offset fixup (the earlier no-fixup debug build was rejected
 since it left the script visibly broken/misaligned in Makou Reactor —
 this restores proper fixup math). `build_work_bin.py` now calls
-`apply_dskcg_removal(img, only_indices={0})` by default, removing only
-occurrence index 0 (the first DSKCG encountered in the script, which
-is the one on the D1->D2 path) and leaving the other 3 as-is, matching
-your manual fix exactly.
+`apply_dskcg_removal(img, only_indices={3})` by default.
+
+Occurrence index 3 (script offset 518 in BLACKBGB's `init` slot 0) is
+the DSKCG gated by `if var[3][136] bitON 4` — confirmed by the user as
+the one on the actual D1->D2 execution path and the one they manually
+deleted in Makou Reactor. The other 3 DSKCG (indices 0-2, gated by
+different IFUB checks on var[3][136] mask 0x05, var[13][82], and
+var[3][134]) are left untouched.
 
 ## Prerequisites
 
@@ -38,7 +42,7 @@ your manual fix exactly.
 
    Expect this line during the DSKCG-removal step:
    ```
-   Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB'] (only occurrence(s) [0])...
+   Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB'] (only occurrence(s) [3])...
        init slot 0: Removed 1 DSKCG
    ```
    No `WARNING:` or uncaught errors.

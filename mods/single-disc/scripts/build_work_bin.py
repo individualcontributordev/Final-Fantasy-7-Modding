@@ -158,10 +158,11 @@ def main() -> int:
         print("\nSkipping DSKCG removal (--skip-dskcg-removal)")
     else:
         # Only remove the single DSKCG on the actual D1->D2 execution path
-        # (occurrence index 0 in BLACKBGB's init slot 0), matching the
-        # manual Makou Reactor edit confirmed to work. Removing all 4 (the
-        # old default) is known to hang/corrupt the field.
-        apply_dskcg_removal(img, only_indices={0})
+        # (occurrence index 3 in BLACKBGB's init slot 0 -- gated by
+        # `if var[3][136] bitON 4`), matching the manual Makou Reactor edit
+        # confirmed to work. Removing all 4 (the old default) is known to
+        # hang/corrupt the field.
+        apply_dskcg_removal(img, only_indices={3})
 
     if args.apply_table_fix:
         print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
