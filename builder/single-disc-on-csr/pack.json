@@ -1,8 +1,8 @@
 {
   "id": "single-disc-on-csr",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.0: from-scratch rebuild reverted to the Aug 7 known-stable logic \u2014 9-field rework merge + 66-field safe bulk D2/D3 merge + DSKCG removal + SNOVA D3\u2192D1 inject. Manip movies and endings are disabled pending re-validation on this new base.",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.1: v0.2.0 rebuild + LOST2 D1\u2192D2 break-scene IFUW gate fix + FIELD.BIN/WORLD.BIN embedded table fix (was breaking every Makou Reactor save with \"Invalid archive\"). Manip movies and endings are disabled pending re-validation on this new base.",
   "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -12,5 +12,5 @@
   "enabled": true,
   "beta": true,
   "status": "beta",
-  "betaNote": "v0.2.0: rebuilt from scratch on the Aug 7 known-stable logic. Manip movies and endings are currently disabled while this core is playtested standalone."
+  "betaNote": "v0.2.1: rebuilt on the v0.2.0 Aug 7 known-stable logic with the LOST2 break-scene fix and the FIELD.BIN/WORLD.BIN table fix that resolves \"Invalid archive\" Makou saves. Manip movies and endings are currently disabled while this core is playtested standalone."
 }
