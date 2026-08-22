@@ -1,8 +1,8 @@
 {
   "id": "single-disc-on-csr",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.3: fixes v0.2.2 LOST2 (#634) background graphical corruption after the D1->D2 break scene (the IFUW gate fix was recompressing the whole field with a from-scratch LZS encoder; now patches the single else-jump byte directly in the compressed data instead). Retains the v0.2.2 D1->D2 black screen fix and the FIELD.BIN/WORLD.BIN embedded table fix (Makou Reactor save). Manip movies and endings are disabled pending re-validation on this new base.",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.4: fixes a hang in Cosmo Canyon's WHITE2 (#643) where a scripted movie no longer plays correctly on the single-disc build. Retains all v0.2.3 fixes (D1->D2 transition, LOST2 background corruption, Makou Reactor save). Manip movies and endings are disabled pending re-validation on this new base.",
   "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -12,5 +12,5 @@
   "enabled": true,
   "beta": true,
   "status": "beta",
-  "betaNote": "v0.2.3: fixes the v0.2.2 regression where the LOST2 (#634) break-scene IFUW gate fix decompressed and recompressed the whole field with a from-scratch LZS encoder, which round-tripped correctly through this repo's own decoder but produced a background that rendered corrupted/garbled on real hardware and DuckStation. Now patches the single else-jump byte directly inside the still-compressed LZS body, so the rebuilt LOST2.DAT differs from pristine CSR Disc 2's LOST2.DAT by exactly that one byte. Retains the v0.2.2 D1->D2 black screen fix (proven pre-exported DSKCG-stripped BLACKBGB/E/3) and the FIELD.BIN/WORLD.BIN table fix (resolves Invalid archive Makou Reactor saves). Manip movies and endings are currently disabled while this core is playtested standalone."
+  "betaNote": "v0.2.4: fixes a hang in Cosmo Canyon's WHITE2 (#643) -- that field plays two short movies, but on the single-disc build they no longer point at valid movie data, so the game freezes trying to play them (screen glitches / stutters to a stop). The movie-playing part of that field's script is removed; the scene now fades to black and continues instead of trying to play the broken movies. Also removed a leftover one-byte patch in LOST2 (#634) that testing showed does nothing on this build -- the earlier field already sets the game up so LOST2's condition is already true, so the patch had no effect on gameplay. Retains all v0.2.3 fixes (D1->D2 transition, LOST2 background corruption, Makou Reactor save). Manip movies and endings are currently disabled while this core is playtested standalone."
 }

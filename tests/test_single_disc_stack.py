@@ -318,6 +318,33 @@ def test_dskcg_fields_parse_with_no_bad_jumps(stacked, iso_api, scripts_dir):
                 pos += max(op_size(blob, pos), 1)
 
 
+def test_white2_movie_block_stripped(stacked, iso_api, scripts_dir):
+    """Field 643 (WHITE2) mdir/31 must not hang on missing movie streams.
+
+    Regression: WHITE2 plays PMVIE 0x1C/0x2A + MOVIE, but those movies no
+    longer resolve to valid streams at their expected locations on the
+    single-disc build, causing an MDEC hang (see
+    docs/findings/2026-08-11-single-disc-white2-movie-crawl.md and the
+    field 643 fix in docs/INSTRUCTIONS.md). The movie-play block must be
+    stripped entirely; both IFSW branches converged on the same
+    fade-to-black + return regardless."""
+    import sys
+
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    from field_dat import load_field_dat, decode_ops
+
+    extract_file, _ = iso_api
+    raw = extract_file(stacked, "FIELD/WHITE2.DAT")
+    fd = load_field_dat(raw)
+    slot = next(s for s in fd.scripts if s.entity == "mdir" and s.slot == 31)
+    names = [n for _, n in decode_ops(slot.raw)]
+    assert "PMVIE" not in names
+    assert "MOVIE" not in names
+    assert "NFADE" in names
+    assert names[-1] == "RET"
+
+
 def test_d1d2_lost2_music_unmute(stacked, iso_api, csr_d1_bytes, csr_d2_bytes, scripts_dir):
     """D1→2: LOST2 a455+bit4OFF plays MUSIC (v0.1.35); no COS force; LOSIN2 CSR BITOFF."""
     import sys
