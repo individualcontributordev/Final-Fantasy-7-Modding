@@ -42,7 +42,7 @@ def csr_layer(disc: int) -> Path:
         raise ValueError(f"disc must be 1..3, got {disc}")
     return (
         csr_root()
-        / "builder/csr-v0.14.1/layers"
+        / "builder/csr-v0.14.2/layers"
         / f"disc{disc}.layer.json"
     )
 

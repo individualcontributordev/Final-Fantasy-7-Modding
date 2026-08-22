@@ -778,7 +778,7 @@
       "hint": "Hidden. Auto with Single-disc on CSR when CSR+ off.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1"
+        "csr-v0.14.2"
       ],
       "layout": "global",
       "discs": {
@@ -790,7 +790,7 @@
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.2"
         ],
         "unlessAddonIdPrefix": "csr-plus-scene-"
       }
@@ -802,7 +802,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 1/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -813,7 +813,7 @@
       "version": "0.1.0",
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -834,7 +834,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 2/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -844,7 +844,7 @@
       "uiHidden": true,
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -866,7 +866,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 3/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -876,7 +876,7 @@
       "uiHidden": true,
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -898,7 +898,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 4/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -908,7 +908,7 @@
       "uiHidden": true,
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -930,7 +930,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 5/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -940,7 +940,7 @@
       "uiHidden": true,
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -962,7 +962,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 6/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -972,7 +972,7 @@
       "uiHidden": true,
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -994,7 +994,7 @@
       "blurb": "Hidden. Always applied with Single-disc on CSR (including CSR+ scenes). Ending/credits movies on the one-disc image (part 7/7). Not optional.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0"
       ],
       "discs": {
@@ -1004,7 +1004,7 @@
       "uiHidden": true,
       "autoIncludeWhen": {
         "bases": [
-          "csr-v0.14.1",
+          "csr-v0.14.2",
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
@@ -1091,7 +1091,7 @@
       "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1"
+        "csr-v0.14.2"
       ],
       "layout": "global",
       "discs": {
@@ -1113,7 +1113,7 @@
       "hint": "Hidden. Auto with Single-disc on CSR when CSR+ off.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-v0.14.1"
+        "csr-v0.14.2"
       ],
       "layout": "global",
       "discs": {
@@ -1125,7 +1125,7 @@
       "autoIncludeWhen": {
         "addonSelected": "single-disc-csr-manip-movies-v0.1.4",
         "bases": [
-          "csr-v0.14.1"
+          "csr-v0.14.2"
         ],
         "unlessAddonIdPrefix": "csr-plus-scene-"
       }

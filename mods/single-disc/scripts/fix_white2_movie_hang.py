@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
-"""Strip WHITE2's (field 643) PMVIE/MOVIE movie-play opcodes.
+"""Strip WHITE2's (field 643) `mdir`/31 PMVIE/MOVIE movie-play block.
 
-Root cause: WHITE2 has **two independent** script slots that try to play
-a field movie, and on the single-disc build neither movie ID resolves to
-a valid stream at its single-disc location, so playback hangs (MDEC
-decode of garbage / DMA FIFO underrun -- see
-docs/findings/2026-08-11-single-disc-white2-movie-crawl.md for the
-original crawl and docs/findings/2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md
-for the second slot's discovery):
-
-1. `mdir` slot 31 -- plays two FMVs (PMVIE 0x1C "fallpl", PMVIE 0x2A
-   "boogdemo") gated by an IFSW on GameMoment:
+Root cause: WHITE2's `mdir` slot 31 plays two FMVs (PMVIE 0x1C "fallpl",
+PMVIE 0x2A "boogdemo") gated by an IFSW on GameMoment, and on the
+single-disc build neither movie ID resolves to a valid stream at its
+single-disc location, so playback hangs (MDEC decode of garbage / DMA
+FIFO underrun -- see docs/findings/2026-08-11-single-disc-white2-movie-crawl.md):
 
      UC / MENU2 / MVCAM 1
      IFSW GM >= 0x1620, else jump to PMVIE 0x2A
@@ -21,19 +16,24 @@ for the second slot's discovery):
      MOVIE
      RET
 
-   Both IFSW branches converge on the same NFADE/RET tail, so the whole
-   IFSW/PMVIE/JMPF/PMVIE/MOVIE block can be dropped, leaving just:
+Both IFSW branches converge on the same NFADE/RET tail, so the whole
+IFSW/PMVIE/JMPF/PMVIE/MOVIE block can be dropped, leaving just:
 
      UC / MENU2 / MVCAM 1
      NFADE (fade to black, speed=30, type=12)
      RET
 
-2. `cl` slot 31 -- CSR Disc 2's version of this slot adds a `JMPF` story
-   edit (`docs/findings/2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md`)
-   but pristine/CSR both also play a PMVIE 0x38 / MOVIE pair partway
-   through. Only the `PMVIE`/`MOVIE` opcodes are stripped here; the CSR
-   `JMPF` edit and everything else in this (much longer) cutscene script
-   is preserved untouched.
+Note: WHITE2's `cl`/31 slot also contains a PMVIE/MOVIE pair, but CSR
+Disc 2 wraps it (and everything after) in an unconditional `JMPF` that
+jumps clean over that block every time the script runs -- it's dead
+code, never reached at runtime (see
+docs/findings/2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md).
+An earlier version of this script also stripped `cl`/31's PMVIE/MOVIE
+bytes, but doing so shifts every opcode after the removed bytes back
+without updating the JMPF's fixed relative-offset literal, so the jump
+lands mid-instruction and hangs the field -- worse than leaving the
+(unreachable) movie call in place. `cl`/31 is intentionally left
+untouched here.
 
 Usage:
   python3 mods/single-disc/scripts/fix_white2_movie_hang.py \\
@@ -48,7 +48,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from field_dat import load_field_dat, decode_ops  # noqa: E402
+from field_dat import load_field_dat  # noqa: E402
 from field_dat_write import write_field_dat  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E402
 
@@ -62,18 +62,6 @@ MDIR_ORIGINAL = bytes.fromhex(
 )
 # Trimmed: UC, MENU2, MVCAM 1, NFADE, RET (movie block + gate removed)
 MDIR_TRIMMED = bytes.fromhex("33014a01fb012500000c0000001e0000")
-
-CL_ENTITY, CL_SLOT = "cl", 31
-
-
-def _strip_movie_ops(raw: bytes) -> bytes:
-    """Remove only PMVIE/MOVIE opcodes, keeping everything else byte-identical."""
-    out = bytearray()
-    for args, name in decode_ops(raw):
-        if name in ("PMVIE", "MOVIE"):
-            continue
-        out.extend(args)
-    return bytes(out)
 
 
 def _fix_mdir(img: bytearray, fd) -> tuple[bool, dict]:
@@ -93,30 +81,11 @@ def _fix_mdir(img: bytearray, fd) -> tuple[bool, dict]:
     return True, {(MDIR_ENTITY, MDIR_SLOT): MDIR_TRIMMED}
 
 
-def _fix_cl(img: bytearray, fd) -> tuple[bool, dict]:
-    slot = next((s for s in fd.scripts if s.entity == CL_ENTITY and s.slot == CL_SLOT), None)
-    if slot is None:
-        raise SystemExit(f"{FIELD}: no {CL_ENTITY}/{CL_SLOT} script slot found")
-    ops = [n for _, n in decode_ops(slot.raw)]
-    if "PMVIE" not in ops and "MOVIE" not in ops:
-        print(f"  {CL_ENTITY}/{CL_SLOT} already has no PMVIE/MOVIE, nothing to do")
-        return False, {}
-    trimmed = _strip_movie_ops(slot.raw)
-    print(f"  {FIELD} {CL_ENTITY}/{CL_SLOT}: removed PMVIE/MOVIE opcodes "
-          f"({len(slot.raw)} -> {len(trimmed)} bytes)")
-    return True, {(CL_ENTITY, CL_SLOT): trimmed}
-
-
 def fix_white2(img: bytearray) -> bool:
     raw = extract_file(bytes(img), FIELD)
     fd = load_field_dat(raw)
 
-    edits: dict = {}
-    changed_mdir, mdir_edits = _fix_mdir(img, fd)
-    changed_cl, cl_edits = _fix_cl(img, fd)
-    edits.update(mdir_edits)
-    edits.update(cl_edits)
-
+    changed_mdir, edits = _fix_mdir(img, fd)
     if not edits:
         return False
 
@@ -126,9 +95,6 @@ def fix_white2(img: bytearray) -> bool:
         new_slot = next(s for s in fd2.scripts if s.entity == entity and s.slot == slot_idx)
         if new_slot.raw != expected:
             raise SystemExit(f"post-write verification failed: {entity}/{slot_idx} not trimmed as expected")
-        for name in ("PMVIE", "MOVIE"):
-            if any(n == name for _, n in decode_ops(new_slot.raw)):
-                raise SystemExit(f"post-write verification failed: {name} still present in {entity}/{slot_idx}")
     replace_file_within_sectors(img, FIELD, new_raw)
     return True
 
