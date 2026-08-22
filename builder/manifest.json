@@ -1086,8 +1086,8 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.2.2",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.2: fixes v0.2.1 D1->D2 black screen (BLACKBGB/E/3 DSKCG removal was corrupting the field; now uses the proven v0.1.2 pre-exported fields) plus the earlier LOST2 break-scene IFUW gate fix and FIELD.BIN/WORLD.BIN embedded table fix (Makou Reactor save). Manip movies and endings are disabled pending re-validation on this new base.",
+      "version": "0.2.3",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.3: fixes v0.2.2 LOST2 (#634) background graphical corruption after the D1->D2 break scene (the IFUW gate fix was recompressing the whole field with a from-scratch LZS encoder; now patches the single else-jump byte directly in the compressed data instead). Retains the v0.2.2 D1->D2 black screen fix and the FIELD.BIN/WORLD.BIN embedded table fix (Makou Reactor save). Manip movies and endings are disabled pending re-validation on this new base.",
       "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1102,7 +1102,7 @@
       "hidden": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "v0.2.2: fixes the v0.2.1 regression where BLACKBGB/BLACKBGE/BLACKBG3 DSKCG (Ask for disc) removal used a live splicer that corrupted the field, causing a black screen at the D1->D2 transition. Now injects the proven, pre-exported DSKCG-stripped fields from v0.1.2 instead. Retains the LOST2 break-scene IFUW gate fix and the FIELD.BIN/WORLD.BIN table fix (resolves Invalid archive Makou Reactor saves). Manip movies and endings are currently disabled while this core is playtested standalone."
+      "betaNote": "v0.2.3: fixes the v0.2.2 regression where the LOST2 (#634) break-scene IFUW gate fix decompressed and recompressed the whole field with a from-scratch LZS encoder, which round-tripped correctly through this repo's own decoder but produced a background that rendered corrupted/garbled on real hardware and DuckStation. Now patches the single else-jump byte directly inside the still-compressed LZS body, so the rebuilt LOST2.DAT differs from pristine CSR Disc 2's LOST2.DAT by exactly that one byte. Retains the v0.2.2 D1->D2 black screen fix (proven pre-exported DSKCG-stripped BLACKBGB/E/3) and the FIELD.BIN/WORLD.BIN table fix (resolves Invalid archive Makou Reactor saves). Manip movies and endings are currently disabled while this core is playtested standalone."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.5",

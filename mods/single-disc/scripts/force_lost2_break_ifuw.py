@@ -23,6 +23,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import struct
 import sys
 from pathlib import Path
 
@@ -30,7 +31,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from field_dat import load_field_dat, decode_ops  # noqa: E402
-from lzs import compress_all_with_header, decompress_all_with_header  # noqa: E402
+from lzs import decompress_all_with_header, find_literal_body_offset  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_within_sectors  # noqa: E402
 
 FIELD = "FIELD/LOST2.DAT"
@@ -73,21 +74,33 @@ def main() -> int:
 
     img = bytearray(args.bin.read_bytes())
     raw = extract_file(bytes(img), FIELD)
-    meta = find_file(img, FIELD)
-    nsec = max(1, (meta.size + 2047) // 2048)
-    max_bytes = nsec * 2048
 
     dec = bytearray(decompress_all_with_header(raw))
     forced = force_lost2_ifuw(dec)
     if not forced:
         print("no LOST2 break-scene IFUW cleared (already open, or pattern not found)")
+
+    # Patch each cleared else-byte directly in the still-compressed LZS body
+    # instead of decompressing+recompressing the whole field. The custom
+    # from-scratch LZS encoder (compress_all) can pick different match/
+    # literal choices than the original CSR encoder for unrelated bytes
+    # (e.g. the background section), which round-trips correctly through
+    # our own decompressor but has caused on-console graphical corruption
+    # in the recompressed background. Patching the else-byte's literal
+    # in place changes exactly one byte and leaves everything else,
+    # including the compressed bitstream shape, untouched.
+    (lzs_size,) = struct.unpack_from("<I", raw, 0)
+    body = bytearray(raw[4 : 4 + lzs_size])
     for off, old in forced:
         print(f"  force IFUW else-byte @{off:#x}: {old:#x} -> 0x00")
-
-    new_raw = compress_all_with_header(bytes(dec))
-    print(f"recompressed {len(raw)} -> {len(new_raw)} (sector cap {max_bytes})")
-    if len(new_raw) > max_bytes:
-        raise SystemExit(f"too large for ISO slot {len(new_raw)} > {max_bytes}")
+        body_off = find_literal_body_offset(bytes(body), off)
+        if body[body_off] != old:
+            raise SystemExit(
+                f"body byte at {body_off:#x} is {body[body_off]:#x}, expected {old:#x}"
+            )
+        body[body_off] = 0x00
+    new_raw = bytes(raw[:4]) + bytes(body) + bytes(raw[4 + lzs_size :])
+    print(f"patched in place: {len(raw)} -> {len(new_raw)} bytes (no recompress)")
 
     # Sanity: confirm the target gate is open post-patch.
     f = load_field_dat(new_raw, "LOST2")
