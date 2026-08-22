@@ -14,18 +14,13 @@ Pipeline, on top of CSR D1 as the base:
      diverges from the proven file by ~12k bytes after decompression
      (see docs/findings/) and causes a black-screen hang at the D1->D2
      transition, so it is no longer used for these three fields.
-  4. Strip WHITE2's (field 643) movie-play block (IFSW/PMVIE/JMPF/PMVIE/
-     MOVIE) via fix_white2_movie_hang.py -- those movie files no longer
-     resolve to valid streams on the single-disc build, so playing them
-     hangs (MDEC decode of garbage). Both IFSW branches converge on the
-     same fade+return anyway, so the block is dropped entirely.
-  5. Patch FIELD.BIN's/WORLD.BIN's embedded (location,size) lookup table
-     for every field resized by steps 1-4, via fix_field_bin_table.py --
+  4. Patch FIELD.BIN's/WORLD.BIN's embedded (location,size) lookup table
+     for every field resized by steps 1-3, via fix_field_bin_table.py --
      without this, ff7tk (Makou Reactor) fails ANY save of the built bin
      with "Cannot update game binaries" (InvalidError), because its
      unconditional reorganizeModifiedFilesAfter() searches FIELD.BIN for
      each field's current directory-record size and finds the stale one.
-  6. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
+  5. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
      via inject_snova_d3_to_d1.py.
 
 This produces the merged single-disc-on-csr work .bin -- NOT a final release
@@ -56,7 +51,6 @@ from merge_rework_fields import (  # noqa: E402
     merge_slots,
 )
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
-from fix_white2_movie_hang import fix_white2  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
@@ -145,7 +139,6 @@ def main() -> int:
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
     dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
     apply_dskcg_removal(img, fields=dskcg_fields)
-    fix_white2(img)
 
     print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
     fixed = fix_field_and_world_bins(img)

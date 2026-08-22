@@ -1,12 +1,12 @@
 {
   "id": "single-disc-on-csr",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "name": "Single-disc",
   "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.5: fixes a second WHITE2 (#643) movie hang missed in v0.2.4 -- Cosmo Canyon's cutscene script also tries to play a movie in a different script slot, which still hung on load. Retains all v0.2.4 fixes. Manip movies and endings are disabled pending re-validation on this new base.",
   "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
   "format": "ic-layer-v1",
   "compatibleBases": [
-    "csr-v0.14.1"
+    "csr-v0.14.2"
   ],
   "layout": "global",
   "enabled": true,

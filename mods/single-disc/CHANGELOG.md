@@ -1,3 +1,24 @@
+## 0.2.6 — 2026-08-22
+
+**Retires `fix_white2_movie_hang.py` from the build pipeline** — no longer
+needed against `csr-v0.14.2`.
+
+- v0.2.5's `cl`/31 strip was wrong: that slot's `PMVIE`/`MOVIE` pair sits
+  behind CSR's unconditional `JMPF`, so it's dead code, never reached at
+  runtime. Stripping it shifted every following opcode back without
+  updating the `JMPF`'s fixed relative-offset literal, desyncing the
+  jump target — reverted, `cl`/31 is left untouched.
+- `mdir`/31 (the actual hang, fixed in v0.2.4/v0.2.5) is now fixed
+  upstream: `csr-v0.14.2`'s own `WHITE2.DAT` already has the
+  `IFSW/PMVIE/JMPF/PMVIE/MOVIE` block removed from `mdir`/31. WHITE2's
+  whole-file merge verdict is CSR Disc 2 (`merge_safe_fields.py`), so
+  the single-disc build picks up this fix automatically during the
+  step-2 safe-field merge, before `fix_white2_movie_hang.py` would even
+  run. Calling it now would hit its "unexpected script bytes" guard, so
+  step 4 (WHITE2 movie strip) is removed from `build_work_bin.py`
+  entirely. `fix_white2_movie_hang.py` is kept in the repo as a
+  historical reference but is no longer invoked.
+
 ## 0.2.5 — 2026-08-22
 
 **Fixes a second WHITE2 (#643) movie hang** missed by v0.2.4.
