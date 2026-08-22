@@ -7,7 +7,9 @@ Pipeline, on top of CSR D1 as the base:
      RCKTIN2) via merge_rework_fields.py's logic. 5 of these 6 whole-file
      verdicts (BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2) resolve to CSR D1
      -- already the base -- so only LOST2 (verdict D2) actually applies;
-     the no-op D1 copies are skipped to avoid redundant work.
+     the no-op D1 copies are skipped to avoid redundant work. Likewise, the
+     3 slot-spliced fields (BUGIN1A, NIVGATE, RCKTIN2) only list slots whose
+     verdict is CSR D2 -- slots verdicted CSR D1 are omitted as no-ops.
   2. Apply the bulk "safe" field merge -- every other CSR field edited on
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset) -- via
      merge_safe_fields.py.
