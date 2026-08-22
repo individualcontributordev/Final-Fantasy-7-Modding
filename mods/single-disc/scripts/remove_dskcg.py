@@ -56,10 +56,18 @@ def _write_jump_raw(raw: bytearray, offset: int, width: int, value: int) -> None
         raw[offset : offset + width] = value.to_bytes(width, "little")
 
 
-def remove_dskcg_from_script(script_raw: bytes) -> tuple[bytes, int]:
-    """Remove all DSKCG (0x0E) operations from a script slot, fixing up any
+def remove_dskcg_from_script(
+    script_raw: bytes, only_indices: set[int] | None = None
+) -> tuple[bytes, int]:
+    """Remove DSKCG (0x0E) operations from a script slot, fixing up any
     JMPF/JMPFL/JMPB/JMPBL/IFxx jump targets whose relative byte offset would
     otherwise be broken by the deleted bytes.
+
+    By default removes every DSKCG in the slot. If `only_indices` is given,
+    only removes the DSKCG occurrences at those 0-based indices (in
+    script order) -- e.g. {0} to remove just the first DSKCG and leave the
+    other 3 completely untouched, matching a manual single-opcode deletion
+    in Makou Reactor.
 
     Deleting an opcode shifts the byte position of everything after it, so a
     jump instruction whose target lies past a removed DSKCG (or whose own
@@ -84,17 +92,52 @@ def remove_dskcg_from_script(script_raw: bytes) -> tuple[bytes, int]:
     if not any(raw[0] == 0x0E for _, raw, _ in ops):
         return script_raw, 0
 
-    # Debug/isolation mode (per user request): just strip DSKCG bytes,
-    # do NOT recalculate any jump offsets. Jumps that pointed past a removed
-    # DSKCG will be off by the removed bytes -- this is intentionally wrong
-    # and only for isolating whether jump-fixup math itself was the bug.
+    # old_boundaries[i] -> new_boundaries[i]: maps every original instruction
+    # start (plus the trailing end-of-script sentinel) to its position in the
+    # compacted script, collapsing removed DSKCG starts onto whatever now
+    # follows them (same technique as field_dat_write.py's boundary_map).
+    old_boundaries = [p for p, _, _ in ops] + [end]
+    new_boundaries: list[int] = [0]
     survivors: list[tuple[int, bytearray, str]] = []
     removed = 0
+    dskcg_seen = 0
+    cur = 0
     for start, raw, name in ops:
         if raw[0] == 0x0E:  # DSKCG opcode
-            removed += 1
-            continue
+            idx = dskcg_seen
+            dskcg_seen += 1
+            if only_indices is None or idx in only_indices:
+                removed += 1
+                new_boundaries.append(cur)
+                continue
+        cur += len(raw)
         survivors.append((start, bytearray(raw), name))
+        new_boundaries.append(cur)
+
+    boundary_map = dict(zip(old_boundaries, new_boundaries))
+
+    for start, raw, name in survivors:
+        info = JUMP_INFO.get(name)
+        if info is None:
+            continue
+        offset, width, shift, is_back = info
+        raw_val = _read_jump_raw(bytes(raw), offset, width)
+        old_target = start - raw_val if is_back else start + raw_val + shift
+        if old_target not in boundary_map:
+            raise ValueError(
+                f"{name} at old offset {start}: jump target {old_target} is not "
+                "an instruction boundary -- cannot fix up after DSKCG removal"
+            )
+        new_target = boundary_map[old_target]
+        new_start = boundary_map[start]
+        new_val = new_start - new_target if is_back else new_target - new_start - shift
+        max_val = (1 << (8 * width)) - 1
+        if not (0 <= new_val <= max_val):
+            raise ValueError(
+                f"{name} at old offset {start}: fixed-up jump value {new_val} "
+                f"out of range for a {width}-byte field after DSKCG removal"
+            )
+        _write_jump_raw(raw, offset, width, new_val)
 
     new_script = bytearray()
     for _, raw, _ in survivors:
@@ -103,8 +146,14 @@ def remove_dskcg_from_script(script_raw: bytes) -> tuple[bytes, int]:
     return bytes(new_script), removed
 
 
-def remove_dskcg_from_field(field_raw: bytes, field_name: str) -> tuple[bytes, int]:
-    """Remove all DSKCG operations from a field file.
+def remove_dskcg_from_field(
+    field_raw: bytes, field_name: str, only_indices: set[int] | None = None
+) -> tuple[bytes, int]:
+    """Remove DSKCG operations from a field file.
+
+    `only_indices`, if given, restricts removal (within each script slot
+    that has any DSKCG) to those 0-based occurrence indices -- e.g. {0} to
+    remove only the first DSKCG per slot and leave the rest untouched.
 
     Returns (new_field_raw, total_dskcg_removed).
     """
@@ -116,7 +165,7 @@ def remove_dskcg_from_field(field_raw: bytes, field_name: str) -> tuple[bytes, i
     modified_scripts: dict[tuple[str, int], bytes] = {}
 
     for script in field_dat.scripts:
-        new_raw, removed = remove_dskcg_from_script(script.raw)
+        new_raw, removed = remove_dskcg_from_script(script.raw, only_indices)
         if removed > 0:
             total_removed += removed
             modified_scripts[(script.entity, script.slot)] = new_raw
