@@ -137,6 +137,9 @@ def main() -> int:
                      help="patch FIELD.BIN/WORLD.BIN (location,size) tables after merging "
                           "(opt-in: has not reliably fixed Makou Reactor's InvalidError in "
                           "all cases, kept available for testing)")
+    ap.add_argument("--skip-dskcg-removal", action="store_true",
+                     help="skip stripping DSKCG (ask-for-disc) ops from BLACKBGB "
+                          "(isolation test for D1->D2 transition black-screen hang)")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -148,7 +151,10 @@ def main() -> int:
 
     apply_rework_merge(img, c1, c2)
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
-    apply_dskcg_removal(img)
+    if args.skip_dskcg_removal:
+        print("\nSkipping DSKCG removal (--skip-dskcg-removal)")
+    else:
+        apply_dskcg_removal(img)
 
     if args.apply_table_fix:
         print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
