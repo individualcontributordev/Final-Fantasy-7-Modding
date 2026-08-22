@@ -2,16 +2,17 @@
 """Build the merged single-disc-on-csr work bin (rebuild-from-scratch pipeline).
 
 Pipeline, on top of CSR D1 as the base:
-  1. Apply the 66-slot verdict-table merge for the 9 "rework" fields
-     (BLACKBGB, BUGIN1A, COS_BTM, COS_BTM2, DEL1, JUNAIR2, LOST2, NIVGATE,
-     RCKTIN2) via merge_rework_fields.py's logic. 5 of these 6 whole-file
-     verdicts (BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2) resolve to CSR D1
-     -- already the base -- so only LOST2 (verdict D2) actually applies;
-     the no-op D1 copies are skipped to avoid redundant work. Likewise, the
-     3 slot-spliced fields (BUGIN1A, NIVGATE, RCKTIN2) only list slots whose
-     verdict is CSR D2 -- slots verdicted CSR D1 are omitted as no-ops.
+  1. Apply the verdict-table merge for the 8 "rework" fields (BLACKBGB,
+     BUGIN1A, COS_BTM, COS_BTM2, DEL1, JUNAIR2, NIVGATE, RCKTIN2) via
+     merge_rework_fields.py's logic. All 5 whole-file verdicts (BLACKBGB,
+     COS_BTM, COS_BTM2, DEL1, JUNAIR2) resolve to CSR D1 -- already the
+     base -- so WHOLE_FILE_FIELDS is empty and those are skipped as no-ops.
+     Likewise, the 3 slot-spliced fields (BUGIN1A, NIVGATE, RCKTIN2) only
+     list slots whose verdict is CSR D2 -- slots verdicted CSR D1 are
+     omitted as no-ops.
   2. Apply the bulk "safe" field merge -- every other CSR field edited on
-     only one non-D1 disc (plus RCKTIN7, a safe D2-superset) -- via
+     only one non-D1 disc (plus RCKTIN7, a safe D2-superset; LOST2 also
+     lands here now that CSR D1's LOST2 matches pristine) -- via
      merge_safe_fields.py.
   3. Replace BLACKBGB with the pre-exported, DSKCG-stripped field from
      workspace/v012-exports/ (proven working in v0.1.2). The live
@@ -67,7 +68,7 @@ V012_EXPORTS_DIR = ROOT / "workspace" / "v012-exports"
 
 
 def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
-    print("\nApplying 9-field rework merge (verdict table)...")
+    print("\nApplying 8-field rework merge (verdict table)...")
     for field, disc in WHOLE_FILE_FIELDS.items():
         src = c1 if disc == 1 else c2
         path = f"FIELD/{field}.DAT"

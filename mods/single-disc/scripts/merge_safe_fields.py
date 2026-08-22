@@ -6,10 +6,13 @@ Scope: every field present on 2+ discs where CSR only really edited it
 (vs pristine) on exactly one disc, or where edits on 2+ discs are
 identical/pad-only/sections-only (no genuine script rework) -- i.e.
 everything scripts/scan_all_field_collisions.py classifies as "safe".
-This is the complement of the 10 real collisions handled by
-merge_rework_fields.py (9 true reworks) -- RCKTIN7 is also folded in here
-since it's a safe D2-superset, not a genuine rework (see
-docs/findings/2026-08-19-collision-mergeability.md).
+This is the complement of the 8 real collisions handled by
+merge_rework_fields.py -- RCKTIN7 is also folded in here since it's a
+safe D2-superset, not a genuine rework (see
+docs/findings/2026-08-19-collision-mergeability.md). LOST2 also lands
+here now: CSR v0.14.2 reverted D1's LOST2 to pristine and removed the
+stray `version` entity, so it's a clean D2-only edit picked up
+automatically by find_safe_whole_file_merges() below.
 
 For each safe field:
   - If untouched by CSR on any disc, or already CSR D1 (the work-image
@@ -43,10 +46,10 @@ from scan_all_field_collisions import list_field_dir  # noqa: E402
 # take D2 wholesale, same as the true single-disc-edit fields below.
 EXTRA_SAFE_WHOLE_FILE: dict[str, int] = {"RCKTIN7": 2}
 
-# Fields fully owned by the 9-field rework merge -- must not be touched here.
+# Fields fully owned by the 8-field rework merge -- must not be touched here.
 REWORK_FIELDS = {
     "BLACKBGB", "BUGIN1A", "COS_BTM", "COS_BTM2", "DEL1",
-    "JUNAIR2", "LOST2", "NIVGATE", "RCKTIN2",
+    "JUNAIR2", "NIVGATE", "RCKTIN2",
 }
 
 

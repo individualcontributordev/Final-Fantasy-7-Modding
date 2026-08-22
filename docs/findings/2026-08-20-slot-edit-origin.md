@@ -1,4 +1,12 @@
-# Per-slot edit-origin (pristine-anchored) for 9 rework fields
+# Per-slot edit-origin (pristine-anchored) for 8 rework fields
+
+LOST2 was originally included here as a 9th rework field (CSR D1 had its
+own conflicting `init:0` edit plus a stray `version` entity not present
+pre-CSR). CSR v0.14.2 was republished with D1's LOST2 reverted to
+pristine and the `version` entity removed, making it a clean D2-only
+edit -- it now goes through the generic safe-field merge
+(merge_safe_fields.py) instead of this verdict table. Its rows and the
+judgement-call note below are kept for historical record.
 
 | Field | Slot | D1 edited by CSR? | D2 edited by CSR? | Origin verdict |
 |---|---|---|---|---|
@@ -29,28 +37,6 @@
 | DEL1 | tifa:7 | True | False | D1-ONLY edit -> take D1 |
 | DEL1 | yufi:31 | True | False | D1-ONLY edit -> take D1 |
 | JUNAIR2 | dir:0 | True | False | D1-ONLY edit -> take D1 |
-| LOST2 | Info:4 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | ballet:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | ballet:5 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | cefir:31 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | cid:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | cid:5 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | cloud:7 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | cloud:31 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 (field #634) | init:0 | True | True | D2 adds missing MAPJUMP to COS_BTM2 (field #526) -> take D2 |
-| LOST2 | ketcy:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | ketcy:5 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | line:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | red13:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | red13:5 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | tifa:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | tifa:5 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | version:0 | False | True | no pristine baseline (slot missing pre-CSR) |
-| LOST2 | version:31 | False | True | no pristine baseline (slot missing pre-CSR) |
-| LOST2 | vincent:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | vincent:5 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | yufi:3 | False | True | D2-ONLY edit -> take D2 |
-| LOST2 | yufi:5 | False | True | D2-ONLY edit -> take D2 |
 | NIVGATE | b_drct:1 | False | True | D2-ONLY edit -> take D2 |
 | NIVGATE | b_drct:31 | False | True | D2-ONLY edit -> take D2 |
 | NIVGATE | cefiros:3 | True | False | D1-ONLY edit -> take D1 |
@@ -74,7 +60,11 @@
 
 ## Notes on judgement calls
 
-### LOST2 (field #634), init:0
+### LOST2 (field #634), init:0 -- historical, resolved in CSR v0.14.2
+
+This slot's rows were removed from the table above since LOST2 moved to
+the safe-field merge (see the note at the top of this file). Kept here
+for context on why CSR D2 was originally judged correct pre-republish.
 
 Both discs edit this slot but not the same way, so it isn't a simple
 superset like COS_BTM2. Decoded comparison:
