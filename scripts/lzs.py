@@ -56,6 +56,51 @@ def decompress_all_with_header(data: bytes) -> bytes:
 	return decompress_all(data[4 : 4 + lzs_size])
 
 
+def find_literal_body_offset(body: bytes, dec_offset: int) -> int:
+	"""Find the offset within a raw LZS payload (no header) of the literal
+	byte that produced decompressed output byte `dec_offset`.
+
+	Raises ValueError if that output byte was produced by a back-reference
+	match instead of a literal (i.e. it cannot be patched in place without
+	possibly also touching other decompressed bytes that share the same
+	match run).
+	"""
+	i = 0
+	n = len(body)
+	first_byte = 0
+	out_pos = 0
+	while i < n:
+		first_byte >>= 1
+		if (first_byte & 256) == 0:
+			if i >= n:
+				break
+			first_byte = body[i] | 0xFF00
+			i += 1
+		if i >= n:
+			break
+		if first_byte & 1:
+			if out_pos == dec_offset:
+				return i
+			i += 1
+			out_pos += 1
+		else:
+			if i + 1 >= n:
+				break
+			b1 = body[i]
+			b2 = body[i + 1]
+			i += 2
+			offset = b1 | ((b2 & 0xF0) << 4)
+			end = (b2 & 0x0F) + 2 + offset
+			run_len = end - offset + 1
+			if out_pos <= dec_offset < out_pos + run_len:
+				raise ValueError(
+					f"decompressed offset {dec_offset} is inside a back-reference "
+					f"match run, not a literal byte -- cannot patch in place"
+				)
+			out_pos += run_len
+	raise ValueError(f"decompressed offset {dec_offset} not reached (stream length {out_pos})")
+
+
 
 def compress_all(data: bytes) -> bytes:
 	"""FF7 LZS compress matching decompress_all (ring 4096, cur starts 4078)."""

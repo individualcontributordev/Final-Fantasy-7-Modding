@@ -1,34 +1,36 @@
-# Task: Playtest single-disc-on-csr v0.2.2 (fixes v0.2.1 black screen)
+# Task: Playtest single-disc-on-csr v0.2.3 (fixes v0.2.2 LOST2 background corruption)
 
 ## Why
 
-Root cause of the v0.2.1 black-screen regression found: `build_work_bin.py`
-was live-stripping DSKCG ("Ask for disc") ops from BLACKBGB/BLACKBGE/
-BLACKBG3 via `remove_dskcg.py`, but that splicer produces a field that
-diverges from the **proven-working v0.1.2 field** by ~12k bytes after
-decompression — it was corrupting BLACKBGB, which is the field the
-player is standing in right before the D1→D2 transition, causing the
-hang before LOST2 (and its IFUW gate fix) is ever reached.
+v0.2.2 fixed the D1→D2 black screen and the Makou save error, but the
+forest field **LOST2 (#634)** rendered with a garbled/static background
+right after the break scene (movement/audio were fine — only the
+background graphics were corrupted).
 
-Fixed in `build_work_bin.py`: it now injects the pre-exported,
-DSKCG-stripped fields from `workspace/v012-exports/` (byte-identical to
-the field that shipped working in v0.1.2) instead of running the live
-splicer. Verified:
-- Rebuilt work bin's BLACKBGB/BLACKBGE/BLACKBG3 are byte-identical to
-  `workspace/v012-exports/*.DAT`.
-- Re-diffed into `disc1.layer.json`, round-trips byte-for-byte against
-  a fresh CSR D1 base.
-- `verify_builder_config.py --base csr-v0.14.1 --addon single-disc-on-csr`
-  passes end-to-end and the resulting stack also has the correct
-  BLACKBGB/E/3 bytes.
+Root cause: `force_lost2_break_ifuw.py` clears a single else-jump byte
+in LOST2's script to open the break-scene gate, but it did this by
+**decompressing the whole 32KB field, then recompressing it from
+scratch** with this repo's own from-scratch LZS encoder
+(`compress_all_with_header`). That encoder round-trips correctly
+through this repo's own decompressor, but it can choose different
+match/literal splits than the original CSR encoder for unrelated
+bytes — including the 13KB background section — producing a bitstream
+that decoded with visible corruption on real hardware/DuckStation even
+though our own Python decoder read it back fine.
 
-Bumped to **v0.2.2**. This is a fresh playtest — confirm all three
-issues (D1→D2 transition, music, Makou save) are actually fixed on the
-real shipped pack.
+Fixed: the else-byte is now patched **directly inside the still-compressed
+LZS body**, in place, without ever re-encoding the rest of the file.
+Verified offline: the rebuilt `FIELD/LOST2.DAT` differs from pristine
+CSR Disc 2's `LOST2.DAT` by **exactly one byte** (the intended else-jump
+byte), everything else — including the entire background section byte
+range — is untouched/identical to CSR D2.
+
+Bumped to **v0.2.3**. This is a fresh playtest — confirm the D1→D2
+transition/music/Makou-save fixes from v0.2.2 still hold, and that
+LOST2's background now renders correctly.
 
 The build isn't committed (`.bin`/`.cue` gitignored) — rebuilt locally
-below. Produces `workspace/iso-extract/single-disc-v022-repro.bin`
-(748,775,664 bytes).
+below.
 
 ## Prerequisites
 
@@ -42,36 +44,34 @@ below. Produces `workspace/iso-extract/single-disc-v022-repro.bin`
 2. Rebuild the work bin and a matching `.cue`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v022-repro.bin
-   printf 'FILE "single-disc-v022-repro.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-v022-repro.cue
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v023-repro.bin
+   printf 'FILE "single-disc-v023-repro.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-v023-repro.cue
    ```
 
-   Expect `Injecting pre-exported DSKCG-stripped fields ... for
-   ['BLACKBGB', 'BLACKBGE', 'BLACKBG3']` then `Wrote
-   workspace/iso-extract/single-disc-v022-repro.bin (747,435,024 bytes)
-   [pre-SNOVA]` then `Done. Final work bin: ...` with the final file at
-   **748,775,664 bytes**. No `WARNING:` or uncaught errors.
+   Expect a line `force IFUW else-byte @...: 0xb -> 0x0` and `patched in
+   place: 17090 -> 17090 bytes (no recompress)` during the "Forcing
+   LOST2 D1->D2 break-scene IFUW gate open..." step. No `WARNING:` or
+   uncaught errors.
 
-3. Open `workspace/iso-extract/single-disc-v022-repro.cue` in
+3. Open `workspace/iso-extract/single-disc-v023-repro.cue` in
    DuckStation fresh (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
-   break scene → COS_BTM2). Confirm exactly what happens, in order:
-   - Does it ask "do you want to save?" (expected/normal).
-   - After that, does it go straight to the break scene (fixed), or
-     show an "insert disc 2" prompt / black screen (bug still present)?
-   - Break scene plays with music, or black screen/silence?
-6. Open this bin in Makou Reactor, make a trivial edit (e.g. rename a
-   variable), Save. Confirm: succeeds (fixed) or fails with "Invalid
-   archive" / "Cannot update game binaries" (bug still present — note
-   exact text).
+   break scene → COS_BTM2). Confirm:
+   - Transition still goes straight to the break scene with music
+     (should be unchanged from v0.2.2 — still fixed).
+   - After the break scene, on LOST2 (forest): is the **background**
+     rendered correctly (fixed) or garbled/static/glitched (bug still
+     present)? Character models and movement were already fine before.
+6. Open this bin in Makou Reactor, make a trivial edit, Save. Confirm
+   it still succeeds (should be unchanged from v0.2.2).
 
 ## Evidence (paste)
 
 ```
-Disc 1→2 transition: straight to break scene (fixed) / asks for disc 2 first (bug) / black screen no save prompt (bug)
-Music: present / absent
-Makou save test: SUCCEEDED (fixed) / FAILED "Invalid archive" (bug) / FAILED other (paste exact text)
+Disc 1->2 transition: straight to break scene with music (expected)
+LOST2 background: renders correctly (fixed) / still garbled (bug)
+Makou save test: SUCCEEDED / FAILED (paste exact text)
 notes:
 ```
 

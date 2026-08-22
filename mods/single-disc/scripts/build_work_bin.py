@@ -38,6 +38,7 @@ Usage (from repo root):
 from __future__ import annotations
 
 import argparse
+import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -57,7 +58,7 @@ from merge_rework_fields import (  # noqa: E402
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from force_lost2_break_ifuw import force_lost2_ifuw  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
-from lzs import compress_all_with_header, decompress_all_with_header  # noqa: E402
+from lzs import decompress_all_with_header, find_literal_body_offset  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
 V012_EXPORTS_DIR = ROOT / "workspace" / "v012-exports"
@@ -121,9 +122,23 @@ def apply_lost2_break_fix(img: bytearray) -> int:
     if not forced:
         print("  no gate cleared (already open, or pattern not found)")
         return 0
+    # Patch each cleared else-byte directly in the still-compressed LZS body
+    # (no decompress+recompress round trip). The custom from-scratch LZS
+    # encoder can choose different match/literal splits than the original
+    # CSR encoder for unrelated bytes (background section included), which
+    # round-trips correctly through our own decompressor but caused
+    # on-console graphical corruption in the recompressed background.
+    (lzs_size,) = struct.unpack_from("<I", raw, 0)
+    body = bytearray(raw[4 : 4 + lzs_size])
     for off, old in forced:
         print(f"  force IFUW else-byte @{off:#x}: {old:#x} -> 0x00")
-    new_raw = compress_all_with_header(bytes(dec))
+        body_off = find_literal_body_offset(bytes(body), off)
+        if body[body_off] != old:
+            raise SystemExit(
+                f"body byte at {body_off:#x} is {body[body_off]:#x}, expected {old:#x}"
+            )
+        body[body_off] = 0x00
+    new_raw = bytes(raw[:4]) + bytes(body) + bytes(raw[4 + lzs_size :])
     replace_file_within_sectors(img, path, new_raw)
     return len(forced)
 

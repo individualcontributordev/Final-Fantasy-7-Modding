@@ -1,3 +1,26 @@
+## 0.2.3 — 2026-08-22
+
+**Fixes v0.2.2 LOST2 (#634) background graphical corruption** after the
+D1→D2 break scene (movement/audio were fine; only the background
+rendered garbled/static).
+
+- Root cause: `force_lost2_break_ifuw.py` cleared LOST2's break-scene
+  IFUW else-jump byte by decompressing the whole 32KB field and
+  recompressing it from scratch via this repo's own from-scratch LZS
+  encoder (`compress_all_with_header`). That encoder round-trips
+  correctly through this repo's own decompressor, but can choose
+  different match/literal splits than the original CSR encoder for
+  unrelated bytes — including the 13KB background section — producing
+  a bitstream that decoded with visible corruption on real
+  hardware/DuckStation.
+- Fix: patch the else-jump byte directly inside the still-compressed
+  LZS body (`lzs.find_literal_body_offset`), leaving every other byte
+  of the compressed field untouched. No recompression. Verified the
+  rebuilt `FIELD/LOST2.DAT` differs from pristine CSR Disc 2's
+  `LOST2.DAT` by exactly the one intended byte.
+- `build_work_bin.py`'s `apply_lost2_break_fix` uses the same in-place
+  patch.
+
 ## 0.1.3.3 — 2026-08-21
 
 **Fixes D1→D2 disc-swap hang** (freeze on black screen, no "Insert Disc 2"
