@@ -1,3 +1,16 @@
+## 0.2.7 — 2026-08-22
+
+**Drops redundant no-op whole-file merges from `merge_rework_fields.py`.**
+
+- `WHOLE_FILE_FIELDS` verdicts for BLACKBGB, COS_BTM, COS_BTM2, DEL1,
+  JUNAIR2 all resolve to CSR D1 — already `build_work_bin.py`'s base image
+  — so applying them was a byte-for-byte no-op copy onto themselves.
+  Removed; only LOST2 (verdict CSR D2) remains, since it's the only one of
+  the 6 that changes bytes on a D1 base. The full 6-field audit record is
+  unchanged in `docs/findings/2026-08-20-slot-edit-origin.md` and in the
+  module docstring — this only trims the pipeline's redundant work, not
+  the audit trail.
+
 ## 0.2.6 — 2026-08-22
 
 **Retires `fix_white2_movie_hang.py` from the build pipeline** — no longer

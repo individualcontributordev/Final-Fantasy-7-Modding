@@ -4,9 +4,13 @@ per verdicts recorded in docs/findings/2026-08-20-slot-edit-origin.md.
 
 6 fields are pure single-disc replacements (every differing slot's verdict
 agrees with one whole disc's CSR file for that field):
-  BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2 -> take whole CSR D1 file
+  BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2 -> verdict = CSR D1, which is
+           already the work image's base -- WHOLE_FILE_FIELDS omits these
+           (no-op copy onto themselves) to avoid redundant writes. BLACKBGB
+           is also fully replaced later anyway (DSKCG removal step).
   LOST2 -> take whole CSR D2 file (adds the `version` entity D1 lacks, and
            the missing MAPJUMP field #526 COS_BTM2 break-scene transition)
+           -- the only one of the 6 that actually changes bytes on a D1 base.
 
 3 fields have genuinely mixed per-slot verdicts (entity/slot sets are
 identical between discs, so a slot-level splice is safe):
@@ -30,13 +34,14 @@ from field_dat import load_field_dat  # noqa: E402
 from field_dat_write import write_field_dat  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E402
 
-# Fields where the verdict table agrees with one whole CSR disc's file.
+# Fields where the verdict table agrees with one whole CSR disc's file, AND
+# that disc differs from the work image's CSR-D1 base (i.e. the merge would
+# actually change bytes). BLACKBGB/COS_BTM/COS_BTM2/DEL1/JUNAIR2 all verdict
+# to CSR D1 -- since the base is already CSR D1, applying them is a no-op
+# copy; they're omitted here to avoid redundant work. See module docstring
+# and docs/findings/2026-08-20-slot-edit-origin.md for the full 6-field
+# audit record.
 WHOLE_FILE_FIELDS = {
-    "BLACKBGB": 1,
-    "COS_BTM": 1,
-    "COS_BTM2": 1,
-    "DEL1": 1,
-    "JUNAIR2": 1,
     "LOST2": 2,
 }
 
