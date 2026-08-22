@@ -1,36 +1,23 @@
-# Task: Playtest single-disc-on-csr v0.2.1 (both regressions fixed)
+# Task: Isolate why v0.2.1 is worse than v0.2.0 (black screen + still broken save)
 
 ## Why
 
-Both regressions this whole bisection was chasing are now believed fixed
-on `main`, independently of the bisection:
+v0.2.1 playtest came back **worse** than expected: no transition at all
+(black screen, no audio) and Makou save still fails "Invalid archive".
+Since v0.2.1 only added the `fix_field_bin_table.py` table-fix step on
+top of what v0.2.0 already had, and the LOST2 IFUW patch logic was
+verified byte-identical in old vs new pipeline (same 3 occurrences,
+same offsets, same else-bytes 0x12/0x12/0xb — the patch is correctly
+targeting the pre-MAPJUMP gate), the table-fix step is the prime
+suspect for the new black-screen regression.
 
-1. **Disc 1→2 break-scene regression** (the `78e2cff..a6a14df` bug we were
-   bisecting): `main` was rebuilt from scratch on Aug 21
-   (`e45a5bf`, "v0.2.0") using a new `build_work_bin.py` pipeline that
-   includes `force_lost2_break_ifuw.py` — explicitly forces LOST2's
-   D1→D2 break-scene IFUW gate open, since the GM flag it checks is
-   never set on single-disc.
-2. **Makou Reactor "Invalid archive" save regression**: fixed this
-   morning in `c3a420e` — `FIELD.BIN`/`WORLD.BIN` embed their own
-   (location,size) lookup table per field, used by ff7tk's
-   `reorganizeModifiedFilesAfter()` on every save. Field merges resized
-   files but never updated that table, so any save failed. Fixed via
-   `fix_field_bin_table.py`, wired into `build_work_bin.py` as a new
-   step.
+This step builds a diagnostic bin with the **same field merges +
+LOST2 fix but WITHOUT the table-fix and WITHOUT SNOVA inject**, to see
+if removing the table-fix alone restores at least the old (v0.2.0)
+black-screen-but-editable-and-saveable behavior.
 
-The **shipped** `builder/single-disc-on-csr/layers/disc1.layer.json`
-(v0.2.0) predated the Makou-save fix (`e45a5bf` before `c3a420e`), so it
-was rebuilt just now with the current pipeline and bumped to **v0.2.1**.
-Verified: applying the new layer to a fresh CSR D1 base reproduces the
-rebuilt work bin byte-for-byte.
-
-This step is a **fresh playtest from scratch** (not another bisection
-step) — confirm both bugs are actually gone on the real shipped pack.
-
-The build isn't committed (`.bin`/`.cue` are gitignored) — it's rebuilt
-locally below. Produces
-`workspace/iso-extract/single-disc-v021-repro.bin` (748,775,664 bytes).
+The build isn't committed — rebuilt locally below. Produces
+`workspace/iso-extract/notablefix-test.bin` (747,435,024 bytes).
 
 ## Prerequisites
 
@@ -41,40 +28,83 @@ locally below. Produces
 ## What you do
 
 1. `git pull --ff-only`.
-2. Rebuild the work bin and a matching `.cue` (regenerates the exact
-   bytes already committed in the layer — `.bin`/`.cue` aren't tracked
-   in git, this just gets you a local file to playtest):
+2. Rebuild the diagnostic bin and cue:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v021-repro.bin
-   printf 'FILE "single-disc-v021-repro.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-v021-repro.cue
+   python3 - <<'PYEOF'
+import sys
+sys.path.insert(0, 'scripts')
+sys.path.insert(0, 'mods/single-disc/scripts')
+from disc_sources import load_csr_image
+from psx_mode2_iso import extract_file, replace_file_within_sectors
+from merge_rework_fields import SLOT_SPLICE_FIELDS, WHOLE_FILE_FIELDS, merge_slots
+from merge_safe_fields import find_safe_whole_file_merges
+from remove_dskcg import remove_dskcg_from_field
+from force_lost2_break_ifuw import force_lost2_ifuw
+from lzs import compress_all_with_header, decompress_all_with_header
+
+c1 = bytes(load_csr_image(1))
+c2 = bytes(load_csr_image(2))
+img = bytearray(c1)
+
+for field, disc in WHOLE_FILE_FIELDS.items():
+    src = c1 if disc == 1 else c2
+    path = f'FIELD/{field}.DAT'
+    data = extract_file(src, path)
+    replace_file_within_sectors(img, path, data)
+for field, slot_discs in SLOT_SPLICE_FIELDS.items():
+    merge_slots(img, field, slot_discs, c1, c2)
+
+merges = find_safe_whole_file_merges()
+src_imgs = {2: bytes(load_csr_image(2)), 3: bytes(load_csr_image(3))}
+for field, disc in sorted(merges.items()):
+    path = f'FIELD/{field}.DAT'
+    data = extract_file(src_imgs[disc], path)
+    current = extract_file(bytes(img), path)
+    if data != current:
+        replace_file_within_sectors(img, path, data)
+
+for field in ['BLACKBGB','BLACKBGE','BLACKBG3']:
+    path = f'FIELD/{field}.DAT'
+    raw = extract_file(bytes(img), path)
+    new_raw, removed = remove_dskcg_from_field(raw, field)
+    if removed:
+        replace_file_within_sectors(img, path, new_raw)
+
+path = 'FIELD/LOST2.DAT'
+raw = extract_file(bytes(img), path)
+dec = bytearray(decompress_all_with_header(raw))
+forced = force_lost2_ifuw(dec)
+print('forced', forced)
+new_raw = compress_all_with_header(bytes(dec))
+replace_file_within_sectors(img, path, new_raw)
+
+out = 'workspace/iso-extract/notablefix-test.bin'
+open(out, 'wb').write(img)
+print('wrote', out, len(img))
+PYEOF
+   printf 'FILE "notablefix-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/notablefix-test.cue
    ```
 
-   Expect `Wrote workspace/iso-extract/single-disc-v021-repro.bin
-   (747,435,024 bytes) [pre-SNOVA]` then `Done. Final work bin: ...`
-   with the final file at **748,775,664 bytes**. No `WARNING:` or
-   uncaught errors.
+   Expect `forced [(1236, 11)]` and `wrote ... 747435024`.
 
-3. Open `workspace/iso-extract/single-disc-v021-repro.cue` in
-   DuckStation fresh (no save states, no cheats).
-4. New game, play through Midgar to confirm baseline sanity (no hangs).
-5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
-   break scene → COS_BTM2). Confirm exactly what happens, in order:
-   - Does it ask "do you want to save?" (expected/normal).
-   - After that, does it go straight to the break scene (fixed), or
-     show an "insert disc 2" prompt / black screen (bug still present)?
-   - Break scene plays with music, or black screen/silence?
-6. Open this bin in Makou Reactor, make a trivial edit (e.g. rename a
-   variable), Save. Confirm: succeeds (fixed) or fails with "Invalid
-   archive" / "Cannot update game binaries" (bug still present — note
-   exact text).
+3. Open `workspace/iso-extract/notablefix-test.cue` in DuckStation
+   fresh (no save states, no cheats).
+4. New game, confirm no early hangs.
+5. Progress to the Disc 1→2 transition. Report exactly what happens:
+   straight to break scene with music / disc-2 prompt / black screen
+   with no audio (same as v0.2.1) / black screen but this time note if
+   ANYTHING happens (any sound, any delay before black).
+6. Open this bin in Makou Reactor, make a trivial edit, Save. Report:
+   succeeds / fails with "Invalid archive" / fails with other text
+   (paste exact text).
 
 ## Evidence (paste)
 
 ```
-Disc 1→2 transition: straight to break scene (fixed) / asks for disc 2 first (bug) / black screen no save prompt (bug)
-Music: present / absent
-Makou save test: SUCCEEDED (fixed) / FAILED "Invalid archive" (bug) / FAILED other (paste exact text)
+Disc 1->2 transition: <result>
+Music/audio: <present/absent>
+Makou save test: <result, exact error text if any>
 notes:
 ```
 
