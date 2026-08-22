@@ -14,12 +14,13 @@ Pipeline, on top of CSR D1 as the base:
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset; LOST2 also
      lands here now that CSR D1's LOST2 matches pristine) -- via
      merge_safe_fields.py.
-  3. Replace BLACKBGB with the pre-exported, DSKCG-stripped field from
-     workspace/v012-exports/ (proven working in v0.1.2). The live
-     remove_dskcg.py splicer produces a field that diverges from the
-     proven file by ~12k bytes after decompression (see docs/findings/)
-     and causes a black-screen hang at the D1->D2 transition, so it is
-     no longer used for this field. BLACKBGE/BLACKBG3 are unused maps
+  3. Strip DSKCG (ask-for-disc) ops from BLACKBGB via remove_dskcg.py's
+     live opcode splicer (parses scripts, removes 0x0E ops, fixes up
+     JMPF/JMPFL/JMPB/JMPBL/IFxx jump targets). This is a pure DSKCG
+     removal only -- untested against the D1->D2 transition as of this
+     pipeline revision; see docs/findings/ for prior hang reports on an
+     earlier version of this step and 2026-08-2x findings for the
+     current verification status. BLACKBGE/BLACKBG3 are unused maps
      with no MAPJUMP references from any other field (confirmed in
      Makou Reactor) and are left untouched.
   4. (optional, --apply-table-fix) Patch FIELD.BIN's/WORLD.BIN's embedded
@@ -62,9 +63,9 @@ from merge_rework_fields import (  # noqa: E402
 )
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
+from remove_dskcg import remove_dskcg_from_field  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB"]
-V012_EXPORTS_DIR = ROOT / "workspace" / "v012-exports"
 
 
 def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
@@ -101,18 +102,17 @@ def apply_safe_field_merge(img: bytearray, d2_only: bool = False) -> int:
 
 def apply_dskcg_removal(img: bytearray, fields: list[str] | None = None) -> int:
     fields = DSKCG_FIELDS if fields is None else fields
-    print(f"\nInjecting pre-exported DSKCG-stripped fields (proven v0.1.2) for {fields}...")
+    print(f"\nRemoving DSKCG (ask-for-disc) ops via live splicer for {fields}...")
     total = 0
     for field in fields:
         path = f"FIELD/{field}.DAT"
-        export_path = V012_EXPORTS_DIR / f"{field}.DAT"
-        new_raw = export_path.read_bytes()
         current = extract_file(img, path)
-        if new_raw != current:
+        new_raw, removed = remove_dskcg_from_field(current, field)
+        if removed > 0:
             replace_file_within_sectors(img, path, new_raw)
             total += 1
-        print(f"  {field}: injected from {export_path.relative_to(ROOT)} ({len(new_raw)} bytes)")
-    print(f"  Total fields replaced: {total}")
+        print(f"  {field}: removed {removed} DSKCG ({len(new_raw)} bytes)")
+    print(f"  Total fields modified: {total}")
     return total
 
 
