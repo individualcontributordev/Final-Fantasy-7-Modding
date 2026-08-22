@@ -1,41 +1,33 @@
-# Task: Diagnostic — test 6ba3f34 with movies-before-single-disc apply
-# order (--swap-order)
+# Task: Bisect — test commit 909c4bb (last untested commit before 6ba3f34)
 
 ## Why
 
-Bisection hit a dead end: `909c4bb` and `cc87303` both fail to build
-standalone (CANONON mismatch), so the only testable commits between
-`78e2cff` (good) and `a6a14df` (bad) were the endpoints, plus `6ba3f34`
-and `8e1f569` (both reproduce the bug: transition to disc 2 with no
-break scene, no music).
+The `--swap-order` diagnostic is **disproven**: `6ba3f34-repro-swapped.bin`
+(manip-movies applied before single-disc, matching the production
+builder's `addonApplyRank` fix) still shows the same broken transition —
+disc 2, no break scene, no music — identical to the non-swapped build.
+Makou save still works fine. So this is a **real regression** in the
+commit range, not a test-harness apply-order artifact.
 
-Investigating `6ba3f34`'s own finding doc
-(`docs/findings/2026-08-13-path-fmv-movies-pack-clobber.md`) revealed the
-likely real cause: it documents that the **manip-movies pack must be
-applied before the single-disc pack**, not after, because the movies
-pack rewrites shared JAIROFAL/MOVIE_ID LBAs that the single-disc path
-injects rely on. The documented fix was to change the **production
-builder's** `addonApplyRank` (movies=10, single-disc-on-csr=20).
+Current state of the disc-2-prompt/no-break-scene bisection:
+- `78e2cff` (v0.1.21): **GOOD** — straight to break scene, music present.
+- `909c4bb` (v0.1.22): **UNTESTED** (only remaining commit in range).
+- `cc87303` (v0.1.23): unbuildable standalone (CANONON mismatch) — skip.
+- `6ba3f34` (v0.1.24): **BROKEN**, confirmed with and without swap order.
+- `8e1f569`: **BROKEN**.
+- `a6a14df`: **BROKEN** (disc-2 prompt, but does still show a save
+  prompt — a milder variant than 6ba3f34/8e1f569/main).
 
-However, `mods/single-disc/scripts/build_playtest_bin.py` — the
-standalone dev script this whole bisection has been using — was **never
-updated** to match that reordering. It still hardcodes CSR → single-disc
-→ movies on every commit, including current `main`. That means every
-"disc-2-prompt / no break scene" result from `78e2cff` onward via this
-script may be a **test-harness artifact**, not a bug present in the real
-web builder players actually use.
-
-This step tests that theory directly: rebuild `6ba3f34` with the apply
-order swapped (movies applied first, single-disc second) using a new
-`--swap-order` diagnostic flag. The internal CANONON check already
-passes with this order. If the break scene/music now work in-game too,
-the entire disc-2-prompt "regression" chase has been chasing a dev-script
-bug, not a real one — and the real single-disc mod may never have been
-broken in the shipped builder pack for these versions.
+This step tests `909c4bb` ("single-disc-on-csr-v0.1.22: restore MD8_52
+NRCRL Cloud-position FMV") — the only remaining untested commit between
+known-good `78e2cff` and known-bad `6ba3f34`. If broken, `909c4bb` itself
+is the regression commit. If good, the bug is somehow specific to
+`6ba3f34`'s changes despite the swap not fixing it (unlikely, but would
+need a closer diff read).
 
 The build isn't committed (`.bin` files are gitignored) — you rebuild it
 locally with the commands below. It produces
-`workspace/iso-extract/6ba3f34-repro-swapped.bin` (808,951,584 bytes).
+`workspace/iso-extract/909c4bb-repro.bin`.
 
 ## Prerequisites
 
@@ -47,23 +39,22 @@ locally with the commands below. It produces
 ## What you do
 
 1. `git pull --ff-only`.
-2. Build `6ba3f34-repro-swapped.bin` (movies applied before single-disc):
+2. Build `909c4bb-repro.bin`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_aug7_repro.py 6ba3f34 --swap-order
+   python3 mods/single-disc/scripts/build_aug7_repro.py 909c4bb
    ```
 
-   This creates a throwaway git worktree at that commit, patches that
-   commit's own `build_playtest_bin.py` to apply manip-movies *before*
-   the single-disc main pack, runs it against your current pristine
+   This creates a throwaway git worktree at that commit, runs *that*
+   commit's own `build_playtest_bin.py` against your current pristine
    discs and CSR repo, copies the result back, and cleans up the
    worktree. Expect a `WROTE
-   .../workspace/iso-extract/6ba3f34-repro-swapped.bin (808,951,584
-   bytes)` line at the end with no `FAIL:` lines. If anything differs,
-   paste full output before playtesting.
+   .../workspace/iso-extract/909c4bb-repro.bin (...)` line at the end
+   with no `FAIL:` lines. If anything differs, paste full output before
+   playtesting.
 
-3. Open `workspace/iso-extract/6ba3f34-repro-swapped.cue` in DuckStation
-   fresh (no save states, no cheats).
+3. Open `workspace/iso-extract/909c4bb-repro.cue` in DuckStation fresh
+   (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
    break scene → COS_BTM2). Confirm exactly what happens, in order:
@@ -87,18 +78,14 @@ notes:
 
 ## Why this matters
 
-- If the transition is **correct** with `--swap-order` (break scene +
-  music): the whole `78e2cff..a6a14df` "regression" was a test-harness
-  artifact — `build_playtest_bin.py` uses the wrong apply order, and the
-  real production builder (which uses `addonApplyRank` from the
-  `6ba3f34` fix) was never actually broken. In that case we'd stop
-  chasing this as a code regression and instead fix/retire the dev
-  script's hardcoded order.
-- If the bug **still reproduces** even with movies-before-single-disc:
-  the harness theory is wrong, and there's a real regression somewhere
-  in `78e2cff..a6a14df` that isn't explained by apply order alone —
-  resume bisecting `909c4bb` (only remaining untested commit; `cc87303`
-  is unbuildable).
+- If the transition is **correct** on `909c4bb` (break scene + music):
+  `909c4bb` is good, and the regression must be introduced by `6ba3f34`
+  itself despite the apply-order swap not fixing it — needs a closer
+  read of `6ba3f34`'s actual diff (LBA allocation changes) rather than
+  apply order.
+- If the bug **reproduces** on `909c4bb`: `909c4bb` is the regression
+  commit — done bisecting the disc-2-prompt bug, move to reading its
+  diff for the root cause.
 
 ## When done
 
