@@ -4,7 +4,10 @@
 Pipeline, on top of CSR D1 as the base:
   1. Apply the 66-slot verdict-table merge for the 9 "rework" fields
      (BLACKBGB, BUGIN1A, COS_BTM, COS_BTM2, DEL1, JUNAIR2, LOST2, NIVGATE,
-     RCKTIN2) via merge_rework_fields.py's logic.
+     RCKTIN2) via merge_rework_fields.py's logic. 5 of these 6 whole-file
+     verdicts (BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2) resolve to CSR D1
+     -- already the base -- so only LOST2 (verdict D2) actually applies;
+     the no-op D1 copies are skipped to avoid redundant work.
   2. Apply the bulk "safe" field merge -- every other CSR field edited on
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset) -- via
      merge_safe_fields.py.
