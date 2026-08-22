@@ -84,48 +84,17 @@ def remove_dskcg_from_script(script_raw: bytes) -> tuple[bytes, int]:
     if not any(raw[0] == 0x0E for _, raw, _ in ops):
         return script_raw, 0
 
-    # old_boundaries[i] -> new_boundaries[i]: maps every original instruction
-    # start (plus the trailing end-of-script sentinel) to its position in the
-    # compacted script, collapsing removed DSKCG starts onto whatever now
-    # follows them (same technique as field_dat_write.py's boundary_map).
-    old_boundaries = [p for p, _, _ in ops] + [end]
-    new_boundaries: list[int] = [0]
+    # Debug/isolation mode (per user request): just strip DSKCG bytes,
+    # do NOT recalculate any jump offsets. Jumps that pointed past a removed
+    # DSKCG will be off by the removed bytes -- this is intentionally wrong
+    # and only for isolating whether jump-fixup math itself was the bug.
     survivors: list[tuple[int, bytearray, str]] = []
     removed = 0
-    cur = 0
     for start, raw, name in ops:
         if raw[0] == 0x0E:  # DSKCG opcode
             removed += 1
-            new_boundaries.append(cur)
             continue
-        cur += len(raw)
         survivors.append((start, bytearray(raw), name))
-        new_boundaries.append(cur)
-
-    boundary_map = dict(zip(old_boundaries, new_boundaries))
-
-    for start, raw, name in survivors:
-        info = JUMP_INFO.get(name)
-        if info is None:
-            continue
-        offset, width, shift, is_back = info
-        raw_val = _read_jump_raw(bytes(raw), offset, width)
-        old_target = start - raw_val if is_back else start + raw_val + shift
-        if old_target not in boundary_map:
-            raise ValueError(
-                f"{name} at old offset {start}: jump target {old_target} is not "
-                "an instruction boundary -- cannot fix up after DSKCG removal"
-            )
-        new_target = boundary_map[old_target]
-        new_start = boundary_map[start]
-        new_val = new_start - new_target if is_back else new_target - new_start - shift
-        max_val = (1 << (8 * width)) - 1
-        if not (0 <= new_val <= max_val):
-            raise ValueError(
-                f"{name} at old offset {start}: fixed-up jump value {new_val} "
-                f"out of range for a {width}-byte field after DSKCG removal"
-            )
-        _write_jump_raw(raw, offset, width, new_val)
 
     new_script = bytearray()
     for _, raw, _ in survivors:

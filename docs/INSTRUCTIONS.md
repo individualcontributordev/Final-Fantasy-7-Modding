@@ -1,15 +1,24 @@
-# Task: Test D1->D2 transition with DSKCG removal SKIPPED
+# Task: Test D1->D2 transition with DSKCG bytes removed but NO jump fixup
 
 ## Why
 
-Pure DSKCG removal (previous task) still hung on the D1->D2 transition
-black screen. The MAPJUMP-reorder theory is ruled out (that code path
-in field 103/BLACKBGB isn't executed during the D1->D2 transition), so
-the hang is suspected to come from `remove_dskcg.py`'s DSKCG-stripping
-itself (the ask-for-disc opcode removal). `build_work_bin.py` now has
-a `--skip-dskcg-removal` flag so you can build with `BLACKBGB` fully
-untouched (straight from CSR D1) to confirm whether removing that step
-gets rid of the hang.
+Manual testing in Makou Reactor narrowed the bug: jumping *around* the
+single relevant DSKCG (leave bytes in place) works; and manually
+deleting just that one DSKCG (out of 4 in the `init` slot) also works
+and saves fine. The automated `remove_dskcg.py` deletes all 4 DSKCG in
+that slot and recalculates every JMPF/JMPB/IFxx jump target afterward
+— and *that* build hangs, plus later shows "Invalid Archive" in Makou.
+
+This build isolates whether the jump-offset **recalculation** itself
+is the bug: `remove_dskcg.py`'s `remove_dskcg_from_script` has been
+temporarily changed to strip the 4 DSKCG opcodes but leave every jump
+instruction's raw bytes untouched (no offset fixup at all). This is
+known to be arithmetically wrong for any jump that used to point past
+a removed DSKCG — but if the field still loads and the transition
+still hangs/corrupts the same way, that proves the jump-fixup math
+was never the cause, and the real bug is elsewhere (e.g. in
+`write_field_dat`'s field-level offset/AKAO table handling, or
+something outside the script referencing an absolute byte position).
 
 ## Prerequisites
 
@@ -20,34 +29,36 @@ gets rid of the hang.
 ## What you do
 
 1. `git pull --ff-only`.
-2. Rebuild the work bin with DSKCG removal skipped, and a matching `.cue`:
+2. Rebuild the work bin (jump-fixup disabled in `remove_dskcg.py`) and
+   a matching `.cue`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-no-dskcg-test.bin --skip-dskcg-removal
-   printf 'FILE "single-disc-no-dskcg-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-no-dskcg-test.cue
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-no-jump-fixup-test.bin
+   printf 'FILE "single-disc-no-jump-fixup-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-no-jump-fixup-test.cue
    ```
 
-   Expect this line during the build (instead of the DSKCG-removal lines):
+   Expect this line during the DSKCG-removal step:
    ```
-   Skipping DSKCG removal (--skip-dskcg-removal)
+     init slot 0: Removed 4 DSKCG
    ```
    No `WARNING:` or uncaught errors.
 
-3. Open `workspace/iso-extract/single-disc-no-dskcg-test.cue` in
+3. Open `workspace/iso-extract/single-disc-no-jump-fixup-test.cue` in
    DuckStation fresh (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
-   Note: BLACKBGB still has its original "insert disc 2" prompt in this
-   build (DSKCG not removed), so you may need to accept/dismiss that
-   prompt manually to proceed — that's expected here, this build is
-   only testing whether the transition itself still hangs afterward.
 5. Progress to the Disc 1->2 transition (BLACKBGB field #103 -> LOST2
-   -> break scene -> COS_BTM2). Confirm whether it hangs on black
-   screen or proceeds normally once the disc-swap prompt is handled.
+   -> break scene -> COS_BTM2). Note whether it hangs on black screen,
+   proceeds normally, or does something different (e.g. crashes,
+   garbled script behavior) compared to the earlier "remove all 4 with
+   fixup" build.
+6. Open this bin in Makou Reactor and check BLACKBGB field #103.
+   Confirm whether it opens cleanly or still shows "Invalid Archive".
 
 ## Evidence (paste)
 
 ```
-D1->2 transition (BLACKBGB->LOST2->break scene) with DSKCG removal SKIPPED: NO HANG / HANGS
+D1->2 transition with DSKCG removed, NO jump fixup: NO HANG / HANGS / OTHER (describe)
+Makou Reactor BLACKBGB open: OK / Invalid Archive
 notes:
 ```
 
