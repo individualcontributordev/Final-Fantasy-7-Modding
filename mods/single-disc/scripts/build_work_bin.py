@@ -21,12 +21,13 @@ Pipeline, on top of CSR D1 as the base:
      no longer used for this field. BLACKBGE/BLACKBG3 are unused maps
      with no MAPJUMP references from any other field (confirmed in
      Makou Reactor) and are left untouched.
-  4. Patch FIELD.BIN's/WORLD.BIN's embedded (location,size) lookup table
-     for every field resized by steps 1-3, via fix_field_bin_table.py --
-     without this, ff7tk (Makou Reactor) fails ANY save of the built bin
-     with "Cannot update game binaries" (InvalidError), because its
-     unconditional reorganizeModifiedFilesAfter() searches FIELD.BIN for
-     each field's current directory-record size and finds the stale one.
+  4. (optional, --apply-table-fix) Patch FIELD.BIN's/WORLD.BIN's embedded
+     (location,size) lookup table for every field resized by steps 1-3,
+     via fix_field_bin_table.py -- intended to let ff7tk (Makou Reactor)
+     save the built bin without "Cannot update game binaries"
+     (InvalidError). NOTE: this has not reliably fixed the InvalidError
+     in all cases, so it is now opt-in rather than a default step,
+     pending further testing.
   5. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
      via inject_snova_d3_to_d1.py.
 
@@ -37,6 +38,7 @@ Usage (from repo root):
   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-work.bin
   python3 mods/single-disc/scripts/build_work_bin.py -o OUT.bin --skip-snova
   python3 mods/single-disc/scripts/build_work_bin.py -o OUT.bin --d2-only-fields
+  python3 mods/single-disc/scripts/build_work_bin.py -o OUT.bin --apply-table-fix
 """
 from __future__ import annotations
 
@@ -130,6 +132,10 @@ def main() -> int:
     ap.add_argument("--d2-only-fields", action="store_true",
                      help="safe-field merge: only apply CSR D2 fields, skip D3 fields entirely "
                           "(isolation test for D1->D2 transition regression)")
+    ap.add_argument("--apply-table-fix", action="store_true",
+                     help="patch FIELD.BIN/WORLD.BIN (location,size) tables after merging "
+                          "(opt-in: has not reliably fixed Makou Reactor's InvalidError in "
+                          "all cases, kept available for testing)")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -143,9 +149,12 @@ def main() -> int:
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
     apply_dskcg_removal(img)
 
-    print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
-    fixed = fix_field_and_world_bins(img)
-    print(f"  Total table entries patched: {fixed}")
+    if args.apply_table_fix:
+        print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
+        fixed = fix_field_and_world_bins(img)
+        print(f"  Total table entries patched: {fixed}")
+    else:
+        print("\nSkipping FIELD.BIN/WORLD.BIN table patch (opt-in via --apply-table-fix)")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(img)

@@ -20,6 +20,12 @@
   other field (confirmed in Makou Reactor), so stripping their "ask for
   disc" opcodes has no effect on the playable game and is dropped. Removed
   the now-redundant `--blackbgb-only-dskcg` isolation flag along with it.
+- The FIELD.BIN/WORLD.BIN (location,size) table patch
+  (`fix_field_and_world_bins`) is now opt-in via `--apply-table-fix`
+  instead of running by default. It has not reliably fixed Makou
+  Reactor's "Cannot update game binaries" (InvalidError) in all cases, so
+  it's disabled by default pending further testing while its code stays
+  available.
 
 ## 0.2.6 — 2026-08-22
 
