@@ -15,6 +15,11 @@
   `docs/findings/2026-08-20-slot-edit-origin.md` and in the module
   docstring — this only trims the pipeline's redundant work, not the
   audit trail.
+- `build_work_bin.py`'s DSKCG-removal step now only processes BLACKBGB.
+  BLACKBGE/BLACKBG3 are unused maps with no `MAPJUMP` references from any
+  other field (confirmed in Makou Reactor), so stripping their "ask for
+  disc" opcodes has no effect on the playable game and is dropped. Removed
+  the now-redundant `--blackbgb-only-dskcg` isolation flag along with it.
 
 ## 0.2.6 — 2026-08-22
 
