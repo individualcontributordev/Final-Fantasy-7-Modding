@@ -1,22 +1,15 @@
-# Task: Test pure DSKCG removal (no MAPJUMP reorder) for BLACKBGB
+# Task: Test D1->D2 transition with DSKCG removal SKIPPED
 
 ## Why
 
-The single-disc build previously injected a static, untracked
-`BLACKBGB.DAT` export that no longer existed on disk (build would
-crash on a fresh clone). `build_work_bin.py` now calls the live
-`remove_dskcg.py` splicer instead, which strips the 4 DSKCG
-("ask for disc") opcodes from `BLACKBGB`'s `init` slot 0 and fixes up
-jump targets. This is reproducible from tracked scripts only.
-
-Verified programmatically: the live splicer's output matches the
-previously-proven working v0.1.2 field byte-for-byte, **except** for
-one extra change in that old proven file — a `MAPJUMP` instruction was
-also moved to *after* a following `AKAO/WAIT/MUSIC/AKAO` block. That
-reorder is unrelated to DSKCG removal and has **not** been applied
-here. This build isolates the variable: does pure DSKCG stripping
-alone (no reorder) fix the D1→D2 black-screen hang, or is the MAPJUMP
-reorder also required?
+Pure DSKCG removal (previous task) still hung on the D1->D2 transition
+black screen. The MAPJUMP-reorder theory is ruled out (that code path
+in field 103/BLACKBGB isn't executed during the D1->D2 transition), so
+the hang is suspected to come from `remove_dskcg.py`'s DSKCG-stripping
+itself (the ask-for-disc opcode removal). `build_work_bin.py` now has
+a `--skip-dskcg-removal` flag so you can build with `BLACKBGB` fully
+untouched (straight from CSR D1) to confirm whether removing that step
+gets rid of the hang.
 
 ## Prerequisites
 
@@ -27,44 +20,40 @@ reorder also required?
 ## What you do
 
 1. `git pull --ff-only`.
-2. Rebuild the work bin and a matching `.cue`:
+2. Rebuild the work bin with DSKCG removal skipped, and a matching `.cue`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-test.bin
-   printf 'FILE "single-disc-dskcg-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-dskcg-test.cue
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-no-dskcg-test.bin --skip-dskcg-removal
+   printf 'FILE "single-disc-no-dskcg-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-no-dskcg-test.cue
    ```
 
-   Expect this line during the build:
+   Expect this line during the build (instead of the DSKCG-removal lines):
    ```
-   Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB']...
-       init slot 0: Removed 4 DSKCG
-     BLACKBGB: removed 4 DSKCG (12923 bytes)
+   Skipping DSKCG removal (--skip-dskcg-removal)
    ```
    No `WARNING:` or uncaught errors.
 
-3. Open `workspace/iso-extract/single-disc-dskcg-test.cue` in
+3. Open `workspace/iso-extract/single-disc-no-dskcg-test.cue` in
    DuckStation fresh (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
-5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
-   break scene → COS_BTM2). This is the critical test: confirm whether
-   it goes straight to the break scene with music and no black-screen
-   hang, or whether the hang still occurs.
-6. Open this bin in Makou Reactor, make a trivial edit, Save. Confirm
-   it still succeeds.
+   Note: BLACKBGB still has its original "insert disc 2" prompt in this
+   build (DSKCG not removed), so you may need to accept/dismiss that
+   prompt manually to proceed — that's expected here, this build is
+   only testing whether the transition itself still hangs afterward.
+5. Progress to the Disc 1->2 transition (BLACKBGB field #103 -> LOST2
+   -> break scene -> COS_BTM2). Confirm whether it hangs on black
+   screen or proceeds normally once the disc-swap prompt is handled.
 
 ## Evidence (paste)
 
 ```
-D1->2 transition (BLACKBGB->LOST2->break scene): NO HANG (fixed) / HANGS (bug, MAPJUMP reorder still needed)
-Makou save test: SUCCEEDED / FAILED (paste exact text)
+D1->2 transition (BLACKBGB->LOST2->break scene) with DSKCG removal SKIPPED: NO HANG / HANGS
 notes:
 ```
 
 ## When done
 
-Paste evidence above, commit this file, push, say check. If it hangs,
-the next step is implementing the MAPJUMP reorder as a follow-up
-surgical patch alongside DSKCG removal.
+Paste evidence above, commit this file, push, say check.
 
 ---
 
