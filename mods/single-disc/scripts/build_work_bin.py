@@ -14,10 +14,11 @@ Pipeline, on top of CSR D1 as the base:
      diverges from the proven file by ~12k bytes after decompression
      (see docs/findings/) and causes a black-screen hang at the D1->D2
      transition, so it is no longer used for these three fields.
-  4. Force LOST2's D1->D2 break-scene IFUW gate open (Var[13][0]==0xa455
-     check before MAPJUMP to COS_BTM2) via force_lost2_break_ifuw.py --
-     this GM flag is never set on single-disc, so without this the break
-     scene / disc-2 prompt never fires.
+  4. Strip WHITE2's (field 643) movie-play block (IFSW/PMVIE/JMPF/PMVIE/
+     MOVIE) via fix_white2_movie_hang.py -- those movie files no longer
+     resolve to valid streams on the single-disc build, so playing them
+     hangs (MDEC decode of garbage). Both IFSW branches converge on the
+     same fade+return anyway, so the block is dropped entirely.
   5. Patch FIELD.BIN's/WORLD.BIN's embedded (location,size) lookup table
      for every field resized by steps 1-4, via fix_field_bin_table.py --
      without this, ff7tk (Makou Reactor) fails ANY save of the built bin
@@ -38,7 +39,6 @@ Usage (from repo root):
 from __future__ import annotations
 
 import argparse
-import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -56,9 +56,8 @@ from merge_rework_fields import (  # noqa: E402
     merge_slots,
 )
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
-from force_lost2_break_ifuw import force_lost2_ifuw  # noqa: E402
+from fix_white2_movie_hang import fix_white2  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
-from lzs import decompress_all_with_header, find_literal_body_offset  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
 V012_EXPORTS_DIR = ROOT / "workspace" / "v012-exports"
@@ -113,36 +112,6 @@ def apply_dskcg_removal(img: bytearray, fields: list[str] | None = None) -> int:
     return total
 
 
-def apply_lost2_break_fix(img: bytearray) -> int:
-    print("\nForcing LOST2 D1->D2 break-scene IFUW gate open...")
-    path = "FIELD/LOST2.DAT"
-    raw = extract_file(img, path)
-    dec = bytearray(decompress_all_with_header(raw))
-    forced = force_lost2_ifuw(dec)
-    if not forced:
-        print("  no gate cleared (already open, or pattern not found)")
-        return 0
-    # Patch each cleared else-byte directly in the still-compressed LZS body
-    # (no decompress+recompress round trip). The custom from-scratch LZS
-    # encoder can choose different match/literal splits than the original
-    # CSR encoder for unrelated bytes (background section included), which
-    # round-trips correctly through our own decompressor but caused
-    # on-console graphical corruption in the recompressed background.
-    (lzs_size,) = struct.unpack_from("<I", raw, 0)
-    body = bytearray(raw[4 : 4 + lzs_size])
-    for off, old in forced:
-        print(f"  force IFUW else-byte @{off:#x}: {old:#x} -> 0x00")
-        body_off = find_literal_body_offset(bytes(body), off)
-        if body[body_off] != old:
-            raise SystemExit(
-                f"body byte at {body_off:#x} is {body[body_off]:#x}, expected {old:#x}"
-            )
-        body[body_off] = 0x00
-    new_raw = bytes(raw[:4]) + bytes(body) + bytes(raw[4 + lzs_size :])
-    replace_file_within_sectors(img, path, new_raw)
-    return len(forced)
-
-
 def inject_snova(work_bin: Path) -> None:
     print("\nInjecting SNOVA D3 -> D1...")
     d3 = pristine_bin(3)
@@ -163,9 +132,6 @@ def main() -> int:
     ap.add_argument("--blackbgb-only-dskcg", action="store_true",
                      help="only strip DSKCG from BLACKBGB (skip BLACKBGE/BLACKBG3) -- "
                           "further isolation of the D1->D2 break-scene regression")
-    ap.add_argument("--skip-lost2-ifuw", action="store_true",
-                     help="diagnostic: skip forcing the LOST2 break-scene IFUW gate open "
-                          "(keeps every other fix) -- NOT a release option")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -179,10 +145,7 @@ def main() -> int:
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
     dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
     apply_dskcg_removal(img, fields=dskcg_fields)
-    if args.skip_lost2_ifuw:
-        print("\nSkipping LOST2 IFUW gate fix (--skip-lost2-ifuw, diagnostic)")
-    else:
-        apply_lost2_break_fix(img)
+    fix_white2(img)
 
     print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
     fixed = fix_field_and_world_bins(img)

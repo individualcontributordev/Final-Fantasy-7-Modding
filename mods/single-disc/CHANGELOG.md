@@ -1,3 +1,23 @@
+## 0.2.4 — 2026-08-22
+
+**Fixes WHITE2 (#643) movie hang** and drops a redundant no-op LOST2 patch.
+
+- WHITE2's `mdir` slot 31 script plays two FMVs (`PMVIE` 0x1C "fallpl",
+  `PMVIE` 0x2A "boogdemo") gated by an `IFSW`, then a `MOVIE` opcode. On
+  the single-disc build those movies no longer resolve to valid streams
+  at their expected disc locations, so playback hangs (MDEC decode of
+  garbage / DMA FIFO underrun). Both `IFSW` branches converge on the
+  same fade-to-black + return regardless, so the whole
+  `IFSW/PMVIE/JMPF/PMVIE/MOVIE` block is now stripped
+  (`fix_white2_movie_hang.py`), leaving just the character-lock,
+  fade-to-black, and return.
+- Confirmed via diagnostic build that LOST2's IFUW break-scene gate
+  byte-flip (`force_lost2_break_ifuw.py`, shipped 0.2.3) is a no-op:
+  LOSIN2 already sets `Var[13][0]`/GM to `0xa455` before LOST2 runs on
+  single-disc, so the IFUW condition is already true and the "else"
+  byte the patch clears is never reached. Removed the step from
+  `build_work_bin.py`; output is unaffected for that field.
+
 ## 0.2.3 — 2026-08-22
 
 **Fixes v0.2.2 LOST2 (#634) background graphical corruption** after the
