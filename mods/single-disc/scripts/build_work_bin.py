@@ -8,8 +8,12 @@ Pipeline, on top of CSR D1 as the base:
   2. Apply the bulk "safe" field merge -- every other CSR field edited on
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset) -- via
      merge_safe_fields.py.
-  3. Remove DSKCG ("Ask for disc") ops from BLACKBGB/BLACKBGE/BLACKBG3
-     (expect 19 total: 4 + 1 + 14) via remove_dskcg.py's splicer.
+  3. Replace BLACKBGB/BLACKBGE/BLACKBG3 with the pre-exported,
+     DSKCG-stripped fields from workspace/v012-exports/ (proven working
+     in v0.1.2). The live remove_dskcg.py splicer produces a field that
+     diverges from the proven file by ~12k bytes after decompression
+     (see docs/findings/) and causes a black-screen hang at the D1->D2
+     transition, so it is no longer used for these three fields.
   4. Force LOST2's D1->D2 break-scene IFUW gate open (Var[13][0]==0xa455
      check before MAPJUMP to COS_BTM2) via force_lost2_break_ifuw.py --
      this GM flag is never set on single-disc, so without this the break
@@ -51,13 +55,12 @@ from merge_rework_fields import (  # noqa: E402
     merge_slots,
 )
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
-from remove_dskcg import remove_dskcg_from_field  # noqa: E402
 from force_lost2_break_ifuw import force_lost2_ifuw  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
 from lzs import compress_all_with_header, decompress_all_with_header  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
-EXPECTED_DSKCG_TOTAL = 19
+V012_EXPORTS_DIR = ROOT / "workspace" / "v012-exports"
 
 
 def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
@@ -94,20 +97,18 @@ def apply_safe_field_merge(img: bytearray, d2_only: bool = False) -> int:
 
 def apply_dskcg_removal(img: bytearray, fields: list[str] | None = None) -> int:
     fields = DSKCG_FIELDS if fields is None else fields
-    expected = EXPECTED_DSKCG_TOTAL if fields == DSKCG_FIELDS else None
-    print(f"\nRemoving DSKCG ('Ask for disc') ops from {fields}...")
+    print(f"\nInjecting pre-exported DSKCG-stripped fields (proven v0.1.2) for {fields}...")
     total = 0
     for field in fields:
         path = f"FIELD/{field}.DAT"
-        raw = extract_file(img, path)
-        new_raw, removed = remove_dskcg_from_field(raw, field)
-        if removed:
+        export_path = V012_EXPORTS_DIR / f"{field}.DAT"
+        new_raw = export_path.read_bytes()
+        current = extract_file(img, path)
+        if new_raw != current:
             replace_file_within_sectors(img, path, new_raw)
-        print(f"  {field}: removed {removed}")
-        total += removed
-    print(f"  Total DSKCG removed: {total}")
-    if expected is not None and total != expected:
-        print(f"  WARNING: expected {expected} total, got {total}")
+            total += 1
+        print(f"  {field}: injected from {export_path.relative_to(ROOT)} ({len(new_raw)} bytes)")
+    print(f"  Total fields replaced: {total}")
     return total
 
 
