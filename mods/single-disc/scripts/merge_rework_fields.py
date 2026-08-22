@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Merge the 9 "rework" fields' CSR D1/D2 slot edits onto a CSR D1 work image,
+"""Merge the 8 "rework" fields' CSR D1/D2 slot edits onto a CSR D1 work image,
 per verdicts recorded in docs/findings/2026-08-20-slot-edit-origin.md.
 
-6 fields are pure single-disc replacements (every differing slot's verdict
-agrees with one whole disc's CSR file for that field):
-  BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2 -> verdict = CSR D1, which is
-           already the work image's base -- WHOLE_FILE_FIELDS omits these
-           (no-op copy onto themselves) to avoid redundant writes. BLACKBGB
-           is also fully replaced later anyway (DSKCG removal step).
-  LOST2 -> take whole CSR D2 file (adds the `version` entity D1 lacks, and
-           the missing MAPJUMP field #526 COS_BTM2 break-scene transition)
-           -- the only one of the 6 that actually changes bytes on a D1 base.
+5 fields are pure single-disc replacements where every differing slot's
+verdict agrees with CSR D1 -- already the work image's base -- so
+WHOLE_FILE_FIELDS omits them (no-op copy onto themselves):
+  BLACKBGB, COS_BTM, COS_BTM2, DEL1, JUNAIR2. BLACKBGB is also fully
+  replaced later anyway (DSKCG removal step).
+
+LOST2 was previously listed here (CSR D1 had its own conflicting `init:0`
+edit and a stray `version` entity), but CSR v0.14.2 was republished with
+D1 LOST2 reverted to pristine and the `version` entity removed, so it's
+now a clean D2-only edit handled by the generic safe-field merge
+(merge_safe_fields.py) instead of this verdict table.
 
 3 fields have genuinely mixed per-slot verdicts (entity/slot sets are
 identical between discs, so a slot-level splice is safe):
@@ -43,11 +45,10 @@ from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E40
 # actually change bytes). BLACKBGB/COS_BTM/COS_BTM2/DEL1/JUNAIR2 all verdict
 # to CSR D1 -- since the base is already CSR D1, applying them is a no-op
 # copy; they're omitted here to avoid redundant work. See module docstring
-# and docs/findings/2026-08-20-slot-edit-origin.md for the full 6-field
-# audit record.
-WHOLE_FILE_FIELDS = {
-    "LOST2": 2,
-}
+# and docs/findings/2026-08-20-slot-edit-origin.md for the full 5-field
+# audit record. (LOST2 used to be here -- see module docstring for why it
+# moved to the safe-field merge.)
+WHOLE_FILE_FIELDS: dict[str, int] = {}
 
 # Fields needing true per-slot splicing: (entity, slot) -> disc, taken
 # directly from docs/findings/2026-08-20-slot-edit-origin.md. Only CSR D2
