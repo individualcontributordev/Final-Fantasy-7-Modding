@@ -9,6 +9,17 @@ disc 2, no break scene, no music — identical to the non-swapped build.
 Makou save still works fine. So this is a **real regression** in the
 commit range, not a test-harness apply-order artifact.
 
+Separately, the first `909c4bb` build attempt failed its internal
+CANONON check. Root cause: a bug in the repro harness itself
+(`repoint_stale_layer_paths` in `build_aug7_repro.py`) — it always
+redirected to the *latest* movies layer on disk even when the commit's
+own hardcoded version still existed, pairing `909c4bb`'s pre-fix core
+layer (v0.1.22) with a newer movies layer (v0.1.4) it was never tested
+against. Fixed: it now only repoints when the commit's pinned version
+was actually purged from `builder/`. Rebuilt successfully with the
+correct pairing (core v0.1.2, movies v0.1.2, matching the literal
+strings in that commit's own script).
+
 Current state of the disc-2-prompt/no-break-scene bisection:
 - `78e2cff` (v0.1.21): **GOOD** — straight to break scene, music present.
 - `909c4bb` (v0.1.22): **UNTESTED** (only remaining commit in range).
@@ -49,9 +60,9 @@ locally with the commands below. It produces
    commit's own `build_playtest_bin.py` against your current pristine
    discs and CSR repo, copies the result back, and cleans up the
    worktree. Expect a `WROTE
-   .../workspace/iso-extract/909c4bb-repro.bin (...)` line at the end
-   with no `FAIL:` lines. If anything differs, paste full output before
-   playtesting.
+   .../workspace/iso-extract/909c4bb-repro.bin (766,340,400 bytes)` line
+   at the end with no `FAIL:` lines. If anything differs, paste full
+   output before playtesting.
 
 3. Open `workspace/iso-extract/909c4bb-repro.cue` in DuckStation fresh
    (no save states, no cheats).
