@@ -1,3 +1,18 @@
+## 0.2.5 — 2026-08-22
+
+**Fixes a second WHITE2 (#643) movie hang** missed by v0.2.4.
+
+- WHITE2 has two independent script slots that play a field movie:
+  `mdir` slot 31 (fixed in v0.2.4) and `cl` slot 31, which CSR Disc 2
+  also edits with a `JMPF` story change
+  (`docs/findings/2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md`).
+  v0.2.4 only stripped `mdir`/31's `PMVIE`/`MOVIE` block, leaving
+  `cl`/31's `PMVIE`/`MOVIE` pair intact — on single-disc that movie ID
+  doesn't resolve to a valid stream either, so the field still hung on
+  load. Now strips `PMVIE`/`MOVIE` from `cl`/31 too, keeping the CSR
+  `JMPF` edit and every other opcode in that (much longer) cutscene
+  script untouched (`fix_white2_movie_hang.py`).
+
 ## 0.2.4 — 2026-08-22
 
 **Fixes WHITE2 (#643) movie hang** and drops a redundant no-op LOST2 patch.

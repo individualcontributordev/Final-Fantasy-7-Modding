@@ -319,15 +319,17 @@ def test_dskcg_fields_parse_with_no_bad_jumps(stacked, iso_api, scripts_dir):
 
 
 def test_white2_movie_block_stripped(stacked, iso_api, scripts_dir):
-    """Field 643 (WHITE2) mdir/31 must not hang on missing movie streams.
+    """Field 643 (WHITE2) must not hang on missing movie streams.
 
-    Regression: WHITE2 plays PMVIE 0x1C/0x2A + MOVIE, but those movies no
-    longer resolve to valid streams at their expected locations on the
-    single-disc build, causing an MDEC hang (see
-    docs/findings/2026-08-11-single-disc-white2-movie-crawl.md and the
-    field 643 fix in docs/INSTRUCTIONS.md). The movie-play block must be
-    stripped entirely; both IFSW branches converged on the same
-    fade-to-black + return regardless."""
+    Regression: WHITE2 has two independent script slots that play a
+    field movie (mdir/31: PMVIE 0x1C/0x2A + MOVIE; cl/31: PMVIE 0x38 +
+    MOVIE), but neither movie resolves to a valid stream at its expected
+    location on the single-disc build, causing an MDEC hang (see
+    docs/findings/2026-08-11-single-disc-white2-movie-crawl.md and
+    docs/findings/2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md).
+    Both slots' PMVIE/MOVIE opcodes must be stripped; mdir/31's IFSW
+    branches converged on the same fade-to-black + return regardless,
+    and cl/31 keeps its other opcodes (incl. CSR's JMPF story edit)."""
     import sys
 
     if str(scripts_dir) not in sys.path:
@@ -337,12 +339,18 @@ def test_white2_movie_block_stripped(stacked, iso_api, scripts_dir):
     extract_file, _ = iso_api
     raw = extract_file(stacked, "FIELD/WHITE2.DAT")
     fd = load_field_dat(raw)
-    slot = next(s for s in fd.scripts if s.entity == "mdir" and s.slot == 31)
-    names = [n for _, n in decode_ops(slot.raw)]
-    assert "PMVIE" not in names
-    assert "MOVIE" not in names
-    assert "NFADE" in names
-    assert names[-1] == "RET"
+
+    mdir_slot = next(s for s in fd.scripts if s.entity == "mdir" and s.slot == 31)
+    mdir_names = [n for _, n in decode_ops(mdir_slot.raw)]
+    assert "PMVIE" not in mdir_names
+    assert "MOVIE" not in mdir_names
+    assert "NFADE" in mdir_names
+    assert mdir_names[-1] == "RET"
+
+    cl_slot = next(s for s in fd.scripts if s.entity == "cl" and s.slot == 31)
+    cl_names = [n for _, n in decode_ops(cl_slot.raw)]
+    assert "PMVIE" not in cl_names
+    assert "MOVIE" not in cl_names
 
 
 def test_d1d2_lost2_music_unmute(stacked, iso_api, csr_d1_bytes, csr_d2_bytes, scripts_dir):
