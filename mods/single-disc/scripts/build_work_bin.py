@@ -163,6 +163,9 @@ def main() -> int:
     ap.add_argument("--blackbgb-only-dskcg", action="store_true",
                      help="only strip DSKCG from BLACKBGB (skip BLACKBGE/BLACKBG3) -- "
                           "further isolation of the D1->D2 break-scene regression")
+    ap.add_argument("--skip-lost2-ifuw", action="store_true",
+                     help="diagnostic: skip forcing the LOST2 break-scene IFUW gate open "
+                          "(keeps every other fix) -- NOT a release option")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -176,7 +179,10 @@ def main() -> int:
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
     dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
     apply_dskcg_removal(img, fields=dskcg_fields)
-    apply_lost2_break_fix(img)
+    if args.skip_lost2_ifuw:
+        print("\nSkipping LOST2 IFUW gate fix (--skip-lost2-ifuw, diagnostic)")
+    else:
+        apply_lost2_break_fix(img)
 
     print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
     fixed = fix_field_and_world_bins(img)

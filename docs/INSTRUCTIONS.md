@@ -9,7 +9,8 @@ field merges, BLACKBGB/E/3 DSKCG fix, FIELD.BIN/WORLD.BIN table fix)?
 
 This is **not** a new pack version — nothing was bumped in `pack.json`/
 `builder/manifest.json`, and no `.layer.json` was regenerated. It's a
-one-off local bin for comparison only.
+one-off local bin for comparison only, built via a new diagnostic-only
+`--skip-lost2-ifuw` flag on `build_work_bin.py`.
 
 ## What you do
 
@@ -17,31 +18,12 @@ one-off local bin for comparison only.
 2. Build it:
 
    ```bash
-   python3 -c "
-   import sys
-   sys.path.insert(0,'scripts')
-   sys.path.insert(0,'mods/single-disc/scripts')
-   from disc_sources import load_csr_image
-   from build_work_bin import apply_rework_merge, apply_safe_field_merge, apply_dskcg_removal, inject_snova
-   from fix_field_bin_table import fix_field_and_world_bins
-   from pathlib import Path
-
-   c1 = bytes(load_csr_image(1))
-   c2 = bytes(load_csr_image(2))
-   img = bytearray(c1)
-   apply_rework_merge(img, c1, c2)
-   apply_safe_field_merge(img)
-   apply_dskcg_removal(img)
-   # SKIP apply_lost2_break_fix (this is the diagnostic)
-   fix_field_and_world_bins(img)
-   out = Path('workspace/iso-extract/single-disc-v023-noifuw.bin')
-   out.parent.mkdir(parents=True, exist_ok=True)
-   out.write_bytes(img)
-   inject_snova(out)
-   print('done', out)
-   "
+   python3 mods/single-disc/scripts/build_work_bin.py --skip-lost2-ifuw -o workspace/iso-extract/single-disc-v023-noifuw.bin
    printf 'FILE "single-disc-v023-noifuw.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-v023-noifuw.cue
    ```
+
+   Expect a line `Skipping LOST2 IFUW gate fix (--skip-lost2-ifuw, diagnostic)`
+   in place of the usual `Forcing LOST2 D1->D2 break-scene IFUW gate open...`.
 
 3. Open `workspace/iso-extract/single-disc-v023-noifuw.cue` in DuckStation
    fresh. Play to the Disc 1->2 transition point (BLACKBGB field #103 ->
