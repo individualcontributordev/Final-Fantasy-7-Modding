@@ -13,12 +13,14 @@ Pipeline, on top of CSR D1 as the base:
   2. Apply the bulk "safe" field merge -- every other CSR field edited on
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset) -- via
      merge_safe_fields.py.
-  3. Replace BLACKBGB/BLACKBGE/BLACKBG3 with the pre-exported,
-     DSKCG-stripped fields from workspace/v012-exports/ (proven working
-     in v0.1.2). The live remove_dskcg.py splicer produces a field that
-     diverges from the proven file by ~12k bytes after decompression
-     (see docs/findings/) and causes a black-screen hang at the D1->D2
-     transition, so it is no longer used for these three fields.
+  3. Replace BLACKBGB with the pre-exported, DSKCG-stripped field from
+     workspace/v012-exports/ (proven working in v0.1.2). The live
+     remove_dskcg.py splicer produces a field that diverges from the
+     proven file by ~12k bytes after decompression (see docs/findings/)
+     and causes a black-screen hang at the D1->D2 transition, so it is
+     no longer used for this field. BLACKBGE/BLACKBG3 are unused maps
+     with no MAPJUMP references from any other field (confirmed in
+     Makou Reactor) and are left untouched.
   4. Patch FIELD.BIN's/WORLD.BIN's embedded (location,size) lookup table
      for every field resized by steps 1-3, via fix_field_bin_table.py --
      without this, ff7tk (Makou Reactor) fails ANY save of the built bin
@@ -58,7 +60,7 @@ from merge_rework_fields import (  # noqa: E402
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
 
-DSKCG_FIELDS = ["BLACKBGB", "BLACKBGE", "BLACKBG3"]
+DSKCG_FIELDS = ["BLACKBGB"]
 V012_EXPORTS_DIR = ROOT / "workspace" / "v012-exports"
 
 
@@ -128,9 +130,6 @@ def main() -> int:
     ap.add_argument("--d2-only-fields", action="store_true",
                      help="safe-field merge: only apply CSR D2 fields, skip D3 fields entirely "
                           "(isolation test for D1->D2 transition regression)")
-    ap.add_argument("--blackbgb-only-dskcg", action="store_true",
-                     help="only strip DSKCG from BLACKBGB (skip BLACKBGE/BLACKBG3) -- "
-                          "further isolation of the D1->D2 break-scene regression")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -142,8 +141,7 @@ def main() -> int:
 
     apply_rework_merge(img, c1, c2)
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
-    dskcg_fields = ["BLACKBGB"] if args.blackbgb_only_dskcg else None
-    apply_dskcg_removal(img, fields=dskcg_fields)
+    apply_dskcg_removal(img)
 
     print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
     fixed = fix_field_and_world_bins(img)
