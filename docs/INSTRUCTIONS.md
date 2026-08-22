@@ -126,3 +126,16 @@ notes:
 ## When done
 
 Paste evidence above, commit this file, push, say check.
+
+
+field 643 fix
+1 mdir > Script 3
+
+Deactivate the movability of the playable character
+Disables access to the main menu
+Camera Movie: 1
+If $GameMoment >= 1620 (else goto label 1)
+	Goto label 1
+Label 1
+Fades the screen to the colour RGB(0, 0, 0) (speed=30, type=12)
+Return
