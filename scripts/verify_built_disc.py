@@ -114,6 +114,10 @@ def _match_addon_id(label: str, catalog: dict[str, dict]) -> str | None:
 	addons_cat = [
 		(pid, meta) for pid, meta in catalog.items() if meta.get("kind") == "addon"
 	]
+	# Prefer an explicit pack id in trailing parens, e.g. "Single-disc v0.2.8 (single-disc-on-csr)".
+	m = re.search(r"\(([a-z0-9][a-z0-9._-]*)\)\s*$", label, re.IGNORECASE)
+	if m and m.group(1) in dict(addons_cat):
+		return m.group(1)
 	ln = _norm_name(label)
 	for pid, meta in addons_cat:
 		name = str(meta["entry"].get("name") or "")
@@ -145,7 +149,7 @@ def _config_from_applied(
 	text = applied_path.read_text(encoding="utf-8", errors="replace")
 	lines = text.splitlines()
 
-	disc_m = re.search(r"(?im)^\s*Disc:\s*([123])\s*$", text)
+	disc_m = re.search(r"(?im)^\s*Disc:\s*([123])\b", text)
 	if not disc_m:
 		raise SystemExit(f"{applied_path}: missing Disc: 1|2|3 line")
 	disc = int(disc_m.group(1))
@@ -160,14 +164,18 @@ def _config_from_applied(
 			f"{applied_path}: could not map Base {base_label!r} to a catalog pack id"
 		)
 
+	_ADDON_HEADER = re.compile(r"(?i)^\s*(Add-ons|Mods on this disc):\s*$")
+	_ADDON_HEADER_NONE = re.compile(r"(?i)^\s*(Add-ons|Mods on this disc):\s*none\s*$")
+	_ADDON_HEADER_ANY = re.compile(r"(?im)^\s*(Add-ons|Mods on this disc):")
+
 	addon_labels: list[str] = []
 	addons_none = False
 	in_addons = False
 	for line in lines:
-		if re.match(r"(?i)^\s*Add-ons:\s*$", line):
+		if _ADDON_HEADER.match(line):
 			in_addons = True
 			continue
-		if re.match(r"(?i)^\s*Add-ons:\s*none\s*$", line):
+		if _ADDON_HEADER_NONE.match(line):
 			addons_none = True
 			in_addons = False
 			continue
@@ -186,10 +194,10 @@ def _config_from_applied(
 				in_addons = False
 
 	if not addons_none and not addon_labels:
-		# No Add-ons section at all — treat as none only if file has no "Add-ons"
-		if not re.search(r"(?im)^\s*Add-ons:", text):
-			raise SystemExit(f"{applied_path}: missing Add-ons: section")
-		# "Add-ons:" present but empty list
+		# No Add-ons/Mods section at all — treat as none only if file has no such header
+		if not _ADDON_HEADER_ANY.search(text):
+			raise SystemExit(f"{applied_path}: missing Add-ons/Mods on this disc: section")
+		# Header present but empty list
 		addon_ids: list[str] = []
 	elif addons_none:
 		addon_ids = []
