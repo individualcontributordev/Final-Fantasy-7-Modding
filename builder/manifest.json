@@ -788,7 +788,7 @@
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-on-csr",
+        "addonSelected": "DISABLED-pending-endings-only-playtest",
         "bases": [
           "csr-v0.14.2"
         ],
@@ -1087,8 +1087,8 @@
       "name": "Single-disc",
       "kind": "mod",
       "version": "0.2.11",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.11: picks up the CSR v0.14.2 disc3.layer.json update that moves (not deletes) the PlayMovie opcodes in the ending fields LAS4_2/LAS4_3/LAS4_4/LASTMAP (fields 765-768), fixing a Disc 3 ending-sequence crash caused by those opcodes trying to play movie files absent from the Disc 1 single-disc LBA map. Retains the v0.2.10 break-scene (LOST2) and v0.2.8/v0.2.9 D1->D2 transition (BLACKBGB) fixes. Manip movies and endings are disabled pending re-validation on this new base.",
-      "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.11: picks up the CSR v0.14.2 disc3.layer.json update that moves (not deletes) the PlayMovie opcodes in the ending fields LAS4_2/LAS4_3/LAS4_4/LASTMAP (fields 765-768), fixing a Disc 3 ending-sequence crash caused by those opcodes trying to play movie files absent from the Disc 1 single-disc LBA map. Retains the v0.2.10 break-scene (LOST2) and v0.2.8/v0.2.9 D1->D2 transition (BLACKBGB) fixes. Ending/credits movies are re-enabled for playtesting; manip movies remain disabled pending re-validation on this new base.",
+      "hint": "CSR. Ending movies included; manip movies not yet re-enabled.",
       "format": "ic-layer-v1",
       "compatibleBases": [
         "csr-v0.14.2"
@@ -1123,7 +1123,7 @@
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "single-disc-csr-manip-movies-v0.1.4",
+        "addonSelected": "DISABLED-pending-endings-only-playtest",
         "bases": [
           "csr-v0.14.2"
         ],
