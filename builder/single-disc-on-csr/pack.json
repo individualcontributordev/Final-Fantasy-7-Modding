@@ -1,8 +1,8 @@
 {
   "id": "single-disc-on-csr",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.9: fixes a New Game hang caused by a corrupted FIELD.BIN in the published v0.2.8 layer (layer was diffed against a stale/broken work bin). Retains the v0.2.8 D1->D2 transition (BLACKBGB) and LOST2 background fixes. Manip movies and endings are disabled pending re-validation on this new base.",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.10: fixes the Cosmo Canyon break-scene (LOST2, field 634) failing to load after the D1->D2 'want to save?' prompt, caused by the v0.2.9 hybrid layer's manual stitching corrupting LOST2's internal section table. Retains the v0.2.8/v0.2.9 D1->D2 transition (BLACKBGB) fix and fixed FIELD.BIN/WORLD.BIN. Manip movies and endings are disabled pending re-validation on this new base.",
   "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -12,5 +12,5 @@
   "enabled": true,
   "beta": true,
   "status": "beta",
-  "betaNote": "v0.2.9: fixes a New Game hang -- the v0.2.8 disc1.layer.json was diffed against a stale/corrupted work bin whose FIELD.BIN failed to decompress (invalid DEFLATE stream), so the layer shipped that corruption to every build using it. Regenerated the layer from a freshly-built, verified work bin (FIELD.BIN/WORLD.BIN both decompress correctly; reapplying the new layer onto the CSR base reproduces that work bin byte-for-byte). Retains all v0.2.8 fixes (BLACKBGB D1->D2 splice, Okumura LZSS LOST2 fix). Not yet tested on real hardware or replayed past New Game on DuckStation -- please playtest a full run. Manip movies and endings are currently disabled while this core is playtested standalone."
+  "betaNote": "v0.2.10: fixes the Cosmo Canyon break-scene not loading after the D1->D2 'want to save?' prompt. Root cause: the v0.2.9 layer was hand-stitched from two separate diffs (a BLACKBGB-only layer + a FIELD.BIN/WORLD.BIN-fix layer) to avoid rebuilding from scratch, and that stitching corrupted LOST2.DAT's internal section-size table (walkmesh/background/model_loader boundaries shifted) even though the file's overall size matched CSR D2. This layer was instead regenerated in one pass, diffing a single freshly-built work bin (all merges + verified BLACKBGB manual splice + SNOVA inject + FIELD.BIN/WORLD.BIN table fix, no hybrid stitching) straight against the CSR v0.14.2 base. Verified: LOST2 byte-identical to CSR D2 (correct 3996/13012/76-byte walkmesh/background/model_loader sections), BLACKBGB byte-identical to the verified manual splice, FIELD.BIN/WORLD.BIN decompress cleanly, and reapplying this layer onto the CSR base reproduces the work bin byte-for-byte. Not yet tested on real hardware or playtested past the break scene on DuckStation -- please playtest a full run. Manip movies and endings are currently disabled while this core is playtested standalone."
 }

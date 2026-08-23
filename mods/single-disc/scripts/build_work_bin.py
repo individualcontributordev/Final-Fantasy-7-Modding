@@ -14,22 +14,22 @@ Pipeline, on top of CSR D1 as the base:
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset; LOST2 also
      lands here now that CSR D1's LOST2 matches pristine) -- via
      merge_safe_fields.py.
-  3. Strip DSKCG (ask-for-disc) ops from BLACKBGB via remove_dskcg.py's
-     live opcode splicer (parses scripts, removes 0x0E ops, fixes up
-     JMPF/JMPFL/JMPB/JMPBL/IFxx jump targets). This is a pure DSKCG
-     removal only -- untested against the D1->D2 transition as of this
-     pipeline revision; see docs/findings/ for prior hang reports on an
-     earlier version of this step and 2026-08-2x findings for the
-     current verification status. BLACKBGE/BLACKBG3 are unused maps
-     with no MAPJUMP references from any other field (confirmed in
-     Makou Reactor) and are left untouched.
-  4. (optional, --apply-table-fix) Patch FIELD.BIN's/WORLD.BIN's embedded
+  3. Splice a known-working manually-edited FIELD/BLACKBGB.DAT (DSKCG
+     ops removed in Makou Reactor, DuckStation-verified) in verbatim,
+     bypassing our own LZS re-encode + DSKCG splicer for this field --
+     see docs/findings/2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md.
+     Defaults to the committed splice at
+     mods/single-disc/patches/BLACKBGB.manual.dat (override with
+     --blackbgb-manual-bin, or use --skip-dskcg-removal / the automated
+     remove_dskcg.py live opcode splicer, which still hangs the D1->D2
+     transition for reasons not yet root-caused). BLACKBGE/BLACKBG3 are
+     unused maps with no MAPJUMP references from any other field
+     (confirmed in Makou Reactor) and are left untouched.
+  4. (skip with --skip-table-fix) Patch FIELD.BIN's/WORLD.BIN's embedded
      (location,size) lookup table for every field resized by steps 1-3,
-     via fix_field_bin_table.py -- intended to let ff7tk (Makou Reactor)
+     via fix_field_bin_table.py -- needed for ff7tk (Makou Reactor) to
      save the built bin without "Cannot update game binaries"
-     (InvalidError). NOTE: this has not reliably fixed the InvalidError
-     in all cases, so it is now opt-in rather than a default step,
-     pending further testing.
+     (InvalidError).
   5. Inject SNOVA from pristine D3 onto D1 + remap BATTLE.X hardcoded LBAs
      via inject_snova_d3_to_d1.py.
 
@@ -175,14 +175,21 @@ def main() -> int:
                      help="skip stripping DSKCG (ask-for-disc) ops from BLACKBGB "
                           "(isolation test for D1->D2 transition black-screen hang)")
     ap.add_argument("--blackbgb-manual-bin", type=Path,
+                     default=ROOT / "mods" / "single-disc" / "patches" / "BLACKBGB.manual.dat",
                      help="path to EITHER a full known-working .bin (e.g. exported from "
                           "Makou Reactor after manually deleting BLACKBGB's DSKCG ops) OR "
                           "a raw already-extracted FIELD/BLACKBGB.DAT (from "
                           "extract_field_from_bin.py). Detected automatically by whether "
                           "the file size is a multiple of 2352. Its bytes are spliced in "
                           "verbatim, bypassing our own LZS re-encode + DSKCG splicer for "
-                          "this field entirely. Overrides --skip-dskcg-removal for BLACKBGB.")
+                          "this field entirely. Overrides --skip-dskcg-removal for BLACKBGB. "
+                          "Defaults to the committed verified splice at "
+                          "mods/single-disc/patches/BLACKBGB.manual.dat -- pass "
+                          "--skip-dskcg-removal instead if you explicitly want the "
+                          "(currently broken) automated re-encoder path.")
     args = ap.parse_args()
+    if args.blackbgb_manual_bin and not args.blackbgb_manual_bin.exists():
+        args.blackbgb_manual_bin = None
 
     print("Loading CSR D1/D2 reference images...")
     c1 = bytes(load_csr_image(1))

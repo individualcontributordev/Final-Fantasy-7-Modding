@@ -1,3 +1,33 @@
+## 0.2.10 — 2026-08-23
+
+**Fixes the Cosmo Canyon break-scene (LOST2, field 634) failing to load
+after the D1→D2 "want to save?" prompt.**
+
+- Root cause: the v0.2.9 layer was a **hybrid** built by hand-stitching the
+  v0.2.8 layer's `FIELD/BLACKBGB.DAT` bytes onto a fresh work bin's
+  `FIELD.BIN`/`WORLD.BIN`, then re-diffing. That stitching corrupted
+  `FIELD/LOST2.DAT`: it stayed the correct 17,032-byte size (matching CSR
+  D2) and still LZS-decompressed without error, but its embedded 7-section
+  offset table was wrong -- `walkmesh`/`background`/`model_loader` section
+  boundaries were shifted (3,740/13,268/2,348 bytes instead of the correct
+  3,996/13,012/76), which Makou Reactor showed as a corrupted field and
+  which broke the `IFUW GameMoment==0xa455 -> MAPJUMP COS_BTM2` break-scene
+  trigger at runtime. `FIELD/BLACKBGB.DAT` itself and `FIELD.BIN`/`WORLD.BIN`
+  were unaffected.
+- The manual-edit `FIELD/BLACKBGB.DAT` splice source (previously described
+  as gitignored/unavailable, forcing the v0.2.9 hybrid workaround) was
+  recovered from a prior commit (`fb2f9b3`) that had briefly tracked it.
+- Fix: rebuilt from scratch in a single pass -- one `build_work_bin.py` run
+  with `--blackbgb-manual-bin` (no hybrid stitching), diffed directly
+  against the CSR v0.14.2 base into a new `disc1.layer.json` (63,419 addon
+  records). Verified: `FIELD/LOST2.DAT` is byte-identical to CSR D2 (correct
+  section sizes restored); `FIELD/BLACKBGB.DAT` is byte-identical to the
+  verified manual splice; `FIELD.BIN`/`WORLD.BIN` decompress cleanly;
+  reapplying the new layer onto the CSR base reproduces the work bin
+  byte-for-byte.
+- Not yet playtested past the break scene on DuckStation or on real
+  hardware.
+
 ## 0.2.9 — 2026-08-23
 
 **Fixes a New Game hang introduced in the published v0.2.8 layer, while
