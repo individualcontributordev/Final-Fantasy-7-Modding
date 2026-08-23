@@ -1,8 +1,8 @@
 {
   "id": "single-disc-on-csr",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "name": "Single-disc",
-  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.11: picks up the CSR v0.14.2 disc3.layer.json update that moves (not deletes) the PlayMovie opcodes in the ending fields LAS4_2/LAS4_3/LAS4_4/LASTMAP (fields 765-768), fixing a Disc 3 ending-sequence crash caused by those opcodes trying to play movie files absent from the Disc 1 single-disc LBA map. Retains the v0.2.10 break-scene (LOST2) and v0.2.8/v0.2.9 D1->D2 transition (BLACKBGB) fixes. Manip movies and endings are disabled pending re-validation on this new base.",
+  "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.12: re-diffed after reverting the CSR v0.14.2 disc3.layer.json field 768 (LASTMAP) edit that skipped the AD3 script 31 PlayMovie/FMUSC opcodes -- both are now restored intact, matching CSR's own layer. Retains the v0.2.10 break-scene (LOST2) and v0.2.8/v0.2.9 D1->D2 transition (BLACKBGB) fixes. Manip movies and endings are disabled pending re-validation on this new base.",
   "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
   "format": "ic-layer-v1",
   "compatibleBases": [
@@ -12,5 +12,5 @@
   "enabled": true,
   "beta": true,
   "status": "beta",
-  "betaNote": "v0.2.11: single-disc's safe-field merge pulls FIELD/LAS4_2.DAT, LAS4_3.DAT, LAS4_4.DAT, and LASTMAP.DAT wholesale from CSR Disc 3 (they're D3-only edits vs pristine on D1/D2), so the CSR v0.14.2 disc3.layer.json opcode-relocation fix (commit 9ad13bb) flows through automatically. Rebuilt in one pass via build_work_bin.py (all field merges + verified BLACKBGB manual splice + SNOVA inject + FIELD.BIN/WORLD.BIN table fix) and re-diffed against the CSR v0.14.2 D1 base. Not yet playtested past the Disc 3 ending sequence on DuckStation -- please playtest a full run through the ending. Manip movies and endings are currently disabled while this core is playtested standalone."
+  "betaNote": "v0.2.12: single-disc's safe-field merge pulls FIELD/LAS4_2.DAT, LAS4_3.DAT, LAS4_4.DAT, and LASTMAP.DAT wholesale from CSR Disc 3 (they're D3-only edits vs pristine on D1/D2). CSR's disc3.layer.json (commit 965d040) now restores the original PlayMovie/FMUSC opcodes on field 768 (LASTMAP, AD3 script 31) that were previously routed around by a goto/label skip -- this addon layer was re-diffed against that updated CSR source so the fix flows through. Rebuilt in one pass via build_work_bin.py (all field merges + verified BLACKBGB manual splice + SNOVA inject + FIELD.BIN/WORLD.BIN table fix) and re-diffed against the CSR v0.14.2 D1 base. Not yet playtested past the Disc 3 ending sequence on DuckStation -- please playtest a full run through the ending. Manip movies and endings are currently disabled while this core is playtested standalone."
 }

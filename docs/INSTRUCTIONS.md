@@ -1,21 +1,34 @@
-# Task: build single-disc with ending movies re-enabled, playtest the LASTMAP ending
+# Task: build single-disc v0.2.12 with ending movies re-enabled, playtest the LASTMAP ending
 
 ## Why
 
 `LASTMAP` (field 768) `AD3` script 31 freezes after the "Ask Question"
-choice: the `MOVIE`/`FMUSC` opcodes there expect an ending/credits movie
-that wasn't actually on the single-disc image. The `single-disc-endings-
-v0.1.0-part1..7` layers (the movie asset pack) had their manifest
-`autoIncludeWhen` trigger swapped for a dead sentinel back in v0.2.8, so
-they silently never included on any single-disc build despite the
-manifest blurb claiming "Always applied... Not optional."
+choice. Two separate bugs stacked here:
 
-Fixed: `single-disc-endings-v0.1.0-part1..7` now auto-include again
-whenever `single-disc-on-csr` is selected. Manip movies
-(`single-disc-csr-manip-movies-v0.1.4`/`v0.1.5`) are intentionally kept
-disabled for this test — testing endings in isolation first.
+1. The `single-disc-endings-v0.1.0-part1..7` layers (the movie asset
+   pack) had their manifest `autoIncludeWhen` trigger swapped for a dead
+   sentinel back in v0.2.8, so they silently never included on any
+   single-disc build despite the manifest blurb claiming "Always
+   applied... Not optional." **Fixed** in a prior task — the 7 parts
+   now auto-include whenever `single-disc-on-csr` is selected.
+2. A manual CSR Disc 3 edit had routed around the `AD3` script 31
+   `PlayMovie`/`FMUSC` opcodes with a goto/label skip (to dodge an
+   earlier crash), so even with the movie assets now present the
+   opcodes never fired. That CSR edit was reverted (CSR commit
+   `965d040`) — both `MOVIE f9` and `FMUSC fc01` are restored intact.
+   Because `builder/single-disc-on-csr/layers/disc1.layer.json` is a
+   **pre-baked diff** that doesn't auto-refresh when the CSR source
+   changes, it had to be rebuilt via `build_work_bin.py` and re-diffed
+   (`single-disc-on-csr` v0.2.12) to actually pick up the CSR revert.
 
-**Not yet playtested** — that's this task.
+Verified via `field_dat.py` that the rebuilt bin's `LASTMAP.DAT` `AD3`
+slot 31 now has `MOVIE f9` / `BMUSC f601` / `FMUSC fc01` back-to-back
+right after the `REQ 0112c6` disc-check, with no conditional skip.
+Manip movies (`single-disc-csr-manip-movies-v0.1.4`/`v0.1.5`) are
+intentionally kept disabled for this test — testing endings in
+isolation first.
+
+**Not yet playtested on DuckStation** — that's this task.
 
 ## Steps (copy-paste, in order)
 
@@ -67,7 +80,7 @@ change CSR and didn't clear cache — fine to skip step 2 in that case).
 Then ends with:
 
 ```
-PASS — builder config applies cleanly (3422768 total records)
+PASS — builder config applies cleanly (3422700 total records)
 ```
 
 **Do not** open the output `.bin` directly in Makou Reactor to hand-edit
