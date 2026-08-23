@@ -30,18 +30,24 @@ it does not re-encode or modify them.
 
 ### Step 3 — build using the splice
 
-If you're building on the same machine as the working .bin, point
-`build_work_bin.py` at the whole manual-edit bin directly with
-`--blackbgb-manual-bin`:
+`--blackbgb-manual-bin` now accepts EITHER path — it auto-detects which one
+you gave it by file size (a multiple of 2352 = full disc image, otherwise
+treated as a raw extracted `.DAT`):
+
+If you're building on the same machine as the working .bin, point it at the
+whole manual-edit bin directly:
 
 ```
 python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-splice-test.bin --blackbgb-manual-bin path/to/your-working-manual-edit.bin
 ```
 
-If the working bin lives on a different machine than the build, copy the
-whole working bin (or at least keep it reachable) over and pass it the same
-way — the flag needs the full bin (to extract `FIELD/BLACKBGB.DAT` from),
-not just the standalone `.dat` from Step 2.
+Or, if you already extracted the standalone `.dat` in Step 2 (e.g. because
+the working bin lives on a different machine than the build), point it at
+that instead:
+
+```
+python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-splice-test.bin --blackbgb-manual-bin workspace/iso-extract/BLACKBGB.manual.dat
+```
 
 ### Step 4 — playtest
 

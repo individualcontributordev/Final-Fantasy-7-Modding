@@ -78,9 +78,16 @@ def apply_manual_blackbgb(img: bytearray, manual_bin: Path) -> None:
     main()) will then patch FIELD.BIN's embedded (location,size) entry to
     match this file's new size.
     """
-    print(f"\nSplicing FIELD/BLACKBGB.DAT from manual-edit bin: {manual_bin}")
-    manual_img = bytes(manual_bin.read_bytes())
-    data = extract_file(manual_img, "FIELD/BLACKBGB.DAT")
+    print(f"\nSplicing FIELD/BLACKBGB.DAT from manual-edit source: {manual_bin}")
+    manual_bytes = manual_bin.read_bytes()
+    if len(manual_bytes) % 2352 == 0:
+        # Full disc image -- pull FIELD/BLACKBGB.DAT out of its filesystem.
+        data = extract_file(bytes(manual_bytes), "FIELD/BLACKBGB.DAT")
+    else:
+        # Already a bare extracted .DAT (e.g. from extract_field_from_bin.py)
+        # -- use it verbatim, no ISO parsing needed.
+        print("  (input is not sector-aligned -- treating as a raw extracted .DAT)")
+        data = manual_bytes
     current = extract_file(img, "FIELD/BLACKBGB.DAT")
     if data == current:
         print("  BLACKBGB.DAT already matches manual-edit bin -- no-op")
@@ -168,11 +175,13 @@ def main() -> int:
                      help="skip stripping DSKCG (ask-for-disc) ops from BLACKBGB "
                           "(isolation test for D1->D2 transition black-screen hang)")
     ap.add_argument("--blackbgb-manual-bin", type=Path,
-                     help="path to a known-working bin (e.g. exported from Makou Reactor "
-                          "after manually deleting BLACKBGB's DSKCG ops) whose FIELD/"
-                          "BLACKBGB.DAT bytes will be spliced in verbatim, bypassing our "
-                          "own LZS re-encode + DSKCG splicer for this field entirely. "
-                          "Overrides --skip-dskcg-removal for BLACKBGB.")
+                     help="path to EITHER a full known-working .bin (e.g. exported from "
+                          "Makou Reactor after manually deleting BLACKBGB's DSKCG ops) OR "
+                          "a raw already-extracted FIELD/BLACKBGB.DAT (from "
+                          "extract_field_from_bin.py). Detected automatically by whether "
+                          "the file size is a multiple of 2352. Its bytes are spliced in "
+                          "verbatim, bypassing our own LZS re-encode + DSKCG splicer for "
+                          "this field entirely. Overrides --skip-dskcg-removal for BLACKBGB.")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
