@@ -23,7 +23,7 @@ field/world reloads audio. Stock ISO and stub-only images do not freeze.
 ## Files
 
 - force-no-victory-music-sites.txt — BATTLE.X word patches (shipped)
-- FAN2.SND.quiet — research only (reproduces freeze; not default)
+- FAN2.SND.quiet.layer.json — ic-layer-v1 diff vs stock FAN2.SND, research only (reproduces freeze; not default)
 - fan2-quiet-source.txt — how quiet asset was produced
 
 ## Apply
