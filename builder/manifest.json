@@ -1086,8 +1086,8 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.2.5",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.5: fixes a second WHITE2 (#643) movie hang missed in v0.2.4 -- Cosmo Canyon's cutscene script also tries to play a movie in a different script slot, which still hung on load. Retains all v0.2.4 fixes. Manip movies and endings are disabled pending re-validation on this new base.",
+      "version": "0.2.8",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.8: fixes the D1->D2 transition hang (BLACKBGB) and LOST2 background corruption, confirmed on DuckStation emulator. Manip movies and endings are disabled pending re-validation on this new base.",
       "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1102,7 +1102,7 @@
       "hidden": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "v0.2.5: v0.2.4 fixed one WHITE2 (#643) movie hang but missed a second, separate movie-play in the same field's cutscene script -- that one still froze the game on load. It's now removed the same way (movie-playing opcodes stripped, everything else in that scene kept intact). Retains all v0.2.4 fixes (WHITE2's first movie hang, D1->D2 transition, LOST2 background corruption, Makou Reactor save). Manip movies and endings are currently disabled while this core is playtested standalone."
+      "betaNote": "v0.2.8: fixes two showstopper regressions, both confirmed on DuckStation emulator (not yet tested on real hardware). D1->D2 transition (BLACKBGB) no longer hangs -- spliced in a known-working manually-edited BLACKBGB.DAT in place of the auto re-encoded one. LOST2 background corruption fixed via a bit-exact Okumura LZSS port replacing the previous from-scratch LZS encoder, which benefits every recompressed field. Retains all v0.2.7 fixes. Manip movies and endings are currently disabled while this core is playtested standalone."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.5",
