@@ -1,8 +1,32 @@
-## TASK: dump BLACKBGB script from your manually-edited bin for comparison
+## TASK: create a manual-edit bin in Makou Reactor, then dump + compare
 
-You have a .bin where you manually removed the "ask for disc 2" opcode in
-Makou Reactor and it works correctly (shows the save prompt). Run this
-against that bin, and paste the full output back here:
+### Step 1 — build a base bin with everything EXCEPT the automated DSKCG removal
+
+This matches the real pipeline (rework merge + safe-field merge + FIELD.BIN
+table fix + SNOVA inject) but skips the automated DSKCG step, so you can
+manually delete the opcode yourself and get an apples-to-apples comparison:
+
+```
+python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/manual-edit-base.bin --skip-dskcg-removal
+```
+
+### Step 2 — open it in Makou Reactor and manually remove the DSKCG opcode
+
+1. Open `workspace/iso-extract/manual-edit-base.bin` in Makou Reactor.
+2. Open field `BLACKBGB`, script `init`, slot `0`.
+3. Find the `DSKCG` (Ask for disc) opcode inside the branch gated by
+   `if var[3][136] bitON 4` (the one you previously confirmed is on the
+   D1→D2 path) and delete just that one opcode.
+4. Save the field in Makou Reactor, then save/export the .bin (however you
+   normally do it — e.g. File > Save, or export to a new .bin path). Note
+   the exact output path.
+5. Test that this manually-edited bin actually shows the "want to save?"
+   prompt when going D1→D2, to confirm it's a known-good reference.
+
+### Step 3 — dump and compare
+
+Run the dump script against your manually-edited bin and paste the full
+output back here:
 
 ```
 python3 mods/single-disc/scripts/dump_blackbgb_debug.py path/to/your-manual-edit.bin
@@ -14,8 +38,8 @@ Also run it against the latest auto-built bin for comparison:
 python3 mods/single-disc/scripts/dump_blackbgb_debug.py workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
 ```
 
-Paste both outputs (or just note which file path you used for the first one)
-so the two "init slot 0" script dumps can be diffed byte-for-byte.
+Paste both full outputs (or the exact file paths used) so the two
+"init slot 0" script dumps can be diffed byte-for-byte.
 
 ---
 
