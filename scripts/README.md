@@ -30,6 +30,8 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 
 Single-disc playtest / SNOVA / movies: `mods/single-disc/scripts/` (see that mod’s README + skill `ship-single-disc`).
 
+**New to building locally (no agent)?** Start with [docs/08-engineer-build-guide.md](../docs/08-engineer-build-guide.md).
+
 ### Regression tests (prevent single-disc / builder breakage)
 
 ```bash
