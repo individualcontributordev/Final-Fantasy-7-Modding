@@ -1086,8 +1086,8 @@
       "id": "single-disc-on-csr",
       "name": "Single-disc",
       "kind": "mod",
-      "version": "0.2.8",
-      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.8: fixes the D1->D2 transition hang (BLACKBGB) and LOST2 background corruption, confirmed on DuckStation emulator. Manip movies and endings are disabled pending re-validation on this new base.",
+      "version": "0.2.9",
+      "blurb": "Play the whole game from one Disc 1 image on CSR. v0.2.9: fixes a New Game hang caused by a corrupted FIELD.BIN in the published v0.2.8 layer (layer was diffed against a stale/broken work bin). Retains the v0.2.8 D1->D2 transition (BLACKBGB) and LOST2 background fixes. Manip movies and endings are disabled pending re-validation on this new base.",
       "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -1102,7 +1102,7 @@
       "hidden": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "v0.2.8: fixes two showstopper regressions, both confirmed on DuckStation emulator (not yet tested on real hardware). D1->D2 transition (BLACKBGB) no longer hangs -- spliced in a known-working manually-edited BLACKBGB.DAT in place of the auto re-encoded one. LOST2 background corruption fixed via a bit-exact Okumura LZSS port replacing the previous from-scratch LZS encoder, which benefits every recompressed field. Retains all v0.2.7 fixes. Manip movies and endings are currently disabled while this core is playtested standalone."
+      "betaNote": "v0.2.9: fixes a New Game hang -- the v0.2.8 disc1.layer.json was diffed against a stale/corrupted work bin whose FIELD.BIN failed to decompress (invalid DEFLATE stream), so the layer shipped that corruption to every build using it. Regenerated the layer from a freshly-built, verified work bin (FIELD.BIN/WORLD.BIN both decompress correctly; reapplying the new layer onto the CSR base reproduces that work bin byte-for-byte). Retains all v0.2.8 fixes (BLACKBGB D1->D2 splice, Okumura LZSS LOST2 fix). Not yet tested on real hardware or replayed past New Game on DuckStation -- please playtest a full run. Manip movies and endings are currently disabled while this core is playtested standalone."
     },
     {
       "id": "single-disc-csr-manip-movies-v0.1.5",
