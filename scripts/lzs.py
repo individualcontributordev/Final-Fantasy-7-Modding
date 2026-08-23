@@ -103,73 +103,187 @@ def find_literal_body_offset(body: bytes, dec_offset: int) -> int:
 
 
 def compress_all(data: bytes) -> bytes:
-	"""FF7 LZS compress matching decompress_all (ring 4096, cur starts 4078)."""
-	from collections import defaultdict
+	"""FF7 LZS compress -- exact port of Haruhiko Okumura's binary-tree LZSS
+	as used by ff7tk's LZS::compress() (the library Makou Reactor delegates
+	to). This is a bit-exact port (not just semantically-equivalent), since
+	our previous from-scratch hash-chain encoder could choose different
+	match/literal splits than the original encoder for unrelated bytes,
+	which round-trips fine through our own decompressor but has caused
+	on-console corruption (see docs/findings/2026-07-25-force-stub-compressed.md
+	and the LOST2 background-corruption regression).
 
-	n_ring, f_max = 4096, 18
-	text_buf = bytearray(n_ring)
-	cur = 4078
-	chains: dict[int, list[int]] = defaultdict(list)
-	ring_at: list[int] = []
-	out = bytearray()
-	i = 0
-	n = len(data)
+	Ring buffer/tree layout matches LZS.cpp exactly:
+	  N = 4096 (ring buffer size), F = 18 (max match length), THRESHOLD = 2.
+	  NIL = N is used as the "not in tree" sentinel for lson/rson/dad.
+	  text_buf is sized N + F + (N - F - 1) = 4113 so that text_buf[r+i] for
+	  r in [0, N) and i in [0, F) never goes out of range, and so that the
+	  s < F - 1 buffer-wraparound mirror (text_buf[s + N] = c) fits too.
+	"""
+	N = 4096
+	F = 18
+	THRESHOLD = 2
+	NIL = N
 
-	def key_at(p: int):
-		if p + 2 >= n:
-			return None
-		return (data[p] << 16) | (data[p + 1] << 8) | data[p + 2]
+	text_buf = bytearray(N + F + N)  # generous; only ~4113 bytes are ever touched
+	lson = [NIL] * (N + 1)
+	rson = [NIL] * (N + 1 + 256)
+	dad = [NIL] * (N + 1)
 
-	def index_start(p: int) -> None:
-		k = key_at(p)
-		if k is None:
-			return
-		chains[k].append(p)
-		if len(chains[k]) > 512:
-			chains[k] = chains[k][-256:]
+	state = {"match_length": 0, "match_position": 0}
 
-	while i < n:
-		fpos = len(out)
-		out.append(0)
-		flags = 0
-		for bit in range(8):
-			if i >= n:
-				break
-			best_len, best_data_pos = 0, -1
-			k = key_at(i)
-			if k is not None and i > 0:
-				for src in chains.get(k, [])[-256:]:
-					if src >= i or i - src > n_ring:
-						continue
-					ml = 0
-					while ml < f_max and i + ml < n and data[src + ml] == data[i + ml]:
-						ml += 1
-					if ml > best_len:
-						best_len, best_data_pos = ml, src
-			if best_len >= 3 and best_data_pos >= 0:
-				length = min(best_len, 18)
-				best_off = ring_at[best_data_pos]
-				b1 = best_off & 0xFF
-				b2 = ((best_off >> 4) & 0xF0) | ((length - 3) & 0x0F)
-				out.append(b1)
-				out.append(b2)
-				for j in range(length):
-					b = data[i + j]
-					ring_at.append(cur)
-					text_buf[cur] = b
-					cur = (cur + 1) & 4095
-					index_start(len(ring_at) - 3)
-				i += length
+	def insert_node(r: int) -> None:
+		cmp = 1
+		key = r
+		p = N + 1 + text_buf[key]
+		rson[r] = NIL
+		lson[r] = NIL
+		state["match_length"] = 0
+		while True:
+			if cmp >= 0:
+				if rson[p] != NIL:
+					p = rson[p]
+				else:
+					rson[p] = r
+					dad[r] = p
+					return
 			else:
-				flags |= 1 << bit
-				b = data[i]
-				out.append(b)
-				ring_at.append(cur)
-				text_buf[cur] = b
-				cur = (cur + 1) & 4095
-				index_start(len(ring_at) - 3)
+				if lson[p] != NIL:
+					p = lson[p]
+				else:
+					lson[p] = r
+					dad[r] = p
+					return
+			i = 1
+			while i < F:
+				cmp = text_buf[key + i] - text_buf[p + i]
+				if cmp != 0:
+					break
 				i += 1
-		out[fpos] = flags
+			if i > state["match_length"]:
+				state["match_position"] = p
+				state["match_length"] = i
+				if i >= F:
+					break
+		dad[r] = dad[p]
+		lson[r] = lson[p]
+		rson[r] = rson[p]
+		dad[lson[p]] = r
+		dad[rson[p]] = r
+		if rson[dad[p]] == p:
+			rson[dad[p]] = r
+		else:
+			lson[dad[p]] = r
+		dad[p] = NIL  # remove p
+
+	def delete_node(p: int) -> None:
+		if dad[p] == NIL:
+			return
+		if rson[p] == NIL:
+			q = lson[p]
+		elif lson[p] == NIL:
+			q = rson[p]
+		else:
+			q = lson[p]
+			if rson[q] != NIL:
+				while rson[q] != NIL:
+					q = rson[q]
+				rson[dad[q]] = lson[q]
+				dad[lson[q]] = dad[q]
+				lson[q] = lson[p]
+				dad[lson[p]] = q
+			rson[q] = rson[p]
+			dad[rson[p]] = q
+		dad[q] = dad[p]
+		if rson[dad[p]] == p:
+			rson[dad[p]] = q
+		else:
+			lson[dad[p]] = q
+		dad[p] = NIL
+
+	n = len(data)
+	if n == 0:
+		return b""
+
+	for i in range(N + 1, N + 1 + 256):
+		rson[i] = NIL
+	for i in range(N):
+		dad[i] = NIL
+
+	code_buf = bytearray(17)
+	code_buf[0] = 0
+	code_buf_ptr = 1
+	mask = 1
+
+	s = 0
+	r = 4078
+	for i in range(r):
+		text_buf[i] = 0
+
+	pos = 0
+	length = 0
+	while length < F and pos < n:
+		text_buf[r + length] = data[pos]
+		pos += 1
+		length += 1
+	if length == 0:
+		return b""
+
+	for i in range(1, F + 1):
+		insert_node(r - i)
+	insert_node(r)
+
+	out = bytearray()
+	while True:
+		match_length = state["match_length"]
+		match_position = state["match_position"]
+		if match_length > length:
+			match_length = length
+		if match_length <= THRESHOLD:
+			match_length = 1
+			code_buf[0] |= mask
+			code_buf[code_buf_ptr] = text_buf[r]
+			code_buf_ptr += 1
+		else:
+			code_buf[code_buf_ptr] = match_position & 0xFF
+			code_buf_ptr += 1
+			code_buf[code_buf_ptr] = ((match_position >> 4) & 0xF0) | ((match_length - (THRESHOLD + 1)) & 0x0F)
+			code_buf_ptr += 1
+
+		mask = (mask << 1) & 0xFF
+		if mask == 0:
+			out.extend(code_buf[:code_buf_ptr])
+			code_buf[0] = 0
+			code_buf_ptr = 1
+			mask = 1
+
+		last_match_length = match_length
+		i = 0
+		while i < last_match_length and pos < n:
+			c = data[pos]
+			pos += 1
+			delete_node(s)
+			text_buf[s] = c
+			if s < F - 1:
+				text_buf[s + N] = c
+			s = (s + 1) & (N - 1)
+			r = (r + 1) & (N - 1)
+			insert_node(r)
+			i += 1
+		while i < last_match_length:
+			i += 1
+			delete_node(s)
+			s = (s + 1) & (N - 1)
+			r = (r + 1) & (N - 1)
+			length -= 1
+			if length:
+				insert_node(r)
+
+		if length <= 0:
+			break
+
+	if code_buf_ptr > 1:
+		out.extend(code_buf[:code_buf_ptr])
+
 	return bytes(out)
 
 

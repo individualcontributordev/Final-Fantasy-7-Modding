@@ -160,12 +160,15 @@ def main() -> int:
     if args.skip_dskcg_removal:
         print("\nSkipping DSKCG removal (--skip-dskcg-removal)")
     else:
-        # Only remove the single DSKCG on the actual D1->D2 execution path
-        # (occurrence index 3 in BLACKBGB's init slot 0 -- gated by
-        # `if var[3][136] bitON 4`), matching the manual Makou Reactor edit
-        # confirmed to work. Removing all 4 (the old default) is known to
-        # hang/corrupt the field.
-        apply_dskcg_removal(img, only_indices={3})
+        # Remove all 4 DSKCG occurrences in BLACKBGB's init slot 0. Verified
+        # 2026-08-2x: a manual Makou Reactor edit removing all 4 (combined
+        # with the FIELD.BIN table fix below) produces a byte-identical
+        # script to this automated splicer, and was confirmed in-game to
+        # show the "want to save?" prompt and load the D1->D2 scene
+        # correctly. The earlier only_indices={3} restriction and prior
+        # "removing all 4 hangs" reports predate the FIELD.BIN table-fix
+        # being wired in as the pipeline default.
+        apply_dskcg_removal(img)
 
     if args.skip_table_fix:
         print("\nSkipping FIELD.BIN/WORLD.BIN table patch (--skip-table-fix, debug only)")
