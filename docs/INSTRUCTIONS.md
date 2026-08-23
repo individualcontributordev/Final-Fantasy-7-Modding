@@ -19,14 +19,33 @@ disabled for this test — testing endings in isolation first.
 
 ## Steps (copy-paste, in order)
 
-### 1. Update the repo
+### 1. Update BOTH repos
+
+The single-disc build reads CSR's Disc 3 layer (your field 768 un-skip
+edit) from the `Final-Fantasy-7-CSR` repo, and caches a built copy of it.
+If you skip pulling CSR or skip clearing the cache, the build will
+silently use a stale/old CSR D1 image and your field 768 edit will not
+be in the output — this is the most common cause of "the bin doesn't
+reflect my edit."
 
 ```bash
 cd Final-Fantasy-7-Modding
 git pull --ff-only
+cd ../Final-Fantasy-7-CSR
+git pull --ff-only
+cd ../Final-Fantasy-7-Modding
 ```
 
-### 2. Rebuild the builder-equivalent bin (endings only, no manip movies)
+### 2. Clear the stale CSR base cache
+
+Required every time the CSR layer changes (e.g. after any Makou Reactor
+edit + layer rebuild + push on the CSR side):
+
+```bash
+rm -f ../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin
+```
+
+### 3. Rebuild the builder-equivalent bin (endings only, no manip movies)
 
 Run from `Final-Fantasy-7-Modding`. Requires
 `workspace/pristine/FINALFANTASY7_D1.bin` (your own retail NTSC-U Disc 1
@@ -36,13 +55,29 @@ copy) already present.
 python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin --disc 1 --base csr-v0.14.2 --addon single-disc-on-csr --addon single-disc-endings-v0.1.0-part1 --addon single-disc-endings-v0.1.0-part2 --addon single-disc-endings-v0.1.0-part3 --addon single-disc-endings-v0.1.0-part4 --addon single-disc-endings-v0.1.0-part5 --addon single-disc-endings-v0.1.0-part6 --addon single-disc-endings-v0.1.0-part7 -o workspace/iso-extract/ff7_d1_singledisc_endings_playtest.bin
 ```
 
-Expected output ends with:
+Expected output starts with a cache line — either:
+
+```
+cache miss — apply disc1.layer.json onto pristine → cache/csr/D1
+wrote .../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin (...)
+```
+
+(first run after clearing cache) or `cache hit: ...` (if you didn't
+change CSR and didn't clear cache — fine to skip step 2 in that case).
+Then ends with:
 
 ```
 PASS — builder config applies cleanly (3422768 total records)
 ```
 
-### 3. Create the matching .cue (if not already present)
+**Do not** open the output `.bin` directly in Makou Reactor to hand-edit
+it — it's a raw disc image, not something Makou Reactor can save back to
+("Cannot update game binaries" / "invalid archive" errors are from
+trying to do this). All edits happen on the CSR side (Makou Reactor on
+the CSR disc image → rebuild CSR's own layer JSON → push), then this
+script re-applies that layer onto Disc 1 from scratch.
+
+### 4. Create the matching .cue (if not already present)
 
 ```bash
 cat > workspace/iso-extract/ff7_d1_singledisc_endings_playtest.cue << 'EOF'
@@ -52,7 +87,7 @@ FILE "ff7_d1_singledisc_endings_playtest.bin" BINARY
 EOF
 ```
 
-### 4. Playtest
+### 5. Playtest
 
 Open `workspace/iso-extract/ff7_d1_singledisc_endings_playtest.cue` in
 DuckStation.
@@ -68,7 +103,8 @@ DuckStation.
 
 ## Evidence to paste back when done
 
-- Full terminal output of step 2 (the `verify_builder_config.py` run)
+- Full terminal output of step 3 (the `verify_builder_config.py` run,
+  including the cache miss/hit line)
 - Whether the `LASTMAP` "Ask Question" freeze is gone
 - Whether the ending/credits movies play correctly end to end
 - Regression check results (New Game / D1→D2 / break scene)
