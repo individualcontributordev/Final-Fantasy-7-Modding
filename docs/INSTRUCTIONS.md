@@ -1,24 +1,29 @@
-# Task: rebuild single-disc-on-csr from the full pipeline against the latest CSR (new D3 LASTMAP edit), then playtest the LASTMAP ending
+# Task: confirm LASTMAP freeze fixed, then build+playtest the full ending/credits movie sequence
 
 ## Why
 
-`LASTMAP` (field 768) `AD3` script 31 was still freezing after the "Ask
-Question" choice even with the movie assets present and the earlier
-goto/skip revert. A known-working reference bin
-(`ff7-d1-csr-sd-mov-end.bin`, playtested externally) was compared in
-Makou Reactor against field 768 — the working version *also* removes
-the `PMVIE` ("set next movie") opcodes in `AD`/`AD3`, not just the
-`MOVIE`/`FMUSC` skip. That same edit has now been made on the CSR side
-and pushed as a new CSR Disc 3 layer.
+Your CSR Disc 3 `PMVIE` removal worked — the `LASTMAP` `AD3` script 31
+freeze is fixed on the CSR side. Verified directly in the fresh CSR D3
+field data: `AD` script 4's `PMVIE f818` (which set MOVIE_ID row 24 to
+`LASTFLOR.MOV`) is now gone entirely, and `AD3` script 31 goes straight
+`REQ → BMUSC → FMUSC` with no `MOVIE`/`PMVIE` op left at all. That means
+**`LASTFLOR.MOV` is no longer needed in the single-disc endings movie
+layer** — it was only ever aliased onto D1 for that now-dead opcode.
 
-Because `builder/single-disc-on-csr/layers/disc1.layer.json` is a
-**pre-baked diff** that doesn't auto-refresh when CSR's source images
-change, the full pipeline must be rebuilt from scratch every time a CSR
-field changes: fresh CSR D1/D2/D3 base images → merged single-disc work
-bin → re-diffed addon layer → builder-equivalent playtest bin. This
-task runs that full pipeline end-to-end and playtests the result.
+Removed the now-dead `LASTFLOR.MOV → MAINPLR.MOV` alias job from
+`mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py` (confirmed no
+other field DAT sets MOVIE_ID row 24 except a handful of early D1
+fields that rely on its untouched *default* value — `MAINPLR.MOV` —
+so leaving row 24 alone is correct, not just harmless).
 
-**Not yet playtested on DuckStation** — that's this task.
+The remaining ending/credits movie aliases (`ONTRAIN→LASTMAP.BIN`,
+`SMK→ENDING01`, `SOUTHMK→ENDING3E`, `MONITOR→ENDING2E`, plus the
+`CANONON`/`LAST4_3` splices) are untouched. This task rebuilds the full
+single-disc pipeline (fresh CSR D1/D2/D3 → merged work bin → re-diffed
+`single-disc-on-csr` layer) and then builds+plays the **actual ending
+movie sequence bin** (`build_ending_credits_test_bin.py`, not just the
+endings-parts layers) to verify the whole sequence plays through
+without the LASTFLOR alias.
 
 ## Steps (copy-paste, in order)
 
@@ -101,67 +106,51 @@ found" warning. Bump `builder/single-disc-on-csr/pack.json`'s and
 and `mods/single-disc/VERSION` + `CHANGELOG.md`, if you intend to commit
 this rebuild.
 
-### 6. Rebuild the builder-equivalent playtest bin (endings only, no manip movies)
+### 6. Build the actual ending/credits movie sequence bin
 
-Run from `Final-Fantasy-7-Modding`.
-
-```bash
-python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin --disc 1 --base csr-v0.14.2 --addon single-disc-on-csr --addon single-disc-endings-v0.1.0-part1 --addon single-disc-endings-v0.1.0-part2 --addon single-disc-endings-v0.1.0-part3 --addon single-disc-endings-v0.1.0-part4 --addon single-disc-endings-v0.1.0-part5 --addon single-disc-endings-v0.1.0-part6 --addon single-disc-endings-v0.1.0-part7 -o workspace/iso-extract/ff7_d1_singledisc_endings_playtest.bin
-```
-
-Expected output starts with a cache line — either:
-
-```
-cache miss — apply disc1.layer.json onto pristine → cache/csr/D1
-wrote .../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin (...)
-```
-
-(first run after clearing cache) or `cache hit: ...` (if you didn't
-clear cache in step 2 — fine, the base CSR D1 doesn't need to be
-current for this step since the freshly re-diffed addon layer from
-step 5 already carries the latest CSR D2/D3 field edits baked in). Then
-ends with:
-
-```
-PASS — builder config applies cleanly (3422700 total records)
-```
-
-**Do not** open the output `.bin` directly in Makou Reactor to hand-edit
-it — it's a raw disc image, not something Makou Reactor can save back to
-("Cannot update game binaries" / "invalid archive" errors are from
-trying to do this). All edits happen on the CSR side (Makou Reactor on
-the CSR disc image → rebuild CSR's own layer JSON → push), then steps
-3-5 above rebuild `single-disc-on-csr`'s own layer from scratch.
-
-### 7. Create the matching .cue (if not already present)
+This is a separate, dedicated ending-movie test bin — not the
+endings-parts layers used for the shipped `single-disc-on-csr` addon
+stack. It rebuilds `ff7_d1_playtest_csr_sd_movies.bin` first (CSR +
+single-disc core + manip-movies), then splices in the D3 ending
+streams (via the just-edited `alias_d3_ending_lbas_on_d1.py`, now
+without the dead `LASTFLOR.MOV` alias), the `CANONON` lake fix, and the
+`LAST4_3`→`GOLD7_2` manip seed.
 
 ```bash
-cat > workspace/iso-extract/ff7_d1_singledisc_endings_playtest.cue << 'EOF'
-FILE "ff7_d1_singledisc_endings_playtest.bin" BINARY
-  TRACK 01 MODE2/2352
-    INDEX 01 00:00:00
-EOF
+python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
 ```
 
-### 8. Playtest
+Runs `build_playtest_bin.py` as step 1/5 internally (uses
+`builder/csr-v0.14.2`, `builder/single-disc-on-csr`, and
+`builder/single-disc-csr-manip-movies-v0.1.5` — already current, no
+edits needed there). Expect all 5 steps to print `OK`/pass lines, no
+`FAIL`, ending with:
 
-Open `workspace/iso-extract/ff7_d1_singledisc_endings_playtest.cue` in
+```
+WROTE workspace/iso-extract/ff7_d1_playtest_ending_test.bin
+WROTE workspace/iso-extract/ff7_d1_playtest_ending_test.cue
+```
+
+### 7. Playtest
+
+Open `workspace/iso-extract/ff7_d1_playtest_ending_test.cue` in
 DuckStation.
 
 - Get to `LASTMAP` (field 768), entity `AD3`, and trigger the "Ask
   Question" choice (Script 31, line 224).
 - **Confirm the scene loads and plays through** instead of freezing —
-  this is the bug the new CSR `PMVIE` removal is meant to fix.
-- Also spot-check the rest of the ending/credits sequence plays cleanly
-  (all 7 parts of the movie pack are now included).
+  this is the bug the new CSR `PMVIE` removal fixed.
+- Watch the full ending/credits movie sequence through to the end
+  (`ONTRAIN`, `ENDING01`, `ENDING3E`, `ENDING2E`, and the `LOSLAKE1`
+  lake scene via the `CANONON` splice) — confirm none of them are
+  silent/black or freeze, now that `LASTFLOR.MOV` is no longer aliased.
 - Regression check: confirm New Game, D1→D2 transition, and the break
   scene (`LOST2`) are unaffected.
 
 ## Evidence to paste back when done
 
 - Full terminal output of steps 4-6 (`build_work_bin.py`,
-  `bin_diff_to_layer.py`, and the `verify_builder_config.py` run
-  including the cache miss/hit line)
+  `bin_diff_to_layer.py`, and `build_ending_credits_test_bin.py`)
 - Whether the `LASTMAP` "Ask Question" freeze is gone
 - Whether the ending/credits movies play correctly end to end
 - Regression check results (New Game / D1→D2 / break scene)
