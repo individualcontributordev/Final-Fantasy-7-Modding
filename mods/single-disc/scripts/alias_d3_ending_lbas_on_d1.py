@@ -32,9 +32,14 @@ from psx_mode2_iso import (  # noqa: E402
 )
 
 # (MOVIE_ID row, D3 MOVIE name, D1 slot to retarget)
+#
+# id24/LASTFLOR.MOV removed 2026-08-23: the fresh CSR D3 LASTMAP edit
+# strips PMVIE f818 (the opcode that set MOVIE_ID row 24) from AD script 4,
+# so id24 is never referenced by the field anymore -- confirmed no other
+# field DAT sets MOVIE_ID row 24 either. Keeping the alias would just be
+# dead weight in the layer.
 JOBS = (
     (23, "LASTMAP.BIN", "ONTRAIN.MOV"),
-    (24, "LASTFLOR.MOV", "MAINPLR.MOV"),
     (25, "ENDING01.MOV", "SMK.STR"),
     (26, "ENDING3E.MOV", "SOUTHMK.MOV"),
     (29, "ENDING2E.MOV", "MONITOR.STR"),

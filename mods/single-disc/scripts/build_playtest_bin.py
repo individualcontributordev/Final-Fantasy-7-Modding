@@ -25,13 +25,13 @@ from psx_mode2_iso import extract_file, find_file  # noqa: E402
 def main() -> int:
     pristine = ROOT / "workspace/pristine/FINALFANTASY7_D1.bin"
     d2 = ROOT / "workspace/pristine/FINALFANTASY7_D2.bin"
-    csr_layer = ROOT.parent / "Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
+    csr_layer = ROOT.parent / "Final-Fantasy-7-CSR/builder/csr-v0.14.2/layers/disc1.layer.json"
     if not csr_layer.is_file():
-        csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json"
+        csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.2/layers/disc1.layer.json"
     csr_layer = csr_layer.resolve()
-    core_layer = ROOT / "builder/single-disc-on-csr-v0.1.2/layers/disc1.layer.json"
+    core_layer = ROOT / "builder/single-disc-on-csr/layers/disc1.layer.json"
     # Cumulative movies pack only (latest = seed + LBA alias).
-    movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v0.1.2/layers/disc1.layer.json"
+    movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
