@@ -1,3 +1,25 @@
+## 0.2.11 — 2026-08-23
+
+**Fixes a Disc 3 ending-sequence crash caused by `PlayMovie` opcodes
+trying to play movie files absent from the Disc 1 single-disc LBA map.**
+
+- CSR v0.14.2's `disc3.layer.json` was updated (commit `9ad13bb`) to move
+  (not delete) the `PlayMovie` opcodes in fields 765-768 (`LAS4_2`,
+  `LAS4_3`, `LAS4_4`, `LASTMAP`) so they no longer trigger on this path.
+  Verified in CSR disc 3 alone via playtest before publishing.
+- `FIELD/LAS4_2.DAT`, `LAS4_3.DAT`, `LAS4_4.DAT`, and `LASTMAP.DAT` are all
+  edited by CSR only on Disc 3 (byte-identical to pristine on D1/D2), so
+  `merge_safe_fields.py`'s safe whole-file merge already classifies and
+  pulls them from CSR D3 automatically -- no single-disc script changes
+  needed, just a rebuild + re-diff to pick up the new CSR base.
+- Rebuilt via `build_work_bin.py` (all field merges + verified BLACKBGB
+  manual splice + SNOVA inject + FIELD.BIN/WORLD.BIN table fix) and
+  re-diffed against the CSR v0.14.2 D1 base into a new `disc1.layer.json`
+  (63,487 addon records). `FIELD.BIN` table entries for `LAS4_3.DAT`
+  (8,527 bytes), `LAS4_4.DAT` (6,333 bytes), and `LASTMAP.DAT` (23,329
+  bytes) confirmed patched to the new CSR D3 sizes.
+- Not yet playtested past the Disc 3 ending sequence on DuckStation.
+
 ## 0.2.10 — 2026-08-23
 
 **Fixes the Cosmo Canyon break-scene (LOST2, field 634) failing to load
