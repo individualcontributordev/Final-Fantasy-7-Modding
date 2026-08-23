@@ -37,16 +37,20 @@ def main() -> int:
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
     out_cue = out_dir / "ff7_d1_playtest_csr_sd_movies.cue"
 
+    import time
+
     for p, label in [
         (pristine, "pristine D1"),
         (d2, "pristine D2"),
         (csr_layer, "CSR layer"),
         (core_layer, "single-disc main pack"),
-        (movie_layer, "manip-movies cumulative v0.1.2"),
+        (movie_layer, "manip-movies cumulative v0.1.5"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
             return 1
+        mtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(p.stat().st_mtime))
+        print(f"USING [{label}] {p}  (mtime {mtime})")
 
     print("1/3 CSR base...")
     img = bytearray(pristine.read_bytes())
