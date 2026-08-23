@@ -788,7 +788,7 @@
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
-        "addonSelected": "DISABLED-pending-v0.2.8-revalidation",
+        "addonSelected": "single-disc-on-csr",
         "bases": [
           "csr-v0.14.2"
         ],
@@ -817,7 +817,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "groupLabel": "Single-disc ending credits (always on)",
@@ -848,7 +848,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "version": "0.1.0",
@@ -880,7 +880,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "version": "0.1.0",
@@ -912,7 +912,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "version": "0.1.0",
@@ -944,7 +944,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "version": "0.1.0",
@@ -976,7 +976,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "version": "0.1.0",
@@ -1008,7 +1008,7 @@
           "highwind-v0.2.0"
         ],
         "addonSelectedAny": [
-          "DISABLED-pending-v0.2.8-revalidation"
+          "single-disc-on-csr"
         ]
       },
       "version": "0.1.0",
