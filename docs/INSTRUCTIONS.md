@@ -43,10 +43,144 @@ Paste both full outputs (or the exact file paths used) so the two
 
 ---
 
-script output
+python3 mods/single-disc/scripts/dump_blackbgb_debug.py workspace/iso-extract/manual-edit-base.bin 
+BLACKBGB.DAT: lba=58550 size=13013
+FIELD.BIN table: 1864 entries, looking for rel_lba=3550
+  (no matching table entry found by rel_lba scan)
+--- manual-edit-base.bin: init slot 0 (794 bytes) ---
+   0 UC           3301
+   2 MENU2        4a01
+   4 RET          00
+   5 IFUB         1430880709f2
+  11 MUSIC        f000
+  13 AKAO         f2000000c1017f00000000000000
+  27 AKAO         f200000028400000000000000000
+  41 AKAO         f200000029400000000000000000
+  55 AKAO         f20000002a400000000000000000
+  69 AKAO         f20000002b400000000000000000
+  83 AKAO         f2000000a07f0000000000000000
+  97 AKAO         f2000000a17f0000000000000000
+ 111 AKAO         f2000000a27f0000000000000000
+ 125 AKAO         f2000000a37f0000000000000000
+ 139 AKAO         f2000000b0000000000000000000
+ 153 AKAO         f2000000b1000000000000000000
+ 167 AKAO         f2000000b2000000000000000000
+ 181 AKAO         f2000000b3000000000000000000
+ 195 BMUSC        f601
+ 197 BITOFF       83308807
+ 201 MENU         49031500
+ 205 BATTLE       7000d401
+ 209 MAPJUMP      60e20025fbdeff320000
+ 219 AKAO         f2000000c1ff0000000000000000
+ 233 WAIT         245000
+ 236 MUSIC        f000
+ 238 AKAO         f2000000c1007f00000000000000
+ 252 IFUB         14d05b020930
+ 258 BITON        82308807
+ 262 BITOFF       83d05b02
+ 266 MHMMX        3e
+ 267 WMODE        52000101
+ 271 WMODE        52010001
+ 275 WMODE        52020001
+ 279 WMODE        52030201
+ 283 WAIT         240100
+ 286 REQ          0106c3
+ 289 REQ          0107c3
+ 292 WINDOW       5000100008001f013900
+ 302 MESSAGE      400003
+ 305 IFUB         143088050919
+ 311 BITOFF       83308805
+ 315 WAIT         240400
+ 318 MUSIC        f002
+ 320 WAIT         240800
+ 323 MAPJUMP      60e802f9ff6bfcf300e4
+ 333 JMPF         10c8
+ 335 IFUB         14d05206094a
+ 341 BITOFF       83d05206
+ 345 REQ          0105c4
+ 348 WAIT         241000
+ 351 WINDOW       500146007d00b4004900
+ 361 ASK          48050101020300
+ 368 MHMMX        3e
+ 369 IFUB         145000020010
+ 375 WAIT         240400
+ 378 BITON        82308805
+ 382 SETBYTE      80d00003
+ 386 MENU         49000e00
+ 390 BITOFF       83308805
+ 394 WAIT         240400
+ 397 MUSIC        f002
+ 399 WAIT         240800
+ 402 MAPJUMP      60e802f9ff6bfcf300e4
+ 412 JMPF         1079
+ 414 IFUB         143086020920
+ 420 BITOFF       83308602
+ 424 WAIT         240400
+ 427 WAIT         240800
+ 430 BITON        82308901
+ 434 MAPJUMP      607a02fdfeb213710000
+ 444 MUSIC        f003
+ 446 WAIT         240800
+ 449 JMPF         1054
+ 451 IFUB         14308804094e
+ 457 BITOFF       83308804
+ 461 REQ          0105c3
+ 464 WAIT         241000
+ 467 WINDOW       500146007d00b4004900
+ 477 ASK          48050101020300
+ 484 IFUB         145000020010
+ 490 WAIT         240400
+ 493 BITON        82308602
+ 497 SETBYTE      80d00002
+ 501 MENU         49000e00
+ 505 BITOFF       83308602
+ 509 WAIT         240400
+ 512 WAIT         240800
+ 515 BITON        82308901
+ 519 WAIT         240800
+ 522 MAPJUMP      607a02fdfeb213710000
+ 532 MUSIC        f003
+ 534 IFUB         1430830209c1
+ 540 UC           3301
+ 542 MENU2        4a01
+ 544 NFADE        250000000000000000
+ 553 AKAO         f2000000a4100000000000000000
+ 567 AKAO         f2000000a5100000000000000000
+ 581 AKAO         f2000000a3100000000000000000
+ 595 AKAO         f2000000c1100000000000000000
+ 609 WAIT         240600
+ 612 AKAO         f200000028400000000000000000
+ 626 AKAO         f200000029400000000000000000
+ 640 AKAO         f20000002a400000000000000000
+ 654 AKAO         f2000000a4017f00000000000000
+ 668 AKAO         f2000000a5017f00000000000000
+ 682 AKAO         f2000000a3017f00000000000000
+ 696 MUSIC        f000
+ 698 AKAO         f2000000c1017f00000000000000
+ 712 PMVIE        f82d
+ 714 MOVIE        f9
+ 715 WAIT         240300
+ 718 MULCK        f501
+ 720 MAPJUMP      602e02d7ff99015500f0
+ 730 JMPF         103e
+ 732 IFSW         162000007e020036
+ 740 AKAO         f2000000c1600000000000000000
+ 754 WAIT         243000
+ 757 MUSIC        f000
+ 759 AKAO         f2000000c1010000000000000000
+ 773 WAIT         240400
+ 776 MMBud        cd0003
+ 779 MENU         49001103
+ 783 MAPJUMP      600a0289fff0002200ff
+ 793 RET          00
+total len 794
+
+
+
+
+
 
 python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
-
 Loading CSR D1/D2 reference images...
 Base: CSR D1 (747,435,024 bytes)
 
@@ -133,9 +267,9 @@ Patching FIELD.BIN/WORLD.BIN embedded (location,size) tables...
   FIELD/FIELD.BIN table: ZMIND1.DAT @120288 size 9323 -> 9246
   FIELD/FIELD.BIN table: ZMIND2.DAT @120402 size 9266 -> 9285
   FIELD/FIELD.BIN table: ZMIND3.DAT @120498 size 12123 -> 12163
-Source (dec):     C:\Users\David\AppData\Local\Temp\tmpheyxov7m\bin.dec (264008 bytes)
-Original (bin):   C:\Users\David\AppData\Local\Temp\tmpheyxov7m\bin.orig (85346 bytes)
-Output:           C:\Users\David\AppData\Local\Temp\tmpheyxov7m\bin.new (81162 bytes)
+Source (dec):     C:\Users\David\AppData\Local\Temp\tmpq_gcd5na\bin.dec (264008 bytes)
+Original (bin):   C:\Users\David\AppData\Local\Temp\tmpq_gcd5na\bin.orig (85346 bytes)
+Output:           C:\Users\David\AppData\Local\Temp\tmpq_gcd5na\bin.new (81162 bytes)
 Method:           zopfli
 Size delta:       -4184 bytes
 Shorter than original — CDmage 'pad with zeros?' → Yes.
@@ -164,9 +298,9 @@ patch BATTLE.X hardcoded SNOVA LBAs (delta 190687)
   BATTLE.X LBA 0x48DE8: 127618 -> 318305
   BATTLE.X LBA 0x48DF0: 127649 -> 318336
   BATTLE.X LBA 0x4F5A8: 127101 -> 317788
-Source (dec):     C:\Users\David\AppData\Local\Temp\tmpe1q2qnkq\BATTLE.X.dec (342188 bytes)
-Original (bin):   C:\Users\David\AppData\Local\Temp\tmpe1q2qnkq\BATTLE.X.orig (130322 bytes)
-Output:           C:\Users\David\AppData\Local\Temp\tmpe1q2qnkq\BATTLE.X.new (123557 bytes)
+Source (dec):     C:\Users\David\AppData\Local\Temp\tmp6h2ghzjc\BATTLE.X.dec (342188 bytes)
+Original (bin):   C:\Users\David\AppData\Local\Temp\tmp6h2ghzjc\BATTLE.X.orig (130322 bytes)
+Output:           C:\Users\David\AppData\Local\Temp\tmp6h2ghzjc\BATTLE.X.new (123557 bytes)
 Method:           zopfli
 Size delta:       -6765 bytes
 Shorter than original — CDmage 'pad with zeros?' → Yes.
@@ -176,259 +310,138 @@ verify: BATTLE.X 17 LBA entries remapped
 verify: all SNOVA files match D3
 
 Done. Final work bin: workspace\iso-extract\single-disc-dskcg-tablefix-test.bin
+➜  Final-Fantasy-7-Modding git:(main) ✗ python3 mods/single-disc/scripts/dump_blackbgb_debug.py workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
 
-
-# Task: Test D1->D2 transition with DSKCG removal + FIELD.BIN table fix
-
-## Why
-
-Root cause found: it was never the jump-fixup math (independently
-verified byte-for-byte correct — every JMPF/IFUB target in the patched
-BLACKBGB script lands exactly on an instruction boundary, 0 bad
-jumps). The real bug is in the pipeline step *after* DSKCG removal.
-
-FIELD.BIN has its **own embedded `(LBA, size)` lookup table**,
-separate from the ISO9660 directory record that
-`replace_file_within_sectors()` patches. Removing a DSKCG opcode
-shrinks BLACKBGB's compressed size, so the ISO9660 dirent gets the
-correct new size — but FIELD.BIN's internal table still points at the
-field's **old pre-edit size**. `fix_field_bin_table.py` (which patches
-that internal table) existed but was gated behind an opt-in
-`--apply-table-fix` flag that `build_work_bin.py` did **not** pass by
-default. So every build you tested had a stale FIELD.BIN table entry
-for BLACKBGB, which is exactly consistent with what you saw: the game
-loads BLACKBGB at the wrong byte length (truncating before the ASK/
-save-prompt opcode) → black screen, no save prompt. It also explains
-Makou's "Invalid Archive": Makou's own `updateBin()` searches FIELD.BIN
-for `(LBA, old_size)` to relocate the field on save and fails to find
-it once the size no longer matches.
-
-Fix: `--apply-table-fix` is now the **default** behavior (renamed to
-an opt-out `--skip-table-fix` debug flag). `build_work_bin.py` always
-patches FIELD.BIN/WORLD.BIN's internal tables after any field-resizing
-step, so BLACKBGB's real new size and the table's record of it always
-agree.
-
-DSKCG removal itself still only strips occurrence index 3 (script
-offset 518 in BLACKBGB's `init` slot 0, gated by
-`if var[3][136] bitON 4`) — confirmed as the one on the actual D1->D2
-execution path.
-
-## Prerequisites
-
-- `workspace/pristine/FINALFANTASY7_D1.bin`, `_D2.bin`, `_D3.bin` present.
-- `Final-Fantasy-7-CSR` repo checked out as a sibling of this repo.
-- Python 3 on PATH; run all commands from this repo's root.
-
-## What you do
-
-1. `git pull --ff-only`.
-2. Rebuild the work bin and a matching `.cue`:
-
-   ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
-   printf 'FILE "single-disc-dskcg-tablefix-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-dskcg-tablefix-test.cue
-   ```
-
-   Expect this line during the DSKCG-removal step:
-   ```
-   Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB'] (only occurrence(s) [3])...
-       init slot 0: Removed 1 DSKCG
-   ```
-   and later, during the table-fix step (no longer skipped):
-   ```
-   Patching FIELD.BIN/WORLD.BIN embedded (location,size) tables...
-     FIELD/FIELD.BIN table: BLACKBGB.DAT @... size ... -> ...
-   ```
-   No `WARNING:` or uncaught errors.
-
-3. Open `workspace/iso-extract/single-disc-dskcg-tablefix-test.cue` in
-   DuckStation fresh (no save states, no cheats).
-4. New game, play through Midgar to confirm baseline sanity (no hangs).
-5. Progress to the Disc 1->2 transition (BLACKBGB field #103 -> LOST2
-   -> break scene -> COS_BTM2). Confirm it goes straight through with
-   no black-screen hang, and that the disc-swap **save prompt** (ASK
-   opcode) still appears normally on that path.
-6. Open this bin in Makou Reactor and check BLACKBGB field #103.
-   Confirm it opens cleanly (no "Invalid Archive"), and that the
-   script displays with clean "Goto label X" jumps (no "Forward N
-   byte(s)" raw offsets). Try File > Save to confirm Makou can save
-   the archive without error.
-
-## Evidence (paste)
-
-```
-D1->2 transition with DSKCG removal + table fix: NO HANG / HANGS
-Save prompt (ASK) appears on that path: YES / NO
-Makou Reactor BLACKBGB open: OK / Invalid Archive
-Makou Reactor save: OK / error (describe)
-Script jumps display as clean labels: YES / NO (describe)
-notes:
-```
-
-## When done
-
-Paste evidence above, commit this file, push, say check.
-
----
-
-# Task: Manual WHITE2 (#643) fix in CSR itself, then rebuild single-disc
-
-## Why
-
-You want to fix WHITE2's second movie-hang (`cl`/31) by hand in Makou
-Reactor, at the source — CSR's own Disc 2 — instead of patching it in
-this repo's `single-disc` pipeline. Once CSR's Disc 2 layer is fixed,
-`single-disc`'s `build_work_bin.py` pulls CSR Disc 2 via
-`disc_sources.load_csr_image(2)` (pristine D2 + CSR's `disc2.layer.json`),
-so the fix flows through automatically on the next single-disc rebuild
-— no changes needed in this repo's field-patch scripts.
-
-This is a **manual, human-run process** across two repos. Follow every
-step in order; nothing here is scripted end-to-end.
-
-## Part 1 — Edit WHITE2 in CSR's Disc 2 image (Makou Reactor)
-
-1. In `Final-Fantasy-7-CSR`, `git pull --ff-only`.
-2. Open `Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D2.bin` in Makou
-   Reactor (this is the exact edited D2 image CSR's current
-   `csr-v0.14.1` Disc 2 layer was diffed from, and what single-disc
-   pulls from on every rebuild).
-3. Find field 643, `WHITE2.DAT`, script slot `cl` / 31 (the longer
-   Cosmo Canyon cutscene script — the one carrying CSR's story `JMPF`
-   edit). Remove the `PMVIE`/`MOVIE` opcode pair from that slot only.
-   Leave every other opcode in that script (including the `JMPF`
-   edit) untouched.
-4. Save in Makou. Confirm it succeeds (this is a size-neutral-or-not
-   edit on stock CSR D2 — either way should save fine per the earlier
-   Makou save investigation).
-
-## Part 2 — Rebuild CSR's Disc 2 layer from the edited image
-
-Still in `Final-Fantasy-7-CSR`:
-
-```bash
-python3 scripts/build_csr_base_layers.py cache/csr --version 0.14.2 --discs 2
-```
-
-This diffs `pristine/FINALFANTASY7_D2.bin` vs. the edited
-`cache/csr/FINALFANTASY7_D2.bin`, writes
-`builder/csr-v0.14.2/layers/disc2.layer.json` (a **new** versioned
-folder — it will not overwrite `csr-v0.14.1` in place), and verifies
-the layer reapplies cleanly onto pristine to reproduce your edited
-image byte-for-byte.
-
-`csr-v0.14.2` will only have a Disc 2 layer written by this run — Disc
-1 and Disc 3 layers must still come from `csr-v0.14.1` (copy those two
-files into `builder/csr-v0.14.2/layers/` and merge `pack.json`'s
-`discs` map, or re-run the script with `--discs 1,2,3` against the
-full `cache/csr/` set if Disc 1/3 there are already current).
-
-Commit the new `builder/csr-v0.14.2/` folder and the updated
-`builder/manifest.json` bases entry (JSON only — never `.bin`/`.cue`)
-in the CSR repo, then push.
-
-## Part 3 — Point single-disc at the new CSR version
-
-Back in this repo (`Final-Fantasy-7-Modding`):
-
-1. Update every `csr-v0.14.1` reference relevant to single-disc to
-   `csr-v0.14.2`:
-   - `scripts/disc_sources.py`: `csr_layer()`'s
-     `"builder/csr-v0.14.1/layers"` path.
-   - `builder/single-disc-on-csr/pack.json` and the manifest entry's
-     `compatibleBases`.
-   - Any other `single-disc*` pack/manifest entries with
-     `compatibleBases: ["csr-v0.14.1"]`.
-2. Rebuild the single-disc work bin and regenerate its layer exactly
-   as in past releases (`build_work_bin.py` → `bin_diff_to_layer.py`
-   against pristine D1) — this should no longer need
-   `fix_white2_movie_hang.py`'s `cl`/31 branch since the fix now comes
-   from CSR's own Disc 2 layer. Confirm no `PMVIE`/`MOVIE` remain in
-   WHITE2 via the same verification snippet used for v0.2.5 (extract
-   `FIELD/WHITE2.DAT` from pristine+CSR+single-disc-layer and check
-   `decode_ops` for any `PMVIE`/`MOVIE`).
-3. Bump `single-disc-on-csr`'s version, update CHANGELOG, run
-   `verify_builder_config.py --base csr-v0.14.2 --addon single-disc-on-csr`,
-   commit, push.
-
-## When done
-
-Confirm each part above, then playtest WHITE2 end-to-end as in prior
-releases (loads, plays through, no freeze) and re-confirm Makou save
-still works on the new single-disc build. Paste evidence, commit,
-push, say check.
-
----
-
-# Task: Playtest single-disc-on-csr v0.2.5 (fixes 2nd WHITE2 #643 movie hang)
-
-## Why
-
-You reported field 643 (WHITE2) didn't load at all on the v0.2.4 build.
-Root cause: WHITE2 has **two independent** script slots that each try
-to play a field movie. v0.2.4 only fixed one of them (`mdir` slot 31).
-The other (`cl` slot 31 — CSR Disc 2's longer Cosmo Canyon cutscene
-script, which also carries a CSR story edit) still had its own
-`PMVIE`/`MOVIE` pair, and that movie ID doesn't resolve to a valid
-stream on the single-disc build either — so the field hung on load
-exactly like before.
-
-Fix: strip only the `PMVIE`/`MOVIE` opcodes from `cl` slot 31, keeping
-every other opcode (including CSR's story edit) untouched. Verified
-directly against the actual builder pipeline (pristine D1 + CSR base +
-this layer) that WHITE2 now has zero `PMVIE`/`MOVIE` opcodes anywhere.
-
-Bumped to **v0.2.5**. This is a fresh playtest — confirm WHITE2 now
-loads and plays correctly, and that everything from v0.2.4 still holds.
-
-The build isn't committed (`.bin`/`.cue` gitignored) — rebuilt locally
-below.
-
-## Prerequisites
-
-- `workspace/pristine/FINALFANTASY7_D1.bin`, `_D2.bin`, `_D3.bin` present.
-- `Final-Fantasy-7-CSR` repo checked out as a sibling of this repo.
-- Python 3 on PATH; run all commands from this repo's root.
-
-## What you do
-
-1. `git pull --ff-only`.
-2. Rebuild the work bin and a matching `.cue`:
-
-   ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-v025-repro.bin
-   printf 'FILE "single-disc-v025-repro.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-v025-repro.cue
-   ```
-
-   Expect two lines during the "Fixing WHITE2 movie hang" step: one for
-   `mdir/31` (IFSW/PMVIE/JMPF/PMVIE/MOVIE block removed) and one for
-   `cl/31` (PMVIE/MOVIE opcodes removed). No `WARNING:` or uncaught
-   errors.
-
-3. Open `workspace/iso-extract/single-disc-v025-repro.cue` in
-   DuckStation fresh (no save states, no cheats).
-4. New game, play through Midgar to confirm baseline sanity (no hangs).
-5. Progress to the Disc 1→2 transition (BLACKBGB field #103 → LOST2 →
-   break scene → COS_BTM2). Confirm it still goes straight to the break
-   scene with music, and LOST2's background still renders correctly
-   (unchanged from v0.2.3/v0.2.4).
-6. Reach Cosmo Canyon and enter WHITE2. Confirm the field now loads at
-   all (previously it didn't load), and that any cutscene/character
-   moment there plays through without freezing or glitching.
-7. Open this bin in Makou Reactor, make a trivial edit, Save. Confirm
-   it still succeeds (should be unchanged from v0.2.3/v0.2.4).
-
-## Evidence (paste)
-
-```
-Disc 1->2 transition: straight to break scene with music (expected)
-LOST2 background: renders correctly (expected)
-WHITE2: loads and plays through normally (fixed) / still hangs or glitches (bug)
-Makou save test: SUCCEEDED / FAILED (paste exact text)
-notes:
-```
-
-## When done
-
-Paste evidence above, commit this file, push, say check.
+BLACKBGB.DAT: lba=58550 size=12929
+FIELD.BIN table: 1864 entries, looking for rel_lba=3550
+  (no matching table entry found by rel_lba scan)
+--- single-disc-dskcg-tablefix-test.bin: init slot 0 (800 bytes) ---
+   0 UC           3301
+   2 MENU2        4a01
+   4 RET          00
+   5 IFUB         1430880709f2
+  11 MUSIC        f000
+  13 AKAO         f2000000c1017f00000000000000
+  27 AKAO         f200000028400000000000000000
+  41 AKAO         f200000029400000000000000000
+  55 AKAO         f20000002a400000000000000000
+  69 AKAO         f20000002b400000000000000000
+  83 AKAO         f2000000a07f0000000000000000
+  97 AKAO         f2000000a17f0000000000000000
+ 111 AKAO         f2000000a27f0000000000000000
+ 125 AKAO         f2000000a37f0000000000000000
+ 139 AKAO         f2000000b0000000000000000000
+ 153 AKAO         f2000000b1000000000000000000
+ 167 AKAO         f2000000b2000000000000000000
+ 181 AKAO         f2000000b3000000000000000000
+ 195 BMUSC        f601
+ 197 BITOFF       83308807
+ 201 MENU         49031500
+ 205 BATTLE       7000d401
+ 209 MAPJUMP      60e20025fbdeff320000
+ 219 AKAO         f2000000c1ff0000000000000000
+ 233 WAIT         245000
+ 236 MUSIC        f000
+ 238 AKAO         f2000000c1007f00000000000000
+ 252 IFUB         14d05b020930
+ 258 BITON        82308807
+ 262 BITOFF       83d05b02
+ 266 MHMMX        3e
+ 267 WMODE        52000101
+ 271 WMODE        52010001
+ 275 WMODE        52020001
+ 279 WMODE        52030201
+ 283 WAIT         240100
+ 286 REQ          0106c3
+ 289 REQ          0107c3
+ 292 WINDOW       5000100008001f013900
+ 302 MESSAGE      400003
+ 305 IFUB         14308805091b
+ 311 BITOFF       83308805
+ 315 WAIT         240400
+ 318 DSKCG        0e03
+ 320 MUSIC        f002
+ 322 WAIT         240800
+ 325 MAPJUMP      60e802f9ff6bfcf300e4
+ 335 JMPF         10cc
+ 337 IFUB         14d05206094c
+ 343 BITOFF       83d05206
+ 347 REQ          0105c4
+ 350 WAIT         241000
+ 353 WINDOW       500146007d00b4004900
+ 363 ASK          48050101020300
+ 370 MHMMX        3e
+ 371 IFUB         145000020010
+ 377 WAIT         240400
+ 380 BITON        82308805
+ 384 SETBYTE      80d00003
+ 388 MENU         49000e00
+ 392 BITOFF       83308805
+ 396 WAIT         240400
+ 399 DSKCG        0e03
+ 401 MUSIC        f002
+ 403 WAIT         240800
+ 406 MAPJUMP      60e802f9ff6bfcf300e4
+ 416 JMPF         107b
+ 418 IFUB         143086020922
+ 424 BITOFF       83308602
+ 428 WAIT         240400
+ 431 DSKCG        0e02
+ 433 WAIT         240800
+ 436 BITON        82308901
+ 440 MAPJUMP      607a02fdfeb213710000
+ 450 MUSIC        f003
+ 452 WAIT         240800
+ 455 JMPF         1054
+ 457 IFUB         14308804094e
+ 463 BITOFF       83308804
+ 467 REQ          0105c3
+ 470 WAIT         241000
+ 473 WINDOW       500146007d00b4004900
+ 483 ASK          48050101020300
+ 490 IFUB         145000020010
+ 496 WAIT         240400
+ 499 BITON        82308602
+ 503 SETBYTE      80d00002
+ 507 MENU         49000e00
+ 511 BITOFF       83308602
+ 515 WAIT         240400
+ 518 WAIT         240800
+ 521 BITON        82308901
+ 525 WAIT         240800
+ 528 MAPJUMP      607a02fdfeb213710000
+ 538 MUSIC        f003
+ 540 IFUB         1430830209c1
+ 546 UC           3301
+ 548 MENU2        4a01
+ 550 NFADE        250000000000000000
+ 559 AKAO         f2000000a4100000000000000000
+ 573 AKAO         f2000000a5100000000000000000
+ 587 AKAO         f2000000a3100000000000000000
+ 601 AKAO         f2000000c1100000000000000000
+ 615 WAIT         240600
+ 618 AKAO         f200000028400000000000000000
+ 632 AKAO         f200000029400000000000000000
+ 646 AKAO         f20000002a400000000000000000
+ 660 AKAO         f2000000a4017f00000000000000
+ 674 AKAO         f2000000a5017f00000000000000
+ 688 AKAO         f2000000a3017f00000000000000
+ 702 MUSIC        f000
+ 704 AKAO         f2000000c1017f00000000000000
+ 718 PMVIE        f82d
+ 720 MOVIE        f9
+ 721 WAIT         240300
+ 724 MULCK        f501
+ 726 MAPJUMP      602e02d7ff99015500f0
+ 736 JMPF         103e
+ 738 IFSW         162000007e020036
+ 746 AKAO         f2000000c1600000000000000000
+ 760 WAIT         243000
+ 763 MUSIC        f000
+ 765 AKAO         f2000000c1010000000000000000
+ 779 WAIT         240400
+ 782 MMBud        cd0003
+ 785 MENU         49001103
+ 789 MAPJUMP      600a0289fff0002200ff
+ 799 RET          00
+total len 800
