@@ -83,9 +83,13 @@ for single-disc:
 
 ```bash
 python3 mods/single-disc/scripts/build_work_bin.py \
-  -o workspace/iso-extract/single-disc-work.bin \
-  --blackbgb-manual-bin workspace/iso-extract/BLACKBGB.manual.dat
+  -o workspace/iso-extract/single-disc-work.bin
 ```
+
+(BLACKBGB's DSKCG removal is applied automatically from the committed
+`mods/single-disc/patches/BLACKBGB.dskcg-removal.layer.json` ic-layer-v1
+diff -- pass `--blackbgb-manual-bin path/to/other.layer.json` only to
+override it.)
 
 Run `python3 mods/<name>/scripts/<script>.py -h` for flags — every script has
 argparse `--help` and a docstring explaining what it does and why.
