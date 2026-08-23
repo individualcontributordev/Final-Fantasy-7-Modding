@@ -1,32 +1,22 @@
-# Task: rebuild single-disc-on-csr from the full pipeline against the latest CSR, then playtest the LASTMAP ending
+# Task: rebuild single-disc-on-csr from the full pipeline against the latest CSR (new D3 LASTMAP edit), then playtest the LASTMAP ending
 
 ## Why
 
-`LASTMAP` (field 768) `AD3` script 31 freezes after the "Ask Question"
-choice. Two separate bugs stacked here:
+`LASTMAP` (field 768) `AD3` script 31 was still freezing after the "Ask
+Question" choice even with the movie assets present and the earlier
+goto/skip revert. A known-working reference bin
+(`ff7-d1-csr-sd-mov-end.bin`, playtested externally) was compared in
+Makou Reactor against field 768 — the working version *also* removes
+the `PMVIE` ("set next movie") opcodes in `AD`/`AD3`, not just the
+`MOVIE`/`FMUSC` skip. That same edit has now been made on the CSR side
+and pushed as a new CSR Disc 3 layer.
 
-1. The `single-disc-endings-v0.1.0-part1..7` layers (the movie asset
-   pack) had their manifest `autoIncludeWhen` trigger swapped for a dead
-   sentinel back in v0.2.8, so they silently never included on any
-   single-disc build despite the manifest blurb claiming "Always
-   applied... Not optional." **Fixed** in a prior task — the 7 parts
-   now auto-include whenever `single-disc-on-csr` is selected.
-2. A manual CSR Disc 3 edit had routed around the `AD3` script 31
-   `PlayMovie`/`FMUSC` opcodes with a goto/label skip (to dodge an
-   earlier crash), so even with the movie assets now present the
-   opcodes never fired. That CSR edit was reverted (CSR commit
-   `965d040`) — both `MOVIE f9` and `FMUSC fc01` are restored intact.
-   Because `builder/single-disc-on-csr/layers/disc1.layer.json` is a
-   **pre-baked diff** that doesn't auto-refresh when the CSR source
-   changes, it had to be rebuilt via `build_work_bin.py` and re-diffed
-   (`single-disc-on-csr` v0.2.12) to actually pick up the CSR revert.
-
-Verified via `field_dat.py` that the rebuilt bin's `LASTMAP.DAT` `AD3`
-slot 31 now has `MOVIE f9` / `BMUSC f601` / `FMUSC fc01` back-to-back
-right after the `REQ 0112c6` disc-check, with no conditional skip.
-Manip movies (`single-disc-csr-manip-movies-v0.1.4`/`v0.1.5`) are
-intentionally kept disabled for this test — testing endings in
-isolation first.
+Because `builder/single-disc-on-csr/layers/disc1.layer.json` is a
+**pre-baked diff** that doesn't auto-refresh when CSR's source images
+change, the full pipeline must be rebuilt from scratch every time a CSR
+field changes: fresh CSR D1/D2/D3 base images → merged single-disc work
+bin → re-diffed addon layer → builder-equivalent playtest bin. This
+task runs that full pipeline end-to-end and playtests the result.
 
 **Not yet playtested on DuckStation** — that's this task.
 
@@ -160,8 +150,8 @@ DuckStation.
 
 - Get to `LASTMAP` (field 768), entity `AD3`, and trigger the "Ask
   Question" choice (Script 31, line 224).
-- **Confirm the scene loads and plays through** instead of freezing with
-  stray movie audio — this is the bug this task verifies is fixed.
+- **Confirm the scene loads and plays through** instead of freezing —
+  this is the bug the new CSR `PMVIE` removal is meant to fix.
 - Also spot-check the rest of the ending/credits sequence plays cleanly
   (all 7 parts of the movie pack are now included).
 - Regression check: confirm New Game, D1→D2 transition, and the break
