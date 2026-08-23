@@ -1,4 +1,4 @@
-# Task: build single-disc v0.2.12 with ending movies re-enabled, playtest the LASTMAP ending
+# Task: rebuild single-disc-on-csr from the full pipeline against the latest CSR, then playtest the LASTMAP ending
 
 ## Why
 
@@ -58,11 +58,62 @@ edit + layer rebuild + push on the CSR side):
 rm -f ../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin
 ```
 
-### 3. Rebuild the builder-equivalent bin (endings only, no manip movies)
+### 3. Rebuild the CSR D1 base image (needed as the diff baseline in step 5)
 
-Run from `Final-Fantasy-7-Modding`. Requires
-`workspace/pristine/FINALFANTASY7_D1.bin` (your own retail NTSC-U Disc 1
-copy) already present.
+Requires `workspace/pristine/FINALFANTASY7_D1.bin` (your own retail
+NTSC-U Disc 1 copy) already present in `Final-Fantasy-7-Modding`.
+
+```bash
+python3 -c "
+import sys
+sys.path.insert(0, 'scripts')
+from disc_sources import load_csr_image
+img = load_csr_image(1)
+open('/tmp/csr_d1_base.bin', 'wb').write(img)
+print('wrote', len(img))
+"
+```
+
+This applies CSR's current `builder/csr-v0.14.2/layers/disc1.layer.json`
+onto pristine D1. Expect `wrote 747435024`.
+
+### 4. Rebuild the merged single-disc work bin
+
+This is the actual "full pipeline" step: it takes CSR D1 (loaded fresh
+from `Final-Fantasy-7-CSR`, same as step 3) and merges in every CSR
+D2/D3-only field edit (including your `LASTMAP` field 768 revert),
+splices the verified `BLACKBGB` DSKCG-removal, patches the `FIELD.BIN`/
+`WORLD.BIN` lookup tables, and injects `SNOVA` from pristine D3. See
+`mods/single-disc/scripts/build_work_bin.py` module docstring for the
+full step-by-step breakdown.
+
+```bash
+python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-work.bin
+```
+
+Takes a couple minutes (loads CSR D1/D2/D3 fresh each time — no cache).
+Ends with `Done. Final work bin: workspace/iso-extract/single-disc-work.bin`.
+
+### 5. Diff the work bin against the CSR D1 base into the addon layer
+
+This produces the actual `single-disc-on-csr` mod artifact — the file
+the builder ships. It overwrites the committed layer, so **only run this
+once you're ready to re-verify and re-ship** (see `AGENTS.md` — pack
+version/changelog bumps still apply if you commit the result).
+
+```bash
+python3 scripts/bin_diff_to_layer.py /tmp/csr_d1_base.bin workspace/iso-extract/single-disc-work.bin -o builder/single-disc-on-csr/layers/disc1.layer.json --id single-disc-on-csr-disc1 --description "single-disc-on-csr: rebuilt from latest CSR D1/D2/D3"
+```
+
+Expect `records=` in the tens of thousands and no "no differences
+found" warning. Bump `builder/single-disc-on-csr/pack.json`'s and
+`builder/manifest.json`'s matching entry's `version`/`blurb`/`betaNote`,
+and `mods/single-disc/VERSION` + `CHANGELOG.md`, if you intend to commit
+this rebuild.
+
+### 6. Rebuild the builder-equivalent playtest bin (endings only, no manip movies)
+
+Run from `Final-Fantasy-7-Modding`.
 
 ```bash
 python3 scripts/verify_builder_config.py --pristine workspace/pristine/FINALFANTASY7_D1.bin --disc 1 --base csr-v0.14.2 --addon single-disc-on-csr --addon single-disc-endings-v0.1.0-part1 --addon single-disc-endings-v0.1.0-part2 --addon single-disc-endings-v0.1.0-part3 --addon single-disc-endings-v0.1.0-part4 --addon single-disc-endings-v0.1.0-part5 --addon single-disc-endings-v0.1.0-part6 --addon single-disc-endings-v0.1.0-part7 -o workspace/iso-extract/ff7_d1_singledisc_endings_playtest.bin
@@ -76,8 +127,10 @@ wrote .../Final-Fantasy-7-CSR/cache/csr/FINALFANTASY7_D1.bin (...)
 ```
 
 (first run after clearing cache) or `cache hit: ...` (if you didn't
-change CSR and didn't clear cache — fine to skip step 2 in that case).
-Then ends with:
+clear cache in step 2 — fine, the base CSR D1 doesn't need to be
+current for this step since the freshly re-diffed addon layer from
+step 5 already carries the latest CSR D2/D3 field edits baked in). Then
+ends with:
 
 ```
 PASS — builder config applies cleanly (3422700 total records)
@@ -87,10 +140,10 @@ PASS — builder config applies cleanly (3422700 total records)
 it — it's a raw disc image, not something Makou Reactor can save back to
 ("Cannot update game binaries" / "invalid archive" errors are from
 trying to do this). All edits happen on the CSR side (Makou Reactor on
-the CSR disc image → rebuild CSR's own layer JSON → push), then this
-script re-applies that layer onto Disc 1 from scratch.
+the CSR disc image → rebuild CSR's own layer JSON → push), then steps
+3-5 above rebuild `single-disc-on-csr`'s own layer from scratch.
 
-### 4. Create the matching .cue (if not already present)
+### 7. Create the matching .cue (if not already present)
 
 ```bash
 cat > workspace/iso-extract/ff7_d1_singledisc_endings_playtest.cue << 'EOF'
@@ -100,7 +153,7 @@ FILE "ff7_d1_singledisc_endings_playtest.bin" BINARY
 EOF
 ```
 
-### 5. Playtest
+### 8. Playtest
 
 Open `workspace/iso-extract/ff7_d1_singledisc_endings_playtest.cue` in
 DuckStation.
@@ -116,7 +169,8 @@ DuckStation.
 
 ## Evidence to paste back when done
 
-- Full terminal output of step 3 (the `verify_builder_config.py` run,
+- Full terminal output of steps 4-6 (`build_work_bin.py`,
+  `bin_diff_to_layer.py`, and the `verify_builder_config.py` run
   including the cache miss/hit line)
 - Whether the `LASTMAP` "Ask Question" freeze is gone
 - Whether the ending/credits movies play correctly end to end
