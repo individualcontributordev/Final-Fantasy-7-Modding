@@ -136,10 +136,13 @@ def main() -> int:
     ap.add_argument("--d2-only-fields", action="store_true",
                      help="safe-field merge: only apply CSR D2 fields, skip D3 fields entirely "
                           "(isolation test for D1->D2 transition regression)")
-    ap.add_argument("--apply-table-fix", action="store_true",
-                     help="patch FIELD.BIN/WORLD.BIN (location,size) tables after merging "
-                          "(opt-in: has not reliably fixed Makou Reactor's InvalidError in "
-                          "all cases, kept available for testing)")
+    ap.add_argument("--skip-table-fix", action="store_true",
+                     help="skip patching FIELD.BIN/WORLD.BIN (location,size) tables "
+                          "(debug only: any field resized by this pipeline -- e.g. "
+                          "BLACKBGB after DSKCG removal -- will be loaded at the WRONG "
+                          "size at runtime without this step, since replace_file_within_"
+                          "sectors() only patches the ISO9660 dirent, not FIELD.BIN's own "
+                          "embedded LBA/size table)")
     ap.add_argument("--skip-dskcg-removal", action="store_true",
                      help="skip stripping DSKCG (ask-for-disc) ops from BLACKBGB "
                           "(isolation test for D1->D2 transition black-screen hang)")
@@ -164,12 +167,12 @@ def main() -> int:
         # hang/corrupt the field.
         apply_dskcg_removal(img, only_indices={3})
 
-    if args.apply_table_fix:
+    if args.skip_table_fix:
+        print("\nSkipping FIELD.BIN/WORLD.BIN table patch (--skip-table-fix, debug only)")
+    else:
         print("\nPatching FIELD.BIN/WORLD.BIN embedded (location,size) tables...")
         fixed = fix_field_and_world_bins(img)
         print(f"  Total table entries patched: {fixed}")
-    else:
-        print("\nSkipping FIELD.BIN/WORLD.BIN table patch (opt-in via --apply-table-fix)")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(img)

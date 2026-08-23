@@ -1,28 +1,38 @@
-# Task: Test D1->D2 transition with only the ONE relevant DSKCG removed (with proper jump fixup)
+# Task: Test D1->D2 transition with DSKCG removal + FIELD.BIN table fix
 
 ## Why
 
-Manual testing in Makou Reactor narrowed the bug down precisely: the
-old automated `remove_dskcg.py` removed **all 4** DSKCG opcodes in
-BLACKBGB's `init` slot 0 and recalculated jumps around all 4 — that
-build hangs on the D1->D2 transition and later shows "Invalid Archive"
-in Makou. But manually deleting **only the one** DSKCG on the actual
-D1->D2 execution path (leaving the other 3 untouched) works perfectly
-and saves fine in Makou.
+Root cause found: it was never the jump-fixup math (independently
+verified byte-for-byte correct — every JMPF/IFUB target in the patched
+BLACKBGB script lands exactly on an instruction boundary, 0 bad
+jumps). The real bug is in the pipeline step *after* DSKCG removal.
 
-`remove_dskcg.py` now supports removing a specific occurrence index
-of DSKCG per script slot (`only_indices` param), with full, correct
-jump-offset fixup (the earlier no-fixup debug build was rejected
-since it left the script visibly broken/misaligned in Makou Reactor —
-this restores proper fixup math). `build_work_bin.py` now calls
-`apply_dskcg_removal(img, only_indices={3})` by default.
+FIELD.BIN has its **own embedded `(LBA, size)` lookup table**,
+separate from the ISO9660 directory record that
+`replace_file_within_sectors()` patches. Removing a DSKCG opcode
+shrinks BLACKBGB's compressed size, so the ISO9660 dirent gets the
+correct new size — but FIELD.BIN's internal table still points at the
+field's **old pre-edit size**. `fix_field_bin_table.py` (which patches
+that internal table) existed but was gated behind an opt-in
+`--apply-table-fix` flag that `build_work_bin.py` did **not** pass by
+default. So every build you tested had a stale FIELD.BIN table entry
+for BLACKBGB, which is exactly consistent with what you saw: the game
+loads BLACKBGB at the wrong byte length (truncating before the ASK/
+save-prompt opcode) → black screen, no save prompt. It also explains
+Makou's "Invalid Archive": Makou's own `updateBin()` searches FIELD.BIN
+for `(LBA, old_size)` to relocate the field on save and fails to find
+it once the size no longer matches.
 
-Occurrence index 3 (script offset 518 in BLACKBGB's `init` slot 0) is
-the DSKCG gated by `if var[3][136] bitON 4` — confirmed by the user as
-the one on the actual D1->D2 execution path and the one they manually
-deleted in Makou Reactor. The other 3 DSKCG (indices 0-2, gated by
-different IFUB checks on var[3][136] mask 0x05, var[13][82], and
-var[3][134]) are left untouched.
+Fix: `--apply-table-fix` is now the **default** behavior (renamed to
+an opt-out `--skip-table-fix` debug flag). `build_work_bin.py` always
+patches FIELD.BIN/WORLD.BIN's internal tables after any field-resizing
+step, so BLACKBGB's real new size and the table's record of it always
+agree.
+
+DSKCG removal itself still only strips occurrence index 3 (script
+offset 518 in BLACKBGB's `init` slot 0, gated by
+`if var[3][136] bitON 4`) — confirmed as the one on the actual D1->D2
+execution path.
 
 ## Prerequisites
 
@@ -36,8 +46,8 @@ var[3][134]) are left untouched.
 2. Rebuild the work bin and a matching `.cue`:
 
    ```bash
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-single-occ-test.bin
-   printf 'FILE "single-disc-dskcg-single-occ-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-dskcg-single-occ-test.cue
+   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
+   printf 'FILE "single-disc-dskcg-tablefix-test.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/single-disc-dskcg-tablefix-test.cue
    ```
 
    Expect this line during the DSKCG-removal step:
@@ -45,25 +55,33 @@ var[3][134]) are left untouched.
    Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB'] (only occurrence(s) [3])...
        init slot 0: Removed 1 DSKCG
    ```
+   and later, during the table-fix step (no longer skipped):
+   ```
+   Patching FIELD.BIN/WORLD.BIN embedded (location,size) tables...
+     FIELD/FIELD.BIN table: BLACKBGB.DAT @... size ... -> ...
+   ```
    No `WARNING:` or uncaught errors.
 
-3. Open `workspace/iso-extract/single-disc-dskcg-single-occ-test.cue` in
+3. Open `workspace/iso-extract/single-disc-dskcg-tablefix-test.cue` in
    DuckStation fresh (no save states, no cheats).
 4. New game, play through Midgar to confirm baseline sanity (no hangs).
 5. Progress to the Disc 1->2 transition (BLACKBGB field #103 -> LOST2
    -> break scene -> COS_BTM2). Confirm it goes straight through with
-   no black-screen hang and no disc-swap prompt (this should now match
-   your manual single-opcode-deletion fix exactly).
+   no black-screen hang, and that the disc-swap **save prompt** (ASK
+   opcode) still appears normally on that path.
 6. Open this bin in Makou Reactor and check BLACKBGB field #103.
    Confirm it opens cleanly (no "Invalid Archive"), and that the
    script displays with clean "Goto label X" jumps (no "Forward N
-   byte(s)" raw offsets).
+   byte(s)" raw offsets). Try File > Save to confirm Makou can save
+   the archive without error.
 
 ## Evidence (paste)
 
 ```
-D1->2 transition with single-occurrence DSKCG removal: NO HANG / HANGS
+D1->2 transition with DSKCG removal + table fix: NO HANG / HANGS
+Save prompt (ASK) appears on that path: YES / NO
 Makou Reactor BLACKBGB open: OK / Invalid Archive
+Makou Reactor save: OK / error (describe)
 Script jumps display as clean labels: YES / NO (describe)
 notes:
 ```
