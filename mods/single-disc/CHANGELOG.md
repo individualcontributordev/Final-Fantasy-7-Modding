@@ -1,22 +1,35 @@
 ## 0.2.9 — 2026-08-23
 
-**Fixes a New Game hang introduced in the published v0.2.8 layer.**
+**Fixes a New Game hang introduced in the published v0.2.8 layer, while
+preserving the v0.2.8 D1→D2 BLACKBGB fix (hybrid layer).**
 
 - Root cause: `builder/single-disc-on-csr/layers/disc1.layer.json` for
   v0.2.8 was diffed against a stale/corrupted work bin whose `FIELD/FIELD.BIN`
-  failed to decompress (invalid DEFLATE stream) after the FIELD.BIN/WORLD.BIN
-  table-fix step interacted badly with a build that didn't match the actual
-  released `build_work_bin.py` pipeline output. Since FIELD.BIN is read on
+  failed to decompress (invalid DEFLATE stream). Since FIELD.BIN is read on
   every field load including the very first one, this hung "New Game" on
   both the browser builder output and any local reconstruction of the same
   stack -- independent of the BLACKBGB/LOST2 fixes, which were unaffected.
-- Fix: regenerated `disc1.layer.json` by diffing a freshly-built, verified
-  work bin (confirmed `FIELD.BIN`/`WORLD.BIN` both decompress correctly)
-  against the CSR v0.14.2 base. Verified the new layer, reapplied onto that
-  base, reproduces the verified work bin byte-for-byte, and that
-  `FIELD.BIN`/`WORLD.BIN` decompress cleanly in the result.
+- First fix attempt regenerated `disc1.layer.json` from a fresh, flag-less
+  `build_work_bin.py` run. This fixed New Game but silently reintroduced the
+  D1→D2 BLACKBGB hang, because a flag-less run uses the automated DSKCG-
+  removal re-encoder (still broken) instead of `--blackbgb-manual-bin`'s
+  verified manual splice — the manual-edit source `.DAT` is gitignored and
+  wasn't available to re-supply that flag.
+- Actual fix: built a **hybrid** layer. Took the v0.2.8 layer (known-good,
+  playtest-verified `FIELD/BLACKBGB.DAT` splice) as the base image, and
+  patched in only the corrected `FIELD/FIELD.BIN` and `WORLD/WORLD.BIN` from
+  the freshly-built work bin (both confirmed to decompress cleanly).
+  Re-diffed against the CSR v0.14.2 base to produce the new
+  `disc1.layer.json` (63,712 addon records; 151,318 total with the CSR base).
+  Verified: reapplying the new layer onto CSR v0.14.2 reproduces the hybrid
+  image byte-for-byte; `FIELD.BIN`/`WORLD.BIN` decompress correctly;
+  `FIELD/BLACKBGB.DAT` is byte-identical to the verified v0.2.8 splice; a
+  full sweep of all 787 `FIELD/*.DAT` files shows the same 73 pre-existing
+  non-LZS files (e.g. `WM*.DAT`) failing decompression as on a plain CSR-only
+  base — no new regressions.
 - Retains all v0.2.8 fixes (BLACKBGB D1→D2 splice, Okumura LZSS LOST2 fix).
-- Not yet playtested past New Game on DuckStation or on real hardware.
+- Confirmed working locally (New Game + D1→D2 transition) on DuckStation;
+  builder-site download still pending playtest confirmation.
 
 ## 0.2.8 — 2026-08-23
 
