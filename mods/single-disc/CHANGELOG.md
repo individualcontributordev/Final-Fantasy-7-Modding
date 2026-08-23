@@ -1,3 +1,25 @@
+## 0.2.12 — 2026-08-23
+
+**Restores the field 768 (`LASTMAP`, `AD3` script 31) `PlayMovie`/`FMUSC`
+opcodes that a manual CSR Disc 3 edit had routed around with a
+goto/label skip, which caused the ending to freeze or play audio with
+no movie even with the v0.2.11 movie-asset fix in place.**
+
+- CSR v0.14.2's `disc3.layer.json` was reverted (commit `965d040`) back
+  to its original `9ad13bb` state: both `MOVIE f9` opcodes (at op index
+  268 in `AD3` script 31) and the `FMUSC fc01` opcode are intact and
+  reachable, not wrapped in a conditional skip.
+- `builder/single-disc-on-csr/layers/disc1.layer.json` is a pre-baked
+  diff of CSR D1 vs. the merged single-disc work bin -- it does **not**
+  auto-refresh when the CSR source layer changes underneath it. Rebuilt
+  via `build_work_bin.py` against the updated CSR D3 layer and re-diffed
+  with `bin_diff_to_layer.py` (63,419 addon records) to pick up the
+  restored opcodes.
+- Verified via `field_dat.py` that the rebuilt bin's `LASTMAP.DAT`
+  (`AD3` slot 31) contains `MOVIE f9` at op 268 and `FMUSC fc01` at op
+  270, matching the reverted CSR source.
+- Not yet playtested on DuckStation.
+
 ## 0.2.11 — 2026-08-23
 
 **Fixes a Disc 3 ending-sequence crash caused by `PlayMovie` opcodes
