@@ -1,3 +1,138 @@
+script output
+
+python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
+
+Loading CSR D1/D2 reference images...
+Base: CSR D1 (747,435,024 bytes)
+
+Applying 8-field rework merge (verdict table)...
+  [slot-splice] BUGIN1A: 1 slots spliced, new size 12195 bytes
+  [slot-splice] NIVGATE: 13 slots spliced, new size 7213 bytes
+  [slot-splice] RCKTIN2: 1 slots spliced, new size 17822 bytes
+
+Applying bulk safe-field merge (non-collision D2/D3 edits)...
+  Applied 67/67 safe field merges
+
+Removing DSKCG (ask-for-disc) ops via live splicer for ['BLACKBGB'] (only occurrence(s) [3])...
+    init slot 0: Removed 1 DSKCG
+  BLACKBGB: removed 1 DSKCG (12929 bytes)
+  Total fields modified: 1
+
+Patching FIELD.BIN/WORLD.BIN embedded (location,size) tables...
+  FIELD/FIELD.BIN table: BLACKBGB.DAT @58550 size 13013 -> 12929
+  FIELD/FIELD.BIN table: BLIN66_6.DAT @72265 size 13316 -> 13340
+  FIELD/FIELD.BIN table: BLIN70_4.DAT @73653 size 9579 -> 9595
+  FIELD/FIELD.BIN table: BUGIN1A.DAT @100193 size 12117 -> 12195
+  FIELD/FIELD.BIN table: CANON_2.DAT @121844 size 24844 -> 24698
+  FIELD/FIELD.BIN table: CONDOR2.DAT @81722 size 7211 -> 7217
+  FIELD/FIELD.BIN table: CONVIL_1.DAT @81793 size 24285 -> 24306
+  FIELD/FIELD.BIN table: CONVIL_2.DAT @81936 size 21290 -> 21156
+  FIELD/FIELD.BIN table: CRATER_1.DAT @117071 size 12314 -> 12320
+  FIELD/FIELD.BIN table: CRATER_2.DAT @117223 size 18114 -> 18129
+  FIELD/FIELD.BIN table: FR_E.DAT @80996 size 16368 -> 16376
+  FIELD/FIELD.BIN table: FSHIP_1.DAT @55277 size 4926 -> 4911
+  FIELD/FIELD.BIN table: FSHIP_22.DAT @55605 size 12093 -> 12097
+  FIELD/FIELD.BIN table: FSHIP_23.DAT @55782 size 21390 -> 21387
+  FIELD/FIELD.BIN table: FSHIP_24.DAT @55957 size 15572 -> 15617
+  FIELD/FIELD.BIN table: FSHIP_25.DAT @56136 size 29850 -> 29800
+  FIELD/FIELD.BIN table: FSHIP_3.DAT @56317 size 12071 -> 12074
+  FIELD/FIELD.BIN table: FSHIP_4.DAT @56425 size 17328 -> 17293
+  FIELD/FIELD.BIN table: GAIA_32.DAT @116589 size 5535 -> 5536
+  FIELD/FIELD.BIN table: GAIIN_6.DAT @116885 size 9541 -> 9542
+  FIELD/FIELD.BIN table: HYOU7.DAT @114422 size 15007 -> 15059
+  FIELD/FIELD.BIN table: ITHOS.DAT @119756 size 16171 -> 16187
+  FIELD/FIELD.BIN table: ITOWN1A.DAT @118600 size 22854 -> 22856
+  FIELD/FIELD.BIN table: ITOWN2.DAT @119255 size 8658 -> 8627
+  FIELD/FIELD.BIN table: ITOWN_W.DAT @119465 size 12027 -> 12000
+  FIELD/FIELD.BIN table: JUNAIR.DAT @84555 size 26248 -> 26279
+  FIELD/FIELD.BIN table: JUNBIN22.DAT @85651 size 12917 -> 12923
+  FIELD/FIELD.BIN table: JUNBIN3.DAT @85725 size 11491 -> 11506
+  FIELD/FIELD.BIN table: JUNBIN4.DAT @85785 size 18015 -> 17963
+  FIELD/FIELD.BIN table: JUNBIN5.DAT @85889 size 17912 -> 17894
+  FIELD/FIELD.BIN table: JUNIN2.DAT @84980 size 17990 -> 17997
+  FIELD/FIELD.BIN table: JUNONE2.DAT @86715 size 11095 -> 11094
+  FIELD/FIELD.BIN table: JUNONE22.DAT @125702 size 5921 -> 5929
+  FIELD/FIELD.BIN table: JUNONE7.DAT @87142 size 12269 -> 12210
+  FIELD/FIELD.BIN table: LAS4_0.DAT @124908 size 15377 -> 15395
+  FIELD/FIELD.BIN table: LAS4_2.DAT @125223 size 6879 -> 6880
+  FIELD/FIELD.BIN table: LAS4_4.DAT @125283 size 6325 -> 6334
+  FIELD/FIELD.BIN table: LASTMAP.DAT @125347 size 23302 -> 23326
+  FIELD/FIELD.BIN table: LOSLAKE1.DAT @109793 size 21195 -> 21207
+  FIELD/FIELD.BIN table: LOST2.DAT @109345 size 16974 -> 17032
+  FIELD/FIELD.BIN table: MD8BRDG2.DAT @121560 size 17846 -> 17695
+  FIELD/FIELD.BIN table: MD8_6.DAT @121053 size 19843 -> 19695
+  FIELD/FIELD.BIN table: MTCRL_2.DAT @92237 size 23601 -> 23436
+  FIELD/FIELD.BIN table: NIVGATE.DAT @74319 size 7378 -> 7213
+  FIELD/FIELD.BIN table: NIVGATE2.DAT @74381 size 7308 -> 7280
+  FIELD/FIELD.BIN table: NIVL_B22.DAT @75913 size 16492 -> 16400
+  FIELD/FIELD.BIN table: RCKTBAS1.DAT @102419 size 26218 -> 26193
+  FIELD/FIELD.BIN table: RCKTBAS2.DAT @102591 size 24129 -> 24100
+  FIELD/FIELD.BIN table: RCKTIN2.DAT @102803 size 17713 -> 17822
+  FIELD/FIELD.BIN table: RCKTIN3.DAT @102897 size 13328 -> 13335
+  FIELD/FIELD.BIN table: RCKTIN5.DAT @103028 size 20893 -> 20923
+  FIELD/FIELD.BIN table: RCKTIN6.DAT @103111 size 16186 -> 16172
+  FIELD/FIELD.BIN table: RCKTIN7.DAT @103210 size 13186 -> 13202
+  FIELD/FIELD.BIN table: SEMKIN_4.DAT @87948 size 22539 -> 22373
+  FIELD/FIELD.BIN table: SEMKIN_5.DAT @88116 size 22225 -> 22069
+  FIELD/FIELD.BIN table: SUBIN_1B.DAT @86260 size 19932 -> 19963
+  FIELD/FIELD.BIN table: TRNAD_1.DAT @117324 size 15788 -> 15796
+  FIELD/FIELD.BIN table: TRNAD_2.DAT @117485 size 13054 -> 13069
+  FIELD/FIELD.BIN table: TRNAD_4.DAT @117727 size 19219 -> 19195
+  FIELD/FIELD.BIN table: TRNAD_51.DAT @117880 size 15250 -> 15248
+  FIELD/FIELD.BIN table: TRNAD_52.DAT @118054 size 6374 -> 6425
+  FIELD/FIELD.BIN table: TUNNEL_6.DAT @126016 size 23251 -> 23082
+  FIELD/FIELD.BIN table: WHITE1.DAT @110379 size 11459 -> 11472
+  FIELD/FIELD.BIN table: WHITE2.DAT @110479 size 9395 -> 9381
+  FIELD/FIELD.BIN table: ZCOAL_1.DAT @120619 size 16023 -> 15851
+  FIELD/FIELD.BIN table: ZCOAL_3.DAT @120814 size 15161 -> 14989
+  FIELD/FIELD.BIN table: ZMIND1.DAT @120288 size 9323 -> 9246
+  FIELD/FIELD.BIN table: ZMIND2.DAT @120402 size 9266 -> 9285
+  FIELD/FIELD.BIN table: ZMIND3.DAT @120498 size 12123 -> 12163
+Source (dec):     C:\Users\David\AppData\Local\Temp\tmpheyxov7m\bin.dec (264008 bytes)
+Original (bin):   C:\Users\David\AppData\Local\Temp\tmpheyxov7m\bin.orig (85346 bytes)
+Output:           C:\Users\David\AppData\Local\Temp\tmpheyxov7m\bin.new (81162 bytes)
+Method:           zopfli
+Size delta:       -4184 bytes
+Shorter than original — CDmage 'pad with zeros?' → Yes.
+  Total table entries patched: 69
+
+Wrote workspace\iso-extract\single-disc-dskcg-tablefix-test.bin (747,435,024 bytes) [pre-SNOVA]
+
+Injecting SNOVA D3 -> D1...
+D3 SNOVA raw block LBA 127100+570 files=17
+grow sectors 317787 -> 318357 (delta LBA 190687)
+patch BATTLE.X hardcoded SNOVA LBAs (delta 190687)
+  BATTLE.X LBA 0x48D78: 127254 -> 317941
+  BATTLE.X LBA 0x48D80: 127293 -> 317980
+  BATTLE.X LBA 0x48D88: 127320 -> 318007
+  BATTLE.X LBA 0x48D90: 127354 -> 318041
+  BATTLE.X LBA 0x48D98: 127373 -> 318060
+  BATTLE.X LBA 0x48DA0: 127394 -> 318081
+  BATTLE.X LBA 0x48DA8: 127430 -> 318117
+  BATTLE.X LBA 0x48DB0: 127442 -> 318129
+  BATTLE.X LBA 0x48DB8: 127464 -> 318151
+  BATTLE.X LBA 0x48DC0: 127503 -> 318190
+  BATTLE.X LBA 0x48DC8: 127544 -> 318231
+  BATTLE.X LBA 0x48DD0: 127555 -> 318242
+  BATTLE.X LBA 0x48DD8: 127562 -> 318249
+  BATTLE.X LBA 0x48DE0: 127571 -> 318258
+  BATTLE.X LBA 0x48DE8: 127618 -> 318305
+  BATTLE.X LBA 0x48DF0: 127649 -> 318336
+  BATTLE.X LBA 0x4F5A8: 127101 -> 317788
+Source (dec):     C:\Users\David\AppData\Local\Temp\tmpe1q2qnkq\BATTLE.X.dec (342188 bytes)
+Original (bin):   C:\Users\David\AppData\Local\Temp\tmpe1q2qnkq\BATTLE.X.orig (130322 bytes)
+Output:           C:\Users\David\AppData\Local\Temp\tmpe1q2qnkq\BATTLE.X.new (123557 bytes)
+Method:           zopfli
+Size delta:       -6765 bytes
+Shorter than original — CDmage 'pad with zeros?' → Yes.
+  BATTLE.X recompress 130322 -> 123557 (pad 6765)
+wrote workspace\iso-extract\single-disc-dskcg-tablefix-test.bin (raw-copy + BATTLE.X LBA patch v3)
+verify: BATTLE.X 17 LBA entries remapped
+verify: all SNOVA files match D3
+
+Done. Final work bin: workspace\iso-extract\single-disc-dskcg-tablefix-test.bin
+
+
 # Task: Test D1->D2 transition with DSKCG removal + FIELD.BIN table fix
 
 ## Why
