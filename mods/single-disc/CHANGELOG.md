@@ -1,3 +1,23 @@
+## 0.2.9 — 2026-08-23
+
+**Fixes a New Game hang introduced in the published v0.2.8 layer.**
+
+- Root cause: `builder/single-disc-on-csr/layers/disc1.layer.json` for
+  v0.2.8 was diffed against a stale/corrupted work bin whose `FIELD/FIELD.BIN`
+  failed to decompress (invalid DEFLATE stream) after the FIELD.BIN/WORLD.BIN
+  table-fix step interacted badly with a build that didn't match the actual
+  released `build_work_bin.py` pipeline output. Since FIELD.BIN is read on
+  every field load including the very first one, this hung "New Game" on
+  both the browser builder output and any local reconstruction of the same
+  stack -- independent of the BLACKBGB/LOST2 fixes, which were unaffected.
+- Fix: regenerated `disc1.layer.json` by diffing a freshly-built, verified
+  work bin (confirmed `FIELD.BIN`/`WORLD.BIN` both decompress correctly)
+  against the CSR v0.14.2 base. Verified the new layer, reapplied onto that
+  base, reproduces the verified work bin byte-for-byte, and that
+  `FIELD.BIN`/`WORLD.BIN` decompress cleanly in the result.
+- Retains all v0.2.8 fixes (BLACKBGB D1→D2 splice, Okumura LZSS LOST2 fix).
+- Not yet playtested past New Game on DuckStation or on real hardware.
+
 ## 0.2.8 — 2026-08-23
 
 **Fixes the D1→D2 transition hang (BLACKBGB) and LOST2 background
