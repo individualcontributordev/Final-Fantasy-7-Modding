@@ -1,3 +1,61 @@
+## TASK: splice your known-working BLACKBGB.DAT into the automated build
+
+Our own LZS re-encode of BLACKBGB (after stripping the DSKCG "ask for disc"
+ops) keeps producing a black-screen hang on the D1->D2 transition, even
+though it round-trips through our own decompressor and script-diffs clean
+against a manual edit. Rather than keep chasing encoder parity, we're now
+splicing your own known-working compressed BLACKBGB.DAT (the one you
+manually edited in Makou Reactor and confirmed works on hardware) straight
+into the automated pipeline, byte-for-byte -- the same way CSR whole-file
+field merges already work.
+
+### Step 1 — pull
+
+```
+git pull --ff-only
+```
+
+### Step 2 — extract BLACKBGB.DAT from your working manual-edit bin
+
+Run this on whichever machine has the .bin where your manual "remove all 4
+DSKCG" edit worked (showed the "want to save?" prompt, no black screen, no
+hang):
+
+```
+python3 mods/single-disc/scripts/extract_field_from_bin.py path/to/your-working-manual-edit.bin --field BLACKBGB -o workspace/iso-extract/BLACKBGB.manual.dat
+```
+
+This just pulls the file's raw (still-compressed) bytes out of the ISO —
+it does not re-encode or modify them.
+
+### Step 3 — build using the splice
+
+If you're building on the same machine as the working .bin, point
+`build_work_bin.py` at the whole manual-edit bin directly with
+`--blackbgb-manual-bin`:
+
+```
+python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-splice-test.bin --blackbgb-manual-bin path/to/your-working-manual-edit.bin
+```
+
+If the working bin lives on a different machine than the build, copy the
+whole working bin (or at least keep it reachable) over and pass it the same
+way — the flag needs the full bin (to extract `FIELD/BLACKBGB.DAT` from),
+not just the standalone `.dat` from Step 2.
+
+### Step 4 — playtest
+
+Load `workspace/iso-extract/single-disc-splice-test.bin` and check:
+
+1. The D1→D2 transition (BLACKBGB) — should show the "want to save?"
+   prompt, no black screen, no hang.
+2. The LOST2 background — should render correctly (this was already fixed
+   by the bit-exact LZS encoder and is unrelated to this splice).
+
+Report back whether the D1→D2 transition now works.
+
+---
+
 ## TASK: playtest the bit-exact LZS encoder fix
 
 Root cause found: our LZS *compressor* (`scripts/lzs.py`) was a from-scratch
