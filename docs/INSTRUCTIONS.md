@@ -59,18 +59,12 @@ Requires `workspace/pristine/FINALFANTASY7_D1.bin` (your own retail
 NTSC-U Disc 1 copy) already present in `Final-Fantasy-7-Modding`.
 
 ```bash
-python3 -c "
-import sys
-sys.path.insert(0, 'scripts')
-from disc_sources import load_csr_image
-img = load_csr_image(1)
-open('/tmp/csr_d1_base.bin', 'wb').write(img)
-print('wrote', len(img))
-"
+python3 scripts/build_csr_d1_base.py
 ```
 
 This applies CSR's current `builder/csr-v0.14.2/layers/disc1.layer.json`
-onto pristine D1. Expect `wrote 747435024`.
+onto pristine D1 and writes it to `workspace/tmp/csr_d1_base.bin`
+(gitignored). Expect `wrote 747435024 -> workspace/tmp/csr_d1_base.bin`.
 
 ### 4. Rebuild the merged single-disc work bin
 
@@ -97,7 +91,7 @@ once you're ready to re-verify and re-ship** (see `AGENTS.md` — pack
 version/changelog bumps still apply if you commit the result).
 
 ```bash
-python3 scripts/bin_diff_to_layer.py /tmp/csr_d1_base.bin workspace/iso-extract/single-disc-work.bin -o builder/single-disc-on-csr/layers/disc1.layer.json --id single-disc-on-csr-disc1 --description "single-disc-on-csr: rebuilt from latest CSR D1/D2/D3"
+python3 scripts/bin_diff_to_layer.py workspace/tmp/csr_d1_base.bin workspace/iso-extract/single-disc-work.bin -o builder/single-disc-on-csr/layers/disc1.layer.json --id single-disc-on-csr-disc1 --description "single-disc-on-csr: rebuilt from latest CSR D1/D2/D3"
 ```
 
 Expect `records=` in the tens of thousands and no "no differences
