@@ -68,6 +68,27 @@ from remove_dskcg import remove_dskcg_from_field  # noqa: E402
 DSKCG_FIELDS = ["BLACKBGB"]
 
 
+def apply_manual_blackbgb(img: bytearray, manual_bin: Path) -> None:
+    """Splice FIELD/BLACKBGB.DAT verbatim out of a known-good manually-edited
+    bin (e.g. exported from Makou Reactor after manually deleting the DSKCG
+    ops) into `img`, exactly like the CSR whole-file merges above. This
+    bypasses our own LZS re-encode + DSKCG splicer entirely for BLACKBGB --
+    we just take Makou's own compressed bytes as-is. The FIELD.BIN table fix
+    step (apply_dskcg_removal's sibling, run unconditionally afterward in
+    main()) will then patch FIELD.BIN's embedded (location,size) entry to
+    match this file's new size.
+    """
+    print(f"\nSplicing FIELD/BLACKBGB.DAT from manual-edit bin: {manual_bin}")
+    manual_img = bytes(manual_bin.read_bytes())
+    data = extract_file(manual_img, "FIELD/BLACKBGB.DAT")
+    current = extract_file(img, "FIELD/BLACKBGB.DAT")
+    if data == current:
+        print("  BLACKBGB.DAT already matches manual-edit bin -- no-op")
+        return
+    replace_file_within_sectors(img, "FIELD/BLACKBGB.DAT", data)
+    print(f"  Replaced BLACKBGB.DAT: {len(current)} -> {len(data)} bytes")
+
+
 def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
     print("\nApplying 8-field rework merge (verdict table)...")
     for field, disc in WHOLE_FILE_FIELDS.items():
@@ -146,6 +167,12 @@ def main() -> int:
     ap.add_argument("--skip-dskcg-removal", action="store_true",
                      help="skip stripping DSKCG (ask-for-disc) ops from BLACKBGB "
                           "(isolation test for D1->D2 transition black-screen hang)")
+    ap.add_argument("--blackbgb-manual-bin", type=Path,
+                     help="path to a known-working bin (e.g. exported from Makou Reactor "
+                          "after manually deleting BLACKBGB's DSKCG ops) whose FIELD/"
+                          "BLACKBGB.DAT bytes will be spliced in verbatim, bypassing our "
+                          "own LZS re-encode + DSKCG splicer for this field entirely. "
+                          "Overrides --skip-dskcg-removal for BLACKBGB.")
     args = ap.parse_args()
 
     print("Loading CSR D1/D2 reference images...")
@@ -157,17 +184,18 @@ def main() -> int:
 
     apply_rework_merge(img, c1, c2)
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
-    if args.skip_dskcg_removal:
+    if args.blackbgb_manual_bin:
+        apply_manual_blackbgb(img, args.blackbgb_manual_bin)
+    elif args.skip_dskcg_removal:
         print("\nSkipping DSKCG removal (--skip-dskcg-removal)")
     else:
-        # Remove all 4 DSKCG occurrences in BLACKBGB's init slot 0. Verified
-        # 2026-08-2x: a manual Makou Reactor edit removing all 4 (combined
-        # with the FIELD.BIN table fix below) produces a byte-identical
-        # script to this automated splicer, and was confirmed in-game to
-        # show the "want to save?" prompt and load the D1->D2 scene
-        # correctly. The earlier only_indices={3} restriction and prior
-        # "removing all 4 hangs" reports predate the FIELD.BIN table-fix
-        # being wired in as the pipeline default.
+        # Remove all 4 DSKCG occurrences in BLACKBGB's init slot 0. Our own
+        # LZS re-encode of this splice has repeatedly hung on real hardware
+        # even though it round-trips through our own decompressor and byte-
+        # matches a manual Makou Reactor edit's *script* bytes -- see
+        # docs/findings/ for the ongoing investigation. Prefer
+        # --blackbgb-manual-bin to splice in a known-working compressed
+        # BLACKBGB.DAT instead of relying on this path.
         apply_dskcg_removal(img)
 
     if args.skip_table_fix:
