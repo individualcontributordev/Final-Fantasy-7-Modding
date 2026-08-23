@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-23 | [blackbgb-splice-lost2-lzs-fix-verified](2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md) | D1→D2 BLACKBGB transition (manual-edit splice) and LOST2 background (bit-exact Okumura LZS encoder) both confirmed fixed on real hardware | confirmed |
 | 2026-08-21 | [md8-52-nrcrl-inject-dropped-from-movies-pack](2026-08-21-md8-52-nrcrl-inject-dropped-from-movies-pack.md) | D1→D2 hang: manip-movies pack lost 5 D2 FMV injects (NRCRL/NRCRLB/PARASHOT/METEOFIX/METEOSKY) after v0.1.23; restored in v0.1.5 | fixed |
 | 2026-08-18 | [loslake1-hojo-audio-flicker-on-csr-overwrite](2026-08-18-loslake1-hojo-audio-flicker-on-csr-overwrite.md) | retracted: diagnosis relied on a reference bin that has the same flicker bug; the "fix" was itself a regression (dropped 3 legit CSR records, broke field 637), reverted same day | retracted |
 | 2026-08-15 | [csr-single-disc-layer-conflict-analysis](2026-08-15-csr-single-disc-layer-conflict-analysis.md) | Analyzed 15,154 CSR D2 × single-disc overlaps (95% same bytes = built from CSR); 926 CSR D1 conflicts (100% different = built from pristine) explain breakage | confirmed |
