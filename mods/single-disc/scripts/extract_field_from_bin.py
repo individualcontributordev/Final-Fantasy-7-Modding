@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Extract a single FIELD/*.DAT file verbatim (still LZS-compressed) out of a
-.bin disc image, so it can be fed back into build_work_bin.py's
---blackbgb-manual-bin (or similar) flag on another machine.
+.bin disc image, e.g. to diff a manual Makou Reactor edit into a new
+ic-layer-v1 JSON diff via scripts/bin_diff_to_layer.py (see
+build_work_bin.py's --blackbgb-manual-bin flag, which applies such a diff --
+NOT a raw extracted .dat -- against the CSR D1 base at build time).
 
 Usage (from repo root):
   python3 mods/single-disc/scripts/extract_field_from_bin.py \
@@ -9,11 +11,9 @@ Usage (from repo root):
       --field BLACKBGB \
       -o workspace/iso-extract/BLACKBGB.manual.dat
 
-Then, back on the machine building the release, either:
-  a) pass the whole manual-edit .bin straight to build_work_bin.py:
-       python3 mods/single-disc/scripts/build_work_bin.py \
-           -o OUT.bin --blackbgb-manual-bin path/to/your-manual-edit.bin
-  b) or hand the extracted .dat to whoever is diffing it.
+Then diff the extracted .dat against the CSR D1 base's own extracted
+FIELD/BLACKBGB.DAT using scripts/bin_diff_to_layer.py's build_layer() to
+produce a new ic-layer-v1 JSON diff -- do not commit the raw .dat itself.
 """
 from __future__ import annotations
 

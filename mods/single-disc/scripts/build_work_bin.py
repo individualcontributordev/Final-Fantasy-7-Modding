@@ -14,16 +14,17 @@ Pipeline, on top of CSR D1 as the base:
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset; LOST2 also
      lands here now that CSR D1's LOST2 matches pristine) -- via
      merge_safe_fields.py.
-  3. Splice a known-working manually-edited FIELD/BLACKBGB.DAT (DSKCG
-     ops removed in Makou Reactor, DuckStation-verified) in verbatim,
-     bypassing our own LZS re-encode + DSKCG splicer for this field --
-     see docs/findings/2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md.
-     Defaults to the committed splice at
-     mods/single-disc/patches/BLACKBGB.manual.dat (override with
-     --blackbgb-manual-bin, or use --skip-dskcg-removal / the automated
-     remove_dskcg.py live opcode splicer, which still hangs the D1->D2
-     transition for reasons not yet root-caused). BLACKBGE/BLACKBG3 are
-     unused maps with no MAPJUMP references from any other field
+  3. Apply a known-working FIELD/BLACKBGB.DAT DSKCG-removal ic-layer-v1
+     diff (offset/hex records against CSR D1's BLACKBGB.DAT; ops removed
+     in Makou Reactor, DuckStation-verified), bypassing our own LZS
+     re-encode + DSKCG splicer for this field -- see
+     docs/findings/2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md.
+     Defaults to the committed diff at
+     mods/single-disc/patches/BLACKBGB.dskcg-removal.layer.json (override
+     with --blackbgb-manual-bin, or use --skip-dskcg-removal / the
+     automated remove_dskcg.py live opcode splicer, which still hangs the
+     D1->D2 transition for reasons not yet root-caused). BLACKBGE/BLACKBG3
+     are unused maps with no MAPJUMP references from any other field
      (confirmed in Makou Reactor) and are left untouched.
   4. (skip with --skip-table-fix) Patch FIELD.BIN's/WORLD.BIN's embedded
      (location,size) lookup table for every field resized by steps 1-3,
@@ -45,6 +46,7 @@ Usage (from repo root):
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -68,32 +70,32 @@ from remove_dskcg import remove_dskcg_from_field  # noqa: E402
 DSKCG_FIELDS = ["BLACKBGB"]
 
 
-def apply_manual_blackbgb(img: bytearray, manual_bin: Path) -> None:
-    """Splice FIELD/BLACKBGB.DAT verbatim out of a known-good manually-edited
-    bin (e.g. exported from Makou Reactor after manually deleting the DSKCG
-    ops) into `img`, exactly like the CSR whole-file merges above. This
+def apply_manual_blackbgb(img: bytearray, layer_json: Path) -> None:
+    """Apply the committed FIELD/BLACKBGB.DAT DSKCG-removal ic-layer-v1 diff
+    (offset/hex records against CSR D1's BLACKBGB.DAT) into `img`. This
     bypasses our own LZS re-encode + DSKCG splicer entirely for BLACKBGB --
-    we just take Makou's own compressed bytes as-is. The FIELD.BIN table fix
-    step (apply_dskcg_removal's sibling, run unconditionally afterward in
-    main()) will then patch FIELD.BIN's embedded (location,size) entry to
-    match this file's new size.
+    the layer's bytes came from Makou Reactor after manually deleting the
+    DSKCG ops, DuckStation-verified. Shipped as a diff (like every other
+    layer) rather than a raw committed binary asset -- see
+    docs/findings/2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md. The
+    FIELD.BIN table fix step (apply_dskcg_removal's sibling, run
+    unconditionally afterward in main()) will then patch FIELD.BIN's
+    embedded (location,size) entry to match this file's new size.
     """
-    print(f"\nSplicing FIELD/BLACKBGB.DAT from manual-edit source: {manual_bin}")
-    manual_bytes = manual_bin.read_bytes()
-    if len(manual_bytes) % 2352 == 0:
-        # Full disc image -- pull FIELD/BLACKBGB.DAT out of its filesystem.
-        data = extract_file(bytes(manual_bytes), "FIELD/BLACKBGB.DAT")
-    else:
-        # Already a bare extracted .DAT (e.g. from extract_field_from_bin.py)
-        # -- use it verbatim, no ISO parsing needed.
-        print("  (input is not sector-aligned -- treating as a raw extracted .DAT)")
-        data = manual_bytes
+    print(f"\nApplying FIELD/BLACKBGB.DAT DSKCG-removal layer: {layer_json}")
+    layer = json.loads(layer_json.read_text(encoding="utf-8"))
     current = extract_file(img, "FIELD/BLACKBGB.DAT")
+    data = bytearray(current)
+    for rec in layer["records"]:
+        off = rec["offset"]
+        chunk = bytes.fromhex(rec["hex"])
+        data[off : off + len(chunk)] = chunk
+    data = bytes(data)
     if data == current:
-        print("  BLACKBGB.DAT already matches manual-edit bin -- no-op")
+        print("  BLACKBGB.DAT already matches layer output -- no-op")
         return
     replace_file_within_sectors(img, "FIELD/BLACKBGB.DAT", data)
-    print(f"  Replaced BLACKBGB.DAT: {len(current)} -> {len(data)} bytes")
+    print(f"  Replaced BLACKBGB.DAT: {len(current)} -> {len(data)} bytes ({len(layer['records'])} diff records)")
 
 
 def apply_rework_merge(img: bytearray, c1: bytes, c2: bytes) -> None:
@@ -175,17 +177,14 @@ def main() -> int:
                      help="skip stripping DSKCG (ask-for-disc) ops from BLACKBGB "
                           "(isolation test for D1->D2 transition black-screen hang)")
     ap.add_argument("--blackbgb-manual-bin", type=Path,
-                     default=ROOT / "mods" / "single-disc" / "patches" / "BLACKBGB.manual.dat",
-                     help="path to EITHER a full known-working .bin (e.g. exported from "
-                          "Makou Reactor after manually deleting BLACKBGB's DSKCG ops) OR "
-                          "a raw already-extracted FIELD/BLACKBGB.DAT (from "
-                          "extract_field_from_bin.py). Detected automatically by whether "
-                          "the file size is a multiple of 2352. Its bytes are spliced in "
-                          "verbatim, bypassing our own LZS re-encode + DSKCG splicer for "
-                          "this field entirely. Overrides --skip-dskcg-removal for BLACKBGB. "
-                          "Defaults to the committed verified splice at "
-                          "mods/single-disc/patches/BLACKBGB.manual.dat -- pass "
-                          "--skip-dskcg-removal instead if you explicitly want the "
+                     default=ROOT / "mods" / "single-disc" / "patches" / "BLACKBGB.dskcg-removal.layer.json",
+                     help="path to an ic-layer-v1 JSON diff (offset/hex records against CSR "
+                          "D1's FIELD/BLACKBGB.DAT) to apply, bypassing our own LZS re-encode "
+                          "+ DSKCG splicer for this field entirely. Overrides "
+                          "--skip-dskcg-removal for BLACKBGB. Defaults to the committed "
+                          "verified diff at "
+                          "mods/single-disc/patches/BLACKBGB.dskcg-removal.layer.json -- "
+                          "pass --skip-dskcg-removal instead if you explicitly want the "
                           "(currently broken) automated re-encoder path.")
     args = ap.parse_args()
     if args.blackbgb_manual_bin and not args.blackbgb_manual_bin.exists():
