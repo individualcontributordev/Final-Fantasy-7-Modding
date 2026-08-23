@@ -1,14 +1,15 @@
-# BLACKBGB manual-edit splice + bit-exact LZS encoder: both verified on hardware
+# BLACKBGB manual-edit splice + bit-exact LZS encoder: both verified on DuckStation
 
 **Date:** 2026-08-23
-**Confidence:** confirmed
+**Confidence:** likely
 **Status:** promoted
 **Related:** docs/findings/2026-08-16-blackbgb-pristine-no-mapjump.md, docs/findings/2026-08-13-lost2-break-bit-bank3-84.md
 
 ## Summary
 
 The D1→D2 BLACKBGB transition hang and the LOST2 background corruption are
-both fixed and confirmed working via real hardware playtest.
+both fixed and confirmed working via DuckStation emulator playtest. Not yet
+tested on real PSX hardware.
 
 ## Context
 
@@ -48,9 +49,9 @@ Two independent fixes, both now playtest-confirmed:
 - BLACKBGB splice: since the true root cause (why our Okumura port still
   doesn't reproduce a working BLACKBGB after DSKCG removal) remains
   unexplained, the splice was adopted as a working, tested bypass.
-- Verified via real PSX hardware playtest (not emulator): D1→D2 transition
-  showed the "want to save?" prompt correctly, and LOST2's background
-  rendered without corruption.
+- Verified via DuckStation emulator playtest: D1→D2 transition showed the
+  "want to save?" prompt correctly, and LOST2's background rendered without
+  corruption. Not yet tested on real PSX hardware.
 
 ## Why it matters
 
@@ -65,8 +66,9 @@ byte parity.
 - [ ] Investigate why the Okumura-encoded BLACKBGB still hangs post-DSKCG-
       removal despite matching the manual edit's script bytes exactly —
       would let us drop the manual-splice dependency.
-- [x] Confirm D1→D2 transition on hardware.
-- [x] Confirm LOST2 background on hardware.
+- [x] Confirm D1→D2 transition on DuckStation.
+- [x] Confirm LOST2 background on DuckStation.
+- [ ] Confirm both on real PSX hardware.
 
 ## Sources
 
