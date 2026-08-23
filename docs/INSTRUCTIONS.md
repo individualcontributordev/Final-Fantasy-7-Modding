@@ -1,3 +1,24 @@
+## TASK: dump BLACKBGB script from your manually-edited bin for comparison
+
+You have a .bin where you manually removed the "ask for disc 2" opcode in
+Makou Reactor and it works correctly (shows the save prompt). Run this
+against that bin, and paste the full output back here:
+
+```
+python3 mods/single-disc/scripts/dump_blackbgb_debug.py path/to/your-manual-edit.bin
+```
+
+Also run it against the latest auto-built bin for comparison:
+
+```
+python3 mods/single-disc/scripts/dump_blackbgb_debug.py workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
+```
+
+Paste both outputs (or just note which file path you used for the first one)
+so the two "init slot 0" script dumps can be diffed byte-for-byte.
+
+---
+
 script output
 
 python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-dskcg-tablefix-test.bin
