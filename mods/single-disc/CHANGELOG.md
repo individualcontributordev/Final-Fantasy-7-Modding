@@ -1,3 +1,30 @@
+## 0.2.8 — 2026-08-23
+
+**Fixes the D1→D2 transition hang (BLACKBGB) and LOST2 background
+corruption, confirmed on DuckStation emulator.**
+
+- LOST2 background corruption: root-caused to `scripts/lzs.py` being a
+  from-scratch LZSS encoder that chose different match/literal splits
+  than the original game's encoder on untouched bytes — valid per our
+  decompressor but not bit-identical, and the PSX's real decompressor was
+  sensitive to that difference. Fixed by porting Haruhiko Okumura's exact
+  binary-tree LZSS (same algorithm ff7tk/qt-lzs/Makou Reactor use).
+  Verified all 714 real LZS fields on the pristine disc recompress
+  bit-identical to the original. Benefits every recompressed field, not
+  just LOST2.
+- D1→D2 BLACKBGB hang: even after the LZS fix, our own re-encode of
+  BLACKBGB's DSKCG-stripped script still hung. Rather than keep chasing
+  encoder parity for this one field, `build_work_bin.py
+  --blackbgb-manual-bin` now splices a known-working, manually-edited
+  `FIELD/BLACKBGB.DAT` directly into the build, bypassing our re-encoder
+  for this field entirely (accepts either a full working `.bin` or a raw
+  extracted `.DAT` from `extract_field_from_bin.py`).
+- Both fixes confirmed via DuckStation emulator playtest (D1→D2 shows the
+  "want to save?" prompt correctly; LOST2 background renders without
+  corruption). Not yet tested on real PSX hardware.
+- See `docs/findings/2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md`
+  for full details.
+
 ## 0.2.7 — 2026-08-22
 
 **Drops redundant no-op whole-file and slot merges from `merge_rework_fields.py`.**
