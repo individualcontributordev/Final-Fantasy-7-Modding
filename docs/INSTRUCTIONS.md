@@ -1,3 +1,37 @@
+## TASK: playtest the bit-exact LZS encoder fix
+
+Root cause found: our LZS *compressor* (`scripts/lzs.py`) was a from-scratch
+encoder that round-tripped fine through our own decompressor but chose
+different match/literal splits than the original game's encoder for
+untouched bytes. That produced a technically-valid but non-original
+bitstream the PSX hardware couldn't decompress correctly — this, not the
+DSKCG removal count, was the actual cause of the BLACKBGB D1→D2 hang and
+the LOST2 background corruption.
+
+Fixed by porting Haruhiko Okumura's exact binary-tree LZSS (the same
+algorithm ff7tk/qt-lzs/Makou Reactor use). Verified: recompressing every
+real LZS field on the pristine disc (714 checked) is now bit-identical to
+the original bytes.
+
+### Step 1 — pull and build
+
+```
+git pull --ff-only
+python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/single-disc-lzsfix-test.bin
+```
+
+### Step 2 — playtest
+
+Load `workspace/iso-extract/single-disc-lzsfix-test.bin` and check:
+
+1. The D1→D2 transition (BLACKBGB, the "want to save?" prompt) — this
+   previously hung with a black screen.
+2. The LOST2 background — this previously showed corrupted graphics.
+
+Report back whether both now work correctly.
+
+---
+
 ## TASK: create a manual-edit bin in Makou Reactor, then dump + compare
 
 ### Step 1 — build a base bin with everything EXCEPT the automated DSKCG removal
