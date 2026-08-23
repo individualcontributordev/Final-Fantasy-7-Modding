@@ -38,21 +38,40 @@ actual verified pipeline output, so a corrupted byte silently shipped.
 
 ## Fix
 
-Regenerated `builder/single-disc-on-csr/layers/disc1.layer.json` by running
-`bin_diff_to_layer.py` against a freshly-built `build_work_bin.py` output
-(confirmed both `FIELD/FIELD.BIN` and `WORLD/WORLD.BIN` decompress
-correctly beforehand). Verified the new layer, reapplied onto the CSR
-v0.14.2 base via `apply_layer.py`, reproduces that work bin **byte-for-byte**
-(`img == good` in Python). Also swept all 787 `FIELD/*.DAT` files for LZS
-decompression failures in the new build — 73 fail, but the same 73 fail on
-a plain CSR-only base too (non-LZS files, e.g. `WM*.DAT` world map
-textures), so this is a pre-existing, unrelated baseline and not a
-regression.
+First attempt: regenerated `disc1.layer.json` by running
+`bin_diff_to_layer.py` against a freshly-built, flag-less `build_work_bin.py`
+output. This fixed FIELD.BIN/WORLD.BIN decompression but **silently
+reintroduced the D1→D2 BLACKBGB hang** — a flag-less run falls back to the
+automated DSKCG-removal re-encoder (`apply_dskcg_removal`), which is still
+broken (see `2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md`), instead
+of `--blackbgb-manual-bin`'s verified manual splice. The manual-edit
+`BLACKBGB.DAT` source is gitignored and wasn't available locally to re-supply
+that flag. Confirmed via byte comparison: the flag-less rebuild's
+`FIELD/BLACKBGB.DAT` was 13,011 bytes vs the verified splice's 13,013 bytes —
+different content, not just size-adjacent.
+
+Actual fix: built a **hybrid** image instead of a full flag-less rebuild.
+1. Reconstructed the (corrupted) v0.2.8 image by applying the checked-in
+   v0.2.8 layer onto the CSR v0.14.2 base, and confirmed its
+   `FIELD/BLACKBGB.DAT` (13,013 bytes) decompresses fine and is the known
+   verified splice — only `FIELD.BIN` was broken in v0.2.8.
+2. Extracted the corrected `FIELD/FIELD.BIN` and `WORLD/WORLD.BIN` from the
+   freshly-built (flag-less) work bin, and spliced *only those two files*
+   into the reconstructed v0.2.8 image via `replace_file_within_sectors`,
+   leaving `BLACKBGB.DAT` and everything else from v0.2.8 untouched.
+3. Re-diffed this hybrid image against the CSR v0.14.2 base with
+   `bin_diff_to_layer.py` to produce the new `disc1.layer.json`.
+
+Verified the new layer, reapplied onto CSR v0.14.2 via `apply_layer.py`,
+reproduces the hybrid image **byte-for-byte**. `FIELD.BIN`/`WORLD.BIN`
+decompress correctly; `FIELD/BLACKBGB.DAT` byte-identical to the verified
+v0.2.8 splice. Swept all 787 `FIELD/*.DAT` files for LZS decompression
+failures — 73 fail, and the *same* 73 fail on a plain reconstructed v0.2.8
+image too (non-LZS files, e.g. `WM*.DAT` world map textures), confirming
+this is a pre-existing, unrelated baseline and not a regression.
 
 Released as v0.2.9. Record counts: base csr-v0.14.2 87,606 + addon
-single-disc-on-csr 60,864 = 148,470 total (down from 152,892 combined in
-the corrupted v0.2.8, consistent with the smaller/correct addon-only diff
-of 60,864 vs the previous 72,788).
+single-disc-on-csr 63,712 = 151,318 total.
 
 ## Why it matters
 
@@ -70,15 +89,22 @@ publishing.
       `bin_diff_to_layer.py`, reapply the layer and assert `FIELD.BIN`/
       `WORLD.BIN` decompress and the reconstructed image matches the source
       work bin byte-for-byte.
-- [ ] Playtest v0.2.9 past New Game through the D1→D2 transition on
-      DuckStation to reconfirm BLACKBGB/LOST2 fixes still hold with the
-      regenerated layer (not yet done as of this finding).
+- [ ] Save the manual-edit `BLACKBGB.DAT` (or the working `.bin` it was
+      pulled from) somewhere durable/tracked (outside the gitignored
+      workspace) so a future flag-less `build_work_bin.py` run doesn't
+      silently drop the D1→D2 fix again.
+- [x] Playtest v0.2.9 (hybrid layer) past New Game through the D1→D2
+      transition on DuckStation — confirmed working locally.
+- [ ] Confirm the builder-site download of v0.2.9 also passes
+      `verify_built_disc.py` and plays through New Game + D1→D2 in
+      DuckStation (local reconstruction confirmed; site download pending).
 - [ ] Confirm on real PSX hardware (still outstanding from v0.2.8).
 
 ## Sources
 
-- `scripts/bin_diff_to_layer.py`, `scripts/apply_layer.py`
+- `scripts/bin_diff_to_layer.py`, `scripts/apply_layer.py`,
+  `psx_mode2_iso.replace_file_within_sectors`
 - `mods/single-disc/scripts/build_work_bin.py`,
   `mods/single-disc/scripts/fix_field_bin_table.py`
-- `builder/single-disc-on-csr/layers/disc1.layer.json` (regenerated)
-- commit `3f63bff`
+- `builder/single-disc-on-csr/layers/disc1.layer.json` (hybrid regeneration)
+- commits `3f63bff` (flawed first attempt), hybrid fix (this session)
