@@ -1,4 +1,3 @@
-LIMIT THE FILE CONTENT TO AT MOST 150 LINES. IF MORE CONTENT NEEDS TO BE ADDED USE THE str-replace-editor TOOL TO EDIT THE FILE AFTER IT HAS BEEN CREATED.
 # Engineer's Build Guide (no agent required)
 
 How to build/verify disc images from repo files the same way the builder site
