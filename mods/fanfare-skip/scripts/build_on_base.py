@@ -36,7 +36,7 @@ MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
 BATTLE_PATH = "BATTLE/BATTLE.X"
 FAN2_PATH = "ENEMY6/FAN2.SND"
-FAN2_QUIET = _MOD / "patches" / "FAN2.SND.quiet"
+FAN2_QUIET_LAYER = _MOD / "patches" / "FAN2.SND.quiet.layer.json"
 HINT = 'No victory fanfare or win poses — loot and exp still apply.'
 DEFAULT_CSR_MANIFEST = (
 	"https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
@@ -184,10 +184,16 @@ def patch_and_inject(
 	else:
 		print("=== skip BATTLE.X patch (stock victory-queue) ===")
 
-	if replace_fan2 and FAN2_QUIET.is_file():
-		print(f"=== replace {FAN2_PATH} with quiet stub ===")
+	if replace_fan2 and FAN2_QUIET_LAYER.is_file():
+		print(f"=== replace {FAN2_PATH} with quiet stub (layer diff) ===")
 		fan_meta = find_file(img, FAN2_PATH)
-		quiet = FAN2_QUIET.read_bytes()
+		stock = bytearray(extract_file(img, FAN2_PATH))
+		layer = json.loads(FAN2_QUIET_LAYER.read_text(encoding="utf-8"))
+		for rec in layer["records"]:
+			off = rec["offset"]
+			chunk = bytes.fromhex(rec["hex"])
+			stock[off : off + len(chunk)] = chunk
+		quiet = bytes(stock)
 		if len(quiet) > fan_meta.size:
 			raise SystemExit(
 				f"quiet FAN2 ({len(quiet)}) larger than slot ({fan_meta.size})"
@@ -195,7 +201,7 @@ def patch_and_inject(
 		replace_file_padded(img, FAN2_PATH, quiet)
 		print(f"  FAN2 quiet {len(quiet)} bytes (slot {fan_meta.size})")
 	elif replace_fan2:
-		print(f"  WARNING: missing {FAN2_QUIET}, leaving fanfare audio stock")
+		print(f"  WARNING: missing {FAN2_QUIET_LAYER}, leaving fanfare audio stock")
 	else:
 		print(f"=== skip {FAN2_PATH} (stock fanfare asset) ===")
 
