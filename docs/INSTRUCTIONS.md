@@ -1,32 +1,49 @@
-# Status: static tracing of FIELD.BIN exhausted — need a live debugger session
+# Status: import disc-2/3 kernel EXEs into Ghidra, export decompiled C
 
-`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`
-found the field-script opcode dispatch table and the PMVIE/MOVIE/MVIEF
-handlers, traced the movie-id struct field (`DAT_8009c6e0+2`), and then
-read **every function reachable** from those handlers and from the
-per-frame field-object update entry point (`FUN_800ba65c` and its five
-sibling calls). None of it contains a `CdControl`/`CdRead`-style call —
-static grepping of the existing Ghidra exports has reached diminishing
-returns (see "Reassessment" section at the end of that finding doc).
+Static tracing of `FIELD.BIN` (see
+`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`)
+has exhausted every function reachable from the PMVIE/MOVIE/MVIEF opcode
+handlers with no `CdControl`/`CdRead`-style call found. Only the **disc-1**
+kernel EXE (`SCUS_941.63`) has been decompiled so far
+(`workspace/ghidra/SCUS_941.63_disc1.c`) — CANONON is a **disc-2** cutscene
+(LOSLAKE1), so a disc-1-only kernel export could be missing whatever
+disc-2/3-specific movie-streaming logic exists.
 
-**Task for you (needs DuckStation, not just grep):**
+The disc-2/3 kernel EXEs have already been extracted from the pristine
+ISOs (raw `PS-X EXE`, not GZIPPS — do not run `decompress_gzipps.py` on
+these) and are sitting at:
 
-1. Load the CSR single-disc build (or pristine D2) in DuckStation with
-   debugger support enabled.
-2. Set a breakpoint on the BIOS `CdControl`/`CdControlB`/`CdRead` call (or
-   on kernel exe address `0x8002da7c`, the generic CD-command dispatcher
-   found in `SCUS_941.63` this session — it switches on `DAT_8009a000`).
-3. Trigger the LOSLAKE1 cutscene (the one that plays CANONON at movie id
-   47) and let it hit the breakpoint.
-4. Capture the **call stack** at that breakpoint (return addresses) and
-   the value of `DAT_8009a000` (the CD command code) at the time of the
-   break.
-5. Paste the call stack + command code back here. That tells us directly
-   whether `FIELD.BIN` or the kernel exe issues the seek, and gives the
-   exact caller address to keep tracing from — ending the static-grep
-   dead end in one test.
+```
+workspace/iso-extract/battle-dec/SCUS_941.64_D2.body   (disc 2 kernel EXE)
+workspace/iso-extract/battle-dec/SCUS_941.65_D3.body   (disc 3 kernel EXE)
+```
 
-No Ghidra re-export needed for this step.
+**Task for you (Ghidra, one program per file):**
+
+For each `.body` file above:
+
+1. **File → Import File...** → select the `.body` file
+2. Format: **Raw Binary**
+3. Language: **MIPS · 32-bit little-endian**
+4. Open the program
+5. **Window → Memory Map** → set image base to **`0x80010000`**
+6. **Analysis → Auto Analyze...** → run with defaults, wait for the
+   background task list to go idle
+7. Sanity check: **G** (Go To) → `80014540` should land on a thin wrapper
+   function that calls `80033E34` (per `docs/ghidra-battle-overlays.md`
+   §7.2 — same recipe used for the existing disc-1 `SCUS_941.63` project).
+   If it lands on garbage/no function, the image base or file offset is
+   wrong — re-check step 5.
+8. **File → Export Program...** → Format: **C/C++** → save to:
+   - `workspace/ghidra/SCUS_941.64_disc2.c` (for the D2 file)
+   - `workspace/ghidra/SCUS_941.65_disc3.c` (for the D3 file)
+
+Once both exports exist under `workspace/ghidra/`, tell me — I'll grep
+both for the CD-command dispatcher (`FUN_8002da7c`-equivalent /
+`DAT_8009a000` writers) and cross-reference the `FUN_80033e74`/
+`FUN_80033cb8(0xb, ...)` streaming-mode call sites already found in the
+disc-1 export, looking for any disc-2/3-specific movie path that isn't
+present on disc 1.
 
 ---
 
