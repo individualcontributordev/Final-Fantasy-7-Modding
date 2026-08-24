@@ -15,14 +15,13 @@ growing `MOVIE_ID` row 25 to a new LBA didn't change the ending's seek,
 but that test also grew the file, moved it to EOF, and changed disc size
 all at once — too many variables. This is a single-variable version.
 
-## Test image (already built)
+## Test image (you build it — .bin/.cue are never committed to git)
 
-`workspace/iso-extract/d2_verify_canonon_table_test.bin` (+ matching
-`.cue`) — pristine Disc 2 with **exactly one byte-level change**:
-`MINT/MOVIE_ID.BIN` row 47 (normally LBA 250450, `CANONON.MOV`) rewritten
-to row 11's values (LBA 136669, `BOOGUP.STR` — a short, visually distinct
-snowboard clip). Nothing else touched: no file moves, no size changes, no
-field-script edits.
+The test disc is **your own pristine Disc 2 rip** with **exactly one
+byte-level change**: `MINT/MOVIE_ID.BIN` row 47 (normally LBA 250450,
+`CANONON.MOV`) rewritten to row 11's values (LBA 136669, `BOOGUP.STR` — a
+short, visually distinct snowboard clip). Nothing else touched: no file
+moves, no size changes, no field-script edits.
 
 - If the engine **reads the table**: reaching the LOSLAKE1 cannon scene
   plays `BOOGUP.STR` (snowboarding) instead of the cannon movie.
@@ -31,18 +30,71 @@ field-script edits.
 
 ## Steps (copy-paste — Windows / Git Bash)
 
-### 1. Get the test disc path
+### 1. Build the test image from your own Disc 2 rip
 
-From Git Bash, in your clone of this repo:
+You need a pristine Disc 2 `.bin`/`.cue` on this machine already (any path
+is fine). From Git Bash, in your clone of this repo:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-TESTCUE="$(pwd)/workspace/iso-extract/d2_verify_canonon_table_test.cue"
-echo "$TESTCUE"
 ```
 
-Confirm that path prints and the file exists (`ls -la "$TESTCUE"`).
+Set this to wherever your pristine Disc 2 image actually is:
+
+```bash
+SRC_D2="/c/path/to/your/ff7_disc2.bin"
+ls -la "$SRC_D2"
+```
+
+Then build the patched test copy (same folder as your source, `.cue` is
+copied/renamed alongside if one exists next to `$SRC_D2`):
+
+```bash
+python3 - "$SRC_D2" <<'PYEOF'
+import sys, shutil
+sys.path.insert(0, "scripts")
+import psx_mode2_iso as iso
+
+src = sys.argv[1]
+dst = src.rsplit(".", 1)[0] + "_verify_canonon_table_test.bin"
+shutil.copyfile(src, dst)
+
+with open(dst, "r+b") as f:
+    img = bytearray(f.read())
+    data = bytearray(iso.extract_file(img, "MINT/MOVIE_ID.BIN"))
+    row_size = 20
+    row11 = bytes(data[11 * row_size:12 * row_size])
+    data[47 * row_size:48 * row_size] = row11
+    iso.replace_file_padded(img, "MINT/MOVIE_ID.BIN", bytes(data))
+    f.seek(0)
+    f.write(img)
+
+print("Wrote:", dst)
+
+src_cue = src.rsplit(".", 1)[0] + ".cue"
+dst_cue = dst.rsplit(".", 1)[0] + ".cue"
+try:
+    with open(src_cue) as cf:
+        cue = cf.read()
+    import os
+    cue = cue.replace(os.path.basename(src), os.path.basename(dst))
+    with open(dst_cue, "w") as cf:
+        cf.write(cue)
+    print("Wrote:", dst_cue)
+except FileNotFoundError:
+    print("No .cue next to source — point DuckStation at the .bin directly.")
+PYEOF
+```
+
+This prints the path(s) it created — that's your `$TESTCUE` for the next
+step (the `.cue` if one was made, otherwise the `.bin`).
+
+```bash
+TESTCUE="${SRC_D2%.*}_verify_canonon_table_test.cue"
+[ -f "$TESTCUE" ] || TESTCUE="${SRC_D2%.*}_verify_canonon_table_test.bin"
+echo "$TESTCUE"
+```
 
 ### 2. Launch DuckStation on the test disc
 
