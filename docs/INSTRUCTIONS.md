@@ -1,21 +1,63 @@
-# Status: kernel EXE ruled out on all 3 discs — find the real movie-caller module
+# Status: static tracing exhausted — need a DuckStation dynamic trace of the CANONON movie call
 
-`workspace/ghidra/SCUS_941.63_disc1.c`, `SCUS_941.64_D2.body.c`, and
-`SCUS_941.65_D3.body.c` are all decompiled and fully cross-checked (see
-`docs/findings/2026-08-24-kernel-exe-all-discs-no-movie-hardcode.md`).
-Result: the CD-command dispatcher is byte-identical on every disc, there's
-no literal movie-id-47 constant anywhere, and the movie-streaming
-primitive (`FUN_80033e74`, mode `0xb`) has **zero in-file callers** on any
-disc — same dead-end already found in `FIELD.BIN`
-(`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`).
+## Why (skip if you already know)
 
-**Both known candidate modules (kernel EXE, FIELD.BIN) are ruled out.**
-The real movie-id → LBA resolver, and whatever makes CANONON ignore a
-patched `MOVIE_ID.BIN` row, lives in a third module neither has captured
-yet. No action needed from you right now — next session needs to identify
-that module (likely a dedicated movie-player overlay loaded only during
-PMVIE/MOVIE/MVIEF opcodes) before there's a concrete Ghidra task to hand
-off.
+Two full static-tracing passes are done and both dead-ended:
+- `FIELD.BIN` (disc 2): PMVIE/MOVIE/MVIEF opcode handlers found and fully
+  read, plus every function reachable from the per-frame field-object
+  update loop. They only stage state in a shared struct
+  (`DAT_8009c6e0`) — no CD/disc-read call anywhere.
+  (`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`)
+- Kernel EXE, **all three discs** (`SCUS_941.63/64/65`): CD dispatcher is
+  byte-identical across discs, no literal movie-id-47 constant, and the
+  movie-streaming primitive (`FUN_80033e74`, CD mode `0xb`) has **zero
+  in-file callers** anywhere.
+  (`docs/findings/2026-08-24-kernel-exe-all-discs-no-movie-hardcode.md`)
+
+More grepping won't help — the call is either in a third
+not-yet-found module, or it's issued through a function-pointer indirect
+call the decompiler couldn't resolve to a name (so text search misses it
+either way). The only way to get real evidence now is watching it happen
+live in a debugger-capable emulator.
+
+## Task: capture the call stack at the CANONON movie seek in DuckStation
+
+You need DuckStation with the debugger enabled, and the CANONON trigger
+in FF7 disc 2 (Junon cannon sequence — trigger the cutscene where the
+cannon fires at Sister Ray/Weapon).
+
+1. Open DuckStation → **Settings → Advanced → enable "Show Debug Menu"**
+   (or launch a debug build) so the CPU debugger window is available.
+2. Boot disc 2, load/advance a save to just before the CANONON cutscene
+   triggers (Junon, after firing the cannon).
+3. Open **Debug → CPU Debugger**.
+4. Set a breakpoint on the CD-command dispatcher entry: address
+   `0x8002da7c` (`FUN_8002da7c` from the kernel exe — same address on
+   all 3 discs per the finding doc above).
+   - If DuckStation's breakpoint UI wants a symbol instead of a raw
+     address, just enter the hex address directly — no symbols are
+     loaded.
+5. Resume emulation, let the CANONON cutscene trigger.
+6. When the breakpoint hits, **before resuming**, capture:
+   - The **call stack** (Debug → CPU Debugger should show it, or use
+     the "Call Stack" panel if present).
+   - The **return address** on the stack (tells you which function
+     called into the dispatcher).
+   - Register values at the break, especially `$a0`-`$a3` (the
+     dispatcher's incoming command code/params).
+7. If it hits multiple times before the movie plays, repeat step 6 for
+   each hit until you see one where the command code looks like the
+   movie-streaming mode (`0xb`, per the finding doc).
+8. Paste everything you captured (call stack, return address, register
+   dump) back here — don't summarize/trim it, paste raw.
+
+## What happens next
+
+Once you paste the capture, the return address tells us which module
+issued the call (its address range identifies FIELD.BIN vs kernel vs an
+unknown third module) — that's the concrete lead needed to know what to
+extract and decompile next. No further action needed from you until
+then.
 
 ---
 
