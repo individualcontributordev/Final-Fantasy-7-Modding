@@ -5,9 +5,7 @@ workspace/*
 !workspace/**/
 !workspace/**/.gitkeep
 
-# Ghidra projects (local)
-workspace/ghidra/*
-!workspace/ghidra/.gitkeep
+
 
 # Ghidra exports (raw game data - keep local only)
 workspace/ghidra-exports/
@@ -32,16 +30,13 @@ workspace/**/*.mdf
 workspace/**/*.nrg
 workspace/**/*.chd
 workspace/**/*.ecm
-workspace/**/*.dec
-workspace/**/*.dec.*
+
 workspace/**/*.new
 workspace/**/*.pristine
 workspace/**/*.gz
 workspace/**/*.gzip
-workspace/**/FIELD.BIN
-workspace/**/FIELD.BIN.*
 workspace/**/*.makou
-workspace/**/*.X
+
 
 # Emulator / save junk if dropped in the repo
 workspace/**/*.mcd
@@ -51,6 +46,10 @@ workspace/**/*.state
 workspace/**/*.dst
 **/duckstation*/
 **/*.duckstation*
+
+# Ghidra projects (local)
+!workspace/ghidra/.gitkeep
+!workspace/ghidra/*
 
 # Python
 __pycache__/
