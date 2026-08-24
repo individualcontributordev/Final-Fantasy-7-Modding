@@ -1,22 +1,32 @@
-# Status: PMVIE/MOVIE/MVIEF handlers found — no Ghidra action needed right now
+# Status: static tracing of FIELD.BIN exhausted — need a live debugger session
 
 `docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`
-found the real opcode dispatch table (`PTR_LAB_800e0228`) and the PMVIE
-(0xF8)/MOVIE (0xF9)/MVIEF (0xFA) handler addresses in the exports already
-in the repo (`workspace/ghidra/FIELD.BIN.dec_disc2.c` /
-`.dec_disc2.html`). The movie id is confirmed written to struct offset
-`DAT_8009c6e0+2`, but no CD-read call has been found in any handler yet —
-`FUN_800c0248` (called from MVIEF) and `FUN_800bc438`/`FUN_800bc4d4`
-(the per-frame update path) are both ruled out as unrelated (generic
-opcode-operand decoder; UI icon overlay, respectively).
+found the field-script opcode dispatch table and the PMVIE/MOVIE/MVIEF
+handlers, traced the movie-id struct field (`DAT_8009c6e0+2`), and then
+read **every function reachable** from those handlers and from the
+per-frame field-object update entry point (`FUN_800ba65c` and its five
+sibling calls). None of it contains a `CdControl`/`CdRead`-style call —
+static grepping of the existing Ghidra exports has reached diminishing
+returns (see "Reassessment" section at the end of that finding doc).
 
-Next step is more grepping of the **existing** export (agent-only, no
-Ghidra session needed): read the five still-unread sibling calls inside
-the per-frame update function `FUN_800ba65c` — `FUN_800bb3a8`,
-`FUN_800d7d6c`, `FUN_800d7f9c`, `FUN_800d4bfc`, `FUN_800bc338` — looking
-for whichever one polls `DAT_80071c1c` or resolves the movie id at
-`DAT_8009c6e0+2` to an LBA/CD call. Nothing for you to do here until that
-turns up a new dead end or a concrete address worth confirming live.
+**Task for you (needs DuckStation, not just grep):**
+
+1. Load the CSR single-disc build (or pristine D2) in DuckStation with
+   debugger support enabled.
+2. Set a breakpoint on the BIOS `CdControl`/`CdControlB`/`CdRead` call (or
+   on kernel exe address `0x8002da7c`, the generic CD-command dispatcher
+   found in `SCUS_941.63` this session — it switches on `DAT_8009a000`).
+3. Trigger the LOSLAKE1 cutscene (the one that plays CANONON at movie id
+   47) and let it hit the breakpoint.
+4. Capture the **call stack** at that breakpoint (return addresses) and
+   the value of `DAT_8009a000` (the CD command code) at the time of the
+   break.
+5. Paste the call stack + command code back here. That tells us directly
+   whether `FIELD.BIN` or the kernel exe issues the seek, and gives the
+   exact caller address to keep tracing from — ending the static-grep
+   dead end in one test.
+
+No Ghidra re-export needed for this step.
 
 ---
 
