@@ -22,6 +22,13 @@ live in a debugger-capable emulator.
 
 ## Task: capture the call stack at the CANONON movie seek in DuckStation
 
+**Correction (learned from first attempt):** `0x8002da7c` is the
+*generic* CD-command dispatcher — it fires on **every** disc read (field
+loads, textures, sound, everything), not just movies. A plain breakpoint
+there is useless, it'll hit constantly. Use a **conditional
+breakpoint/watchpoint on the command code value**, not just the address,
+so it only stops for the movie-streaming command specifically.
+
 You need DuckStation with the debugger enabled, and the CANONON trigger
 in FF7 disc 2 (Junon cannon sequence — trigger the cutscene where the
 cannon fires at Sister Ray/Weapon).
@@ -31,25 +38,34 @@ cannon fires at Sister Ray/Weapon).
 2. Boot disc 2, load/advance a save to just before the CANONON cutscene
    triggers (Junon, after firing the cannon).
 3. Open **Debug → CPU Debugger**.
-4. Set a breakpoint on the CD-command dispatcher entry: address
-   `0x8002da7c` (`FUN_8002da7c` from the kernel exe — same address on
-   all 3 discs per the finding doc above).
-   - If DuckStation's breakpoint UI wants a symbol instead of a raw
-     address, just enter the hex address directly — no symbols are
-     loaded.
+4. Instead of breaking on the dispatcher address unconditionally, set a
+   **memory watchpoint (write breakpoint) on `0x8009a000`**, the global
+   CD-command-code variable (`DAT_8009a000` from the kernel exe — same
+   address on all 3 discs). If DuckStation supports conditional
+   watchpoints, set the condition to break only when the written value
+   is `0xb` (the movie-streaming mode, per the finding doc). If it
+   doesn't support a value condition, set an unconditional write
+   watchpoint on that address — it'll be far less noisy than breaking on
+   the dispatcher function itself, since most reads/writes to disc are
+   quick file opens rather than command-code writes.
 5. Resume emulation, let the CANONON cutscene trigger.
-6. When the breakpoint hits, **before resuming**, capture:
-   - The **call stack** (Debug → CPU Debugger should show it, or use
-     the "Call Stack" panel if present).
-   - The **return address** on the stack (tells you which function
-     called into the dispatcher).
-   - Register values at the break, especially `$a0`-`$a3` (the
-     dispatcher's incoming command code/params).
-7. If it hits multiple times before the movie plays, repeat step 6 for
-   each hit until you see one where the command code looks like the
-   movie-streaming mode (`0xb`, per the finding doc).
+6. Each time the watchpoint hits, check the value just written to
+   `0x8009a000` (or `$a0`/return value if DuckStation shows it inline).
+   Skip any hit where the value isn't `0xb`. When you find the `0xb`
+   hit, **before resuming**, capture:
+   - The **call stack** (Debug → CPU Debugger's "Call Stack" panel, or
+     equivalent).
+   - The **return address** / the address of the instruction that wrote
+     `0xb` to `0x8009a000` (tells you which function issued the movie
+     seek).
+   - Register values at that point, especially `$a0`-`$a3`.
+7. If no hit ever shows value `0xb`, that itself is useful evidence
+   (means the movie doesn't go through `DAT_8009a000` at all, or the
+   command code constant isn't actually `0xb` for movies) — report that
+   back instead of guessing further.
 8. Paste everything you captured (call stack, return address, register
-   dump) back here — don't summarize/trim it, paste raw.
+   dump, or the "no 0xb hit" result) back here — don't summarize/trim
+   it, paste raw.
 
 ## What happens next
 
