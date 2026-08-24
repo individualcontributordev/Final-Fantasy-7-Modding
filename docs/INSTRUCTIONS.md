@@ -1,59 +1,21 @@
-# Status: import disc-2/3 kernel EXEs into Ghidra, export decompiled C
+# Status: kernel EXE ruled out on all 3 discs — find the real movie-caller module
 
-Static tracing of `FIELD.BIN` (see
-`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`)
-has exhausted every function reachable from the PMVIE/MOVIE/MVIEF opcode
-handlers with no `CdControl`/`CdRead`-style call found. Only the **disc-1**
-kernel EXE (`SCUS_941.63`) has been decompiled so far
-(`workspace/ghidra/SCUS_941.63_disc1.c`) — CANONON is a **disc-2** cutscene
-(LOSLAKE1), so a disc-1-only kernel export could be missing whatever
-disc-2/3-specific movie-streaming logic exists.
+`workspace/ghidra/SCUS_941.63_disc1.c`, `SCUS_941.64_D2.body.c`, and
+`SCUS_941.65_D3.body.c` are all decompiled and fully cross-checked (see
+`docs/findings/2026-08-24-kernel-exe-all-discs-no-movie-hardcode.md`).
+Result: the CD-command dispatcher is byte-identical on every disc, there's
+no literal movie-id-47 constant anywhere, and the movie-streaming
+primitive (`FUN_80033e74`, mode `0xb`) has **zero in-file callers** on any
+disc — same dead-end already found in `FIELD.BIN`
+(`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`).
 
-The disc-2/3 kernel EXEs have already been extracted from the pristine
-ISOs (raw `PS-X EXE`, not GZIPPS — do not run `decompress_gzipps.py` on
-these) and are sitting at:
-
-```
-workspace/iso-extract/battle-dec/SCUS_941.64_D2.body   (disc 2 kernel EXE)
-workspace/iso-extract/battle-dec/SCUS_941.65_D3.body   (disc 3 kernel EXE)
-```
-
-If you ever need to reproduce this extraction (files deleted, new pristine
-rip, etc.), run `scripts/extract_kernel_exe.py` from the repo root. It
-knows the per-disc kernel EXE filename (`SCUS_941.63` disc 1, `SCUS_941.64`
-disc 2, `SCUS_941.65` disc 3) and strips the PS-X EXE header for you:
-
-```bash
-cd "$(git rev-parse --show-toplevel)"
-python3 scripts/extract_kernel_exe.py D2 D3
-```
-
-**Task for you (Ghidra, one program per file):**
-
-For each `.body` file above:
-
-1. **File → Import File...** → select the `.body` file
-2. Format: **Raw Binary**
-3. Language: **MIPS · 32-bit little-endian**
-4. Open the program
-5. **Window → Memory Map** → set image base to **`0x80010000`**
-6. **Analysis → Auto Analyze...** → run with defaults, wait for the
-   background task list to go idle
-7. Sanity check: **G** (Go To) → `80014540` should land on a thin wrapper
-   function that calls `80033E34` (per `docs/ghidra-battle-overlays.md`
-   §7.2 — same recipe used for the existing disc-1 `SCUS_941.63` project).
-   If it lands on garbage/no function, the image base or file offset is
-   wrong — re-check step 5.
-8. **File → Export Program...** → Format: **C/C++** → save to:
-   - `workspace/ghidra/SCUS_941.64_disc2.c` (for the D2 file)
-   - `workspace/ghidra/SCUS_941.65_disc3.c` (for the D3 file)
-
-Once both exports exist under `workspace/ghidra/`, tell me — I'll grep
-both for the CD-command dispatcher (`FUN_8002da7c`-equivalent /
-`DAT_8009a000` writers) and cross-reference the `FUN_80033e74`/
-`FUN_80033cb8(0xb, ...)` streaming-mode call sites already found in the
-disc-1 export, looking for any disc-2/3-specific movie path that isn't
-present on disc 1.
+**Both known candidate modules (kernel EXE, FIELD.BIN) are ruled out.**
+The real movie-id → LBA resolver, and whatever makes CANONON ignore a
+patched `MOVIE_ID.BIN` row, lives in a third module neither has captured
+yet. No action needed from you right now — next session needs to identify
+that module (likely a dedicated movie-player overlay loaded only during
+PMVIE/MOVIE/MVIEF opcodes) before there's a concrete Ghidra task to hand
+off.
 
 ---
 
