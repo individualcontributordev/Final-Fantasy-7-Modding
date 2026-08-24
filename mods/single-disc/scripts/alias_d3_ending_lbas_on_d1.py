@@ -38,8 +38,9 @@ from psx_mode2_iso import (  # noqa: E402
 # so id24 is never referenced by the field anymore -- confirmed no other
 # field DAT sets MOVIE_ID row 24 either. Keeping the alias would just be
 # dead weight in the layer.
+#
+# id23/ONTRAIN.MOV removed 2026-08-24: user requested removal for testing.
 JOBS = (
-    (23, "LASTMAP.BIN", "ONTRAIN.MOV"),
     (25, "ENDING01.MOV", "SMK.STR"),
     (26, "ENDING3E.MOV", "SOUTHMK.MOV"),
     (29, "ENDING2E.MOV", "MONITOR.STR"),
