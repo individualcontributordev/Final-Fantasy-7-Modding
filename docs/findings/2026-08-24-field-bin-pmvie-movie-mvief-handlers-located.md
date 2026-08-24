@@ -203,6 +203,117 @@ Found and read the callers:
    found by symbol grep yet, possibly because it's aliased through a
    pointer rather than referenced by the `DAT_80071c1c` symbol directly.
 
+## Update 2026-08-24 (continued further still): sibling functions read, struct+2 confirmed generic — pivoting to dynamic tracing
+
+Read all five sibling calls in `FUN_800ba65c` in full:
+
+- **`FUN_800bb3a8`** (13683-13833): message-window/entity-icon tick + the
+  field-script opcode interpreter's per-frame execution driver — this is
+  the loop that calls `(*(code *)(&PTR_LAB_800e0228)[DAT_8009a058])()`,
+  i.e. it **is** the frame-by-frame opcode dispatcher caller (not a
+  separate poller). It contains no CD-read call of its own; it just runs
+  script opcodes (including PMVIE/MOVIE/MVIEF) until the frame's op budget
+  is exhausted. Its callee `FUN_800bbbcc` (message-window color/animation
+  ticker) — also read fully — is unrelated (character head-plate flicker
+  and message-box border colors, keyed off `DAT_8007eb98`/opcode-actor
+  ids, not movies).
+- **`FUN_800d7d6c`** (18255-18341) and **`FUN_800d7f9c`** (18347-18381):
+  both are one-time **menu/UI panel setup** for a debug/status overlay —
+  `FUN_800d7d6c` initializes fixed VRAM tile records (icon glyph slots,
+  clock digits) and calls `func_0x80044a68` (a sprite/TIM draw primitive)
+  6 times; `FUN_800d7f9c` builds text-label sub-windows ("Author", "Event",
+  "Stop", "Step", "Actor OFF", "Info OFF") via `FUN_800d828c`/`FUN_800d9f00`
+  and sets `DAT_80071c08 = 5` (a menu-page id, unrelated to
+  `DAT_80071c1c`, the near-identical name is coincidental). No CD/media
+  calls in either.
+- **`FUN_800d4bfc`** (16940-16961): trivial 4-entry array zero-init
+  (`DAT_80071e2c = 0`); no CD logic.
+- **`FUN_800bc338`** (14030-14063, already partially quoted above): HUD
+  clock-digit position/style init (`DAT_800e48f7` etc, screen coords);
+  no CD logic.
+
+**None of the five siblings contain a CD call.** This closes out the
+`FUN_800ba65c` call chain as a dead end for this trace — every function
+reachable from the confirmed per-frame object-update entry point has now
+been read.
+
+### struct offset +2 / +0x26 confirmed to be a generic per-opcode async-id slot, not movie-specific
+
+Re-scanned the *entire* HTML listing (not just the C export) for every
+instruction that loads `DAT_8009c6e0` into a register and then does
+`sh reg,0x2(reg)` shortly after (i.e. every write to struct offset `+2`,
+using raw address proximity instead of relying on the decompiler
+resolving the global symbol). Found **two more writers** beyond the PMVIE
+handler already documented:
+
+- `800c45ac`-`800c4694` — the **`batle`** opcode handler (string xref
+  `s_batle_800a0864`) — writes struct `+2` at `800c4638` with the return
+  value of `FUN_800bf908` (a distinct battle-id-lookup helper, not the
+  movie-id byte).
+- `800c4ee8`-onward — the **`tutor`** opcode handler (string xref
+  `s_tutor_800a08c0`) — writes struct `+2` at `800c4f5c` with a value
+  computed from `DAT_800722c4` (current script-object index) through a
+  lookup table at `0x800831fc`, again unrelated to movies.
+
+**Conclusion:** offset `+2` (and its paired sub-state halfword at
+`+0x26`) is a **generic "pending async operation id" slot shared by
+multiple unrelated field-script opcodes** (`pmvie`, `batle`, `tutor`,
+and likely others) — each opcode handler stashes its own kind of pending
+id there and a *shared* completion-poll mechanism (state byte at `+1`)
+advances it. This means grepping for reads of struct `+2` specifically
+was always going to be a dead end for isolating the *movie* consumer,
+since any reader must also branch on which opcode's async operation is
+in flight — that branch/dispatch has not been located.
+
+### Reassessment: static grep tracing has reached diminishing returns
+
+After three extended sessions of pure static-decompile tracing (this
+document + the two "Update" sections above), every function directly and
+transitively reachable from the three opcode handlers and the per-frame
+object-update entry point has been read, with **no CD/disc-read primitive
+found anywhere in `FIELD.BIN`'s decompiled/disassembled text**. Two
+explanations remain, both requiring a different technique than more
+grepping:
+
+1. The CD-read call is issued through a **function-pointer table call**
+   the decompiler could not resolve to a fixed target (several `(*(code
+   *))()` indirect calls exist in this file beyond the confirmed opcode
+   table — e.g. inside `FUN_800bbbcc`'s per-actor state switch), so a
+   plain-text search for `CdControl`/`CdRead` naturally misses it even
+   though the call exists at runtime.
+2. The actual seek is issued by the **kernel executable**
+   (`SCUS_941.63`), not `FIELD.BIN` — `FIELD.BIN` only sets shared
+   low-memory flags/struct fields (`DAT_80071c1c`, `DAT_8009c6e0`-based
+   struct) that a kernel-side movie-service routine polls. This document
+   already ruled out an *obvious* hardcoded id-47 branch in the kernel
+   exe in an earlier investigation phase, but the **generic** CD-command
+   dispatcher was found there (`FUN_8002da7c`, switches on `DAT_8009a000`
+   command codes 0x00-0xda) — this was not fully cross-referenced against
+   every `DAT_8009a000` write site in the kernel exe for a movie-streaming
+   command code, since that search focused on `FIELD.BIN` this session.
+
+### Recommended next step: switch to dynamic tracing
+
+Given static tracing has now exhausted the reachable call graph from the
+known opcode handlers without finding a CD call, the highest-value next
+step is **dynamic**, not more grep:
+
+- In DuckStation (or another debugger-capable PSX emulator), set a
+  breakpoint on `CdControl`/`CdControlB`/`CdRead` (kernel BIOS trap or the
+  exe's wrapper `FUN_8002da7c`) during the LOSLAKE1/CANONON cutscene
+  trigger, and capture the **call stack** at the moment of the movie seek.
+  This directly answers "does `FIELD.BIN` or the kernel exe issue this
+  call" and gives the exact caller address in one test, rather than more
+  hours of static cross-referencing.
+- Alternatively, hardware/software watchpoint on writes to
+  `DAT_8009a000` (the CD-command-code global already confirmed in the
+  kernel exe) filtered to the movie-streaming command value (likely `0xb`,
+  matching the `FUN_80033cb8(0xb, ...)`/`FUN_80033e74` "streaming" mode
+  pattern found this session in the kernel exe, called from three
+  **walkmap-loading** sites in `FIELD.BIN` — not movie sites — but the
+  same command code is plausibly reused for movie streaming) at the
+  moment CANONON starts playing.
+
 ## Sources
 
 - `workspace/ghidra/FIELD.BIN.dec_disc2.c` (lines 13578-13624: `FUN_800baf54`
