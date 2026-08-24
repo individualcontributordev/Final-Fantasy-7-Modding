@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-24 | [csr-movie-reachability-scan](2026-08-24-csr-movie-reachability-scan.md) | CFG-based PMVIE/MOVIE reachability analyzer (validated vs 3 known CSR skips); found PMVIE id resolves via MOVIE_ID.BIN row order, not sorted MOVIE/ dir order; full scan finds 17 movie mismatches + 2 OOB ids needing D1 table growth | confirmed |
 | 2026-08-23 | [v029-hybrid-layer-corrupted-lost2-section-table](2026-08-23-v029-hybrid-layer-corrupted-lost2-section-table.md) | v0.2.9's hand-stitched hybrid layer corrupted LOST2's internal section table, breaking the Cosmo Canyon break scene after D1→D2; rebuilt from scratch in one pass, released as v0.2.10 | confirmed |
 | 2026-08-23 | [v028-new-game-hang-corrupted-field-bin-layer](2026-08-23-v028-new-game-hang-corrupted-field-bin-layer.md) | v0.2.8 disc1.layer.json shipped a corrupted FIELD.BIN (diffed against a stale/broken work bin), hanging every New Game; regenerated layer from a verified work bin, released as v0.2.9 | confirmed |
 | 2026-08-23 | [blackbgb-splice-lost2-lzs-fix-verified](2026-08-23-blackbgb-splice-lost2-lzs-fix-verified.md) | D1→D2 BLACKBGB transition (manual-edit splice) and LOST2 background (bit-exact Okumura LZS encoder) both confirmed fixed on DuckStation; not yet tested on real hardware | likely |
