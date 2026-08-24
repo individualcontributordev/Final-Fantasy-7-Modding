@@ -1,4 +1,49 @@
-# Status: static tracing exhausted — need a DuckStation dynamic trace of the CANONON movie call
+# Status: caller found (FIELD.BIN, ra=0x800C47CC) — need Ghidra to identify the function
+
+## Task: import FIELD.BIN into Ghidra and inspect 0x800C47CC
+
+The dynamic trace worked: at the CD dispatcher breakpoint during CANONON,
+`ra=0x800C47CC` — inside FIELD.BIN's address range (base `0x800A0000`).
+See `docs/findings/2026-08-24-canonon-ra-inside-field-bin.md`. This
+supersedes the earlier "third module" theory below — no more DuckStation
+tracing needed for now, this is a Ghidra static-analysis task.
+
+1. Extract + decompress disc 2's `FIELD.BIN` (this is disc 2 — CANONON's
+   movie id/field script live there):
+   ```
+   python scripts/extract_from_iso.py workspace/pristine/FINALFANTASY7_D2.bin FIELD/FIELD.BIN workspace/tmp/FIELD.BIN
+   python scripts/decompress_gzipps.py workspace/tmp/FIELD.BIN workspace/tmp/FIELD.BIN.dec
+   ```
+2. Ghidra → new project → Import `workspace/tmp/FIELD.BIN.dec`:
+   - Format: **Raw Binary**
+   - Language: **MIPS: R3000 32bit little endian**
+   - Base address: **`0x800A0000`**
+3. **Analysis → Auto Analyze** → accept defaults → wait until the
+   background task list is fully idle (check it twice a few seconds
+   apart to confirm nothing new queues up).
+4. **Navigation → Go To** → `0x800C47CC`.
+5. Note the name/start address of the **containing function** (Ghidra
+   should show it in the Function/Decompile panel).
+6. Scroll up from `0x800C47CC` to see the few instructions/lines just
+   before the call — specifically how `a0` (should end up as `0x7FE`),
+   `a1` (`0xC`), `a2` (`0x2`), `a3` (`0x0`) are set: literal constants,
+   loaded from a table, or computed from other values.
+7. Use **Function → Show References To** (or right-click → References)
+   on that containing function to see what calls *it* — that should
+   trace back toward the actual PMVIE/MOVIE opcode handler.
+8. Paste back: the function name/address at `0x800C47CC`, the
+   instructions setting up `a0`-`a3`, and the list of callers from step 7.
+
+## What happens next
+
+Once you paste that, this should identify either the exact
+movie-id → CD-command translation, or the next function up the call
+chain to inspect — either way it's the concrete lead the dynamic trace
+was for.
+
+---
+
+# (superseded) Status: static tracing exhausted — need a DuckStation dynamic trace of the CANONON movie call
 
 ## Why (skip if you already know)
 
