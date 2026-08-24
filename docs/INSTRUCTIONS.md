@@ -16,57 +16,62 @@ either the LBA is computed at runtime, or the engine isn't hardcoding an
 LBA at all but a **filename** it resolves via a CD directory search,
 bypassing `MOVIE_ID.BIN` entirely. Check both, in this order.
 
-## Setup (once)
+## What to export (do this instead of manual point-and-click hunting)
+
+Rather than testing Hypothesis A/B by hand in the GUI one string at a time,
+export the **whole decompiled program** once and I'll grep it directly —
+faster and won't miss anything a manual search might skip.
+
+### 1. Import (once, if not already done this session)
 
 Import `SCUS_941.63` following `docs/ghidra-battle-overlays.md` §7 exactly
 (extract the `.body` with the `0x800` EXE header stripped, Raw Binary, MIPS
 32-bit LE, image base `0x80010000`, then Auto Analyze). Use the **same
 Ghidra project** as any prior FIELD.BIN/battle imports so addresses can be
-cross-referenced later.
+cross-referenced later. Let Auto Analyze finish completely before exporting.
 
-For the generic "search a string/scalar and follow its xrefs" mechanics
-used below, see `docs/05-ghidra-guide.md` → "Reusable technique: find a
-hardcoded string/constant and its callers".
+### 2. Export decompiled C for the whole program
 
-## Hypothesis A — hardcoded filename string (check first, cheaper)
+**File → Export Program...** → Format: **C/C++** (this exports the
+Decompiler's C output for every function Ghidra could decompile, not just
+one). Save to:
 
-1. String-search for `CANONON` (the on-disc name is `CANONON.MOV`, but
-   search the bare stem too in case the extension isn't stored with it).
-2. If found, follow xrefs to the containing function(s) and decompile.
-3. Repeat the same string search for 2-3 *other* movie names from the
-   17-movie to-do list — pick short, distinctive ones from
-   `docs/findings/2026-08-24-csr-movie-reachability-scan.md` (e.g.
-   `GELNICA`, `RCKTOFF`, `NRCRL`).
-   - **Only** `CANONON` exists as a bare string, others don't exist
-     anywhere in `SCUS_941.63` → supports "id 47 is a one-off," not a
-     general pattern.
-   - **Multiple** movie names show up hardcoded → the table-bypass is a
-     broader pattern — note exactly which ids/names.
+```
+workspace/ghidra-exports/SCUS_941.63.decompiled.c
+```
 
-## Hypothesis B — hardcoded/computed LBA (only if A finds nothing)
+(`workspace/ghidra-exports/` is gitignored — this file stays local, never
+committed. Create the folder if it doesn't exist yet.)
 
-1. String-search for `MOVIE_ID.BIN` (the table's on-disc filename) to find
-   the function that opens/reads the table.
-2. Decompile it and trace forward to where it multiplies a movie id by the
-   row size (20 bytes, per `docs/reference/movie-system.md`) to index into
-   the table and read the LBA field.
-3. Around that indexing/read code, look for a **comparison against literal
-   `47` / `0x2f`** with a branch that **skips** the table read. Scope a
-   scalar search for `0x2f` to this one function to find it fast.
-4. If found, decompile the branch target — literal LBA load? call to a
-   different table? something else? Note the address and behavior.
-5. If no such branch exists near the table-read code: the special-case (if
-   any) isn't in the generic lookup function — it may be inlined
-   per-caller instead. Report that as the answer rather than searching
-   further ad hoc.
+### 3. Export the Listing (raw disassembly + defined strings/data)
 
-## What to report back
+**File → Export Program...** → Format: **ASCII (Listing)**. Save to:
 
-- Function address(es) + a short decompile excerpt, written into a **new
-  dated finding** under `docs/findings/` (not just chat), per
+```
+workspace/ghidra-exports/SCUS_941.63.listing.txt
+```
+
+This carries the defined-string table and data labels the C export
+sometimes drops or renames, useful as a cross-check.
+
+### 4. Tell me it's done
+
+Once both files exist under `workspace/ghidra-exports/` on this machine,
+tell me — I'll grep them for `CANONON`, other movie names (from
+`docs/findings/2026-08-24-csr-movie-reachability-scan.md`), `MOVIE_ID`,
+and comparisons against `47`/`0x2f`, then write the finding myself.
+
+If either export is huge (the C export especially, for a full executable,
+can be tens of MB) and slow to produce, that's fine — it's a one-time
+export, not something we repeat per-hypothesis.
+
+## What the analysis will answer (for your reference — you don't need to check this yourself)
+
+- Whether `CANONON` (or `CANONON.MOV`) appears as a literal string in the
+  executable, and if so, what function(s) reference it.
+- Whether other movie names from the 17-movie to-do list also appear as
+  literal strings (broader pattern) or only `CANONON` does (one-off).
+- Whether the function that reads `MOVIE_ID.BIN` and indexes by row
+  contains a special-case branch comparing the movie id against `47`.
+- Result goes into a new dated finding under `docs/findings/`, per
   `.agents/rules/capture-research-findings.mdc`.
-- Whether the special case is keyed on a literal id (`47` only) or
-  something broader (field name, a set of ids, etc.).
-- If neither hypothesis hits anywhere in `SCUS_941.63`, repeat the same
-  string/scalar searches against the `FIELD.BIN` import instead
-  (field-script-side special case rather than kernel-side).
