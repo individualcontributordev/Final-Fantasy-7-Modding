@@ -75,6 +75,9 @@ Each finding must include:
 - **Why it matters** for PSX disc modding
 - **Confidence**: confirmed / likely / unverified
 - **Follow-ups** if any
+- **False leads hit along the way** (if any): what looked promising, what it
+  actually turned out to be (with the disproving evidence), and why it matters
+  for the next reader — see `.agents/rules/capture-research-findings.mdc`
 
 Avoid duplicating entire reference docs inside findings — link instead.
 

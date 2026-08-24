@@ -47,9 +47,8 @@ workspace/**/*.dst
 **/duckstation*/
 **/*.duckstation*
 
-# Ghidra projects (local)
+# Ghidra projects (local) — only keep the placeholder, not exports/binaries
 !workspace/ghidra/.gitkeep
-!workspace/ghidra/*
 
 # Python
 __pycache__/
