@@ -1,8 +1,11 @@
 # CSR D3 ending movie skips (JMPF) vs ending-v7
 
-**Date:** 2026-08-07  
-**Source:** CSR D3 image vs pristine D3 vs `ff7_d1_playtest_ending_test.bin`  
+**Date:** 2026-08-07
+**Source:** CSR D3 image vs pristine D3 vs `ff7_d1_playtest_ending_test.bin`
 **User check:** Makou on CSR-layered D3 — confirmed skips.
+**Note:** the hardcoded-LBA premise behind the ending relocation work here
+is under re-verification — see
+`2026-08-24-canonon-hardcode-clean-room-reverification.md`.
 
 ## How CSR skips (not by deleting PMVIE)
 

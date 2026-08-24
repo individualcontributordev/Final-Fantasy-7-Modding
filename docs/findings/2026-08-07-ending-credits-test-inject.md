@@ -1,7 +1,11 @@
 # Ending credits test inject
 
 **Date:** 2026-08-07
-**Status:** v7 — CD-sized + CANONON@250450 restored for LOSLAKE1
+**Status:** superseded (pending live re-test) — see
+`2026-08-24-canonon-hardcode-clean-room-reverification.md`. The
+"hardcoded LBA" conclusion here came from a multi-variable test (file
+grown, moved to EOF, disc resized simultaneously); a clean single-variable
+re-test is pending.
 
 ## Evidence (v5 post-battle black screen)
 
