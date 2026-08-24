@@ -27,6 +27,29 @@ Screenshots under `docs/` are evidence only; the finding file is the durable rec
 
 Follow skill `.agents/skills/record-findings/SKILL.md`.
 
+## Document false leads, not just conclusions
+
+Write findings so a reader with **zero session context** can follow the reasoning,
+like a professor teaching a class — not just a lab result. This especially applies
+to **false leads / dead ends** hit along the way (a promising address, string, or
+opcode match that turned out to be unrelated).
+
+For every false lead, capture:
+
+1. **What looked promising** and why (e.g. "`case 0xf8:` looked like the PMVIE
+   opcode dispatcher because `0xf8` is PMVIE's opcode value")
+2. **What it actually was**, with the disproving evidence (function name/address,
+   what it actually indexes/does, e.g. "it's `FUN_80026c5c`, a text/font-rendering
+   routine indexing `DAT_800707c0`, a font glyph-width table, by character code —
+   `0xf8` there is a coincidental byte value, unrelated to field-script opcodes")
+3. **Why it matters** for the next person: what this rules out, and what pattern to
+   avoid re-chasing (e.g. "don't assume every `0xf8` literal in this exe is the PMVIE
+   opcode; check what the switch actually indexes into first")
+
+Do not silently drop dead ends from the write-up just because the main conclusion
+is negative or the lead didn't pan out — the point of the finding file is to save
+the *next* person (human or agent) from re-walking the same false path.
+
 ## Before ending a session
 
 Sweep the turn/history: anything still only in chat or `INSTRUCTIONS` evidence that meets the bar above → write the finding before stopping.

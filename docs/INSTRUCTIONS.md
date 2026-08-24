@@ -1,4 +1,13 @@
-# Ghidra: is CANONON's hardcoded movie seek unique to id 47?
+# RESOLVED (negative) — see docs/findings/2026-08-24-canonon-hardcode-scus94163-negative-result.md
+#
+# The SCUS_941.63 export you already produced was fully grepped: no
+# CANONON string, no id-47 branch, no field-opcode dispatcher at all in
+# that executable. This file's remaining steps are stale — do not run
+# them again. Next investigation (not yet scoped into instructions) is
+# at the field-script level (CANONON's own field, not the kernel exe).
+# Nothing further needed here for now.
+
+# Ghidra: is CANONON's hardcoded movie seek unique to id 47? (STALE, see note above)
 
 ## Why
 
