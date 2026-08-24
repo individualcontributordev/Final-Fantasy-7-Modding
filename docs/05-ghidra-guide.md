@@ -203,6 +203,88 @@ When posting a script patch task to `docs/INSTRUCTIONS.md`:
 
 This workflow was added after v0.1.36 (LOST2 JMPF patch) to avoid future blind pattern-matching.
 
+## Movie-play routine: is CANONON's hardcoded seek unique to id 47?
+
+Background: `docs/findings/2026-08-24-canonon-hardcode-clean-room-reverification.md`
+confirmed (live test) that PMVIE id 47 (CANONON) ignores a patched
+`MOVIE_ID.BIN` row 47 at runtime. Open question: is this special-cased for
+id 47 only, or does the engine do this for other ids too (relevant to the
+17-movie relocation to-do list in `docs/reference/movie-system.md`)? A raw
+byte scan of `SCUS_941.63` for LBA 250450 (as a 32-bit LE word and as BCD
+MSF, both byte orders) already came back with **zero hits** — so if this is
+hardcoded, it is either computed at runtime (not a literal), or it's not an
+LBA at all but a hardcoded **filename** the engine resolves via a CD
+directory search (`CdSearchFile`-style lookup), bypassing `MOVIE_ID.BIN`
+entirely. Both hypotheses need checking; do them in order.
+
+### Setup (once)
+
+Import `SCUS_941.63` following `docs/ghidra-battle-overlays.md` §7 exactly
+(extract the `.body` with the `0x800` EXE header stripped, Raw Binary, MIPS
+32-bit LE, image base `0x80010000`, then Auto Analyze). Use the **same
+Ghidra project** as any prior FIELD.BIN/battle imports so you can
+cross-reference addresses later.
+
+### Hypothesis A — hardcoded filename string (check first, cheaper)
+
+1. **Search → For Strings...** across the whole program (not just defined
+   strings — check "Search all" if the dialog offers it).
+2. Filter/scroll for `CANONON` (the movie's on-disc name is `CANONON.MOV`,
+   but the extension may or may not be stored with it — search the bare
+   stem too).
+3. If found: right-click the string → **References → Show References to
+   Address** (or press `Ctrl+Shift+F`). Each xref is a place in code that
+   loads this string's address — that's very likely the hardcoded-filename
+   seek path. Open the containing function and decompile it (`Ctrl+E` in
+   Listing, or right-click → **Decompile**).
+4. Repeat the same string search for 2-3 *other* movie names from the
+   17-movie to-do list (e.g. `GELNICA`, `RCKTOFF`, `NRCRL` — pick short,
+   distinctive ones from `docs/findings/2026-08-24-csr-movie-reachability-scan.md`).
+   - If **only** `CANONON` shows up as a bare string and the others don't
+     exist anywhere in `SCUS_941.63`: this supports "id 47 is a one-off
+     special case," not a general pattern.
+   - If **multiple** movie names show up as hardcoded strings: the
+     table-bypass is a broader pattern — note which ids/names are affected.
+
+### Hypothesis B — hardcoded/computed LBA (if A finds nothing)
+
+1. **Search → For Strings...** for `MOVIE_ID.BIN` (the table's filename on
+   disc) or **Search → Memory** for its ASCII bytes if the string search
+   doesn't surface it. Find xrefs the same way as Hypothesis A step 3 —
+   this should lead to the function that opens/reads the table file.
+2. Decompile that function and trace forward: look for where it multiplies
+   a movie id by the row size (20 bytes, confirmed row layout from
+   `docs/reference/movie-system.md`) to index into the table, then reads
+   the LBA field out of the row.
+3. Immediately around that indexing/read code, look for a **comparison
+   against a literal id** (`47` / `0x2f`) with a branch that **skips** the
+   table read and jumps to a separate code path. That branch (if it
+   exists) is the special case. `Search → For Scalars` for `0x2f` scoped to
+   this function (right-click the function in Listing → **Select
+   Function** first, then run the scalar search restricted to the current
+   selection) narrows this quickly.
+4. If such a branch exists, decompile the target of the skip and see what
+   it does instead — a literal LBA load, a call to a different lookup
+   table, or something else. Note the address and behavior.
+5. If **no such branch exists anywhere near the table-read code**: the
+   special-casing (if any) doesn't live in the generic table-lookup
+   function at all — it may be inlined per-caller instead. That's a
+   materially different, harder-to-generalize answer worth reporting as-is
+   rather than searching further ad hoc.
+
+### What to report back
+
+For whichever hypothesis produces a hit:
+- The function address and a short decompile excerpt (paste into a new
+  dated finding under `docs/findings/`, not just chat, per
+  `.agents/rules/capture-research-findings.mdc`).
+- Whether it's keyed on a literal id (`47` only) or something broader
+  (field name, a small set of ids, etc.).
+- If neither hypothesis produces a hit anywhere in `SCUS_941.63`, check
+  whether the same string/scalar searches turn up anything in `FIELD.BIN`
+  instead (field-script-side special case rather than kernel-side) using
+  the FIELD.BIN import from earlier in this guide.
+
 ## External references
 
 - [Field map encounter mechanics](https://ff7speedruns.com/index.php/Field_map_encounter_mechanics)
