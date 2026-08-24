@@ -100,34 +100,33 @@ found" warning. Bump `builder/single-disc-on-csr/pack.json`'s and
 and `mods/single-disc/VERSION` + `CHANGELOG.md`, if you intend to commit
 this rebuild.
 
-### 6. Build the actual ending/credits movie sequence bin
+### 6. Build the isolated ending-movie test bin (no manip-movies)
 
-This is a separate, dedicated ending-movie test bin — not the
-endings-parts layers used for the shipped `single-disc-on-csr` addon
-stack. It rebuilds `ff7_d1_playtest_csr_sd_movies.bin` first (CSR +
-single-disc core + manip-movies), then splices in the D3 ending
-streams (via the just-edited `alias_d3_ending_lbas_on_d1.py`, now
-without the dead `LASTFLOR.MOV` alias), the `CANONON` lake fix, and the
-`LAST4_3`→`GOLD7_2` manip seed.
+This is a dedicated ending-movie-only test bin — isolated from
+manip-movies fixes (`CANONON`/`LOSLAKE1`, `LAST4_3`→`GOLD7_2`, etc.),
+which are unrelated regular-game movie fixes, not part of the ending
+sequence. Isolating them means this exact stack (single-disc core +
+ending streams) is also what will be applied to the "highwind" base,
+where none of the manip-movies fixes are needed. It rebuilds the
+single-disc core bin (CSR + single-disc-on-csr, via
+`build_singledisc_core_bin.py`) then splices in the D3 ending streams
+via `alias_d3_ending_lbas_on_d1.py` (now without the dead
+`LASTFLOR.MOV` alias).
 
 ```bash
-python3 mods/single-disc/scripts/build_ending_credits_test_bin.py
+python3 mods/single-disc/scripts/build_ending_movies_test_bin.py
 ```
 
-Runs `build_playtest_bin.py` as step 1/5 internally (uses
-`builder/csr-v0.14.2`, `builder/single-disc-on-csr`, and
-`builder/single-disc-csr-manip-movies-v0.1.5` — already current, no
-edits needed there). Expect all 5 steps to print `OK`/pass lines, no
-`FAIL`, ending with:
+Expect both steps to print `OK`/`USING` lines, no `FAIL`, ending with:
 
 ```
-WROTE workspace/iso-extract/ff7_d1_playtest_ending_test.bin
-WROTE workspace/iso-extract/ff7_d1_playtest_ending_test.cue
+WROTE workspace/iso-extract/ff7_d1_singledisc_endings_test.bin
+WROTE workspace/iso-extract/ff7_d1_singledisc_endings_test.cue
 ```
 
 ### 7. Playtest
 
-Open `workspace/iso-extract/ff7_d1_playtest_ending_test.cue` in
+Open `workspace/iso-extract/ff7_d1_singledisc_endings_test.cue` in
 DuckStation.
 
 - Get to `LASTMAP` (field 768), entity `AD3`, and trigger the "Ask
@@ -135,11 +134,15 @@ DuckStation.
 - **Confirm the scene loads and plays through** instead of freezing —
   this is the bug the new CSR `PMVIE` removal fixed.
 - Watch the full ending/credits movie sequence through to the end
-  (`ONTRAIN`, `ENDING01`, `ENDING3E`, `ENDING2E`, and the `LOSLAKE1`
-  lake scene via the `CANONON` splice) — confirm none of them are
-  silent/black or freeze, now that `LASTFLOR.MOV` is no longer aliased.
-- Regression check: confirm New Game, D1→D2 transition, and the break
-  scene (`LOST2`) are unaffected.
+  (`ONTRAIN`, `ENDING01`, `ENDING3E`, `ENDING2E`) — confirm none of
+  them are silent/black or freeze, now that `LASTFLOR.MOV` is no
+  longer aliased.
+- Regression check: confirm New Game and the D1→D2 transition are
+  unaffected. (The `LOSLAKE1`/`CANONON` lake scene and `LOST2` break
+  scene are manip-movies fixes, not part of this isolated test — they
+  are covered separately by `build_playtest_bin.py` /
+  `build_ending_credits_test_bin.py`, the combined CSR+core+manip-movies
+  stack.)
 
 ## Evidence to paste back when done
 
