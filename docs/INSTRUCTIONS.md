@@ -43,15 +43,17 @@ In your Ghidra project with `FIELD.BIN.dec` already imported (the one
 
 ### 1. Fresh import (only if you don't have a usable FIELD.BIN.dec project already)
 
-1. Extract + decompress if you don't already have a current copy:
+1. Extract + decompress if you don't already have a current copy. `FIELD.BIN`
+   is a top-level file under `FIELD/`, not a per-map `.DAT` — use
+   `extract_from_iso.py` (not `extract_field_dat.py`, which always appends
+   `.DAT` and will fail with "missing FIELD.BIN.DAT"), then decompress its
+   GZIPPS header with `decompress_gzipps.py`:
    ```
-   python scripts/extract_field_dat.py --from pristine:2 --field FIELD.BIN -o workspace/tmp/FIELD.BIN.dec
+   python scripts/extract_from_iso.py workspace/pristine/FINALFANTASY7_D2.bin FIELD/FIELD.BIN workspace/tmp/FIELD.BIN
+   python scripts/decompress_gzipps.py workspace/tmp/FIELD.BIN workspace/tmp/FIELD.BIN.dec
    ```
    (Use disc 2 — that's the disc CANONON's `MOVIE_ID.BIN` row and field
-   script live on. If that flag doesn't work for the top-level `FIELD.BIN`
-   container itself rather than a per-map `.DAT`, use whatever script/step
-   you already used to produce the existing `workspace/iso-extract/FIELD.BIN.dec`
-   — same decompressed file, just re-confirm it's current.)
+   script live on.)
 2. Ghidra → **new** project → Import `FIELD.BIN.dec`:
    - Format: **Raw Binary**
    - Language: **MIPS: R3000 32bit little endian**
