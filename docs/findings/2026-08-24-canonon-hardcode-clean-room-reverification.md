@@ -1,22 +1,24 @@
 # CANONON/ENDING "hardcoded LBA" theory — clean-room re-verification
 
 **Date:** 2026-08-24
-**Confidence:** likely (source + byte-level confirmed; live-engine test pending)
-**Status:** open
-**Related:** supersedes the "hardcoded LBA" conclusion in
-`2026-08-07-ending-credits-test-inject.md` and
-`2026-08-07-csr-d3-ending-movie-jumps.md` pending the live test below.
+**Confidence:** confirmed (source + byte-level + live single-variable test)
+**Status:** confirmed
+**Related:** the live test below reconfirms the "hardcoded LBA" conclusion
+originally reached in `2026-08-07-ending-credits-test-inject.md` and
+`2026-08-07-csr-d3-ending-movie-jumps.md`, this time with a clean
+single-variable methodology rather than the original confounded test.
 
 ## Summary
 
 Independently re-derived, from raw bytes and Makou Reactor source only (no
 reliance on prior findings), that `PMVIE` is a disc-agnostic 1-byte movie ID
 with no embedded LBA anywhere in the opcode, field script, or `FIELD.BIN`/
-`BATTLE.X`. This contradicts the assumption that CANONON/ENDING require raw
-LBA aliasing instead of a normal `MOVIE_ID.BIN` table entry — but the actual
-live-engine behavior (does D2 honor a patched table row 47 at runtime) is
-still unresolved; a clean single-variable emulator test is pending user
-report.
+`BATTLE.X`. This ruled out the field script / opcode as the source of any
+hardcode, but left open whether the engine itself still honors
+`MOVIE_ID.BIN` at runtime for this specific id. A clean single-variable live
+test (pristine Disc 2, only `MOVIE_ID.BIN` row 47 changed) now confirms it
+does **not**: the engine seeks LBA 250450 directly for id 47, ignoring the
+table entirely, even on the disc the table was authored for.
 
 ## Context
 
@@ -84,16 +86,37 @@ live test), the LBA-aliasing workaround and its known overlap glitch become
 unnecessary — these could ship as ordinary table entries like the other 17
 reachable movies already handled by `inject_movies_by_disc_id.py`.
 
+## Live test result (2026-08-24, user-run on Windows/Git Bash)
+
+Built a pristine-Disc-2 copy with **only** `MINT/MOVIE_ID.BIN` row 47
+rewritten (LBA 250450 `CANONON.MOV` → LBA 136669 `BOOGUP.STR`, a visually
+distinct snowboard clip). No file moves, no size changes, no field-script
+edits — single byte-range change only (see `docs/INSTRUCTIONS.md`).
+
+**Result: the real CANONON cannon movie played, unaffected by the patch.**
+The snowboard clip never appeared. This confirms the engine seeks LBA
+250450 directly for PMVIE id 47 on `LOSLAKE1`, regardless of what
+`MOVIE_ID.BIN` row 47 contains — even on genuine Disc 2, not just the
+single-disc D1 rebuild. The "hardcoded LBA" theory is confirmed, not
+overturned.
+
 ## Follow-ups
 
-- [ ] Run the live single-variable test in `docs/INSTRUCTIONS.md`
-      (`d2_verify_canonon_table_test.bin`/`.cue`) and record the literal
-      result here or in a new dated finding.
-- [ ] If engine honors the table: retire the LBA-aliasing approach for
-      CANONON/ENDING and fold them into the standard seed-file mechanism.
-- [ ] If engine ignores the table: the prior "hardcoded" conclusion stands,
-      but this time confirmed by a clean single-variable test, not a
-      multi-variable one.
+- [x] Run the live single-variable test in `docs/INSTRUCTIONS.md` — done,
+      table ignored, hardcoded LBA confirmed.
+- [x] Engine ignores the table for CANONON: the LBA-aliasing approach
+      (`alias_d2_seek_lba_on_d1.py`, hardcoded LBA 250450) remains
+      necessary for this movie; it cannot be folded into the standard
+      `MOVIE_ID.BIN`-only seed-file mechanism.
+- [ ] Still open: whether this hardcoded-seek behavior is unique to
+      CANONON/id 47, or affects other PMVIE ids too. Only id 47 has been
+      live-tested; the 17-movie relocation to-do list still assumes the
+      table path works for every other id, unproven either way. A Ghidra
+      disassembly of the field movie-play routine (search for LBA 250450 /
+      MSF-encoded literal, or the code path branching around the
+      `MOVIE_ID.BIN` read) could identify whether this is a one-off
+      special case or a broader pattern before relying on the assumption
+      for the remaining movies.
 
 ## Sources
 
