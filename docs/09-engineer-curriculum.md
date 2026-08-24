@@ -51,7 +51,6 @@ that first established it.
 | Read | Why |
 |---|---|
 | `docs/reference/INDEX.md` + `field-id-mapping.txt` / `movie-id-mapping.txt` / `music-id-mapping.txt` | Canonical ID tables, extracted and cited from Makou Reactor source |
-| `docs/reference/field-scripts-database.md` | SQLite schema for querying opcodes across discs/sources at scale |
 | `docs/05-ghidra-guide.md` "Exporting Field Script Data" section | Using Ghidra (not just Python) to read/patch bytecode scripts |
 | `docs/reference/movie-system.md` **(new)** | Full worked system: `PMVIE` opcode → `MOVIE_ID.BIN` table format → CD-ROM seek, with the byte layout, a documented bug (sorted-dir-order ≠ table id), and the one known hardware-seek exception |
 
