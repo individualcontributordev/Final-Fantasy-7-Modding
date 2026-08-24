@@ -109,6 +109,25 @@ class SlotAnalysis:
     ops: list[OpRec]
     visited: set[int]
     bad_jumps: list[str] = dc_field(default_factory=list)
+    # offset of a reachable MOVIE op -> set of movie ids that can be "live"
+    # (last PMVIE seen on some path from slot entry) when that MOVIE actually
+    # executes. None means a path reaches MOVIE without this slot ever having
+    # set an id itself (inherited from whatever a prior field/slot left in
+    # global state). Path-sensitive: PMVIE alone is a no-op byte-store and
+    # NEVER crashes; only a reachable MOVIE whose live id resolves out-of-
+    # range or to the wrong file can actually crash/misplay. See user
+    # correction in docs/findings/2026-08-24-csr-movie-reachability-scan.md.
+    movie_ids_at_movie: dict[int, set[int | None]] = dc_field(default_factory=dict)
+    # Whether this slot itself is ever executed at all: slots 0/1 (Init/Main)
+    # of every entity auto-run; every other slot only runs if something
+    # (REQ/REQSW/REQEW/PREQ/PRQSW/PRQEW) actually calls it. A slot's own
+    # intra-slot CFG reachability (`visited`) is meaningless if the slot is
+    # never invoked in the first place -- see user report: FSHIP_22 mov/31
+    # has a live-looking `MOVIE` at offset 0, but nothing ever REQs into
+    # entity "mov" at all, so it never runs. Set by compute_slot_liveness()
+    # via analyze_field_bytes(); defaults to True so standalone analyze_slot()
+    # callers (no field context) keep prior behavior.
+    live: bool = True
 
     def reachable_pmvie(self) -> list[tuple[int, int]]:
         """[(offset, movie_id)] for PMVIE ops with offset in visited."""
@@ -125,8 +144,44 @@ class SlotAnalysis:
         """[(offset, movie_id, reachable)] for every PMVIE regardless of reachability."""
         return [(o.offset, o.raw[1], o.offset in self.visited) for o in self.ops if o.name == "PMVIE"]
 
+    def reachable_movie_resolutions(self) -> list[tuple[int, int | None]]:
+        """[(movie_offset, live_id)] -- one entry per (offset, id) pair, i.e.
+        what id is actually live for each reachable MOVIE call along some
+        path. This is the thing that can crash (OOB id) or misplay (wrong
+        file), NOT bare PMVIE reachability.
+
+        NOT gated on `self.live` -- see compute_slot_liveness()/`live` field
+        docstring: our REQ/PREQ call-graph is demonstrably incomplete (many
+        real "direct"/"director"-entity cutscene+movie+MAPJUMP sequences,
+        e.g. NRTHMK's Reactor-1-exit dir/31, have no detectable caller yet
+        are definitely live in vanilla FF7). Silently dropping MOVIE rows
+        based on `live` produced false NEGATIVES here -- e.g. it dropped 5 of
+        the 7 known-genuine CSR mismatches (LOSLAKE1, TRNAD_51, BLIN70_4,
+        FSHIP_2, ROOTMAP) alongside the real orphans (FSHIP_22/23/25 mov/
+        move, BLIN2_I AD). Under-reporting needed movies is worse than
+        over-reporting (missing movie file = hard crash; extra movie file =
+        wasted disc space), so callers should use `self.live` only to flag
+        `needs_manual_review`, never to exclude a row outright."""
+        out = []
+        for off, ids in self.movie_ids_at_movie.items():
+            for mid in ids:
+                out.append((off, mid))
+        return out
+
     def reachable_mapjump_targets(self) -> list[int]:
-        """Field ids from reachable MAPJUMP ops (0x60: op,I_lo,I_hi,X,X,Y,Y,Z,Z,D)."""
+        """Field ids from reachable MAPJUMP ops (0x60: op,I_lo,I_hi,X,X,Y,Y,Z,Z,D).
+
+        Deliberately NOT gated on `self.live`: unlike PMVIE/MOVIE (where a
+        REQ/PREQ call graph plus auto-run Init/Main slots fully explains
+        which script actually plays a given movie), field-transition scripts
+        can live in slots we can't prove are invoked (e.g. NRTHMK's `dir/31`
+        reactor-exit transition -- no REQ targets it anywhere in the field,
+        yet it's the real vanilla exit). Our REQ/PREQ call-graph model is
+        verified sufficient for the MOVIE false-positive case (FSHIP_22
+        mov/31) but demonstrably incomplete for field-graph purposes, so
+        gating this on liveness silently drops real field transitions
+        (787->163 reachable fields when tried) rather than only removing
+        false positives. Keep the old (pre-liveness) behavior here."""
         out = []
         for o in self.ops:
             if o.name == "MAPJUMP" and o.offset in self.visited and len(o.raw) >= 3:
@@ -178,12 +233,134 @@ def analyze_slot(entity: str, slot_idx: int, script_raw: bytes) -> SlotAnalysis:
             for t in edges(op):
                 if t not in visited:
                     stack.append(t)
-    return SlotAnalysis(entity, slot_idx, ops, visited, bad_jumps)
+
+    # Path-sensitive pass: carry "last id set by PMVIE on this path" (None if
+    # never set within this slot) so we know which id is actually live at
+    # each reachable MOVIE call, instead of just "some PMVIE and some MOVIE
+    # are each independently reachable somewhere in the slot" (which can both
+    # over- and under-report: a later PMVIE can overwrite an earlier one
+    # before MOVIE runs, or MOVIE can be reachable on a branch that never
+    # passed through this slot's PMVIE at all).
+    movie_ids_at_movie: dict[int, set[int | None]] = {}
+    if ops:
+        seen_states: set[tuple[int, int | None]] = set()
+        pstack: list[tuple[int, int | None]] = [(0, None)]
+        while pstack:
+            off, cur_id = pstack.pop()
+            if (off, cur_id) in seen_states:
+                continue
+            seen_states.add((off, cur_id))
+            if off not in by_offset:
+                continue
+            op = by_offset[off]
+            if op.name == "PMVIE":
+                cur_id = op.raw[1]
+            elif op.name == "MOVIE":
+                movie_ids_at_movie.setdefault(off, set()).add(cur_id)
+            for t in edges(op):
+                if (t, cur_id) not in seen_states:
+                    pstack.append((t, cur_id))
+    return SlotAnalysis(entity, slot_idx, ops, visited, bad_jumps, movie_ids_at_movie)
+
+
+# Every entity auto-runs its own slot 0 (Init) and slot 1 (Main). Beyond
+# that, the ENGINE (not a REQ opcode) directly invokes certain slots based on
+# player interaction, keyed off the entity's detected type (Makou Reactor
+# GrpScript::detectType: first opcode of slot 0) --
+# docs/reference/makou-reactor-script-labels.md:
+#   Model entities    (first op PC/CHAR): slot 2 = Talk, slot 3 = Contact.
+#   Location entities (first op LINE):    slots 2-7 = walkmesh-line
+#     interactions ([OK]/Move/Move/Go/Go1x/Go away).
+#   Everything else (Animation/Director/NoType): only 0/1 auto-run; any
+#   other slot number is a plain "Script N" that ONLY runs if something
+#   REQs/PREQs into it (this is FSHIP_22 mov/31's situation -- no type
+#   detected, slot 31 is not 0/1, and nothing REQs entity "mov").
+AUTORUN_SLOTS_MODEL = {0, 1, 2, 3}
+AUTORUN_SLOTS_LOCATION = {0, 1, 2, 3, 4, 5, 6, 7}
+AUTORUN_SLOTS_DEFAULT = {0, 1}
+
+
+def _entity_autorun_slots(entity: str, analyses_by_key: dict[tuple[str, int], SlotAnalysis]) -> set[int]:
+    """Port of Makou Reactor's GrpScript::detectType: scan slot 0 (Init) top
+    to bottom for the first opcode matching a known type-defining category
+    (not just the very first opcode in the slot)."""
+    slot0 = analyses_by_key.get((entity, 0))
+    if slot0 is None:
+        return AUTORUN_SLOTS_DEFAULT
+    char_seen = False
+    for o in slot0.ops:
+        if o.name == "PC":
+            return AUTORUN_SLOTS_MODEL
+        if o.name == "CHAR":
+            char_seen = True
+            continue
+        if o.name == "LINE":
+            return AUTORUN_SLOTS_LOCATION
+        if o.name in ("BGPDH", "BGSCR", "BGON", "BGOFF", "BGROL", "BGROL2", "BGCLR", "MPNAM"):
+            return AUTORUN_SLOTS_DEFAULT
+    return AUTORUN_SLOTS_MODEL if char_seen else AUTORUN_SLOTS_DEFAULT
+
+
+# Opcodes whose target entity is resolved statically via a groupID byte that
+# indexes this field's entity list directly (verified against Makou
+# Reactor's Opcode.cpp _groupScript()/SCRIPT_ID()/PRIORITY() macros: byte
+# layout is [opcode, groupID, scriptIDAndPriority], scriptID = byte2 & 0x1F).
+GROUP_CALL_OPS = {"REQ", "REQSW", "REQEW"}
+# PREQ family targets "whatever entity is character #N in the current
+# party" (byte1 = partyID, not a groupID) -- not statically resolvable here.
+# Conservatively treat these as capable of invoking ANY entity's matching
+# slot number, so we never under-report reachability.
+PARTY_CALL_OPS = {"PREQ", "PRQSW", "PRQEW"}
+
+
+def compute_slot_liveness(fd, analyses: list[SlotAnalysis]) -> dict[tuple[str, int], bool]:
+    """Which (entity, slot) pairs are ever actually executed in this field:
+    auto-run Init/Main slots, plus anything transitively REQ'd from a live
+    slot's reachable code. A slot's own intra-slot CFG reachability is
+    meaningless if nothing ever calls the slot at all."""
+    by_key = {(a.entity, a.slot): a for a in analyses}
+    live: set[tuple[str, int]] = set()
+    queue: list[tuple[str, int]] = []
+    for ent in fd.entities:
+        for slot in _entity_autorun_slots(ent, by_key):
+            key = (ent, slot)
+            if key in by_key and key not in live:
+                live.add(key)
+                queue.append(key)
+
+    all_slot_numbers = {a.slot for a in analyses}
+    while queue:
+        key = queue.pop()
+        sa = by_key[key]
+        for o in sa.ops:
+            if o.offset not in sa.visited:
+                continue
+            if o.name in GROUP_CALL_OPS and len(o.raw) >= 3:
+                group_id = o.raw[1]
+                target_slot = o.raw[2] & 0x1F
+                if 0 <= group_id < len(fd.entities):
+                    tkey = (fd.entities[group_id], target_slot)
+                    if tkey in by_key and tkey not in live:
+                        live.add(tkey)
+                        queue.append(tkey)
+            elif o.name in PARTY_CALL_OPS and len(o.raw) >= 3:
+                target_slot = o.raw[2] & 0x1F
+                if target_slot in all_slot_numbers:
+                    for a in analyses:
+                        tkey = (a.entity, target_slot)
+                        if tkey in by_key and tkey not in live:
+                            live.add(tkey)
+                            queue.append(tkey)
+    return {key: (key in live) for key in by_key}
 
 
 def analyze_field_bytes(field_raw: bytes, field_name: str) -> list[SlotAnalysis]:
     fd = load_field_dat(field_raw, field_name)
-    return [analyze_slot(s.entity, s.slot, s.raw) for s in fd.scripts]
+    analyses = [analyze_slot(s.entity, s.slot, s.raw) for s in fd.scripts]
+    liveness = compute_slot_liveness(fd, analyses)
+    for a in analyses:
+        a.live = liveness.get((a.entity, a.slot), False)
+    return analyses
 
 
 # Section 5 (index 4 in FieldDat.sections; ffrtt calls it "Triggers") layout,
@@ -254,10 +431,14 @@ def main() -> int:
                 continue
         any_hit = True
         movie_reach = s.reachable_movie_count()
+        live_str = "" if s.live else " SLOT NEVER CALLED (not Init/Main, no REQ targets it)"
         print(f"{s.entity}/{s.slot}: {len(s.ops)} ops, {len(s.visited)} reachable, "
-              f"MOVIE reachable={movie_reach > 0}")
+              f"MOVIE reachable={movie_reach > 0}{live_str}")
         for o, mid, reach in pmvies:
             print(f"  PMVIE id={mid} (0x{mid:02x}) @{o:#x} reachable={reach}")
+        for off, mid in s.reachable_movie_resolutions():
+            id_str = "NONE (inherited from prior field/slot)" if mid is None else f"{mid} (0x{mid:02x})"
+            print(f"  MOVIE @{off:#x} live id={id_str}")
         if s.bad_jumps:
             for b in s.bad_jumps:
                 print(f"  WARN: {b}")

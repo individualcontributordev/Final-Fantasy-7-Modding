@@ -33,9 +33,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import struct  # noqa: E402
 
-from analyze_movie_reachability import analyze_field_bytes  # noqa: E402
+from analyze_movie_reachability import analyze_field_bytes, field_gateway_targets  # noqa: E402
 from disc_sources import load_csr_image, load_pristine_image  # noqa: E402
 from psx_mode2_iso import USER, _list_dir, _u32_le, _user, extract_file  # noqa: E402
+from scan_csr_movie_reachability import (  # noqa: E402
+    ENTRY_FIELD_ID,
+    build_field_graph,
+    reachable_field_names,
+)
 
 
 def _movie_dir_by_lba(img: bytes) -> dict[int, str]:
@@ -107,6 +112,15 @@ def main() -> int:
     sd_fields = field_dat_listing(sd_img)
     print(f"  {len(sd_fields)} fields, {len(sd_movies)} D1 MOVIE_ID.BIN rows", file=sys.stderr)
 
+    print("  Building field-level MAPJUMP+gateway graph...", file=sys.stderr)
+    sd_graph = build_field_graph(sd_img, sd_fields)
+    sd_field_reachable = reachable_field_names(sd_fields, sd_graph)
+    print(
+        f"  {len(sd_field_reachable)}/{len(sd_fields)} fields reachable from entry field "
+        f"(id {ENTRY_FIELD_ID})",
+        file=sys.stderr,
+    )
+
     print("Loading comparison sources (pristine + CSR D1/D2/D3)...", file=sys.stderr)
     sources: dict[str, bytes] = {}
     for d in (1, 2, 3):
@@ -135,31 +149,76 @@ def main() -> int:
         except Exception as e:  # noqa: BLE001
             errors.append(f"{name}: {e!r}")
             continue
-        pmvies = []
-        for s in slots:
-            for off, mid, reach in s.all_pmvie():
-                if reach:
-                    pmvies.append((s.entity, s.slot, off, mid))
-        if not pmvies:
+        field_ok = name in sd_field_reachable
+        # PMVIE only stores an id byte and is HARMLESS on its own -- it can
+        # never crash or misplay anything. The actual risk is a reachable
+        # MOVIE call (the player invocation): if the id that's live when it
+        # executes is OOB or points at the wrong file, THAT is what
+        # crashes/misplays. So we must resolve, path-sensitively, which id
+        # is live at each reachable MOVIE call within this slot -- not just
+        # check "a PMVIE is reachable somewhere" and "a MOVIE is reachable
+        # somewhere else in the field" independently (that both over-reports,
+        # e.g. a later PMVIE overwriting an earlier one before MOVIE runs,
+        # and under-reports/misses cases with no PMVIE in this slot at all).
+        # `s.live` (compute_slot_liveness): whether *anything* actually runs
+        # this (entity, slot) -- auto-run Init/Main, or a statically-resolved
+        # REQ/REQSW/REQEW/PREQ/PRQSW/PRQEW call from another live slot. This
+        # catches genuine orphans (e.g. FSHIP_22 mov/31: a MOVIE opcode that
+        # looks reachable within its own slot, but nothing ever calls entity
+        # "mov" at all). It is NOT authoritative on its own -- many real
+        # "direct"/"director"-entity cutscene scripts (e.g. NRTHMK dir/31,
+        # the Reactor 1 exit) have no statically-detectable caller yet are
+        # definitely live in vanilla FF7 -- so we surface `live=False` as
+        # `needs_manual_review` rather than silently dropping the row.
+        movie_calls: list[tuple[str, int, int, int, bool]] = []  # entity, slot, movie_off, id, live
+        inherited: list[tuple[str, int, int, bool]] = []  # entity, slot, movie_off, live (id set outside this slot)
+        if field_ok:
+            for s in slots:
+                for off, mid in s.reachable_movie_resolutions():
+                    if mid is None:
+                        inherited.append((s.entity, s.slot, off, s.live))
+                    else:
+                        movie_calls.append((s.entity, s.slot, off, mid, s.live))
+        if not movie_calls and not inherited:
             continue
         origin = origin_for(name, built_bytes)
         origin_movies = src_movies.get(origin, sd_movies)
-        for entity, slot, off, mid in pmvies:
+        for entity, slot, off, mid, slot_live in movie_calls:
             intended = origin_movies[mid] if 0 <= mid < len(origin_movies) else f"OOB({mid})"
             current = sd_movies[mid] if 0 <= mid < len(sd_movies) else f"OOB({mid})"
-            rows.append(
-                {
-                    "field": name,
-                    "entity": entity,
-                    "slot": slot,
-                    "offset": off,
-                    "movie_id": mid,
-                    "origin": origin,
-                    "intended_movie": intended,
-                    "current_d1_movie_at_id": current,
-                    "mismatch": intended != current,
-                }
-            )
+            row = {
+                "field": name,
+                "entity": entity,
+                "slot": slot,
+                "offset": off,
+                "movie_id": mid,
+                "origin": origin,
+                "intended_movie": intended,
+                "current_d1_movie_at_id": current,
+                "mismatch": intended != current,
+                "slot_live": slot_live,
+            }
+            if not slot_live:
+                row["needs_manual_review"] = True
+                row["review_reason"] = "slot appears never called (not Init/Main, no REQ/PREQ targets it) -- verify in Makou Reactor before treating as real"
+            rows.append(row)
+        for entity, slot, off, slot_live in inherited:
+            row = {
+                "field": name,
+                "entity": entity,
+                "slot": slot,
+                "offset": off,
+                "movie_id": None,
+                "origin": origin,
+                "intended_movie": "INHERITED (id set outside this slot -- needs cross-field trace)",
+                "current_d1_movie_at_id": "N/A",
+                "mismatch": False,
+                "needs_manual_review": True,
+                "slot_live": slot_live,
+            }
+            if not slot_live:
+                row["review_reason"] = "slot appears never called (not Init/Main, no REQ/PREQ targets it) -- verify in Makou Reactor before treating as real"
+            rows.append(row)
         if (i + 1) % 150 == 0:
             print(f"  ...{i + 1}/{len(sd_fields)}", file=sys.stderr)
 
@@ -173,8 +232,13 @@ def main() -> int:
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    needs_review = [r for r in rows if r.get("needs_manual_review")]
     print(f"Wrote {args.output}")
-    print(f"Total reachable PMVIE rows: {len(rows)}; mismatches (intended != current D1 slot): {len(mismatches)}")
+    print(
+        f"Total reachable MOVIE-call resolutions: {len(rows)}; "
+        f"mismatches (intended != current D1 slot): {len(mismatches)}; "
+        f"inherited-id (needs manual review): {len(needs_review)}"
+    )
     return 0
 
 

@@ -50,6 +50,17 @@ def _load_field_id_mapping() -> dict[int, str]:
     return out
 
 
+# Field id 97 = blackbg5, a generic character-select/party-swap background
+# screen. Its scripts MAPJUMP to whatever field each individually-named
+# character (earith/tifa/pri/cefiros/ketcy/doctor/girl/yufi/crew2/...) last
+# came from -- dozens of arbitrary story fields, not real walkmesh/story
+# navigation. Treating those as real graph edges makes nearly every field in
+# the game "reachable" from here and defeats the whole point of the
+# reachability scan. Exclude its MAPJUMP edges (gateways, if any, still
+# count).
+MAPJUMP_FANOUT_EXCLUDE = {"BLACKBG5"}
+
+
 def build_field_graph(img: bytes, fields: dict[str, tuple[int, int]]) -> dict[str, set[int]]:
     """field NAME -> set of target field IDs reachable from it, via either a
     reachable scripted MAPJUMP or a walkmesh gateway (door/exit line)."""
@@ -57,12 +68,13 @@ def build_field_graph(img: bytes, fields: dict[str, tuple[int, int]]) -> dict[st
     for name, (lba, size) in fields.items():
         raw = read_extent(img, lba, size)
         targets: set[int] = set()
-        try:
-            slots = analyze_field_bytes(raw, name)
-            for s in slots:
-                targets.update(s.reachable_mapjump_targets())
-        except Exception:  # noqa: BLE001
-            pass
+        if name.upper() not in MAPJUMP_FANOUT_EXCLUDE:
+            try:
+                slots = analyze_field_bytes(raw, name)
+                for s in slots:
+                    targets.update(s.reachable_mapjump_targets())
+            except Exception:  # noqa: BLE001
+                pass
         try:
             targets.update(field_gateway_targets(raw, name))
         except Exception:  # noqa: BLE001
