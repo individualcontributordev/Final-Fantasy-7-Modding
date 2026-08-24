@@ -1,4 +1,36 @@
-# Status: caller found (FIELD.BIN, ra=0x800C47CC) — need Ghidra to identify the function
+# Status: 0x800C47CC is a generic CD-command helper (FUN_800c46d0) — need callers of FUN_800c46d0 + FUN_800bf908 body
+
+## Task: trace who calls FUN_800c46d0, and what FUN_800bf908 reads
+
+`0x800C47CC` sits inside `UndefinedFunction_800c46d0`, which just builds a
+5-word CD command block from `FUN_800bf908(n, offset)` lookups and then
+calls the generic dispatcher — this function fires for **every** disc
+read, not just movies. To find the CANONON-specific logic we need to go
+one level up and one level down:
+
+1. In Ghidra, rename `UndefinedFunction_800c46d0` to `issue_cd_command`
+   (optional, just for clarity) then **right-click it → Show References
+   To** (References to the function itself, not to `FUN_800c46a4`).
+   Paste the full list of callers (addresses).
+2. **Navigation → Go To → `FUN_800bf908`**. Open its Decompile panel.
+   Paste the full decompiled body — this function takes `(n, offset)` and
+   is almost certainly indexing into a per-command/per-movie parameter
+   table; we need to see the table address and how `n`/`offset` map to it.
+3. Same for **`FUN_800bee10`** (used for the first word, `_DAT_8009a004`)
+   — paste its decompiled body too.
+4. If time allows, also check **`FUN_800c46a4`** (called first, before
+   the command-block build) — paste its decompiled body.
+
+## What happens next
+
+`FUN_800bf908`'s table is likely where the movie id (or a LBA/sector
+count derived from it) enters this call chain. Once we see that table
+and its indexing, we should be able to answer why CANONON's own
+`MOVIE_ID.BIN` row isn't being honored.
+
+---
+
+# (superseded) Status: caller found (FIELD.BIN, ra=0x800C47CC) — need Ghidra to identify the function
 
 ## Task: import FIELD.BIN into Ghidra and inspect 0x800C47CC
 
