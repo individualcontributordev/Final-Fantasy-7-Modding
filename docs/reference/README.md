@@ -9,6 +9,11 @@ Complete reference mappings for FF7 PSX field, movie, and music IDs extracted fr
 | `field-id-mapping.txt` | Field ID → Field Name | 788 fields |
 | `movie-id-mapping.txt` | Movie ID → Filename + Disc | 106 movies |
 | `music-id-mapping.txt` | Music ID → Track Name | 100 tracks |
+| `movie-system.md` | PMVIE opcode → MOVIE_ID.BIN row format → CD-ROM seek, end-to-end | — |
+| `layer-engineering.md` | `ic-layer-v1` JSON format + worked diff example | — |
+| `verifying-makou-with-ghidra.md` | Method for verifying Makou/engine claims with bytes+source+live test | — |
+
+See also `docs/09-engineer-curriculum.md` for a sequenced course through all of this.
 
 ## Quick Lookup
 
