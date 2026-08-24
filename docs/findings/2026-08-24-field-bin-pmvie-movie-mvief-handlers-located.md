@@ -100,6 +100,109 @@ name (`s_pmvie_800a0be8`, etc.).
   writers/readers of `DAT_80071c1c` and `_DAT_8009c6dc`/`_DAT_8009c6e0`
   outside these three handlers) to find the actual disc-read/CD-seek call.
 
+## Update 2026-08-24 (same day, continued): all three handlers fully read — still no CD call
+
+Read the complete `LAB_800cce94` (MOVIE, `800cce94`-`800ccfe4`) and
+`LAB_800ccfe8` (MVIEF, `800ccfe8`-`800cd0c0`) bodies in the HTML listing.
+Findings:
+
+- **MOVIE handler struct layout confirmed:** `DAT_8009c6e0+1` = state byte
+  (values seen: 0/1/3/4/5/0x14), `+0x26` = halfword sub-state (0/1/2), and
+  **`+2` (halfword) = the movie ID itself** — written at `800cce7c`
+  (`sh v0,0x2(v1)` where `v0` came from the PMVIE-set byte at `+1`, i.e.
+  PMVIE's opcode-operand byte is relayed into struct offset `+2`). This
+  is the first concrete evidence of *where* the raw movie-id byte from the
+  field script ends up living for later use.
+- **Searched every reference to `_DAT_8009c6e0` in the C export
+  (`grep -n "_DAT_8009c6e0" ... | 60+ hits`) for any read of offset `+2`
+  elsewhere in the file — there are none.** Offset `+2` is written once
+  (PMVIE handler) and zero-initialized once (struct-init function, line
+  13337); no other function reads it. Either (a) the movie ID is consumed
+  through a different aliasing path the decompiler didn't resolve back to
+  `_DAT_8009c6e0` (e.g. a raw pointer passed around and dereferenced with a
+  local variable name only, not the global symbol), or (b) it's read by
+  something outside `FIELD.BIN` entirely (kernel exe or a different
+  overlay) via a shared low-memory struct.
+- **MVIEF handler (`LAB_800ccfe8`) calls `FUN_800c0248`** with
+  `a2 = *(short)(DAT_8009c6e0 + 0x88)` — **not** offset `+2` (the movie ID
+  slot). Read `FUN_800c0248` fully: it's a **generic field-script operand
+  decoder** with 21 call sites across unrelated opcodes (movement,
+  dialogue, etc. — call sites at `800ca448`, `800ca54c`, `800cb8b0`, etc.),
+  switching on `a0` (1-6) to fetch a byte/word from the script buffer
+  `_DAT_8009c6dc` at various computed offsets. It is **not movie-specific**
+  and contains no CD/media call — ruled out as a dead end for this trace.
+- **Struct offset `+0x88`** (read by MVIEF before calling the generic
+  decoder) is a different field entirely from the movie-id slot at `+2`;
+  not yet identified what it represents.
+
+### Conclusion so far
+
+The field-script opcode handlers (PMVIE/MOVIE/MVIEF) only stage state in
+the `DAT_8009c6e0` struct and never call any CD/disc-read primitive
+directly. The actual movie playback trigger must be in a **different,
+not-yet-located function** — most likely a per-frame background task
+(polled outside the opcode interpreter loop) that reads the state flag
+`DAT_80071c1c` and/or struct offset `+1`/`+0x26`, resolves the movie id
+at struct `+2` to an LBA (via `MOVIE_ID.BIN` normally, but hardcoded for
+CANONON per the confirmed live test), and issues the actual seek. This
+function has not yet been located; searching for `DAT_80071c1c` reads
+(not writes) across the whole export, or for functions that reference
+`DAT_8009c6e0 + 2` via a copied/aliased pointer rather than the global
+symbol directly, are the two open threads.
+
+### Updated next steps
+
+- The `_DAT_8009c6e0`-prefixed grep only catches direct global-symbol
+  references. Search instead for the raw hex offset pattern in the struct
+  init function (`FUN_...` around line 13258-13385, where `_DAT_8009c6e0 =
+  param_1;`) to find what else holds a copy of `param_1` — that caller may
+  pass the same struct pointer into a totally different function under a
+  different local name, hiding the `+2` read from a symbol grep.
+  Concretely: find the caller of the struct-init function (the one setting
+  `_DAT_8009c6e0 = param_1` at line 13258) and read forward from there for
+  a per-frame "movie service" routine.
+
+### Update 2026-08-24 (continued further): traced the init/update call chain — also a dead end
+
+Found and read the callers:
+- `FUN_800ba534` (line 13247, sets `_DAT_8009c6e0 = param_1` at 13258) is
+  called once, from the main field-object loop at line 954:
+  `FUN_800ba534(&DAT_8009abf4, 0x80074ea4, *_DAT_8007eb64);` — this is
+  one-time field-object **initialization**, not a per-frame movie poller.
+- The per-frame **update** counterpart is `FUN_800ba65c` (line 13283),
+  called once per frame from the same outer loop. It calls, in order:
+  `FUN_800d4bfc`, `FUN_800bc338`, `FUN_800d7d6c`, `FUN_800d7f9c`,
+  `FUN_800bb3a8`, then **`FUN_800bc438(param_1)`** (line 13310) — the same
+  `FUN_800bc438` already read earlier in this doc's first pass.
+- Re-confirmed `FUN_800bc438` → `FUN_800bc4d4`: this pair only manipulates
+  screen-space sprite/UI-icon coordinates clamped to `0x140`x`0xe0`
+  (320x224, the PSX field-view resolution) and a double-buffered icon-slot
+  index (`DAT_80114490`). **This is a UI icon/marker overlay routine, not
+  movie playback** — another near-miss on the same struct offsets
+  (`DAT_8009c6e0+0x32`, matching offsets touched by PMVIE), not a
+  dead-end-worthy rabbit hole to repeat, but confirmed not to contain any
+  CD call either.
+- **None of the 5 sibling calls in `FUN_800ba65c`** (`FUN_800d4bfc`,
+  `FUN_800bc338`, `FUN_800d7d6c`, `FUN_800d7f9c`, `FUN_800bb3a8`) have been
+  read yet — any one of these five is a more promising unexplored lead
+  than re-deriving `FUN_800bc438`, since they're unread and sit in the
+  same per-frame update call chain.
+
+### Next steps (revised, most promising first)
+
+1. Read `FUN_800bb3a8`, `FUN_800d7d6c`, `FUN_800d7f9c`, `FUN_800d4bfc`,
+   `FUN_800bc338` in that order (unread siblings of `FUN_800bc438` inside
+   the confirmed per-frame update function `FUN_800ba65c`) — one of these
+   is the more likely candidate for a movie-state poller, since they run
+   every frame alongside (not instead of) the UI-icon routine already
+   ruled out.
+2. Alternatively, grep the whole export for reads (not writes) of
+   `DAT_80071c1c` outside `FUN_800baf54`/`FUN_800bc4d4` — only one read
+   site is known so far (`FUN_800bc4d4`, already ruled out as UI/icon
+   code), so a second consumer likely exists elsewhere and hasn't been
+   found by symbol grep yet, possibly because it's aliased through a
+   pointer rather than referenced by the `DAT_80071c1c` symbol directly.
+
 ## Sources
 
 - `workspace/ghidra/FIELD.BIN.dec_disc2.c` (lines 13578-13624: `FUN_800baf54`

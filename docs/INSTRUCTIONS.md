@@ -4,13 +4,19 @@
 found the real opcode dispatch table (`PTR_LAB_800e0228`) and the PMVIE
 (0xF8)/MOVIE (0xF9)/MVIEF (0xFA) handler addresses in the exports already
 in the repo (`workspace/ghidra/FIELD.BIN.dec_disc2.c` /
-`.dec_disc2.html`). Both handlers only set/check a state flag
-(`DAT_80071c1c`) and a struct at `DAT_8009c6e0` — no CD-read call visible
-yet. Next step is more grepping of the **existing** export (agent-only,
-no Ghidra session needed) to trace who reads `DAT_80071c1c` and where the
-movie id itself gets written into the struct. Nothing for you to do here
-until that turns up a new dead end or a concrete address worth confirming
-live.
+`.dec_disc2.html`). The movie id is confirmed written to struct offset
+`DAT_8009c6e0+2`, but no CD-read call has been found in any handler yet —
+`FUN_800c0248` (called from MVIEF) and `FUN_800bc438`/`FUN_800bc4d4`
+(the per-frame update path) are both ruled out as unrelated (generic
+opcode-operand decoder; UI icon overlay, respectively).
+
+Next step is more grepping of the **existing** export (agent-only, no
+Ghidra session needed): read the five still-unread sibling calls inside
+the per-frame update function `FUN_800ba65c` — `FUN_800bb3a8`,
+`FUN_800d7d6c`, `FUN_800d7f9c`, `FUN_800d4bfc`, `FUN_800bc338` — looking
+for whichever one polls `DAT_80071c1c` or resolves the movie id at
+`DAT_8009c6e0+2` to an LBA/CD call. Nothing for you to do here until that
+turns up a new dead end or a concrete address worth confirming live.
 
 ---
 
