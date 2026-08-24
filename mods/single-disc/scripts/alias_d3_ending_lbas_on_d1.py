@@ -8,6 +8,12 @@ for this path (seek fails → black silence). Same class of fix as CANONON @2504
 Writes full MODE2/2352 sectors from pristine D3, retargets chosen D1 MOVIE/
 dirents, and sets MINT/MOVIE_ID.BIN rows to Disc 3 LBA + size/aux.
 
+Before writing, any other D1 MOVIE/ file whose sectors overlap the incoming
+D3 ranges (e.g. GOLD7_2.MOV, CANONON.MOV under ENDING2E's huge span) is
+relocated to free space at EOF and its dirent/MOVIE_ID updated. Splicing
+those files back in afterward at their original LBAs would punch holes into
+the newly written ending stream and corrupt playback.
+
   python3 mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py \\
     --d1 workspace/iso-extract/ff7_d1_playtest_ending_test.bin --in-place
 """
@@ -22,10 +28,16 @@ _ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_ROOT / "scripts"))
 sys.path.insert(0, str(_ROOT / "mods/single-disc/scripts"))
 
-from inject_movies_by_disc_id import _patch_dirent_lba_size  # noqa: E402
+from inject_movies_by_disc_id import (  # noqa: E402
+    _patch_dirent_lba_size,
+    _patch_movie_id_bin,
+)
 from psx_mode2_iso import (  # noqa: E402
     SECTOR,
     USER,
+    _list_dir,
+    _u32_le,
+    _user,
     extract_file,
     find_file,
     replace_file_padded,
@@ -67,10 +79,76 @@ def _write_raw(img: bytearray, lba: int, raw: bytes) -> None:
     img[off : off + len(raw)] = raw
 
 
+def _movie_files(img: bytes | bytearray):
+    pvd = _user(img, 16)
+    root = pvd[156:190]
+    for n, lba, sz, d in _list_dir(img, _u32_le(root, 2), _u32_le(root, 10)):
+        if n == "MOVIE" and d:
+            return [
+                (nn, lb, ss)
+                for nn, lb, ss, dd in _list_dir(img, lba, sz)
+                if nn not in (".", "..") and not dd
+            ]
+    raise FileNotFoundError("MOVIE/")
+
+
+# Only these D1 slots are known to collide with the ENDING2E span AND are
+# needed by fields that are reachable before the ending sequence plays
+# (GOLD7_2 on NVMKIN21, CANONON via the LOSLAKE1 seek alias). Relocating
+# every movie under the ending streams' combined LBA range would blow the
+# 80-min CD budget for files nothing else in this isolated pipeline uses.
+RELOCATE_NAMES = {"GOLD7_2.MOV", "CANONON.MOV"}
+
+
+def _relocate_collisions(
+    img: bytearray, ranges: list[tuple[int, int]], keep_names: set[str]
+) -> list[str]:
+    """Move specific D1 MOVIE/ files whose sectors overlap `ranges` to EOF.
+
+    `keep_names` are the D1 slots the caller is about to overwrite on purpose
+    (the ending-stream targets) -- those are skipped here since clobbering
+    them is the intended effect, not a collision to repair. Only files in
+    RELOCATE_NAMES are moved; see its comment for why the scope is narrow.
+    """
+    notes: list[str] = []
+    for name, lba, size in sorted(_movie_files(bytes(img)), key=lambda x: x[1]):
+        if name.upper() in keep_names or name.upper() not in RELOCATE_NAMES:
+            continue
+        nsec = (size + USER - 1) // USER
+        file_end = lba + nsec - 1
+        if not any(file_end >= r0 and lba <= r1 for r0, r1 in ranges):
+            continue
+        path = "MOVIE/" + name
+        raw = _raw(bytes(img), lba, nsec)
+        new_lba = len(img) // SECTOR if len(img) % SECTOR == 0 else (len(img) // SECTOR) + 1
+        _write_raw(img, new_lba, raw)
+        _patch_dirent_lba_size(img, path, new_lba, size)
+        n = _patch_movie_id_bin(img, lba, new_lba, size)
+        notes.append(
+            f"RELOCATE {name} LBA {lba}..{file_end} -> EOF LBA {new_lba} "
+            f"(MOVIE_ID x{n})"
+        )
+    return notes
+
+
 def apply(img: bytearray, d3: bytes) -> list[str]:
     blob3 = extract_file(d3, "MINT/MOVIE_ID.BIN")
-    blob = bytearray(extract_file(img, "MINT/MOVIE_ID.BIN"))
     notes: list[str] = []
+
+    # Precompute D3 absolute LBA ranges + relocate any D1 movie sectors that
+    # would otherwise be stomped by the incoming raw D3 writes (e.g. GOLD7_2,
+    # CANONON) before writing anything. Otherwise splicing those files back in
+    # afterward at their old LBAs would punch holes into the freshly written
+    # ending stream data.
+    ranges: list[tuple[int, int]] = []
+    keep_names = {d1name.upper() for _mid, _d3name, d1name in JOBS}
+    for _mid, d3name, _d1name in JOBS:
+        m3 = find_file(d3, f"MOVIE/{d3name}")
+        nsec = (m3.size + USER - 1) // USER
+        ranges.append((m3.lba, m3.lba + nsec - 1))
+    notes.extend(_relocate_collisions(img, ranges, keep_names))
+
+    blob = bytearray(extract_file(img, "MINT/MOVIE_ID.BIN"))
     for mid, d3name, d1name in JOBS:
         m3 = find_file(d3, f"MOVIE/{d3name}")
         nsec = (m3.size + USER - 1) // USER
