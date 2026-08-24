@@ -93,18 +93,27 @@ Three sources agree (field script bytes, `MOVIE_ID.BIN` bytes, Makou source) —
 see `docs/findings/2026-08-24-canonon-hardcode-clean-room-reverification.md`
 for the full citation trail.
 
-## Absolute-LBA seek exception (CANONON on D1, evidence: bytes + live test)
+## Absolute-LBA seek exception (CANONON, evidence: bytes + live test on pristine D2)
 
-One confirmed case does **not** go through `MOVIE_ID.BIN`: on single-disc
-builds, `LOSLAKE1`'s hardcoded LBA 250450 is honored directly by the CD-ROM
-seek regardless of what the table says at that id — see
-`docs/findings/2026-08-05-loslake1-cdrom-d1-vs-d2.md` and
-`alias_d2_seek_lba_on_d1.py` (`D2_CANONON_LBA = 250450`). This means the file
-occupying LBA 250450 must literally be `CANONON.MOV`'s bytes; you cannot
-redirect this one playback by editing the table row alone. All *other*
-movies confirmed reachable by the CFG scanner (`docs/findings/2026-08-24-csr-movie-reachability-scan.md`)
-use the normal table path and can be relocated by editing `MOVIE_ID.BIN` +
-the dirent, as `inject_movies_by_disc_id.py` does.
+One confirmed case does **not** go through `MOVIE_ID.BIN`: `LOSLAKE1`'s
+PMVIE id 47 (`CANONON`) seeks hardcoded LBA 250450 directly, regardless of
+what the table's row 47 says. Confirmed by a clean single-variable live
+test on a **pristine, unmodified Disc 2** (not just the single-disc D1
+rebuild): patching only row 47 to point at a visually distinct movie
+(`BOOGUP.STR`) had no effect — the real CANONON content played anyway. See
+`docs/findings/2026-08-24-canonon-hardcode-clean-room-reverification.md`
+(live result) and `docs/findings/2026-08-05-loslake1-cdrom-d1-vs-d2.md` +
+`alias_d2_seek_lba_on_d1.py` (`D2_CANONON_LBA = 250450`, the working
+aliasing tool). This means the file occupying LBA 250450 must literally be
+`CANONON.MOV`'s bytes; you cannot redirect this one playback by editing the
+table row alone.
+
+**Not yet tested:** whether this is unique to id 47 or a broader engine
+behavior. All *other* movies confirmed reachable by the CFG scanner
+(`docs/findings/2026-08-24-csr-movie-reachability-scan.md`) are *assumed* to
+use the normal table path and relocatable by editing `MOVIE_ID.BIN` + the
+dirent (as `inject_movies_by_disc_id.py` does), but only id 47 has actually
+been live-tested for table-vs-hardcode behavior.
 
 ## Reproducing a movie relocation (worked example)
 
@@ -128,8 +137,8 @@ this via a manifest file (`mods/single-disc/patches/csr-manip-movie-seed.txt`).
 | PMVIE is 1-byte disc-local table index | confirmed | source + bytes, 3-way cross-check |
 | MOVIE_ID.BIN row = 20 bytes LE, offsets above | confirmed | bytes, used successfully by shipped tooling |
 | Sorted-dir-order ≠ PMVIE id | confirmed | bytes, 61/61 mismatch on CSR D2 |
-| CANONON/LOSLAKE1 needs absolute LBA (not table-only) | confirmed | live test, `2026-08-05-loslake1-cdrom-d1-vs-d2.md` |
-| Whether *other* engine paths ever bypass the table | open | only CANONON's case has been live-tested |
+| CANONON/LOSLAKE1 needs absolute LBA (not table-only) | confirmed | live test on pristine D2, `2026-08-24-canonon-hardcode-clean-room-reverification.md` + `2026-08-05-loslake1-cdrom-d1-vs-d2.md` |
+| Whether *other* engine paths ever bypass the table | open | only PMVIE id 47 (CANONON) has been live-tested |
 
 ## Sources
 
