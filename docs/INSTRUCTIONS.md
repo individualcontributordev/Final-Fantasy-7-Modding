@@ -1,4 +1,20 @@
-# Ghidra: find the PMVIE movie-id → LBA resolver inside FIELD.BIN (not the kernel exe)
+# Status: PMVIE/MOVIE/MVIEF handlers found — no Ghidra action needed right now
+
+`docs/findings/2026-08-24-field-bin-pmvie-movie-mvief-handlers-located.md`
+found the real opcode dispatch table (`PTR_LAB_800e0228`) and the PMVIE
+(0xF8)/MOVIE (0xF9)/MVIEF (0xFA) handler addresses in the exports already
+in the repo (`workspace/ghidra/FIELD.BIN.dec_disc2.c` /
+`.dec_disc2.html`). Both handlers only set/check a state flag
+(`DAT_80071c1c`) and a struct at `DAT_8009c6e0` — no CD-read call visible
+yet. Next step is more grepping of the **existing** export (agent-only,
+no Ghidra session needed) to trace who reads `DAT_80071c1c` and where the
+movie id itself gets written into the struct. Nothing for you to do here
+until that turns up a new dead end or a concrete address worth confirming
+live.
+
+---
+
+# (superseded) Ghidra: find the PMVIE movie-id → LBA resolver inside FIELD.BIN (not the kernel exe)
 
 ## Why
 
