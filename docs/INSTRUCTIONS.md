@@ -1,21 +1,25 @@
-# Status: FUN_800c46d0 identified as the AKAO (0xF2) opcode handler — agent is now self-sufficient via Ghidra headless, no human action needed for this step
+# Status: AKAO operand fetch uses 16 addressing modes, not always a literal — CANON_1/CANON_2 scanned, no literal-mode match found yet
 
-Agent set up a fully automated Ghidra headless decompile pipeline this
-session (`scripts/ghidra/DecompileTargets.java` + `analyzeHeadless`,
-no GUI/project needed) and used it to confirm `FUN_800c46d0` (the
-`ra=0x800C47CC` call site) is field-script opcode **`0xF2` = AKAO**, not
-PMVIE — see
-`docs/findings/2026-08-24-akao-opcode-0xf2-is-canonon-cd-call-site.md`.
-AKAO reads its CD-command operand bytes as **literals straight out of the
-field's own compiled script**, which is why patching `MOVIE_ID.BIN` never
-affected CANONON.
+`FUN_800bf908`/`FUN_800bee10` (AKAO's operand-fetch helpers) decompile to a
+**selector-nibble dispatch**: mode 0 reads a literal straight from the
+script (what the prior finding assumed universally), modes 1–0xF instead
+index into global/bank variable tables. See
+`docs/findings/2026-08-24-canon-fields-akao-operand-addressing-modes.md`.
 
-**Next step (agent will do this via the same headless pipeline, no human
-Ghidra session needed):** locate the CANNON field's compiled script bytes
-inside `FIELD.BIN` (or the map's own `.DAT`) and find the specific AKAO
-instruction whose literal operand bytes match the confirmed live-trace
-registers (`a0=0x7FE, a1=0xC, a2=0x2, a3=0x0`), to get the exact byte
-offset to patch. No pending human task right now.
+Using `scripts/field_dat.py` I enumerated every AKAO (`0xF2`) instruction in
+`CANON_1.DAT` (2 instructions, both cmd=0x40) and `CANON_2.DAT` (24
+instructions, cmd in `{0x0,0x1,0x1E,0x3F,0x40,0x78,0x7F,0xF,0xF0}`). None
+match the confirmed live-trace `a1=0xC` when decoded as literal-mode, which
+is expected if the real instruction uses a non-zero selector nibble (bank
+lookup) instead.
+
+**Next step (agent-doable via existing scripts, no human Ghidra session
+needed):** re-scan CANON_1/CANON_2 AKAO instructions decoding the selector
+nibble properly for every instruction (not assuming mode 0), to find which
+one resolves to `cmd=0xC` — either directly (mode 0) or by identifying which
+bank/global variable a non-literal-mode instruction reads and what earlier
+script bytecode sets that variable to `0xC`. No pending human task right
+now.
 
 ---
 
