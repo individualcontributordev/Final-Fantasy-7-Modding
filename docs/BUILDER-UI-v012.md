@@ -1,5 +1,11 @@
 # What You'll See in the Builder UI for v0.1.2
 
+> **Stale snapshot (verified 2026-08-24):** Single-disc is now at
+> `v0.2.12` (`mods/single-disc/VERSION`); the pack ids, record counts, and
+> UI flow below are frozen at the old v0.1.2 state and do not reflect the
+> current builder. Use this only as a historical illustration of the UI
+> pattern, not as current version/record numbers.
+
 ## Builder URL
 https://individualcontributor.dev/builder/
 

@@ -1,6 +1,13 @@
 # Field Scripts Database
 
-**Location:** `docs/reference/field-scripts.db`  
+> **NOT IMPLEMENTED.** Verified 2026-08-24: `docs/reference/field-scripts.db`,
+> `scripts/build_field_db.py`, and `scripts/query_field_scripts.py` do not
+> exist in this repo. Every command below is a design spec, not a working
+> tool. Do not attempt to run these commands. Use
+> `scripts/decode_field_script.py` and `scripts/field_dat.py` for real
+> opcode inspection today.
+
+**Location:** `docs/reference/field-scripts.db` (proposed, not built)
 **Purpose:** SQLite database for fast querying of FF7 field script opcodes across different disc images
 
 ## Schema

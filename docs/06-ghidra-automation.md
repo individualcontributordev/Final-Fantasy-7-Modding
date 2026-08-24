@@ -53,7 +53,6 @@ This will:
 ls -lh workspace/ghidra-analysis/
 # field-functions.json - function addresses, names, sizes
 # field-symbols.json   - global symbols (RNG table, etc.)
-# field-xrefs.json     - cross-references (who calls what)
 ```
 
 ### 4. Commit Metadata

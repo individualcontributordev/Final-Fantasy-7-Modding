@@ -1,5 +1,11 @@
 # FF7 PSX - Complete Ghidra Extraction Plan
 
+> **Stale status note (verified 2026-08-24):** The "🔲 TODO" / "Next Steps"
+> markers below are outdated. `scripts/ghidra/*.json` now contains
+> functions+symbols for all of FIELD, BATTLE, BATRES, WORLD, and
+> SCUS_941.63 — see `docs/06-ghidra-automation.md` for the current
+> extraction workflow. This file is left as the original planning record.
+
 ## Files Containing Executable Code (Priority Order)
 
 ### Tier 1: Core Gameplay Modules (Essential for Modding)

@@ -88,7 +88,7 @@ Stored in each field `.DAT` encounter section (48 bytes, two tables):
 - `rate` — lower byte = **more** battles (inverse intuition)
 - Battle IDs and probability weights for standard (6) and special (4) slots
 
-Field **scale** (default 512) is in section 1 of the `.DAT` and affects Danger growth.
+Field **scale** (default 512) is in the script section header of the `.DAT` and affects Danger growth (unverified against raw bytes in this repo — sourced from external FF7 field format docs, not independently confirmed here).
 
 ## What we patch (shipped Encounter mod)
 
