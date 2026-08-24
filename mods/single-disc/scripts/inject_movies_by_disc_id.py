@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-"""Overwrite D1 MOVIE slots by per-disc sorted id (PMVIE index).
+"""Overwrite D1 MOVIE slots by per-disc MOVIE_ID.BIN row index (PMVIE id).
 
-Field scripts use a disc-local movie id (sorted MOVIE/ name order). Copying a
-D2/D3 file onto D1 by filename would land at the wrong id. This tool copies
-source disc file for id N into D1 existing id N file. Shrinks the ISO size
-field to the source length so builder layers stay small.
+Field scripts use a disc-local movie id (PMVIE opcode, 1 byte). That id is
+NOT sorted MOVIE/ directory order -- it's the row index into that disc's own
+MINT/MOVIE_ID.BIN table (row[id].lba -> dirent lookup by LBA). See
+docs/reference/movie-system.md and
+docs/findings/2026-08-24-csr-movie-reachability-scan.md for the confirmed
+byte layout and the bug this comment used to describe. Copying a D2/D3 file
+onto D1 by filename would land at the wrong id. This tool copies source disc
+file for id N into D1 existing id N file. Shrinks the ISO size field to the
+source length so builder layers stay small.
 
   python3 mods/single-disc/scripts/inject_movies_by_disc_id.py \
     --d1 workspace/iso-extract/ff7_d1_csr_single_disc_movies_work.bin \

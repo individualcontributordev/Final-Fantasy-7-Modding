@@ -57,7 +57,10 @@ should still ship `-on-highwind-*` variants since Highwind is a live base.
 | Start | Path |
 |-------|------|
 | **New mod (idea → builder)** | `docs/06-new-mod-research.md` |
+| **Full engineer curriculum** | `docs/09-engineer-curriculum.md` |
 | Encounter system | `docs/01-encounter-system.md` |
+| Movie system (PMVIE/MOVIE_ID.BIN) | `docs/reference/movie-system.md` |
+| Layer format (`ic-layer-v1`) | `docs/reference/layer-engineering.md` |
 | Findings index | `docs/findings/README.md` |
 | **PSX RAM map (query)** | `docs/reference/ff7-psx-memory/` — `python3 docs/reference/ff7-psx-memory/query_memory.py …` |
 | Ghidra | `docs/05-ghidra-guide.md` |

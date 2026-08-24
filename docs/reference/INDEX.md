@@ -11,6 +11,10 @@ Complete reference data for FF7 PSX modding. All data extracted from [Makou Reac
 | **Music** | 100 | `music-id-mapping.txt` | `python3 scripts/query_ff7_ids.py music <id>` |
 | **Memory** | ~300 regions | `ff7-psx-memory/*.txt` | `python3 docs/reference/ff7-psx-memory/query_memory.py <addr-or-keyword>` |
 | **Script labels** | scriptID→UI label | `makou-reactor-script-labels.md` | n/a — lookup table |
+| **Movie system** | opcode→table→seek | `movie-system.md` | n/a — narrative reference |
+| **Layer format** | `ic-layer-v1` spec | `layer-engineering.md` | n/a — narrative reference |
+
+Full teaching sequence through all reference material: `docs/09-engineer-curriculum.md`.
 
 ## Usage Examples
 
