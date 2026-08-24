@@ -19,32 +19,13 @@ workspace/iso-extract/battle-dec/SCUS_941.65_D3.body   (disc 3 kernel EXE)
 ```
 
 If you ever need to reproduce this extraction (files deleted, new pristine
-rip, etc.), run this from the repo root — note the EXE filename differs
-per disc (`SCUS_941.63` disc 1, `SCUS_941.64` disc 2, `SCUS_941.65` disc 3;
-confirmed via `psx_mode2_iso.find_file`'s directory-listing error message):
+rip, etc.), run `scripts/extract_kernel_exe.py` from the repo root. It
+knows the per-disc kernel EXE filename (`SCUS_941.63` disc 1, `SCUS_941.64`
+disc 2, `SCUS_941.65` disc 3) and strips the PS-X EXE header for you:
 
 ```bash
 cd "$(git rev-parse --show-toplevel)"
-mkdir -p workspace/iso-extract/battle-raw workspace/iso-extract/battle-dec
-
-python3 << 'PY'
-from pathlib import Path
-import sys
-sys.path.insert(0, "scripts")
-from psx_mode2_iso import extract_file
-
-# (disc, exe filename on that disc's root)
-discs = [("D2", "SCUS_941.64"), ("D3", "SCUS_941.65")]
-for disc, exe in discs:
-    img = bytearray(Path(f"workspace/pristine/FINALFANTASY7_{disc}.bin").read_bytes())
-    data = extract_file(img, exe)
-    raw = Path(f"workspace/iso-extract/battle-raw/{exe}_{disc}")
-    raw.write_bytes(data)
-    body = data[0x800:]  # strip PS-X EXE header, same as the disc-1 SCUS_941.63 recipe
-    body_path = Path(f"workspace/iso-extract/battle-dec/{exe}_{disc}.body")
-    body_path.write_bytes(body)
-    print(disc, "full", len(data), data[:8], "body", len(body), "->", body_path)
-PY
+python3 scripts/extract_kernel_exe.py D2 D3
 ```
 
 **Task for you (Ghidra, one program per file):**
