@@ -49,6 +49,10 @@ workspace/**/*.dst
 
 # Ghidra projects (local) — only keep the placeholder, not exports/binaries
 !workspace/ghidra/.gitkeep
+workspace/ghidra/*.c
+workspace/ghidra/*.html
+workspace/iso-extract/battle-dec/SCUS_941.6*_D*.body
+workspace/iso-extract/battle-raw/SCUS_941.6*_D*
 
 # Python
 __pycache__/
