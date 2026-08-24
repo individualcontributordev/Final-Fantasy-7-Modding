@@ -33,7 +33,7 @@ from scripts.psx_mode2_iso import extract_file
 out = Path("workspace/iso-extract/multi-raw")
 for disc in (1, 2, 3):
     img = bytearray(Path(f"workspace/pristine/FINALFANTASY7_D{disc}.bin").read_bytes())
-    for name in ("FIELD.BIN", "BATTLE/BATTLE.X"):
+    for name in ("FIELD/FIELD.BIN", "BATTLE/BATTLE.X"):
         data = extract_file(img, name)
         tag = name.split("/")[-1]
         dest = out / f"D{disc}_{tag}"
@@ -60,30 +60,46 @@ This produces `D1_FIELD.BIN.dec`, `D1_BATTLE.X.dec`, `D2_FIELD.BIN.dec`,
 `D2_BATTLE.X.dec`, `D3_FIELD.BIN.dec`, `D3_BATTLE.X.dec` in
 `workspace/iso-extract/multi-dec/`.
 
-## 3. Import each into Ghidra
+## 3. Result: FIELD.BIN and BATTLE.X are identical on all 3 discs — no Ghidra import needed
 
-For **each** of the 6 `.dec` files, create a new Ghidra import (can be
-separate programs in the same project):
+An MD5 check on the 6 decompressed files found `FIELD.BIN.dec`
+byte-identical across D1/D2/D3 (`902ef064...`), and `BATTLE.X.dec`
+byte-identical across D1/D2/D3 (`7ebfd537...`). These are shared engine
+overlays with no per-disc content — there's nothing to import or search
+here, since a D1-vs-D2-vs-D3 diff is guaranteed to be empty. **Do not
+import these into Ghidra.**
 
-| Setting | Value |
-|---------|-------|
-| Format | Raw Binary |
-| Language | MIPS: R3000 32bit little endian |
-| Base address (FIELD.BIN) | `0x800A0000` |
-| Base address (BATTLE.X) | `0x800A0000` |
+This means the hardcoded seek logic is **not** in the field/battle engine
+overlay code at all. It must be in one of:
 
-After importing, run Analyze → yes to defaults (MIPS analysis) on each.
+- **Per-field script bytecode** — the individual `.DAT` files for
+  `LOSLAKE1` (CANONON trigger, D2) and the ending fields (D3), extracted
+  and decompressed separately from `FIELD.BIN` (use `scripts/lzs.py`, not
+  `decompress_gzipps.py` — see `docs/02-disc-format.md` for the FIELD.DAT
+  format). These are per-scene data, not shared engine code, so they
+  *can* differ from D1 and could contain the LBA as literal script
+  operand data.
+- **The main `SCUS_941.63` executable** — same on all discs at the ISO
+  level (path `/SCUS_941.63`), but worth a scalar search anyway in case
+  the seek dispatch/kernel logic (not the field-specific trigger) lives
+  there.
 
-## 4. Search for the hardcoded LBAs
+## 4. Next: search per-field .DAT bytecode + SCUS executable
 
-For **D2's FIELD.BIN/BATTLE.X** (CANONON only — LOSLAKE1 lives on D2) and
-**D3's FIELD.BIN/BATTLE.X** (all three ENDING ids — the ending fields live
-on D3), use **Search → For Scalars** (or Search → Memory, decimal/hex as
-needed) for the relevant values below, one at a time. Try both decimal and
-hex forms — Ghidra's scalar search usually takes decimal by default.
+Extract and decompress (via `scripts/lzs.py`) the specific field `.DAT`
+files: `LOSLAKE1` from D2 (CANONON), and the ending field(s) from D3
+(check `docs/01-encounter-system.md` / field name list for the exact
+ending field IDs — likely `LAS4_0` or similarly named lategame/ending
+fields). Also extract `SCUS_941.63` directly (it's not GZIPPS-compressed —
+extract raw via `extract_file`, no `decompress_gzipps.py` step needed) from
+D1 for a baseline scalar search.
 
-D1's copies are just there for a baseline diff if needed — the D1 search
-already came up empty and isn't expected to change.
+Import each into Ghidra (field `.DAT` bytecode may need a different base
+address/import approach — check `docs/02-disc-format.md` for FIELD.DAT
+layout; `SCUS_941.63` base is `0x80010000` after its 0x800-byte header,
+per `docs/ghidra-battle-overlays.md`). Then repeat the same **Search → For
+Scalars** pass for the relevant values below, one at a time, decimal and
+hex:
 
 | Movie    | Decimal  | Hex        |
 |----------|----------|------------|
@@ -104,19 +120,16 @@ For each search:
 
 ## Report back
 
-Paste, for each of the 4 values (CANONON against D2, the 3 ENDING ids
-against D3): found / not found, and if found, the address + whether it
-looked like code or a table entry (with nearby bytes if it's a table).
+Paste, for each of the 4 values: found / not found, and if found, which
+file it was in, the address, and whether it looked like code or a table
+entry (with nearby bytes if it's a table).
 
-## Fallback if D2/D3 search also comes up empty: live trace
+## Fallback if this also comes up empty: live trace
 
-D1's `FIELD.BIN.dec`/`BATTLE.X.dec` were already searched (raw bytes and
-decompiled text, as 32-bit words LE/BE and as MSF triples plain/BCD) —
-**no hits anywhere**, which is expected since D1 doesn't contain these
-scripts. If the D2/D3 search above also comes up empty, static search is a
-dead end and the next step is a **live breakpoint in DuckStation** on the
-actual CD-ROM seek, to capture the return address (the calling code) at
-the moment it fires.
+If the per-field `.DAT` bytecode and `SCUS_941.63` search also come up
+empty, static search is a dead end and the next step is a **live
+breakpoint in DuckStation** on the actual CD-ROM seek, to capture the
+return address (the calling code) at the moment it fires.
 
 ### Setup
 
