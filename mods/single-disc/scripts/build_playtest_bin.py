@@ -30,8 +30,15 @@ def main() -> int:
         csr_layer = ROOT / "../Final-Fantasy-7-CSR/builder/csr-v0.14.2/layers/disc1.layer.json"
     csr_layer = csr_layer.resolve()
     core_layer = ROOT / "builder/single-disc-on-csr/layers/disc1.layer.json"
-    # Cumulative movies pack only (latest = seed + LBA alias).
-    movie_layer = ROOT / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
+    # v0.1.5 is a DELTA pack: its stored diff is computed against v0.1.4's
+    # output (766340400 bytes), not the core layer's output (748775664
+    # bytes) -- see builder/manifest.json blurb ("applies after manip-movies
+    # v0.1.4"). Both must be applied in order or v0.1.5's byte patches land
+    # at the wrong offsets against undersized base content (confirmed
+    # 2026-08-24: applying v0.1.5 alone left JAIROFAL == vanilla D1, not
+    # CANONON, because v0.1.4's LBA-250450 alias never landed first).
+    movie_layer_v4 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
+    movie_layer_v5 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
@@ -44,7 +51,8 @@ def main() -> int:
         (d2, "pristine D2"),
         (csr_layer, "CSR layer"),
         (core_layer, "single-disc main pack"),
-        (movie_layer, "manip-movies cumulative v0.1.5"),
+        (movie_layer_v4, "manip-movies v0.1.4"),
+        (movie_layer_v5, "manip-movies v0.1.5 (delta on v0.1.4)"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
@@ -52,20 +60,24 @@ def main() -> int:
         mtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(p.stat().st_mtime))
         print(f"USING [{label}] {p}  (mtime {mtime})")
 
-    print("1/3 CSR base...")
+    print("1/4 CSR base...")
     img = bytearray(pristine.read_bytes())
     apply_layer(img, json.loads(csr_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("2/3 single-disc main pack...")
+    print("2/4 single-disc main pack...")
     apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
     j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
     van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")
     print("   JAIROFAL after main size", len(j_core), "(still D1-family until movies)")
 
-    print("3/3 manip-movies v0.1.2 cumulative (seed + LBA 250450)...")
-    apply_layer(img, json.loads(movie_layer.read_text(encoding="utf-8")))
+    print("3/4 manip-movies v0.1.4 (seed + LBA 250450 alias)...")
+    apply_layer(img, json.loads(movie_layer_v4.read_text(encoding="utf-8")))
+    print("   ", len(img), "bytes")
+
+    print("4/4 manip-movies v0.1.5 (delta: NRCRLB/NRCRL/PARASHOT/METEOFIX/METEOSKY)...")
+    apply_layer(img, json.loads(movie_layer_v5.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
     j = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
@@ -104,7 +116,6 @@ def main() -> int:
     print("WROTE", out_cue)
     print("Open the .cue in DuckStation.")
     print("Do NOT open other ff7_d1_*_work.bin files in iso-extract (many are core-only ~714MB).")
-    print("This playtest bin must be ~731MB (766084032 bytes if current packs).")
     print("actual", out_bin.stat().st_size)
     return 0
 
