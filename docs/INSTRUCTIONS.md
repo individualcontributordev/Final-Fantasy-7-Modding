@@ -1,4 +1,25 @@
-# Status: 0x800C47CC is a generic CD-command helper (FUN_800c46d0) — need callers of FUN_800c46d0 + FUN_800bf908 body
+# Status: FUN_800c46d0 identified as the AKAO (0xF2) opcode handler — agent is now self-sufficient via Ghidra headless, no human action needed for this step
+
+Agent set up a fully automated Ghidra headless decompile pipeline this
+session (`scripts/ghidra/DecompileTargets.java` + `analyzeHeadless`,
+no GUI/project needed) and used it to confirm `FUN_800c46d0` (the
+`ra=0x800C47CC` call site) is field-script opcode **`0xF2` = AKAO**, not
+PMVIE — see
+`docs/findings/2026-08-24-akao-opcode-0xf2-is-canonon-cd-call-site.md`.
+AKAO reads its CD-command operand bytes as **literals straight out of the
+field's own compiled script**, which is why patching `MOVIE_ID.BIN` never
+affected CANONON.
+
+**Next step (agent will do this via the same headless pipeline, no human
+Ghidra session needed):** locate the CANNON field's compiled script bytes
+inside `FIELD.BIN` (or the map's own `.DAT`) and find the specific AKAO
+instruction whose literal operand bytes match the confirmed live-trace
+registers (`a0=0x7FE, a1=0xC, a2=0x2, a3=0x0`), to get the exact byte
+offset to patch. No pending human task right now.
+
+---
+
+# (superseded) Status: 0x800C47CC is a generic CD-command helper (FUN_800c46d0) — need callers of FUN_800c46d0 + FUN_800bf908 body
 
 ## Task: trace who calls FUN_800c46d0, and what FUN_800bf908 reads
 
