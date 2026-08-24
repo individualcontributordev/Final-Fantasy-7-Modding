@@ -1,7 +1,16 @@
 # Disc Transition Knowledge Base
 
-**Last updated:** 2026-08-16  
+**Last updated:** 2026-08-16
 **Status:** Active investigation of single-disc D1→D2 transition issue
+
+> **Note (verified 2026-08-24):** This doc references `scripts/build_field_db.py`,
+> `scripts/query_field_scripts.py`, and `docs/reference/field-scripts.db`,
+> none of which exist in this repo (see `docs/reference/field-scripts-database.md`).
+> Those were a proposed tool, never built. The narrative findings below
+> (field IDs, memory addresses, root-cause analysis, resolution in
+> v0.1.3.1) are independently confirmed by `docs/findings/2026-08-20-slot-edit-origin.md`
+> and `mods/single-disc/CHANGELOG.md` and remain accurate — only the
+> "Investigation Tools" / query command sections describe a nonexistent tool.
 
 ## Quick Reference
 

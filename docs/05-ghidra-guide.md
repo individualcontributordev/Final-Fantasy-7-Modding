@@ -113,7 +113,7 @@ When patching individual field scripts (e.g., LOST2.DAT for single-disc), Ghidra
 ### Setup for Field Script Analysis
 
 1. **Import decompressed DAT file:**
-   - Extract: `python scripts/extract_field_dat.py FIELD/LOST2.DAT workspace/tmp/LOST2.dec`
+   - Extract: `python scripts/extract_field_dat.py --from pristine:1 --field LOST2 -o workspace/tmp/LOST2.dec`
    - Ghidra → Import `workspace/tmp/LOST2.dec`
    - Format: Raw Binary
    - Language: **Data:LE:8:default** (not MIPS — field scripts are bytecode, not MIPS code)
@@ -139,7 +139,7 @@ When patching individual field scripts (e.g., LOST2.DAT for single-disc), Ghidra
 1. **Find script offset** (from `field_dat.py` or prior analysis):
    ```python
    # Run once to find offset:
-   python scripts/compare_field_dat.py FIELD/LOST2.DAT
+   python scripts/compare_field_dat.py pristine:1 pristine:2 --field LOST2
    # Output shows init/0 at offset 0x434 (example)
    ```
 

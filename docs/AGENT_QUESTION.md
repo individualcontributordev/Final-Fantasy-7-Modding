@@ -4,6 +4,14 @@
 **Context:** v0.1.39 regression - missing DSKCG removals and CSR field changes
 **Status:** ✅ FULLY CLARIFIED - Correct architecture documented
 
+> **Stale-file note (verified 2026-08-24):** This is a historical planning
+> snapshot. `mods/single-disc/patches/csr-field-disc-prefer.txt`,
+> `csr-d2d3-field-merge-on-d1.md`, and `build_csrplus_and_highwind_d1_layers.py`
+> referenced below do not exist in the current repo — the merge approach
+> here was superseded by later tooling in `mods/single-disc/scripts/`. Do
+> not follow this workflow as a how-to; see `mods/single-disc/` and
+> `docs/reference/disc-transition-knowledge-base.md` for current state.
+
 **⚠️ CRITICAL RULE: NEVER MODIFY CSR LAYERS - They are correct as-is!**
 
 All changes are to `builder/single-disc-on-csr/layers/disc1.layer.json` ONLY.

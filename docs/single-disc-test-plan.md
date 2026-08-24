@@ -1,5 +1,11 @@
 # Single-disc test plan (lock gates, no regression churn)
 
+> **Stale snapshot (verified 2026-08-24):** References pack versions
+> `single-disc-on-csr-v0.1.24` through `v0.1.33` and CSR `v0.14.1`.
+> Single-disc is now at `v0.2.12` (`mods/single-disc/VERSION`) and gates
+> below may already be locked/resolved. Treat this as a historical gating
+> methodology example, not a current status board.
+
 **Goal:** Prove each fixed surface once, then only open the *next* unfixed gate.
 Do not re-touch a locked area unless a later fix fails its own regression row.
 
