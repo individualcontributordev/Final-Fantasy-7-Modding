@@ -23,11 +23,80 @@ sys.path.insert(0, str(_ROOT / "scripts"))
 
 import struct  # noqa: E402
 
-from analyze_movie_reachability import analyze_field_bytes  # local dir on path via sys.path below
+from analyze_movie_reachability import analyze_field_bytes, field_gateway_targets  # local dir on path via sys.path below
 from disc_sources import load_csr_image  # noqa: E402
 from psx_mode2_iso import USER, _list_dir, _u32_le, _user, extract_file  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+# Field-graph entry point: field id 116 = md1stin, Reactor 1 train platform --
+# the very first field a new-game playthrough enters (confirmed via
+# docs/reference/field-id-mapping.txt + ff7speedruns.com "md1stin is the
+# first field map in Reactor 1"). BFS from here over MAPJUMP edges gives the
+# set of fields CSR can actually make the player enter.
+ENTRY_FIELD_ID = 116
+
+
+def _load_field_id_mapping() -> dict[int, str]:
+    root = Path(__file__).resolve().parents[3]
+    path = root / "docs/reference/field-id-mapping.txt"
+    out: dict[int, str] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        fid_s, name = line.split(maxsplit=1)
+        out[int(fid_s)] = name.strip().upper()
+    return out
+
+
+def build_field_graph(img: bytes, fields: dict[str, tuple[int, int]]) -> dict[str, set[int]]:
+    """field NAME -> set of target field IDs reachable from it, via either a
+    reachable scripted MAPJUMP or a walkmesh gateway (door/exit line)."""
+    graph: dict[str, set[int]] = {}
+    for name, (lba, size) in fields.items():
+        raw = read_extent(img, lba, size)
+        targets: set[int] = set()
+        try:
+            slots = analyze_field_bytes(raw, name)
+            for s in slots:
+                targets.update(s.reachable_mapjump_targets())
+        except Exception:  # noqa: BLE001
+            pass
+        try:
+            targets.update(field_gateway_targets(raw, name))
+        except Exception:  # noqa: BLE001
+            pass
+        graph[name] = targets
+    return graph
+
+
+def reachable_field_names(fields: dict[str, tuple[int, int]], graph: dict[str, set[int]]) -> set[str]:
+    """BFS from ENTRY_FIELD_ID over the MAPJUMP graph -> set of enterable field NAMEs."""
+    id_to_name = _load_field_id_mapping()
+    # This disc's FIELD/*.DAT names are upper-case; id_to_name values are
+    # upper-cased too, but the disc's field-name set is the ground truth for
+    # what's actually present on this disc image.
+    name_set = set(fields)
+    entry_name = id_to_name.get(ENTRY_FIELD_ID)
+    if entry_name is None or entry_name not in name_set:
+        # Fall back: can't resolve entry field on this disc (e.g. D2/D3 don't
+        # ship md1stin) -- caller should treat every field as reachable
+        # rather than silently reporting an empty set as "nothing reachable".
+        return set(name_set)
+
+    visited: set[str] = set()
+    stack = [entry_name]
+    while stack:
+        cur = stack.pop()
+        if cur in visited:
+            continue
+        visited.add(cur)
+        for tid in graph.get(cur, ()):
+            tname = id_to_name.get(tid)
+            if tname and tname in name_set and tname not in visited:
+                stack.append(tname)
+    return visited
 
 
 def _movie_dir_by_lba(img: bytes) -> dict[int, str]:
@@ -105,6 +174,11 @@ def scan_disc(disc: int) -> dict:
     fields = field_dat_listing(img)
     print(f"  {len(fields)} FIELD/*.DAT, {len(movies)} MOVIE_ID.BIN rows", file=sys.stderr)
 
+    print("  Building field-level MAPJUMP graph...", file=sys.stderr)
+    graph = build_field_graph(img, fields)
+    field_reachable = reachable_field_names(fields, graph)
+    print(f"  {len(field_reachable)}/{len(fields)} fields reachable from entry field", file=sys.stderr)
+
     # field name -> list of {movie_id, movie_file, reachable, entity, slot}
     per_field: dict[str, list[dict]] = {}
     # movie filename -> True if reachable from ANY field on this disc
@@ -118,10 +192,12 @@ def scan_disc(disc: int) -> dict:
         except Exception as e:  # noqa: BLE001
             errors.append(f"{name}: {e!r}")
             continue
+        field_ok = name in field_reachable
         rows = []
         for s in slots:
-            for off, mid, reach in s.all_pmvie():
+            for off, mid, reach_intra in s.all_pmvie():
                 mfile = movies[mid] if 0 <= mid < len(movies) else f"OOB({mid})"
+                reach = reach_intra and field_ok
                 rows.append(
                     {
                         "entity": s.entity,
@@ -130,6 +206,7 @@ def scan_disc(disc: int) -> dict:
                         "movie_id": mid,
                         "movie_file": mfile,
                         "reachable": reach,
+                        "field_reachable": field_ok,
                     }
                 )
                 if reach:
@@ -145,6 +222,8 @@ def scan_disc(disc: int) -> dict:
         "disc": disc,
         "movie_count": len(movies),
         "field_count": len(fields),
+        "field_reachable_count": len(field_reachable),
+        "unreachable_fields": sorted(set(fields) - field_reachable),
         "movies": movies,
         "per_field": per_field,
         "movie_reachable_anywhere": movie_reachable,
