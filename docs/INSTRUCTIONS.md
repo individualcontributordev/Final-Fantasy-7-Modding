@@ -1,64 +1,41 @@
-# Find hardcoded ending/CANONON seek LBAs
+# Verify: does the engine honor MOVIE_ID.BIN, or is CANONON's LBA hardcoded?
 
-## Status
+## Why this test
 
-`FIELD.BIN`/`BATTLE.X` are byte-identical across D1/D2/D3 (confirmed by
-MD5) — shared engine overlays, ruled out, nothing more to do there.
+Static checks (done, both ruled out — no need to repeat):
+- `FIELD.BIN`/`BATTLE.X` identical across D1/D2/D3 (MD5) — not there.
+- `LOSLAKE1.DAT`'s `PMVIE` opcode is `f8 2f` (id 47, one byte) — the field
+  script itself cannot embed a full LBA, so it isn't the source.
+- `SCUS_941.63` raw-scanned for `250450` as a 32-bit LE word *and* as a
+  BCD MSF triple (`55:41:25`, both byte orders) — zero hits either way.
 
-The hardcoded seek must be in one of:
-- Per-field script bytecode for `LOSLAKE1` (D2, CANONON trigger) or the
-  ending field(s) (D3)
-- The main `SCUS_941.63` executable
+None of that proves or disproves the engine ignores a patched
+`MOVIE_ID.BIN` row at runtime — only a live test can. Prior notes claimed
+growing `MOVIE_ID` row 25 to a new LBA didn't change the ending's seek,
+but that test also grew the file, moved it to EOF, and changed disc size
+all at once — too many variables. This is a single-variable version.
 
-## Task: extract + Ghidra-search the .DAT scripts and SCUS executable
+## Test image (already built)
 
-1. Extract + decompress the field `.DAT` files via `scripts/lzs.py` (not
-   `decompress_gzipps.py`) — see `docs/02-disc-format.md` for the FIELD.DAT
-   format:
-   - `LOSLAKE1` from pristine `workspace/pristine/FINALFANTASY7_D2.bin`
-   - The ending field(s) from pristine `workspace/pristine/FINALFANTASY7_D3.bin`
-     (check `docs/01-encounter-system.md` or the field name list for the
-     exact ending field ID — likely `LAS4_0` or similar)
-2. Extract `SCUS_941.63` raw from `workspace/pristine/FINALFANTASY7_D1.bin`
-   (not GZIPPS-compressed, use `extract_file` directly, no decompress step).
-3. Import each into Ghidra:
-   - Field `.DAT` bytecode: base address per `docs/02-disc-format.md` FIELD.DAT layout
-   - `SCUS_941.63`: base `0x80010000`, after its 0x800-byte header (per `docs/ghidra-battle-overlays.md`)
-4. **Search → For Scalars**, decimal and hex, one at a time:
+`workspace/iso-extract/d2_verify_canonon_table_test.bin` (+ matching
+`.cue`) — pristine Disc 2 with **exactly one byte-level change**:
+`MINT/MOVIE_ID.BIN` row 47 (normally LBA 250450, `CANONON.MOV`) rewritten
+to row 11's values (LBA 136669, `BOOGUP.STR` — a short, visually distinct
+snowboard clip). Nothing else touched: no file moves, no size changes, no
+field-script edits.
 
-| Movie    | Decimal  | Hex        |
-|----------|----------|------------|
-| ENDING01 | `163608` | `0x27F18`  |
-| ENDING3E | `172631` | `0x2A257`  |
-| ENDING2E | `197242` | `0x3027A`  |
-| CANONON  | `250450` | `0x3D252`  |
+- If the engine **reads the table**: reaching the LOSLAKE1 cannon scene
+  plays `BOOGUP.STR` (snowboarding) instead of the cannon movie.
+- If the engine **ignores the table** (hardcoded LBA): the real CANONON
+  movie plays anyway, unaffected by the patch.
 
-For each hit: note whether it's in code (instruction operand, e.g. part of
-a `lui`/`ori`/`li` pair) or data (table entry — check for a repeating
-stride like the SNOVA table's 8-byte `lba, padded_size` entries).
+## Steps
 
-## Report back
+1. Load `d2_verify_canonon_table_test.cue` in DuckStation (or your usual
+   emulator/debugger).
+2. Get to the point in Disc 2 that triggers the LOSLAKE1 cannon scene
+   (fastest known save/route to that field).
+3. Report exactly what plays: the cannon movie, the snowboard clip, a
+   black screen/freeze, or something else.
 
-For each of the 4 values: found / not found, and if found — which file,
-the address, and code vs. table entry (with nearby bytes if it's a table).
-
-## Fallback if this also comes up empty: live trace in DuckStation
-
-1. **Settings → Advanced → Enable Debugging Tools** (or launch with
-   `-debugger`). Restart if prompted.
-2. Load a built single-disc image that reaches `LOSLAKE1`/CANONON (faster
-   to reach than the true ending, same seek mechanism).
-3. Open the Debugger window (Debug menu → CPU Debugger).
-4. Add a memory **write** breakpoint at `0x1F801802` (CD-ROM parameter
-   FIFO — a `Setloc` writes 3 MSF bytes here before the command byte hits
-   `0x1F801801`).
-5. Resume, play up to the CANONON lake scene. The breakpoint may fire many
-   times (normal file-read seeks use this path too) — Continue until the
-   3 bytes just written decode to MSF `(55, 41, 25)` (CANONON) or one of
-   the ENDING MSF triples above.
-6. At that hit, check the debugger's call stack / return address ($ra/r31)
-   — that's the calling function. Note the address (`0x8xxxxxxx` range).
-
-Report: whether the breakpoint fired on the right MSF, the return address,
-and if call stack isn't exposed, the current PC + a short disassembly
-window (10-15 instructions) around it.
+That single observation resolves the question — no further steps needed.
