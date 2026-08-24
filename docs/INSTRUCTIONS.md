@@ -17,19 +17,31 @@ container. The PMVIE opcode handler — and whatever resolves a movie id to
 an LBA or filename — has to live there.
 
 There's already a `workspace/ghidra/FIELD.BIN.dec.c` export in the repo
-history, but it was grepped and also came back with zero hits for
-`PMVIE`/`MOVIE`/`CdControl`/`CdRead`/`MOVIE_ID`. That's suspicious rather
-than conclusive: that project/export was built for the **encounter-RNG**
-investigation (`docs/05-ghidra-guide.md`), which only needed Auto Analyze
-to resolve the RNG-adjacent region — it likely never got a full
-whole-binary analysis pass, so large parts of the movie-related code may
-still be undecompiled/unlabeled function stubs that a text export would
-silently omit or garble. Redo the import fresh and let analysis fully
-finish this time before exporting.
+history, but it was grepped and came back with zero hits for
+`PMVIE`/`MOVIE`/`CdControl`/`CdRead`/`MOVIE_ID`. I don't have evidence for
+*why* — I don't know if that export covers the whole binary or was scoped/
+generated some other way, and I'm not asserting a cause without checking
+(per `.agents/rules/verified-reference-evidence.mdc`). Before redoing any
+import, answer this first — it's fast and avoids a wasted re-import if the
+existing export is actually fine:
 
-## What to export
+### 0. Check the existing export first
 
-### 1. Fresh import of FIELD.BIN
+In your Ghidra project with `FIELD.BIN.dec` already imported (the one
+`docs/05-ghidra-guide.md`'s checklist was built from):
+
+1. **Window → Script Manager** or just check the **bottom-right
+   background task list** — is anything still queued/running from a prior
+   session? (Should be empty/idle.)
+2. **Analysis → Auto Analyze** (or Ctrl+Shift+A) → **run it again** on the
+   already-imported program, even if you think it's done. If it says
+   "already analyzed, nothing to do" that confirms it's complete. If it
+   finds and processes new areas, that confirms the earlier pass was
+   partial — note which outcome you got.
+3. Either way, once it reports idle/complete, redo the two exports below
+   from that same project (no need to re-import).
+
+### 1. Fresh import (only if you don't have a usable FIELD.BIN.dec project already)
 
 1. Extract + decompress if you don't already have a current copy:
    ```
@@ -40,14 +52,12 @@ finish this time before exporting.
    container itself rather than a per-map `.DAT`, use whatever script/step
    you already used to produce the existing `workspace/iso-extract/FIELD.BIN.dec`
    — same decompressed file, just re-confirm it's current.)
-2. Ghidra → **new** project (or reuse the existing FIELD.BIN one, your
-   choice) → Import `FIELD.BIN.dec`:
+2. Ghidra → **new** project → Import `FIELD.BIN.dec`:
    - Format: **Raw Binary**
    - Language: **MIPS: R3000 32bit little endian**
    - Base address: **`0x800A0000`** (per `docs/05-ghidra-guide.md`)
-3. **Analysis → Auto Analyze** → accept defaults → **wait for it to fully
-   finish** (watch the progress bar / background task list in the bottom
-   right go to zero — don't export while anything is still running).
+3. **Analysis → Auto Analyze** → accept defaults → wait for the
+   background task list to go idle.
 
 ### 2. Export decompiled C for the whole program
 
