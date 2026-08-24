@@ -161,6 +161,44 @@ consumed by `alias_d3_ending_lbas_on_d1.py`.
   table extended past its current 54 rows before they can be aliased at
   all — a new class of problem beyond simple slot-repoint.
 
+## Update 2026-08-24 (later): build_playtest_bin.py only applied v0.1.5, skipped v0.1.4
+
+While validating the CANONON/ENDING2E fix, `build_ending_credits_test_bin.py`
+(which calls `build_playtest_bin.py`) failed with "movies layer did not
+install CANONON into JAIROFAL." Root cause: `build_playtest_bin.py` only
+applied the `single-disc-csr-manip-movies-v0.1.5` layer. v0.1.5 is a
+**delta pack** — its stored diff (`originalBytes: 766340400`) is computed
+against v0.1.4's *output*, not against the single-disc core layer's output
+(748775664 bytes). Applying v0.1.5 directly onto the core silently patches
+bytes at offsets that don't correspond to what v0.1.5 intended (no error —
+`apply_layer` just writes at whatever offsets the diff specifies), leaving
+JAIROFAL == vanilla D1 instead of CANONON.
+
+Confirmed by manually replaying `apply_layer` step by step: core -> v0.1.4
+-> v0.1.5 gives JAIROFAL == CANONON (correct); core -> v0.1.5 alone does
+not. `builder/manifest.json`'s own blurb for v0.1.5 already documented this
+("applies after manip-movies v0.1.4") — the build script just didn't follow
+it.
+
+**Fix:** `build_playtest_bin.py` now applies v0.1.4 then v0.1.5 in order
+(4 steps total instead of 3). Re-verified full ending-credits chain after
+the fix:
+
+- JAIROFAL == D2 CANONON (bit-exact)
+- ISO LBA 250450 sector0 == D2 CANONON sector0, submode 0x42 (Form2)
+- `alias_d3_ending_lbas_on_d1.py` relocates GOLD7_2.MOV to EOF LBA 336392
+  before writing ENDING2E (collision-safe)
+- CANONON re-punched at LBA 250450 after ENDING2E write (known-good v7
+  fix from `docs/findings/2026-08-07-ending-credits-test-inject.md`) —
+  confirmed bit-exact against D2 CANONON post-punch
+- GOLD7_2.MOV (relocated slot) == D3 LAST4_3.BIN (bit-exact)
+- Final image: 791,483,280 bytes / 336,515 sectors, 23,485 sectors
+  (~44 MiB) free of the 360,000-sector 80-min budget
+
+Built `workspace/iso-extract/ff7_d1_playtest_ending_test.bin` +
+`.cue` — ready for a DuckStation playtest of the ending sequence with
+manip-movies + CANONON/LOSLAKE1 both present.
+
 ## Follow-ups
 
 - [ ] Decide relocation target for CANONON's *collision* (ENDING2E must be
