@@ -68,6 +68,12 @@ TERMINALS = {"RET", "RETTO", "GAMEOVER"}
 # caller via CALL_OPS detection + separate slot lookup), but we must NOT
 # treat them as terminal (they fall through to the next op after return).
 CALL_OPS = {"REQ", "REQSW", "REQEW", "PREQ", "PRQSW", "PRQEW"}
+# MAPJUMP (0x60) unconditionally transfers control to a DIFFERENT field's
+# script entirely (ffrtt: "Change Field" -- field id + xyz + direction).
+# Anything physically after it in this slot is dead unless something else
+# jumps back in, so it must be terminal (no fallthrough) here -- same as
+# RET/RETTO/GAMEOVER. See docs/findings/2026-08-24-csr-movie-reachability-scan.md.
+MAPJUMP_TERMINAL = {"MAPJUMP"}
 
 
 def _read_jump_val(raw: bytes, offset: int, width: int) -> int:
@@ -119,6 +125,14 @@ class SlotAnalysis:
         """[(offset, movie_id, reachable)] for every PMVIE regardless of reachability."""
         return [(o.offset, o.raw[1], o.offset in self.visited) for o in self.ops if o.name == "PMVIE"]
 
+    def reachable_mapjump_targets(self) -> list[int]:
+        """Field ids from reachable MAPJUMP ops (0x60: op,I_lo,I_hi,X,X,Y,Y,Z,Z,D)."""
+        out = []
+        for o in self.ops:
+            if o.name == "MAPJUMP" and o.offset in self.visited and len(o.raw) >= 3:
+                out.append(o.raw[1] | (o.raw[2] << 8))
+        return out
+
 
 def analyze_slot(entity: str, slot_idx: int, script_raw: bytes) -> SlotAnalysis:
     ops = decode_with_offsets(script_raw)
@@ -127,7 +141,7 @@ def analyze_slot(entity: str, slot_idx: int, script_raw: bytes) -> SlotAnalysis:
 
     def edges(o: OpRec) -> list[int]:
         fallthrough = o.offset + o.size
-        if o.name in TERMINALS:
+        if o.name in TERMINALS or o.name in MAPJUMP_TERMINAL:
             return []
         if o.name in UNCONDITIONAL_JUMPS:
             width_info = JUMP_INFO[o.name]
@@ -170,6 +184,42 @@ def analyze_slot(entity: str, slot_idx: int, script_raw: bytes) -> SlotAnalysis:
 def analyze_field_bytes(field_raw: bytes, field_name: str) -> list[SlotAnalysis]:
     fd = load_field_dat(field_raw, field_name)
     return [analyze_slot(s.entity, s.slot, s.raw) for s in fd.scripts]
+
+
+# Section 5 (index 4 in FieldDat.sections; ffrtt calls it "Triggers") layout,
+# confirmed against ffrtt's FF7/Field/Triggers page:
+#   offset 56, 12 entries * 24 bytes = Gateways.
+#   Each gateway: [0:6]=exit line v1, [6:6]=exit line v2, [12:6]=dest vertex,
+#   [18:2]=destination field id (u16 LE), [20:4]=unknown.
+#   Unused gateway slots have field id 0x7FFF (32767) -- must be excluded.
+_GATEWAY_TABLE_OFFSET = 56
+_GATEWAY_COUNT = 12
+_GATEWAY_ENTRY_SIZE = 24
+_GATEWAY_UNUSED_FIELD_ID = 0x7FFF
+
+
+def field_gateway_targets(field_raw: bytes, field_name: str) -> list[int]:
+    """Destination field ids from this field's gateway table (section 5).
+
+    Gateways are walkmesh-line triggers -- always live, unlike scripted
+    MAPJUMP which can be dead code under a jump-over. We don't attempt to
+    determine if a *specific* gateway is reachable within the field (that
+    would require walkmesh polygon connectivity analysis); we conservatively
+    treat any non-placeholder gateway entry as a potential exit.
+    """
+    fd = load_field_dat(field_raw, field_name)
+    if len(fd.sections) <= 4:
+        return []
+    inf = fd.sections[4]
+    out = []
+    for i in range(_GATEWAY_COUNT):
+        off = _GATEWAY_TABLE_OFFSET + i * _GATEWAY_ENTRY_SIZE
+        if off + _GATEWAY_ENTRY_SIZE > len(inf):
+            break
+        fid = inf[off + 18] | (inf[off + 19] << 8)
+        if fid != _GATEWAY_UNUSED_FIELD_ID:
+            out.append(fid)
+    return out
 
 
 def load_field(disc_spec: str, field_name: str) -> bytes:
