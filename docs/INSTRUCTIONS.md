@@ -10,25 +10,24 @@ and nothing else broke.
 
 ## 1. Build the playtest image
 
+`verify_builder_config.py` currently fails with `layer mismatch in
+disc1.layer.json @ 0x7b2eae8` even on plain `single-disc-on-csr` with no
+movie-relocation addon — a pre-existing, unrelated base/layer-drift bug.
+Use this working command chain instead (same layers, applied directly):
+
 ```
-python scripts/verify_builder_config.py ^
-  --pristine workspace\pristine\FINALFANTASY7_D1.bin ^
-  --disc 1 ^
-  --base csr-v0.14.2 ^
-  --addon single-disc-on-csr ^
-  --addon single-disc-movie-relocation-v0.1.0 ^
-  -o workspace\iso-extract\playtest_movie_relocation.bin
+python3 mods\single-disc\scripts\build_singledisc_core_bin.py
+python3 scripts\apply_layer.py workspace\iso-extract\ff7_d1_singledisc_core.bin builder\single-disc-movie-relocation-v0.1.0\layers\disc1.layer.json -o workspace\iso-extract\playtest_movie_relocation.bin
 ```
 
-**Known issue, unrelated to this addon:** this currently fails with
-`layer mismatch in disc1.layer.json @ 0x7b2eae8` even with just
-`--addon single-disc-on-csr` alone (no movie-relocation addon) — a
-pre-existing base/layer drift, not something this patch introduced. If
-you hit that, use whatever local single-disc-on-csr build process you
-were already using before this patch, and just add
-`--addon single-disc-movie-relocation-v0.1.0` to it. If your normal
-process also fails now, say so and I'll investigate the layer mismatch
-separately.
+Then create a matching `.cue` (DuckStation needs one to open the `.bin`):
+
+```
+python3 -c "p='workspace/iso-extract/playtest_movie_relocation.bin'; open(p.replace('.bin','.cue'),'w').write('FILE \"playtest_movie_relocation.bin\" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n')"
+```
+
+Open `workspace\iso-extract\playtest_movie_relocation.cue` in DuckStation
+(not the `.bin` directly).
 
 ## 2. Playtest checklist (DuckStation)
 
