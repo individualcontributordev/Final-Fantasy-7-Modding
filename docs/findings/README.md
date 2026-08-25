@@ -14,6 +14,7 @@ Lab notebook for this repo. Stable summaries: `docs/0N-*.md`. Shipped Field stub
 
 | Date | Slug | Summary | Confidence |
 |------|------|---------|------------|
+| 2026-08-25 | [fship22-fship25-movie-unresolved](2026-08-25-fship22-fship25-movie-unresolved.md) | CSR D3 FSHIP_22/FSHIP_25 orphan `MOVIE` calls traced to only live caller (TRNAD_2/hikutei/2, CANON_2/hojyo/1) — neither sets PMVIE, confirming UNRESOLVED (not a new required-movie site) | confirmed |
 | 2026-08-24 | [mapjump-gateway-field-graph-fix](2026-08-24-mapjump-gateway-field-graph-fix.md) | MAPJUMP treated as terminal + walkmesh-gateway field graph (BFS from md1stin, id 116) corrects earlier reachability scan: only 24/27/23 movies reachable on CSR D1/D2/D3 (not 58/57/58) — most movies genuinely unreachable, matching user's premise | confirmed |
 | 2026-08-24 | [canonon-caller-is-generic-cd-command-helper](2026-08-24-canonon-caller-is-generic-cd-command-helper.md) | `0x800C47CC` is inside `FUN_800c46d0`, a generic CD-command-block builder (calls `FUN_800bf908`/`FUN_800bee10` table lookups) used for all disc I/O, not movie-specific; need callers of `FUN_800c46d0` and the table `FUN_800bf908` reads | confirmed |
 | 2026-08-24 | [canonon-ra-inside-field-bin](2026-08-24-canonon-ra-inside-field-bin.md) | Live DuckStation trace: `ra=0x800C47CC` at the CD dispatcher entry during CANONON — inside FIELD.BIN's address range (base `0x800A0000`), not the kernel; overturns prior "no CD call in FIELD.BIN" grep result as a false negative | confirmed |
