@@ -1,4 +1,66 @@
-# Status: AKAO operand fetch uses 16 addressing modes, not always a literal — CANON_1/CANON_2 scanned, no literal-mode match found yet
+# Task: playtest single-disc-movie-relocation-v0.1.0 (JUNAIR / TRNAD_51 / ROOTMAP)
+
+## Why
+
+`docs/findings/2026-08-25-movie-relocation-plan.md` fixed the last 4 real
+live movie-id conflicts in the single-disc build (agent-verified via the
+byte-level scanner, not yet human-playtested). Need DuckStation
+confirmation that all 3 movies actually play the right footage in-game
+and nothing else broke.
+
+## 1. Build the playtest image
+
+```
+python scripts/verify_builder_config.py ^
+  --pristine workspace\pristine\FINALFANTASY7_D1.bin ^
+  --disc 1 ^
+  --base csr-v0.14.2 ^
+  --addon single-disc-on-csr ^
+  --addon single-disc-movie-relocation-v0.1.0 ^
+  -o workspace\iso-extract\playtest_movie_relocation.bin
+```
+
+**Known issue, unrelated to this addon:** this currently fails with
+`layer mismatch in disc1.layer.json @ 0x7b2eae8` even with just
+`--addon single-disc-on-csr` alone (no movie-relocation addon) — a
+pre-existing base/layer drift, not something this patch introduced. If
+you hit that, use whatever local single-disc-on-csr build process you
+were already using before this patch, and just add
+`--addon single-disc-movie-relocation-v0.1.0` to it. If your normal
+process also fails now, say so and I'll investigate the layer mismatch
+separately.
+
+## 2. Playtest checklist (DuckStation)
+
+Boot `playtest_movie_relocation.bin`. For each field below, use a save
+state or field-warp cheat to jump straight there if you have one —
+otherwise reach it via normal/skip-ahead play.
+
+1. **JUNAIR** (field id 384, Junon area) — trigger whatever event plays
+   the Gelnica cutscene. Confirm the movie that plays is the **Gelnica
+   cargo-plane crash** cutscene, not a Gold Saucer clip.
+2. **TRNAD_51** (field id 706, Northern Crater train/canyon cluster) —
+   this field has 4 duplicate `tg_d` script variants (slots 4/5/6/7)
+   gated on game-state; try to trigger it at a few different points in
+   the story if possible. Confirm the movies that play are the intended
+   end-game cutscenes (do **not** expect to see North Corel's mine-cart
+   sequence or the Junon cannon-train footage — those are the *wrong*
+   clips this patch replaced).
+3. **ROOTMAP** (field id 143, Mako Reactor 8 area, early Midgar) —
+   confirm this still plays **MAINPLR.MOV** exactly as before (this
+   field's movie was intentionally left untouched by the patch — it's
+   the regression check).
+
+## 3. Report back
+
+For each of the 3 fields, say whether the correct movie played, and
+paste any DuckStation error/log output if something looks wrong (wrong
+footage, black screen, crash, audio desync). No further action needed
+from you beyond that — I'll investigate anything that doesn't match.
+
+---
+
+# (superseded) Status: AKAO operand fetch uses 16 addressing modes, not always a literal — CANON_1/CANON_2 scanned, no literal-mode match found yet
 
 `FUN_800bf908`/`FUN_800bee10` (AKAO's operand-fetch helpers) decompile to a
 **selector-nibble dispatch**: mode 0 reads a literal straight from the
