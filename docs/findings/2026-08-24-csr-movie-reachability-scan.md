@@ -2,8 +2,19 @@
 
 **Date:** 2026-08-24
 **Confidence:** confirmed
-**Status:** open
-**Related:** docs/findings/2026-08-07-csr-d3-ending-movie-jumps.md, docs/findings/2026-08-19-fresh-field-collision-scan.md, mods/single-disc/patches/csr-manip-movie-seed.txt
+**Status:** superseded (see below)
+**Related:** docs/findings/2026-08-07-csr-d3-ending-movie-jumps.md, docs/findings/2026-08-19-fresh-field-collision-scan.md, mods/single-disc/patches/csr-manip-movie-seed.txt, docs/findings/2026-08-25-movie-relocation-plan.md
+
+**Superseded 2026-08-25:** The "17 mismatches + 2 OOB ids" table below is
+**stale**. After the `slot_live` liveness check (compute_slot_liveness,
+added later this same investigation) was applied to these results, only
+4 rows are real (calling slot actually reachable/invoked) — the other 13
+mismatches + both OOB ids are never-called script slots, same
+UNRESOLVED-category pattern as FSHIP_22/23/25. See
+`docs/findings/2026-08-25-movie-relocation-plan.md` for the current,
+re-verified plan. The bug discovery (PMVIE id resolution via
+MOVIE_ID.BIN row order) and the CFG reachability analyzer itself are
+still correct and unaffected — only the movie-mismatch table is superseded.
 
 ## Summary
 
