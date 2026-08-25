@@ -56,23 +56,45 @@ def write_field_dat(fd: FieldDat, edits: dict[tuple[str, int], bytes]) -> bytes:
             raise KeyError(f"no such script slot in this FieldDat: {key!r}")
 
     # Sort all real (non-empty) script slots by their absolute start offset.
-    ordered = sorted(fd.scripts, key=lambda s: s.start)
-    if not ordered:
+    # NOTE: multiple (entity, slot) indices can ALIAS the same underlying
+    # blob -- the engine's offset table stores an identical start offset for
+    # a run of slot numbers (e.g. LOSLAKE1 `cl` slots 9-30 all alias `cl`
+    # slot 31's CANONON.MOV body). field_dat.py now emits a ScriptSlot for
+    # every aliased index, so grouping by `start` here is required: writing
+    # each alias's bytes independently would duplicate the shared blob once
+    # per alias and corrupt the offset table.
+    ordered_all = sorted(fd.scripts, key=lambda s: s.start)
+    if not ordered_all:
         raise ValueError("FieldDat has no script slots to splice")
 
-    blob_region_start = ordered[0].start
+    groups: list[list] = []
+    for slot in ordered_all:
+        if groups and groups[-1][0].start == slot.start:
+            groups[-1].append(slot)
+        else:
+            groups.append([slot])
 
-    # Boundaries: old_start of slot i, old_end of slot i (= old_start of i+1,
-    # or pos_after for the last one).
-    old_boundaries: list[int] = [s.start for s in ordered] + [old_pos_after]
+    blob_region_start = groups[0][0].start
+
+    # Boundaries: old_start of group i, old_end of group i (= old_start of
+    # group i+1, or pos_after for the last one).
+    old_boundaries: list[int] = [g[0].start for g in groups] + [old_pos_after]
 
     # Build the new contiguous blob region, applying edits, and record the
-    # remapping from every old boundary value -> new boundary value.
+    # remapping from every old boundary value -> new boundary value. Each
+    # aliased group is written exactly once; if edits touch more than one
+    # alias of the same group with conflicting bytes, that's ambiguous
+    # (they physically share storage) and we reject it.
     new_blob = bytearray()
     new_boundaries: list[int] = [blob_region_start]
-    for i, slot in enumerate(ordered):
-        key = (slot.entity, slot.slot)
-        data = edits.get(key, slot.raw)
+    for group in groups:
+        edited = {edits[(s.entity, s.slot)] for s in group if (s.entity, s.slot) in edits}
+        if len(edited) > 1:
+            raise ValueError(
+                f"conflicting edits for aliased script slots sharing offset "
+                f"{group[0].start}: {[(s.entity, s.slot) for s in group]}"
+            )
+        data = next(iter(edited)) if edited else group[0].raw
         new_blob.extend(data)
         new_boundaries.append(blob_region_start + len(new_blob))
 

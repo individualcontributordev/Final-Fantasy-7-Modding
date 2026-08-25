@@ -207,9 +207,18 @@ def scan_disc(disc: int) -> dict:
         field_ok = name in field_reachable
         rows = []
         for s in slots:
-            for off, mid, reach_intra in s.all_pmvie():
-                mfile = movies[mid] if 0 <= mid < len(movies) else f"OOB({mid})"
-                reach = reach_intra and field_ok
+            # Use reachable_movie_resolutions(), not all_pmvie(): PMVIE is a
+            # no-op byte-store that's reachable even when a later JMPF skips
+            # clean over the actual MOVIE opcode (e.g. NRTHMK dir/31 after
+            # csr-v0.14.2 -- PMVIE still executes, MOVIE does not). Gating on
+            # PMVIE reachability alone produces false-positive "live movie"
+            # rows for exactly this pattern.
+            for off, mid in s.reachable_movie_resolutions():
+                if mid is None:
+                    mfile = "UNRESOLVED"
+                else:
+                    mfile = movies[mid] if 0 <= mid < len(movies) else f"OOB({mid})"
+                reach = field_ok
                 rows.append(
                     {
                         "entity": s.entity,
@@ -219,6 +228,7 @@ def scan_disc(disc: int) -> dict:
                         "movie_file": mfile,
                         "reachable": reach,
                         "field_reachable": field_ok,
+                        "slot_live": s.live,
                     }
                 )
                 if reach:
@@ -259,8 +269,21 @@ def main() -> int:
     for d, data in result.items():
         n_reach = sum(1 for v in data["movie_reachable_anywhere"].values() if v)
         n_dead = sum(1 for v in data["movie_reachable_anywhere"].values() if not v)
-        print(f"{d}: {n_reach} movies reachable from >=1 field, {n_dead} referenced-but-dead, "
-              f"{len(data['errors'])} field parse errors")
+        # "required" = reachable AND slot_live (confirmed auto-run/REQ'd
+        # caller). Reachable-but-not-slot_live rows are uncalled script
+        # bodies -- CFG-reachable within their own slot, but nothing ever
+        # invokes that slot -- so they're not required on disc, not "needs
+        # manual review" (project convention: uncalled scripts are left
+        # untouched during CSR editing precisely because they don't run).
+        required_files = set()
+        for entries in data["per_field"].values():
+            for e in entries:
+                if e["reachable"] and e["slot_live"]:
+                    required_files.add(e["movie_file"])
+        n_uncalled = n_reach - len(required_files)
+        print(f"{d}: {len(required_files)} movies required (reachable + called), "
+              f"{n_uncalled} reachable-but-uncalled slot (not required), "
+              f"{n_dead} referenced-but-dead, {len(data['errors'])} field parse errors")
     return 0
 
 

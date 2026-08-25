@@ -151,17 +151,20 @@ class SlotAnalysis:
         file), NOT bare PMVIE reachability.
 
         NOT gated on `self.live` -- see compute_slot_liveness()/`live` field
-        docstring: our REQ/PREQ call-graph is demonstrably incomplete (many
-        real "direct"/"director"-entity cutscene+movie+MAPJUMP sequences,
-        e.g. NRTHMK's Reactor-1-exit dir/31, have no detectable caller yet
-        are definitely live in vanilla FF7). Silently dropping MOVIE rows
-        based on `live` produced false NEGATIVES here -- e.g. it dropped 5 of
-        the 7 known-genuine CSR mismatches (LOSLAKE1, TRNAD_51, BLIN70_4,
-        FSHIP_2, ROOTMAP) alongside the real orphans (FSHIP_22/23/25 mov/
-        move, BLIN2_I AD). Under-reporting needed movies is worse than
-        over-reporting (missing movie file = hard crash; extra movie file =
-        wasted disc space), so callers should use `self.live` only to flag
-        `needs_manual_review`, never to exclude a row outright."""
+        docstring. Our REQ/PREQ call-graph is known-incomplete (it only
+        models statically-resolvable REQ-family calls, not e.g. system/
+        walkmesh-driven entry points), so `live=False` is not a mathematical
+        proof a slot never runs -- but per project convention, CSR editing
+        only ever touches scripts confirmed to execute, so any slot nobody
+        REQs (and that isn't an autorun slot) was left byte-for-byte as
+        pristine/untouched precisely BECAUSE it doesn't run. Confirmed for
+        FSHIP_22/23/25 mov|move/31, BLIN2_I AD/31, and NRTHMK dir/31 (all
+        verified orphans/dead code, NRTHMK by direct playtest). Treat
+        `live=False` rows as "uncalled slot -- not required on disc", not as
+        open questions needing per-row playtest verification; callers should
+        still avoid silently dropping rows from raw data (keep them in
+        output, just don't count them toward the disc's required-movie set),
+        since a genuinely-missed caller edge would otherwise be invisible."""
         out = []
         for off, ids in self.movie_ids_at_movie.items():
             for mid in ids:
@@ -171,17 +174,19 @@ class SlotAnalysis:
     def reachable_mapjump_targets(self) -> list[int]:
         """Field ids from reachable MAPJUMP ops (0x60: op,I_lo,I_hi,X,X,Y,Y,Z,Z,D).
 
-        Deliberately NOT gated on `self.live`: unlike PMVIE/MOVIE (where a
-        REQ/PREQ call graph plus auto-run Init/Main slots fully explains
-        which script actually plays a given movie), field-transition scripts
-        can live in slots we can't prove are invoked (e.g. NRTHMK's `dir/31`
-        reactor-exit transition -- no REQ targets it anywhere in the field,
-        yet it's the real vanilla exit). Our REQ/PREQ call-graph model is
-        verified sufficient for the MOVIE false-positive case (FSHIP_22
-        mov/31) but demonstrably incomplete for field-graph purposes, so
-        gating this on liveness silently drops real field transitions
-        (787->163 reachable fields when tried) rather than only removing
-        false positives. Keep the old (pre-liveness) behavior here."""
+        Deliberately NOT gated on `self.live`: gating MAPJUMP on liveness
+        drops the field-reachability graph from 405/787 to 163/787 reachable
+        fields (tried and measured). At least one of those lost edges
+        (NRTHMK dir/31 -> MD8_1, field id 133) is the ONLY modeled path into
+        that target field (no walkmesh gateway covers it either), and
+        MD8_1's reachability status if this edge is cut is unverified either
+        way -- NRTHMK dir/31 itself was manually confirmed NOT played in
+        CSR, but that doesn't establish whether MD8_1 is reached some other
+        way we don't model (e.g. from WORLD.BIN) or is genuinely unreachable
+        in CSR. Rather than assert either outcome without per-field
+        verification, keep the old (pre-liveness) behavior for field-graph
+        construction and treat this as an open question, not a settled
+        "definitely live" claim."""
         out = []
         for o in self.ops:
             if o.name == "MAPJUMP" and o.offset in self.visited and len(o.raw) >= 3:
@@ -234,13 +239,16 @@ def analyze_slot(entity: str, slot_idx: int, script_raw: bytes) -> SlotAnalysis:
                 if t not in visited:
                     stack.append(t)
 
-    # Path-sensitive pass: carry "last id set by PMVIE on this path" (None if
-    # never set within this slot) so we know which id is actually live at
-    # each reachable MOVIE call, instead of just "some PMVIE and some MOVIE
-    # are each independently reachable somewhere in the slot" (which can both
-    # over- and under-report: a later PMVIE can overwrite an earlier one
-    # before MOVIE runs, or MOVIE can be reachable on a branch that never
-    # passed through this slot's PMVIE at all).
+    # Path-sensitive pass: carry "last id set by PMVIE/BGMOVIE on this path"
+    # (None if never set within this slot) so we know which id is actually
+    # live at each reachable MOVIE call, instead of just "some id-setter and
+    # some MOVIE are each independently reachable somewhere in the slot"
+    # (which can both over- and under-report: a later PMVIE/BGMOVIE can
+    # overwrite an earlier one before MOVIE runs, or MOVIE can be reachable
+    # on a branch that never passed through this slot's id-setter at all).
+    # BGMOVIE (0x27) is a second, distinct opcode that sets the same "next
+    # MOVIE id" state as PMVIE (0xf8) -- confirmed at LAS4_2/LAS4_3 movkun/1
+    # (`BGMOVIE 01` immediately followed by `MOVIE`, id=1).
     movie_ids_at_movie: dict[int, set[int | None]] = {}
     if ops:
         seen_states: set[tuple[int, int | None]] = set()
@@ -253,7 +261,7 @@ def analyze_slot(entity: str, slot_idx: int, script_raw: bytes) -> SlotAnalysis:
             if off not in by_offset:
                 continue
             op = by_offset[off]
-            if op.name == "PMVIE":
+            if op.name in ("PMVIE", "BGMOVIE"):
                 cur_id = op.raw[1]
             elif op.name == "MOVIE":
                 movie_ids_at_movie.setdefault(off, set()).add(cur_id)

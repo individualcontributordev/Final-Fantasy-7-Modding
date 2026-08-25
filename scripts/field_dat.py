@@ -70,6 +70,65 @@ def fmt_op(raw: bytes, name: str) -> str:
     return f"{name} {raw.hex()}"
 
 
+# Forward-jump opcode families: op -> (jump_field_offset, jump_field_size,
+# jumpShift, is_back). Offsets/sizes/shift verified against Makou Reactor's
+# Opcode::jumpShift()/Opcode::jump() and the fixed-size opcode length table
+# (Opcode.cpp). Only forward jumps matter for splitScriptAtReturn (back jumps
+# are excluded via is_back).
+_JUMP_FIELDS: dict[int, tuple[int, int, int, bool]] = {
+    0x10: (1, 1, 1, False),  # JMPF
+    0x11: (1, 2, 1, False),  # JMPFL
+    0x12: (1, 1, 0, True),  # JMPB
+    0x13: (1, 2, 0, True),  # JMPBL
+    0x1B: (1, 2, 1, False),  # Unused1B (long forward jump)
+    0x14: (5, 1, 5, False),  # IFUB
+    0x15: (5, 2, 5, False),  # IFUBL
+    0x16: (7, 1, 7, False),  # IFSW
+    0x17: (7, 2, 7, False),  # IFSWL
+    0x18: (7, 1, 7, False),  # IFUW
+    0x19: (7, 2, 7, False),  # IFUWL
+    0x30: (3, 1, 3, False),  # IFKEY
+    0x31: (3, 1, 3, False),  # IFKEYON
+    0x32: (3, 1, 3, False),  # IFKEYOFF
+    0xCB: (2, 1, 2, False),  # IFPRTYQ
+    0xCC: (2, 1, 2, False),  # IFMEMBQ
+}
+_RET_OPS = {0x00, 0x07}  # RET, RETTO
+
+
+def split_script_at_return(blob: bytes) -> int:
+    """Port of Makou Reactor's Script::splitScriptAtReturn.
+
+    Walks opcodes in byte order, skipping over any region reached only via a
+    forward jump (matching Makou's gotoLabel skip-state), until it reaches a
+    top-level RET/RETTO. Returns the byte offset just after that RET/RETTO
+    (the S0-Init/S0-Main boundary). If no top-level RET is found, returns
+    len(blob) (the whole blob is Init, Main is empty) -- matching Makou's
+    fallback when the loop runs off the end of the opcode list.
+    """
+    pos = 0
+    skip_target: int | None = None
+    n = len(blob)
+    while pos < n:
+        op = blob[pos]
+        size = max(op_size(blob, pos), 1)
+        if skip_target is not None:
+            if pos == skip_target:
+                skip_target = None
+            else:
+                pos += size
+                continue
+        if op in _JUMP_FIELDS:
+            joff, jsz, shift, is_back = _JUMP_FIELDS[op]
+            if not is_back and pos + joff + jsz <= n:
+                raw = int.from_bytes(blob[pos + joff : pos + joff + jsz], "little")
+                skip_target = pos + raw + shift
+        elif op in _RET_OPS:
+            return pos + size
+        pos += size
+    return n
+
+
 def decompress_dat(raw: bytes) -> bytes:
     """LZS FIELD DAT, or already-decompressed if header looks like VRAM ptrs."""
     if len(raw) >= 28:
@@ -107,6 +166,31 @@ class ScriptSlot:
 
     def ops(self) -> list[str]:
         return [fmt_op(r, n) for r, n in decode_ops(self.raw)]
+
+    def makou_label(self) -> str:
+        """Human label matching Makou Reactor's GrpScript::scriptName for
+        this raw table slot -- NOT the Init/Main split (see
+        makou_init_main())."""
+        if self.slot == 0:
+            return "S0 - Init/Main (raw, unsplit -- see makou_init_main())"
+        return f"Script {self.slot - 1}"
+
+    def makou_init_main(self) -> tuple[bytes, bytes]:
+        """Only meaningful when self.slot == 0. Returns (init_bytes,
+        main_bytes) by replicating Makou Reactor's
+        Script::splitScriptAtReturn: physical slot 0 is ONE blob that Makou
+        splits into logical 'S0 - Init' (bytes up to and including the
+        first top-level RET/RETTO, skipping over any region only reached by
+        a forward jump) and 'S0 - Main' (the remainder). This is a read-only
+        display helper -- field_dat_write.py and every (entity, slot) key
+        elsewhere in this codebase still use the raw physical slot number
+        (slot 0 == the whole unsplit blob), so do NOT use this to renumber
+        ScriptSlot.slot.
+        """
+        if self.slot != 0:
+            raise ValueError("makou_init_main() only applies to physical slot 0")
+        split = split_script_at_return(self.raw)
+        return self.raw[:split], self.raw[split:]
 
 
 @dataclass
@@ -184,9 +268,24 @@ def _parse_section1(sec: bytes) -> tuple[
                     empty += 1
                 positions.append(pos_after if i + empty == nb else pos)
         for j in range(sc):
-            if positions[j + 1] > positions[j]:
-                blob = sec[positions[j] : positions[j + 1]]
-                slots.append(ScriptSlot(name, j, blob, start=positions[j]))
+            start = positions[j]
+            # Multiple slot indices can alias the SAME script body: the
+            # engine's offset table stores identical start offsets for a
+            # run of slot numbers, with the blob only ending at the next
+            # DISTINCT (larger) offset -- e.g. LOSLAKE1 `cl` slots 9-30 all
+            # read 2315 while slot 31 (CANONON.MOV) is also 2315, meaning
+            # REQ'ing slot 9 runs the exact same bytes as slot 31. Checking
+            # only positions[j+1] > positions[j] misses every aliased slot
+            # in the run except the last one before the real gap. Search
+            # forward for the next strictly-greater offset instead.
+            end = None
+            for k in range(j + 1, len(positions)):
+                if positions[k] > start:
+                    end = positions[k]
+                    break
+            if end is not None:
+                blob = sec[start:end]
+                slots.append(ScriptSlot(name, j, blob, start=start))
 
     texts_blob = (
         sec[pos_texts:pos_akao] if pos_akao >= pos_texts else sec[pos_texts:]
