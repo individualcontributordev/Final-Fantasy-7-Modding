@@ -1,3 +1,28 @@
+## single-disc-movie-relocation-v0.1.0 — 2026-08-25
+
+**New hidden auto addon (`single-disc-movie-relocation-v0.1.0`, auto-included
+with `single-disc-on-csr`): fixes the 4 remaining real live movie-id
+conflicts found by re-verifying `docs/findings/2026-08-24-csr-movie-reachability-scan.md`'s
+mismatch list against `slot_live` liveness — see
+`docs/findings/2026-08-25-movie-relocation-plan.md`.**
+
+- `JUNAIR` (field 384) id 40: repoints the D1 slot to CSR D2's
+  `GELNICA.MOV` bytes (dirent stays named `GOLD1.MOV`, same pattern as the
+  already-shipped `LOSLAKE1`/`JAIROFAL.MOV`→`CANONON.MOV` repoint).
+- `TRNAD_51` (field 706) ids 21/23: repoints to `C_SCENE1.MOV`/`C_SCENE3.MOV`.
+- `TRNAD_51` id 24 conflicted with `ROOTMAP` (field 143), which still needs
+  id 24's content (`MAINPLR.MOV`). Grew `MINT/MOVIE_ID.BIN` to 55 rows
+  (54→55) with a brand-new id 54 pointing at `FF_DAIKU.MOV` (engine-table
+  only, no ISO9660 dirent needed — PMVIE resolves purely via the table),
+  and patched `TRNAD_51`'s single physical `tg_d` script blob's `PMVIE 24`
+  operand to `PMVIE 54`. `ROOTMAP.DAT` is untouched; id 24 still resolves
+  to `MAINPLR.MOV`.
+- Built via `mods/single-disc/scripts/ship_movie_relocation_v1.py`, diffed
+  against the current `single-disc-on-csr` core (not CSR D1) since this is
+  a delta layer. Re-ran `scan_sd_movie_requirements.py` against the result:
+  all 4 conflicts resolved, 0 new live mismatches introduced.
+- Not yet playtested on DuckStation — see follow-up in the findings doc.
+
 ## 0.2.12 — 2026-08-23
 
 **Restores the field 768 (`LASTMAP`, `AD3` script 31) `PlayMovie`/`FMUSC`
