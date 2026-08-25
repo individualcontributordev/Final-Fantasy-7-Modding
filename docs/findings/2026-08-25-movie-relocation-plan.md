@@ -112,18 +112,26 @@ already-shipped LOSLAKE1/CANONON or the ENDING2E/GOLD7_2 EOF relocation.
 
 ## Follow-ups
 
-- [ ] Implement: repoint D1 MOVIE_ID.BIN id 21 → C_SCENE1.MOV bytes,
-      id 23 → C_SCENE3.MOV bytes (same-slot swap, no dirent/table change).
-- [ ] Implement: repoint D1 MOVIE_ID.BIN id 40 → GELNICA.MOV bytes
-      (same-slot swap).
-- [ ] Implement: grow D1 MOVIE_ID.BIN to 55 rows, append FF_DAIKU.MOV at
-      EOF, add row 54 pointing at it, and patch `TRNAD_51/tg_d` slots
-      4/5/6/7's `PMVIE` operand from 24 to 54 (leaves ROOTMAP untouched).
-- [ ] Verify table-growth mechanism (row format, dirent creation) against
-      an existing example before writing the patch script — no prior
-      single-disc mod has grown this table yet.
-- [ ] Playtest JUNAIR (Gelnica), TRNAD_51 (all 4 slot variants), and
-      confirm ROOTMAP's MAINPLR.MOV playback is unaffected.
+- [x] Implemented 2026-08-25 via `mods/single-disc/scripts/ship_movie_relocation_v1.py`,
+      shipped as hidden auto addon `single-disc-movie-relocation-v0.1.0`
+      (auto-included with `single-disc-on-csr`): repointed ids 21/23/40
+      (EOF append, since all 3 CSR D2 sources are larger than their D1
+      slots), grew MOVIE_ID.BIN to 55 rows with new id 54 -> FF_DAIKU.MOV
+      (engine-table only, no ISO9660 dirent -- PMVIE resolves purely via
+      the table per docs/reference/movie-system.md), and patched
+      `TRNAD_51`'s single physical `tg_d` script blob's `PMVIE 24` operand
+      to `PMVIE 54` (all of slots 3-31 alias one physical blob via
+      field_dat dedup -- confirmed only 1 real occurrence to patch, not
+      4). ROOTMAP verified byte-identical before/after; id 24 still
+      resolves to MAINPLR.MOV. Re-ran `scan_sd_movie_requirements.py`
+      against the built result: 0 live mismatches remain for these 4
+      sites (the 2 pre-existing LOSLAKE1/JUNAIR "mismatches" reported by
+      the scanner are the same dirent-name-vs-content label artifact as
+      the already-shipped LOSLAKE1 repoint -- confirmed byte-identical to
+      the intended CSR D2 source).
+- [ ] Playtest JUNAIR (field 384, Gelnica), TRNAD_51 (field 706, all
+      GameMoment-gated `tg_d` slot variants), and confirm ROOTMAP
+      (field 143) MAINPLR.MOV playback is unaffected.
 
 ## Sources
 
