@@ -1,6 +1,58 @@
-# Task: playtest single-disc-movie-relocation-v0.1.0 (JUNAIR / TRNAD_51 / ROOTMAP)
+# Task: bisect JUNAIR (field 384) battle-return freeze
 
 ## Why
+
+Playtest report: on `playtest_movie_relocation.bin`, JUNAIR (field 384,
+game moment 1016 / CSR D2 content) loads fine initially, but if a battle
+encounter starts and finishes, the game **freezes** when loading back
+into the field. No prior finding in this repo documents a battle-return
+freeze anywhere (all documented single-disc freezes are field-transition,
+movie-playback, or audio issues) — so this needs to be isolated: is it
+caused by the movie-relocation patch (JUNAIR's PMVIE id 40 was repointed
+to `GELNICA.MOV`), or does it also happen on the plain `single-disc-on-csr`
+core build (i.e. pre-existing, unrelated to this session's patch)?
+
+## 1. Build BOTH images and compare
+
+The **core build** (no movie-relocation patch) is already produced by
+step 1 of the build chain below, before the `apply_layer.py` step. Build
+both from scratch and keep both `.bin`s:
+
+```
+python3 mods/single-disc/scripts/build_singledisc_core_bin.py
+cp workspace/iso-extract/ff7_d1_singledisc_core.bin workspace/iso-extract/bisect_core_no_relocation.bin
+python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_singledisc_core.bin builder/single-disc-movie-relocation-v0.1.0/layers/disc1.layer.json -o workspace/iso-extract/playtest_movie_relocation.bin
+```
+
+Generate a `.cue` for each:
+
+```
+python3 -c "
+import pathlib
+for stem in ['bisect_core_no_relocation', 'playtest_movie_relocation']:
+    p = pathlib.Path(f'workspace/iso-extract/{stem}.bin')
+    p.with_suffix('.cue').write_text(f'FILE \"{p.name}\" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n')
+"
+```
+
+## 2. Playtest: reproduce on the CORE build (no relocation patch)
+
+Open `workspace/iso-extract/bisect_core_no_relocation.cue` in DuckStation.
+Get to JUNAIR (field 384) at the same game moment (1016), trigger a
+battle, let it finish, and see if it freezes loading back into the field.
+
+- **If it freezes on the core build too** → pre-existing, unrelated to
+  the movie-relocation patch. Report that back — I'll look elsewhere
+  (e.g. `single-disc-on-csr`'s own JUNAIR merge).
+- **If it does NOT freeze on the core build** → confirms the
+  movie-relocation patch caused it. Report that back — I'll dig into
+  `ship_movie_relocation_v010.py`'s JUNAIR change (id 40 repoint).
+
+Please also note, if possible: does the freeze happen on every battle
+return at JUNAIR, or only some? Any black screen vs. frozen-but-visible
+frame? Any DuckStation log/console output at the moment it freezes?
+
+## 3. (Once bisected) Playtest single-disc-movie-relocation-v0.1.0 (JUNAIR / TRNAD_51 / ROOTMAP)
 
 `docs/findings/2026-08-25-movie-relocation-plan.md` fixed the last 4 real
 live movie-id conflicts in the single-disc build (agent-verified via the
@@ -8,28 +60,10 @@ byte-level scanner, not yet human-playtested). Need DuckStation
 confirmation that all 3 movies actually play the right footage in-game
 and nothing else broke.
 
-## 1. Build the playtest image
+(Build already done in step 1 above — use the `playtest_movie_relocation.cue`
+produced there.)
 
-`verify_builder_config.py` currently fails with `layer mismatch in
-disc1.layer.json @ 0x7b2eae8` even on plain `single-disc-on-csr` with no
-movie-relocation addon — a pre-existing, unrelated base/layer-drift bug.
-Use this working command chain instead (same layers, applied directly):
-
-```
-python3 mods/single-disc/scripts/build_singledisc_core_bin.py
-python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_singledisc_core.bin builder/single-disc-movie-relocation-v0.1.0/layers/disc1.layer.json -o workspace/iso-extract/playtest_movie_relocation.bin
-```
-
-Then create a matching `.cue` (DuckStation needs one to open the `.bin`):
-
-```
-python3 -c "p='workspace/iso-extract/playtest_movie_relocation.bin'; open(p.replace('.bin','.cue'),'w').write('FILE \"playtest_movie_relocation.bin\" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n')"
-```
-
-Open `workspace/iso-extract/playtest_movie_relocation.cue` in DuckStation
-(not the `.bin` directly).
-
-## 2. Playtest checklist (DuckStation)
+## 4. Playtest checklist (DuckStation)
 
 Boot `playtest_movie_relocation.bin`. For each field below, use a save
 state or field-warp cheat to jump straight there if you have one —
@@ -50,12 +84,14 @@ otherwise reach it via normal/skip-ahead play.
    field's movie was intentionally left untouched by the patch — it's
    the regression check).
 
-## 3. Report back
+## 5. Report back
 
-For each of the 3 fields, say whether the correct movie played, and
-paste any DuckStation error/log output if something looks wrong (wrong
-footage, black screen, crash, audio desync). No further action needed
-from you beyond that — I'll investigate anything that doesn't match.
+Report the bisect result from step 2 first (freezes on core build or not).
+Then, for each of the 3 fields in step 4, say whether the correct movie
+played, and paste any DuckStation error/log output if something looks
+wrong (wrong footage, black screen, crash, audio desync). No further
+action needed from you beyond that — I'll investigate anything that
+doesn't match.
 
 ---
 
