@@ -16,8 +16,8 @@ movie-relocation addon — a pre-existing, unrelated base/layer-drift bug.
 Use this working command chain instead (same layers, applied directly):
 
 ```
-python3 mods\single-disc\scripts\build_singledisc_core_bin.py
-python3 scripts\apply_layer.py workspace\iso-extract\ff7_d1_singledisc_core.bin builder\single-disc-movie-relocation-v0.1.0\layers\disc1.layer.json -o workspace\iso-extract\playtest_movie_relocation.bin
+python3 mods/single-disc/scripts/build_singledisc_core_bin.py
+python3 scripts/apply_layer.py workspace/iso-extract/ff7_d1_singledisc_core.bin builder/single-disc-movie-relocation-v0.1.0/layers/disc1.layer.json -o workspace/iso-extract/playtest_movie_relocation.bin
 ```
 
 Then create a matching `.cue` (DuckStation needs one to open the `.bin`):
@@ -26,7 +26,7 @@ Then create a matching `.cue` (DuckStation needs one to open the `.bin`):
 python3 -c "p='workspace/iso-extract/playtest_movie_relocation.bin'; open(p.replace('.bin','.cue'),'w').write('FILE \"playtest_movie_relocation.bin\" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n')"
 ```
 
-Open `workspace\iso-extract\playtest_movie_relocation.cue` in DuckStation
+Open `workspace/iso-extract/playtest_movie_relocation.cue` in DuckStation
 (not the `.bin` directly).
 
 ## 2. Playtest checklist (DuckStation)
