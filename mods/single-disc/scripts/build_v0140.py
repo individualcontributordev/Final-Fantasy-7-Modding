@@ -58,7 +58,7 @@ def write_json(path: Path, obj: dict) -> None:
 def load_csr_image(disc: int) -> bytearray:
     """Load pristine disc + apply CSR layer."""
     img = bytearray(pristine_bin(disc).read_bytes())
-    layer_path = CSR / f"builder/csr-v0.14.1/layers/disc{disc}.layer.json"
+    layer_path = CSR / f"builder/csr-v0.14.2/layers/disc{disc}.layer.json"
     apply_layer(img, load_json(layer_path))
     return img
 

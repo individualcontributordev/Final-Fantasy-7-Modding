@@ -163,12 +163,15 @@ def main() -> int:
         # `s.live` (compute_slot_liveness): whether *anything* actually runs
         # this (entity, slot) -- auto-run Init/Main, or a statically-resolved
         # REQ/REQSW/REQEW/PREQ/PRQSW/PRQEW call from another live slot. This
-        # catches genuine orphans (e.g. FSHIP_22 mov/31: a MOVIE opcode that
-        # looks reachable within its own slot, but nothing ever calls entity
-        # "mov" at all). It is NOT authoritative on its own -- many real
-        # "direct"/"director"-entity cutscene scripts (e.g. NRTHMK dir/31,
-        # the Reactor 1 exit) have no statically-detectable caller yet are
-        # definitely live in vanilla FF7 -- so we surface `live=False` as
+        # catches genuine orphans (confirmed for FSHIP_22/23/25 mov|move/31
+        # and BLIN2_I AD/31: a MOVIE opcode reachable within its own slot's
+        # CFG, but nothing ever calls that entity at all). It is NOT proven
+        # authoritative for every row, though -- our REQ/PREQ call-graph only
+        # models statically-resolvable calls, so `live=False` elsewhere is
+        # "unconfirmed", not "confirmed dead" (e.g. NRTHMK dir/31 has no
+        # detectable caller and was manually confirmed NOT played in CSR --
+        # consistent with being dead, but other `live=False` rows haven't
+        # been checked this way) -- so we surface `live=False` as
         # `needs_manual_review` rather than silently dropping the row.
         movie_calls: list[tuple[str, int, int, int, bool]] = []  # entity, slot, movie_off, id, live
         inherited: list[tuple[str, int, int, bool]] = []  # entity, slot, movie_off, live (id set outside this slot)
