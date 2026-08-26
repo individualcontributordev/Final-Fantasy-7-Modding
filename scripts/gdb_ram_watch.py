@@ -67,6 +67,32 @@ def cont_no_wait(sock: socket.socket) -> None:
     send_packet(sock, "c")
 
 
+def drain_stray(sock: socket.socket) -> None:
+    """Discard any bytes sitting in the socket buffer (e.g. a stale stop
+    reply from a previous continue, or a manual unpause in the UI)."""
+    sock.settimeout(0.05)
+    try:
+        while True:
+            data = sock.recv(4096)
+            if not data:
+                break
+    except socket.timeout:
+        pass
+    except OSError:
+        pass
+
+
+def handshake(sock: socket.socket) -> None:
+    """Sync the RSP stream: drain anything pending, then confirm the
+    stub responds to a basic query before we start polling."""
+    drain_stray(sock)
+    try:
+        rsp_call(sock, "qSupported", timeout=3.0)
+    except socket.timeout:
+        pass
+    drain_stray(sock)
+
+
 def read_mem(sock: socket.socket, addr: int, length: int) -> bytes:
     reply = rsp_call(sock, f"m{addr:x},{length:x}")
     try:
@@ -100,16 +126,29 @@ def main():
     args = ap.parse_args()
 
     sock = socket.create_connection((args.host, args.port), timeout=5)
+    handshake(sock)
     print(f"Connected to {args.host}:{args.port}. Watching 0x{args.addr:x}"
           f"-0x{args.addr+args.len:x}. Ctrl+C at the freeze to stop.")
 
     log = []
     prev = None
+    resumed = True  # track whether the emulator should currently be running
     try:
         while True:
-            halt(sock)
-            snap = read_mem(sock, args.addr, args.len)
-            regs = read_regs(sock)
+            try:
+                halt(sock)
+                resumed = False
+                snap = read_mem(sock, args.addr, args.len)
+                regs = read_regs(sock)
+            except socket.timeout:
+                # Stub didn't answer (e.g. it was manually unpaused/paused
+                # in the UI mid-cycle and the stream desynced). Resync and
+                # skip this cycle instead of crashing.
+                print("(resync: no reply from stub, retrying)")
+                drain_stray(sock)
+                resumed = True
+                time.sleep(args.interval)
+                continue
             ts = time.strftime("%H:%M:%S")
             if snap != prev:
                 pc = regs.get("pc")
@@ -122,15 +161,20 @@ def main():
                 log.append(line)
                 prev = snap
             cont_no_wait(sock)
+            resumed = True
             time.sleep(args.interval)
     except KeyboardInterrupt:
         print("Stopping, taking final snapshot...")
-        halt(sock)
-        snap = read_mem(sock, args.addr, args.len)
-        regs = read_regs(sock)
-        log.append("\n=== FINAL SNAPSHOT (Ctrl+C) ===\n")
-        log.append(f"registers: {regs}\n")
-        log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
+        try:
+            halt(sock)
+            snap = read_mem(sock, args.addr, args.len)
+            regs = read_regs(sock)
+            log.append("\n=== FINAL SNAPSHOT (Ctrl+C) ===\n")
+            log.append(f"registers: {regs}\n")
+            log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
+        except socket.timeout:
+            log.append("\n=== FINAL SNAPSHOT FAILED (stub not responding) ===\n")
+        print("Emulator left paused at the freeze for inspection.")
     finally:
         with open(args.out, "w") as f:
             f.writelines(log)
