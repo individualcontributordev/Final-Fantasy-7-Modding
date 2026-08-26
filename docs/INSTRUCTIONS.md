@@ -1,14 +1,14 @@
-# Task: log DMA transfers to catch the write to 0x0
+# Task: run the RAM watcher script while you playtest
 
-Watchpoint on 0x0 is confirmed to cover all RAM mirrors (DuckStation
-dedupes them) and still never fires — so this is NOT a CPU store, it's
-a DMA write (CD-ROM/GPU/SPU DMA writing straight to RAM, which CPU
-watchpoints can't catch). Need DMA logging instead:
+Watchpoint on 0x0 is confirmed to cover all RAM mirrors and still never
+fires, so it's a DMA write, not a CPU store. Built a script that polls
+RAM 0x0 directly over DuckStation's GDB server instead of relying on
+its (limited) debugger UI:
 
-1. Settings → Advanced → enable debug/trace logging, turn on the
-   **DMA** log channel (and CDROM if separate) at Debug/Trace level.
-2. Reproduce the freeze (JUNAIR, field 384, moment 1016, battle-return).
-3. Save/export the log (or screenshot the last ~30 lines before the
-   freeze) and put it at `workspace/iso-extract/dma_log.txt`.
-4. Tell me it's there — looking for a DMA transfer whose destination
-   address is 0x00000000 or very close to it.
+1. DuckStation: Settings → Advanced → enable "GDB Server" (port 19000).
+2. In a terminal: `python3 scripts/gdb_ram_watch.py`
+3. Load the game / continue play as normal in DuckStation.
+4. Reproduce the freeze (JUNAIR, field 384, moment 1016, battle-return).
+5. As soon as you see the freeze, **Ctrl+C** the terminal running the
+   script — it writes `workspace/iso-extract/ram_watch_log.txt`.
+6. Send me that file.
