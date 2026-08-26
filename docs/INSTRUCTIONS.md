@@ -1,44 +1,52 @@
-# Task: bisect JUNAIR freeze by playtesting whole-file quarters of the single-disc merge
+# Task: bisect JUNAIR freeze — test 3 individual shared-engine files
 
 ## Progress so far
 
 - `--none` (CSR only): **no freeze** (baseline confirmed good).
-- `--half 1` (46 files, `BATTLE/BATTLE.X` through `FIELD/MD8BRDG2.DAT`,
-  alphabetically): **freezes**. So the bad file is one of those 46 — the
-  other 45 (`--half 2`) are cleared, no need to test that half.
+- `--half 1` (46 files): **freezes**. `--half 2` (45 files): cleared.
+- Both 23-file quarters of `half1` **froze**. Since only one half of the
+  91 total files froze, but *both* quarters of that half also freeze,
+  this doesn't look like a simple single-culprit file — more likely one
+  or two **shared engine files** included in both quarters are at fault
+  (a per-map `.DAT` couldn't explain both quarters freezing, since each
+  quarter has a disjoint set of map files).
 
-Splitting `half1` into two quarters of 23 files each. Quarter A is
-`BATTLE/BATTLE.X` through `FIELD/GAIIN_6.DAT`; quarter B is
-`FIELD/HYOU7.DAT` through `FIELD/MD8BRDG2.DAT` (this one includes
-**JUNAIR.DAT** itself, worth noting since the freeze happens in JUNAIR,
-though the bad write could easily come from a different file that runs
-just before/during the transition).
+The prime suspects are the non-map, shared-engine files. Testing each
+completely alone (CSR + only that one file) tells us directly whether it
+alone is sufficient to cause the freeze:
 
-## Step 1: build and playtest these two on your machine
+- `FIELD/FIELD.BIN` — shared field engine overlay, used by every field.
+- `BATTLE/BATTLE.X` — shared battle engine executable.
+- `FIELD/JUNAIR.DAT` — JUNAIR's own field script/data (the field where
+  the freeze happens).
+
+## Step 1: build and playtest these three on your machine
 
 ```
-python3 mods/single-disc/scripts/bisect_core_layer.py --files BATTLE/BATTLE.X,FIELD/BLACKBGB.DAT,FIELD/BLIN66_6.DAT,FIELD/BLIN70_4.DAT,FIELD/BUGIN1A.DAT,FIELD/CANON_2.DAT,FIELD/CONDOR2.DAT,FIELD/CONVIL_1.DAT,FIELD/CONVIL_2.DAT,FIELD/CRATER_1.DAT,FIELD/CRATER_2.DAT,FIELD/FIELD.BIN,FIELD/FR_E.DAT,FIELD/FSHIP_1.DAT,FIELD/FSHIP_2.DAT,FIELD/FSHIP_22.DAT,FIELD/FSHIP_23.DAT,FIELD/FSHIP_24.DAT,FIELD/FSHIP_25.DAT,FIELD/FSHIP_3.DAT,FIELD/FSHIP_4.DAT,FIELD/GAIA_32.DAT,FIELD/GAIIN_6.DAT
-python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/HYOU7.DAT,FIELD/ITHOS.DAT,FIELD/ITOWN1A.DAT,FIELD/ITOWN2.DAT,FIELD/ITOWN_W.DAT,FIELD/JUNAIR.DAT,FIELD/JUNBIN22.DAT,FIELD/JUNBIN3.DAT,FIELD/JUNBIN4.DAT,FIELD/JUNBIN5.DAT,FIELD/JUNELE1.DAT,FIELD/JUNIN2.DAT,FIELD/JUNONE2.DAT,FIELD/JUNONE22.DAT,FIELD/JUNONE7.DAT,FIELD/LAS4_0.DAT,FIELD/LAS4_2.DAT,FIELD/LAS4_3.DAT,FIELD/LAS4_4.DAT,FIELD/LASTMAP.DAT,FIELD/LOSLAKE1.DAT,FIELD/LOST2.DAT,FIELD/MD8BRDG2.DAT
+python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/FIELD.BIN
+python3 mods/single-disc/scripts/bisect_core_layer.py --files BATTLE/BATTLE.X
+python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/JUNAIR.DAT
 ```
 
-Each writes `workspace/iso-extract/bisect_core_n23_<hash>.bin` (+`.cue`)
-locally — the printed file list at the top of each command's output
-tells you which quarter you're looking at, so you don't need to remember
-the hash.
+Each writes `workspace/iso-extract/bisect_core_n1_<hash>.bin` (+`.cue`)
+locally — the printed `+ FILE` line at the top of each command's output
+tells you which one you're looking at, so you don't need to remember the
+hash.
 
 Playtest JUNAIR (field 384, moment 1016): get into a battle, let it
-finish, return to the field. Report for **each** of the two builds:
+finish, return to the field. Report for **each** of the three builds:
 freeze or no freeze.
 
 ## Step 2: what happens next
 
-- Whichever quarter freezes, I'll split it into two more (11/12 files)
-  next, and so on, until we land on one file.
-- If **both** quarters freeze, that's unexpected (would suggest the two
-  half1 files somehow only trigger it in combination) — report that
-  exactly and I'll re-check the grouping logic.
-- If **neither** freezes, that's also unexpected given `half1` froze —
-  same, report it and I'll double check nothing is misapplied.
+- If exactly one freezes alone: that's the culprit, we inspect its diff
+  next.
+- If more than one freezes alone: multiple independent bad writes exist,
+  we'll need to fix each.
+- If **none** freeze alone: the bug needs two or more of these files
+  together (or a file outside these three, still within the frozen
+  quarters) — I'll test 2-file combinations next (e.g. FIELD.BIN +
+  BATTLE.X, FIELD.BIN + JUNAIR.DAT, etc).
 
 You can also generate other slices yourself between playtests instead of
 waiting for me:
