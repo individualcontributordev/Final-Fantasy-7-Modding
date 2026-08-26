@@ -47,41 +47,48 @@ sector/size fields) — it does **not** go through `MOVIE_ID.BIN`, so the
 prior movie-relocation fix cannot affect this at all (consistent with the
 freeze being identical with/without that patch).
 
-## Caveat — relevance to the battle-return freeze not yet confirmed
+## `air0`/slot-3 hypothesis: DISPROVEN (2026-08-26 update)
 
-This `air0`/slot-3 branch is gated by an `IFSW` flag check (different flag
-condition per disc: `0x0b` on D1 vs `0x31` on D2), so it's a **conditional**
-branch, not something guaranteed to run every time the field loads or every
-time a battle ends. It has not yet been confirmed that:
+Playtester confirmed this `air0` slot-3 block is gated by a **line trigger**
+(walk-into-line script call) that is not being hit in the reproduction —
+the freeze happens right after a battle, well before that trigger point in
+the field. So this branch cannot be the cause regardless of the `IFSW`
+flag state.
 
-1. This slot is actually invoked during the battle-return / field-reinit
-   sequence (as opposed to some unrelated story trigger), or
-2. The `IFSW` condition is actually true at game moment 1016 in the
-   single-disc build's flag state.
+This also means **no genuine JUNAIR.DAT content difference explains the
+freeze**: a full script-slot diff (736 slots) plus section-by-section diff
+confirms `air0`/slot-3 (unreachable here) is the *only* content delta —
+`walkmesh`, `background`, `camera`, `inf`, `encounter`, and `model_loader`
+sections are all byte-identical D1 vs D2, and all 735 other script slots
+match exactly. Text section differs by only 2 bytes total (padding), no
+script logic difference.
 
-It remains the single most likely candidate (only genuine script content
-delta between the D1 and D2 copies of this field, and the `AKAO(0xF2)`
-literal CD-command bytes are a known freeze-prone construct per the linked
-finding), but is unconfirmed.
+**Conclusion: the cause is not inside `FIELD/JUNAIR.DAT` at all.** It must
+be something else in the battle-return path: engine/global state, a
+different shared file (battle module common code, VRAM/module data,
+audio/CD-DA track layout affected by the single-disc merge), or something
+disc-layout-dependent that isn't visible in this field's own file content.
 
 ## Next steps
 
-1. RAM-watch the script interpreter PC (or use DuckStation's debugger) at
-   the exact freeze moment to confirm execution is inside this `air0`
-   entity's script (specifically the `AKAO` instruction) vs. elsewhere
-   (e.g. a shared field-init/re-entry script this diff doesn't cover).
-2. If confirmed: this `AKAO` instruction's literal bytes
-   (`c1 78 00000000 00000000 00000000`) were compiled assuming CSR D2's
-   physical layout; identify what CD command `0xC1` actually issues
-   (Ghidra: `FUN_800c46d0` dispatch, cmd byte `0xC1`) to understand why it
-   hangs on a D1-based single-disc image.
-3. Possible fix directions once confirmed: strip/patch this specific
-   `air0`/slot-3 block in the single-disc build's JUNAIR merge (similar in
-   spirit to the CANON_2 fix in
-   `docs/findings/2026-08-12-single-disc-canon2-akao-dskcg-strip.md`, but
-   here it's genuinely new D2 content, not merge corruption — needs design
-   review before stripping, since it may be intentional post-battle story
-   content, e.g. new dialogue/party state (`PRTYE`) added by CSR D2).
+1. RAM-watch the script interpreter PC / call stack (DuckStation debugger)
+   at the exact freeze moment. Since it's not `air0`, check whether PC is
+   inside generic battle-end/field-reinit engine code (not the field
+   script interpreter at all) vs. some other field entity's script that
+   *is* reachable at this point (re-review scripts for `dir`/other
+   entities executed on field re-entry, not just the diffed slot).
+2. Since JUNAIR.DAT content is now ruled out, broaden the search: compare
+   other files touched by battle-return (e.g. shared battle/field common
+   modules, CD-DA/audio track table, `MOVIE_ID.BIN` if it's read at
+   battle-end for any reason) between stock CSR D2 alone and the
+   single-disc merged image, since the freeze is present on single-disc
+   but not on stock D2.
+3. Consider whether single-disc strips or renumbers CD audio tracks (CD-DA
+   redbook tracks) present on D2 but not carried into the merged D1-based
+   image — a battle-end music/SFX cue trying to read a track that no
+   longer exists in the same position could hang the CD-XA subsystem
+   similarly to the (ruled-out) AKAO literal-sector theory, just from a
+   different call site than JUNAIR's field script.
 
 ## False leads (for future readers)
 
@@ -90,3 +97,7 @@ finding), but is unconfirmed.
 - Movie-relocation patch (`ship_movie_relocation_v010.py`): **ruled out** —
   freeze reproduces identically on the core build without that layer
   applied at all.
+- `air0`/slot-3 `AKAO(0xF2)` script delta: **disproved** — this block is
+  gated by a line trigger not hit before the freeze occurs, and no other
+  JUNAIR.DAT content differs between D1 and D2. The freeze source is
+  outside this file entirely.
