@@ -1,23 +1,14 @@
-# Task: RAM-watch the JUNAIR freeze live
+# Task: identify source of corrupting write to 0x00000000
 
-Confirmed: plain CSR disc 1 does NOT freeze. Bug is introduced by the
-single-disc-on-csr layer itself.
+Screenshots show PC stuck at 0x80000088 (kernel exception-vector area)
+with COP0_CAUSE=Reserved Instruction — the low-RAM jump table got
+overwritten with raw file/text bytes. Write watchpoint on 0x00000000
+never fired, so it's a DMA write (CD-ROM->RAM), not a CPU store.
 
-```
-git pull --ff-only
-python3 mods/single-disc/scripts/build_singledisc_core_bin.py
-printf 'FILE "ff7_d1_singledisc_core.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/ff7_d1_singledisc_core.cue
-```
-
-Open the resulting `.cue` in DuckStation with the debugger enabled
-(Settings → Advanced → Show Debug Menu).
-
-1. Debug → CPU Debugger → breakpoints/watchpoints panel.
-2. Add a **write watchpoint on guest address `0x00000000`** (range
-   `0x0000`–`0x1FFF` if supported).
-3. JUNAIR (field 384, moment 1016): trigger a battle, let it finish,
-   return to field.
-4. When it hits, before resuming, capture: **PC**, **call stack**, and
-   **all GPR registers** (especially whichever holds the target address
-   — expect something like `0x80200000`).
-5. Report PC + call stack + register dump, raw/untrimmed.
+In DuckStation, pause right at the freeze (same repro), open the
+Memory panel, right-click near address 0x00000000, export/dump
+0x00000000-0x00000800 to a file (any format: raw binary or the
+panel's "Export" if available). Put it at
+`workspace/iso-extract/corrupt_ram_dump.bin` and tell me it's there —
+I'll grep `ff7_d1_singledisc_core.bin` for that byte sequence to find
+which file/offset is being mis-targeted.
