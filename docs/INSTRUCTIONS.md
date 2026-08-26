@@ -1,18 +1,19 @@
-# Task: bisect JUNAIR freeze by playtesting incremental single-disc-on-csr builds
+# Task: bisect JUNAIR freeze by playtesting whole-file halves of the single-disc merge
 
-## Why this instead of the debugger trace
+## Why this instead of raw byte-offset slicing
 
 Confirmed: the freeze reproduces on the **full** single-disc-on-csr core
 build and is **absent** with CSR alone (3 discs, no single-disc merge).
-Instead of chasing it in the DuckStation debugger, we're bisecting by
-playtest: build CSR + an increasing slice of the single-disc merge layer,
-and playtest JUNAIR's battle-return each time. Whichever slice first
-introduces the freeze tells us exactly which part of the merge causes it.
+We're bisecting by playtest, but grouped by **whole ISO file** (each
+`FIELD/*.DAT`, each `SNOVA/*`, `BATTLE/BATTLE.X`), not by raw byte
+position in the layer file. Cutting mid-file could leave a file's
+compressed data or directory table half-patched — an inconsistent state
+that might crash for a *different* reason and give a false signal. Whole
+files stay internally consistent no matter how many of them are included.
 
-The single-disc merge is one big flat layer of 63450 byte-diff records,
-stored in ascending disc-offset order. `bisect_core_layer.py` applies
-CSR + only the first N of those records, so "N records" is our bisection
-axis (roughly: earlier disc regions/files first, later ones last).
+The single-disc merge touches 91 files. `bisect_core_layer.py` groups its
+63,450 byte-diff records by file automatically and lets you build CSR +
+any subset of those 91 files.
 
 ## Step 1: build and playtest these two on your machine
 
@@ -20,18 +21,19 @@ Run both of these (needs `workspace/pristine/FINALFANTASY7_D1.bin` and a
 sibling checkout of `Final-Fantasy-7-CSR`, same as any other build here):
 
 ```
-python3 mods/single-disc/scripts/bisect_core_layer.py --count 0
-python3 mods/single-disc/scripts/bisect_core_layer.py --count 31725
+python3 mods/single-disc/scripts/bisect_core_layer.py --none
+python3 mods/single-disc/scripts/bisect_core_layer.py --half 1
 ```
 
 This writes, locally on your machine:
 
-- `workspace/iso-extract/bisect_core_N0.bin` (+`.cue`) — **CSR only**,
-  zero single-disc records applied. This is the baseline — JUNAIR's
+- `workspace/iso-extract/bisect_core_none.bin` (+`.cue`) — **CSR only**,
+  no single-disc files applied. This is the baseline — JUNAIR's
   battle-return must **not** freeze here (if it does, something is wrong
   with the harness itself, report that immediately).
-- `workspace/iso-extract/bisect_core_N31725.bin` (+`.cue`) — CSR + the
-  first 50% of single-disc records (offsets up to `284732332`).
+- `workspace/iso-extract/bisect_core_half1.bin` (+`.cue`) — CSR + the
+  first alphabetical half of the 91 touched files (BATTLE/BATTLE.X
+  through FIELD/MD8BRDG2.DAT — run `--list` to see the exact set).
 
 Playtest JUNAIR (field 384, moment 1016): get into a battle, let it
 finish, return to the field. Report for **each** of the two builds:
@@ -39,25 +41,24 @@ freeze or no freeze.
 
 ## Step 2: what happens next
 
-- If `N31725` **freezes**: the cause is in the first half of the merge
-  records (offsets `\u2264 284732332`) \u2014 I'll build a `N~15862` (25%) slice
-  next to narrow further.
-- If `N31725` does **not** freeze: the cause is in the second half
-  (offsets `> 284732332`) \u2014 I'll build a `N~47587` (75%) slice next.
-- Repeat this halving until we land on the exact record (or small
-  cluster of records) that introduces the freeze, then inspect what file/
-  region that disc offset belongs to.
+- If `half1` **freezes**: the cause is one of those 46 files — I'll split
+  that half again next.
+- If `half1` does **not** freeze: the cause is in the other 45 files
+  (`--half 2`) — I'll build and hand you that slice, then split it.
+- Repeat until we land on one file, then inspect exactly what changed in
+  it (JUNAIR itself is one of the 91 touched files, worth checking early).
 
-You can also generate any other slice yourself between playtests instead
-of waiting for me:
+You can also generate other slices yourself between playtests instead of
+waiting for me:
 
 ```
-python3 mods/single-disc/scripts/bisect_core_layer.py --count <N>
+python3 mods/single-disc/scripts/bisect_core_layer.py --list
+    # show every file group + record/byte counts
+python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/JUNAIR.DAT,FIELD/BLACKBGB.DAT
+    # apply CSR + only the named files
+python3 mods/single-disc/scripts/bisect_core_layer.py --all
+    # every file (equivalent to the full, known-freezing core build)
 ```
-
-which writes `workspace/iso-extract/bisect_core_N<N>.bin` + `.cue`
-(0 \u2264 N \u2264 63450; `--all` = the full core build, i.e. the known-freezing
-build).
 
 ## Note on movie count vs. burnable single disc
 
