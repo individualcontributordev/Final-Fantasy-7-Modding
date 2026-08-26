@@ -3,8 +3,14 @@
 Confirmed: plain CSR disc 1 does NOT freeze. Bug is introduced by the
 single-disc-on-csr layer itself.
 
-Open `workspace/iso-extract/ff7_d1_singledisc_core.bin` in DuckStation
-with the debugger enabled (Settings → Advanced → Show Debug Menu).
+```
+git pull --ff-only
+python3 mods/single-disc/scripts/build_singledisc_core_bin.py
+printf 'FILE "ff7_d1_singledisc_core.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/ff7_d1_singledisc_core.cue
+```
+
+Open the resulting `.cue` in DuckStation with the debugger enabled
+(Settings → Advanced → Show Debug Menu).
 
 1. Debug → CPU Debugger → breakpoints/watchpoints panel.
 2. Add a **write watchpoint on guest address `0x00000000`** (range
