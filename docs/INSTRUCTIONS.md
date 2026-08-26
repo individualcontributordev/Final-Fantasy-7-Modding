@@ -1,44 +1,54 @@
-# Task: confirm JUNAIR battle-return freeze trigger (RAM watch), then playtest movie relocation
+# Task: catch the exact write that corrupts the kernel vector table in JUNAIR battle-return freeze
 
-## Bisect result (confirmed)
+## Root cause found: 2MB address-wrap memory corruption (not a CD-ROM issue)
 
-The freeze reproduces identically on `bisect_core_no_relocation.bin`
-(no movie-relocation patch) and `playtest_movie_relocation.bin` — it is
-**pre-existing in `single-disc-on-csr` itself**, unrelated to the movie
-patch. Also confirmed: the freeze does **not** occur on stock CSR Disc 2
-alone at the same spot.
+Full analysis: `docs/findings/2026-08-26-junair-single-disc-battle-return-freeze.md`.
 
-Root-cause research (`docs/findings/2026-08-26-junair-single-disc-battle-return-freeze.md`):
+Summary: the DuckStation debug log (`docs/logs`) caught the actual crash
+event. Some code (guest PC `0x80034E54` / `0x80034EFC` / `0x80034EF4`, in
+the BIOS SPU/CD driver work area — no application symbol resolves here)
+writes to guest address `0x80200000`+ (2MB above the base of PS1 RAM). The
+PS1 only decodes the low 21 bits of RAM addresses, so this write **wraps
+around and stomps address `0x00000000`** — the kernel exception-vector
+table used for every hardware interrupt. One frame later the vector table
+is corrupted garbage, the next interrupt (`CAUSE=0x00000400`) jumps into
+it, and the CPU hangs forever at `PC=0x80000080`. This is not a CD-ROM
+seek/track bug — the CD-XA audio log activity around it is a red herring.
 
-- JUNAIR's encounter table and `BATTLE/SCENE.BIN` are **byte-identical**
-  between CSR D1 and D2 — ruled out.
-- The `air0` entity script-3 `AKAO(0xF2)` hypothesis is also **ruled out**:
-  that block is gated by a line trigger not hit before the freeze occurs
-  (confirmed by playtester). A full slot-by-slot and section-by-section
-  diff confirms **no other content difference exists** between D1 and D2
-  JUNAIR.DAT — every walkmesh/background/camera/inf/encounter/model_loader
-  byte and all 735 other script slots match exactly.
-- **Conclusion: JUNAIR.DAT's own file content is not the cause.** The
-  freeze must come from something else touched during battle-return:
-  engine/global state, a different shared file, or CD/audio-track layout
-  changed by the single-disc merge.
+**Goal now: catch the write to `0x80200000` (or the vector-table stomp at
+`0x00000000`) live, so we can see the call stack and the register holding
+the bad address** — that traces back to which battle-end/field-reinit
+routine miscalculates a pointer/length by exactly `0x200000`.
 
-## 1. RAM-watch to find the actual freeze site
+## 1. RAM-watch: catch the corrupting write
 
-Since the field's own script content is ruled out, this step is now about
-**finding**, not confirming, where execution is stuck. Open
-`bisect_core_no_relocation.cue` (build command in step 2 below) in
-DuckStation with the debugger. Get to JUNAIR (field 384, moment 1016),
-trigger a battle, let it finish, and when the freeze happens on return to
-the field, check the CPU program counter / call stack in DuckStation's
-debug window.
+Open `bisect_core_no_relocation.cue` (build command in step 2 below) in
+DuckStation with the debugger enabled (Settings → Advanced → Show Debug
+Menu, if not already on).
 
-Report back exactly what you see: the PC address, any resolvable function
-name/symbol, and the call stack if available. Also note if it looks like
-a CD-read spin-loop (PC not moving, or looping in a tiny address range)
-vs. a genuine crash/exception. This will tell me which subsystem to dig
-into next (field script interpreter, battle-end common code, or CD-XA
-audio dispatch).
+1. **Debug → CPU Debugger** → find the **breakpoints/watchpoints** panel.
+2. Add a **write watchpoint on guest address `0x00000000`**, size covering
+   at least `0x0000`–`0x1FFF` if DuckStation lets you set a range (if only
+   single addresses are supported, `0x00000000` alone should still catch
+   the first stomp based on the log). If DuckStation doesn't support
+   memory-range watchpoints at all, an **execution breakpoint at
+   `0x80034E54`** is the fallback (that's the guest PC seen issuing the
+   first bad write in the log).
+3. Get to JUNAIR (field 384, moment 1016), trigger a battle, let it
+   finish, and return to the field. The watchpoint/breakpoint should hit
+   **before** the freeze becomes visible (the log shows this happens
+   right after a ~20s CD-XA background stall, so don't assume it's broken
+   if there's a pause).
+4. When it hits, **before resuming**, capture:
+   - The **PC** (should be near `0x80034E54`/`EFC`/`EF4` if the vector
+     watchpoint triggered, per the log).
+   - The **call stack** (Debug → CPU Debugger's "Call Stack" panel).
+   - **All GPR register values**, especially whichever register holds the
+     target address being written (should show `0x80200000` or similar —
+     we need to see this value and, if possible, step back a few
+     instructions to see what computation produced it).
+5. Report back: PC, call stack, and the register dump — paste raw, don't
+   summarize/trim.
 
 If you don't have the debugger set up or this is too fiddly, that's fine
 — report back "skipped RAM watch" and just do the playtest checklist
@@ -101,8 +111,9 @@ otherwise reach it via normal/skip-ahead play.
 
 ## 5. Report back
 
-Report the RAM-watch result from step 1 first (confirmed AKAO/air0, stuck
-elsewhere, or skipped). Then, for each of the 3 fields in step 4, say
+Report the RAM-watch result from step 1 first (caught the corrupting
+write with PC/call-stack/register dump, or skipped). Then, for each of
+the 3 fields in step 4, say
 whether the correct movie played, and paste any DuckStation error/log
 output if something looks wrong (wrong footage, black screen, crash,
 audio desync). No further action needed from you beyond that — I'll
