@@ -1,40 +1,41 @@
-# Task: bisect JUNAIR freeze — check whether ANY nonzero selection freezes
+# Task: bisect JUNAIR freeze — isolate __GAP__ (directory-table) records from file content
 
-## Progress so far, and why we're pivoting
+## Progress so far
 
 - `--none` (CSR only, zero files selected): **no freeze**.
-- `--half 1` (46 files): **freezes**.
-- Both 23-file quarters of `half1`: **both froze**.
-- `FIELD/FIELD.BIN` alone, `BATTLE/BATTLE.X` alone, and `FIELD/JUNAIR.DAT`
-  alone: **all three froze independently.**
+- `--half 1` (46 files), both 23-file quarters of it, `FIELD/FIELD.BIN`
+  alone, `BATTLE/BATTLE.X` alone, `FIELD/JUNAIR.DAT` alone, `--half 2`
+  (45 files), and one trivial unrelated file (`FIELD/GAIA_32.DAT`)
+  alone: **every single one froze.**
 
-Three unrelated files (a shared field overlay, a shared battle exe, and
-one map's own script) each independently reproducing the exact same
-freeze doesn't fit "one bad file." It fits a different hypothesis: the
-freeze isn't caused by any single file's *content*, but by applying
-**any nonzero subset** of the core layer at all, because of how the
-always-on `__GAP__` records (ISO9660 directory-table entries) interact
-with a partial selection — `--none` is the only build so far where the
-directory table and actual file bytes are guaranteed fully consistent
-with each other.
+8-for-8: every build with ANY nonzero file selection froze, and only
+`--none` was clean. That rules out any single file's content as the
+cause. The one thing every frozen build has in common (that `--none`
+lacks) is the always-on `__GAP__` records — 383 ISO9660 directory-table
+entries spanning LBA 16 (system area) through LBA 317787 (near the end
+of the image), which get applied on top of every non-`--none` selection
+regardless of which files you pick.
 
-Critically: `--half 2` (the other 45 files) was **never actually
-tested** — I incorrectly assumed it was "cleared" by binary-bisection
-logic, but that logic doesn't hold if the real cause is "any partial
-selection is inconsistent." We need to test that now, plus one trivial,
-unrelated file to see if literally anything nonzero freezes.
+I've added two new modes to the script to test this directly:
+- `--gap-only`: apply CSR + ONLY the __GAP__ records, zero file content.
+- `--all --no-gap`: apply CSR + ALL file content, but WITHOUT the
+  __GAP__ records.
+
+Note: `--gap-only` alone still grows the image from 747,435,024 to
+748,775,664 bytes (same final size as the full build) even with zero
+file bytes touched — confirming __GAP__ is what reshapes/grows the
+directory table and disc layout, independent of file content.
 
 ## Step 1: build and playtest these two on your machine
 
 ```
-python3 mods/single-disc/scripts/bisect_core_layer.py --half 2
-python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/GAIA_32.DAT
+git pull --ff-only
+python3 mods/single-disc/scripts/bisect_core_layer.py --gap-only
+python3 mods/single-disc/scripts/bisect_core_layer.py --all --no-gap
 ```
 
-`--half 2` writes `bisect_core_half2.bin`/`.cue`. `FIELD/GAIA_32.DAT` is
-a tiny, unrelated map file (89 records, ~5KB) picked only to test the
-"any nonzero selection freezes" theory as cheaply as possible; it writes
-`bisect_core_n1_<hash>.bin`/`.cue`.
+`--gap-only` writes `bisect_core_gaponly.bin`/`.cue`. `--all --no-gap`
+writes `bisect_core_all_nogap.bin`/`.cue`.
 
 Playtest JUNAIR (field 384, moment 1016): get into a battle, let it
 finish, return to the field. Report for **each** build: freeze or no
@@ -42,17 +43,23 @@ freeze.
 
 ## Step 2: what happens next
 
-- If **both** freeze: confirms "any nonzero core-layer selection
-  freezes" — the bug is in the always-on `__GAP__`/directory-table
-  handling itself, not in any specific file's content. I'll go look at
-  `group_records_by_file` / `apply_layer` and the GAP record set next.
-- If `--half 2` does **not** freeze but `GAIA_32.DAT` alone **does**:
-  contradicts the "any selection" theory in a different way — would mean
-  something about *which* files are selected still matters, just not in
-  the way straight bisection assumed. Report exactly which combination
-  and I'll re-plan.
-- If **neither** freezes: even more surprising given everything above —
-  report it, I'll double-check nothing was misapplied.
+- If `--gap-only` **freezes** and `--all --no-gap` does **not**:
+  confirms the bug is in the `__GAP__`/directory-table records
+  themselves — I'll dig into what those records actually change
+  (probably the root/subdirectory extent sizes for grown files) and fix
+  the generator.
+- If `--gap-only` does **not** freeze and `--all --no-gap` **does**:
+  means file content alone (independent of directory-table changes) can
+  freeze — points back at file data, but now with __GAP__ ruled out as
+  a factor, so I'd re-test individual files with `--no-gap` to see if
+  removing __GAP__ changes their individual behavior too.
+- If **both** freeze: both structural and content changes are
+  independently sufficient — two separate bugs, or GAP isn't fully
+  isolated from content in the applier. Report it, I'll inspect
+  `apply_layer` ordering.
+- If **neither** freezes: would mean __GAP__ + content together is
+  required, but neither alone. Report it, I'll test partial combos next
+  (e.g. `--files FIELD/JUNAIR.DAT --no-gap` vs with GAP).
 
 You can also generate other slices yourself between playtests instead of
 waiting for me:
@@ -61,9 +68,13 @@ waiting for me:
 python3 mods/single-disc/scripts/bisect_core_layer.py --list
     # show every file group + record/byte counts
 python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/JUNAIR.DAT,FIELD/BLACKBGB.DAT
-    # apply CSR + only the named files
+    # apply CSR + only the named files (+ __GAP__, unless --no-gap is added)
 python3 mods/single-disc/scripts/bisect_core_layer.py --all
     # every file (equivalent to the full, known-freezing core build)
+python3 mods/single-disc/scripts/bisect_core_layer.py --gap-only
+    # ONLY the __GAP__ structural records, no file content
+python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/JUNAIR.DAT --no-gap
+    # a file selection WITHOUT __GAP__ (combine --no-gap with any mode)
 ```
 
 ## Note on movie count vs. burnable single disc

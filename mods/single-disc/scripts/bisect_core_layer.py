@@ -28,6 +28,12 @@ always included in every build (they're structural, not content, and tiny).
   python3 mods/single-disc/scripts/bisect_core_layer.py --none   # CSR only, baseline
   python3 mods/single-disc/scripts/bisect_core_layer.py --all    # full core layer
 
+  python3 mods/single-disc/scripts/bisect_core_layer.py --gap-only
+      # apply CSR + ONLY the __GAP__ structural records, no file content
+  python3 mods/single-disc/scripts/bisect_core_layer.py --all --no-gap
+      # apply CSR + all file content, WITHOUT the __GAP__ structural records
+      # (combine --no-gap with --files/--half too)
+
 Writes workspace/iso-extract/bisect_core_<tag>.bin and a matching .cue.
 """
 from __future__ import annotations
@@ -104,6 +110,8 @@ def main() -> int:
     ap.add_argument("--half", type=int, choices=(1, 2), help="apply the first (1) or second (2) half of file groups, alphabetically")
     ap.add_argument("--none", action="store_true", help="CSR only, no core-layer files applied (baseline)")
     ap.add_argument("--all", action="store_true", help="apply every file group (equivalent to the full core build)")
+    ap.add_argument("--gap-only", action="store_true", help="apply ONLY the __GAP__ structural records, no file content")
+    ap.add_argument("--no-gap", action="store_true", help="exclude the normally always-on __GAP__ structural records")
     args = ap.parse_args()
 
     pristine, csr_layer, core_layer_path = _resolve_paths(ROOT)
@@ -140,8 +148,10 @@ def main() -> int:
         print(f"total changed bytes across all groups: {total_bytes}")
         return 0
 
-    if args.none:
+    if args.gap_only:
         selected: list[str] = []
+    elif args.none:
+        selected = []
     elif args.all:
         selected = content_keys
     elif args.half is not None:
@@ -155,16 +165,18 @@ def main() -> int:
             return 1
         selected = [f for f in wanted if f != GAP_KEY]
     else:
-        print("pass one of --list / --files / --half / --none / --all", file=sys.stderr)
+        print("pass one of --list / --files / --half / --none / --all / --gap-only", file=sys.stderr)
         return 1
 
-    records: list[dict] = list(groups.get(GAP_KEY, []))
+    include_gap = args.gap_only or (not args.none and not args.no_gap)
+    records: list[dict] = list(groups.get(GAP_KEY, [])) if include_gap else []
     for key in selected:
         records.extend(groups[key])
 
     mtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(core_layer_path.stat().st_mtime))
     print(f"USING [core layer] {core_layer_path}  (mtime {mtime})")
-    print(f"Applying {len(selected)}/{len(content_keys)} file groups + {GAP_KEY} ({len(records)} records total)")
+    gap_note = f"+ {GAP_KEY}" if include_gap else f"WITHOUT {GAP_KEY}"
+    print(f"Applying {len(selected)}/{len(content_keys)} file groups {gap_note} ({len(records)} records total)")
     for key in selected:
         print(f"  + {key}")
 
@@ -177,7 +189,9 @@ def main() -> int:
     apply_layer(img, partial_layer)
     print("   after partial core layer:", len(img), "bytes")
 
-    if args.none:
+    if args.gap_only:
+        tag = "gaponly"
+    elif args.none:
         tag = "none"
     elif args.all:
         tag = "all"
@@ -187,6 +201,8 @@ def main() -> int:
         import hashlib
         digest = hashlib.sha1(",".join(selected).encode("utf-8")).hexdigest()[:8]
         tag = f"n{len(selected)}_{digest}"
+    if args.no_gap and not args.gap_only:
+        tag += "_nogap"
     stem = f"bisect_core_{tag}"
     out_bin = out_dir / f"{stem}.bin"
     out_cue = out_dir / f"{stem}.cue"
