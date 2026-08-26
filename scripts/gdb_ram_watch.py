@@ -31,6 +31,7 @@ def send_packet(sock: socket.socket, body: str) -> None:
 
 
 def read_reply(sock: socket.socket, timeout=2.0) -> str:
+    """Read one RSP packet and ACK it with '+' (required by most stubs)."""
     sock.settimeout(timeout)
     buf = b""
     while True:
@@ -43,19 +44,27 @@ def read_reply(sock: socket.socket, timeout=2.0) -> str:
         if c == b"#":
             buf += sock.recv(2)
             break
+    sock.sendall(b"+")
     if buf.startswith(b"$"):
         buf = buf[1:-3]
     return buf.decode(errors="replace")
 
 
-def rsp_call(sock: socket.socket, body: str) -> str:
+def rsp_call(sock: socket.socket, body: str, timeout=2.0) -> str:
     send_packet(sock, body)
-    return read_reply(sock)
+    return read_reply(sock, timeout=timeout)
 
 
 def halt(sock: socket.socket) -> str:
+    """Send Ctrl+C and read the resulting stop-reply packet."""
     sock.sendall(b"\x03")
-    return read_reply(sock, timeout=3.0)
+    return read_reply(sock, timeout=5.0)
+
+
+def cont_no_wait(sock: socket.socket) -> None:
+    """Send 'continue' without blocking for its reply (it won't arrive
+    until the target stops, which we trigger later via halt())."""
+    send_packet(sock, "c")
 
 
 def read_mem(sock: socket.socket, addr: int, length: int) -> bytes:
@@ -112,7 +121,7 @@ def main():
                 print(line.strip())
                 log.append(line)
                 prev = snap
-            rsp_call(sock, "c")
+            cont_no_wait(sock)
             time.sleep(args.interval)
     except KeyboardInterrupt:
         print("Stopping, taking final snapshot...")
