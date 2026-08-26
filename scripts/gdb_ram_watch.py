@@ -112,6 +112,11 @@ def read_regs(sock: socket.socket) -> dict:
                 vals[name] = word
     except ValueError:
         pass
+    if not vals:
+        # Couldn't parse anything useful -- keep the raw reply so we can
+        # see *why* (error reply like "E01", empty string, non-hex text,
+        # wrong word count, etc.) instead of silently returning {}.
+        vals["_raw_reply"] = reply
     return vals
 
 
@@ -153,9 +158,11 @@ def main():
             if snap != prev:
                 pc = regs.get("pc")
                 cause = regs.get("cause")
+                raw_dbg = f" raw_regs_reply={regs['_raw_reply']!r}" if "_raw_reply" in regs else ""
                 line = (f"[{ts}] CHANGE at 0x{args.addr:x} "
                         f"pc={hex(pc) if pc is not None else '?'} "
-                        f"cause={hex(cause) if cause is not None else '?'}\n"
+                        f"cause={hex(cause) if cause is not None else '?'}"
+                        f"{raw_dbg}\n"
                         f"  bytes: {snap.hex()}\n")
                 print(line.strip())
                 log.append(line)
@@ -171,6 +178,7 @@ def main():
             regs = read_regs(sock)
             log.append("\n=== FINAL SNAPSHOT (Ctrl+C) ===\n")
             log.append(f"registers: {regs}\n")
+            log.append(f"raw 'g' reply: {rsp_call(sock, 'g')!r}\n")
             log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
         except socket.timeout:
             log.append("\n=== FINAL SNAPSHOT FAILED (stub not responding) ===\n")
