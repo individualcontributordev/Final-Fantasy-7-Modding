@@ -184,7 +184,9 @@ def main() -> int:
     elif args.half is not None:
         tag = f"half{args.half}"
     else:
-        tag = f"n{len(selected)}"
+        import hashlib
+        digest = hashlib.sha1(",".join(selected).encode("utf-8")).hexdigest()[:8]
+        tag = f"n{len(selected)}_{digest}"
     stem = f"bisect_core_{tag}"
     out_bin = out_dir / f"{stem}.bin"
     out_cue = out_dir / f"{stem}.cue"
