@@ -1,0 +1,13 @@
+ Final-Fantasy-7-Modding git:(main) ✗ python3 scripts/gdb_ram_watch.py                                                    
+Connected to 127.0.0.1:19000. Watching 0x0-0x800. Ctrl+C at the freeze to stop.
+Wrote log to workspace/iso-extract/ram_watch_log.txt
+Traceback (most recent call last):
+  File "D:\projects\Final-Fantasy-7-Modding\scripts\gdb_ram_watch.py", line 141, in <module>
+    main()
+  File "D:\projects\Final-Fantasy-7-Modding\scripts\gdb_ram_watch.py", line 110, in main
+    halt(sock)
+  File "D:\projects\Final-Fantasy-7-Modding\scripts\gdb_ram_watch.py", line 61, in halt
+    return read_reply(sock, timeout=5.0)
+  File "D:\projects\Final-Fantasy-7-Modding\scripts\gdb_ram_watch.py", line 38, in read_reply
+    c = sock.recv(1)
+TimeoutError: timed out
