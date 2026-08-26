@@ -1,16 +1,14 @@
-# Task: catch the corrupting write via mirrored watchpoints
+# Task: log DMA transfers to catch the write to 0x0
 
-RAM dump confirms 0x0 holds decompressed text garbage (field dialogue
-fragments), not raw disc bytes — so it's a wrong-destination-pointer
-bug, not a bad byte copy. Your earlier watchpoint on 0x00000000 alone
-likely missed it because PSX RAM is mirrored at 0x00000000 (KUSEG),
-0x80000000 (KSEG0), and 0xA0000000 (KSEG1) — same physical page.
+Watchpoint on 0x0 is confirmed to cover all RAM mirrors (DuckStation
+dedupes them) and still never fires — so this is NOT a CPU store, it's
+a DMA write (CD-ROM/GPU/SPU DMA writing straight to RAM, which CPU
+watchpoints can't catch). Need DMA logging instead:
 
-1. Reproduce up to just before the freeze (JUNAIR, field 384, moment
-   1016, battle almost over).
-2. Add **three write watchpoints**: 0x00000000, 0x80000000, 0xA0000000
-   (small range, e.g. first 0x800 bytes of each).
-3. Finish the battle, return to field.
-4. When one hits, capture: PC, call stack, and all GPR registers
-   (especially whichever register holds the destination address).
-5. Report which watchpoint fired + full register/PC dump.
+1. Settings → Advanced → enable debug/trace logging, turn on the
+   **DMA** log channel (and CDROM if separate) at Debug/Trace level.
+2. Reproduce the freeze (JUNAIR, field 384, moment 1016, battle-return).
+3. Save/export the log (or screenshot the last ~30 lines before the
+   freeze) and put it at `workspace/iso-extract/dma_log.txt`.
+4. Tell me it's there — looking for a DMA transfer whose destination
+   address is 0x00000000 or very close to it.
