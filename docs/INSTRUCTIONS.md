@@ -1,4 +1,69 @@
-# Task: catch the exact write that corrupts the kernel vector table in JUNAIR battle-return freeze
+# Task: bisect JUNAIR freeze by playtesting incremental single-disc-on-csr builds
+
+## Why this instead of the debugger trace
+
+Confirmed: the freeze reproduces on the **full** single-disc-on-csr core
+build and is **absent** with CSR alone (3 discs, no single-disc merge).
+Instead of chasing it in the DuckStation debugger, we're bisecting by
+playtest: build CSR + an increasing slice of the single-disc merge layer,
+and playtest JUNAIR's battle-return each time. Whichever slice first
+introduces the freeze tells us exactly which part of the merge causes it.
+
+The single-disc merge is one big flat layer of 63450 byte-diff records,
+stored in ascending disc-offset order. `bisect_core_layer.py` applies
+CSR + only the first N of those records, so "N records" is our bisection
+axis (roughly: earlier disc regions/files first, later ones last).
+
+## Step 1: playtest these two builds now
+
+Two builds are already made:
+
+- `workspace/iso-extract/bisect_core_N0.bin` (+`.cue`) — **CSR only**,
+  zero single-disc records applied. This is the baseline — JUNAIR's
+  battle-return must **not** freeze here (if it does, something is wrong
+  with the harness itself, report that immediately).
+- `workspace/iso-extract/bisect_core_N31725.bin` (+`.cue`) — CSR + the
+  first 50% of single-disc records (offsets up to `284732332`).
+
+Playtest JUNAIR (field 384, moment 1016): get into a battle, let it
+finish, return to the field. Report for **each** of the two builds:
+freeze or no freeze.
+
+## Step 2: what happens next
+
+- If `N31725` **freezes**: the cause is in the first half of the merge
+  records (offsets `\u2264 284732332`) \u2014 I'll build a `N~15862` (25%) slice
+  next to narrow further.
+- If `N31725` does **not** freeze: the cause is in the second half
+  (offsets `> 284732332`) \u2014 I'll build a `N~47587` (75%) slice next.
+- Repeat this halving until we land on the exact record (or small
+  cluster of records) that introduces the freeze, then inspect what file/
+  region that disc offset belongs to.
+
+To generate a new slice yourself between playtests instead of waiting for
+me, you can also just run:
+
+```
+python3 mods/single-disc/scripts/bisect_core_layer.py --count <N>
+```
+
+which writes `workspace/iso-extract/bisect_core_N<N>.bin` + `.cue`
+(0 \u2264 N \u2264 63450; `--all` = the full core build, i.e. the known-freezing
+build).
+
+## Note on movie count vs. burnable single disc
+
+If it turns out not every required movie fits on a burnable, console-
+playable single disc, we'll need to cut some \u2014 endings/credits movies are
+the best candidates to drop first (least likely to be needed for
+manips/route-critical content), keeping movies required for speedrun
+manips or story-critical mid-game cutscenes. Flag this separately once the
+freeze is resolved; it's a distinct problem from the memory-corruption
+bug above.
+
+---
+
+# (superseded) Task: catch the exact write that corrupts the kernel vector table in JUNAIR battle-return freeze
 
 ## Root cause found: 2MB address-wrap memory corruption (not a CD-ROM issue)
 
