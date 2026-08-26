@@ -102,20 +102,28 @@ def read_mem(sock: socket.socket, addr: int, length: int) -> bytes:
 
 
 def read_regs(sock: socket.socket) -> dict:
+    """Parse a 'g' packet reply into named registers.
+
+    Some stubs (DuckStation included) mark unavailable register bytes with
+    'x' fill characters instead of hex digits (per the GDB RSP spec), which
+    made bytes.fromhex() on the whole string raise and drop everything.
+    Parse 8-hex-char (4-byte) chunks individually so a few 'xx'-filled
+    registers don't blank out the ones that *are* available (like pc).
+    """
     reply = rsp_call(sock, "g")
     vals = {}
-    try:
-        raw = bytes.fromhex(reply)
-        for i, name in enumerate(GDB_REGS):
-            if (i + 1) * 4 <= len(raw):
-                word = int.from_bytes(raw[i * 4:(i + 1) * 4], "little")
-                vals[name] = word
-    except ValueError:
-        pass
+    for i, name in enumerate(GDB_REGS):
+        chunk = reply[i * 8:(i + 1) * 8]
+        if len(chunk) < 8 or "x" in chunk or "X" in chunk:
+            continue
+        try:
+            word = int.from_bytes(bytes.fromhex(chunk), "little")
+        except ValueError:
+            continue
+        vals[name] = word
     if not vals:
-        # Couldn't parse anything useful -- keep the raw reply so we can
-        # see *why* (error reply like "E01", empty string, non-hex text,
-        # wrong word count, etc.) instead of silently returning {}.
+        # Nothing parsed at all -- keep the raw reply so we can see why
+        # (error reply like "E01", empty string, unexpected format, etc.)
         vals["_raw_reply"] = reply
     return vals
 
