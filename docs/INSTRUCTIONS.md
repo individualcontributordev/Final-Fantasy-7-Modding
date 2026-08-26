@@ -1,39 +1,30 @@
-# Task: bisect JUNAIR freeze by playtesting whole-file halves of the single-disc merge
+# Task: bisect JUNAIR freeze by playtesting whole-file quarters of the single-disc merge
 
-## Why this instead of raw byte-offset slicing
+## Progress so far
 
-Confirmed: the freeze reproduces on the **full** single-disc-on-csr core
-build and is **absent** with CSR alone (3 discs, no single-disc merge).
-We're bisecting by playtest, but grouped by **whole ISO file** (each
-`FIELD/*.DAT`, each `SNOVA/*`, `BATTLE/BATTLE.X`), not by raw byte
-position in the layer file. Cutting mid-file could leave a file's
-compressed data or directory table half-patched — an inconsistent state
-that might crash for a *different* reason and give a false signal. Whole
-files stay internally consistent no matter how many of them are included.
+- `--none` (CSR only): **no freeze** (baseline confirmed good).
+- `--half 1` (46 files, `BATTLE/BATTLE.X` through `FIELD/MD8BRDG2.DAT`,
+  alphabetically): **freezes**. So the bad file is one of those 46 — the
+  other 45 (`--half 2`) are cleared, no need to test that half.
 
-The single-disc merge touches 91 files. `bisect_core_layer.py` groups its
-63,450 byte-diff records by file automatically and lets you build CSR +
-any subset of those 91 files.
+Splitting `half1` into two quarters of 23 files each. Quarter A is
+`BATTLE/BATTLE.X` through `FIELD/GAIIN_6.DAT`; quarter B is
+`FIELD/HYOU7.DAT` through `FIELD/MD8BRDG2.DAT` (this one includes
+**JUNAIR.DAT** itself, worth noting since the freeze happens in JUNAIR,
+though the bad write could easily come from a different file that runs
+just before/during the transition).
 
 ## Step 1: build and playtest these two on your machine
 
-Run both of these (needs `workspace/pristine/FINALFANTASY7_D1.bin` and a
-sibling checkout of `Final-Fantasy-7-CSR`, same as any other build here):
-
 ```
-python3 mods/single-disc/scripts/bisect_core_layer.py --none
-python3 mods/single-disc/scripts/bisect_core_layer.py --half 1
+python3 mods/single-disc/scripts/bisect_core_layer.py --files BATTLE/BATTLE.X,FIELD/BLACKBGB.DAT,FIELD/BLIN66_6.DAT,FIELD/BLIN70_4.DAT,FIELD/BUGIN1A.DAT,FIELD/CANON_2.DAT,FIELD/CONDOR2.DAT,FIELD/CONVIL_1.DAT,FIELD/CONVIL_2.DAT,FIELD/CRATER_1.DAT,FIELD/CRATER_2.DAT,FIELD/FIELD.BIN,FIELD/FR_E.DAT,FIELD/FSHIP_1.DAT,FIELD/FSHIP_2.DAT,FIELD/FSHIP_22.DAT,FIELD/FSHIP_23.DAT,FIELD/FSHIP_24.DAT,FIELD/FSHIP_25.DAT,FIELD/FSHIP_3.DAT,FIELD/FSHIP_4.DAT,FIELD/GAIA_32.DAT,FIELD/GAIIN_6.DAT
+python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/HYOU7.DAT,FIELD/ITHOS.DAT,FIELD/ITOWN1A.DAT,FIELD/ITOWN2.DAT,FIELD/ITOWN_W.DAT,FIELD/JUNAIR.DAT,FIELD/JUNBIN22.DAT,FIELD/JUNBIN3.DAT,FIELD/JUNBIN4.DAT,FIELD/JUNBIN5.DAT,FIELD/JUNELE1.DAT,FIELD/JUNIN2.DAT,FIELD/JUNONE2.DAT,FIELD/JUNONE22.DAT,FIELD/JUNONE7.DAT,FIELD/LAS4_0.DAT,FIELD/LAS4_2.DAT,FIELD/LAS4_3.DAT,FIELD/LAS4_4.DAT,FIELD/LASTMAP.DAT,FIELD/LOSLAKE1.DAT,FIELD/LOST2.DAT,FIELD/MD8BRDG2.DAT
 ```
 
-This writes, locally on your machine:
-
-- `workspace/iso-extract/bisect_core_none.bin` (+`.cue`) — **CSR only**,
-  no single-disc files applied. This is the baseline — JUNAIR's
-  battle-return must **not** freeze here (if it does, something is wrong
-  with the harness itself, report that immediately).
-- `workspace/iso-extract/bisect_core_half1.bin` (+`.cue`) — CSR + the
-  first alphabetical half of the 91 touched files (BATTLE/BATTLE.X
-  through FIELD/MD8BRDG2.DAT — run `--list` to see the exact set).
+Each writes `workspace/iso-extract/bisect_core_n23_<hash>.bin` (+`.cue`)
+locally — the printed file list at the top of each command's output
+tells you which quarter you're looking at, so you don't need to remember
+the hash.
 
 Playtest JUNAIR (field 384, moment 1016): get into a battle, let it
 finish, return to the field. Report for **each** of the two builds:
@@ -41,12 +32,13 @@ freeze or no freeze.
 
 ## Step 2: what happens next
 
-- If `half1` **freezes**: the cause is one of those 46 files — I'll split
-  that half again next.
-- If `half1` does **not** freeze: the cause is in the other 45 files
-  (`--half 2`) — I'll build and hand you that slice, then split it.
-- Repeat until we land on one file, then inspect exactly what changed in
-  it (JUNAIR itself is one of the 91 touched files, worth checking early).
+- Whichever quarter freezes, I'll split it into two more (11/12 files)
+  next, and so on, until we land on one file.
+- If **both** quarters freeze, that's unexpected (would suggest the two
+  half1 files somehow only trigger it in combination) — report that
+  exactly and I'll re-check the grouping logic.
+- If **neither** freezes, that's also unexpected given `half1` froze —
+  same, report it and I'll double check nothing is misapplied.
 
 You can also generate other slices yourself between playtests instead of
 waiting for me:
