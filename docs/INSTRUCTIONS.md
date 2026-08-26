@@ -1,4 +1,4 @@
-# Task: bisect JUNAIR freeze — isolate __GAP__ (directory-table) records from file content
+# Task: bisect JUNAIR freeze — pivot to real self-consistent builds
 
 ## Progress so far
 
@@ -76,6 +76,70 @@ python3 mods/single-disc/scripts/bisect_core_layer.py --gap-only
 python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/JUNAIR.DAT --no-gap
     # a file selection WITHOUT __GAP__ (combine --no-gap with any mode)
 ```
+
+## Why the 8-for-8 freeze result was a dead end
+
+Every `bisect_core_layer.py` slice (including `--gap-only` and `--all
+--no-gap`) applies the **final, fully-merged 91-file `__GAP__`
+directory table** (or the final file content) without the matching
+other half. The `__GAP__` records encode where files land in the
+*complete* single-disc build — once any file grows, everything after it
+on the disc shifts to a new LBA. Any partial slice is internally
+inconsistent (directory entries pointing at data that was never moved,
+or vice versa), so it's expected to freeze regardless of where the real
+bug is. This whole bisection axis is invalid and abandoned.
+
+# New plan: bisect on real, self-consistent builds
+
+Instead of slicing one diff layer, build actual complete disc images at
+each stage of the real pipeline and playtest each one. Two scripts
+already exist and each produces a fully self-consistent ISO:
+
+```
+python3 mods/single-disc/scripts/build_singledisc_core_bin.py
+    # CSR + single-disc core layer, NO manip-movies. Writes
+    # workspace/iso-extract/ff7_d1_singledisc_core.bin (no .cue --
+    # you'll need to pair it with a .cue, see below)
+python3 mods/single-disc/scripts/build_playtest_bin.py
+    # CSR + single-disc core + manip-movies v0.1.4 + v0.1.5. Writes
+    # workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin/.cue
+```
+
+`build_singledisc_core_bin.py` doesn't write a `.cue` file. Create one
+next to it manually (same pattern used elsewhere):
+```
+printf 'FILE "ff7_d1_singledisc_core.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/ff7_d1_singledisc_core.cue
+```
+
+## Step 1: build and playtest both
+
+```
+git pull --ff-only
+python3 mods/single-disc/scripts/build_singledisc_core_bin.py
+printf 'FILE "ff7_d1_singledisc_core.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00\n' > workspace/iso-extract/ff7_d1_singledisc_core.cue
+python3 mods/single-disc/scripts/build_playtest_bin.py
+```
+
+Playtest JUNAIR (field 384, moment 1016) on **both** resulting discs:
+get into a battle, let it finish, return to the field. Report freeze/no
+freeze for each.
+
+## Step 2: what happens next
+
+- If `ff7_d1_singledisc_core.bin` (core only, no movies) does **NOT**
+  freeze but `ff7_d1_playtest_csr_sd_movies.bin` (core + manip-movies)
+  **does**: the bug is introduced by the manip-movies layer
+  (`inject_movies_by_disc_id.py` output), not the core single-disc
+  merge itself. I'll bisect the manip-movies manifest next (one movie
+  injection at a time on top of the known-good core build).
+- If the core-only build **also freezes**: the bug is in the
+  single-disc core merge itself (real merge, not a partial slice this
+  time) — I'll look at what the core layer changes specifically in/near
+  JUNAIR or FIELD.BIN's shared tables.
+- If **neither** freezes: the freeze requires some other layer/addon
+  stacked on top (e.g. an add-on pack) — report exactly which pack
+  combination you were testing when you first saw the freeze, so we can
+  reproduce it exactly.
 
 ## Note on movie count vs. burnable single disc
 
