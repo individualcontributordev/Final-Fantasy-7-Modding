@@ -1,0 +1,689 @@
+86717.0781] V/AudioStream: ___ Stretcher is being reset.
+[86717.0781] V/AudioStream: ___ Stretcher is being reset.
+[86717.0781] V/AudioStream: ___ Stretcher is being reset.
+[86717.0859] V/AudioStream: ___ Stretcher is being reset.
+[86717.0859] V/AudioStream: ___ Stretcher is being reset.
+[86717.0938] V/AudioStream: ___ Stretcher is being reset.
+[86717.0938] V/AudioStream: ___ Stretcher is being reset.
+[86717.1016] V/AudioStream: ___ Stretcher is being reset.
+[86717.1016] V/AudioStream: ___ Stretcher is being reset.
+[86717.1016] V/AudioStream: ___ Stretcher is being reset.
+[86717.1094] V/AudioStream: ___ Stretcher is being reset.
+[86717.1094] V/AudioStream: ___ Stretcher is being reset.
+[86717.1172] V/AudioStream: ___ Stretcher is being reset.
+[86717.1172] V/AudioStream: ___ Stretcher is being reset.
+[86717.1250] V/AudioStream: ___ Stretcher is being reset.
+[86717.1250] V/AudioStream: ___ Stretcher is being reset.
+[86717.1328] V/AudioStream: ___ Stretcher is being reset.
+[86717.1328] V/AudioStream: ___ Stretcher is being reset.
+[86717.1328] V/AudioStream: ___ Stretcher is being reset.
+[86717.1406] V/AudioStream: ___ Stretcher is being reset.
+[86717.1406] V/AudioStream: ___ Stretcher is being reset.
+[86717.1484] V/AudioStream: ___ Stretcher is being reset.
+[86717.1484] V/AudioStream: ___ Stretcher is being reset.
+[86717.1484] V/AudioStream: ___ Stretcher is being reset.
+[86717.1562] V/AudioStream: ___ Stretcher is being reset.
+[86717.1562] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x04, 0x00, 0x48]
+[86717.1562] D/CDROM: CDROM setloc command (04, 00, 48)
+[86717.1562] V/AudioStream: ___ Stretcher is being reset.
+[86717.1641] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.1641] D/CDROM: Seek time for 06:47:38->04:00:48 (12515 LBA): 10923046 (322.511 ms) (2N/sled backward)
+[86717.1641] V/AudioStream: ___ Stretcher is being reset.
+[86717.1641] V/AudioStream: ___ Stretcher is being reset.
+[86717.1719] V/AudioStream: ___ Stretcher is being reset.
+[86717.1719] V/AudioStream: ___ Stretcher is being reset.
+[86717.1797] V/AudioStream: ___ Stretcher is being reset.
+[86717.1797] V/AudioStream: ___ Stretcher is being reset.
+[86717.1797] V/AudioStream: ___ Stretcher is being reset.
+[86717.1875] V/AudioStream: ___ Stretcher is being reset.
+[86717.1875] V/AudioStream: ___ Stretcher is being reset.
+[86717.1953] V/AudioStream: ___ Stretcher is being reset.
+[86717.1953] D/CDROM: Logical seek to [04:00:48] complete, now reading
+[86717.1953] D/CDROM: Read sector 18048 [04:00:48]: mode 2 submode 0x08 into buffer 1
+[86717.1953] D/CDROM: Read sector 18049 [04:00:49]: mode 2 submode 0x89 into buffer 2
+[86717.1953] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.1953] V/AudioStream: ___ Stretcher is being reset.
+[86717.2031] V/AudioStream: ___ Stretcher is being reset.
+[86717.2031] V/AudioStream: ___ Stretcher is being reset.
+[86717.2031] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x12, 0x15, 0x25]
+[86717.2109] D/CDROM: CDROM setloc command (12, 15, 25)
+[86717.2109] V/AudioStream: ___ Stretcher is being reset.
+[86717.2109] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.2109] D/CDROM: Seek time for 04:00:45->12:15:25 (37105 LBA): 13220331 (390.340 ms) (2N/sled forward)
+[86717.2109] V/AudioStream: ___ Stretcher is being reset.
+[86717.2109] V/AudioStream: ___ Stretcher is being reset.
+[86717.2188] V/AudioStream: ___ Stretcher is being reset.
+[86717.2188] V/AudioStream: ___ Stretcher is being reset.
+[86717.2266] V/AudioStream: ___ Stretcher is being reset.
+[86717.2266] V/AudioStream: ___ Stretcher is being reset.
+[86717.2344] V/AudioStream: ___ Stretcher is being reset.
+[86717.2344] V/AudioStream: ___ Stretcher is being reset.
+[86717.2422] V/AudioStream: ___ Stretcher is being reset.
+[86717.2422] V/AudioStream: ___ Stretcher is being reset.
+[86717.2422] V/AudioStream: ___ Stretcher is being reset.
+[86717.2500] D/CDROM: Logical seek to [12:15:25] complete, now reading
+[86717.2500] V/AudioStream: ___ Stretcher is being reset.
+[86717.2500] D/CDROM: Read sector 55150 [12:15:25]: mode 2 submode 0x08 into buffer 1
+[86717.2500] D/CDROM: Read sector 55151 [12:15:26]: mode 2 submode 0x08 into buffer 2
+[86717.2500] D/CDROM: Read sector 55152 [12:15:27]: mode 2 submode 0x08 into buffer 3
+[86717.2500] V/AudioStream: ___ Stretcher is being reset.
+[86717.2500] D/CDROM: Read sector 55153 [12:15:28]: mode 2 submode 0x08 into buffer 4
+[86717.2500] D/CDROM: Read sector 55154 [12:15:29]: mode 2 submode 0x08 into buffer 5
+[86717.2500] D/CDROM: Read sector 55155 [12:15:30]: mode 2 submode 0x08 into buffer 6
+[86717.2500] D/CDROM: Read sector 55156 [12:15:31]: mode 2 submode 0x08 into buffer 7
+[86717.2578] D/CDROM: Read sector 55157 [12:15:32]: mode 2 submode 0x08 into buffer 0
+[86717.2578] D/CDROM: Read sector 55158 [12:15:33]: mode 2 submode 0x08 into buffer 1
+[86717.2578] D/CDROM: Read sector 55159 [12:15:34]: mode 2 submode 0x08 into buffer 2
+[86717.2578] D/CDROM: Read sector 55160 [12:15:35]: mode 2 submode 0x08 into buffer 3
+[86717.2578] V/AudioStream: ___ Stretcher is being reset.
+[86717.2578] D/CDROM: Read sector 55161 [12:15:36]: mode 2 submode 0x08 into buffer 4
+[86717.2578] D/CDROM: Read sector 55162 [12:15:37]: mode 2 submode 0x08 into buffer 5
+[86717.2578] D/CDROM: Read sector 55163 [12:15:38]: mode 2 submode 0x08 into buffer 6
+[86717.2578] D/CDROM: Read sector 55164 [12:15:39]: mode 2 submode 0x08 into buffer 7
+[86717.2578] V/AudioStream: ___ Stretcher is being reset.
+[86717.2578] D/CDROM: Read sector 55165 [12:15:40]: mode 2 submode 0x08 into buffer 0
+[86717.2578] D/CDROM: Read sector 55166 [12:15:41]: mode 2 submode 0x08 into buffer 1
+[86717.2578] D/CDROM: Read sector 55167 [12:15:42]: mode 2 submode 0x08 into buffer 2
+[86717.2578] D/CDROM: Read sector 55168 [12:15:43]: mode 2 submode 0x08 into buffer 3
+[86717.2578] V/AudioStream: ___ Stretcher is being reset.
+[86717.2656] D/CDROM: Read sector 55169 [12:15:44]: mode 2 submode 0x08 into buffer 4
+[86717.2656] D/CDROM: Read sector 55170 [12:15:45]: mode 2 submode 0x08 into buffer 5
+[86717.2656] D/CDROM: Read sector 55171 [12:15:46]: mode 2 submode 0x08 into buffer 6
+[86717.2656] D/CDROM: Read sector 55172 [12:15:47]: mode 2 submode 0x08 into buffer 7
+[86717.2656] V/AudioStream: ___ Stretcher is being reset.
+[86717.2656] D/CDROM: Read sector 55173 [12:15:48]: mode 2 submode 0x08 into buffer 0
+[86717.2656] D/CDROM: Read sector 55174 [12:15:49]: mode 2 submode 0x08 into buffer 1
+[86717.2656] D/CDROM: Read sector 55175 [12:15:50]: mode 2 submode 0x08 into buffer 2
+[86717.2656] D/CDROM: Read sector 55176 [12:15:51]: mode 2 submode 0x08 into buffer 3
+[86717.2656] D/CDROM: Read sector 55177 [12:15:52]: mode 2 submode 0x08 into buffer 4
+[86717.2656] D/CDROM: Read sector 55178 [12:15:53]: mode 2 submode 0x08 into buffer 5
+[86717.2656] D/CDROM: Read sector 55179 [12:15:54]: mode 2 submode 0x08 into buffer 6
+[86717.2656] V/AudioStream: ___ Stretcher is being reset.
+[86717.2656] D/CDROM: Read sector 55180 [12:15:55]: mode 2 submode 0x08 into buffer 7
+[86717.2734] D/CDROM: Read sector 55181 [12:15:56]: mode 2 submode 0x08 into buffer 0
+[86717.2734] D/CDROM: Read sector 55182 [12:15:57]: mode 2 submode 0x08 into buffer 1
+[86717.2734] D/CDROM: Read sector 55183 [12:15:58]: mode 2 submode 0x08 into buffer 2
+[86717.2734] D/CDROM: Read sector 55184 [12:15:59]: mode 2 submode 0x08 into buffer 3
+[86717.2734] V/AudioStream: ___ Stretcher is being reset.
+[86717.2734] D/CDROM: Read sector 55185 [12:15:60]: mode 2 submode 0x08 into buffer 4
+[86717.2734] D/CDROM: Read sector 55186 [12:15:61]: mode 2 submode 0x08 into buffer 5
+[86717.2734] D/CDROM: Read sector 55187 [12:15:62]: mode 2 submode 0x08 into buffer 6
+[86717.2734] D/CDROM: Read sector 55188 [12:15:63]: mode 2 submode 0x08 into buffer 7
+[86717.2734] D/CDROM: Read sector 55189 [12:15:64]: mode 2 submode 0x08 into buffer 0
+[86717.2734] D/CDROM: Read sector 55190 [12:15:65]: mode 2 submode 0x08 into buffer 1
+[86717.2734] D/CDROM: Read sector 55191 [12:15:66]: mode 2 submode 0x89 into buffer 2
+[86717.2734] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.2734] V/AudioStream: ___ Stretcher is being reset.
+[86717.2812] V/AudioStream: ___ Stretcher is being reset.
+[86717.2812] V/AudioStream: ___ Stretcher is being reset.
+[86717.2812] V/AudioStream: ___ Stretcher is being reset.
+[86717.2891] V/AudioStream: ___ Stretcher is being reset.
+[86717.2891] V/AudioStream: ___ Stretcher is being reset.
+[86717.2969] V/AudioStream: ___ Stretcher is being reset.
+[86717.2969] V/AudioStream: ___ Stretcher is being reset.
+[86717.3047] V/AudioStream: ___ Stretcher is being reset.
+[86717.3047] V/AudioStream: ___ Stretcher is being reset.
+[86717.3047] V/AudioStream: ___ Stretcher is being reset.
+[86717.3125] V/AudioStream: ___ Stretcher is being reset.
+[86717.3125] V/AudioStream: ___ Stretcher is being reset.
+[86717.3203] V/AudioStream: ___ Stretcher is being reset.
+[86717.3203] V/AudioStream: ___ Stretcher is being reset.
+[86717.3281] V/AudioStream: ___ Stretcher is being reset.
+[86717.3281] V/AudioStream: ___ Stretcher is being reset.
+[86717.3359] V/AudioStream: ___ Stretcher is being reset.
+[86717.3359] V/AudioStream: ___ Stretcher is being reset.
+[86717.3359] V/AudioStream: ___ Stretcher is being reset.
+[86717.3438] V/AudioStream: ___ Stretcher is being reset.
+[86717.3438] V/AudioStream: ___ Stretcher is being reset.
+[86717.3516] V/AudioStream: ___ Stretcher is being reset.
+[86717.3516] V/AudioStream: ___ Stretcher is being reset.
+[86717.3594] V/AudioStream: ___ Stretcher is being reset.
+[86717.3594] V/AudioStream: ___ Stretcher is being reset.
+[86717.3594] V/AudioStream: ___ Stretcher is being reset.
+[86717.3672] V/AudioStream: ___ Stretcher is being reset.
+[86717.3672] V/AudioStream: ___ Stretcher is being reset.
+[86717.3750] V/AudioStream: ___ Stretcher is being reset.
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A1000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A2000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A3000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A4000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A5000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A6000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A7000
+[86717.3750] D/CodeCache: Ignoring fault due to RAM write @ 0x800A8000
+[86717.3750] V/AudioStream: ___ Stretcher is being reset.
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800A9000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800AA000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800AB000
+[86717.3828] V/AudioStream: ___ Stretcher is being reset.
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800AC000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800AD000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800AE000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800AF000
+[86717.3828] V/AudioStream: ___ Stretcher is being reset.
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B0000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B1000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B2000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B3000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B4000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B5000
+[86717.3828] D/CodeCache: Ignoring fault due to RAM write @ 0x800B6000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800B7000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800B8000
+[86717.3906] V/AudioStream: ___ Stretcher is being reset.
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800B9000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800BA000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800BB000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800BC000
+[86717.3906] V/AudioStream: ___ Stretcher is being reset.
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800BD000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800BE000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800BF000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800C0000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800C1000
+[86717.3906] V/AudioStream: ___ Stretcher is being reset.
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800C2000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800C4000
+[86717.3906] D/CodeCache: Ignoring fault due to RAM write @ 0x800C5000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800C6000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800C7000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800C8000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800C9000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800CA000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800CB000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800CC000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800CD000
+[86717.3984] V/AudioStream: ___ Stretcher is being reset.
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800CE000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800CF000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800D0000
+[86717.3984] V/AudioStream: ___ Stretcher is being reset.
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800D2000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800D4000
+[86717.3984] D/CodeCache: Ignoring fault due to RAM write @ 0x800D5000
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800D6000
+[86717.4062] V/AudioStream: ___ Stretcher is being reset.
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800D8000
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800D9000
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800DB000
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800DC000
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800DD000
+[86717.4062] V/AudioStream: ___ Stretcher is being reset.
+[86717.4062] D/CodeCache: Ignoring fault due to RAM write @ 0x800DE000
+[86717.4141] D/CodeCache: Ignoring fault due to RAM write @ 0x800DF000
+[86717.4141] D/CodeCache: Ignoring fault due to RAM write @ 0x800E0748
+[86717.4141] D/CodeCache: Ignoring fault due to RAM write @ 0x800E1000
+[86717.4141] D/CodeCache: Ignoring fault due to RAM write @ 0x800E2000
+[86717.4141] D/CodeCache: Ignoring fault due to RAM write @ 0x800E3000
+[86717.4141] V/AudioStream: ___ Stretcher is being reset.
+[86717.4141] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x04]
+[86717.4141] D/CDROM: CDROM setloc command (19, 02, 04)
+[86717.4141] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.4141] D/CDROM: Seek time for 12:15:59->19:02:04 (30470 LBA): 12687811 (374.617 ms) (2N/sled forward)
+[86717.4141] V/AudioStream: ___ Stretcher is being reset.
+[86717.4141] V/AudioStream: ___ Stretcher is being reset.
+[86717.4219] V/AudioStream: ___ Stretcher is being reset.
+[86717.4219] V/AudioStream: ___ Stretcher is being reset.
+[86717.4297] V/AudioStream: ___ Stretcher is being reset.
+[86717.4297] V/AudioStream: ___ Stretcher is being reset.
+[86717.4375] V/AudioStream: ___ Stretcher is being reset.
+[86717.4375] V/AudioStream: ___ Stretcher is being reset.
+[86717.4375] V/AudioStream: ___ Stretcher is being reset.
+[86717.4453] V/AudioStream: ___ Stretcher is being reset.
+[86717.4453] D/CDROM: Logical seek to [19:02:04] complete, now reading
+[86717.4531] V/AudioStream: ___ Stretcher is being reset.
+[86717.4531] D/CDROM: Read sector 85654 [19:02:04]: mode 2 submode 0x08 into buffer 1
+[86717.4531] D/CDROM: Read sector 85655 [19:02:05]: mode 2 submode 0x08 into buffer 2
+[86717.4531] D/CDROM: Read sector 85656 [19:02:06]: mode 2 submode 0x08 into buffer 3
+[86717.4531] V/AudioStream: ___ Stretcher is being reset.
+[86717.4531] D/CDROM: Read sector 85657 [19:02:07]: mode 2 submode 0x08 into buffer 4
+[86717.4531] D/CDROM: Read sector 85658 [19:02:08]: mode 2 submode 0x08 into buffer 5
+[86717.4531] D/CDROM: Read sector 85659 [19:02:09]: mode 2 submode 0x08 into buffer 6
+[86717.4531] D/CDROM: Read sector 85660 [19:02:10]: mode 2 submode 0x89 into buffer 7
+[86717.4531] D/CDROM: Read sector 85661 [19:02:11]: mode 2 submode 0x08 into buffer 0
+[86717.4531] D/CDROM: Read sector 85662 [19:02:12]: mode 2 submode 0x08 into buffer 1
+[86717.4531] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.4531] V/AudioStream: ___ Stretcher is being reset.
+[86717.4609] V/AudioStream: ___ Stretcher is being reset.
+[86717.4609] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x13]
+[86717.4609] D/CDROM: CDROM setloc command (19, 02, 13)
+[86717.4609] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.4609] D/CDROM: Seek time for 19:02:05->19:02:13 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.4609] V/AudioStream: ___ Stretcher is being reset.
+[86717.4688] V/AudioStream: ___ Stretcher is being reset.
+[86717.4688] D/CDROM: Logical seek to [19:02:13] complete, now reading
+[86717.4688] D/CDROM: Read sector 85663 [19:02:13]: mode 2 submode 0x08 into buffer 1
+[86717.4688] D/CDROM: Read sector 85664 [19:02:14]: mode 2 submode 0x08 into buffer 2
+[86717.4688] D/CDROM: Read sector 85665 [19:02:15]: mode 2 submode 0x08 into buffer 3
+[86717.4688] D/CDROM: Read sector 85666 [19:02:16]: mode 2 submode 0x08 into buffer 4
+[86717.4688] V/AudioStream: ___ Stretcher is being reset.
+[86717.4688] D/CDROM: Read sector 85667 [19:02:17]: mode 2 submode 0x08 into buffer 5
+[86717.4688] D/CDROM: Read sector 85668 [19:02:18]: mode 2 submode 0x08 into buffer 6
+[86717.4688] D/CDROM: Read sector 85669 [19:02:19]: mode 2 submode 0x08 into buffer 7
+[86717.4688] V/AudioStream: ___ Stretcher is being reset.
+[86717.4688] D/CDROM: Read sector 85670 [19:02:20]: mode 2 submode 0x08 into buffer 0
+[86717.4766] D/CDROM: Read sector 85671 [19:02:21]: mode 2 submode 0x08 into buffer 1
+[86717.4766] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.4766] V/AudioStream: ___ Stretcher is being reset.
+[86717.4766] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x22]
+[86717.4766] D/CDROM: CDROM setloc command (19, 02, 22)
+[86717.4766] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.4766] D/CDROM: Seek time for 19:02:14->19:02:22 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.4766] V/AudioStream: ___ Stretcher is being reset.
+[86717.4844] V/AudioStream: ___ Stretcher is being reset.
+[86717.4844] D/CDROM: Logical seek to [19:02:22] complete, now reading
+[86717.4844] D/CDROM: Read sector 85672 [19:02:22]: mode 2 submode 0x08 into buffer 1
+[86717.4844] V/AudioStream: ___ Stretcher is being reset.
+[86717.4844] D/CDROM: Read sector 85673 [19:02:23]: mode 2 submode 0x08 into buffer 2
+[86717.4844] D/CDROM: Read sector 85674 [19:02:24]: mode 2 submode 0x08 into buffer 3
+[86717.4844] D/CDROM: Read sector 85675 [19:02:25]: mode 2 submode 0x08 into buffer 4
+[86717.4844] D/CDROM: Read sector 85676 [19:02:26]: mode 2 submode 0x08 into buffer 5
+[86717.4844] D/CDROM: Read sector 85677 [19:02:27]: mode 2 submode 0x08 into buffer 6
+[86717.4922] D/CDROM: Read sector 85678 [19:02:28]: mode 2 submode 0x08 into buffer 7
+[86717.4922] D/CDROM: Read sector 85679 [19:02:29]: mode 2 submode 0x08 into buffer 0
+[86717.4922] V/AudioStream: ___ Stretcher is being reset.
+[86717.4922] D/CDROM: Read sector 85680 [19:02:30]: mode 2 submode 0x08 into buffer 1
+[86717.4922] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.4922] V/AudioStream: ___ Stretcher is being reset.
+[86717.4922] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x31]
+[86717.4922] D/CDROM: CDROM setloc command (19, 02, 31)
+[86717.4922] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.4922] D/CDROM: Seek time for 19:02:23->19:02:31 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.5000] V/AudioStream: ___ Stretcher is being reset.
+[86717.5000] V/AudioStream: ___ Stretcher is being reset.
+[86717.5000] D/CDROM: Logical seek to [19:02:31] complete, now reading
+[86717.5000] D/CDROM: Read sector 85681 [19:02:31]: mode 2 submode 0x08 into buffer 1
+[86717.5000] D/CDROM: Read sector 85682 [19:02:32]: mode 2 submode 0x08 into buffer 2
+[86717.5000] V/AudioStream: ___ Stretcher is being reset.
+[86717.5078] D/CDROM: Read sector 85683 [19:02:33]: mode 2 submode 0x08 into buffer 3
+[86717.5078] D/CDROM: Read sector 85684 [19:02:34]: mode 2 submode 0x08 into buffer 4
+[86717.5078] D/CDROM: Read sector 85685 [19:02:35]: mode 2 submode 0x08 into buffer 5
+[86717.5078] D/CDROM: Read sector 85686 [19:02:36]: mode 2 submode 0x08 into buffer 6
+[86717.5078] D/CDROM: Read sector 85687 [19:02:37]: mode 2 submode 0x08 into buffer 7
+[86717.5078] D/CDROM: Read sector 85688 [19:02:38]: mode 2 submode 0x08 into buffer 0
+[86717.5078] D/CDROM: Read sector 85689 [19:02:39]: mode 2 submode 0x08 into buffer 1
+[86717.5078] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.5078] V/AudioStream: ___ Stretcher is being reset.
+[86717.5078] V/AudioStream: ___ Stretcher is being reset.
+[86717.5156] V/AudioStream: ___ Stretcher is being reset.
+[86717.5156] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x40]
+[86717.5156] D/CDROM: CDROM setloc command (19, 02, 40)
+[86717.5156] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.5156] D/CDROM: Seek time for 19:02:32->19:02:40 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.5156] V/AudioStream: ___ Stretcher is being reset.
+[86717.5156] D/CDROM: Logical seek to [19:02:40] complete, now reading
+[86717.5234] V/AudioStream: ___ Stretcher is being reset.
+[86717.5234] D/CDROM: Read sector 85690 [19:02:40]: mode 2 submode 0x08 into buffer 1
+[86717.5234] D/CDROM: Read sector 85691 [19:02:41]: mode 2 submode 0x08 into buffer 2
+[86717.5234] D/CDROM: Read sector 85692 [19:02:42]: mode 2 submode 0x08 into buffer 3
+[86717.5234] D/CDROM: Read sector 85693 [19:02:43]: mode 2 submode 0x08 into buffer 4
+[86717.5234] D/CDROM: Read sector 85694 [19:02:44]: mode 2 submode 0x08 into buffer 5
+[86717.5234] V/AudioStream: ___ Stretcher is being reset.
+[86717.5234] D/CDROM: Read sector 85695 [19:02:45]: mode 2 submode 0x08 into buffer 6
+[86717.5234] D/CDROM: Read sector 85696 [19:02:46]: mode 2 submode 0x08 into buffer 7
+[86717.5234] D/CDROM: Read sector 85697 [19:02:47]: mode 2 submode 0x08 into buffer 0
+[86717.5234] D/CDROM: Read sector 85698 [19:02:48]: mode 2 submode 0x08 into buffer 1
+[86717.5234] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.5312] V/AudioStream: ___ Stretcher is being reset.
+[86717.5312] V/AudioStream: ___ Stretcher is being reset.
+[86717.5312] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x49]
+[86717.5312] D/CDROM: CDROM setloc command (19, 02, 49)
+[86717.5312] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.5312] D/CDROM: Seek time for 19:02:41->19:02:49 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.5312] V/AudioStream: ___ Stretcher is being reset.
+[86717.5391] D/CDROM: Logical seek to [19:02:49] complete, now reading
+[86717.5391] V/AudioStream: ___ Stretcher is being reset.
+[86717.5391] D/CDROM: Read sector 85699 [19:02:49]: mode 2 submode 0x08 into buffer 1
+[86717.5391] D/CDROM: Read sector 85700 [19:02:50]: mode 2 submode 0x08 into buffer 2
+[86717.5391] D/CDROM: Read sector 85701 [19:02:51]: mode 2 submode 0x08 into buffer 3
+[86717.5391] D/CDROM: Read sector 85702 [19:02:52]: mode 2 submode 0x08 into buffer 4
+[86717.5391] V/AudioStream: ___ Stretcher is being reset.
+[86717.5391] D/CDROM: Read sector 85703 [19:02:53]: mode 2 submode 0x08 into buffer 5
+[86717.5391] D/CDROM: Read sector 85704 [19:02:54]: mode 2 submode 0x08 into buffer 6
+[86717.5391] D/CDROM: Read sector 85705 [19:02:55]: mode 2 submode 0x08 into buffer 7
+[86717.5391] D/CDROM: Read sector 85706 [19:02:56]: mode 2 submode 0x08 into buffer 0
+[86717.5391] V/AudioStream: ___ Stretcher is being reset.
+[86717.5469] D/CDROM: Read sector 85707 [19:02:57]: mode 2 submode 0x08 into buffer 1
+[86717.5469] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.5469] V/AudioStream: ___ Stretcher is being reset.
+[86717.5469] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x58]
+[86717.5469] D/CDROM: CDROM setloc command (19, 02, 58)
+[86717.5469] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.5469] D/CDROM: Seek time for 19:02:50->19:02:58 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.5469] V/AudioStream: ___ Stretcher is being reset.
+[86717.5547] V/AudioStream: ___ Stretcher is being reset.
+[86717.5547] D/CDROM: Logical seek to [19:02:58] complete, now reading
+[86717.5547] D/CDROM: Read sector 85708 [19:02:58]: mode 2 submode 0x08 into buffer 1
+[86717.5547] D/CDROM: Read sector 85709 [19:02:59]: mode 2 submode 0x08 into buffer 2
+[86717.5547] D/CDROM: Read sector 85710 [19:02:60]: mode 2 submode 0x08 into buffer 3
+[86717.5547] D/CDROM: Read sector 85711 [19:02:61]: mode 2 submode 0x08 into buffer 4
+[86717.5547] D/CDROM: Read sector 85712 [19:02:62]: mode 2 submode 0x08 into buffer 5
+[86717.5547] D/CDROM: Read sector 85713 [19:02:63]: mode 2 submode 0x08 into buffer 6
+[86717.5547] V/AudioStream: ___ Stretcher is being reset.
+[86717.5625] D/CDROM: Read sector 85714 [19:02:64]: mode 2 submode 0x08 into buffer 7
+[86717.5625] D/CDROM: Read sector 85715 [19:02:65]: mode 2 submode 0x08 into buffer 0
+[86717.5625] D/CDROM: Read sector 85716 [19:02:66]: mode 2 submode 0x08 into buffer 1
+[86717.5625] V/AudioStream: ___ Stretcher is being reset.
+[86717.5625] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.5625] V/AudioStream: ___ Stretcher is being reset.
+[86717.5625] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x02, 0x67]
+[86717.5703] D/CDROM: CDROM setloc command (19, 02, 67)
+[86717.5703] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.5703] D/CDROM: Seek time for 19:02:59->19:02:67 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.5703] V/AudioStream: ___ Stretcher is being reset.
+[86717.5703] V/AudioStream: ___ Stretcher is being reset.
+[86717.5703] D/CDROM: Logical seek to [19:02:67] complete, now reading
+[86717.5703] D/CDROM: Read sector 85717 [19:02:67]: mode 2 submode 0x08 into buffer 1
+[86717.5703] V/AudioStream: ___ Stretcher is being reset.
+[86717.5703] D/CDROM: Read sector 85718 [19:02:68]: mode 2 submode 0x08 into buffer 2
+[86717.5781] D/CDROM: Read sector 85719 [19:02:69]: mode 2 submode 0x08 into buffer 3
+[86717.5781] D/CDROM: Read sector 85720 [19:02:70]: mode 2 submode 0x08 into buffer 4
+[86717.5781] D/CDROM: Read sector 85721 [19:02:71]: mode 2 submode 0x08 into buffer 5
+[86717.5781] D/CDROM: Read sector 85722 [19:02:72]: mode 2 submode 0x08 into buffer 6
+[86717.5781] D/CDROM: Read sector 85723 [19:02:73]: mode 2 submode 0x08 into buffer 7
+[86717.5781] D/CDROM: Read sector 85724 [19:02:74]: mode 2 submode 0x08 into buffer 0
+[86717.5781] D/CDROM: Read sector 85725 [19:03:00]: mode 2 submode 0x08 into buffer 1
+[86717.5781] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.5781] V/AudioStream: ___ Stretcher is being reset.
+[86717.5781] V/AudioStream: ___ Stretcher is being reset.
+[86717.5859] V/AudioStream: ___ Stretcher is being reset.
+[86717.5859] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x01]
+[86717.5859] D/CDROM: CDROM setloc command (19, 03, 01)
+[86717.5859] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.5859] D/CDROM: Seek time for 19:02:68->19:03:01 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.5859] V/AudioStream: ___ Stretcher is being reset.
+[86717.5859] D/CDROM: Logical seek to [19:03:01] complete, now reading
+[86717.5859] D/CDROM: Read sector 85726 [19:03:01]: mode 2 submode 0x08 into buffer 1
+[86717.5938] D/CDROM: Read sector 85727 [19:03:02]: mode 2 submode 0x08 into buffer 2
+[86717.5938] D/CDROM: Read sector 85728 [19:03:03]: mode 2 submode 0x08 into buffer 3
+[86717.5938] V/AudioStream: ___ Stretcher is being reset.
+[86717.5938] D/CDROM: Read sector 85729 [19:03:04]: mode 2 submode 0x08 into buffer 4
+[86717.5938] D/CDROM: Read sector 85730 [19:03:05]: mode 2 submode 0x08 into buffer 5
+[86717.5938] D/CDROM: Read sector 85731 [19:03:06]: mode 2 submode 0x08 into buffer 6
+[86717.5938] V/AudioStream: ___ Stretcher is being reset.
+[86717.5938] D/CDROM: Read sector 85732 [19:03:07]: mode 2 submode 0x08 into buffer 7
+[86717.5938] D/CDROM: Read sector 85733 [19:03:08]: mode 2 submode 0x08 into buffer 0
+[86717.5938] D/CDROM: Read sector 85734 [19:03:09]: mode 2 submode 0x08 into buffer 1
+[86717.5938] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.6016] V/AudioStream: ___ Stretcher is being reset.
+[86717.6016] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x10]
+[86717.6016] D/CDROM: CDROM setloc command (19, 03, 10)
+[86717.6016] V/AudioStream: ___ Stretcher is being reset.
+[86717.6016] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.6016] D/CDROM: Seek time for 19:03:02->19:03:10 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.6016] V/AudioStream: ___ Stretcher is being reset.
+[86717.6094] D/CDROM: Logical seek to [19:03:10] complete, now reading
+[86717.6094] D/CDROM: Read sector 85735 [19:03:10]: mode 2 submode 0x08 into buffer 1
+[86717.6094] D/CDROM: Read sector 85736 [19:03:11]: mode 2 submode 0x08 into buffer 2
+[86717.6094] D/CDROM: Read sector 85737 [19:03:12]: mode 2 submode 0x08 into buffer 3
+[86717.6094] V/AudioStream: ___ Stretcher is being reset.
+[86717.6094] D/CDROM: Read sector 85738 [19:03:13]: mode 2 submode 0x08 into buffer 4
+[86717.6094] D/CDROM: Read sector 85739 [19:03:14]: mode 2 submode 0x08 into buffer 5
+[86717.6094] D/CDROM: Read sector 85740 [19:03:15]: mode 2 submode 0x08 into buffer 6
+[86717.6094] D/CDROM: Read sector 85741 [19:03:16]: mode 2 submode 0x08 into buffer 7
+[86717.6094] V/AudioStream: ___ Stretcher is being reset.
+[86717.6094] D/CDROM: Read sector 85742 [19:03:17]: mode 2 submode 0x08 into buffer 0
+[86717.6094] D/CDROM: Read sector 85743 [19:03:18]: mode 2 submode 0x08 into buffer 1
+[86717.6172] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.6172] V/AudioStream: ___ Stretcher is being reset.
+[86717.6172] V/AudioStream: ___ Stretcher is being reset.
+[86717.6172] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x19]
+[86717.6172] D/CDROM: CDROM setloc command (19, 03, 19)
+[86717.6172] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.6172] D/CDROM: Seek time for 19:03:11->19:03:19 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.6250] V/AudioStream: ___ Stretcher is being reset.
+[86717.6250] V/AudioStream: ___ Stretcher is being reset.
+[86717.6250] D/CDROM: Logical seek to [19:03:19] complete, now reading
+[86717.6250] D/CDROM: Read sector 85744 [19:03:19]: mode 2 submode 0x08 into buffer 1
+[86717.6250] D/CDROM: Read sector 85745 [19:03:20]: mode 2 submode 0x08 into buffer 2
+[86717.6250] D/CDROM: Read sector 85746 [19:03:21]: mode 2 submode 0x08 into buffer 3
+[86717.6250] D/CDROM: Read sector 85747 [19:03:22]: mode 2 submode 0x08 into buffer 4
+[86717.6250] D/CDROM: Read sector 85748 [19:03:23]: mode 2 submode 0x08 into buffer 5
+[86717.6250] D/CDROM: Read sector 85749 [19:03:24]: mode 2 submode 0x08 into buffer 6
+[86717.6250] V/AudioStream: ___ Stretcher is being reset.
+[86717.6328] D/CDROM: Read sector 85750 [19:03:25]: mode 2 submode 0x08 into buffer 7
+[86717.6328] D/CDROM: Read sector 85751 [19:03:26]: mode 2 submode 0x08 into buffer 0
+[86717.6328] D/CDROM: Read sector 85752 [19:03:27]: mode 2 submode 0x08 into buffer 1
+[86717.6328] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.6328] V/AudioStream: ___ Stretcher is being reset.
+[86717.6328] V/AudioStream: ___ Stretcher is being reset.
+[86717.6328] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x28]
+[86717.6328] D/CDROM: CDROM setloc command (19, 03, 28)
+[86717.6328] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.6328] D/CDROM: Seek time for 19:03:20->19:03:28 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.6406] V/AudioStream: ___ Stretcher is being reset.
+[86717.6406] D/CDROM: Logical seek to [19:03:28] complete, now reading
+[86717.6406] V/AudioStream: ___ Stretcher is being reset.
+[86717.6406] D/CDROM: Read sector 85753 [19:03:28]: mode 2 submode 0x08 into buffer 1
+[86717.6406] D/CDROM: Read sector 85754 [19:03:29]: mode 2 submode 0x08 into buffer 2
+[86717.6406] D/CDROM: Read sector 85755 [19:03:30]: mode 2 submode 0x08 into buffer 3
+[86717.6406] V/AudioStream: ___ Stretcher is being reset.
+[86717.6406] D/CDROM: Read sector 85756 [19:03:31]: mode 2 submode 0x08 into buffer 4
+[86717.6484] D/CDROM: Read sector 85757 [19:03:32]: mode 2 submode 0x08 into buffer 5
+[86717.6484] D/CDROM: Read sector 85758 [19:03:33]: mode 2 submode 0x08 into buffer 6
+[86717.6484] D/CDROM: Read sector 85759 [19:03:34]: mode 2 submode 0x08 into buffer 7
+[86717.6484] D/CDROM: Read sector 85760 [19:03:35]: mode 2 submode 0x08 into buffer 0
+[86717.6484] D/CDROM: Read sector 85761 [19:03:36]: mode 2 submode 0x08 into buffer 1
+[86717.6484] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.6484] V/AudioStream: ___ Stretcher is being reset.
+[86717.6484] V/System: Target speed: 100%
+[86717.6484] V/System: Preset timing: immediate
+[86717.6484] V/System: VSync: Disabled
+[86717.6484] V/AudioStream: ___ Stretcher is being reset.
+[86717.6719] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x37]
+[86717.6719] D/CDROM: CDROM setloc command (19, 03, 37)
+[86717.6875] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.6875] D/CDROM: Seek time for 19:03:29->19:03:37 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.7344] D/CDROM: Logical seek to [19:03:37] complete, now reading
+[86717.7344] D/CDROM: Read sector 85762 [19:03:37]: mode 2 submode 0x08 into buffer 1
+[86717.7344] D/CDROM: Read sector 85763 [19:03:38]: mode 2 submode 0x08 into buffer 2
+[86717.7500] D/CDROM: Read sector 85764 [19:03:39]: mode 2 submode 0x08 into buffer 3
+[86717.7500] D/CDROM: Read sector 85765 [19:03:40]: mode 2 submode 0x08 into buffer 4
+[86717.7656] D/CDROM: Read sector 85766 [19:03:41]: mode 2 submode 0x08 into buffer 5
+[86717.7656] D/CDROM: Read sector 85767 [19:03:42]: mode 2 submode 0x08 into buffer 6
+[86717.7734] D/CDROM: Read sector 85768 [19:03:43]: mode 2 submode 0x08 into buffer 7
+[86717.7891] D/CDROM: Read sector 85769 [19:03:44]: mode 2 submode 0x08 into buffer 0
+[86717.7891] D/CDROM: Read sector 85770 [19:03:45]: mode 2 submode 0x08 into buffer 1
+[86717.7891] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86717.8203] V/PerfMon: FPS: 69.54 VPS: 453.98 CPU: 25.55 GPU: 0.00 Avg: 2.20ms Min: 0.68ms Max: 17.70ms
+[86717.8516] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x46]
+[86717.8516] D/CDROM: CDROM setloc command (19, 03, 46)
+[86717.8516] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86717.8516] D/CDROM: Seek time for 19:03:38->19:03:46 (8 LBA): 1806336 (53.333 ms) (forward)
+[86717.9062] D/CDROM: Logical seek to [19:03:46] complete, now reading
+[86717.9219] D/CDROM: Read sector 85771 [19:03:46]: mode 2 submode 0x08 into buffer 1
+[86717.9219] D/CDROM: Read sector 85772 [19:03:47]: mode 2 submode 0x08 into buffer 2
+[86717.9219] D/CDROM: Read sector 85773 [19:03:48]: mode 2 submode 0x08 into buffer 3
+[86717.9375] D/CDROM: Read sector 85774 [19:03:49]: mode 2 submode 0x08 into buffer 4
+[86717.9375] D/CDROM: Read sector 85775 [19:03:50]: mode 2 submode 0x08 into buffer 5
+[86717.9531] D/CDROM: Read sector 85776 [19:03:51]: mode 2 submode 0x08 into buffer 6
+[86717.9531] D/CDROM: Read sector 85777 [19:03:52]: mode 2 submode 0x08 into buffer 7
+[86717.9531] D/CDROM: Read sector 85778 [19:03:53]: mode 2 submode 0x08 into buffer 0
+[86717.9688] D/CDROM: Read sector 85779 [19:03:54]: mode 2 submode 0x08 into buffer 1
+[86717.9688] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86718.0234] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x55]
+[86718.0234] D/CDROM: CDROM setloc command (19, 03, 55)
+[86718.0234] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86718.0234] D/CDROM: Seek time for 19:03:47->19:03:55 (8 LBA): 1806336 (53.333 ms) (forward)
+[86718.0859] D/CDROM: Logical seek to [19:03:55] complete, now reading
+[86718.0859] D/CDROM: Read sector 85780 [19:03:55]: mode 2 submode 0x08 into buffer 1
+[86718.0859] D/CDROM: Read sector 85781 [19:03:56]: mode 2 submode 0x08 into buffer 2
+[86718.1016] D/CDROM: Read sector 85782 [19:03:57]: mode 2 submode 0x08 into buffer 3
+[86718.1016] D/CDROM: Read sector 85783 [19:03:58]: mode 2 submode 0x08 into buffer 4
+[86718.1172] D/CDROM: Read sector 85784 [19:03:59]: mode 2 submode 0x08 into buffer 5
+[86718.1172] D/CDROM: Read sector 85785 [19:03:60]: mode 2 submode 0x08 into buffer 6
+[86718.1172] D/CDROM: Read sector 85786 [19:03:61]: mode 2 submode 0x08 into buffer 7
+[86738.9219] D/CDROM: Read sector 85787 [19:03:62]: mode 2 submode 0x08 into buffer 0
+[86738.9219] D/CDROM: Read sector 85788 [19:03:63]: mode 2 submode 0x08 into buffer 1
+[86738.9219] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86738.9922] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x64]
+[86738.9922] D/CDROM: CDROM setloc command (19, 03, 64)
+[86738.9922] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86738.9922] D/CDROM: Seek time for 19:03:56->19:03:64 (8 LBA): 1806336 (53.333 ms) (forward)
+[86739.0391] D/CDROM: Logical seek to [19:03:64] complete, now reading
+[86739.0391] D/CDROM: Read sector 85789 [19:03:64]: mode 2 submode 0x08 into buffer 1
+[86739.0547] D/CDROM: Read sector 85790 [19:03:65]: mode 2 submode 0x89 into buffer 2
+[86739.0547] D/CDROM: Read sector 85791 [19:03:66]: mode 2 submode 0x08 into buffer 3
+[86739.0781] D/CDROM: Read sector 85792 [19:03:67]: mode 2 submode 0x08 into buffer 4
+[86739.0781] D/CDROM: Read sector 85793 [19:03:68]: mode 2 submode 0x08 into buffer 5
+[86739.0781] D/CDROM: Read sector 85794 [19:03:69]: mode 2 submode 0x08 into buffer 6
+[86739.0938] D/CDROM: Read sector 85795 [19:03:70]: mode 2 submode 0x08 into buffer 7
+[86739.0938] D/CDROM: Read sector 85796 [19:03:71]: mode 2 submode 0x08 into buffer 0
+[86739.1094] D/CDROM: Read sector 85797 [19:03:72]: mode 2 submode 0x08 into buffer 1
+[86739.1094] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86739.1562] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x03, 0x73]
+[86739.1562] D/CDROM: CDROM setloc command (19, 03, 73)
+[86739.1562] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86739.1562] D/CDROM: Seek time for 19:03:65->19:03:73 (8 LBA): 1806336 (53.333 ms) (forward)
+[86739.2266] D/CDROM: Logical seek to [19:03:73] complete, now reading
+[86739.2266] D/CDROM: Read sector 85798 [19:03:73]: mode 2 submode 0x08 into buffer 1
+[86739.2266] D/CDROM: Read sector 85799 [19:03:74]: mode 2 submode 0x08 into buffer 2
+[86739.2422] D/CDROM: Read sector 85800 [19:04:00]: mode 2 submode 0x89 into buffer 3
+[86739.2422] D/CDROM: Read sector 85801 [19:04:01]: mode 2 submode 0x08 into buffer 4
+[86739.2578] V/AudioStream: Audio buffer underflow, resampled 7 frames to 441
+[86739.2578] D/CDROM: Read sector 85802 [19:04:02]: mode 2 submode 0x08 into buffer 5
+[86739.2578] D/CDROM: Read sector 85803 [19:04:03]: mode 2 submode 0x08 into buffer 6
+[86739.2578] D/CDROM: Read sector 85804 [19:04:04]: mode 2 submode 0x08 into buffer 7
+[86739.2734] D/CDROM: Read sector 85805 [19:04:05]: mode 2 submode 0x08 into buffer 0
+[86739.2734] D/CDROM: Read sector 85806 [19:04:06]: mode 2 submode 0x08 into buffer 1
+[86739.2734] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86739.2969] V/AudioStream: Underrun compensation done (128 frames buffered)
+[86739.3125] D/CodeCache: Ignoring fault due to RAM write @ 0x801B0000
+[86739.3359] V/AudioStream: Audio buffer underflow, resampled 2 frames to 441
+[86739.3438] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x07]
+[86739.3438] D/CDROM: CDROM setloc command (19, 04, 07)
+[86739.3438] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86739.3438] D/CDROM: Seek time for 19:03:74->19:04:07 (8 LBA): 1806336 (53.333 ms) (forward)
+[86739.3438] V/AudioStream: Underrun compensation done (128 frames buffered)
+[86739.3906] D/CDROM: Logical seek to [19:04:07] complete, now reading
+[86739.3906] D/CDROM: Read sector 85807 [19:04:07]: mode 2 submode 0x89 into buffer 1
+[86739.4062] D/CDROM: Read sector 85808 [19:04:08]: mode 2 submode 0x08 into buffer 2
+[86739.4062] D/CDROM: Read sector 85809 [19:04:09]: mode 2 submode 0x08 into buffer 3
+[86739.4297] D/CDROM: Read sector 85810 [19:04:10]: mode 2 submode 0x08 into buffer 4
+[86739.4297] D/CDROM: Read sector 85811 [19:04:11]: mode 2 submode 0x08 into buffer 5
+[86739.4297] D/CDROM: Read sector 85812 [19:04:12]: mode 2 submode 0x08 into buffer 6
+[86739.4453] D/CDROM: Read sector 85813 [19:04:13]: mode 2 submode 0x08 into buffer 7
+[86739.4453] D/CDROM: Read sector 85814 [19:04:14]: mode 2 submode 0x08 into buffer 0
+[86739.4609] D/CDROM: Read sector 85815 [19:04:15]: mode 2 submode 0x08 into buffer 1
+[86739.4609] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86739.5078] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x16]
+[86739.5078] D/CDROM: CDROM setloc command (19, 04, 16)
+[86739.5078] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86739.5078] D/CDROM: Seek time for 19:04:08->19:04:16 (8 LBA): 1806336 (53.333 ms) (forward)
+[86739.5625] D/CDROM: Logical seek to [19:04:16] complete, now reading
+[86739.5781] D/CDROM: Read sector 85816 [19:04:16]: mode 2 submode 0x08 into buffer 1
+[86739.5781] D/CDROM: Read sector 85817 [19:04:17]: mode 2 submode 0x08 into buffer 2
+[86739.5938] D/CDROM: Read sector 85818 [19:04:18]: mode 2 submode 0x08 into buffer 3
+[86739.5938] D/CDROM: Read sector 85819 [19:04:19]: mode 2 submode 0x08 into buffer 4
+[86739.5938] D/CDROM: Read sector 85820 [19:04:20]: mode 2 submode 0x08 into buffer 5
+[86739.6094] D/CDROM: Read sector 85821 [19:04:21]: mode 2 submode 0x08 into buffer 6
+[86739.6094] D/CDROM: Read sector 85822 [19:04:22]: mode 2 submode 0x08 into buffer 7
+[86739.6250] D/CDROM: Read sector 85823 [19:04:23]: mode 2 submode 0x08 into buffer 0
+[86739.6250] D/CDROM: Read sector 85824 [19:04:24]: mode 2 submode 0x08 into buffer 1
+[86739.6250] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86739.6953] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x25]
+[86739.6953] D/CDROM: CDROM setloc command (19, 04, 25)
+[86739.6953] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86739.6953] D/CDROM: Seek time for 19:04:17->19:04:25 (8 LBA): 1806336 (53.333 ms) (forward)
+[86739.7422] D/CDROM: Logical seek to [19:04:25] complete, now reading
+[86739.7422] D/CDROM: Read sector 85825 [19:04:25]: mode 2 submode 0x08 into buffer 1
+[86739.7422] V/AudioStream: === Stretcher is now inactive.
+[86739.7578] D/CDROM: Read sector 85826 [19:04:26]: mode 2 submode 0x08 into buffer 2
+[86739.7578] D/CDROM: Read sector 85827 [19:04:27]: mode 2 submode 0x08 into buffer 3
+[86739.7734] D/CDROM: Read sector 85828 [19:04:28]: mode 2 submode 0x08 into buffer 4
+[86739.7734] D/CDROM: Read sector 85829 [19:04:29]: mode 2 submode 0x08 into buffer 5
+[86739.7812] D/CDROM: Read sector 85830 [19:04:30]: mode 2 submode 0x08 into buffer 6
+[86750.9688] D/CDROM: Read sector 85831 [19:04:31]: mode 2 submode 0x08 into buffer 7
+[86750.9688] D/CDROM: Read sector 85832 [19:04:32]: mode 2 submode 0x08 into buffer 0
+[86750.9844] D/CDROM: Read sector 85833 [19:04:33]: mode 2 submode 0x08 into buffer 1
+[86750.9844] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86751.0391] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x34]
+[86751.0391] D/CDROM: CDROM setloc command (19, 04, 34)
+[86751.0391] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86751.0391] D/CDROM: Seek time for 19:04:26->19:04:34 (8 LBA): 1806336 (53.333 ms) (forward)
+[86751.0859] D/CDROM: Logical seek to [19:04:34] complete, now reading
+[86751.1016] D/CDROM: Read sector 85834 [19:04:34]: mode 2 submode 0x08 into buffer 1
+[86751.1016] D/CDROM: Read sector 85835 [19:04:35]: mode 2 submode 0x08 into buffer 2
+[86751.1172] D/CDROM: Read sector 85836 [19:04:36]: mode 2 submode 0x08 into buffer 3
+[86751.1172] D/CDROM: Read sector 85837 [19:04:37]: mode 2 submode 0x08 into buffer 4
+[86751.1172] D/CDROM: Read sector 85838 [19:04:38]: mode 2 submode 0x08 into buffer 5
+[86751.1328] D/CDROM: Read sector 85839 [19:04:39]: mode 2 submode 0x08 into buffer 6
+[86751.1328] D/CDROM: Read sector 85840 [19:04:40]: mode 2 submode 0x08 into buffer 7
+[86751.1562] D/CDROM: Read sector 85841 [19:04:41]: mode 2 submode 0x08 into buffer 0
+[86751.1562] D/CDROM: Read sector 85842 [19:04:42]: mode 2 submode 0x08 into buffer 1
+[86751.1562] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86751.2188] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x43]
+[86751.2188] D/CDROM: CDROM setloc command (19, 04, 43)
+[86751.2188] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86751.2188] D/CDROM: Seek time for 19:04:35->19:04:43 (8 LBA): 1806336 (53.333 ms) (forward)
+[86751.2734] D/CDROM: Logical seek to [19:04:43] complete, now reading
+[86751.2734] D/CDROM: Read sector 85843 [19:04:43]: mode 2 submode 0x08 into buffer 1
+[86751.2891] D/CDROM: Read sector 85844 [19:04:44]: mode 2 submode 0x08 into buffer 2
+[86751.2891] D/CDROM: Read sector 85845 [19:04:45]: mode 2 submode 0x08 into buffer 3
+[86751.2891] D/CDROM: Read sector 85846 [19:04:46]: mode 2 submode 0x08 into buffer 4
+[86751.3047] D/CDROM: Read sector 85847 [19:04:47]: mode 2 submode 0x08 into buffer 5
+[86751.3047] D/CDROM: Read sector 85848 [19:04:48]: mode 2 submode 0x08 into buffer 6
+[86751.3203] D/CDROM: Read sector 85849 [19:04:49]: mode 2 submode 0x08 into buffer 7
+[86751.3203] D/CDROM: Read sector 85850 [19:04:50]: mode 2 submode 0x08 into buffer 0
+[86751.3203] D/CDROM: Read sector 85851 [19:04:51]: mode 2 submode 0x08 into buffer 1
+[86751.3359] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86751.3906] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x52]
+[86751.3906] D/CDROM: CDROM setloc command (19, 04, 52)
+[86751.3906] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86751.3906] D/CDROM: Seek time for 19:04:44->19:04:52 (8 LBA): 1806336 (53.333 ms) (forward)
+[86751.4375] D/CDROM: Logical seek to [19:04:52] complete, now reading
+[86751.4531] D/CDROM: Read sector 85852 [19:04:52]: mode 2 submode 0x08 into buffer 1
+[86751.4531] D/CDROM: Read sector 85853 [19:04:53]: mode 2 submode 0x08 into buffer 2
+[86751.4688] D/CDROM: Read sector 85854 [19:04:54]: mode 2 submode 0x08 into buffer 3
+[86751.4688] D/CDROM: Read sector 85855 [19:04:55]: mode 2 submode 0x08 into buffer 4
+[86751.4688] D/CDROM: Read sector 85856 [19:04:56]: mode 2 submode 0x08 into buffer 5
+[86751.4844] D/CDROM: Read sector 85857 [19:04:57]: mode 2 submode 0x08 into buffer 6
+[86751.4844] D/CDROM: Read sector 85858 [19:04:58]: mode 2 submode 0x08 into buffer 7
+[86751.5078] D/CDROM: Read sector 85859 [19:04:59]: mode 2 submode 0x08 into buffer 0
+[86751.5078] D/CDROM: Read sector 85860 [19:04:60]: mode 2 submode 0x89 into buffer 1
+[86751.5078] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86751.5703] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x61]
+[86751.5703] D/CDROM: CDROM setloc command (19, 04, 61)
+[86751.5703] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86751.5703] D/CDROM: Seek time for 19:04:53->19:04:61 (8 LBA): 1806336 (53.333 ms) (forward)
+[86751.6172] D/CDROM: Logical seek to [19:04:61] complete, now reading
+[86751.6250] D/CDROM: Read sector 85861 [19:04:61]: mode 2 submode 0x08 into buffer 1
+[86751.6406] D/CDROM: Read sector 85862 [19:04:62]: mode 2 submode 0x08 into buffer 2
+[86751.6406] D/CDROM: Read sector 85863 [19:04:63]: mode 2 submode 0x08 into buffer 3
+[86751.6406] D/CDROM: Read sector 85864 [19:04:64]: mode 2 submode 0x08 into buffer 4
+[86751.6562] D/CDROM: Read sector 85865 [19:04:65]: mode 2 submode 0x08 into buffer 5
+[86751.6562] D/CDROM: Read sector 85866 [19:04:66]: mode 2 submode 0x08 into buffer 6
+[86751.6719] D/CDROM: Read sector 85867 [19:04:67]: mode 2 submode 0x08 into buffer 7
+[86751.6719] D/CDROM: Read sector 85868 [19:04:68]: mode 2 submode 0x08 into buffer 0
+[86751.6719] D/CDROM: Read sector 85869 [19:04:69]: mode 2 submode 0x08 into buffer 1
+[86751.6719] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86751.7422] D/CDROM: CDROM executing command 0x02 (Setloc), stat = 0x02, params = [0x19, 0x04, 0x70]
+[86751.7422] D/CDROM: CDROM setloc command (19, 04, 70)
+[86751.7422] D/CDROM: CDROM executing command 0x06 (ReadN), stat = 0x02, params = []
+[86751.7422] D/CDROM: Seek time for 19:04:62->19:04:70 (8 LBA): 1806336 (53.333 ms) (forward)
+[86751.7891] D/CDROM: Logical seek to [19:04:70] complete, now reading
+[86751.8047] D/CDROM: Read sector 85870 [19:04:70]: mode 2 submode 0x08 into buffer 1
+[86751.8047] D/CDROM: Read sector 85871 [19:04:71]: mode 2 submode 0x08 into buffer 2
+[86751.8047] D/CDROM: Read sector 85872 [19:04:72]: mode 2 submode 0x08 into buffer 3
+[86751.8203] D/CDROM: Read sector 85873 [19:04:73]: mode 2 submode 0x08 into buffer 4
+[86751.8203] D/CDROM: Read sector 85874 [19:04:74]: mode 2 submode 0x89 into buffer 5
+[86751.8359] D/CDROM: Read sector 85875 [19:05:00]: mode 2 submode 0x08 into buffer 6
+[86751.8359] D/CDROM: Read sector 85876 [19:05:01]: mode 2 submode 0x08 into buffer 7
+[86751.8359] D/CDROM: Read sector 85877 [19:05:02]: mode 2 submode 0x08 into buffer 0
+[86751.8516] D/CDROM: Read sector 85878 [19:05:03]: mode 2 submode 0x08 into buffer 1
+[86751.8516] D/CDROM: CDROM executing command 0x09 (Pause), stat = 0x22, params = []
+[86751.8750] D/CodeCache: Page fault handler invoked at PC=0x7ff6e58807bf Address=0x2abd3800000 (write), fastmem offset 80200000
+[86751.8750] D/CodeCache: Backpatching store at 0x7ff6e58807bf[5] (pc 80034E54 addr 80200000): Bitmask E7848100 Addr 0 Data 0 Size 1 Signed 00
+[86751.8750] D/Recompiler: Backpatching 0x7ff6e58807bf (guest PC 0x80034E54) to slowmem
+[86751.8750] D/CodeCache: Page fault on protected RAM @ 0x00000000 (page #0), invalidating code cache.
+[86751.8750] D/CodeCache: Page fault handler invoked at PC=0x7ff6e5880e02 Address=0x2abd3800001 (write), fastmem offset 80200001
+[86751.8750] D/CodeCache: Backpatching store at 0x7ff6e5880e02[5] (pc 80034EFC addr 80200001): Bitmask E78481A0 Addr 0 Data 0 Size 1 Signed 00
+[86751.8750] D/Recompiler: Backpatching 0x7ff6e5880e02 (guest PC 0x80034EFC) to slowmem
+[86751.8750] D/CodeCache: Page fault handler invoked at PC=0x7ff6e5880dba Address=0x2abd3800016 (read), fastmem offset 80200016
+[86751.8750] D/CodeCache: Backpatching store at 0x7ff6e5880dba[5] (pc 80034EF4 addr 80200016): Bitmask E7848180 Addr 0 Data 0 Size 1 Signed 00
+[86751.8750] D/Recompiler: Backpatching 0x7ff6e5880dba (guest PC 0x80034EF4) to slowmem
+[86751.8750] D/CodeCache: Page fault on protected RAM @ 0x00001000 (page #1), invalidating code cache.
+[86751.8750] E(ReadBlockInstructions): Instruction read failed at PC=0x80000084, truncating block.
+[86751.8750] W(Compile_Fallback): Compiling instruction fallback at PC=0x80000080, instruction=0x4CF9C255
+[86751.9688] V/PerfMon: FPS: 0.00 VPS: 59.79 CPU: 5.49 GPU: 0.00 Avg: 16.72ms Min: 15.74ms Max: 17.75ms
+[86792.9375] V/PerfMon: FPS: 0.00 VPS: 59.80 CPU: 19.40 GPU: 0.00 Avg: 16.72ms Min: 15.85ms Max: 17.39ms
