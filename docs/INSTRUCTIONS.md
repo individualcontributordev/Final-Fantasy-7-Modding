@@ -1,52 +1,58 @@
-# Task: bisect JUNAIR freeze — test 3 individual shared-engine files
+# Task: bisect JUNAIR freeze — check whether ANY nonzero selection freezes
 
-## Progress so far
+## Progress so far, and why we're pivoting
 
-- `--none` (CSR only): **no freeze** (baseline confirmed good).
-- `--half 1` (46 files): **freezes**. `--half 2` (45 files): cleared.
-- Both 23-file quarters of `half1` **froze**. Since only one half of the
-  91 total files froze, but *both* quarters of that half also freeze,
-  this doesn't look like a simple single-culprit file — more likely one
-  or two **shared engine files** included in both quarters are at fault
-  (a per-map `.DAT` couldn't explain both quarters freezing, since each
-  quarter has a disjoint set of map files).
+- `--none` (CSR only, zero files selected): **no freeze**.
+- `--half 1` (46 files): **freezes**.
+- Both 23-file quarters of `half1`: **both froze**.
+- `FIELD/FIELD.BIN` alone, `BATTLE/BATTLE.X` alone, and `FIELD/JUNAIR.DAT`
+  alone: **all three froze independently.**
 
-The prime suspects are the non-map, shared-engine files. Testing each
-completely alone (CSR + only that one file) tells us directly whether it
-alone is sufficient to cause the freeze:
+Three unrelated files (a shared field overlay, a shared battle exe, and
+one map's own script) each independently reproducing the exact same
+freeze doesn't fit "one bad file." It fits a different hypothesis: the
+freeze isn't caused by any single file's *content*, but by applying
+**any nonzero subset** of the core layer at all, because of how the
+always-on `__GAP__` records (ISO9660 directory-table entries) interact
+with a partial selection — `--none` is the only build so far where the
+directory table and actual file bytes are guaranteed fully consistent
+with each other.
 
-- `FIELD/FIELD.BIN` — shared field engine overlay, used by every field.
-- `BATTLE/BATTLE.X` — shared battle engine executable.
-- `FIELD/JUNAIR.DAT` — JUNAIR's own field script/data (the field where
-  the freeze happens).
+Critically: `--half 2` (the other 45 files) was **never actually
+tested** — I incorrectly assumed it was "cleared" by binary-bisection
+logic, but that logic doesn't hold if the real cause is "any partial
+selection is inconsistent." We need to test that now, plus one trivial,
+unrelated file to see if literally anything nonzero freezes.
 
-## Step 1: build and playtest these three on your machine
+## Step 1: build and playtest these two on your machine
 
 ```
-python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/FIELD.BIN
-python3 mods/single-disc/scripts/bisect_core_layer.py --files BATTLE/BATTLE.X
-python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/JUNAIR.DAT
+python3 mods/single-disc/scripts/bisect_core_layer.py --half 2
+python3 mods/single-disc/scripts/bisect_core_layer.py --files FIELD/GAIA_32.DAT
 ```
 
-Each writes `workspace/iso-extract/bisect_core_n1_<hash>.bin` (+`.cue`)
-locally — the printed `+ FILE` line at the top of each command's output
-tells you which one you're looking at, so you don't need to remember the
-hash.
+`--half 2` writes `bisect_core_half2.bin`/`.cue`. `FIELD/GAIA_32.DAT` is
+a tiny, unrelated map file (89 records, ~5KB) picked only to test the
+"any nonzero selection freezes" theory as cheaply as possible; it writes
+`bisect_core_n1_<hash>.bin`/`.cue`.
 
 Playtest JUNAIR (field 384, moment 1016): get into a battle, let it
-finish, return to the field. Report for **each** of the three builds:
-freeze or no freeze.
+finish, return to the field. Report for **each** build: freeze or no
+freeze.
 
 ## Step 2: what happens next
 
-- If exactly one freezes alone: that's the culprit, we inspect its diff
-  next.
-- If more than one freezes alone: multiple independent bad writes exist,
-  we'll need to fix each.
-- If **none** freeze alone: the bug needs two or more of these files
-  together (or a file outside these three, still within the frozen
-  quarters) — I'll test 2-file combinations next (e.g. FIELD.BIN +
-  BATTLE.X, FIELD.BIN + JUNAIR.DAT, etc).
+- If **both** freeze: confirms "any nonzero core-layer selection
+  freezes" — the bug is in the always-on `__GAP__`/directory-table
+  handling itself, not in any specific file's content. I'll go look at
+  `group_records_by_file` / `apply_layer` and the GAP record set next.
+- If `--half 2` does **not** freeze but `GAIA_32.DAT` alone **does**:
+  contradicts the "any selection" theory in a different way — would mean
+  something about *which* files are selected still matters, just not in
+  the way straight bisection assumed. Report exactly which combination
+  and I'll re-plan.
+- If **neither** freezes: even more surprising given everything above —
+  report it, I'll double-check nothing was misapplied.
 
 You can also generate other slices yourself between playtests instead of
 waiting for me:
