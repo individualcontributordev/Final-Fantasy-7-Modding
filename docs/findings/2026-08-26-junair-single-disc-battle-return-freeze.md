@@ -69,26 +69,79 @@ different shared file (battle module common code, VRAM/module data,
 audio/CD-DA track layout affected by the single-disc merge), or something
 disc-layout-dependent that isn't visible in this field's own file content.
 
+## Root cause identified (2026-08-26 update): 2MB address-wrap memory corruption
+
+DuckStation debug log (`docs/logs`) captured the exact corruption event, just
+before the permanent hang:
+
+```
+[86751.8750] D/CodeCache: Page fault handler invoked at PC=... Address=0x2abd3800000 (write), fastmem offset 80200000
+[86751.8750] D/CodeCache: Backpatching store at ... (pc 80034E54 addr 80200000) ...
+[86751.8750] D/CodeCache: Page fault on protected RAM @ 0x00000000 (page #0), invalidating code cache.
+[86751.8750] D/CodeCache: Page fault handler invoked at PC=... Address=0x2abd3800001 (write), fastmem offset 80200001
+[86751.8750] D/CodeCache: Backpatching store at ... (pc 80034EFC addr 80200001) ...
+[86751.8750] D/CodeCache: Page fault handler invoked at PC=... Address=0x2abd3800016 (read), fastmem offset 80200016
+[86751.8750] D/CodeCache: Page fault on protected RAM @ 0x00001000 (page #1), invalidating code cache.
+[86751.8750] E(ReadBlockInstructions): Instruction read failed at PC=0x80000084, truncating block.
+[86751.8750] W(Compile_Fallback): Compiling instruction fallback at PC=0x80000080, instruction=0x4CF9C255
+[86751.9688] V/PerfMon: FPS: 0.00 ...
+```
+
+**Mechanism:**
+- Something (guest PCs `0x80034E54` / `0x80034EFC` / `0x80034EF4`, inside the
+  BIOS SPU/CD low-level driver work area — no application symbol resolves
+  here) issues writes to guest address **`0x80200000`+** (2MB above the base
+  of PS1 RAM).
+- The PS1 only decodes the **low 21 bits** of RAM addresses (2MB physical
+  RAM, mirrored every 2MB up to the 8MB KUSEG window). `0x80200000 &
+  0x1FFFFF = 0x00000000` — so this write **wraps around and aliases onto
+  address `0x00000000`**, which is the **kernel exception-vector / jump
+  table** (`0x00000000`–`0x00001FFF`, pages 0–1) that the BIOS installs at
+  boot and uses for every hardware interrupt dispatch.
+- DuckStation's log confirms this: immediately after the `0x80200000`-range
+  writes, it reports `"Page fault on protected RAM @ 0x00000000 (page #0)"`
+  and `"@ 0x00001000 (page #1)"` — i.e. **self-modifying code detected in
+  the kernel vector table itself**.
+- One frame later, `"Instruction read failed at PC=0x80000084"` — the CPU
+  tries to execute the now-corrupted exception vector when the next
+  hardware interrupt fires (`CAUSE=0x00000400`, matches the earlier-reported
+  freeze register dump) and reads garbage (`0x4CF9C255`, previously
+  misdecoded as a bogus `cop3` instruction). **The BIOS interrupt handler is
+  now permanently broken**, so every subsequent interrupt jumps into
+  garbage and the CPU never returns to game logic — this is the observed
+  infinite loop at `PC=0x80000080`.
+
+**Conclusion:** this is not a CD-ROM seek/track problem (the background
+XA audio stream logged in the same window is a red herring — it's
+interrupt-driven and keeps limping along independently of the corrupted
+main-thread vector). The actual bug is a **2MB (`0x200000`) address-wrap
+memory stomp** onto the exception-vector table, triggered by some
+battle-end/field-reinit code path computing a pointer or DMA length that
+overruns by exactly one RAM-mirror period. This is disc-layout/build
+dependent (present on merged single-disc, absent on stock CSR D2 alone),
+consistent with a buffer size, table index, or base pointer that differs
+between the two builds (e.g. something sized/offset relative to a battle
+module load address, DAT file size, or shared work-buffer length that is
+correct on D2 alone but off by 2MB on the single-disc merge).
+
 ## Next steps
 
-1. RAM-watch the script interpreter PC / call stack (DuckStation debugger)
-   at the exact freeze moment. Since it's not `air0`, check whether PC is
-   inside generic battle-end/field-reinit engine code (not the field
-   script interpreter at all) vs. some other field entity's script that
-   *is* reachable at this point (re-review scripts for `dir`/other
-   entities executed on field re-entry, not just the diffed slot).
-2. Since JUNAIR.DAT content is now ruled out, broaden the search: compare
-   other files touched by battle-return (e.g. shared battle/field common
-   modules, CD-DA/audio track table, `MOVIE_ID.BIN` if it's read at
-   battle-end for any reason) between stock CSR D2 alone and the
-   single-disc merged image, since the freeze is present on single-disc
-   but not on stock D2.
-3. Consider whether single-disc strips or renumbers CD audio tracks (CD-DA
-   redbook tracks) present on D2 but not carried into the merged D1-based
-   image — a battle-end music/SFX cue trying to read a track that no
-   longer exists in the same position could hang the CD-XA subsystem
-   similarly to the (ruled-out) AKAO literal-sector theory, just from a
-   different call site than JUNAIR's field script.
+1. Set a **write breakpoint** in DuckStation at guest address range
+   `0x00000000`–`0x00001FFF` (kernel vector table) — this will catch the
+   *first* moment battle-return code stomps it, well before the freeze
+   becomes visible.
+2. Alternatively, breakpoint execution at `0x80034E54` (the guest PC seen
+   issuing the bad write) and inspect the register holding the target
+   address right before the store — that register should reveal the
+   miscalculated pointer/offset and its expected (correct) value.
+3. Once the write is caught, trace back to the calling code (call stack at
+   that point) to identify which battle-end/field-reinit routine computes
+   the bad 2MB-off address — likely a buffer size or module-load-address
+   calculation that differs between stock CSR D2 and the merged
+   single-disc image.
+4. Compare battle/field-common module load addresses and buffer-size
+   constants between stock CSR D2 and the single-disc merge to find what's
+   sized/offset differently by (or near) `0x200000`.
 
 ## False leads (for future readers)
 
