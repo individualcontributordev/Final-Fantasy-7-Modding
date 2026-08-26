@@ -1,18 +1,50 @@
-# Task: bisect JUNAIR (field 384) battle-return freeze
+# Task: confirm JUNAIR battle-return freeze trigger (RAM watch), then playtest movie relocation
 
-## Why
+## Bisect result (confirmed)
 
-Playtest report: on `playtest_movie_relocation.bin`, JUNAIR (field 384,
-game moment 1016 / CSR D2 content) loads fine initially, but if a battle
-encounter starts and finishes, the game **freezes** when loading back
-into the field. No prior finding in this repo documents a battle-return
-freeze anywhere (all documented single-disc freezes are field-transition,
-movie-playback, or audio issues) — so this needs to be isolated: is it
-caused by the movie-relocation patch (JUNAIR's PMVIE id 40 was repointed
-to `GELNICA.MOV`), or does it also happen on the plain `single-disc-on-csr`
-core build (i.e. pre-existing, unrelated to this session's patch)?
+The freeze reproduces identically on `bisect_core_no_relocation.bin`
+(no movie-relocation patch) and `playtest_movie_relocation.bin` — it is
+**pre-existing in `single-disc-on-csr` itself**, unrelated to the movie
+patch. Also confirmed: the freeze does **not** occur on stock CSR Disc 2
+alone at the same spot.
 
-## 1. Build BOTH images and compare
+Root-cause research (`docs/findings/2026-08-26-junair-single-disc-battle-return-freeze.md`):
+
+- JUNAIR's encounter table and `BATTLE/SCENE.BIN` are **byte-identical**
+  between CSR D1 and D2 — ruled out.
+- The `air0` entity script-3 `AKAO(0xF2)` hypothesis is also **ruled out**:
+  that block is gated by a line trigger not hit before the freeze occurs
+  (confirmed by playtester). A full slot-by-slot and section-by-section
+  diff confirms **no other content difference exists** between D1 and D2
+  JUNAIR.DAT — every walkmesh/background/camera/inf/encounter/model_loader
+  byte and all 735 other script slots match exactly.
+- **Conclusion: JUNAIR.DAT's own file content is not the cause.** The
+  freeze must come from something else touched during battle-return:
+  engine/global state, a different shared file, or CD/audio-track layout
+  changed by the single-disc merge.
+
+## 1. RAM-watch to find the actual freeze site
+
+Since the field's own script content is ruled out, this step is now about
+**finding**, not confirming, where execution is stuck. Open
+`bisect_core_no_relocation.cue` (build command in step 2 below) in
+DuckStation with the debugger. Get to JUNAIR (field 384, moment 1016),
+trigger a battle, let it finish, and when the freeze happens on return to
+the field, check the CPU program counter / call stack in DuckStation's
+debug window.
+
+Report back exactly what you see: the PC address, any resolvable function
+name/symbol, and the call stack if available. Also note if it looks like
+a CD-read spin-loop (PC not moving, or looping in a tiny address range)
+vs. a genuine crash/exception. This will tell me which subsystem to dig
+into next (field script interpreter, battle-end common code, or CD-XA
+audio dispatch).
+
+If you don't have the debugger set up or this is too fiddly, that's fine
+— report back "skipped RAM watch" and just do the playtest checklist
+below; I'll come back to this diagnostic later.
+
+## 2. Build BOTH images and compare
 
 The **core build** (no movie-relocation patch) is already produced by
 step 1 of the build chain below, before the `apply_layer.py` step. Build
@@ -35,24 +67,7 @@ for stem in ['bisect_core_no_relocation', 'playtest_movie_relocation']:
 "
 ```
 
-## 2. Playtest: reproduce on the CORE build (no relocation patch)
-
-Open `workspace/iso-extract/bisect_core_no_relocation.cue` in DuckStation.
-Get to JUNAIR (field 384) at the same game moment (1016), trigger a
-battle, let it finish, and see if it freezes loading back into the field.
-
-- **If it freezes on the core build too** → pre-existing, unrelated to
-  the movie-relocation patch. Report that back — I'll look elsewhere
-  (e.g. `single-disc-on-csr`'s own JUNAIR merge).
-- **If it does NOT freeze on the core build** → confirms the
-  movie-relocation patch caused it. Report that back — I'll dig into
-  `ship_movie_relocation_v010.py`'s JUNAIR change (id 40 repoint).
-
-Please also note, if possible: does the freeze happen on every battle
-return at JUNAIR, or only some? Any black screen vs. frozen-but-visible
-frame? Any DuckStation log/console output at the moment it freezes?
-
-## 3. (Once bisected) Playtest single-disc-movie-relocation-v0.1.0 (JUNAIR / TRNAD_51 / ROOTMAP)
+## 3. Playtest single-disc-movie-relocation-v0.1.0 (JUNAIR / TRNAD_51 / ROOTMAP)
 
 `docs/findings/2026-08-25-movie-relocation-plan.md` fixed the last 4 real
 live movie-id conflicts in the single-disc build (agent-verified via the
@@ -86,12 +101,12 @@ otherwise reach it via normal/skip-ahead play.
 
 ## 5. Report back
 
-Report the bisect result from step 2 first (freezes on core build or not).
-Then, for each of the 3 fields in step 4, say whether the correct movie
-played, and paste any DuckStation error/log output if something looks
-wrong (wrong footage, black screen, crash, audio desync). No further
-action needed from you beyond that — I'll investigate anything that
-doesn't match.
+Report the RAM-watch result from step 1 first (confirmed AKAO/air0, stuck
+elsewhere, or skipped). Then, for each of the 3 fields in step 4, say
+whether the correct movie played, and paste any DuckStation error/log
+output if something looks wrong (wrong footage, black screen, crash,
+audio desync). No further action needed from you beyond that — I'll
+investigate anything that doesn't match.
 
 ---
 
