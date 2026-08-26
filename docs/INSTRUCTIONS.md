@@ -12,33 +12,33 @@ Root-cause research (`docs/findings/2026-08-26-junair-single-disc-battle-return-
 
 - JUNAIR's encounter table and `BATTLE/SCENE.BIN` are **byte-identical**
   between CSR D1 and D2 — ruled out.
-- The **only** real script difference between D1/D2 JUNAIR.DAT is one
-  slot, `air0` entity script 3: CSR D2's copy (which single-disc merges
-  wholesale) adds an `IFSW`-gated block containing an `AKAO` (`0xF2`)
-  instruction — a raw CD-XA command with **literal sector/size bytes
-  compiled into the script**, not looked up via `MOVIE_ID.BIN` (per
-  `docs/findings/2026-08-24-akao-opcode-0xf2-is-canonon-cd-call-site.md`).
-  D1's copy of this same slot has no such block. This is the leading
-  suspect but not yet confirmed to be what's actually executing at the
-  freeze.
+- The `air0` entity script-3 `AKAO(0xF2)` hypothesis is also **ruled out**:
+  that block is gated by a line trigger not hit before the freeze occurs
+  (confirmed by playtester). A full slot-by-slot and section-by-section
+  diff confirms **no other content difference exists** between D1 and D2
+  JUNAIR.DAT — every walkmesh/background/camera/inf/encounter/model_loader
+  byte and all 735 other script slots match exactly.
+- **Conclusion: JUNAIR.DAT's own file content is not the cause.** The
+  freeze must come from something else touched during battle-return:
+  engine/global state, a different shared file, or CD/audio-track layout
+  changed by the single-disc merge.
 
-## 1. RAM-watch to confirm the freeze site
+## 1. RAM-watch to find the actual freeze site
 
-Open `bisect_core_no_relocation.cue` (build command in step 2 below) in
+Since the field's own script content is ruled out, this step is now about
+**finding**, not confirming, where execution is stuck. Open
+`bisect_core_no_relocation.cue` (build command in step 2 below) in
 DuckStation with the debugger. Get to JUNAIR (field 384, moment 1016),
 trigger a battle, let it finish, and when the freeze happens on return to
 the field, check the CPU program counter / call stack in DuckStation's
 debug window.
 
-- **If PC is stuck inside the field script interpreter executing the
-  `air0` entity's script 3** (look for it looping/stuck right after
-  hitting bytes `f2 00 00 00 c1 78 ...` — the `AKAO` op) → confirms the
-  hypothesis above. Report back "confirmed AKAO/air0" and I'll design a
-  fix (likely stripping/patching that block in the single-disc JUNAIR
-  merge).
-- **If PC is stuck somewhere else entirely** → the `air0` script isn't
-  the cause; report back exactly what DuckStation shows (PC address,
-  any visible function name, call stack) so I can look elsewhere.
+Report back exactly what you see: the PC address, any resolvable function
+name/symbol, and the call stack if available. Also note if it looks like
+a CD-read spin-loop (PC not moving, or looping in a tiny address range)
+vs. a genuine crash/exception. This will tell me which subsystem to dig
+into next (field script interpreter, battle-end common code, or CD-XA
+audio dispatch).
 
 If you don't have the debugger set up or this is too fiddly, that's fine
 — report back "skipped RAM watch" and just do the playtest checklist
