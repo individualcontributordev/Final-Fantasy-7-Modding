@@ -14,9 +14,17 @@ stored in ascending disc-offset order. `bisect_core_layer.py` applies
 CSR + only the first N of those records, so "N records" is our bisection
 axis (roughly: earlier disc regions/files first, later ones last).
 
-## Step 1: playtest these two builds now
+## Step 1: build and playtest these two on your machine
 
-Two builds are already made:
+Run both of these (needs `workspace/pristine/FINALFANTASY7_D1.bin` and a
+sibling checkout of `Final-Fantasy-7-CSR`, same as any other build here):
+
+```
+python3 mods/single-disc/scripts/bisect_core_layer.py --count 0
+python3 mods/single-disc/scripts/bisect_core_layer.py --count 31725
+```
+
+This writes, locally on your machine:
 
 - `workspace/iso-extract/bisect_core_N0.bin` (+`.cue`) — **CSR only**,
   zero single-disc records applied. This is the baseline — JUNAIR's
@@ -40,8 +48,8 @@ freeze or no freeze.
   cluster of records) that introduces the freeze, then inspect what file/
   region that disc offset belongs to.
 
-To generate a new slice yourself between playtests instead of waiting for
-me, you can also just run:
+You can also generate any other slice yourself between playtests instead
+of waiting for me:
 
 ```
 python3 mods/single-disc/scripts/bisect_core_layer.py --count <N>

@@ -33,6 +33,26 @@ See: `docs/findings/2026-08-17-v012-to-v0140-failure-analysis.md`
 
 No second agent on the disc/build machine.
 
+## Hard rule: agent and human are on different machines — never point at local build output
+
+The agent runs on a Mac; the human playtests/burns on an **entirely
+different machine**. Any file the agent writes under `workspace/` (built
+`.bin`/`.cue`, extracted assets, etc.) exists **only on the agent's Mac**
+and is invisible to the human — never say "the build is ready in
+`workspace/iso-extract/...`" or similar as if the human can just open it.
+
+`workspace/` is gitignored (never committed) specifically because it's
+per-machine scratch space, not a handoff mechanism.
+
+The only things that cross machines are what's **committed to the repo**:
+scripts, layer JSON, and `docs/INSTRUCTIONS.md`. So instead of building
+and pointing at the output, put the **exact build command(s)** the human
+must run themselves in `docs/INSTRUCTIONS.md` (per the COPY-PASTE rule
+below), so the human's machine produces its own local `.bin`/`.cue` to
+playtest. The agent may still run the build locally first to sanity-check
+it works before writing the instructions — just never phrase it as
+handing the human a file.
+
 ## Hard rule: instructions live in the repo
 
 **Never** give an operational task that only exists in chat.
