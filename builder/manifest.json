@@ -1177,6 +1177,30 @@
       "autoIncludeWhen": {
         "addonSelected": "single-disc-csr-manip-movies-v0.1.5"
       }
+    },
+    {
+      "id": "single-disc-csr-manip-movies-v0.1.7",
+      "name": "(auto) CSR manip movies delta",
+      "kind": "mod",
+      "version": "0.1.7",
+      "blurb": "D2 manip FMVs on D1 (delta pack, applies after manip-movies v0.1.6). Fixes MD8_5 (#731) PMVIE id 53's LBA collision with OPENINGE.MOV, which broke the 67->731 transition movie.",
+      "hint": "Always with Single-disc.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./single-disc-csr-manip-movies-v0.1.7/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "uiHidden": true,
+      "hidden": true,
+      "beta": true,
+      "status": "beta",
+      "autoIncludeWhen": {
+        "addonSelected": "single-disc-csr-manip-movies-v0.1.6"
+      }
     }
   ],
   "bases": [],
