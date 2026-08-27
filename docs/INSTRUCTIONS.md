@@ -2,10 +2,10 @@
 
 Confirmed: PC=0x80000080, Cause=0x428 (Reserved Instruction) — a write
 to 0x0 clobbers the exception vectors, so the CPU crashes trying to
-handle its own exception. First watchpoint hit was a false lead
-(0x8003cde8/0x80042b00 = normal ExitCriticalSection syscall touching
-the A0/B0/C0 table, not the bug). Script now auto-skips known-benign
-writer PCs and keeps continuing until a real (non-skip-listed) hit:
+handle its own exception. 0x8003cde8 is a known-benign caller
+(ExitCriticalSection syscall touching the A0/B0/C0 table, not the
+bug) — script now skips it (matching both pc and $ra) and keeps
+continuing until a real hit.
 
 1. DuckStation: Settings → Advanced → enable "GDB Server" (port 19000).
 2. In a terminal: `python3 scripts/gdb_ram_watch.py --skip-benign-pc 0x8003cde8`

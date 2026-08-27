@@ -303,9 +303,16 @@ def main():
                 stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
                 regs = read_regs(sock)
                 pc = regs.get("pc")
+                ra = regs.get("r31")
                 hits += 1
-                if pc in skip_pcs:
-                    print(f"  hit #{hits}: pc={hex(pc)} is skip-listed, continuing...")
+                # pc is usually inside the shared BIOS routine that did the
+                # write (e.g. ExitCriticalSection's body), so it's nearly
+                # identical across call sites. Match the skip-list against
+                # both pc and $ra (the actual caller) so a known-benign
+                # caller is skipped regardless of which BIOS helper it used.
+                if pc in skip_pcs or ra in skip_pcs:
+                    print(f"  hit #{hits}: pc={hex(pc) if pc is not None else '?'} "
+                          f"ra={hex(ra) if ra is not None else '?'} is skip-listed, continuing...")
                     continue
                 break
         except socket.timeout:
