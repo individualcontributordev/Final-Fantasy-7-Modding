@@ -8,12 +8,20 @@ debugger at the same time).
 Usage:
     python3 scripts/gdb_ram_watch.py --out watch_log.txt
 
-It pauses the core briefly (~every --interval seconds) to snapshot a memory
-range + registers + all DMA channel registers (MADR/BCR/CHCR/busy flag) +
-an approximate call-stack backtrace, logs any byte changes, then resumes.
+It pauses the core briefly (~every --interval seconds) to snapshot: the
+watched RAM range, all CPU registers, DMA channel registers (MADR/BCR/
+CHCR/busy flag), IRQ/timer status, and an approximate call-stack
+backtrace. Logs any byte changes in the watched range, then resumes.
 Press Ctrl+C when you hit the freeze/bug: it does one final snapshot and
 writes everything to --out (plain text, safe to paste/send back). No need
 to set anything else up in DuckStation -- just play until it freezes.
+
+This is a general-purpose capture tool, not tied to one bug: point --addr
+at whatever RAM region is relevant to the scenario you're debugging (it
+defaults to 0x0, the exception vectors). Some hardware I/O ports (DMA/
+IRQ/timer/CDROM/SPU/scratchpad registers) aren't readable via DuckStation's
+GDB stub -- those are auto-probed once at connect and silently omitted
+from every snapshot instead of erroring each poll cycle.
 """
 import argparse
 import socket
@@ -108,26 +116,69 @@ def read_mem(sock: socket.socket, addr: int, length: int) -> bytes:
 DMA_BASE = 0x1F801080
 DMA_CHANNELS = ["MDEC_in", "MDEC_out", "GPU", "CDROM", "SPU", "PIO", "OTC"]
 
+# Other hardware I/O blocks worth snapshotting for general debugging.
+# (name, addr, length). Not all GDB stubs expose I/O port space over 'm'
+# reads (DuckStation's has been observed failing on some of these, which
+# floods its own log with "Failed to read N bytes" errors) -- each block
+# is probed once at connect and skipped for the rest of the session if
+# unreadable, instead of retrying every poll cycle.
+HW_BLOCKS = {
+    "DMA_DPCR_DICR": (0x1F8010F0, 8),
+    "TIMERS": (0x1F801100, 0x30),
+    "IRQ": (0x1F801070, 8),
+    "CDROM": (0x1F801800, 4),
+    "SPU_CTRL": (0x1F801D80, 0x20),
+    "SCRATCHPAD": (0x1F800000, 0x400),
+}
+for _i, _name in enumerate(DMA_CHANNELS):
+    HW_BLOCKS[f"DMA_{_name}"] = (DMA_BASE + _i * 0x10, 0xC)
 
-def read_dma_regs(sock: socket.socket) -> dict:
-    """Snapshot all DMA channel registers plus DPCR/DICR. A channel's CHCR
-    busy bit (bit 24) being set means a transfer was in flight at halt
-    time -- the most direct evidence of *which* DMA channel is moving data
-    right before/as the corruption happens."""
+
+def probe_hw_blocks(sock: socket.socket) -> dict:
+    """Try reading each HW_BLOCKS region once; return {name: bool readable}.
+    Call this once after connecting, then pass the result into
+    read_hw_snapshot() so unreadable blocks aren't retried every cycle."""
+    available = {}
+    for name, (addr, length) in HW_BLOCKS.items():
+        raw = read_mem(sock, addr, length)
+        available[name] = len(raw) == length
+    return available
+
+
+def read_hw_snapshot(sock: socket.socket, available: dict) -> dict:
+    """Read all HW_BLOCKS regions previously confirmed readable."""
     out = {}
-    for i, name in enumerate(DMA_CHANNELS):
-        base = DMA_BASE + i * 0x10
-        raw = read_mem(sock, base, 0xC)
-        if len(raw) == 0xC:
-            madr, bcr, chcr = int.from_bytes(raw[0:4], "little"), \
-                int.from_bytes(raw[4:8], "little"), \
-                int.from_bytes(raw[8:12], "little")
-            out[name] = {
-                "MADR": hex(madr), "BCR": hex(bcr), "CHCR": hex(chcr),
-                "busy": bool(chcr & (1 << 24)),
-            }
-    ctrl = read_mem(sock, 0x1F8010F0, 8)
-    if len(ctrl) == 8:
+    for name, (addr, length) in HW_BLOCKS.items():
+        if not available.get(name):
+            continue
+        raw = read_mem(sock, addr, length)
+        if len(raw) != length:
+            continue
+        out[name] = raw.hex()
+    return out
+
+
+def read_dma_regs(hw: dict) -> dict:
+    """Decode DMA channel MADR/BCR/CHCR (+ DPCR/DICR) from a read_hw_snapshot()
+    result. A channel's CHCR busy bit (bit 24) being set means a transfer
+    was in flight at halt time -- the most direct evidence of *which* DMA
+    channel is moving data right before/as corruption happens."""
+    out = {}
+    for name in DMA_CHANNELS:
+        raw_hex = hw.get(f"DMA_{name}")
+        if not raw_hex:
+            continue
+        raw = bytes.fromhex(raw_hex)
+        madr, bcr, chcr = int.from_bytes(raw[0:4], "little"), \
+            int.from_bytes(raw[4:8], "little"), \
+            int.from_bytes(raw[8:12], "little")
+        out[name] = {
+            "MADR": hex(madr), "BCR": hex(bcr), "CHCR": hex(chcr),
+            "busy": bool(chcr & (1 << 24)),
+        }
+    ctrl_hex = hw.get("DMA_DPCR_DICR")
+    if ctrl_hex:
+        ctrl = bytes.fromhex(ctrl_hex)
         out["DPCR"] = hex(int.from_bytes(ctrl[0:4], "little"))
         out["DICR"] = hex(int.from_bytes(ctrl[4:8], "little"))
     return out
@@ -185,10 +236,14 @@ def main():
 
     sock = socket.create_connection((args.host, args.port), timeout=5)
     handshake(sock)
+    hw_available = probe_hw_blocks(sock)
+    unreadable = [n for n, ok in hw_available.items() if not ok]
     print(f"Connected to {args.host}:{args.port}. Watching 0x{args.addr:x}"
           f"-0x{args.addr+args.len:x}. Ctrl+C at the freeze to stop.")
+    if unreadable:
+        print(f"(hw blocks not readable via GDB stub, skipping: {unreadable})")
 
-    log = []
+    log = [f"hw_blocks_available: {hw_available}\n\n"]
     prev = None
     resumed = True  # track whether the emulator should currently be running
     try:
@@ -198,7 +253,8 @@ def main():
                 resumed = False
                 snap = read_mem(sock, args.addr, args.len)
                 regs = read_regs(sock)
-                dma = read_dma_regs(sock)
+                hw = read_hw_snapshot(sock, hw_available)
+                dma = read_dma_regs(hw)
             except socket.timeout:
                 # Stub didn't answer (e.g. it was manually unpaused/paused
                 # in the UI mid-cycle and the stream desynced). Resync and
@@ -224,6 +280,8 @@ def main():
                         f"{raw_dbg}\n"
                         f"  dma_busy: {busy if busy else 'none'}\n"
                         f"  dma_all: {dma}\n"
+                        f"  irq: {hw.get('IRQ')}\n"
+                        f"  timers: {hw.get('TIMERS')}\n"
                         f"  backtrace(approx): {bt}\n"
                         f"  bytes: {snap.hex()}\n")
                 print(line.strip())
@@ -238,7 +296,8 @@ def main():
             halt(sock)
             snap = read_mem(sock, args.addr, args.len)
             regs = read_regs(sock)
-            dma = read_dma_regs(sock)
+            hw = read_hw_snapshot(sock, hw_available)
+            dma = read_dma_regs(hw)
             sp = regs.get("r29")
             ra = regs.get("r31")
             bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
@@ -246,6 +305,7 @@ def main():
             log.append(f"registers: {regs}\n")
             log.append(f"raw 'g' reply: {rsp_call(sock, 'g')!r}\n")
             log.append(f"dma_all: {dma}\n")
+            log.append(f"hw_snapshot: {hw}\n")
             log.append(f"backtrace(approx): {bt}\n")
             log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
         except socket.timeout:
