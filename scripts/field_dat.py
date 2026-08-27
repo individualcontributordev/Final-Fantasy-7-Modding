@@ -217,6 +217,7 @@ class FieldDat:
     pos_texts_val: int = 0
     pos_akao_val: int = 0
     pos_after: int = 0
+    vbase: int = 0x80000000
 
     @property
     def section_sizes(self) -> dict[str, int]:
@@ -337,6 +338,12 @@ def load_field_dat(data: bytes, path: str | None = None) -> FieldDat:
     ver, author, ents, slots, texts, entries, pad, akao, meta = _parse_section1(
         sections[0]
     )
+    # Real VRAM base this field's engine code expects section 0 to be
+    # loaded at (varies per file, e.g. 0x80115000) -- NOT a fixed constant.
+    # write_field_dat() must reuse this exact base when recomputing the
+    # section-pointer header, or every pointer in the file becomes wrong
+    # (silently loads, corrupts field logic/pointers at runtime).
+    vbase = struct.unpack_from("<I", dat, 0)[0] - 28
     return FieldDat(
         path=path,
         raw_size=raw_size,
@@ -350,6 +357,7 @@ def load_field_dat(data: bytes, path: str | None = None) -> FieldDat:
         akao=akao,
         author=author,
         version=ver,
+        vbase=vbase,
         **meta,
     )
 

@@ -189,7 +189,13 @@ def write_field_dat(
 
     # --- Reassemble the full decompressed DAT with recomputed section header ---
     new_sections = [sec1_final] + list(fd.sections[1:])
-    vbase = 0x80000000 + 28
+    # Must reuse this field's actual VRAM load base (fd.vbase), not a fixed
+    # constant -- differs per file (e.g. 0x80115000 for JUNAIR) and a wrong
+    # base corrupts every section pointer while still parsing/loading fine,
+    # producing runtime corruption (e.g. black-screen hangs) instead of a
+    # load failure. See docs/findings for the JUNAIR precision-patch bug
+    # this was found from.
+    vbase = fd.vbase
     offs = []
     cur_pos = 28
     for s in new_sections:
