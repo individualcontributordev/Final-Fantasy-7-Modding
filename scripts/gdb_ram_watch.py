@@ -224,6 +224,31 @@ def read_regs(sock: socket.socket) -> dict:
     return vals
 
 
+def try_write_watchpoint(sock: socket.socket, addr: int, length: int) -> bool:
+    """Attempt to set a hardware write watchpoint via RSP 'Z2' (write
+    watchpoint). If the stub supports it, this catches the *exact*
+    instruction that writes to `addr` on the next continue -- far more
+    precise than polling/diffing snapshots, and avoids the polling
+    pause/resume desync issues entirely. Returns True if the stub
+    accepted it (replied 'OK')."""
+    reply = rsp_call(sock, f"Z2,{addr:x},{length:x}", timeout=3.0)
+    return reply == "OK"
+
+
+def clear_write_watchpoint(sock: socket.socket, addr: int, length: int) -> None:
+    try:
+        rsp_call(sock, f"z2,{addr:x},{length:x}", timeout=3.0)
+    except socket.timeout:
+        pass
+
+
+def wait_for_watchpoint_hit(sock: socket.socket, timeout: float = 300.0) -> str:
+    """Continue and block until the target stops (watchpoint hit, other
+    exception, or manual pause), returning the raw stop-reply packet."""
+    send_packet(sock, "c")
+    return read_reply(sock, timeout=timeout)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--host", default="127.0.0.1")
@@ -232,6 +257,10 @@ def main():
     ap.add_argument("--len", type=lambda x: int(x, 0), default=0x800)
     ap.add_argument("--interval", type=float, default=0.25)
     ap.add_argument("--out", default="workspace/iso-extract/ram_watch_log.txt")
+    ap.add_argument("--no-watch", action="store_true",
+                     help="Skip trying a hardware write watchpoint; always poll instead.")
+    ap.add_argument("--watch-len", type=lambda x: int(x, 0), default=4,
+                     help="Length in bytes for the write watchpoint (stubs often cap this small).")
     args = ap.parse_args()
 
     sock = socket.create_connection((args.host, args.port), timeout=5)
@@ -244,6 +273,48 @@ def main():
         print(f"(hw blocks not readable via GDB stub, skipping: {unreadable})")
 
     log = [f"hw_blocks_available: {hw_available}\n\n"]
+
+    watch_ok = False
+    if not args.no_watch:
+        try:
+            watch_ok = try_write_watchpoint(sock, args.addr, args.watch_len)
+        except socket.timeout:
+            watch_ok = False
+        print(f"hardware write watchpoint on 0x{args.addr:x}+{args.watch_len}: "
+              f"{'SUPPORTED, using it (no polling needed)' if watch_ok else 'not supported, falling back to polling'}")
+        log.append(f"write_watchpoint_supported: {watch_ok}\n\n")
+
+    if watch_ok:
+        print("Continuing until the watchpoint fires (or you Ctrl+C)...")
+        try:
+            stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
+        except socket.timeout:
+            stop_reply = "(timeout waiting for watchpoint)"
+        except KeyboardInterrupt:
+            stop_reply = "(interrupted by user before watchpoint fired)"
+            try:
+                halt(sock)
+            except socket.timeout:
+                pass
+        snap = read_mem(sock, args.addr, args.len)
+        regs = read_regs(sock)
+        hw = read_hw_snapshot(sock, hw_available)
+        dma = read_dma_regs(hw)
+        sp = regs.get("r29")
+        ra = regs.get("r31")
+        bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
+        log.append(f"=== WATCHPOINT STOP ===\n")
+        log.append(f"raw stop reply: {stop_reply!r}\n")
+        log.append(f"registers: {regs}\n")
+        log.append(f"dma_all: {dma}\n")
+        log.append(f"hw_snapshot: {hw}\n")
+        log.append(f"backtrace(approx): {bt}\n")
+        log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
+        clear_write_watchpoint(sock, args.addr, args.watch_len)
+        with open(args.out, "w") as f:
+            f.writelines(log)
+        print(f"Wrote log to {args.out}. pc={hex(regs.get('pc')) if regs.get('pc') is not None else '?'}")
+        return
     prev = None
     resumed = True  # track whether the emulator should currently be running
     try:
