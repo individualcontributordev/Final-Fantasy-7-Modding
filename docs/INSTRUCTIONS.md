@@ -1,17 +1,17 @@
 # Task: run the RAM watcher script while you playtest
 
-0.02s polling still saw nothing between last-good and corrupted (26s
-apart) -- the write is a single instant DMA burst, not a slow loop.
-New plan: the DMA *destination* write is invisible to watchpoints,
-but the CPU store that *programs* the DMA channel's MADR (source
-address reg) to point there is not. Watching CD-ROM DMA channel 3's
-MADR (0x1F8010C0) instead of 0x0 -- if it's set to ~0x0, that's the
-setup code corrupting things.
+MADR watchpoint never fired (stub likely can't watch 0x1F80xxxx MMIO).
+Pivoting per docs/findings/2026-08-26-junair-...-freeze.md: DuckStation's
+own debug log already named the exact guest PC issuing the bad write
+(0x80034E54, writes to 0x80200000 which wraps onto 0x0). Set an
+*execution* breakpoint there instead of a data watchpoint.
 
 1. DuckStation: Settings → Advanced → enable "GDB Server" (port 19000).
-2. In a terminal: `python3 scripts/gdb_ram_watch.py --addr 0x1F8010C0 --watch-len 4`
+2. In a terminal: `python3 scripts/gdb_ram_watch.py --break-pc 0x80034E54`
 3. Load the game / continue play as normal in DuckStation.
 4. Reproduce the freeze (JUNAIR, field 384, moment 1016, battle-return).
-5. As soon as you see the freeze, **Ctrl+C** the terminal running the
-   script — it writes `workspace/iso-extract/ram_watch_log.txt`.
+5. It should stop automatically when that PC executes (before the
+   freeze) and write `workspace/iso-extract/ram_watch_log.txt`. If it
+   doesn't stop within a minute or two of returning from battle,
+   Ctrl+C the terminal instead — it'll still write the log.
 6. Send me that file.
