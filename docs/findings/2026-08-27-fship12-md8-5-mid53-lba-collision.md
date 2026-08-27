@@ -1,3 +1,31 @@
+## RETRACTED 2026-08-28
+
+The "id 53 LBA collision" diagnosis below and the v0.1.7 fix it produced
+were **wrong** and have been reverted (never shipped to the user for
+playtest). Re-verified: `MOVIE_ID.BIN` row 53's LBA (295563) and size
+field (11957984) both check out exactly against `/MOVIE/OPENINGE.MOV`'s
+real dirent (10483712 bytes; `11957984 == 10483712 * 2336/2048`, the
+correct ISO-logical-to-Form2-payload size conversion). Per the user:
+field 731's intended movie is **PARASHOT** (CSR D2), and D1's equivalent
+slot for that content is `OPENINGE.MOV` (see
+`mods/single-disc/patches/csr-manip-movie-seed.txt`: `PARASHOT.MOV
+->OPENINGE.MOV`). So id 53 -> OPENINGE was already correct; there was no
+collision to fix. v0.1.7 (which repointed id 53 to a fresh NRCRLB.MOV
+copy, based on the now-superseded 2026-08-12 finding) has been removed
+from `build_playtest_bin.py` and deleted from `builder/`.
+
+**Actual open question:** if id 53/OPENINGE is structurally correct, why
+did the user observe no movie playing at the 67->731 transition? Next
+lead: `MD8_5` `dir`/slot0's very first opcode is `IFSW` (bank 0x20, addr
+0x00, value 0x3f00, cmp 0x06, jump +0x24) gating the entire
+fade/PMVIE/MOVIE/SETWORD block — if that switch is already true on
+arrival, the whole sequence (including the movie) is skipped. Not yet
+confirmed whether that's the actual failure mode; needs a playtest/debug
+session (e.g. watch switch bank 0x20 addr 0 in an emulator's memory
+viewer when arriving at field 731) rather than further static analysis.
+
+---
+
 # Finding: FSHIP_12 (#67) -> MD8_5 (#731) still broken — id 53 LBA collision, not a movie-id mismatch
 
 **Stack:** csr-v0.14.2 + single-disc-on-csr + manip-movies v0.1.4/v0.1.5/v0.1.6

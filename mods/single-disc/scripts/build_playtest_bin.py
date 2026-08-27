@@ -40,7 +40,6 @@ def main() -> int:
     movie_layer_v4 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
     movie_layer_v5 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
     movie_layer_v6 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.6/layers/disc1.layer.json"
-    movie_layer_v7 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.7/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
@@ -56,7 +55,6 @@ def main() -> int:
         (movie_layer_v4, "manip-movies v0.1.4"),
         (movie_layer_v5, "manip-movies v0.1.5 (delta on v0.1.4)"),
         (movie_layer_v6, "manip-movies v0.1.6 (delta on v0.1.5)"),
-        (movie_layer_v7, "manip-movies v0.1.7 (delta on v0.1.6)"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
@@ -84,12 +82,8 @@ def main() -> int:
     apply_layer(img, json.loads(movie_layer_v5.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("5/6 manip-movies v0.1.6 (delta: FSHIP_12 CANONHT1/CANONHT2/CANONH1P)...")
+    print("5/5 manip-movies v0.1.6 (delta: FSHIP_12 CANONHT1/CANONHT2/CANONH1P)...")
     apply_layer(img, json.loads(movie_layer_v6.read_text(encoding="utf-8")))
-    print("   ", len(img), "bytes")
-
-    print("6/6 manip-movies v0.1.7 (delta: MD8_5 id 53 NRCRLB, fix OPENINGE collision)...")
-    apply_layer(img, json.loads(movie_layer_v7.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
     j = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
