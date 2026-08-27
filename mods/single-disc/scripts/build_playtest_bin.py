@@ -39,6 +39,7 @@ def main() -> int:
     # CANONON, because v0.1.4's LBA-250450 alias never landed first).
     movie_layer_v4 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
     movie_layer_v5 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
+    movie_layer_v6 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.6/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_bin = out_dir / "ff7_d1_playtest_csr_sd_movies.bin"
@@ -53,6 +54,7 @@ def main() -> int:
         (core_layer, "single-disc main pack"),
         (movie_layer_v4, "manip-movies v0.1.4"),
         (movie_layer_v5, "manip-movies v0.1.5 (delta on v0.1.4)"),
+        (movie_layer_v6, "manip-movies v0.1.6 (delta on v0.1.5)"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
@@ -60,24 +62,28 @@ def main() -> int:
         mtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(p.stat().st_mtime))
         print(f"USING [{label}] {p}  (mtime {mtime})")
 
-    print("1/4 CSR base...")
+    print("1/5 CSR base...")
     img = bytearray(pristine.read_bytes())
     apply_layer(img, json.loads(csr_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("2/4 single-disc main pack...")
+    print("2/5 single-disc main pack...")
     apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
     j_core = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
     van = extract_file(pristine.read_bytes(), "MOVIE/JAIROFAL.MOV")
     print("   JAIROFAL after main size", len(j_core), "(still D1-family until movies)")
 
-    print("3/4 manip-movies v0.1.4 (seed + LBA 250450 alias)...")
+    print("3/5 manip-movies v0.1.4 (seed + LBA 250450 alias)...")
     apply_layer(img, json.loads(movie_layer_v4.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("4/4 manip-movies v0.1.5 (delta: NRCRLB/NRCRL/PARASHOT/METEOFIX/METEOSKY)...")
+    print("4/5 manip-movies v0.1.5 (delta: NRCRLB/NRCRL/PARASHOT/METEOFIX/METEOSKY)...")
     apply_layer(img, json.loads(movie_layer_v5.read_text(encoding="utf-8")))
+    print("   ", len(img), "bytes")
+
+    print("5/5 manip-movies v0.1.6 (delta: FSHIP_12 CANONHT1/CANONHT2/CANONH1P)...")
+    apply_layer(img, json.loads(movie_layer_v6.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
     j = extract_file(bytes(img), "MOVIE/JAIROFAL.MOV")
