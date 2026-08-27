@@ -1,14 +1,14 @@
 # Task: run the RAM watcher script while you playtest
 
-Confirmed: PC=0x80000080, Cause=0x428 (Reserved Instruction) — a write
-to 0x0 clobbers the exception vectors, so the CPU crashes trying to
-handle its own exception. 0x8003cde8 is a known-benign caller
-(ExitCriticalSection syscall touching the A0/B0/C0 table, not the
-bug) — script now skips it (matching both pc and $ra) and keeps
-continuing until a real hit.
+Confirmed again: PC=0x80000088, Cause=0x428 (Reserved Instruction) in
+the corrupted vector — but the CPU write watchpoint never fired for
+it (only skip-listed ExitCriticalSection hits fired). Likely a DMA
+burst (not a CPU store) does the corrupting write, which CPU-only
+watchpoints can't catch. Switching to polling/diffing instead, which
+catches changes regardless of what wrote them:
 
 1. DuckStation: Settings → Advanced → enable "GDB Server" (port 19000).
-2. In a terminal: `python3 scripts/gdb_ram_watch.py --skip-benign-pc 0x8003cde8`
+2. In a terminal: `python3 scripts/gdb_ram_watch.py --no-watch`
 3. Load the game / continue play as normal in DuckStation.
 4. Reproduce the freeze (JUNAIR, field 384, moment 1016, battle-return).
 5. As soon as you see the freeze, **Ctrl+C** the terminal running the
