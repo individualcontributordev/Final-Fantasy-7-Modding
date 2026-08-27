@@ -88,7 +88,21 @@ def write_field_dat(fd: FieldDat, edits: dict[tuple[str, int], bytes]) -> bytes:
     new_blob = bytearray()
     new_boundaries: list[int] = [blob_region_start]
     for group in groups:
-        edited = {edits[(s.entity, s.slot)] for s in group if (s.entity, s.slot) in edits}
+        # NOTE: (entity, slot) is not always unique -- some fields (e.g.
+        # NIVGATE) have two entities sharing the same name at different
+        # entity-table indices. `by_key` above resolves each (entity, slot)
+        # key to exactly one ScriptSlot object (last-duplicate-wins, same
+        # resolution order dict-based callers like merge_rework_fields.py's
+        # merge_slots() use to look up edit source bytes). Only apply an
+        # edit to the slot object `by_key` actually resolved that key to --
+        # matching purely by name tuple would also match an unrelated
+        # same-named entity's aliased slots and falsely flag them as
+        # "edited", producing spurious conflicts.
+        edited = {
+            edits[(s.entity, s.slot)]
+            for s in group
+            if (s.entity, s.slot) in edits and by_key.get((s.entity, s.slot)) is s
+        }
         if len(edited) > 1:
             raise ValueError(
                 f"conflicting edits for aliased script slots sharing offset "
