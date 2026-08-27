@@ -1,8 +1,10 @@
 # Task: build + test the JUNAIR precision-patch .bin
 
-JUNAIR.DAT is no longer swapped wholesale from CSR D2 -- only the one
-script slot CSR actually changed (air0/3) is patched now. Build the
-merged single-disc core .bin fresh and retest the battle-return freeze.
+Fixed a bug in field_dat_write.py: NIVGATE has two different entities
+both named "b_drct", and the aliased-slot conflict check matched edits
+by name only, wrongly treating the unrelated entity's aliased group as
+edited too. Now resolves the specific ScriptSlot object, not just the
+name. Build succeeds again -- retest the battle-return freeze.
 
 1. In a terminal (repo root):
    ```
