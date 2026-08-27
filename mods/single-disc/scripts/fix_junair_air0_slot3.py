@@ -26,6 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+from disc_sources import load_csr_image  # noqa: E402
 from field_dat import load_field_dat  # noqa: E402
 from field_dat_write import write_field_dat  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E402
@@ -40,6 +41,15 @@ SLOT_PATCHED = bytes.fromhex(
     "16200000f8030531f2000000c1780000000000000000cafefefeca02fefece"
     "028210e206609201b000250001008060810111f1f6fb41000000"
 )
+
+# CSR D2 also appends one extra (empty, 0xFF-terminated) text-table entry
+# vs. D1/D3 -- part of the same edit that added the air0/3 script bytes
+# above (see docs/findings/2026-08-26-junair-single-disc-battle-return-freeze.md
+# and the working-build comparison that found this). The script-only splice
+# silently dropped it, which was the remaining cause of Field 384 failing to
+# load. `_d2_texts_raw()` below fetches D2's whole texts_raw blob (offset
+# table + entries) at runtime from the CSR D2 source image and splices it
+# in alongside the script-slot edit.
 
 
 def _fix_slot(fd) -> dict:
@@ -59,6 +69,12 @@ def _fix_slot(fd) -> dict:
     return {(ENTITY, SLOT): SLOT_PATCHED}
 
 
+def _d2_texts_raw() -> bytes:
+    c2 = bytes(load_csr_image(2))
+    fd2 = load_field_dat(extract_file(c2, FIELD))
+    return fd2.texts_raw
+
+
 def fix_junair(img: bytearray) -> bool:
     raw = extract_file(bytes(img), FIELD)
     fd = load_field_dat(raw)
@@ -67,12 +83,18 @@ def fix_junair(img: bytearray) -> bool:
     if not edits:
         return False
 
-    new_raw = write_field_dat(fd, edits)
+    new_texts_raw = _d2_texts_raw()
+    if new_texts_raw == fd.texts_raw:
+        new_texts_raw = None  # already matches (e.g. re-running on a patched image)
+
+    new_raw = write_field_dat(fd, edits, new_texts_raw=new_texts_raw)
     fd2 = load_field_dat(new_raw)
     for (entity, slot_idx), expected in edits.items():
         new_slot = next(s for s in fd2.scripts if s.entity == entity and s.slot == slot_idx)
         if new_slot.raw != expected:
             raise SystemExit(f"post-write verification failed: {entity}/{slot_idx} not patched as expected")
+    if new_texts_raw is not None and fd2.texts_raw != new_texts_raw:
+        raise SystemExit("post-write verification failed: texts_raw not spliced as expected")
     replace_file_within_sectors(img, FIELD, new_raw)
     return True
 

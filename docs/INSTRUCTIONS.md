@@ -1,10 +1,11 @@
 # Task: build + test the JUNAIR precision-patch .bin
 
-Fixed a bug in field_dat_write.py: NIVGATE has two different entities
-both named "b_drct", and the aliased-slot conflict check matched edits
-by name only, wrongly treating the unrelated entity's aliased group as
-edited too. Now resolves the specific ScriptSlot object, not just the
-name. Build succeeds again -- retest the battle-return freeze.
+Found why Field 384 stopped loading entirely: the JUNAIR precision patch
+only copied CSR D2's `air0/3` script slot but silently dropped a 1-byte
+text-table entry D2 also added in the same edit, corrupting JUNAIR.DAT's
+text section. Fixed `fix_junair_air0_slot3.py` to splice in D2's whole
+text table too -- verified byte-identical to CSR D2's JUNAIR.DAT now.
+Retest the original battle-return freeze repro.
 
 1. In a terminal (repo root):
    ```

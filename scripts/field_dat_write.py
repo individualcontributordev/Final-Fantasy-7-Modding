@@ -29,12 +29,22 @@ from field_dat import FieldDat, ScriptSlot, decompress_dat, slice_sections, load
 from lzs import compress_all_with_header
 
 
-def write_field_dat(fd: FieldDat, edits: dict[tuple[str, int], bytes]) -> bytes:
+def write_field_dat(
+    fd: FieldDat,
+    edits: dict[tuple[str, int], bytes],
+    new_texts_raw: bytes | None = None,
+) -> bytes:
     """Return new compressed FIELD/*.DAT bytes with the given script slots replaced.
 
     `edits` keys are (entity, slot) matching FieldDat.scripts entries; values
     are the new raw opcode bytes for that slot (any length, including 0 is
     not supported -- a slot must remain non-empty).
+
+    `new_texts_raw`, if given, replaces the entire text-table blob (offset
+    table + entries, same format as FieldDat.texts_raw) with a new one that
+    may be a different length. Only supported when texts precede akao in
+    section 0 (the common layout); akao content itself is never modified,
+    only shifted to follow the new text blob.
     """
     if not edits:
         # No-op: re-serialize unchanged (useful for round-trip testing).
@@ -152,6 +162,30 @@ def write_field_dat(fd: FieldDat, edits: dict[tuple[str, int], bytes]) -> bytes:
     # 4) Splice in the new blob region, keeping header/tables (already
     # patched) before it and text/akao raw bytes (unchanged content) after.
     sec1_final = bytes(sec1_new[:blob_region_start]) + bytes(new_blob) + bytes(sec1_new[old_pos_after:])
+
+    # 5) Optionally replace the whole text-table blob (offset table +
+    # entries) with a new one of possibly different length. This shifts
+    # everything from pos_texts onward (i.e. akao, if present) by the size
+    # delta, and the akao pointer table (already shifted above for the
+    # script-splice delta) needs an additional shift for this delta too.
+    if new_texts_raw is not None:
+        if not old_pos_texts:
+            raise ValueError("FieldDat has no text section to replace")
+        texts_start = old_pos_texts + delta
+        texts_end = old_pos_akao + delta if old_pos_akao >= old_pos_texts else len(sec1_final)
+        old_texts_len = texts_end - texts_start
+        text_delta = len(new_texts_raw) - old_texts_len
+        sec1_final = (
+            sec1_final[:texts_start] + new_texts_raw + sec1_final[texts_end:]
+        )
+        if text_delta:
+            sec1_final = bytearray(sec1_final)
+            for i in range(nb_akao):
+                off = akao_tbl_off + 4 * i
+                (val,) = struct.unpack_from("<I", sec1_final, off)
+                if val >= texts_end:
+                    struct.pack_into("<I", sec1_final, off, val + text_delta)
+            sec1_final = bytes(sec1_final)
 
     # --- Reassemble the full decompressed DAT with recomputed section header ---
     new_sections = [sec1_final] + list(fd.sections[1:])
