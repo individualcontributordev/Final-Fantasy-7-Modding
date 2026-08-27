@@ -261,7 +261,14 @@ def main():
                      help="Skip trying a hardware write watchpoint; always poll instead.")
     ap.add_argument("--watch-len", type=lambda x: int(x, 0), default=4,
                      help="Length in bytes for the write watchpoint (stubs often cap this small).")
+    ap.add_argument("--skip-benign-pc", action="append", default=[],
+                     help="Hex PC (e.g. 0x80042b00) that's a known-normal writer to --addr "
+                     "(e.g. the BIOS syscall table init/critical-section code) -- hits with "
+                     "this PC auto-continue past instead of stopping the capture. Repeatable.")
+    ap.add_argument("--max-hits", type=int, default=200,
+                     help="Safety cap on auto-continued benign watchpoint hits before giving up.")
     args = ap.parse_args()
+    skip_pcs = {int(x, 0) for x in args.skip_benign_pc}
 
     sock = socket.create_connection((args.host, args.port), timeout=5)
     handshake(sock)
@@ -285,9 +292,22 @@ def main():
         log.append(f"write_watchpoint_supported: {watch_ok}\n\n")
 
     if watch_ok:
-        print("Continuing until the watchpoint fires (or you Ctrl+C)...")
+        if skip_pcs:
+            print(f"Auto-skipping known-benign writer PCs: {[hex(p) for p in skip_pcs]}")
+        print("Continuing until the watchpoint fires on a non-skipped PC (or you Ctrl+C)...")
+        hits = 0
+        stop_reply = None
+        regs = {}
         try:
-            stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
+            while hits < args.max_hits:
+                stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
+                regs = read_regs(sock)
+                pc = regs.get("pc")
+                hits += 1
+                if pc in skip_pcs:
+                    print(f"  hit #{hits}: pc={hex(pc)} is skip-listed, continuing...")
+                    continue
+                break
         except socket.timeout:
             stop_reply = "(timeout waiting for watchpoint)"
         except KeyboardInterrupt:
@@ -296,14 +316,14 @@ def main():
                 halt(sock)
             except socket.timeout:
                 pass
+            regs = read_regs(sock)
         snap = read_mem(sock, args.addr, args.len)
-        regs = read_regs(sock)
         hw = read_hw_snapshot(sock, hw_available)
         dma = read_dma_regs(hw)
         sp = regs.get("r29")
         ra = regs.get("r31")
         bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
-        log.append(f"=== WATCHPOINT STOP ===\n")
+        log.append(f"=== WATCHPOINT STOP (after {hits} hit(s), {len(skip_pcs)} skip-listed PC(s)) ===\n")
         log.append(f"raw stop reply: {stop_reply!r}\n")
         log.append(f"registers: {regs}\n")
         log.append(f"dma_all: {dma}\n")
