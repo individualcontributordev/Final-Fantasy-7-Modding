@@ -249,6 +249,22 @@ def wait_for_watchpoint_hit(sock: socket.socket, timeout: float = 300.0) -> str:
     return read_reply(sock, timeout=timeout)
 
 
+def try_exec_breakpoint(sock: socket.socket, addr: int) -> bool:
+    """Attempt to set a hardware execution breakpoint via RSP 'Z1' at
+    `addr`. Use this to catch a *known* offending PC (e.g. one already
+    identified from an emulator debug log) when data watchpoints on the
+    write destination/MMIO register aren't supported by the stub."""
+    reply = rsp_call(sock, f"Z1,{addr:x},4", timeout=3.0)
+    return reply == "OK"
+
+
+def clear_exec_breakpoint(sock: socket.socket, addr: int) -> None:
+    try:
+        rsp_call(sock, f"z1,{addr:x},4", timeout=3.0)
+    except socket.timeout:
+        pass
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--host", default="127.0.0.1")
@@ -267,6 +283,12 @@ def main():
                      "this PC auto-continue past instead of stopping the capture. Repeatable.")
     ap.add_argument("--max-hits", type=int, default=200,
                      help="Safety cap on auto-continued benign watchpoint hits before giving up.")
+    ap.add_argument("--break-pc", type=lambda x: int(x, 0), default=None,
+                     help="Set a hardware execution breakpoint at this guest PC instead of a "
+                     "data watchpoint (use when a known offending PC has already been "
+                     "identified, e.g. from an emulator debug log). Overrides --addr watching "
+                     "for the stop condition; --addr/--len still control what memory is "
+                     "captured in the snapshot once it hits.")
     args = ap.parse_args()
     skip_pcs = {int(x, 0) for x in args.skip_benign_pc}
 
@@ -274,12 +296,60 @@ def main():
     handshake(sock)
     hw_available = probe_hw_blocks(sock)
     unreadable = [n for n, ok in hw_available.items() if not ok]
-    print(f"Connected to {args.host}:{args.port}. Watching 0x{args.addr:x}"
-          f"-0x{args.addr+args.len:x}. Ctrl+C at the freeze to stop.")
+    if args.break_pc is not None:
+        print(f"Connected to {args.host}:{args.port}. Breaking at pc=0x{args.break_pc:x}, "
+              f"capturing 0x{args.addr:x}-0x{args.addr+args.len:x}. Ctrl+C at the freeze to stop.")
+    else:
+        print(f"Connected to {args.host}:{args.port}. Watching 0x{args.addr:x}"
+              f"-0x{args.addr+args.len:x}. Ctrl+C at the freeze to stop.")
     if unreadable:
         print(f"(hw blocks not readable via GDB stub, skipping: {unreadable})")
 
     log = [f"hw_blocks_available: {hw_available}\n\n"]
+
+    if args.break_pc is not None:
+        break_ok = False
+        try:
+            break_ok = try_exec_breakpoint(sock, args.break_pc)
+        except socket.timeout:
+            break_ok = False
+        print(f"hardware execution breakpoint at 0x{args.break_pc:x}: "
+              f"{'SUPPORTED, using it' if break_ok else 'not supported'}")
+        log.append(f"exec_breakpoint_supported: {break_ok}\n\n")
+        if break_ok:
+            print("Continuing until the breakpoint fires (or you Ctrl+C)...")
+            stop_reply = None
+            regs = {}
+            try:
+                stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
+                regs = read_regs(sock)
+            except socket.timeout:
+                stop_reply = "(timeout waiting for breakpoint)"
+            except KeyboardInterrupt:
+                stop_reply = "(interrupted by user before breakpoint fired)"
+                try:
+                    halt(sock)
+                except socket.timeout:
+                    pass
+                regs = read_regs(sock)
+            snap = read_mem(sock, args.addr, args.len)
+            hw = read_hw_snapshot(sock, hw_available)
+            dma = read_dma_regs(hw)
+            sp = regs.get("r29")
+            ra = regs.get("r31")
+            bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
+            log.append(f"=== BREAKPOINT STOP at 0x{args.break_pc:x} ===\n")
+            log.append(f"raw stop reply: {stop_reply!r}\n")
+            log.append(f"registers: {regs}\n")
+            log.append(f"dma_all: {dma}\n")
+            log.append(f"hw_snapshot: {hw}\n")
+            log.append(f"backtrace(approx): {bt}\n")
+            log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
+            clear_exec_breakpoint(sock, args.break_pc)
+            with open(args.out, "w") as f:
+                f.writelines(log)
+            print(f"Wrote log to {args.out}. pc={hex(regs.get('pc')) if regs.get('pc') is not None else '?'}")
+            return
 
     watch_ok = False
     if not args.no_watch:
