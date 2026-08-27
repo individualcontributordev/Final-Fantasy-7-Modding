@@ -296,6 +296,11 @@ def main():
                      "decompressor) and only stop once a pointer register enters a danger zone.")
     ap.add_argument("--break-reg-min", type=lambda x: int(x, 0), default=0,
                      help="Minimum value (inclusive) for --break-reg to trigger a real stop.")
+    ap.add_argument("--skip-hits", type=int, default=0,
+                     help="Unconditionally auto-continue past this many --break-pc hits before "
+                     "applying --break-reg filtering (or stopping outright if no --break-reg). "
+                     "Use to jump past known-boring early hits (e.g. menu/boot loads) of a "
+                     "breakpoint that's shared by many call sites.")
     args = ap.parse_args()
     skip_pcs = {int(x, 0) for x in args.skip_benign_pc}
 
@@ -337,6 +342,11 @@ def main():
                     stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
                     regs = read_regs(sock)
                     hits += 1
+                    if hits <= args.skip_hits:
+                        if hits % 500 == 0 or hits == args.skip_hits:
+                            print(f"  hit #{hits}: within --skip-hits {args.skip_hits}, "
+                                  f"continuing...")
+                        continue
                     if args.break_reg:
                         val = regs.get(args.break_reg)
                         if val is None or val < args.break_reg_min:
