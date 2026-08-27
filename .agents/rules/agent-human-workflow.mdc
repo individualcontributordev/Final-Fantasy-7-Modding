@@ -9,7 +9,7 @@ alwaysApply: true
 
 | Who | Does |
 |-----|------|
-| **Agent (this chat)** | **Builds and publishes mods:** writes build scripts, generates layers, validates, commits to builder/, pushes. **Writes `docs/INSTRUCTIONS.md`** only for human testing/validation tasks (playtest, Ghidra, hardware burn). On **check**: pull and review **repo** evidence. |
+| **Agent (this chat)** | **Builds and publishes mods:** writes build scripts, generates layers, validates, commits to builder/, pushes. **Writes `workspace/INSTRUCTIONS.md`** only for human testing/validation tasks (playtest, Ghidra, hardware burn). On **check**: pull and review **repo** evidence. |
 | **Human** | **Testing only:** downloads from builder/, burns discs, playtests, reports bugs. **No building, no layer generation, no manual Makou edits.** Ghidra analysis when needed. |
 
 **Agent builds. Human tests.**
@@ -45,13 +45,24 @@ and is invisible to the human — never say "the build is ready in
 per-machine scratch space, not a handoff mechanism.
 
 The only things that cross machines are what's **committed to the repo**:
-scripts, layer JSON, and `docs/INSTRUCTIONS.md`. So instead of building
+scripts, layer JSON, and `workspace/INSTRUCTIONS.md`. So instead of building
 and pointing at the output, put the **exact build command(s)** the human
-must run themselves in `docs/INSTRUCTIONS.md` (per the COPY-PASTE rule
+must run themselves in `workspace/INSTRUCTIONS.md` (per the COPY-PASTE rule
 below), so the human's machine produces its own local `.bin`/`.cue` to
 playtest. The agent may still run the build locally first to sanity-check
 it works before writing the instructions — just never phrase it as
 handing the human a file.
+
+**Concrete failure mode (happened 2026-08-27):** agent built
+`workspace/iso-extract/sd_full_test.bin` locally to sanity-check it, then
+wrote `workspace/INSTRUCTIONS.md` saying "Already built:
+`workspace/iso-extract/sd_full_test.bin`" and gave the human only `.cue`
++ DuckStation steps — no build command. The human's machine has no such
+`.bin` (it's gitignored, agent-machine-only), so the `.cue` alone is
+useless. **Every instructions file that names a `.bin`/`.cue` the human
+will open must include the full `python3 ...build_....py -o
+workspace/iso-extract/<name>.bin` command as its own numbered step, even
+if the agent already ran that exact command itself.**
 
 ## Hard rule: instructions live in the repo
 
@@ -59,24 +70,24 @@ handing the human a file.
 
 **Always** (no exceptions — DuckStation BPs, Ghidra Go To, shell one-liners, next playtest):
 
-1. **Overwrite `docs/INSTRUCTIONS.md` first** with the full task (Goal/Why, steps, COPY-PASTE or exact BP addresses, empty Evidence).
+1. **Overwrite `workspace/INSTRUCTIONS.md` first** with the full task (Goal/Why, steps, COPY-PASTE or exact BP addresses, empty Evidence).
 2. Prefer small **scripts** when useful; put the exact invoke line in the file.
-3. **Commit + push** from the agent side (`docs/INSTRUCTIONS.md` at minimum).
-4. Chat: **short pointer only** — one-line goal + pull and open `docs/INSTRUCTIONS.md` + say **check** when done.
+3. **Commit + push** from the agent side (`workspace/INSTRUCTIONS.md` at minimum).
+4. Chat: **short pointer only** — one-line goal + pull and open `workspace/INSTRUCTIONS.md` + say **check** when done.
 
-If you drafted steps in chat first, **stop and write/push `docs/INSTRUCTIONS.md` before the human is expected to run anything.**
+If you drafted steps in chat first, **stop and write/push `workspace/INSTRUCTIONS.md` before the human is expected to run anything.**
 
 Do **not**:
 
 - Paste a multi-step runbook only in the chat reply
 - Say optional or if you want for the sole ops path — put it in the file
-- Leave `docs/INSTRUCTIONS.md` stale from a prior task when issuing a new one
+- Leave `workspace/INSTRUCTIONS.md` stale from a prior task when issuing a new one
 
 ## One atomic task per reply
 
-Exactly one operational task per agent turn (one `docs/INSTRUCTIONS.md` overwrite).
+Exactly one operational task per agent turn (one `workspace/INSTRUCTIONS.md` overwrite).
 
-## `docs/INSTRUCTIONS.md` layout (markdown)
+## `workspace/INSTRUCTIONS.md` layout (markdown)
 
 `# Task`, `## Why`, `## What you do`, numbered steps with COPY-PASTE / exact addresses, `## Evidence` empty template, what to paste back and how to commit.
 
@@ -91,7 +102,7 @@ Prefer put X on the image because over long do-not-use lists. One atomic ops tas
 
 For **every** operational step that needs the keyboard:
 
-1. Put the **exact command(s)** in a fenced code block in `docs/INSTRUCTIONS.md`.
+1. Put the **exact command(s)** in a fenced code block in `workspace/INSTRUCTIONS.md`.
 2. Use real paths under the repo (e.g. `builder/fanfare-skip-stub-only-v0.1.4/layers/disc1.layer.json`).
 3. If a version/id is dynamic, either pin it in the file after build docs or use a one-liner that resolves it (`ls` / `$(…)` shown in full).
 4. Include output paths (`-o workspace/iso-extract/...bin`) and what to open in DuckStation.
@@ -105,8 +116,8 @@ DuckStation / Ghidra UI steps still need exact addresses/menus — but shell/bui
 ```bash
 cd "$(git rev-parse --show-toplevel)"
 git pull --ff-only
-# STEPS / COPY-PASTE from docs/INSTRUCTIONS.md
-git add docs/INSTRUCTIONS.md
+# STEPS / COPY-PASTE from workspace/INSTRUCTIONS.md
+git add workspace/INSTRUCTIONS.md
 git commit -m "ops: <task>"
 git push
 ```
@@ -115,7 +126,7 @@ Then say **check**. Never commit `.bin` / `.cue` / ISO.
 
 ## On "check"
 
-Pull -> review committed evidence -> next task **written to** `docs/INSTRUCTIONS.md` + push -> short chat pointer.
+Pull -> review committed evidence -> next task **written to** `workspace/INSTRUCTIONS.md` + push -> short chat pointer.
 
 ## Before agent acts
 
