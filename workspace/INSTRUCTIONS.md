@@ -1,11 +1,16 @@
 # Task: build + test the JUNAIR precision-patch .bin
 
-Found why Field 384 stopped loading entirely: the JUNAIR precision patch
-only copied CSR D2's `air0/3` script slot but silently dropped a 1-byte
-text-table entry D2 also added in the same edit, corrupting JUNAIR.DAT's
-text section. Fixed `fix_junair_air0_slot3.py` to splice in D2's whole
-text table too -- verified byte-identical to CSR D2's JUNAIR.DAT now.
-Retest the original battle-return freeze repro.
+Found the real bug (bigger than the last fix): `write_field_dat()` was
+recomputing every FIELD/*.DAT's internal VRAM section-pointer header using
+a hardcoded base address instead of that field's actual load address
+(e.g. JUNAIR loads at 0x80115000, not the assumed 0x80000000). This
+corrupted the pointer header on every precision-patched field (JUNAIR,
+WHITE2, BUGIN1A, NIVGATE, RCKTIN2, DSKCG-removal) -- the file still loaded
+(hence field 384 showing as current) but all internal pointers were wrong,
+causing a black-screen hang instead of a clean failure. Fixed to preserve
+the original base; rebuilt JUNAIR.DAT is now byte-identical to CSR D2's.
+Retest the original battle-return freeze repro (and general field-loading
+across the build, since this affected 6 fields, not just JUNAIR).
 
 1. In a terminal (repo root):
    ```
