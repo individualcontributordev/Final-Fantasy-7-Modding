@@ -52,6 +52,11 @@ REWORK_FIELDS = {
     "JUNAIR2", "NIVGATE", "RCKTIN2",
 }
 
+# JUNAIR's only CSR D2 edit is a single script slot (air0/3) -- applied as a
+# precision patch by fix_junair_air0_slot3.py instead of a whole-file swap
+# (see docs/findings/2026-08-26-junair-single-disc-battle-return-freeze.md).
+EXCLUDE_WHOLE_FILE = {"JUNAIR"}
+
 
 def find_safe_whole_file_merges() -> dict[str, int]:
     """Return {field: disc} for every field CSR only really edited on one
@@ -63,7 +68,7 @@ def find_safe_whole_file_merges() -> dict[str, int]:
 
     out: dict[str, int] = dict(EXTRA_SAFE_WHOLE_FILE)
     for name in all_names:
-        if name in REWORK_FIELDS or name in out:
+        if name in REWORK_FIELDS or name in out or name in EXCLUDE_WHOLE_FILE:
             continue
         present = [d for d in (1, 2, 3) if name in listings[d]]
         if len(present) < 2:

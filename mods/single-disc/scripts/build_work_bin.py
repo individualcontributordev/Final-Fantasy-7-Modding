@@ -13,7 +13,11 @@ Pipeline, on top of CSR D1 as the base:
   2. Apply the bulk "safe" field merge -- every other CSR field edited on
      only one non-D1 disc (plus RCKTIN7, a safe D2-superset; LOST2 also
      lands here now that CSR D1's LOST2 matches pristine) -- via
-     merge_safe_fields.py.
+     merge_safe_fields.py. JUNAIR is excluded from this wholesale swap
+     (its only CSR D2 edit is one script slot, air0/3) and instead gets a
+     precision patch in the next step.
+  2b. Apply the JUNAIR air0/3 precision patch via fix_junair_air0_slot3.py,
+      replacing the old whole-file JUNAIR.DAT swap.
   3. Apply a known-working FIELD/BLACKBGB.DAT DSKCG-removal ic-layer-v1
      diff (offset/hex records against CSR D1's BLACKBGB.DAT; ops removed
      in Makou Reactor, DuckStation-verified), bypassing our own LZS
@@ -66,6 +70,7 @@ from merge_rework_fields import (  # noqa: E402
 from merge_safe_fields import find_safe_whole_file_merges  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
 from remove_dskcg import remove_dskcg_from_field  # noqa: E402
+from fix_junair_air0_slot3 import fix_junair  # noqa: E402
 
 DSKCG_FIELDS = ["BLACKBGB"]
 
@@ -199,6 +204,8 @@ def main() -> int:
 
     apply_rework_merge(img, c1, c2)
     apply_safe_field_merge(img, d2_only=args.d2_only_fields)
+    print("\nApplying JUNAIR air0/3 precision patch (replaces old whole-file swap)...")
+    fix_junair(img)
     if args.blackbgb_manual_bin:
         apply_manual_blackbgb(img, args.blackbgb_manual_bin)
     elif args.skip_dskcg_removal:
