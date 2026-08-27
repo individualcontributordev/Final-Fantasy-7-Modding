@@ -4,8 +4,7 @@
 workspace/*
 !workspace/**/
 !workspace/**/.gitkeep
-
-
+!workspace/*.md
 
 # Ghidra exports (raw game data - keep local only)
 workspace/ghidra-exports/
