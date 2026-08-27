@@ -1,42 +1,47 @@
-# Task: playtest the full single-disc build (VRAM-base fix applied)
+# Task: playtest the full single-disc build WITH manip-movies (CANONON fix)
 
-Root-caused and fixed the freeze after battle-return on Field 384 (Junon
-airfield, JUNAIR.DAT): `write_field_dat()` was recomputing every
-FIELD/*.DAT's internal VRAM section-pointer header using a hardcoded base
-address instead of that field's actual load address (e.g. JUNAIR loads at
-0x80115000, not 0x80000000). This corrupted the pointer header on every
-precision-patched field (JUNAIR, WHITE2, BUGIN1A, NIVGATE, RCKTIN2,
-DSKCG-removal) -- the file still loaded but internal pointers were wrong,
-causing a black-screen hang instead of a clean failure. Fixed generically
-(uses each field's own `vbase`, confirmed no other script hardcodes a
-base) and rebuilt the **full** single-disc-on-csr v0.2.12 stack, not just
-JUNAIR in isolation.
+Root cause of the missing Junon Cannon movie you reported (field 673
+move_r / LOSLAKE1, moment 1566, jairofal/cannonon scene): the `.bin` you
+were testing (`sd_full_test.bin`) was built with
+`build_work_bin.py`, which only runs the raw CSR-field-script merge
+pipeline. It never applies the **manip-movies** layers
+(`single-disc-csr-manip-movies-v0.1.4`/`v0.1.5`) that alias CSR D2's
+CANONON.MOV onto D1's hardcoded LOSLAKE1 CD-seek (ISO LBA 250450) and
+relocate/repoint several other CSR-D2-only movies (GELNICA, C_SCENE1,
+C_SCENE3, FF_DAIKU). Field script content for move_r/LOSLAKE1 was never
+missing or wrong -- the movie *asset* was just never installed into that
+build. Confirmed by rebuilding with the correct pipeline
+(`build_playtest_bin.py`): JAIROFAL.MOV's ISO content == CSR D2's
+CANONON.MOV byte-for-byte, and the LBA 250450 raw sector matches D2's
+CANONON sector0 (Form2 submode 0x42) -- both verified programmatically
+before writing the .bin.
 
-Requires `workspace/pristine/FINALFANTASY7_D1.bin` (and D2, D3 if not
-already present) in place on your machine first.
+Requires `workspace/pristine/FINALFANTASY7_D1.bin` and
+`FINALFANTASY7_D2.bin` in place on your machine first.
 
 1. Build the .bin yourself (run this from the repo root on your machine):
    ```bash
    cd "$(git rev-parse --show-toplevel)"
    git pull --ff-only
-   python3 mods/single-disc/scripts/build_work_bin.py -o workspace/iso-extract/sd_full_test.bin
+   python3 mods/single-disc/scripts/build_playtest_bin.py
    ```
-2. Make a matching .cue next to it (same folder), containing exactly:
-   ```
-   FILE "sd_full_test.bin" BINARY
-     TRACK 01 MODE2/2352
-       INDEX 01 00:00:00
-   ```
-   Save as `workspace/iso-extract/sd_full_test.cue`.
-3. Open `sd_full_test.cue` in DuckStation.
+   This writes both the `.bin` and a matching `.cue` for you already:
+   `workspace/iso-extract/ff7_d1_playtest_csr_sd_movies.bin` /
+   `.cue`. Do NOT use `sd_full_test.bin` or `build_work_bin.py`'s output
+   for playtesting anymore -- those never include the manip-movies layer
+   stack and will always be missing CANONON/GELNICA/C_SCENE1/C_SCENE3.
+2. Open `ff7_d1_playtest_csr_sd_movies.cue` in DuckStation.
+3. Re-check field 673 (move_r / LOSLAKE1, moment 1566) -- the Junon
+   Cannon (CANONON) movie should now play.
 4. Play to Field 384 (Junon airfield), trigger a battle, and return from
-   it (moment 1016) -- this is the original freeze repro.
-5. Tell me: did it freeze, freeze differently, or load fine?
-6. Known pre-existing cosmetic issue (not a regression, present in
-   reference build too): during the elevator sequence, some background
-   tiles ("squares") are missing from the static background. This is
-   deprioritized -- don't worry about reporting it again unless it's
-   changed.
-7. If Field 384 is clean, continue playtesting broadly (D1->D2 transition
-   via BLACKBGB, a few other battle-returns) to confirm the VRAM-base fix
-   didn't regress anything else, since it touched 6 fields' patch logic.
+   it (moment 1016) -- this was a previously-fixed freeze repro, confirm
+   still clean on this build.
+5. Tell me: did CANONON play, and did Field 384 load fine?
+6. Known pre-existing cosmetic issue (not a regression): during the
+   elevator sequence, some background tiles ("squares") are missing from
+   the static background. Deprioritized -- no need to re-report unless
+   it's changed.
+7. Continue playtesting broadly, including JUNAIR (field 384, Gelnica
+   movie) and TRNAD_51 (field 706, all GameMoment-gated train-scene
+   variants) since those also depend on the manip-movies relocation step
+   this build now includes.
