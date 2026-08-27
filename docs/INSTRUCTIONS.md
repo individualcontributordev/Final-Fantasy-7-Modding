@@ -2,9 +2,10 @@
 
 Confirmed: PC=0x80000080, Cause=0x428 (Reserved Instruction) — a DMA
 write to 0x0 clobbers the exception vectors, so the CPU crashes trying
-to handle its own exception. Script now also captures DMA channel
-registers (to see which channel is mid-transfer) and an approximate
-call-stack backtrace at the moment of the change:
+to handle its own exception. Script is now general-purpose: it captures
+CPU regs, DMA channel regs, IRQ/timers, and an approximate call-stack
+backtrace on every change, and auto-skips any HW port DuckStation's GDB
+stub can't read (no more log spam). Reuse `--addr` for other bugs too:
 
 1. DuckStation: Settings → Advanced → enable "GDB Server" (port 19000).
 2. In a terminal: `python3 scripts/gdb_ram_watch.py`
