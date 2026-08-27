@@ -93,6 +93,43 @@ def _list_dir(img: memoryview | bytes | bytearray, lba: int, size: int):
     return _parse_dir_records(_read_extent(img, lba, size))
 
 
+def _root_dir(img: memoryview | bytes | bytearray) -> tuple[int, int]:
+    pvd = _user(img, 16)
+    if pvd[0] != 1 or pvd[1:6] != b"CD001":
+        raise ValueError("Primary Volume Descriptor not found at LBA 16")
+    root = pvd[156 : 156 + 34]
+    return _u32_le(root, 2), _u32_le(root, 10)
+
+
+def pvd_volume_space_size(img: memoryview | bytes | bytearray) -> int:
+    """Total volume size in logical blocks, as recorded in the PVD (offset 80)."""
+    pvd = _user(img, 16)
+    return _u32_le(pvd, 80)
+
+
+def walk_tree(img: memoryview | bytes | bytearray) -> dict[str, IsoFile]:
+    """Recursively walk every file/dir under root, returning path -> IsoFile.
+
+    Directories are included too (is size/lba of the directory extent itself),
+    keyed with a trailing '/'.
+    """
+    out: dict[str, IsoFile] = {}
+    root_lba, root_size = _root_dir(img)
+
+    def recurse(prefix: str, lba: int, size: int) -> None:
+        for name, e_lba, e_size, is_dir in _list_dir(img, lba, size):
+            full = f"{prefix}{name}"
+            if is_dir:
+                out[full + "/"] = IsoFile(path=full + "/", lba=e_lba, size=e_size)
+                recurse(full + "/", e_lba, e_size)
+            else:
+                out[full] = IsoFile(path=full, lba=e_lba, size=e_size)
+
+    out["/"] = IsoFile(path="/", lba=root_lba, size=root_size)
+    recurse("/", root_lba, root_size)
+    return out
+
+
 def find_file(img: bytes | bytearray, path: str) -> IsoFile:
     """Locate a file by ISO path like FIELD/FIELD.BIN (case-insensitive)."""
     parts = [p for p in path.replace("\\", "/").upper().split("/") if p]
