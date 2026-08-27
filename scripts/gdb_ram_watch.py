@@ -289,6 +289,13 @@ def main():
                      "identified, e.g. from an emulator debug log). Overrides --addr watching "
                      "for the stop condition; --addr/--len still control what memory is "
                      "captured in the snapshot once it hits.")
+    ap.add_argument("--break-reg", default=None,
+                     help="Register name (e.g. r9) to test on each --break-pc hit. If given, "
+                     "hits are auto-continued unless the register's value is >= --break-reg-min "
+                     "-- use this to skip past early/benign hits of a hot loop (e.g. a "
+                     "decompressor) and only stop once a pointer register enters a danger zone.")
+    ap.add_argument("--break-reg-min", type=lambda x: int(x, 0), default=0,
+                     help="Minimum value (inclusive) for --break-reg to trigger a real stop.")
     args = ap.parse_args()
     skip_pcs = {int(x, 0) for x in args.skip_benign_pc}
 
@@ -317,12 +324,30 @@ def main():
               f"{'SUPPORTED, using it' if break_ok else 'not supported'}")
         log.append(f"exec_breakpoint_supported: {break_ok}\n\n")
         if break_ok:
-            print("Continuing until the breakpoint fires (or you Ctrl+C)...")
+            if args.break_reg:
+                print(f"Continuing until {args.break_reg} >= 0x{args.break_reg_min:x} at the "
+                      f"breakpoint (or you Ctrl+C)...")
+            else:
+                print("Continuing until the breakpoint fires (or you Ctrl+C)...")
             stop_reply = None
             regs = {}
+            hits = 0
             try:
-                stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
-                regs = read_regs(sock)
+                while True:
+                    stop_reply = wait_for_watchpoint_hit(sock, timeout=3600.0)
+                    regs = read_regs(sock)
+                    hits += 1
+                    if args.break_reg:
+                        val = regs.get(args.break_reg)
+                        if val is None or val < args.break_reg_min:
+                            if hits % 500 == 0:
+                                print(f"  hit #{hits}: {args.break_reg}="
+                                      f"{hex(val) if val is not None else '?'}, still below "
+                                      f"threshold, continuing...")
+                            continue
+                        print(f"  hit #{hits}: {args.break_reg}=0x{val:x} "
+                              f">= 0x{args.break_reg_min:x}, stopping.")
+                    break
             except socket.timeout:
                 stop_reply = "(timeout waiting for breakpoint)"
             except KeyboardInterrupt:
@@ -338,7 +363,7 @@ def main():
             sp = regs.get("r29")
             ra = regs.get("r31")
             bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
-            log.append(f"=== BREAKPOINT STOP at 0x{args.break_pc:x} ===\n")
+            log.append(f"=== BREAKPOINT STOP at 0x{args.break_pc:x} (after {hits} hit(s)) ===\n")
             log.append(f"raw stop reply: {stop_reply!r}\n")
             log.append(f"registers: {regs}\n")
             log.append(f"dma_all: {dma}\n")
