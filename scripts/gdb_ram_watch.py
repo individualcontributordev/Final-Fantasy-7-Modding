@@ -9,9 +9,11 @@ Usage:
     python3 scripts/gdb_ram_watch.py --out watch_log.txt
 
 It pauses the core briefly (~every --interval seconds) to snapshot a memory
-range + registers, logs any byte changes, then resumes. Press Ctrl+C when
-you hit the freeze/bug: it does one final snapshot and writes everything to
---out (plain text, safe to paste/send back).
+range + registers + all DMA channel registers (MADR/BCR/CHCR/busy flag) +
+an approximate call-stack backtrace, logs any byte changes, then resumes.
+Press Ctrl+C when you hit the freeze/bug: it does one final snapshot and
+writes everything to --out (plain text, safe to paste/send back). No need
+to set anything else up in DuckStation -- just play until it freezes.
 """
 import argparse
 import socket
@@ -101,6 +103,49 @@ def read_mem(sock: socket.socket, addr: int, length: int) -> bytes:
         return b""
 
 
+# PS1 DMA controller: 7 channels at 0x1F801080 + n*0x10, each with
+# MADR (+0x0), BCR (+0x4), CHCR (+0x8); plus shared DPCR/DICR at the end.
+DMA_BASE = 0x1F801080
+DMA_CHANNELS = ["MDEC_in", "MDEC_out", "GPU", "CDROM", "SPU", "PIO", "OTC"]
+
+
+def read_dma_regs(sock: socket.socket) -> dict:
+    """Snapshot all DMA channel registers plus DPCR/DICR. A channel's CHCR
+    busy bit (bit 24) being set means a transfer was in flight at halt
+    time -- the most direct evidence of *which* DMA channel is moving data
+    right before/as the corruption happens."""
+    out = {}
+    for i, name in enumerate(DMA_CHANNELS):
+        base = DMA_BASE + i * 0x10
+        raw = read_mem(sock, base, 0xC)
+        if len(raw) == 0xC:
+            madr, bcr, chcr = int.from_bytes(raw[0:4], "little"), \
+                int.from_bytes(raw[4:8], "little"), \
+                int.from_bytes(raw[8:12], "little")
+            out[name] = {
+                "MADR": hex(madr), "BCR": hex(bcr), "CHCR": hex(chcr),
+                "busy": bool(chcr & (1 << 24)),
+            }
+    ctrl = read_mem(sock, 0x1F8010F0, 8)
+    if len(ctrl) == 8:
+        out["DPCR"] = hex(int.from_bytes(ctrl[0:4], "little"))
+        out["DICR"] = hex(int.from_bytes(ctrl[4:8], "little"))
+    return out
+
+
+def read_stack_backtrace(sock: socket.socket, sp: int, ra: int, depth: int = 24) -> list:
+    """Walk words above $sp looking for plausible return addresses (KSEG0
+    code range 0x80010000-0x80200000, word-aligned) to reconstruct an
+    approximate call stack without needing a symbol table."""
+    trace = [hex(ra)] if ra else []
+    raw = read_mem(sock, sp, depth * 4)
+    for i in range(0, len(raw) - 3, 4):
+        word = int.from_bytes(raw[i:i + 4], "little")
+        if 0x80010000 <= word <= 0x80200000 and word % 4 == 0:
+            trace.append(hex(word))
+    return trace
+
+
 def read_regs(sock: socket.socket) -> dict:
     """Parse a 'g' packet reply into named registers.
 
@@ -153,6 +198,7 @@ def main():
                 resumed = False
                 snap = read_mem(sock, args.addr, args.len)
                 regs = read_regs(sock)
+                dma = read_dma_regs(sock)
             except socket.timeout:
                 # Stub didn't answer (e.g. it was manually unpaused/paused
                 # in the UI mid-cycle and the stream desynced). Resync and
@@ -165,12 +211,20 @@ def main():
             ts = time.strftime("%H:%M:%S")
             if snap != prev:
                 pc = regs.get("pc")
+                sp = regs.get("r29")
+                ra = regs.get("r31")
                 cause = regs.get("cause")
                 raw_dbg = f" raw_regs_reply={regs['_raw_reply']!r}" if "_raw_reply" in regs else ""
+                busy = [f"{n}(MADR={r['MADR']},BCR={r['BCR']},CHCR={r['CHCR']})"
+                        for n, r in dma.items() if isinstance(r, dict) and r.get("busy")]
+                bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
                 line = (f"[{ts}] CHANGE at 0x{args.addr:x} "
                         f"pc={hex(pc) if pc is not None else '?'} "
                         f"cause={hex(cause) if cause is not None else '?'}"
                         f"{raw_dbg}\n"
+                        f"  dma_busy: {busy if busy else 'none'}\n"
+                        f"  dma_all: {dma}\n"
+                        f"  backtrace(approx): {bt}\n"
                         f"  bytes: {snap.hex()}\n")
                 print(line.strip())
                 log.append(line)
@@ -184,9 +238,15 @@ def main():
             halt(sock)
             snap = read_mem(sock, args.addr, args.len)
             regs = read_regs(sock)
+            dma = read_dma_regs(sock)
+            sp = regs.get("r29")
+            ra = regs.get("r31")
+            bt = read_stack_backtrace(sock, sp, ra) if sp is not None else []
             log.append("\n=== FINAL SNAPSHOT (Ctrl+C) ===\n")
             log.append(f"registers: {regs}\n")
             log.append(f"raw 'g' reply: {rsp_call(sock, 'g')!r}\n")
+            log.append(f"dma_all: {dma}\n")
+            log.append(f"backtrace(approx): {bt}\n")
             log.append(f"mem 0x{args.addr:x}+0x{args.len:x}: {snap.hex()}\n")
         except socket.timeout:
             log.append("\n=== FINAL SNAPSHOT FAILED (stub not responding) ===\n")

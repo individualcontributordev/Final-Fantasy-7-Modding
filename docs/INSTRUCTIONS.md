@@ -1,9 +1,10 @@
 # Task: run the RAM watcher script while you playtest
 
-Watchpoint on 0x0 is confirmed to cover all RAM mirrors and still never
-fires, so it's a DMA write, not a CPU store. Built a script that polls
-RAM 0x0 directly over DuckStation's GDB server instead of relying on
-its (limited) debugger UI:
+Confirmed: PC=0x80000080, Cause=0x428 (Reserved Instruction) — a DMA
+write to 0x0 clobbers the exception vectors, so the CPU crashes trying
+to handle its own exception. Script now also captures DMA channel
+registers (to see which channel is mid-transfer) and an approximate
+call-stack backtrace at the moment of the change:
 
 1. DuckStation: Settings → Advanced → enable "GDB Server" (port 19000).
 2. In a terminal: `python3 scripts/gdb_ram_watch.py`
