@@ -47,6 +47,21 @@ except Exception as e:
 import transformers, tokenizers
 print("transformers version:", transformers.__version__)
 print("tokenizers version:", tokenizers.__version__)
+
+vocab = tokenizer.get_vocab()
+space_marker_tokens = [t for t in vocab if t.startswith("\u2581")]
+print(f"Vocab size: {len(vocab)}")
+print(f"Tokens starting with U+2581 (▁): {len(space_marker_tokens)}")
+print("Sample ▁-tokens:", space_marker_tokens[:10])
+print("Is '▁You' in vocab?", "\u2581You" in vocab)
+print("Is '▁are' in vocab?", "\u2581are" in vocab)
+
+# Try encoding with add_special_tokens + explicit prefix space to see if the
+# very first token in a sequence is the only one silently dropping its marker
+# due to prepend_scheme edge cases, vs. every token being marker-less.
+ids2 = tokenizer(" " + probe, add_special_tokens=False).input_ids
+toks2 = tokenizer.convert_ids_to_tokens(ids2)
+print("Tokens when input has a leading space already:", toks2[:20])
 print("============================\n")
 
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
