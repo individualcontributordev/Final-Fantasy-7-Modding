@@ -62,6 +62,12 @@ print("Is '▁are' in vocab?", "\u2581are" in vocab)
 ids2 = tokenizer(" " + probe, add_special_tokens=False).input_ids
 toks2 = tokenizer.convert_ids_to_tokens(ids2)
 print("Tokens when input has a leading space already:", toks2[:20])
+
+gspace_tokens = [t for t in vocab if t.startswith("\u0120")]
+print(f"Tokens starting with U+0120 (Ġ, byte-level BPE space marker): {len(gspace_tokens)}")
+print("Sample Ġ-tokens:", gspace_tokens[:10])
+print("Is 'ĠYou' in vocab?", "\u0120You" in vocab)
+print("Is 'Ġare' in vocab?", "\u0120are" in vocab)
 print("============================\n")
 
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
