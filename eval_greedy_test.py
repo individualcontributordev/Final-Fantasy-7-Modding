@@ -26,11 +26,16 @@ logging.getLogger("unsloth").setLevel(logging.ERROR)
 import torch
 from unsloth import FastLanguageModel
 
-DEFAULT_PROMPT = (
+OOD_PROMPT = (
     "Walk this raw byte sequence from a field script block: "
     "60 01 00 00 00 00 00 00 00 00 2B 2B 48 00 01 02 03 04. "
     "Identify each opcode by its leading byte, and state its offset, name, "
     "and length in sequence. Do not use external imports."
+)
+
+IN_DISTRIBUTION_PROMPT = (
+    "What are the instruction lengths of PMVIE (0xF8) and MOVIE (0xF9), "
+    "and why does PMVIE need an operand while MOVIE doesn't?"
 )
 
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
@@ -38,8 +43,62 @@ SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse e
 ADAPTER_DIR = "ff7_coder_lora_model"
 
 
+def run_prompt(model, tokenizer, label, user_query):
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": user_query},
+    ]
+    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
+    input_length = inputs.input_ids.shape[-1]
+
+    print(f"\n{'=' * 70}")
+    print(f"[{label}]")
+    print(f"👤 Prompt: {user_query}\n")
+    print("🤔 Generating with do_sample=False + repetition_penalty=1.3, "
+          "no_repeat_ngram_size=4 (deterministic, loop-blocked)...")
+
+    outputs = model.generate(
+        input_ids=inputs.input_ids,
+        attention_mask=inputs.attention_mask,
+        max_new_tokens=512,
+        do_sample=False,
+        repetition_penalty=1.3,
+        no_repeat_ngram_size=4,
+        use_cache=True,
+    )
+
+    generated_tokens = outputs[0, input_length:]
+    response_text = tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
+
+    print("\n🤖 Response:\n")
+    print(response_text)
+
+    import re
+    long_fused_runs = re.findall(r"[A-Za-z]{25,}", response_text)
+    print(f"\n📏 Diagnostic: {len(long_fused_runs)} fused-word run(s) of 25+ letters with no space.")
+    if long_fused_runs:
+        print("   Example run(s):", long_fused_runs[:3])
+        print("   -> Fused-word collapse still present -> weights/training issue.")
+    else:
+        print("   -> No fused-word collapse.")
+
+    # Detect degenerate repetition loops (e.g. "60 0x 60 0x ..." repeating).
+    tokens = response_text.split()
+    if len(tokens) >= 12:
+        window = 4
+        repeats = 0
+        for i in range(len(tokens) - window):
+            if tokens[i:i + window] == tokens[i + window:i + 2 * window]:
+                repeats += 1
+        if repeats > 3:
+            print(f"   -> Repetition-loop diagnostic: {repeats} repeated {window}-token windows detected.")
+        else:
+            print("   -> No repetition-loop pattern detected.")
+
+
 def main():
-    user_query = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_PROMPT
+    custom_prompt = sys.argv[1] if len(sys.argv) > 1 else None
 
     print("🚀 Loading base model + adapter for greedy decode test...")
     model, tokenizer = FastLanguageModel.from_pretrained(
@@ -51,43 +110,11 @@ def main():
     model.load_adapter(ADAPTER_DIR)
     FastLanguageModel.for_inference(model)
 
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": user_query},
-    ]
-    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
-    input_length = inputs.input_ids.shape[-1]
-
-    print(f"👤 Prompt: {user_query}\n")
-    print("🤔 Generating with do_sample=False (greedy, deterministic)...")
-
-    outputs = model.generate(
-        input_ids=inputs.input_ids,
-        attention_mask=inputs.attention_mask,
-        max_new_tokens=512,
-        do_sample=False,
-        use_cache=True,
-    )
-
-    generated_tokens = outputs[0, input_length:]
-    response_text = tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
-
-    print("\n🤖 Greedy response:\n")
-    print(response_text)
-
-    # Quick heuristic: count long stretches of alpha chars with no space,
-    # which is the signature of the fused-word collapse we're diagnosing.
-    import re
-    long_fused_runs = re.findall(r"[A-Za-z]{25,}", response_text)
-    print(f"\n📏 Diagnostic: {len(long_fused_runs)} fused-word run(s) of 25+ letters with no space.")
-    if long_fused_runs:
-        print("   Example run(s):", long_fused_runs[:3])
-        print("   -> Collapse reproduces under greedy decoding: this points at the")
-        print("      LoRA weights/training (overfit degeneracy), not sampling temp/top_p.")
+    if custom_prompt:
+        run_prompt(model, tokenizer, "CUSTOM", custom_prompt)
     else:
-        print("   -> No fused-word collapse under greedy decoding: sampling params")
-        print("      (temperature/top_p in run_ff7_agent.py) are the likely cause.")
+        run_prompt(model, tokenizer, "IN-DISTRIBUTION (PMVIE/MOVIE length)", IN_DISTRIBUTION_PROMPT)
+        run_prompt(model, tokenizer, "OUT-OF-DISTRIBUTION (byte-walk)", OOD_PROMPT)
 
 
 if __name__ == "__main__":
