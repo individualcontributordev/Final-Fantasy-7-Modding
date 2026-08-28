@@ -70,6 +70,18 @@ print("Is 'ĠYou' in vocab?", "\u0120You" in vocab)
 print("Is 'Ġare' in vocab?", "\u0120are" in vocab)
 print("============================\n")
 
+print("=== FIX ATTEMPT: load tokenizer from deepseek-ai source repo ===")
+try:
+    fixed_tok = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Llama-8B")
+    fixed_ids = fixed_tok(probe, add_special_tokens=False).input_ids
+    fixed_toks = fixed_tok.convert_ids_to_tokens(fixed_ids)
+    print("Token strings (fixed tokenizer):", fixed_toks[:20])
+    print("Decoded (fixed tokenizer):", repr(fixed_tok.decode(fixed_ids, skip_special_tokens=True)))
+    print("Fixed pre_tokenizer:", fixed_tok.backend_tokenizer.pre_tokenizer)
+except Exception as e:
+    print("Could not load deepseek-ai source tokenizer:", e)
+print("============================\n")
+
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
 
 fused_in_formatted_text = 0
