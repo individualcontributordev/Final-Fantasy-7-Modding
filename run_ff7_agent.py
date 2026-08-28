@@ -1,98 +1,120 @@
+# TARGET_FILE: run_ff7_agent.py
 import os
 import subprocess
 import re
 from unsloth import FastLanguageModel
+import torch
+
+print("🚀 Booting your specialized FF7 Agent environment...")
 
 # 1. Initialize Your Highly Specialized Fine-Tuned Brain
 max_seq_length = 4096
 model, tokenizer = FastLanguageModel.from_pretrained(
-    # model_name = "ff7_coder_lora_model", # Points directly to your saved weights folder
-    model_name = "ff7_coder_complete_agent", # Points directly to your saved weights folder
+    model_name = "unsloth/DeepSeek-R1-Distill-Llama-8B", 
     max_seq_length = max_seq_length,
-    load_in_4bit = True,                 # Keeps VRAM under 6GB on your RTX 3070
+    dtype = torch.float16,
+    load_in_4bit = True, 
 )
-FastLanguageModel.for_inference(model)   # Optimizes the internal kernels for fast token delivery
+model.load_adapter("ff7_coder_lora_model")
+FastLanguageModel.for_inference(model)
 
-# 2. Define the Native System Environment Map
+# 2. System Context
 WORKSPACE_CONTEXT = """
-You are a completely autonomous Agentic Terminal Engine. You operate natively on the user's workstation machine.
-You have direct, root-level clearance to view files, write Python automation tools, and execute terminal commands.
-
+You are an autonomous Agentic Terminal Engine. You operate natively on the user's workstation.
 📍 HARDCODED WORKSPACE DIRECTORY MAP:
-- Personal Reverse Engineering Logs/Notes: ~/Final-Fantasy-7-CSR
-- Active Mod Development Workspace:       /mnt/d/projects/Final-Fantasy-7-Modding
-- Custom Mod Builder Web Site Repository:  ~/individualcontributordev.github.io
-- Reference Engines & Tools:
-  * Makou Reactor Source Tree:            ~/makoureactor
-  * FF7TK Component Library:             ~/ff7tk
-  * Ghidra SRE Installation:              ~/Downloads/ghidra_12.1.2_PUBLIC
-
-🔧 AVAILABLE TOOLS:
-To execute actions on the machine, you must wrap your commands in clean executable markdown block tags:
-- To run a terminal command, use: ```bash ... ```
-- To save or write a python modding script, use: ```python ... ```
+- Notes/Logs: /mnt/d/Final-Fantasy-7-CSR, /mnt/d/projects/Final-Fantasy-7-Modding
+- Workspace:  /mnt/d/projects/Final-Fantasy-7-Modding/workspace
+- Web App:    /mnt/d/individualcontributordev.github.io
+- References: /mnt/d/makoureactor, /mnt/d/ff7tk, /mnt/d/Downloads/ghidra_12.1.2_PUBLIC
 """
 
 # 3. Native Execution Engine (The "Hands")
 def execute_system_tool(model_output):
-    """Parses the model's text response and executes terminal actions natively."""
-    # Find any bash block the model generated
     bash_match = re.search(r"```bash\n(.*?)\n```", model_output, re.DOTALL)
     if bash_match:
         command = bash_match.group(1).strip()
-        print(f"\n[AGENT EXECUTING BASH]: {command}")
-        
-        # Run the command directly on your Ubuntu environment
+        print(f"\n[AGENT BASH EXECUTION]: {command}")
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        output = f"STDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        return True, output
+        return f"STDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
 
-    # Find any python block the model generated to auto-write files
     python_match = re.search(r"```python\n(.*?)\n```", model_output, re.DOTALL)
     if python_match:
         code = python_match.group(1).strip()
-        # Automatically extract target script filename if specified, or default to temp_patch.py
         filename = "temp_patch.py"
         file_target = re.search(r"# TARGET_FILE:\s*(\S+)", code)
-        if file_target:
-            filename = file_target.group(1)
-            
+        if file_target: filename = file_target.group(1)
         print(f"\n[AGENT WRITING FILE]: {filename}")
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(code)
-        return True, f"Successfully wrote script to file path: {filename}"
-        
-    return False, "No native tool calls detected."
+        with open(filename, "w", encoding="utf-8") as f: f.write(code)
+        return f"Successfully wrote script to file path: {filename}"
+    return None
 
-# 4. Core Conversational Loop
-print("🤖 Custom FF7 Autonomous Agent Active and Armed. Enter your command (type 'exit' to quit):")
+# 4. Interactive Conversational Loop & Automatic Dataset Harvester
+print("\n🤖 ==================================================================== 🤖")
+print("🤖 Custom FF7 Autonomous Agent Active and Armed. (Type 'exit' to quit)   🤖")
+print("🤖 ==================================================================== 🤖")
+
 chat_history = []
+TRIGGER_KEYWORDS = ["confirm", "it works", "verified", "working code"]
 
+# Force an infinite input collection pass
 while True:
-    user_query = input("\n👤 User: ")
-    if user_query.lower() == 'exit':
-        break
+    try:
+        # Prompt the user for input explicitly
+        user_query = input("\n👤 User: ").strip()
         
-    # Build complete execution token frame
-    prompt = f"### System:\n{WORKSPACE_CONTEXT}\n\n"
-    for role, text in chat_history[-4:]: # Keep a rolling short memory to prevent context blowout
-        prompt += f"### {role}:\n{text}\n\n"
-    prompt += f"### Instruction:\n{user_query}\n\n### Response:\n"
-    
-    # Generate token sequence on your RTX 3070
-    inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
-    outputs = model.generate(**inputs, max_new_tokens=1024, use_cache=True)
-    response_text = tokenizer.batch_decode(outputs)[0].split("### Response:\n")[-1].replace("</s>", "").strip()
-    
-    print(f"\n🤖 Agent Response:\n{response_text}")
-    
-    # Trigger the tool execution loop
-    action_taken, tool_result = execute_system_tool(response_text)
-    if action_taken:
-        print(f"\n💻 System Tool Output:\n{tool_result}")
-        # Feed the execution results right back into the model's memory so it knows what happened!
+        # Guard clause against empty return keys
+        if not user_query:
+            continue
+            
+        if user_query.lower() in ['exit', 'quit']:
+            print("Shutting down agent loop. Goodbye!")
+            break
+
+        # BACKGROUND AUTOMATION ENGINE: Check for success validation triggers
+        if any(keyword in user_query.lower() for keyword in TRIGGER_KEYWORDS) and len(chat_history) >= 2:
+            print("\n⚡ [AUTOMATION]: Compiling this success into your dataset in the background...")
+            last_problem = chat_history[-2][1]
+            last_solution = chat_history[-1][1]
+            
+            silent_prompt = f"### System:\nFormat this interaction into a single-line JSON training row matching our structural schema: {{\"instruction\": \"...\", \"input\": \"...\", \"output\": \"<thinking>...</thinking>...\"}}\n\nPROBLEM: {last_problem}\nSOLUTION: {last_solution}\n\n### Response:\n"
+            ext_inputs = tokenizer([silent_prompt], return_tensors="pt").to("cuda")
+            ext_outputs = model.generate(input_ids=ext_inputs.input_ids, max_new_tokens=1024, use_cache=True)
+            raw_json = tokenizer.batch_decode(ext_outputs).split("### Response:\n")[-1].replace("</s>", "").strip()
+            
+            try:
+                clean_json = re.sub(r"^```json\s*|\s*```$", "", raw_json.strip(), flags=re.MULTILINE)
+                with open("data/organic_growth.jsonl", "a", encoding="utf-8") as f:
+                    f.write(clean_json.strip() + "\n")
+                print("🎉 [SUCCESS]: Ground-truth row appended to data/organic_growth.jsonl!")
+            except Exception as e:
+                print(f"⚠️ Dataset append skipped: {e}")
+                
+            chat_history.append(("User", user_query))
+            continue
+
+        # STANDARD GENERATION ENGINE
+        prompt = f"### System:\n{WORKSPACE_CONTEXT}\n\n"
+        for role, text in chat_history[-4:]:
+            prompt += f"### {role}:\n{text}\n\n"
+        prompt += f"### Instruction:\n{user_query}\n\n### Response:\n"
+        
+        inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
+        outputs = model.generate(input_ids=inputs.input_ids, max_new_tokens=1024, use_cache=True)
+        response_text = tokenizer.batch_decode(outputs).split("### Response:\n")[-1].replace("</s>", "").strip()
+        
+        print(f"\n🤖 Agent:\n{response_text}")
         chat_history.append(("User", user_query))
-        chat_history.append(("Response", response_text + f"\n\n[System Notification]: {tool_result}"))
-    else:
-        chat_history.append(("User", user_query))
-        chat_history.append(("Response", response_text))
+        chat_history.append(("Agent", response_text))
+
+        # Check for tool/code execution commands
+        tool_output = execute_system_tool(response_text)
+        if tool_output:
+            print(f"\n💻 System Tool Output:\n{tool_output}")
+            chat_history.append(("System", tool_output))
+
+    except KeyboardInterrupt:
+        print("\nSession interrupted via keyboard. Type 'exit' to shut down safely.")
+        continue
+    except Exception as e:
+        print(f"\nRuntime Error: {e}")
+        break
