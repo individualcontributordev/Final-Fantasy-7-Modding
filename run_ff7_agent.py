@@ -6,7 +6,8 @@ from unsloth import FastLanguageModel
 # 1. Initialize Your Highly Specialized Fine-Tuned Brain
 max_seq_length = 4096
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name = "ff7_coder_lora_model", # Points directly to your saved weights folder
+    # model_name = "ff7_coder_lora_model", # Points directly to your saved weights folder
+    model_name = "ff7_coder_complete_agent", # Points directly to your saved weights folder
     max_seq_length = max_seq_length,
     load_in_4bit = True,                 # Keeps VRAM under 6GB on your RTX 3070
 )
