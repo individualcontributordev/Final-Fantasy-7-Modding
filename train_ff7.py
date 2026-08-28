@@ -106,6 +106,13 @@ dataset_path = "data/ff7_re_dataset.jsonl"
 dataset = load_dataset("json", data_files=dataset_path, split="train")
 dataset = dataset.map(format_prompts, batched=True)
 
+# Hold out 10% as an eval split so we can see eval_loss (memorization vs.
+# generalization) instead of flying blind on train_loss alone.
+dataset = dataset.train_test_split(test_size=0.1, seed=3407)
+train_dataset = dataset["train"]
+eval_dataset = dataset["test"]
+print(f"📊 Split dataset: {len(train_dataset)} train / {len(eval_dataset)} eval rows.")
+
 # ====================================================================
 # 5. CONFIGURATION WRAPPER RESOLUTION (Protects against TRL Deprecations)
 # ====================================================================
@@ -115,9 +122,10 @@ try:
 
     training_args = SFTConfig(
         per_device_train_batch_size = 1,
+        per_device_eval_batch_size = 1,
         gradient_accumulation_steps = 8,
         warmup_steps = 10,
-        max_steps = 200,
+        max_steps = 90,
         learning_rate = 2e-4,
         fp16 = True,
         bf16 = False,
@@ -130,6 +138,14 @@ try:
         dataset_text_field = "text",
         max_seq_length = max_seq_length,
         packing = True,
+        eval_strategy = "steps",
+        eval_steps = 10,
+        save_strategy = "steps",
+        save_steps = 10,
+        save_total_limit = 3,
+        load_best_model_at_end = True,
+        metric_for_best_model = "eval_loss",
+        greater_is_better = False,
     )
 
     # Try initializing SFTTrainer with modern processing_class logic
@@ -137,7 +153,8 @@ try:
         trainer = SFTTrainer(
             model = model,
             processing_class = tokenizer,
-            train_dataset = dataset,
+            train_dataset = train_dataset,
+            eval_dataset = eval_dataset,
             args = training_args,
         )
     except TypeError:
@@ -145,7 +162,8 @@ try:
         trainer = SFTTrainer(
             model = model,
             tokenizer = tokenizer,
-            train_dataset = dataset,
+            train_dataset = train_dataset,
+            eval_dataset = eval_dataset,
             args = training_args,
         )
 
@@ -155,9 +173,10 @@ except Exception as e:
 
     training_args = TrainingArguments(
         per_device_train_batch_size = 1,
+        per_device_eval_batch_size = 1,
         gradient_accumulation_steps = 8,
         warmup_steps = 10,
-        max_steps = 200,
+        max_steps = 90,
         learning_rate = 2e-4,
         fp16 = True,
         bf16 = False,
@@ -167,12 +186,21 @@ except Exception as e:
         lr_scheduler_type = "linear",
         seed = 3407,
         output_dir = "ff7_coder_outputs",
+        eval_strategy = "steps",
+        eval_steps = 10,
+        save_strategy = "steps",
+        save_steps = 10,
+        save_total_limit = 3,
+        load_best_model_at_end = True,
+        metric_for_best_model = "eval_loss",
+        greater_is_better = False,
     )
 
     trainer = SFTTrainer(
         model = model,
         tokenizer = tokenizer,
-        train_dataset = dataset,
+        train_dataset = train_dataset,
+        eval_dataset = eval_dataset,
         dataset_text_field = "text",
         max_seq_length = max_seq_length,
         packing = True,
