@@ -17,35 +17,58 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from unsloth import FastLanguageModel
+import torch
+import sys
 
 EXTRACTED_DIR = Path("data/extracted_fields")
 
 
+
+# Cache the model instance globally so it only loads into VRAM once during the test sweep
+_GLOBAL_MODEL = None
+_GLOBAL_TOKENIZER = None
+
 def call_local_model(prompt_string: str) -> str:
-    """STUB — replace this body with your inference call.
-
-    Paste your FastLanguageModel load + generate here, e.g.:
-
-        from unsloth import FastLanguageModel
-        model, tokenizer = FastLanguageModel.from_pretrained(
-            model_name="<path-to-your-merged-checkpoint>",
-            max_seq_length=4096,
-            load_in_4bit=True,
+    """Dispatches the prompt to our fine-tuned RTX 3070 model layers and streams the text output."""
+    global _GLOBAL_MODEL, _GLOBAL_TOKENIZER
+    
+    # 1. Lazy-load the model into memory on the first test call
+    if _GLOBAL_MODEL is None:
+        print("\n🧠 [TEST HARNESS]: Loading DeepSeek-R1-8B Base + Custom FF7 Adapters into VRAM...")
+        max_seq_length = 4096
+        
+        # Load core 4-bit base model layers
+        _GLOBAL_MODEL, _GLOBAL_TOKENIZER = FastLanguageModel.from_pretrained(
+            model_name = "unsloth/DeepSeek-R1-Distill-Llama-8B",
+            max_seq_length = max_seq_length,
+            dtype = torch.float16,
+            load_in_4bit = True,
         )
-        FastLanguageModel.for_inference(model)
+        
+        # Dynamically lay your 1,348-row adapter layers straight over them
+        _GLOBAL_MODEL.load_adapter("ff7_coder_lora_model")
+        FastLanguageModel.for_inference(_GLOBAL_MODEL)
+        print("✔ [TEST HARNESS]: Brain loaded successfully. Executing exercise matrix...")
 
-        def call_local_model(prompt_string: str) -> str:
-            inputs = tokenizer(prompt_string, return_tensors="pt").to("cuda")
-            out = model.generate(**inputs, max_new_tokens=512)
-            return tokenizer.decode(out[0], skip_special_tokens=True)
-
-    Until wired up, this stub raises so the harness fails loudly instead
-    of silently grading empty/fabricated output.
-    """
-    raise NotImplementedError(
-        "call_local_model() is a stub — wire up your model load/generate "
-        "call here before running the harness."
+    # 2. Structure the prompt to match our exact training system format
+    full_prompt = f"### System:\nYou are an expert PlayStation 1 and Final Fantasy VII reverse engineering model.\n\n### Instruction:\n{prompt_string}\n\n### Response:\n"
+    
+    # 3. Tokenize and generate the text sequence on your RTX 3070
+    inputs = _GLOBAL_TOKENIZER([full_prompt], return_tensors="pt").to("cuda")
+    outputs = _GLOBAL_MODEL.generate(
+        input_ids=inputs.input_ids,
+        max_new_tokens=1024,
+        use_cache=True
     )
+   
+    # FIX: Extract element [0] from the batch list BEFORE calling split()
+    decoded_list = _GLOBAL_TOKENIZER.batch_decode(outputs)
+    response_text = decoded_list[0].split("### Response:\n")[-1]
+    
+    return response_text.replace("</s>", "").strip()
+
+
 
 
 def load_bytes(name: str) -> bytes:

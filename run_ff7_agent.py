@@ -100,7 +100,9 @@ while True:
         
         inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
         outputs = model.generate(input_ids=inputs.input_ids, max_new_tokens=1024, use_cache=True)
-        response_text = tokenizer.batch_decode(outputs).split("### Response:\n")[-1].replace("</s>", "").strip()
+        decoded_output = tokenizer.batch_decode(outputs)
+        response_text = decoded_output[0].split("### Response:\n")[-1].replace("</s>", "").strip()
+
         
         print(f"\n🤖 Agent:\n{response_text}")
         chat_history.append(("User", user_query))
