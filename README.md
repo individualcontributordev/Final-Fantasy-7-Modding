@@ -76,6 +76,21 @@ Densities are **named presets** (not a free-form %): **Light** / **Standard** / 
 | [docs/findings/](docs/findings/) | Dated lab notebook |
 
 After clone: `git config core.hooksPath .githooks`
+
+## AI-assisted RE pipeline (local, optional)
+
+Local fine-tuned-model workflow for opcode/maplist assistance. Not required for building mods.
+
+- **Model**: DeepSeek-R1-8B + LoRA adapters (Unsloth, 4-bit) trained on `data/ff7_re_dataset.jsonl` (1,348 rows covering all 256 field opcodes and 788 maplist entries, sourced from `~/makoureactor`/`~/ff7tk`/this repo's `scripts/ff7_opcodes.py`).
+- **Reference paths** (see `AGENTS.md` for full rules):
+  - `~/Final-Fantasy-7-CSR` — RE notes/logs, `field_maplist.py`
+  - `~/makoureactor`, `~/ff7tk` — opcode/maplist ground truth
+  - `~/Downloads/ghidra_12.1.2_PUBLIC` — Ghidra
+- **Run the agent**: `python3 run_ff7_agent.py` — interactive loop; requires a real LoRA checkpoint dir passed to `FastLanguageModel.from_pretrained(model_name=...)` (edit the `model_name` at the top of the script — no checkpoint ships in this repo).
+- **Extract real test assets**: `python3 extract_game_assets.py` — pulls genuine `FIELD/*.DAT` files (e.g. `FSHIP_12.DAT`, `MD8_5.DAT`) from `workspace/pristine/*.bin` into `data/extracted_fields/` (gitignored) via the existing `scripts/extract_field_dat.py`.
+- **Run benchmarks**: `python3 run_agent_tests.py` — feeds 3 seeded exercises (opcode byte parsing, LBA math, maplist graph logic) to `call_local_model()`. That function is a stub by default (raises `NotImplementedError`) until you wire it to a real model load — see comments in the script.
+- **Verified-insight logging**: when a fix is confirmed passing on a live playtest and you say so explicitly (e.g. "it works, log it"), one JSONL row gets appended to `.workspace/verified_insights/organic_growth.jsonl` in the same `{instruction, input, output}` format as `data/ff7_re_dataset.jsonl`. This is manual/on-request only — not an automatic background process.
+
 ## Suggestions backlog
 
 Community-prioritised encounter/engine mods: [docs/SUGGESTIONS.md](docs/SUGGESTIONS.md)

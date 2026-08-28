@@ -1,5 +1,16 @@
 # Local disc / RE artifacts — never commit game data or large binaries
 
+# Repo-wide: never commit extracted game data / disc images / memory dumps,
+# regardless of directory (previously only workspace/** was covered).
+*.DAT
+*.dat
+*.STR
+*.str
+*.iso
+*.ISO
+ramdump*.bin
+data/extracted_fields/
+
 # workspace: ignore everything except .gitkeep placeholders
 workspace/*
 !workspace/**/
