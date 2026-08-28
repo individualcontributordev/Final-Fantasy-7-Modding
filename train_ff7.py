@@ -6,6 +6,26 @@ import logging
 import re
 
 # ====================================================================
+# -1. MINIMAL .env LOADER (no python-dotenv dependency; must run first so
+#     HF_TOKEN / HF_HOME / HF_HUB_* are set before huggingface_hub reads them)
+# ====================================================================
+def _load_dotenv(path=".env"):
+    if not os.path.isfile(path):
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+_load_dotenv()
+
+# ====================================================================
 # 0. FUSED CROSS-ENTROPY MEMORY-PROBE WORKAROUND (must run before unsloth import)
 # ====================================================================
 # unsloth_zoo's fused CE loss picks a chunk size by measuring free VRAM at the
@@ -27,7 +47,7 @@ logging.getLogger("unsloth").setLevel(logging.ERROR)
 # ====================================================================
 # 1. HARDWARE SETTINGS (Optimized for RTX 3070 8GB VRAM)
 # ====================================================================
-max_seq_length = 4096
+max_seq_length = 1536
 dtype = torch.float16
 load_in_4bit = True
 
@@ -94,8 +114,8 @@ try:
     print("📋 Testing modern SFTConfig parameter structure compilation...")
 
     training_args = SFTConfig(
-        per_device_train_batch_size = 2,
-        gradient_accumulation_steps = 4,
+        per_device_train_batch_size = 1,
+        gradient_accumulation_steps = 8,
         warmup_steps = 10,
         max_steps = 200,
         learning_rate = 2e-4,
@@ -134,8 +154,8 @@ except Exception as e:
     print(f"📋 Falling back to legacy TRL direct Trainer kwargs. Notice: {e}")
 
     training_args = TrainingArguments(
-        per_device_train_batch_size = 2,
-        gradient_accumulation_steps = 4,
+        per_device_train_batch_size = 1,
+        gradient_accumulation_steps = 8,
         warmup_steps = 10,
         max_steps = 200,
         learning_rate = 2e-4,
