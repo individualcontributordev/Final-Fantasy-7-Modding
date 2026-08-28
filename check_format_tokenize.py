@@ -17,6 +17,24 @@ from transformers import AutoTokenizer
 
 tokenizer = AutoTokenizer.from_pretrained("unsloth/DeepSeek-R1-Distill-Llama-8B")
 
+# Pinpoint whether ENCODE or DECODE is dropping space markers, using a tiny
+# known-good sentence with no model/dataset involved at all.
+probe = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
+probe_ids = tokenizer(probe, add_special_tokens=False).input_ids
+probe_tokens = tokenizer.convert_ids_to_tokens(probe_ids)
+print("=== ENCODE/DECODE PROBE ===")
+print("Input string:", repr(probe))
+print("Token strings (first 20):", probe_tokens[:20])
+print("Decoded (default):", repr(tokenizer.decode(probe_ids, skip_special_tokens=True)))
+print("Decoded (clean_up_tokenization_spaces=False):",
+      repr(tokenizer.decode(probe_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)))
+print("Manual Ġ/Ċ join:", repr("".join(probe_tokens).replace("\u0120", " ").replace("\u010a", "\n")))
+try:
+    print("backend decoder type:", type(tokenizer.backend_tokenizer.decoder))
+except Exception as e:
+    print("backend decoder introspection failed:", e)
+print("============================\n")
+
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
 
 fused_in_formatted_text = 0
