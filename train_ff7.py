@@ -4,6 +4,17 @@ import torch
 import warnings
 import logging
 import re
+
+# ====================================================================
+# 0. FUSED CROSS-ENTROPY MEMORY-PROBE WORKAROUND (must run before unsloth import)
+# ====================================================================
+# unsloth_zoo's fused CE loss picks a chunk size by measuring free VRAM at the
+# instant compute_loss runs. On 8GB cards, headroom at that point can round to
+# ~0 free GB, causing a crash: "Unsloth: No or negligible GPU memory available
+# for fused cross entropy." (unslothai/unsloth#3827). Forcing a fixed chunk
+# count bypasses that live memory probe entirely.
+os.environ.setdefault("UNSLOTH_CE_LOSS_N_CHUNKS", "8")
+
 from unsloth import FastLanguageModel
 from datasets import load_dataset
 from trl import SFTTrainer
