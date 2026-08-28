@@ -62,6 +62,25 @@ model, tokenizer = FastLanguageModel.from_pretrained(
     load_in_4bit = load_in_4bit,
 )
 
+# ---------------------------------------------------------------------
+# TOKENIZER FIX (huggingface/transformers#45488): transformers v5's
+# LlamaTokenizer.__init__ unconditionally overwrites tokenizer.json's real
+# ByteLevel pre_tokenizer/decoder with a hardcoded SentencePiece-style
+# Metaspace pipeline. This model's vocab has zero "▁"-prefixed tokens, so
+# Metaspace silently drops every space during encode, producing fused-word
+# training data. Patch it by loading the raw tokenizers.Tokenizer (which
+# parses tokenizer.json directly, bypassing LlamaTokenizer's override) and
+# copying its correct pre_tokenizer/decoder onto the loaded tokenizer.
+from tokenizers import Tokenizer as _RawTokenizer
+_raw_tok = _RawTokenizer.from_pretrained("unsloth/DeepSeek-R1-Distill-Llama-8B")
+tokenizer.backend_tokenizer.pre_tokenizer = _raw_tok.pre_tokenizer
+tokenizer.backend_tokenizer.decoder = _raw_tok.decoder
+_probe_ids = tokenizer("You are an expert", add_special_tokens=False).input_ids
+assert tokenizer.decode(_probe_ids) == "You are an expert", (
+    "Tokenizer pre_tokenizer/decoder patch failed -- fused-word bug still present!"
+)
+print("✅ Tokenizer pre_tokenizer/decoder patched (ByteLevel restored, Metaspace bug fixed).")
+
 # ====================================================================
 # 3. CONFIGURE TARGET LORA MODULES
 # ====================================================================
