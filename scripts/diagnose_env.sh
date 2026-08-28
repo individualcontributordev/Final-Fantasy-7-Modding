@@ -32,9 +32,8 @@ if command -v conda >/dev/null 2>&1; then
 fi
 echo
 
-echo "===== KEY PACKAGE VERSIONS (inside ff7_train env) ====="
-if command -v conda >/dev/null 2>&1; then
-    conda run -n ff7_train python3 - <<'EOF'
+echo "===== KEY PACKAGE VERSIONS (current python3) ====="
+python3 - <<'EOF'
 mods = ["torch", "unsloth", "unsloth_zoo", "trl", "transformers", "peft",
         "bitsandbytes", "accelerate", "datasets", "torchao", "triton"]
 for m in mods:
@@ -44,12 +43,10 @@ for m in mods:
     except Exception as e:
         print(f"{m}: NOT INSTALLED ({e.__class__.__name__})")
 EOF
-fi
 echo
 
 echo "===== CUDA / TORCH RUNTIME CHECK ====="
-if command -v conda >/dev/null 2>&1; then
-    conda run -n ff7_train python3 - <<'EOF'
+python3 - <<'EOF'
 try:
     import torch
     print("torch.__version__:", torch.__version__)
@@ -61,7 +58,6 @@ try:
 except Exception as e:
     print("torch check failed:", e)
 EOF
-fi
 echo
 
 echo "===== NVIDIA-SMI ====="
