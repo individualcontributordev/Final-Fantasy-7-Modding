@@ -123,6 +123,20 @@ def main():
     model.load_adapter(ADAPTER_DIR)
     FastLanguageModel.for_inference(model)
 
+    # TOKENIZER FIX (huggingface/transformers#45488): see train_ff7.py for
+    # full explanation. transformers v5's LlamaTokenizer.__init__ overwrites
+    # tokenizer.json's real ByteLevel pre_tokenizer/decoder with a broken
+    # Metaspace pipeline, causing every space to be dropped during encode.
+    from tokenizers import Tokenizer as _RawTokenizer
+    _raw_tok = _RawTokenizer.from_pretrained("unsloth/DeepSeek-R1-Distill-Llama-8B")
+    tokenizer.backend_tokenizer.pre_tokenizer = _raw_tok.pre_tokenizer
+    tokenizer.backend_tokenizer.decoder = _raw_tok.decoder
+    _probe_ids = tokenizer("You are an expert", add_special_tokens=False).input_ids
+    assert tokenizer.decode(_probe_ids) == "You are an expert", (
+        "Tokenizer pre_tokenizer/decoder patch failed -- fused-word bug still present!"
+    )
+    print("✅ Tokenizer pre_tokenizer/decoder patched (ByteLevel restored, Metaspace bug fixed).")
+
     if custom_prompt:
         run_prompt(model, tokenizer, "CUSTOM", custom_prompt)
     else:
