@@ -6,6 +6,8 @@ workspace/*
 !workspace/**/.gitkeep
 !workspace/*.md
 
+unsloth_compiled_cache/
+
 # Ghidra exports (raw game data - keep local only)
 workspace/ghidra-exports/
 
