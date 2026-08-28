@@ -36,6 +36,7 @@ SOURCE_DIRS = [
     "external/big-shoes",
     "external/FF7WorldMap",
     "scripts",
+    "data",
 ]
 
 # File extensions worth chunking (source/docs; skip binaries, images, build junk).
