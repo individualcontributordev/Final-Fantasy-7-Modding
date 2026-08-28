@@ -15,6 +15,7 @@ logging.getLogger("unsloth").setLevel(logging.ERROR)
 import subprocess
 import re
 import time
+import datetime
 import torch
 from unsloth import FastLanguageModel
 
@@ -108,6 +109,94 @@ def execute_system_tool(model_output):
 
     return None
 
+FINDINGS_DIR = "docs/findings"
+FINDINGS_TEMPLATE = os.path.join(FINDINGS_DIR, "_template.md")
+
+
+def _slugify(text, max_words=8):
+    words = re.findall(r"[A-Za-z0-9]+", text.lower())
+    slug = "-".join(words[:max_words])
+    return slug[:80].rstrip("-") or "untitled"
+
+
+def _next_findings_path(date_str, slug):
+    # Path Confinement Guard: filename is derived purely from a regex-sanitized
+    # slug, never from a raw user/model path -- can't escape docs/findings/.
+    base = f"{date_str}-{slug}.md"
+    path = os.path.join(FINDINGS_DIR, base)
+    n = 2
+    while os.path.exists(path):
+        path = os.path.join(FINDINGS_DIR, f"{date_str}-{slug}-{n}.md")
+        n += 1
+    return path
+
+
+def create_finding_doc(model, tokenizer, problem, solution):
+    """Draft a docs/findings/YYYY-MM-DD-slug.md entry from the just-verified
+    problem/solution turn, following _template.md. Human confirms before any
+    write -- same human-in-the-loop gate as execute_system_tool(). This is
+    the intended future fine-tuning feed: once enough of these accumulate,
+    they can be mined into data/ff7_re_dataset.jsonl (per AGENTS.md rule 3),
+    but they are NOT auto-mined here -- that step stays manual and must be
+    checked for RETRACTED/SUPERSEDED status before extraction."""
+    try:
+        with open(FINDINGS_TEMPLATE, "r", encoding="utf-8") as f:
+            template = f.read()
+    except FileNotFoundError:
+        template = None
+
+    date_str = datetime.date.today().isoformat()
+    fallback_template = (
+        "# [Title]\n\n## Summary\n\n## Context\n\n## Discovery\n\n"
+        "## How we found it\n\n## Why it matters\n\n## Follow-ups\n\n## Sources\n"
+    )
+    template_text = template if template else fallback_template
+    draft_prompt = (
+        "A problem was just solved and confirmed working in this workspace. "
+        "Draft a findings-journal entry strictly in this template's structure "
+        "(fill in every section, keep it factual and concrete -- addresses, "
+        "offsets, file paths, commands -- no speculation dressed as fact):\n\n"
+        f"{template_text}"
+        f"\n\nPROBLEM:\n{problem}\n\nCONFIRMED SOLUTION:\n{solution}\n\n"
+        "Also output a single line at the very end: SLUG: <5-8-word-kebab-case-slug>"
+    )
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": draft_prompt},
+    ]
+    prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
+    with contextlib.redirect_stderr(io.StringIO()):
+        outputs = model.generate(input_ids=inputs.input_ids, max_new_tokens=1024, use_cache=True)
+    raw = tokenizer.decode(outputs[0, inputs.input_ids.shape[-1]:], skip_special_tokens=True).strip()
+    raw = re.sub(r"^.*?<\/think>\s*", "", raw, flags=re.DOTALL).strip()
+
+    slug_match = re.search(r"SLUG:\s*([a-z0-9-]+)", raw, re.IGNORECASE)
+    slug = _slugify(slug_match.group(1)) if slug_match else _slugify(problem)
+    body = re.sub(r"\n?SLUG:\s*[a-z0-9-]+\s*$", "", raw, flags=re.IGNORECASE).strip()
+    # Force Date/Status fields to known-good values regardless of what the
+    # model drafted, so provenance is always accurate.
+    body = re.sub(r"\*\*Date:\*\*.*", f"**Date:** {date_str}  ", body, count=1)
+    if "**Status:**" not in body:
+        body = body.replace(f"**Date:** {date_str}  ", f"**Date:** {date_str}  \n**Status:** unverified  ", 1)
+
+    path = _next_findings_path(date_str, slug)
+    print(f"\n⚠️  [AGENT REQUESTS FINDINGS DOC]: {path}")
+    print("----------------------------------------")
+    print(body[:1500] + ("\n... [truncated preview]" if len(body) > 1500 else ""))
+    print("----------------------------------------")
+    confirm = input("Write this findings doc? [y/N]: ").strip().lower()
+    if confirm != 'y':
+        print("❌ Findings doc write canceled by user.")
+        return None
+
+    os.makedirs(FINDINGS_DIR, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(body + "\n")
+    print(f"📝 [SAVED]: Findings doc written to {path}")
+    return path
+
+
 print("\n🤖 ==================================================================== 🤖")
 print("🤖 Custom FF7 Autonomous Agent Active and Armed. (Type 'exit' to quit)   🤖")
 print("🤖 ==================================================================== 🤖")
@@ -154,6 +243,16 @@ while True:
                     print("🎉 [SUCCESS]: Dataset expanded organically via command override!")
                 except Exception as e:
                     print(f"⚠️ Dataset append skipped: {e}")
+
+                # Also draft a docs/findings/*.md entry from the same verified
+                # turn -- these accumulate over time and, once they reach a
+                # useful volume, can be manually mined into
+                # data/ff7_re_dataset.jsonl for the next fine-tune pass (after
+                # the same RETRACTED/SUPERSEDED check used in this session).
+                try:
+                    create_finding_doc(model, tokenizer, last_problem, last_solution)
+                except Exception as e:
+                    print(f"⚠️ Findings doc generation skipped: {e}")
             else:
                 print("❌ [AUTOMATION]: No conversation history found in this session to harvest yet.")
             continue

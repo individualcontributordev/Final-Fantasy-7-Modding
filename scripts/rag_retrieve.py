@@ -50,11 +50,17 @@ def _get_model(model_name="all-MiniLM-L6-v2"):
     return _model
 
 
-def retrieve(query, top_k=4, min_score=0.25):
+def retrieve(query, top_k=4, min_score=0.25, code_boost=0.03):
     """Returns up to top_k chunks (dicts with text/source/line_start/line_end/score)
     for the given query, sorted by descending cosine similarity. Chunks below
     min_score are dropped (avoids injecting irrelevant context when nothing
-    in the corpus is actually related)."""
+    in the corpus is actually related).
+
+    code_boost: small additive bump to cosine score for chunks tagged
+    tier="code" (vs. "discussion", e.g. chat-log dumps). Code chunks are more
+    likely to answer RE questions; without this, high-volume discussion
+    chunks can crowd out code chunks of similar semantic relevance for the
+    same top_k slots. Set to 0 to disable."""
     _load_index()
     model = _get_model()
 
@@ -67,7 +73,15 @@ def retrieve(query, top_k=4, min_score=0.25):
         return []
 
     sims = (_embeddings @ query_vec) / (corpus_norms * query_norm)
-    top_idx = np.argsort(-sims)[:top_k]
+    if code_boost:
+        tier_bonus = np.array(
+            [code_boost if c.get("tier") == "code" else 0.0 for c in _chunks],
+            dtype=np.float32,
+        )
+        ranked = sims + tier_bonus
+    else:
+        ranked = sims
+    top_idx = np.argsort(-ranked)[:top_k]
 
     results = []
     for i in top_idx:
