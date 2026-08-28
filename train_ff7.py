@@ -67,10 +67,10 @@ model, tokenizer = FastLanguageModel.from_pretrained(
 # ====================================================================
 model = FastLanguageModel.get_peft_model(
     model,
-    r = 16,
+    r = 8,
     target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
-    lora_alpha = 16,
-    lora_dropout = 0,
+    lora_alpha = 8,
+    lora_dropout = 0.05,
     bias = "none",
     use_gradient_checkpointing = "unsloth",
     random_state = 3407,
