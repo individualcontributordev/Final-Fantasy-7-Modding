@@ -74,6 +74,19 @@ def run_prompt(model, tokenizer, label, user_query):
     print("\n🤖 Response:\n")
     print(response_text)
 
+    # Diagnostic: check whether literal byte-level BPE markers (Ġ=space,
+    # Ċ=newline) leaked into the decoded string undconverted. If so, this
+    # points at a tokenizer.decode() byte-reassembly bug rather than (or in
+    # addition to) a weights/training problem -- try a manual raw-token
+    # reconstruction as a cross-check.
+    if "Ġ" in response_text or "Ċ" in response_text:
+        print("\n⚠️  Literal byte-level BPE markers (Ġ/Ċ) found in decoded text -- "
+              "possible tokenizer.decode() bug, not just a weights issue.")
+        raw_tokens = tokenizer.convert_ids_to_tokens(generated_tokens)
+        manual_text = "".join(raw_tokens).replace("Ġ", " ").replace("Ċ", "\n")
+        print("\n🔧 Manual raw-token reconstruction (Ġ->space, Ċ->newline):\n")
+        print(manual_text)
+
     import re
     long_fused_runs = re.findall(r"[A-Za-z]{25,}", response_text)
     print(f"\n📏 Diagnostic: {len(long_fused_runs)} fused-word run(s) of 25+ letters with no space.")
