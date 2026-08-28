@@ -7,6 +7,10 @@ workspace/*
 !workspace/*.md
 
 unsloth_compiled_cache/
+ff7_coder_lora_model/
+ff7_coder_outputs/
+
+
 
 # Ghidra exports (raw game data - keep local only)
 workspace/ghidra-exports/
