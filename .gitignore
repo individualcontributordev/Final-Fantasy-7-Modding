@@ -21,6 +21,15 @@ unsloth_compiled_cache/
 ff7_coder_lora_model/
 ff7_coder_outputs/
 
+# Vendored RE reference repos (cloned via scripts/init_external_repos.sh,
+# not committed — re-clone locally on each machine)
+external/
+
+# One-off venv used to build the RAG index (Mac); not needed on workstation
+# for index building, but sentence-transformers must be installed in
+# ff7_train separately for query-time embedding.
+.venv_rag/
+
 
 
 # Ghidra exports (raw game data - keep local only)

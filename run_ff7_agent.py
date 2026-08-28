@@ -18,6 +18,14 @@ import time
 import torch
 from unsloth import FastLanguageModel
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+try:
+    from rag_retrieve import retrieve as rag_retrieve, format_context as rag_format_context
+    RAG_AVAILABLE = True
+except Exception as _rag_import_err:
+    RAG_AVAILABLE = False
+    _rag_import_error_msg = str(_rag_import_err)
+
 print("🚀 Booting your specialized FF7 Agent environment...")
 start_boot = time.time()
 
@@ -150,11 +158,34 @@ while True:
                 print("❌ [AUTOMATION]: No conversation history found in this session to harvest yet.")
             continue
 
+        # --- RAG: GROUND THE QUERY IN VENDORED RE SOURCE REPOS (if index exists) ---
+        rag_context = ""
+        if RAG_AVAILABLE:
+            try:
+                rag_hits = rag_retrieve(user_query, top_k=4)
+                rag_context = rag_format_context(rag_hits)
+                if rag_hits:
+                    print(f"📚 [RAG]: Retrieved {len(rag_hits)} grounding chunk(s) "
+                          f"from {', '.join(sorted(set(h['source'] for h in rag_hits)))}")
+            except FileNotFoundError:
+                pass  # No index built yet — proceed ungrounded.
+            except Exception as rag_err:
+                print(f"⚠️ [RAG]: Retrieval skipped due to error: {rag_err}")
+
         # --- NATIVE CHATML RUNTIME INFERENCE PASS ---
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         for role, text in chat_history[-4:]:
             if role in ["user", "assistant"]:
                 messages.append({"role": role, "content": text})
+        if rag_context:
+            messages.append({
+                "role": "user",
+                "content": (
+                    "Reference material retrieved from local reverse-engineering "
+                    "source repos (cite file:line when you use these):\n\n"
+                    f"{rag_context}"
+                ),
+            })
         messages.append({"role": "user", "content": user_query})
 
         prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
