@@ -38,6 +38,43 @@ IN_DISTRIBUTION_PROMPT = (
     "and why does PMVIE need an operand while MOVIE doesn't?"
 )
 
+# Thin-bucket probes (ISO/Mode2/burning, Ghidra/MIPS, LZS/GZIPPS compression) --
+# added after auditing bucket sizes (33/22/21 rows vs. 1000+ for opcode/CSR).
+ISO_MODE2_PROMPT_1 = (
+    "ImgBurn reports a verify failure at a given LBA/offset inside a raw "
+    "MODE2/2352 sector, but the user-data bytes are byte-identical to a "
+    "pristine reference image. What field is most likely at fault, and why "
+    "would a real PS1/PS2 drive still play the disc fine despite the verify "
+    "failure?"
+)
+ISO_MODE2_PROMPT_2 = (
+    "psx_mode2_iso.py's replace_file_padded refuses to grow a file by only a "
+    "few bytes even though ceil(old_size/2048) == ceil(new_size/2048). What "
+    "ISO9660 fields actually need updating to allow this, and why was the "
+    "original check wrong?"
+)
+GHIDRA_PROMPT_1 = (
+    "I imported FIELD.BIN into Ghidra at base address 0x80000000 and none of "
+    "my known function addresses from prior notes line up. What's wrong, and "
+    "what correction do I need to apply to every address I look up?"
+)
+GHIDRA_PROMPT_2 = (
+    "In a Ghidra decompile of a PS1 kernel executable, I see a function "
+    "reading MOVIE_ID.BIN into a fixed buffer but never indexing it by movie "
+    "id. What does this tell me about where a per-movie hardcoded behavior "
+    "(like a fixed LBA seek) is more likely to live instead?"
+)
+COMPRESSION_PROMPT_1 = (
+    "Describe the LZS ring buffer used by this engine's field/movie "
+    "compression: its size, initial fill position, and how match "
+    "offset/length are packed into the 2-byte control encoding."
+)
+COMPRESSION_PROMPT_2 = (
+    "Why can a hash-chain LZS encoder produce a stream that decompresses "
+    "correctly on PC tools but corrupts on real PS1 hardware, even though "
+    "the compressed bytes are technically valid per the format spec?"
+)
+
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
 
 ADAPTER_DIR = "ff7_coder_lora_model"
@@ -142,6 +179,12 @@ def main():
     else:
         run_prompt(model, tokenizer, "IN-DISTRIBUTION (PMVIE/MOVIE length)", IN_DISTRIBUTION_PROMPT)
         run_prompt(model, tokenizer, "OUT-OF-DISTRIBUTION (byte-walk)", OOD_PROMPT)
+        run_prompt(model, tokenizer, "ISO/MODE2 (EDC verify-fail triage)", ISO_MODE2_PROMPT_1)
+        run_prompt(model, tokenizer, "ISO/MODE2 (directory-record growth)", ISO_MODE2_PROMPT_2)
+        run_prompt(model, tokenizer, "GHIDRA (FIELD.BIN base address)", GHIDRA_PROMPT_1)
+        run_prompt(model, tokenizer, "GHIDRA (hardcode localization reasoning)", GHIDRA_PROMPT_2)
+        run_prompt(model, tokenizer, "COMPRESSION (LZS ring buffer)", COMPRESSION_PROMPT_1)
+        run_prompt(model, tokenizer, "COMPRESSION (hash-chain encoder hazard)", COMPRESSION_PROMPT_2)
 
 
 if __name__ == "__main__":

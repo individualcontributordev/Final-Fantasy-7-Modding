@@ -40,19 +40,33 @@ SOURCE_DIRS = [
 ]
 
 # File extensions worth chunking (source/docs; skip binaries, images, build junk).
+# NOTE: ".ts" here means Qt Linguist translation XML (French/Japanese/Chinese/etc.
+# UI strings), not TypeScript -- this repo has no TypeScript source. It is
+# intentionally excluded below; it carries zero RE value and was ~1400 of the
+# original 6689 chunks.
 INCLUDE_EXT = {
     ".c", ".h", ".cpp", ".hpp", ".cc", ".cxx",
-    ".py", ".js", ".ts", ".jsx", ".tsx",
+    ".py", ".js", ".jsx", ".tsx",
     ".cs", ".html", ".md", ".txt",
 }
 
+# Path substrings that mean "skip this file even if extension matches" --
+# Qt translation catalogs (UI string localization, no RE content).
+EXCLUDE_PATH_SUBSTRINGS = ("/translations/",)
+
 SKIP_DIR_NAMES = {".git", "node_modules", "build", "dist", "__pycache__", ".venv_rag", "rag_index"}
+
+# Source-tier weighting: code chunks are more likely to answer RE questions
+# than raw chat-log/discussion dumps competing for the same top_k slots.
+CODE_EXTS = {".c", ".h", ".cpp", ".hpp", ".cc", ".cxx", ".py", ".js", ".jsx", ".tsx", ".cs"}
 
 CHUNK_LINES = 60
 OVERLAP_LINES = 10
 
 
 def iter_source_files():
+    seen_stems = set()  # (dirname, basename-without-ext) already yielded, for .md/.txt dedupe
+    all_files = []
     for rel_dir in SOURCE_DIRS:
         abs_dir = os.path.join(REPO_ROOT, rel_dir)
         if not os.path.isdir(abs_dir):
@@ -66,7 +80,27 @@ def iter_source_files():
                     continue
                 abs_path = os.path.join(dirpath, fname)
                 rel_path = os.path.relpath(abs_path, REPO_ROOT)
-                yield rel_path, abs_path
+                if any(sub in rel_path.replace(os.sep, "/") for sub in EXCLUDE_PATH_SUBSTRINGS):
+                    continue
+                all_files.append((rel_path, abs_path))
+
+    # De-duplicate .md/.txt pairs that are the same content dumped twice
+    # under two extensions (e.g. "chat-log.md" + "chat-log.txt"). Prefer .md.
+    by_stem = {}
+    for rel_path, abs_path in all_files:
+        root, ext = os.path.splitext(rel_path)
+        if ext.lower() in (".md", ".txt"):
+            by_stem.setdefault(root, []).append((ext.lower(), rel_path, abs_path))
+        else:
+            yield rel_path, abs_path
+
+    for root, variants in by_stem.items():
+        exts = {v[0] for v in variants}
+        if ".md" in exts and ".txt" in exts:
+            chosen = next(v for v in variants if v[0] == ".md")
+        else:
+            chosen = variants[0]
+        yield chosen[1], chosen[2]
 
 
 def chunk_file(rel_path, abs_path):
@@ -86,11 +120,13 @@ def chunk_file(rel_path, abs_path):
         text = "".join(lines[start:end]).strip()
         if len(text) < 20:
             continue
+        ext = os.path.splitext(rel_path)[1].lower()
         yield {
             "text": text,
             "source": rel_path,
             "line_start": start + 1,
             "line_end": end,
+            "tier": "code" if ext in CODE_EXTS else "discussion",
         }
         if end == len(lines):
             break
