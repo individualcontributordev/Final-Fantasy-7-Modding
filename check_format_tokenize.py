@@ -31,8 +31,22 @@ print("Decoded (clean_up_tokenization_spaces=False):",
 print("Manual Ġ/Ċ join:", repr("".join(probe_tokens).replace("\u0120", " ").replace("\u010a", "\n")))
 try:
     print("backend decoder type:", type(tokenizer.backend_tokenizer.decoder))
+    print("backend decoder config:", tokenizer.backend_tokenizer.decoder)
 except Exception as e:
     print("backend decoder introspection failed:", e)
+try:
+    print("backend pre_tokenizer type:", type(tokenizer.backend_tokenizer.pre_tokenizer))
+    print("backend pre_tokenizer config:", tokenizer.backend_tokenizer.pre_tokenizer)
+except Exception as e:
+    print("backend pre_tokenizer introspection failed:", e)
+try:
+    print("backend normalizer type:", type(tokenizer.backend_tokenizer.normalizer))
+    print("backend normalizer config:", tokenizer.backend_tokenizer.normalizer)
+except Exception as e:
+    print("backend normalizer introspection failed:", e)
+import transformers, tokenizers
+print("transformers version:", transformers.__version__)
+print("tokenizers version:", tokenizers.__version__)
 print("============================\n")
 
 SYSTEM_PROMPT = "You are an expert PlayStation 1 and Final Fantasy VII reverse engineering model."
