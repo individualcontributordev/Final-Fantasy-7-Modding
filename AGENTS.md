@@ -10,6 +10,13 @@ not an always-on daemon.
 Consulted when relevant to the task at hand:
 - `~/Final-Fantasy-7-CSR` — workspace notes/logs, `field_maplist.py`
 - `~/Final-Fantasy-7-Modding` — this repo (active modding codebase)
+- `~/Final-Fantasy-7-RE-Archive` — historical/superseded findings, old Ghidra
+  CLI logs, script pastes (moved out of this repo to keep default context
+  lean). Each entry has a `STATUS: CONFIRMED|UNCONFIRMED|DEAD-END` header and
+  is indexed in that repo's `INDEX.md`. Only consult on request or when doing
+  deep RE history digging — never treat archive content as live ground
+  truth; use `scripts/field_pattern_finder.py` /
+  `scripts/duckstation_addr_advisor.py` and `docs/05-ghidra-guide.md` for that.
 - `~/individualcontributordev.github.io` — mod site frontend
 - `~/makoureactor` — Makou Reactor engine source (opcode/maplist ground truth)
 - `~/ff7tk` — FF7TK library source
@@ -27,6 +34,11 @@ assumed.
   happen; if no verification source was checked, the claim is flagged.
 - Unverified values are explicitly labeled **"UNVERIFIED ENGINE SPECULATION"**
   in output rather than presented as fact.
+- Before hand-deriving a field-script opcode offset or a DuckStation RAM
+  address, run `scripts/field_pattern_finder.py` / `scripts/duckstation_addr_advisor.py`
+  and use their `[CONFIRMED]`/`[UNCONFIRMED: <reason>]` tags (see
+  `scripts/README.md` "Verification contract" and
+  `docs/10-patch-workflow-cheatsheet.md`) instead of guessing by eye.
 
 ## 2. Local playtesting & binary-edit workflow
 Before writing bytes to any binary (ISO, FIELD.BIN, MOVIE_ID.BIN, etc.):
