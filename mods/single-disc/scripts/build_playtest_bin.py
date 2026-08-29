@@ -39,6 +39,14 @@ def main() -> int:
     # CANONON, because v0.1.4's LBA-250450 alias never landed first).
     movie_layer_v4 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
     movie_layer_v5 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
+    # v0.1.6 was originally FSHIP_12 ad/3 CANONHT1/CANONHT2/CANONH1P
+    # repoint+grow (~16.6MB); that content was removed 2026-08-29 as
+    # confirmed dead code (ad/3 is never REQ'd, never an autorun slot for
+    # its detected entity type, and not a line-trigger slot either -- see
+    # csr-manip-movie-whitelist.md's CANONHT "exclude-dead" entries). The
+    # v0.1.6 slot was then reused for an unrelated real bug fix: MD8_5
+    # (#731) dir/Main PMVIE id 53's LBA collision with OPENINGE.MOV's
+    # EOF-appended block, which broke the 67->731 transition movie.
     movie_layer_v6 = ROOT / "builder/single-disc-csr-manip-movies-v0.1.6/layers/disc1.layer.json"
     out_dir = ROOT / "workspace/iso-extract"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -54,7 +62,7 @@ def main() -> int:
         (core_layer, "single-disc main pack"),
         (movie_layer_v4, "manip-movies v0.1.4"),
         (movie_layer_v5, "manip-movies v0.1.5 (delta on v0.1.4)"),
-        (movie_layer_v6, "manip-movies v0.1.6 (delta on v0.1.5)"),
+        (movie_layer_v6, "manip-movies v0.1.6 (delta on v0.1.5: MD8_5 id53 fix)"),
     ]:
         if not p.is_file():
             print("MISSING", label, p, file=sys.stderr)
@@ -82,7 +90,7 @@ def main() -> int:
     apply_layer(img, json.loads(movie_layer_v5.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 
-    print("5/5 manip-movies v0.1.6 (delta: FSHIP_12 CANONHT1/CANONHT2/CANONH1P)...")
+    print("5/5 manip-movies v0.1.6 (delta: MD8_5 id53 -> fresh NRCRLB.MOV, fixes OPENINGE collision)...")
     apply_layer(img, json.loads(movie_layer_v6.read_text(encoding="utf-8")))
     print("   ", len(img), "bytes")
 

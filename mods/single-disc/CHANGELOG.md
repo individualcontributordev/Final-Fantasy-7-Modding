@@ -1,3 +1,54 @@
+## single-disc-csr-manip-movies-v0.1.6 (MD8_5 id 53 fix) — 2026-08-29
+
+**Reused the freed `v0.1.6` version slot for a real bug fix: MD8_5 (#731)
+`dir/Main` `PMVIE` id 53's `MOVIE_ID.BIN` LBA (295563) collided with
+`/MOVIE/OPENINGE.MOV`'s EOF-appended block (a leftover from the
+v0.1.4/v0.1.5 inject-restore), so the 67→731 transition movie never
+played and MD8_5's post-movie logic desynced.**
+
+- This is the fix originally shipped as a dangling `v0.1.7` manifest stub
+  (removed earlier today — see below) that depended on the now-deleted
+  `v0.1.6` CANONHT pack. Rebuilt via
+  `mods/single-disc/scripts/ship_movie_relocation_v017_mid53.py`, now
+  based directly on `single-disc-csr-manip-movies-v0.1.5`'s output
+  instead.
+- Repoints id 53 to a freshly EOF-appended copy of CSR D2's
+  `MOVIE/NRCRLB.MOV` (independent of whatever landed at LBA 295563 for
+  OPENINGE/PARASHOT), same "repoint in place" pattern as
+  `ship_movie_relocation_fship12_canonht.py`'s `repoint_id`.
+- Verified: `FIELD/MD8_5.DAT` and `FIELD/FSHIP_12.DAT` script bytes
+  unchanged; id 53 raw sector now matches CSR D2 `NRCRLB.MOV`, no longer
+  collides with `OPENINGE.MOV`'s LBA.
+- `mods/single-disc/scripts/build_playtest_bin.py`: added back step 5/5
+  applying this layer after v0.1.5. Rebuilt playtest `.bin`
+  (796,027,344 bytes) — CANONON/JAIROFAL check and LBA 250450 alias
+  check both still pass.
+
+## Removed single-disc-csr-manip-movies-v0.1.6 — 2026-08-29
+
+**Deleted the `single-disc-csr-manip-movies-v0.1.6` pack (FSHIP_12 `ad/3`
+CANONHT1/CANONHT2/CANONH1P repoint+grow, ~16.6 MB) after confirming the
+scene is dead code, not merely low-priority.**
+
+- CFG reachability + walkmesh-line-trigger audit (prompted by a question
+  about whether `LINE`/`LINON`/`LINOFF` could invoke the slot) confirmed
+  `ad/3` is never `REQ`'d, is outside its entity's autorun range (`ad`
+  type-detects as "Default": slots 0/1 only), and is not a line-trigger
+  slot either (not "Location"-typed, no `LINE` opcode on slot 0). No path
+  reaches it — see `patches/csr-manip-movie-whitelist.md`.
+- Deleted `builder/single-disc-csr-manip-movies-v0.1.6/` (layer + pack.json)
+  and its manifest entry. Also removed the `single-disc-csr-manip-movies-v0.1.7`
+  manifest entry: it was a dangling stub (`autoIncludeWhen` pointed at
+  v0.1.6; its `./single-disc-csr-manip-movies-v0.1.7/layers/disc1.layer.json`
+  was never actually built/committed) documenting an unrelated real bug
+  (MD8_5 `dir/Main` `PMVIE` id 53 colliding with `OPENINGE.MOV`'s
+  EOF-appended block) that still needs a fresh fix rebuilt directly on
+  v0.1.5's output.
+- `mods/single-disc/scripts/build_playtest_bin.py`: dropped step
+  5/5 (v0.1.6 apply); now 4 steps ending at v0.1.5. Rebuilt playtest
+  `.bin` (791,193,984 bytes, ~16.6 MB smaller) and confirmed `JAIROFAL.MOV`
+  still resolves to pristine D2 `CANONON.MOV` bytes.
+
 ## single-disc-movie-relocation-v0.1.0 — 2026-08-25
 
 **New hidden auto addon (`single-disc-movie-relocation-v0.1.0`, auto-included

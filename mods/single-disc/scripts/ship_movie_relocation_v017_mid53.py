@@ -17,8 +17,10 @@ Fix: give id 53 its own freshly EOF-appended copy of CSR D2's
 OPENINGE/PARASHOT. Same "repoint in place" pattern as
 ship_movie_relocation_fship12_canonht.py's `repoint_id`, just for one id.
 
-Base: single-disc-csr-manip-movies-v0.1.6's output (top of the current
-manip-movies layer chain), NOT the CSR base.
+Base: single-disc-csr-manip-movies-v0.1.5's output. (Originally chained on
+top of a v0.1.6 FSHIP_12/CANONHT pack; that pack was confirmed dead code
+and deleted 2026-08-29, so this fix -- a real, unrelated bug -- was
+rebuilt directly on v0.1.5's output and reclaimed the v0.1.6 version slot.)
 
 Usage (from repo root):
   python3 mods/single-disc/scripts/ship_movie_relocation_v017_mid53.py
@@ -40,9 +42,9 @@ from disc_sources import load_csr_image  # noqa: E402
 from psx_mode2_iso import SECTOR, extract_file, find_file, replace_file_within_sectors  # noqa: E402
 from inject_movies_by_disc_id import _append_raw_grow, _movie_id_meta_by_lba, _raw_sectors  # noqa: E402
 
-VERSION = "0.1.7"
+VERSION = "0.1.6"
 PACK_ID = f"single-disc-csr-manip-movies-v{VERSION}"
-PARENT_PACK = "single-disc-csr-manip-movies-v0.1.6"
+PARENT_PACK = "single-disc-csr-manip-movies-v0.1.5"
 COMPATIBLE_BASE = "csr-v0.14.2"
 
 MOVIE_ID = 53
@@ -55,18 +57,16 @@ def build_base_image(root: Path) -> bytearray:
     core_layer = root / "builder/single-disc-on-csr/layers/disc1.layer.json"
     movie_layer_v4 = root / "builder/single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
     movie_layer_v5 = root / "builder/single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
-    movie_layer_v6 = root / "builder/single-disc-csr-manip-movies-v0.1.6/layers/disc1.layer.json"
     img = bytearray(pristine.read_bytes())
     apply_layer(img, json.loads(csr_layer.read_text(encoding="utf-8")))
     apply_layer(img, json.loads(core_layer.read_text(encoding="utf-8")))
     apply_layer(img, json.loads(movie_layer_v4.read_text(encoding="utf-8")))
     apply_layer(img, json.loads(movie_layer_v5.read_text(encoding="utf-8")))
-    apply_layer(img, json.loads(movie_layer_v6.read_text(encoding="utf-8")))
     return img
 
 
 def main() -> int:
-    print("Building base image (CSR + single-disc-on-csr + manip-movies v0.1.4/5/6)...")
+    print("Building base image (CSR + single-disc-on-csr + manip-movies v0.1.4/5)...")
     base_img = build_base_image(ROOT)
     base_bytes = bytes(base_img)
     print("  base", len(base_bytes), "bytes")
@@ -124,7 +124,7 @@ def main() -> int:
     base_path = out_dir / "sd_movie_relocation_v017_mid53_base.bin"
     base_path.write_bytes(base_bytes)
 
-    print("\nBuilding delta layer (base = manip-movies v0.1.6 output)...")
+    print("\nBuilding delta layer (base = manip-movies v0.1.5 output)...")
     pack_dir = ROOT / "builder" / PACK_ID
     layer_dir = pack_dir / "layers"
     layer_dir.mkdir(parents=True, exist_ok=True)
@@ -151,7 +151,7 @@ def main() -> int:
         "name": "(auto) CSR manip movies delta",
         "blurb": (
             "D2 manip FMVs on D1 (delta pack, applies after manip-movies "
-            "v0.1.6). Fixes MD8_5 (#731) PMVIE id 53's LBA collision with "
+            "v0.1.5). Fixes MD8_5 (#731) PMVIE id 53's LBA collision with "
             "OPENINGE.MOV, which broke the 67->731 transition movie."
         ),
         "hint": "Always with Single-disc.",

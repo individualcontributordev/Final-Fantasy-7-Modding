@@ -2,7 +2,7 @@
   "id": "single-disc-csr-manip-movies-v0.1.6",
   "version": "0.1.6",
   "name": "(auto) CSR manip movies delta",
-  "blurb": "D2 manip FMVs on D1 (delta pack, applies after manip-movies v0.1.5). Fixes FSHIP_12 (#67) ad/3 CANONHT1/CANONHT2/CANONH1P movie ids (59 was OOB; 50/51 pointed at wrong D1 content), which broke the 67->731 (MD8_5) transition timing.",
+  "blurb": "D2 manip FMVs on D1 (delta pack, applies after manip-movies v0.1.5). Fixes MD8_5 (#731) PMVIE id 53's LBA collision with OPENINGE.MOV, which broke the 67->731 transition movie.",
   "hint": "Always with Single-disc.",
   "format": "ic-layer-v1",
   "compatibleBases": [
