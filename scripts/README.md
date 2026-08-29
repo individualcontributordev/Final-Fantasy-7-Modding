@@ -27,14 +27,18 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 | Verify pack stack like the site | `verify_builder_config.py` | Before publish |
 | Smoke a built disc image | `verify_built_disc.py` | Needs `APPLIED.txt` beside image |
 | **Regression suite** | `tests/` + `pytest` | Unit (no bins) + integration (CSR stack) |
-| Find opcode/byte pattern in a field script | `field_pattern_finder.py` | Tags hits `[CONFIRMED]`/`[UNCONFIRMED]` — see Verification contract |
+| Find opcode/byte pattern in a field script | `field_pattern_finder.py` | Tags hits `[CONFIRMED]`/`[UNCONFIRMED]` — see Verification contract; `--decode-fields` also prints each `--opcode` hit's named-field breakdown (via `opcode_struct_decoder.py`) |
 | Look up a RAM address/function name | `duckstation_addr_advisor.py` | Cross-checks `docs/05-ghidra-guide.md` checklist + `scripts/ghidra/*.json` |
 | Opcode struct field layouts (banks/value1/oper/jump...) | `opcode_struct_layout.py` | Library — extracted from `external/makoureactor` `Opcode.h` |
 | Decode raw opcode param bytes into named fields | `opcode_struct_decoder.py` | CLI — `--list-mismatches` cross-checks vs `ff7_opcodes.py` |
-| ff7-decomp global symbol → RAM address | `decomp_symbol_map.py` | Library — `D_<hex>`-named symbols encode their own address |
+| ff7-decomp + ffvii global symbol → RAM address | `decomp_symbol_map.py` | Library — `D_<hex>`/`func_<hex>`-named symbols encode their own address; merges `external/ff7-decomp` (gameplay) + `external/ffvii` (boot, tracks decompiled-vs-stub) |
 | Look up decomp symbol by name/address | `decomp_symbol_lookup.py` | CLI — `--addr ... --nearest` finds containing struct/array |
 | ff7-decomp struct field layouts (SaveWork, FieldEntity, ...) | `decomp_struct_layout.py` | Library — extracted from `external/ff7-decomp` headers |
 | Decode raw memory dump against a decomp struct | `decomp_struct_decoder.py` | CLI — `--symbol Savemap` anchors output to absolute RAM addresses |
+| World-map (`wmX.ev`) worldscript opcode layouts | `worldmap_opcode_layout.py` | Library — extracted from `external/ff7-landscaper`'s shipping TS opcode table; different VM than field opcodes (stack-based, 16-bit words) |
+| Look up / decode world-map opcode ids | `worldmap_opcode_lookup.py` | CLI — `--words` decodes a raw word stream; handles `CALL_FN_0..43` (0x204-0x22F) range |
+| PC-version (1998 .exe) struct field layouts | `pc_struct_layout.py` | Library — extracted from `external/ff7-chocobo`/`ff7-coaster` (`ergonomy_joe`); PC binary, not PSX — don't mix with `decomp_struct_layout.py` |
+| Decode raw memory dump against a PC struct | `pc_struct_decoder.py` | CLI — `--base` prefixes output with an absolute address if you have one |
 
 Single-disc playtest / SNOVA / movies: `mods/single-disc/scripts/` (see that mod’s README + skill `ship-single-disc`).
 
@@ -57,6 +61,30 @@ python3 -m pytest tests/ -q -m integration
 ```
 
 Integration skips cleanly when disc images are missing. Run **full** suite before publishing a new `single-disc-on-csr-v*`.
+
+### RAG index (semantic search over vendored RE repos + chat history)
+
+```bash
+# once per machine (separate from requirements-dev.txt -- pulls in torch)
+python3 -m venv .venv_rag
+.venv_rag/bin/pip install -r requirements-rag.txt
+
+# clone/update the vendored reference repos (external/, gitignored)
+bash scripts/init_external_repos.sh
+
+# rebuild the index (rare -- only after external/ repos update or new
+# source dirs are added to SOURCE_DIRS in build_rag_index.py)
+source .venv_rag/bin/activate
+python3 scripts/build_rag_index.py
+
+# query the committed index (rag_index/chunks.jsonl + embeddings.npz)
+python3 scripts/rag_retrieve.py "worldscript CALL_FN opcode encoding"
+```
+
+If `.venv_rag` doesn't exist in a fresh session, `rag_retrieve.py`/
+`build_rag_index.py` fail on `import sentence_transformers` — run the setup
+above first. The committed `rag_index/` works without rebuilding as long as
+the venv exists to embed the query.
 
 ## Quick starts
 
@@ -92,6 +120,7 @@ python3 scripts/apply_layer.py workspace/pristine/FINALFANTASY7_D1.bin \
 # Find an opcode/byte pattern in a field script (CONFIRMED/UNCONFIRMED tagged)
 python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC
 python3 scripts/field_pattern_finder.py csr:1 --field DEL1 --hex f052
+python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC --decode-fields
 
 # Check whether an address/function name is emulator-confirmed or just Ghidra auto-analysis
 python3 scripts/duckstation_addr_advisor.py 0x800AB9C8
@@ -107,6 +136,15 @@ python3 scripts/decomp_symbol_lookup.py --name Savemap
 python3 scripts/decomp_symbol_lookup.py --addr 0x8009D000 --nearest
 python3 scripts/decomp_struct_decoder.py SaveWork <hexbytes> --symbol Savemap
 python3 scripts/decomp_struct_decoder.py --list-structs
+
+# Look up / decode world-map worldscript opcodes (wm0.ev etc.)
+python3 scripts/worldmap_opcode_lookup.py --id 0x318
+python3 scripts/worldmap_opcode_lookup.py --words 0318 0005 0000
+python3 scripts/worldmap_opcode_lookup.py --list
+
+# Decode a raw memory dump against a PC-version (1998 .exe) struct
+python3 scripts/pc_struct_decoder.py VECTOR 01000000020000000300000004000000
+python3 scripts/pc_struct_decoder.py --list-structs
 ```
 
 ## Design rules (agents + humans)
@@ -123,8 +161,9 @@ CSR sibling default: `../Final-Fantasy-7-CSR` from repo root (override with env 
 
 RE tools that emit an address, opcode offset, or structure guess (currently
 `field_pattern_finder.py`, `duckstation_addr_advisor.py`,
-`opcode_struct_decoder.py`, `decomp_symbol_lookup.py`, and
-`decomp_struct_decoder.py`) MUST tag every result line with one of:
+`opcode_struct_decoder.py`, `decomp_symbol_lookup.py`,
+`decomp_struct_decoder.py`, `worldmap_opcode_lookup.py`, and
+`pc_struct_decoder.py`) MUST tag every result line with one of:
 
 - **`[CONFIRMED]`** — the value was cross-checked against a local source of
   truth: parsed directly from the target file via `field_dat.py`/

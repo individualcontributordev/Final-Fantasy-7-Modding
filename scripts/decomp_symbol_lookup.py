@@ -68,6 +68,11 @@ def cmd_stats() -> int:
     print(f"[UNCONFIRMED: no documented address] {len(unconfirmed)} named globals "
           f"(g_*, etc.) with no address in this extraction")
     print(f"total extracted: {len(syms)}")
+    funcs = [s for s in syms.values() if s.decompiled is not None]
+    if funcs:
+        done = sum(1 for s in funcs if s.decompiled)
+        print(f"[CONFIRMED] external/ffvii boot functions: {done}/{len(funcs)} have a decompiled C body "
+              f"(rest are address-only INCLUDE_ASM stubs)")
     return 0
 
 

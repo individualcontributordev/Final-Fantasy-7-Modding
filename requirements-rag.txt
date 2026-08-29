@@ -1,0 +1,14 @@
+# Deps for the RAG index (scripts/build_rag_index.py, scripts/rag_retrieve.py).
+# Separate from requirements-dev.txt because these pull in torch (large,
+# slow to install, unnecessary for anyone just running the pytest suite).
+#
+# Setup (once per machine):
+#   python3 -m venv .venv_rag
+#   .venv_rag/bin/pip install -r requirements-rag.txt
+#
+# Usage:
+#   source .venv_rag/bin/activate
+#   python3 scripts/build_rag_index.py        # rebuild the index (rare)
+#   python3 scripts/rag_retrieve.py "query"    # query the committed index
+sentence-transformers==5.1.2
+numpy==2.0.2

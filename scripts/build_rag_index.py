@@ -35,24 +35,43 @@ SOURCE_DIRS = [
     "external/ff7-decomp",
     "external/big-shoes",
     "external/FF7WorldMap",
+    "external/ffvii",
+    "external/ff7-chocobo",
+    "external/ff7-coaster",
+    "external/ff7-landscaper/src",
+    "external/ff7-landscaper/docs",
+    "external/q-gears/SupportedGames/FinalFantasy7",
+    "external/q-gears/utilities/ffvii_battle_model_exporter",
+    "external/q-gears/utilities/ffvii_battle_scene_dumper",
+    "external/q-gears/utilities/ffvii_field_dat_dumper",
+    "external/q-gears/utilities/ffvii_field_model_exporter",
+    "external/q-gears/utilities/ffvii_field_model_exporter_pc",
+    "external/q-gears/utilities/ffvii_font_exporter",
+    "external/q-gears/utilities/ffvii_sound_dumper",
+    "external/q-gears/utilities/ffvii_sound_dumper_psf",
+    "external/q-gears/utilities/flevel",
+    "external/q-gears/utilities/lzs",
+    "external/q-gears_reverse/ffvii",
     "scripts",
     "data",
 ]
 
 # File extensions worth chunking (source/docs; skip binaries, images, build junk).
-# NOTE: ".ts" here means Qt Linguist translation XML (French/Japanese/Chinese/etc.
-# UI strings), not TypeScript -- this repo has no TypeScript source. It is
-# intentionally excluded below; it carries zero RE value and was ~1400 of the
-# original 6689 chunks.
+# NOTE: ".ts" is ambiguous across our sources -- Qt Linguist translation XML
+# (French/Japanese/Chinese/etc. UI strings) in makoureactor vs. real
+# TypeScript in ff7-landscaper. Both are included below since the Qt ".ts"
+# files all live under "/translations/", which EXCLUDE_PATH_SUBSTRINGS
+# filters out regardless of extension.
 INCLUDE_EXT = {
     ".c", ".h", ".cpp", ".hpp", ".cc", ".cxx",
-    ".py", ".js", ".jsx", ".tsx",
+    ".py", ".js", ".jsx", ".ts", ".tsx",
     ".cs", ".html", ".md", ".txt",
 }
 
 # Path substrings that mean "skip this file even if extension matches" --
-# Qt translation catalogs (UI string localization, no RE content).
-EXCLUDE_PATH_SUBSTRINGS = ("/translations/",)
+# Qt translation catalogs (UI string localization, no RE content), and
+# ff7-landscaper's node_modules/lockfile noise.
+EXCLUDE_PATH_SUBSTRINGS = ("/translations/", "/node_modules/")
 
 SKIP_DIR_NAMES = {".git", "node_modules", "build", "dist", "__pycache__", ".venv_rag", "rag_index"}
 

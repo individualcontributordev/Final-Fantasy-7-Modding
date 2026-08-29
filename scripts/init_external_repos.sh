@@ -34,5 +34,11 @@ clone_or_update "https://github.com/individualcontributordev/individualcontribut
 clone_or_update "https://github.com/Xeeynamo/ff7-decomp.git" "$EXTERNAL_DIR/ff7-decomp"
 clone_or_update "https://github.com/AceZephyr/big-shoes.git" "$EXTERNAL_DIR/big-shoes"
 clone_or_update "https://github.com/AceZephyr/FF7WorldMap.git" "$EXTERNAL_DIR/FF7WorldMap"
+clone_or_update "https://github.com/Drahsid/ffvii.git" "$EXTERNAL_DIR/ffvii"
+clone_or_update "https://github.com/ergonomy-joe/ff7-chocobo.git" "$EXTERNAL_DIR/ff7-chocobo"
+clone_or_update "https://github.com/ergonomy-joe/ff7-coaster.git" "$EXTERNAL_DIR/ff7-coaster"
+clone_or_update "https://github.com/maciej-trebacz/ff7-landscaper.git" "$EXTERNAL_DIR/ff7-landscaper"
+clone_or_update "https://github.com/q-gears/q-gears.git" "$EXTERNAL_DIR/q-gears"
+clone_or_update "https://github.com/Akari1982/q-gears_reverse.git" "$EXTERNAL_DIR/q-gears_reverse"
 
 echo "==> Done. Reference repos are in $EXTERNAL_DIR (gitignored)."

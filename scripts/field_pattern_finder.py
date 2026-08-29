@@ -22,9 +22,15 @@ Examples:
   python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC
   python3 scripts/field_pattern_finder.py csr:1 --field DEL1 --hex f052
   python3 scripts/field_pattern_finder.py file:/tmp/LOST2.DAT --opcode JMPF
+  python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC --decode-fields
 
 Sides: path | pristine:N | csr:N | file:PATH (same as compare_field_dat.py).
 Env: FF7_PRISTINE_DIR, FF7_CSR_ROOT.
+
+--decode-fields (with --opcode only): pipes each hit's raw param bytes
+through opcode_struct_decoder.py and prints the named-field breakdown
+indented under the hit, so a single command gives you both "where" and
+"what's in it" instead of needing two separate tool calls.
 """
 from __future__ import annotations
 
@@ -40,6 +46,7 @@ from disc_sources import (  # noqa: E402
     load_pristine_image,
 )
 from field_dat import decode_ops, load_field_dat  # noqa: E402
+from opcode_struct_decoder import decode as decode_opcode_fields  # noqa: E402
 from psx_mode2_iso import extract_file  # noqa: E402
 
 _img_cache: dict[tuple[str, int], bytes] = {}
@@ -72,7 +79,7 @@ def resolve_dat_bytes(spec: str, field: str | None) -> tuple[bytes, str]:
     return path.read_bytes(), str(path)
 
 
-def find_opcode(fd, opcode_name: str) -> list[str]:
+def find_opcode(fd, opcode_name: str, decode_fields: bool = False) -> list[str]:
     out: list[str] = []
     for slot in fd.scripts:
         pos = 0
@@ -84,6 +91,12 @@ def find_opcode(fd, opcode_name: str) -> list[str]:
                     f"script_off=0x{pos:X} section0_off=0x{abs_off:X} "
                     f"bytes={raw.hex()}"
                 )
+                if decode_fields:
+                    # raw includes the opcode id byte at offset 0; the field
+                    # decoder expects only the param bytes after it.
+                    mnemonic = name.split(".", 1)[0]
+                    for field_line in decode_opcode_fields(mnemonic, raw[1:]):
+                        out.append(f"    {field_line}")
             pos += len(raw)
     return out
 
@@ -124,7 +137,14 @@ def main() -> int:
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--opcode", help="opcode mnemonic, e.g. MUSIC, JMPF")
     group.add_argument("--hex", help="raw byte pattern, e.g. f052")
+    ap.add_argument("--decode-fields", action="store_true",
+                     help="with --opcode: also print each hit's named-field "
+                          "breakdown via opcode_struct_decoder.py")
     args = ap.parse_args()
+
+    if args.decode_fields and not args.opcode:
+        print("error: --decode-fields requires --opcode", file=sys.stderr)
+        return 1
 
     try:
         raw, label = resolve_dat_bytes(args.source, args.field)
@@ -134,7 +154,7 @@ def main() -> int:
         return 1
 
     if args.opcode:
-        hits = find_opcode(fd, args.opcode.upper())
+        hits = find_opcode(fd, args.opcode.upper(), decode_fields=args.decode_fields)
     else:
         try:
             pattern = bytes.fromhex(args.hex)
