@@ -258,7 +258,14 @@ while True:
             continue
 
         # --- RAG: GROUND THE QUERY IN VENDORED RE SOURCE REPOS (if index exists) ---
+        # HARD GROUNDING GATE: eval showed this LoRA fabricates confident,
+        # well-formatted answers (fake opcodes, fake tools, fake file paths)
+        # when it has no real source to draw from. If retrieval finds nothing
+        # above min_score, refuse to generate freely by default -- the user
+        # must explicitly opt in to an unverified/ungrounded answer.
         rag_context = ""
+        rag_hits = []
+        rag_index_missing = False
         if RAG_AVAILABLE:
             try:
                 rag_hits = rag_retrieve(user_query, top_k=4)
@@ -267,9 +274,19 @@ while True:
                     print(f"📚 [RAG]: Retrieved {len(rag_hits)} grounding chunk(s) "
                           f"from {', '.join(sorted(set(h['source'] for h in rag_hits)))}")
             except FileNotFoundError:
-                pass  # No index built yet — proceed ungrounded.
+                rag_index_missing = True  # No index built yet.
             except Exception as rag_err:
                 print(f"⚠️ [RAG]: Retrieval skipped due to error: {rag_err}")
+
+        if RAG_AVAILABLE and not rag_index_missing and not rag_hits:
+            print("\n🚫 [GROUNDING GATE]: No verified source found in the local RAG "
+                  "index for this query (score below threshold). This LoRA has been "
+                  "observed to confidently fabricate opcodes/tools/file paths when "
+                  "ungrounded -- treat any answer here as unverified speculation.")
+            proceed = input("Generate an UNGROUNDED answer anyway? [y/N]: ").strip().lower()
+            if proceed != 'y':
+                print("❌ Generation skipped -- no verified source for this query.")
+                continue
 
         # --- NATIVE CHATML RUNTIME INFERENCE PASS ---
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
