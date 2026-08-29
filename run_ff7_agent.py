@@ -306,10 +306,21 @@ while True:
                 continue
 
         # --- NATIVE CHATML RUNTIME INFERENCE PASS ---
+        # TOPIC-BLEED FIX: observed live -- when a fresh RAG-grounded question
+        # follows an unrelated one, this 8B/r=8 LoRA anchors on the *previous*
+        # turn's topic from chat_history and answers that instead of the new
+        # question, even with correct new RAG context injected (e.g. asked
+        # about ImgBurn/EDC verify failures, answered about FIELD.BIN Ghidra
+        # base address from the prior turn). Since rag_hits being non-empty
+        # means this is a new, independently-answerable grounded question,
+        # drop prior chat_history in that case so it can't dominate the
+        # current answer. Keep history only for true follow-ups (no fresh RAG
+        # hit this turn, e.g. "can you clarify that" on the same topic).
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-        for role, text in chat_history[-4:]:
-            if role in ["user", "assistant"]:
-                messages.append({"role": role, "content": text})
+        if not rag_hits:
+            for role, text in chat_history[-4:]:
+                if role in ["user", "assistant"]:
+                    messages.append({"role": role, "content": text})
         if rag_context:
             messages.append({
                 "role": "user",
