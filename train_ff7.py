@@ -105,7 +105,16 @@ def format_prompts(batch):
     texts = []
 
     for instruction, input_data, output in zip(instructions, inputs, outputs):
-        user_content = f"{instruction}\n\nInput Context:\n{input_data}" if input_data else instruction
+        # Wording here MUST match run_ff7_agent.py's inference-time prompt
+        # construction verbatim (both the wrapper text and the single-user-
+        # turn structure), or the LoRA is trained on one prompt shape and
+        # run on another -- this was the root cause of confabulation on
+        # RAG-grounded queries (right fact, invented supporting detail).
+        user_content = (
+            f"{instruction}\n\nReference material retrieved from local "
+            f"reverse-engineering source repos (cite file:line when you use "
+            f"these):\n\n{input_data}"
+        ) if input_data else instruction
 
         # Structured with strict ChatML keys and full system persona conditioning
         messages = [
@@ -144,7 +153,10 @@ try:
         per_device_eval_batch_size = 1,
         gradient_accumulation_steps = 8,
         warmup_ratio = 0.03,
-        num_train_epochs = 3,
+        num_train_epochs = 2,  # was 3 -- 1421+ rows at r=8 overfits by epoch 3
+                                # (eval_loss climbs while train_loss keeps
+                                # dropping); load_best_model_at_end already
+                                # picks the best eval checkpoint regardless.
         learning_rate = 2e-4,
         fp16 = True,
         bf16 = False,
@@ -195,7 +207,7 @@ except Exception as e:
         per_device_eval_batch_size = 1,
         gradient_accumulation_steps = 8,
         warmup_ratio = 0.03,
-        num_train_epochs = 3,
+        num_train_epochs = 2,  # was 3 -- see SFTConfig branch above for rationale
         learning_rate = 2e-4,
         fp16 = True,
         bf16 = False,
