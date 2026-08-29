@@ -27,6 +27,8 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 | Verify pack stack like the site | `verify_builder_config.py` | Before publish |
 | Smoke a built disc image | `verify_built_disc.py` | Needs `APPLIED.txt` beside image |
 | **Regression suite** | `tests/` + `pytest` | Unit (no bins) + integration (CSR stack) |
+| Find opcode/byte pattern in a field script | `field_pattern_finder.py` | Tags hits `[CONFIRMED]`/`[UNCONFIRMED]` — see Verification contract |
+| Look up a RAM address/function name | `duckstation_addr_advisor.py` | Cross-checks `docs/05-ghidra-guide.md` checklist + `scripts/ghidra/*.json` |
 
 Single-disc playtest / SNOVA / movies: `mods/single-disc/scripts/` (see that mod’s README + skill `ship-single-disc`).
 
@@ -80,6 +82,14 @@ python3 scripts/put_field_dat.py --bin workspace/iso-extract/work.bin \
 python3 scripts/apply_layer.py workspace/pristine/FINALFANTASY7_D1.bin \
   ../Final-Fantasy-7-CSR/builder/csr-v0.14.1/layers/disc1.layer.json \
   -o workspace/iso-extract/out.bin
+
+# Find an opcode/byte pattern in a field script (CONFIRMED/UNCONFIRMED tagged)
+python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC
+python3 scripts/field_pattern_finder.py csr:1 --field DEL1 --hex f052
+
+# Check whether an address/function name is emulator-confirmed or just Ghidra auto-analysis
+python3 scripts/duckstation_addr_advisor.py 0x800AB9C8
+python3 scripts/duckstation_addr_advisor.py increment_step_id
 ```
 
 ## Design rules (agents + humans)
@@ -91,3 +101,25 @@ python3 scripts/apply_layer.py workspace/pristine/FINALFANTASY7_D1.bin \
 5. **Document discovery** — new tool → row in this table + rule/skill touch if workflow changes.
 
 CSR sibling default: `../Final-Fantasy-7-CSR` from repo root (override with env if needed).
+
+## Verification contract: CONFIRMED vs UNCONFIRMED
+
+RE tools that emit an address, opcode offset, or structure guess (currently
+`field_pattern_finder.py` and `duckstation_addr_advisor.py`) MUST tag every
+result line with one of:
+
+- **`[CONFIRMED]`** — the value was cross-checked against a local source of
+  truth: parsed directly from the target file via `field_dat.py`/
+  `ff7_opcodes.py` (ground-truth opcode tables), or matched against an
+  entry in the `docs/05-ghidra-guide.md` "Functions to identify" checklist
+  (the `- [x]` lines), which represents emulator-correlated addresses.
+- **`[UNCONFIRMED: <reason>]`** — anything else, e.g. a heuristic match from
+  Ghidra auto-analysis (`scripts/ghidra/field-functions.json`,
+  `field-symbols.json`) that has no checklist entry or emulator
+  correlation, a pattern match with no cross-reference, or a guess derived
+  by proximity/naming only. `<reason>` states *why* it isn't confirmed
+  (e.g. `no checklist entry`, `auto-analysis only, no emulator correlation`).
+
+Never print a bare address/offset without one of these tags — this is what
+lets an agent tell "verified fact" from "still needs a live DuckStation
+correlation pass" without re-deriving it each time.
