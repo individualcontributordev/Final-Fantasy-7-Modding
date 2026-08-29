@@ -350,7 +350,18 @@ while True:
         response_text = tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
 
         # Cleanly strip leading DeepSeek internal reasoning traces to prevent terminal leakage
+        _pre_strip = response_text
         response_text = re.sub(r"^.*?<\/think>\s*", "", response_text, flags=re.DOTALL).strip()
+
+        # DIAGNOSTIC: if stripping the <think> block leaves nothing (model spent
+        # its whole budget reasoning, or hit EOS right after </think>), fall back
+        # to showing the raw pre-strip text instead of silently printing nothing --
+        # an empty "🤖 Agent:" with no error was masking this failure mode.
+        if not response_text and _pre_strip:
+            print("\n⚠️ [DIAGNOSTIC]: Response was empty after </think> stripping. "
+                  "Raw pre-strip generation follows (likely ran out of tokens while "
+                  "still reasoning, or emitted EOS immediately after </think>):")
+            response_text = _pre_strip.strip()
 
         print(f"\n🤖 Agent:\n{response_text}")
         print(f"⏱️ [INFERENCE TIME]: Agent response generated in {elapsed_inference:.2f} seconds.")
