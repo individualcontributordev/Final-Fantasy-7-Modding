@@ -29,6 +29,12 @@ Each script: one job, `--help`, docstring with when/why. Libraries have no CLI.
 | **Regression suite** | `tests/` + `pytest` | Unit (no bins) + integration (CSR stack) |
 | Find opcode/byte pattern in a field script | `field_pattern_finder.py` | Tags hits `[CONFIRMED]`/`[UNCONFIRMED]` — see Verification contract |
 | Look up a RAM address/function name | `duckstation_addr_advisor.py` | Cross-checks `docs/05-ghidra-guide.md` checklist + `scripts/ghidra/*.json` |
+| Opcode struct field layouts (banks/value1/oper/jump...) | `opcode_struct_layout.py` | Library — extracted from `external/makoureactor` `Opcode.h` |
+| Decode raw opcode param bytes into named fields | `opcode_struct_decoder.py` | CLI — `--list-mismatches` cross-checks vs `ff7_opcodes.py` |
+| ff7-decomp global symbol → RAM address | `decomp_symbol_map.py` | Library — `D_<hex>`-named symbols encode their own address |
+| Look up decomp symbol by name/address | `decomp_symbol_lookup.py` | CLI — `--addr ... --nearest` finds containing struct/array |
+| ff7-decomp struct field layouts (SaveWork, FieldEntity, ...) | `decomp_struct_layout.py` | Library — extracted from `external/ff7-decomp` headers |
+| Decode raw memory dump against a decomp struct | `decomp_struct_decoder.py` | CLI — `--symbol Savemap` anchors output to absolute RAM addresses |
 
 Single-disc playtest / SNOVA / movies: `mods/single-disc/scripts/` (see that mod’s README + skill `ship-single-disc`).
 
@@ -90,6 +96,17 @@ python3 scripts/field_pattern_finder.py csr:1 --field DEL1 --hex f052
 # Check whether an address/function name is emulator-confirmed or just Ghidra auto-analysis
 python3 scripts/duckstation_addr_advisor.py 0x800AB9C8
 python3 scripts/duckstation_addr_advisor.py increment_step_id
+
+# Decode a field-script opcode's raw param bytes into named fields
+python3 scripts/opcode_struct_decoder.py IFUB 0102030405
+python3 scripts/opcode_struct_decoder.py --list-mismatches
+
+# Look up a ff7-decomp global by name/address, and decode a memory dump
+# against a decomp struct (e.g. the savemap at 0x8009C6E4)
+python3 scripts/decomp_symbol_lookup.py --name Savemap
+python3 scripts/decomp_symbol_lookup.py --addr 0x8009D000 --nearest
+python3 scripts/decomp_struct_decoder.py SaveWork <hexbytes> --symbol Savemap
+python3 scripts/decomp_struct_decoder.py --list-structs
 ```
 
 ## Design rules (agents + humans)
@@ -105,8 +122,9 @@ CSR sibling default: `../Final-Fantasy-7-CSR` from repo root (override with env 
 ## Verification contract: CONFIRMED vs UNCONFIRMED
 
 RE tools that emit an address, opcode offset, or structure guess (currently
-`field_pattern_finder.py` and `duckstation_addr_advisor.py`) MUST tag every
-result line with one of:
+`field_pattern_finder.py`, `duckstation_addr_advisor.py`,
+`opcode_struct_decoder.py`, `decomp_symbol_lookup.py`, and
+`decomp_struct_decoder.py`) MUST tag every result line with one of:
 
 - **`[CONFIRMED]`** — the value was cross-checked against a local source of
   truth: parsed directly from the target file via `field_dat.py`/
