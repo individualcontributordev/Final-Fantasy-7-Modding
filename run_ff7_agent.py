@@ -46,6 +46,23 @@ print("🧠 Applying custom fine-tuned Final Fantasy VII adapters...")
 model.load_adapter("ff7_coder_lora_model")
 FastLanguageModel.for_inference(model)
 
+# TOKENIZER FIX (huggingface/transformers#45488): see train_ff7.py for full
+# explanation. transformers v5's LlamaTokenizer.__init__ overwrites
+# tokenizer.json's real ByteLevel pre_tokenizer/decoder with a broken
+# Metaspace pipeline, causing every space to be dropped during encode and
+# Ġ/Ċ raw-BPE-token leakage during decode. Must be patched here too, not
+# just in eval_greedy_test.py/train_ff7.py, or every decoded response in
+# this interactive loop comes out fused/leaked like "ĊĊToĠfixĠthe...".
+from tokenizers import Tokenizer as _RawTokenizer
+_raw_tok = _RawTokenizer.from_pretrained("unsloth/DeepSeek-R1-Distill-Llama-8B")
+tokenizer.backend_tokenizer.pre_tokenizer = _raw_tok.pre_tokenizer
+tokenizer.backend_tokenizer.decoder = _raw_tok.decoder
+_probe_ids = tokenizer("You are an expert", add_special_tokens=False).input_ids
+assert tokenizer.decode(_probe_ids) == "You are an expert", (
+    "Tokenizer pre_tokenizer/decoder patch failed -- fused-word bug still present!"
+)
+print("✅ Tokenizer pre_tokenizer/decoder patched (ByteLevel restored, Metaspace bug fixed).")
+
 print(f"✔ Specialized FF7 brain loaded natively into VRAM in {time.time() - start_boot:.2f} seconds.")
 
 # 3. System Prompt Persona (Strictly matches train_ff7.py distribution to avoid token drift)
@@ -317,6 +334,10 @@ while True:
                 input_ids=inputs.input_ids,
                 attention_mask=inputs.attention_mask,
                 max_new_tokens=512,
+                do_sample=True,  # was missing -- temperature/top_p are no-ops
+                                 # under HF's default do_sample=False (greedy),
+                                 # which is one candidate cause of identical
+                                 # output across different prompts/contexts.
                 temperature=0.6,
                 top_p=0.95,
                 use_cache=True
