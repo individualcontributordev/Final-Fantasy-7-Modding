@@ -321,16 +321,24 @@ while True:
             for role, text in chat_history[-4:]:
                 if role in ["user", "assistant"]:
                     messages.append({"role": role, "content": text})
+
+        # TRAIN/INFERENCE SHAPE MATCH: train_ff7.py's format_prompts() builds
+        # exactly ONE user turn as "{instruction}\n\nReference material
+        # retrieved...\n\n{input}". Previously this appended the RAG context
+        # as a SEPARATE, PRIOR user message, producing two consecutive
+        # "user" turns the LoRA never saw during training -- a second,
+        # independent cause of the confabulation symptom (right base fact,
+        # invented supporting detail) alongside the tokenizer/sampling bugs.
+        # Must stay byte-for-byte identical to train_ff7.py's wrapper text.
         if rag_context:
-            messages.append({
-                "role": "user",
-                "content": (
-                    "Reference material retrieved from local reverse-engineering "
-                    "source repos (cite file:line when you use these):\n\n"
-                    f"{rag_context}"
-                ),
-            })
-        messages.append({"role": "user", "content": user_query})
+            user_content = (
+                f"{user_query}\n\nReference material retrieved from local "
+                f"reverse-engineering source repos (cite file:line when you "
+                f"use these):\n\n{rag_context}"
+            )
+        else:
+            user_content = user_query
+        messages.append({"role": "user", "content": user_content})
 
         prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
         inputs = tokenizer([prompt], return_tensors="pt").to("cuda")
