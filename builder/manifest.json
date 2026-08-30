@@ -402,27 +402,6 @@
       "version": "0.2.0"
     },
     {
-      "id": "field-encounter-on-csr-0-v0.2.0",
-      "name": "Field Random Encounters \u2014 Off (0%) (on CSR) v0.2.0",
-      "kind": "mod",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-0-v0.2.0/layers/disc1.layer.json",
-        "2": "./field-encounter-on-csr-0-v0.2.0/layers/disc2.layer.json",
-        "3": "./field-encounter-on-csr-0-v0.2.0/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
-      "version": "0.2.0"
-    },
-    {
       "id": "field-encounter-on-highwind-0-v0.2.0",
       "name": "Field Random Encounters \u2014 Off (0%) (on Highwind) v0.2.0",
       "kind": "mod",
@@ -457,27 +436,6 @@
         "1": "./world-encounter-0-v0.2.0/layers/disc1.layer.json",
         "2": "./world-encounter-0-v0.2.0/layers/disc2.layer.json",
         "3": "./world-encounter-0-v0.2.0/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
-      "version": "0.2.0"
-    },
-    {
-      "id": "world-encounter-on-csr-0-v0.2.0",
-      "name": "World Random Encounters \u2014 Off (0%) (on CSR) v0.2.0",
-      "kind": "mod",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-0-v0.2.0/layers/disc1.layer.json",
-        "2": "./world-encounter-on-csr-0-v0.2.0/layers/disc2.layer.json",
-        "3": "./world-encounter-on-csr-0-v0.2.0/layers/disc3.layer.json"
       },
       "enabled": true,
       "rate": 0,
@@ -1177,6 +1135,154 @@
       "autoIncludeWhen": {
         "addonSelected": "single-disc-csr-manip-movies-v0.1.5"
       }
+    },
+    {
+      "id": "field-encounter-on-csr-0-v0.2.0",
+      "name": "Field Random Encounters \u2014 Off (0%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "field-encounter-on-csr-25-v0.2.0",
+      "name": "Field Random Encounters \u2014 Light (25%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "Fewer random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-25-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)"
+    },
+    {
+      "id": "field-encounter-on-csr-50-v0.2.0",
+      "name": "Field Random Encounters \u2014 Standard (50%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "Moderate random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-50-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)"
+    },
+    {
+      "id": "field-encounter-on-csr-75-v0.2.0",
+      "name": "Field Random Encounters \u2014 Dense (75%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "More random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-75-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)"
+    },
+    {
+      "id": "world-encounter-on-csr-0-v0.2.0",
+      "name": "World Random Encounters \u2014 Off (0%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-0-v0.2.0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-0-v0.2.0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-0-v0.2.0/layers/disc3.layer.json"
+      },
+      "enabled": true,
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "world-encounter-on-csr-25-v0.2.0",
+      "name": "World Random Encounters \u2014 Light (25%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "Fewer random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-25-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Light (25%)"
+    },
+    {
+      "id": "world-encounter-on-csr-50-v0.2.0",
+      "name": "World Random Encounters \u2014 Standard (50%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "Moderate random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-50-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Standard (50%)"
+    },
+    {
+      "id": "world-encounter-on-csr-75-v0.2.0",
+      "name": "World Random Encounters \u2014 Dense (75%) (on CSR) v0.2.0",
+      "kind": "mod",
+      "blurb": "More random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-75-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Dense (75%)"
     }
   ],
   "bases": [],

@@ -7,7 +7,7 @@
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
-    "csr-v0.14.1"
+    "csr-v0.14.2"
   ],
   "discs": {
     "1": "./layers/disc1.layer.json",
