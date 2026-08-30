@@ -21,15 +21,15 @@ Players never see this repo’s RE trail. They only get packs on https://individ
 | **VA alignment** | Ghidra import base must match DuckStation PCs (`FIELD` @ `0x800A0000`). | [05](05-ghidra-guide.md) |
 | **Pristine vault** | Never open masters in CDmage; only copies under `workspace/iso-extract/`. | [02](02-disc-format.md) |
 | **Stack bases** | Add-ons diff against **clean** or a **CSR base id**, not an arbitrary mashup. | root README, CSR Pages manifest |
-| **Builder contract** | `ic-layer-v1`, `compatibleBases`, `exclusiveGroup`, short blurbs. | `.agents/rules/builder-packs.mdc` |
+| **Builder contract** | `ic-layer-v1`, `compatibleBases`, `exclusiveGroup`, short blurbs. | [docs/reference/layer-engineering.md](reference/layer-engineering.md) |
 | **Hardware bar** | DuckStation → MiSTer PSX → burn/PS2; EDC on real discs. | [07](07-hardware-burn.md), [03](03-environment-setup.md) |
 
 ## Research loop (Agent + human)
 
 1. **State the behavior** in one sentence (e.g. “fewer random field battles, Lure still works”).
 2. **Pick the file** — engine (`FIELD.BIN` / `WORLD.BIN`) vs per-map data (Makou `.DAT`). Many “game feel” mods need the engine. **Makou FIELD packs / CSR+ scenes → Final-Fantasy-7-CSR** (`ship-makou-addon`, `ship-csr-plus-scene`); continue here only for engine/RE work.
-3. **One RE task** — chat steps + `docs/INSTRUCTIONS.md` COPY-PASTE/EVIDENCE (see `.agents/rules/agent-human-workflow.mdc`).
-4. **Record findings** — `docs/findings/YYYY-MM-DD-slug.md` immediately; promote confirmed facts to `docs/0N-*.md`.
+3. **One RE task at a time** — verify each claim (bytes, source, or a live emulator test) before moving to the next.
+4. **Record findings** — write down offsets/bytes/results as you go; promote confirmed facts into the relevant `docs/0N-*.md`.
 5. **Prototype the smallest patch** — prefer in-place stubs over huge caves; keep dual `jal`s / call sites intact unless proven safe.
 6. **Inject + playtest** — [04-workflow.md](04-workflow.md); DuckStation Safe Mode → **MiSTer PSX** for high-confidence logic → burn/PS2 for optical ([07-hardware-burn.md](07-hardware-burn.md)).
 7. **Freeze stub bytes** under `mods/<mod>/patches/` when shipping.
@@ -76,7 +76,6 @@ Living list — add a row when a capability is **repeatably** usable (see skill 
 |------------|-------|--------|
 | Field encounter density packs (Light/Standard/Dense) on clean + CSR bases | 2026-07 | `mods/field-random-encounters/`, root README |
 | Browser `ic-layer-v1` shipping (no PPF) | 2026-07 | builder Pages CDN |
-| Agent↔human RE loop via `INSTRUCTIONS.md` | 2026-07 | `.agents/rules/agent-human-workflow.mdc` |
 | Ghidra FIELD import aligned @ `0x800A0000` with DuckStation | 2026-07 | `docs/05-ghidra-guide.md` |
 | Scripted on-base Field pack build (`build_on_base` / `build_all_rates`) | 2026-07 | `ship-field-encounters` skill |
 | Hardware burn checklist (PS2 MechaPwn / MODE2 cue) | 2026-07 | `docs/07-hardware-burn.md` |
@@ -90,4 +89,5 @@ Living list — add a row when a capability is **repeatably** usable (see skill 
 
 ## Keep the process honest
 
-When RE gets faster or a new surface opens, update **this doc** and the agent skills in the same session — do not leave breakthroughs only in chat or a single finding. Rule: `.agents/rules/evolve-re-process.mdc`.
+When RE gets faster or a new surface opens, update **this doc** in the same
+session — do not leave breakthroughs undocumented.

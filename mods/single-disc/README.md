@@ -32,7 +32,6 @@ CSR+ Hojo/COTA/endgame packs now include disc1 layers. Apply order: CSR, Single-
 1. **now:** single-disc for **CSR+ stacks** and **Highwind** (Ask + field movie trims + SNOVA; no FMV file copies)
 2. **later:** CSR base alone + manip-movie pack (whitelist only; watch ~93 MB free on 80-min CD)
    - Working list: mods/single-disc/patches/csr-manip-movie-whitelist.md
-   - Operator task: docs/INSTRUCTIONS.md (inventory only; no inject yet)
 
 
 Players: https://individualcontributor.dev/builder/
@@ -50,7 +49,7 @@ Delta packs (`v0.1.26`+) are internal auto layers for size/hotfix; squash into o
 | Supernova | D3 SNOVA raw-copy + BATTLE.X LBA remap | DS PASS |
 | Combined work bin | Makou then inject once | DS PASS |
 | Wrong D2/D3 FMVs | Leave MOVIE vanilla (wrong clip OK) | intentional |
-| Console | See docs/INSTRUCTIONS.md smoke | pending |
+| Console | See docs/07-hardware-burn.md smoke checklist | pending |
 
 Engine FIELD MOVIE/DSKCG opcode stubs are abandoned (intro/disc-change softlocks).
 
@@ -110,8 +109,8 @@ Script refuses double inject. Restore bak or restart from step 1 if needed.
 
 ### 5. Optional console smoke
 
-See root docs/INSTRUCTIONS.md (console section) and docs/07-hardware-burn.md.
-New sectors need EDC repair before optical burn; MiSTer/FILE may differ.
+See docs/07-hardware-burn.md. New sectors need EDC repair before optical
+burn; MiSTer/FILE may differ.
 
 ### 6. Optional: build builder layer (dev)
 

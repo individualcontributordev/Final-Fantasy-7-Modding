@@ -4,7 +4,7 @@ A sequenced path through this repo's existing docs for someone who has never
 touched the project, ending with the ability to independently RE a new
 engine behavior and ship it as a builder pack. Every module below is an
 **existing doc** unless marked **(new)** — this page is the index/order, not
-a duplicate of their content, per `.agents/rules/keep-repo-succinct.mdc`.
+a duplicate of their content.
 
 ## Prerequisites
 
@@ -39,8 +39,7 @@ it without relying on xrefs (they're often empty on MIPS `lui`/`addiu` pairs).
 
 | Read | Why |
 |---|---|
-| `.agents/rules/verified-reference-evidence.mdc` | The standard every claim in this repo must meet: bytes, source, or live test |
-| `docs/reference/verifying-makou-with-ghidra.md` **(new)** | Worked example of applying that standard — how a real "hardcoded LBA" hallucination was caught and overturned using Makou Reactor source + raw bytes, and why even that wasn't enough without a single-variable live test |
+| `docs/reference/verifying-makou-with-ghidra.md` | Worked example of the evidence standard every claim in this repo must meet (bytes, source, or a live test) — how a real "hardcoded LBA" hallucination was caught and overturned using Makou Reactor source + raw bytes, and why even that wasn't enough without a single-variable live test |
 
 **Exercise:** pick any claim in `docs/reference/INDEX.md` and independently
 re-derive it from raw bytes or Makou source, without reading the finding
@@ -76,7 +75,7 @@ opcode from any `FIELD/*.DAT` file, then resolve its filename via
 | Read | Why |
 |---|---|
 | `docs/07-hardware-burn.md` | MiSTer PSX as a pre-burn behavioral gate; PS2 MechaPwn burn checklist |
-| `docs/findings/2026-07-30-verify-built-disc-stacking.md` | Why a built zip must be smoke-tested against `APPLIED.txt`, not re-derived config |
+| `docs/08-engineer-build-guide.md` "Smoke-test a zip" section | Why a built zip must be smoke-tested against `APPLIED.txt`, not re-derived config |
 
 **Exercise:** run `scripts/verify_built_disc.py` against any recent
 downloaded builder-site output and confirm it passes.
@@ -85,14 +84,12 @@ downloaded builder-site output and confirm it passes.
 
 | Read | Why |
 |---|---|
-| `.agents/skills/record-findings/SKILL.md` | When/how to write a `docs/findings/*.md` entry |
-| `docs/findings/README.md` | Index format and how findings supersede each other |
-| `docs/06-new-mod-research.md` "Capabilities unlocked" table | How a repeatable new capability gets promoted from a one-off finding into living process docs |
+| `docs/06-new-mod-research.md` "Capabilities unlocked" table | How a repeatable new capability gets promoted from a one-off discovery into living process docs |
 
-**Exercise:** pick an open follow-up from any recent finding (e.g.
-`docs/findings/2026-08-24-csr-movie-reachability-scan.md`'s follow-ups list)
-and write the finding entry for your own investigation of it, meeting the
-evidence-class standard from Module 3.
+**Exercise:** pick an unresolved question about the engine, investigate it
+using the tools from Modules 1-4, and write up what you found (offsets,
+bytes, test result) in your own notes, meeting the evidence-class standard
+from Module 3.
 
 ## Capstone project
 
@@ -106,7 +103,7 @@ exactly how `mods/field-random-encounters/` was originally built.
 
 | Topic | Doc |
 |---|---|
-| Single-disc-specific field/movie conflict resolution | `mods/single-disc/`, rule `single-disc-fields.mdc`, skill `ship-single-disc` |
+| Single-disc-specific field/movie conflict resolution | `mods/single-disc/README.md` |
 | PSX RAM address lookup | `docs/reference/ff7-psx-memory/` |
 | Ghidra metadata automation (headless CLI) | `docs/06-ghidra-automation.md` |
 | Disc-transition-specific debugging session log | `docs/reference/disc-transition-knowledge-base.md` |
