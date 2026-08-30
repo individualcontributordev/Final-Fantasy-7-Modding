@@ -138,7 +138,8 @@ this via a manifest file (`mods/single-disc/patches/csr-manip-movie-seed.txt`).
 | MOVIE_ID.BIN row = 20 bytes LE, offsets above | confirmed | bytes, used successfully by shipped tooling |
 | Sorted-dir-order ≠ PMVIE id | confirmed | bytes, 61/61 mismatch on CSR D2 |
 | CANONON/LOSLAKE1 needs absolute LBA (not table-only) | confirmed | live test on pristine D2, `2026-08-24-canonon-hardcode-clean-room-reverification.md` + `2026-08-05-loslake1-cdrom-d1-vs-d2.md` |
-| Whether *other* engine paths ever bypass the table | open | only PMVIE id 47 (CANONON) has been live-tested |
+| Post-final-battle ending sequence needs ENDING01/ENDING3E/ENDING2E at their D3 absolute LBAs (163608/172631/197242) | confirmed | live DuckStation playtest, 2026-08-30. `dslogs.txt` capture showed `Setloc` to MSF 43:51:67 = LBA 197242 (ENDING2E's D3 start) mid-sequence; a build with only ENDING01 aliased played a corrupted fragment of whatever D1 file occupied LBA 197242 instead. Restoring all three + relocating ~24 colliding D1 MOVIE/ files to EOF fixed it (`alias_d3_ending_lbas_on_d1.py` commit `6fe0cce`). |
+| Whether *other* engine paths ever bypass the table | open | only PMVIE id 47 (CANONON) and the ending sequence (id25/26/29) have been live-tested |
 
 ## Sources
 
