@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
-"""Place the Disc 3 ENDING01 stream at its Disc 3 absolute LBA on a D1 image.
+"""Place a Disc 3 ending stream at its Disc 3 absolute LBA on a D1 image.
 
-Post-final-battle LAS4_0 seeks ENDING01 at MSF 36:23:33 = ISO LBA 163608
-(the Disc 3 file start). Grown end-of-disc LBAs in MOVIE_ID alone are ignored
-for this path (seek fails → black silence). Same class of fix as CANONON @250450.
+Post-final-battle sequence issues a hardcoded Setloc to MSF 43:51:67 = ISO
+LBA 197242 -- ENDING2E.MOV's D3 file start. CONFIRMED via a full DuckStation
+capture (save-state -> 4 boss fights -> ending, 2026-08-30 dslogs.txt): no
+Setloc to ENDING01's LBA (163608) or ENDING3E's LBA (172631) ever fires in
+this trigger path; the *only* ending-related seek is the single jump to
+197242. Grown end-of-disc LBAs in MOVIE_ID alone are ignored for this path
+(seek fails / decodes whatever D1 file physically occupies that LBA). Same
+class of fix as CANONON @250450.
 
 Writes full MODE2/2352 sectors from pristine D3, retargets the chosen D1
 MOVIE/ dirent, and sets the MINT/MOVIE_ID.BIN row to Disc 3 LBA + size/aux.
@@ -13,12 +18,6 @@ D3 range is relocated to free space at EOF and its dirent/MOVIE_ID updated
 (see RELOCATE_NAMES). Splicing those files back in afterward at their
 original LBAs would punch holes into the newly written ending stream and
 corrupt playback.
-
-NOTE: ENDING2E.MOV (D3 LBA 197242) and ENDING3E.MOV (D3 LBA 172631) are also
-CONFIRMED hardcoded-LBA targets in the same post-final-battle sequence (see
-docs/reference/movie-system.md) -- omitting them reproduces the corrupted
-playback this script exists to fix. They are excluded from JOBS anyway per
-explicit user request; see the JOBS comment below before re-adding them.
 
   python3 mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py \\
     --d1 workspace/iso-extract/ff7_d1_playtest_ending_test.bin --in-place
@@ -61,22 +60,19 @@ from psx_mode2_iso import (  # noqa: E402
 #
 # id23/ONTRAIN.MOV removed 2026-08-24: user requested removal for testing.
 #
-# id26/ENDING3E.MOV and id29/ENDING2E.MOV: CONFIRMED via live DuckStation
-# playtest (2026-08-30, dslogs.txt) that the post-final-battle sequence needs
-# all three D3 ending streams at their D3 absolute LBAs -- the engine issues
-# Setloc to MSF 43:51:67 = LBA 197242 (ENDING2E.MOV's D3 start, MOVIE_ID row
-# 29) partway through the sequence, not just ENDING01's (row 25, LBA 163608).
-# A build with only ENDING01 restored plays a corrupted fragment of whatever
-# D1 file occupies LBA 197242 (was NVLMK.MOV) instead of ENDING2E.
+# 2026-08-30 (2nd log capture, ENDING01-only build): a full dslogs.txt
+# spanning save-state -> 4 boss fights -> ending shows NO Setloc to
+# 36:23:33/LBA 163608 (ENDING01's D3 start) anywhere in the log. The *only*
+# ending-related Setloc that ever fires is a single jump straight to MSF
+# 43:51:67 = LBA 197242 -- ENDING2E.MOV's D3 start (MOVIE_ID row 29). The
+# previously assumed "ENDING01 -> ENDING3E -> ENDING2E" chain does not
+# happen for this trigger; ENDING01/ENDING3E are never sought at all.
 #
-# Deliberately excluded anyway per explicit user request (final decision,
-# repeated 2026-08-30): user only wants ENDING01.MOV -> SMK.STR in the build,
-# accepting the known ending-sequence corruption as a tradeoff (image-size /
-# scope reasons). Do not re-add ENDING2E/ENDING3E without a new explicit
-# request even though they are the technically-correct fix -- this has been
-# asked and reverted multiple times.
+# This means aliasing ENDING01 was a red herring for this corruption --
+# the only file that needs to be physically present at its D3 LBA is
+# ENDING2E. Switched JOBS accordingly per explicit user request.
 JOBS = (
-    (25, "ENDING01.MOV", "SMK.STR"),
+    (29, "ENDING2E.MOV", "MONITOR.STR"),
 )
 
 PRISTINE_D3 = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
@@ -170,8 +166,8 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
     blob3 = extract_file(d3, "MINT/MOVIE_ID.BIN")
     notes: list[str] = []
 
-    # Relocation stays generic over JOBS (currently just ENDING01, LBA
-    # 163608..172630) so any D1 MOVIE/ file physically overlapping that
+    # Relocation stays generic over JOBS (currently just ENDING2E, LBA
+    # 197242..277345) so any D1 MOVIE/ file physically overlapping that
     # range gets moved to free space at EOF first instead of being clobbered
     # by the raw write below.
     ranges = []
@@ -206,7 +202,7 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
         img.extend(b"\x00" * (SECTOR - (len(img) % SECTOR)))
     # Relocation + the raw D3 write can grow the image past the PVD's
     # original volume space size. Update it so the ISO9660 driver doesn't
-    # treat the new EOF sectors (relocated MOVIE/ files, ENDING01) as past
+    # treat the new EOF sectors (relocated MOVIE/ files, ENDING2E) as past
     # end-of-disc and refuse to read them.
     new_nsectors = len(img) // SECTOR
     old_nsectors = _u32_le(_user(img, 16), 80)
