@@ -20,9 +20,21 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_layer import apply_layer  # noqa: E402
 from psx_mode2_iso import extract_file, find_file  # noqa: E402
+from validate_manifest import validate as validate_manifest  # noqa: E402
+from check_movie_id_collisions import check as check_movie_id_collisions  # noqa: E402
 
 
 def main() -> int:
+    print("0/5 validating builder/manifest.json...")
+    manifest_path = ROOT / "builder/manifest.json"
+    manifest_errors = validate_manifest(manifest_path)
+    if manifest_errors:
+        print(f"FAIL: {manifest_path} is invalid ({len(manifest_errors)} error(s))", file=sys.stderr)
+        for e in manifest_errors:
+            print(f"  - {e}", file=sys.stderr)
+        return 4
+    print("    manifest OK")
+
     pristine = ROOT / "workspace/pristine/FINALFANTASY7_D1.bin"
     d2 = ROOT / "workspace/pristine/FINALFANTASY7_D2.bin"
     csr_layer = ROOT.parent / "Final-Fantasy-7-CSR/builder/csr-v0.14.2/layers/disc1.layer.json"
@@ -120,6 +132,14 @@ def main() -> int:
         return 3
     print("LBA250450 raw Form2 sector0 == D2 CANONON OK")
 
+    print("Checking MINT/MOVIE_ID.BIN for LBA collisions...")
+    collision_errors = check_movie_id_collisions(bytes(img))
+    if collision_errors:
+        print(f"FAIL: {len(collision_errors)} movie id LBA collision(s) found", file=sys.stderr)
+        for e in collision_errors:
+            print(f"  - {e}", file=sys.stderr)
+        return 5
+    print("    no movie id LBA collisions")
 
     out_bin.write_bytes(img)
     out_cue.write_text(
