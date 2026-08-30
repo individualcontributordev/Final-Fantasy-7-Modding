@@ -364,3 +364,64 @@ def load_field_dat(data: bytes, path: str | None = None) -> FieldDat:
 
 def load_field_dat_path(path: Path) -> FieldDat:
     return load_field_dat(path.read_bytes(), str(path))
+
+
+# ---------------------------------------------------------------------------
+# Section 4 (INF): gateway/trigger-line records.
+#
+# Ground truth: makoureactor/src/core/field/InfFile.h (struct InfData /
+# Exit / Trigger) and InfFile.cpp::open() (size check: 740 bytes with
+# occidental arrow fields, 536 bytes without). Layout verified byte-by-byte
+# below; do not hand-adjust offsets without re-checking against InfFile.h.
+#
+#   offset 0   name[9] + control[1]                         = 10
+#   offset 10  cameraFocusHeight (i16)                       = 2   -> 12
+#   offset 12  camera_range (4x i16)                         = 8   -> 20
+#   offset 20  bg_layer1..4_flag (4x u8)                     = 4   -> 24
+#   offset 24  bg_layer3/4 width/height (4x i16)             = 8   -> 32
+#   offset 32  bg_layer3/4 x/y_related (4x i16)              = 8   -> 40
+#   offset 40  bg_layer3/4 x/y_multiplier_related (4x i16)   = 8   -> 48
+#   offset 48  unused[8]                                     = 8   -> 56
+#   offset 56  doors[12]  (Exit, 24 bytes each)               = 288 -> 344
+#   offset 344 triggers[12] (Trigger, 16 bytes each)          = 192 -> 536
+#   offset 536 display_arrow[12] (occidental only)            = 12  -> 548
+#   offset 548 arrows[12] (Arrow, 16 bytes each, occidental)  = 192 -> 740
+_INF_DOORS_OFF = 56
+_INF_EXIT_SIZE = 24  # exit_line[2] Vertex_s(6B) + destination Vertex_s(6B) + fieldID(u16) + 4x u8
+_INF_NUM_DOORS = 12
+_INF_TRIGGERS_OFF = _INF_DOORS_OFF + _INF_EXIT_SIZE * _INF_NUM_DOORS  # 344
+_INF_TRIGGER_SIZE = 16
+_INF_NUM_TRIGGERS = 12
+
+
+@dataclass
+class Exit:
+    """A walk-through-a-doorway field transition ("gateway"). Triggered when
+    the player crosses exit_line while walking; jumps to fieldID at
+    destination (Makou Reactor calls this section 'Gateways')."""
+
+    index: int
+    field_id: int
+    dest_x: int
+    dest_y: int
+    dest_z: int
+    dir: int
+
+
+def parse_inf_doors(inf_section: bytes) -> list[Exit]:
+    """Parse section 4 (INF) door/gateway records. Returns [] if the section
+    is missing/too short (some minimal fields, e.g. black-background utility
+    maps, may not carry a full 536/740-byte INF block)."""
+    doors: list[Exit] = []
+    if len(inf_section) < _INF_TRIGGERS_OFF:
+        return doors
+    for i in range(_INF_NUM_DOORS):
+        off = _INF_DOORS_OFF + i * _INF_EXIT_SIZE
+        if off + _INF_EXIT_SIZE > len(inf_section):
+            break
+        # exit_line[2] (12 bytes) skipped -- only destination matters here.
+        dest_x, dest_y, dest_z, field_id, dir_ = struct.unpack_from(
+            "<hhhHB", inf_section, off + 12
+        )
+        doors.append(Exit(i, field_id, dest_x, dest_y, dest_z, dir_))
+    return doors
