@@ -30,11 +30,11 @@ Sides: path | pristine:N | csr:N | file:PATH (same as compare_field_dat.py).
 A bare path combined with --field/--field-id is treated as a disc .bin/.iso
 image and the FIELD/*.DAT is extracted from it; without --field/--field-id
 it's read directly as an already-extracted .DAT file's bytes.
-Env: FF7_PRISTINE_DIR, FF7_CSR_ROOT.
+Env: FF7_PRISTINE_DIR (only needed for pristine:N sources).
 
---field-id N: resolve a numeric field ID to its map name via the CSR repo's
-scripts/field_maplist.py (requires FF7_CSR_ROOT or the default sibling
-checkout ~/Final-Fantasy-7-CSR). Alternative to --field NAME.
+--field-id N: resolve a numeric field ID to its map name via this repo's own
+docs/reference/field-id-mapping.txt (no other repo checkout required).
+Alternative to --field NAME.
 
 --dump-all: print every decoded opcode in every script slot (every line is
 [CONFIRMED], same structural parse as --opcode/--hex), for grepping instead
@@ -123,22 +123,20 @@ def find_opcode(fd, opcode_name: str, decode_fields: bool = False) -> list[str]:
 
 
 def resolve_field_id(field_id: int) -> str:
-    """Look up a numeric field ID's map name via the CSR repo's field_maplist.py."""
-    import os
-
-    csr_root = Path(os.environ.get("FF7_CSR_ROOT", "~/Final-Fantasy-7-CSR")).expanduser()
-    maplist_path = csr_root / "scripts" / "field_maplist.py"
-    if not maplist_path.is_file():
-        raise ValueError(
-            f"can't resolve --field-id: {maplist_path} not found "
-            "(set FF7_CSR_ROOT or use --field NAME instead)"
-        )
-    sys.path.insert(0, str(maplist_path.parent))
-    from field_maplist import MAPLIST  # noqa: E402  (dynamic path insert above)
-
-    if field_id < 0 or field_id >= len(MAPLIST):
-        raise ValueError(f"field id {field_id} out of range (0..{len(MAPLIST) - 1})")
-    return MAPLIST[field_id]
+    """Look up a numeric field ID's map name via this repo's own
+    docs/reference/field-id-mapping.txt (Makou Reactor Data.cpp table) --
+    no dependency on the sibling CSR repo checkout."""
+    mapping_path = Path(__file__).resolve().parents[1] / "docs" / "reference" / "field-id-mapping.txt"
+    if not mapping_path.is_file():
+        raise ValueError(f"can't resolve --field-id: {mapping_path} not found (use --field NAME instead)")
+    for line in mapping_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        fid_s, name = line.split(maxsplit=1)
+        if int(fid_s) == field_id:
+            return name.strip()
+    raise ValueError(f"field id {field_id} not found in {mapping_path}")
 
 
 def dump_all(fd) -> list[str]:
