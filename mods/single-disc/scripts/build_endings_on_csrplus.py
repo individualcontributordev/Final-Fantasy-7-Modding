@@ -10,8 +10,10 @@ apply cleanly on top of it. This script rebuilds the ending-stream diff
 directly against the csr-plus-v0.1.0 disc1 image:
 
   pristine D1 -> csr-plus-v0.1.0/layers/disc1.layer.json (base, no endings)
-  -> alias_d3_ending_lbas_on_d1.apply() (D3 ENDING01/2E/3E streams at D3 LBAs,
-     relocating any colliding D1 GOLD7_2/CANONON slots to EOF)
+  -> alias_d3_ending_lbas_on_d1.apply() (D3 ENDING01 stream at its D3 LBA;
+     ENDING2E/ENDING3E removed 2026-08-30, see that script's JOBS comment --
+     they clobbered PLREXP/FALLPL/BIKEGET and ~20 other still-reachable
+     MOVIE/ files)
   -> diff vs the base (pre-endings) image, chunked into <=30MiB parts
 
 Writes builder/single-disc-endings-csrplus-v0.1.0-partN/layers/disc1.layer.json
@@ -84,7 +86,7 @@ def main() -> int:
     base_bin.write_bytes(base_img)
     print("   ", len(base_img), "bytes")
 
-    print("2/4 applying D3 ending streams (ENDING01/2E/3E)...")
+    print("2/4 applying D3 ending stream (ENDING01)...")
     end_img = bytearray(base_img)
     for line in alias_endings.apply(end_img, d3.read_bytes()):
         print("  ", line)
@@ -98,16 +100,14 @@ def main() -> int:
         return 3
 
     print("3/4 checking MINT/MOVIE_ID.BIN for LBA collisions...")
-    # csr-plus keeps the vanilla movie layout (no manip-movies relocation), so
-    # ENDING2E's hardcoded-LBA stream unavoidably overwrites other D1 movie
-    # files' bytes. Per project decision, CSR+ single-disc doesn't need any
-    # D1/D2/D3 movies to play correctly except the endings themselves --
-    # those overwritten cutscenes going glitchy/wrong-clip is accepted (see
-    # README beta notes), not a build blocker. Reported as a warning only.
+    # Only ENDING01 (id25/SMK.STR) is aliased now, so this should come back
+    # clean (any remaining hit is a real bug, not an accepted tradeoff --
+    # ENDING2E/ENDING3E were removed specifically because their hardcoded-LBA
+    # writes clobbered PLREXP/FALLPL/BIKEGET/etc, files still reachable
+    # before the ending sequence plays).
     errors = check_movie_id_collisions(bytes(end_img))
     if errors:
-        print(f"WARNING: {len(errors)} movie id LBA collision(s) found (expected -- "
-              "non-ending movies are not needed for CSR+ single-disc):")
+        print(f"WARNING: {len(errors)} movie id LBA collision(s) found:")
         for e in errors:
             print("  -", e)
     else:

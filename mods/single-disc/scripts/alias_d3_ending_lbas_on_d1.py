@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""Place Disc 3 ending streams at Disc 3 absolute LBAs on a D1 image.
+"""Place the Disc 3 ENDING01 stream at its Disc 3 absolute LBA on a D1 image.
 
 Post-final-battle LAS4_0 seeks ENDING01 at MSF 36:23:33 = ISO LBA 163608
 (the Disc 3 file start). Grown end-of-disc LBAs in MOVIE_ID alone are ignored
 for this path (seek fails → black silence). Same class of fix as CANONON @250450.
 
-Writes full MODE2/2352 sectors from pristine D3, retargets chosen D1 MOVIE/
-dirents, and sets MINT/MOVIE_ID.BIN rows to Disc 3 LBA + size/aux.
+Writes full MODE2/2352 sectors from pristine D3, retargets the chosen D1
+MOVIE/ dirent, and sets the MINT/MOVIE_ID.BIN row to Disc 3 LBA + size/aux.
 
 Before writing, any other D1 MOVIE/ file whose sectors overlap the incoming
-D3 ranges (e.g. GOLD7_2.MOV, CANONON.MOV under ENDING2E's huge span) is
-relocated to free space at EOF and its dirent/MOVIE_ID updated. Splicing
-those files back in afterward at their original LBAs would punch holes into
-the newly written ending stream and corrupt playback.
+D3 range is relocated to free space at EOF and its dirent/MOVIE_ID updated
+(see RELOCATE_NAMES). Splicing those files back in afterward at their
+original LBAs would punch holes into the newly written ending stream and
+corrupt playback. ENDING2E/ENDING3E were removed from JOBS (see below) since
+their much larger spans clobbered files still reachable before the ending
+sequence plays.
 
   python3 mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py \\
     --d1 workspace/iso-extract/ff7_d1_playtest_ending_test.bin --in-place
@@ -52,10 +54,14 @@ from psx_mode2_iso import (  # noqa: E402
 # dead weight in the layer.
 #
 # id23/ONTRAIN.MOV removed 2026-08-24: user requested removal for testing.
+#
+# id26/ENDING3E.MOV and id29/ENDING2E.MOV removed 2026-08-30: both spilled
+# past SOUTHMK.MOV/MONITOR.STR's original dirent bounds and physically
+# clobbered PLREXP.MOV, FALLPL.MOV, BIKEGET.MOV, and ~20 other MOVIE/ files
+# still reachable before the ending sequence (e.g. field 160/pillar_3 plays
+# plrexp/fallpl). Only ENDING01.MOV is kept.
 JOBS = (
     (25, "ENDING01.MOV", "SMK.STR"),
-    (26, "ENDING3E.MOV", "SOUTHMK.MOV"),
-    (29, "ENDING2E.MOV", "MONITOR.STR"),
 )
 
 PRISTINE_D3 = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
@@ -92,27 +98,29 @@ def _movie_files(img: bytes | bytearray):
     raise FileNotFoundError("MOVIE/")
 
 
-# Only these D1 slots are known to collide with the ENDING2E span AND are
-# needed by fields that are reachable before the ending sequence plays
-# (GOLD7_2 on NVMKIN21, CANONON via the LOSLAKE1 seek alias). Relocating
-# every movie under the ending streams' combined LBA range would blow the
-# 80-min CD budget for files nothing else in this isolated pipeline uses.
-RELOCATE_NAMES = {"GOLD7_2.MOV", "CANONON.MOV"}
+# 2026-08-30: previously a hardcoded allowlist ({"GOLD7_2.MOV", "CANONON.MOV"}
+# scoped to the now-removed ENDING2E span). That was the root cause of the
+# PLREXP/FALLPL corruption bug -- ENDING01 alone still overruns SMK.STR's
+# original dirent bounds and physically clobbers whatever real MOVIE/ files
+# sit in its path (MAINPLR, SOUTHMK, PLREXP, FALLPL), none of which were in
+# the allowlist. _relocate_collisions now moves ANY colliding file, not just
+# a fixed set.
 
 
 def _relocate_collisions(
     img: bytearray, ranges: list[tuple[int, int]], keep_names: set[str]
 ) -> list[str]:
-    """Move specific D1 MOVIE/ files whose sectors overlap `ranges` to EOF.
+    """Move every D1 MOVIE/ file whose sectors overlap `ranges` to EOF.
 
     `keep_names` are the D1 slots the caller is about to overwrite on purpose
     (the ending-stream targets) -- those are skipped here since clobbering
-    them is the intended effect, not a collision to repair. Only files in
-    RELOCATE_NAMES are moved; see its comment for why the scope is narrow.
+    them is the intended effect, not a collision to repair. Every other
+    overlapping file is relocated so the raw ending-stream write can't
+    physically stomp its sectors.
     """
     notes: list[str] = []
     for name, lba, size in sorted(_movie_files(bytes(img)), key=lambda x: x[1]):
-        if name.upper() in keep_names or name.upper() not in RELOCATE_NAMES:
+        if name.upper() in keep_names:
             continue
         nsec = (size + USER - 1) // USER
         file_end = lba + nsec - 1
