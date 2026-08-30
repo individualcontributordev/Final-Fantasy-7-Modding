@@ -224,10 +224,10 @@ def build_highwind(csrplus_final_bin: Path) -> None:
     for line in inject_trims(img):
         print(f"  {line}")
 
-    out_dir = CSR / "builder/highwind-v0.2.0-collapsed/layers"
+    out_dir = CSR / "builder/highwind-v0.3.0/layers"
     finish_and_diff(
         img, out_dir,
-        layer_id="highwind-v0.2.0-collapsed-disc1",
+        layer_id="highwind-v0.3.0-disc1",
         description="Highwind single-disc: D2/D3 FIELD merge + CSR+ trims + ask-removal + SNOVA, collapsed",
     )
 

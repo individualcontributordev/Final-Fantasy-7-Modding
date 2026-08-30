@@ -23,9 +23,18 @@ Examples:
   python3 scripts/field_pattern_finder.py csr:1 --field DEL1 --hex f052
   python3 scripts/field_pattern_finder.py file:/tmp/LOST2.DAT --opcode JMPF
   python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC --decode-fields
+  python3 scripts/field_pattern_finder.py csr:1 --field-id 191 --dump-all | grep IFSW
 
 Sides: path | pristine:N | csr:N | file:PATH (same as compare_field_dat.py).
 Env: FF7_PRISTINE_DIR, FF7_CSR_ROOT.
+
+--field-id N: resolve a numeric field ID to its map name via the CSR repo's
+scripts/field_maplist.py (requires FF7_CSR_ROOT or the default sibling
+checkout ~/Final-Fantasy-7-CSR). Alternative to --field NAME.
+
+--dump-all: print every decoded opcode in every script slot (every line is
+[CONFIRMED], same structural parse as --opcode/--hex), for grepping instead
+of searching one mnemonic/pattern at a time.
 
 --decode-fields (with --opcode only): pipes each hit's raw param bytes
 through opcode_struct_decoder.py and prints the named-field breakdown
@@ -101,6 +110,40 @@ def find_opcode(fd, opcode_name: str, decode_fields: bool = False) -> list[str]:
     return out
 
 
+def resolve_field_id(field_id: int) -> str:
+    """Look up a numeric field ID's map name via the CSR repo's field_maplist.py."""
+    import os
+
+    csr_root = Path(os.environ.get("FF7_CSR_ROOT", "~/Final-Fantasy-7-CSR")).expanduser()
+    maplist_path = csr_root / "scripts" / "field_maplist.py"
+    if not maplist_path.is_file():
+        raise ValueError(
+            f"can't resolve --field-id: {maplist_path} not found "
+            "(set FF7_CSR_ROOT or use --field NAME instead)"
+        )
+    sys.path.insert(0, str(maplist_path.parent))
+    from field_maplist import MAPLIST  # noqa: E402  (dynamic path insert above)
+
+    if field_id < 0 or field_id >= len(MAPLIST):
+        raise ValueError(f"field id {field_id} out of range (0..{len(MAPLIST) - 1})")
+    return MAPLIST[field_id]
+
+
+def dump_all(fd) -> list[str]:
+    out: list[str] = []
+    for slot in fd.scripts:
+        pos = 0
+        for raw, name in decode_ops(slot.raw):
+            abs_off = slot.start + pos
+            out.append(
+                f"[CONFIRMED] {slot.entity} slot={slot.slot} "
+                f"script_off=0x{pos:X} section0_off=0x{abs_off:X} "
+                f"op={name} bytes={raw.hex()}"
+            )
+            pos += len(raw)
+    return out
+
+
 def find_hex(fd, pattern: bytes) -> list[str]:
     out: list[str] = []
     for slot in fd.scripts:
@@ -134,9 +177,14 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("source", help="path | pristine:N | csr:N | file:PATH")
     ap.add_argument("--field", help="field map name, required with pristine:/csr:")
+    ap.add_argument("--field-id", type=int,
+                     help="numeric field ID (alternative to --field, resolved "
+                          "via CSR repo's field_maplist.py)")
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--opcode", help="opcode mnemonic, e.g. MUSIC, JMPF")
     group.add_argument("--hex", help="raw byte pattern, e.g. f052")
+    group.add_argument("--dump-all", action="store_true",
+                        help="print every decoded opcode in every script slot")
     ap.add_argument("--decode-fields", action="store_true",
                      help="with --opcode: also print each hit's named-field "
                           "breakdown via opcode_struct_decoder.py")
@@ -146,14 +194,27 @@ def main() -> int:
         print("error: --decode-fields requires --opcode", file=sys.stderr)
         return 1
 
+    field = args.field
+    if args.field_id is not None:
+        if field:
+            print("error: use either --field or --field-id, not both", file=sys.stderr)
+            return 1
+        try:
+            field = resolve_field_id(args.field_id)
+        except ValueError as e:
+            print(f"error: {e}", file=sys.stderr)
+            return 1
+
     try:
-        raw, label = resolve_dat_bytes(args.source, args.field)
+        raw, label = resolve_dat_bytes(args.source, field)
         fd = load_field_dat(raw, label)
     except (FileNotFoundError, ValueError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 1
 
-    if args.opcode:
+    if args.dump_all:
+        hits = dump_all(fd)
+    elif args.opcode:
         hits = find_opcode(fd, args.opcode.upper(), decode_fields=args.decode_fields)
     else:
         try:
