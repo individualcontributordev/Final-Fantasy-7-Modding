@@ -166,17 +166,11 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
     blob3 = extract_file(d3, "MINT/MOVIE_ID.BIN")
     notes: list[str] = []
 
-    # Relocation stays generic over JOBS (currently just ENDING2E, LBA
-    # 197242..277345) so any D1 MOVIE/ file physically overlapping that
-    # range gets moved to free space at EOF first instead of being clobbered
-    # by the raw write below.
-    ranges = []
-    for mid, d3name, _d1name in JOBS:
-        m3 = find_file(d3, f"MOVIE/{d3name}")
-        nsec = (m3.size + USER - 1) // USER
-        ranges.append((m3.lba, m3.lba + nsec - 1))
-    keep_names = {d1name.upper() for _mid, _d3name, d1name in JOBS}
-    notes.extend(_relocate_collisions(img, ranges, keep_names))
+    # Collision relocation disabled per explicit user request (2026-08-30):
+    # any D1 MOVIE/ file physically overlapping the ENDING2E D3 range
+    # (197242..277345) is now left in place and will be clobbered by the
+    # raw write below instead of being moved to EOF. _relocate_collisions()
+    # is kept above for reference in case this needs to be re-enabled.
 
     blob = bytearray(extract_file(img, "MINT/MOVIE_ID.BIN"))
     for mid, d3name, d1name in JOBS:
