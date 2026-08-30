@@ -43,6 +43,7 @@ from psx_mode2_iso import (  # noqa: E402
     extract_file,
     find_file,
     replace_file_padded,
+    set_pvd_volume_space_size,
 )
 
 # (MOVIE_ID row, D3 MOVIE name, D1 slot to retarget)
@@ -178,6 +179,15 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
     replace_file_padded(img, "MINT/MOVIE_ID.BIN", bytes(blob))
     if len(img) % SECTOR:
         img.extend(b"\x00" * (SECTOR - (len(img) % SECTOR)))
+    # Relocation + the raw D3 write can grow the image past the PVD's
+    # original volume space size. Update it so the ISO9660 driver doesn't
+    # treat the new EOF sectors (relocated MOVIE/ files, ENDING01) as past
+    # end-of-disc and refuse to read them.
+    new_nsectors = len(img) // SECTOR
+    old_nsectors = _u32_le(_user(img, 16), 80)
+    if new_nsectors != old_nsectors:
+        set_pvd_volume_space_size(img, new_nsectors)
+        notes.append(f"PVD volume space size {old_nsectors} -> {new_nsectors}")
     return notes
 
 

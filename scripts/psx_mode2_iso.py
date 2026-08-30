@@ -107,6 +107,20 @@ def pvd_volume_space_size(img: memoryview | bytes | bytearray) -> int:
     return _u32_le(pvd, 80)
 
 
+def set_pvd_volume_space_size(img: bytearray, nsectors: int) -> None:
+    """Patch the PVD's both-endian volume space size field (offset 80/84).
+
+    Any code that appends sectors past the original volume end (e.g. EOF
+    relocation) MUST call this afterward, or the ISO9660 driver / game engine
+    will treat those sectors as past-end-of-disc and refuse to read them.
+    """
+    off = 16 * SECTOR + USER_OFF
+    le = nsectors.to_bytes(4, "little")
+    be = nsectors.to_bytes(4, "big")
+    img[off + 80 : off + 84] = le
+    img[off + 84 : off + 88] = be
+
+
 def walk_tree(img: memoryview | bytes | bytearray) -> dict[str, IsoFile]:
     """Recursively walk every file/dir under root, returning path -> IsoFile.
 
