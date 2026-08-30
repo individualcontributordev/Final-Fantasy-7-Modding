@@ -1611,15 +1611,18 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.2.0"
+        "highwind-v0.2.0",
+        "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-0-v0.2.0",
         "field-encounter-on-csr-0-v0.2.0",
         "field-encounter-on-highwind-0-v0.2.0",
+        "field-encounter-on-csr-plus-0-v0.2.0",
         "world-encounter-0-v0.2.0",
         "world-encounter-on-csr-0-v0.2.0",
-        "world-encounter-on-highwind-0-v0.2.0"
+        "world-encounter-on-highwind-0-v0.2.0",
+        "world-encounter-on-csr-plus-0-v0.2.0"
       ],
       "kind": "mod"
     },
@@ -1630,7 +1633,8 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.2.0"
+        "highwind-v0.2.0",
+        "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-25-v0.1.2",
@@ -1638,7 +1642,8 @@
         "field-encounter-on-csr-25-v0.1.2",
         "world-encounter-on-csr-25-v0.1.0",
         "field-encounter-on-highwind-25-v0.1.2",
-        "world-encounter-on-highwind-25-v0.1.0"
+        "world-encounter-on-highwind-25-v0.1.0",
+        "world-encounter-on-csr-plus-25-v0.2.0"
       ],
       "kind": "mod"
     },
@@ -1649,7 +1654,8 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.2.0"
+        "highwind-v0.2.0",
+        "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-50-v0.1.2",
@@ -1657,7 +1663,8 @@
         "field-encounter-on-csr-50-v0.1.2",
         "world-encounter-on-csr-50-v0.1.0",
         "field-encounter-on-highwind-50-v0.1.2",
-        "world-encounter-on-highwind-50-v0.1.0"
+        "world-encounter-on-highwind-50-v0.1.0",
+        "world-encounter-on-csr-plus-50-v0.2.0"
       ],
       "kind": "mod"
     },
@@ -1668,7 +1675,8 @@
       "compatibleBases": [
         "clean",
         "csr-v0.14.1",
-        "highwind-v0.2.0"
+        "highwind-v0.2.0",
+        "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-75-v0.1.2",
@@ -1676,12 +1684,13 @@
         "field-encounter-on-csr-75-v0.1.2",
         "world-encounter-on-csr-75-v0.1.0",
         "field-encounter-on-highwind-75-v0.1.2",
-        "world-encounter-on-highwind-75-v0.1.0"
+        "world-encounter-on-highwind-75-v0.1.0",
+        "world-encounter-on-csr-plus-75-v0.2.0"
       ],
       "kind": "mod"
     }
   ],
   "explainer": {
-    "mods": "Optional mods. Compatible with Unmodified, CSR, and Highwind."
+    "mods": "Optional mods. Compatible with Unmodified, CSR, Highwind, and CSR+."
   }
 }
