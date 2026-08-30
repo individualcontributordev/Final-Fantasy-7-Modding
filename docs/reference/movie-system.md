@@ -152,3 +152,7 @@ this via a manifest file (`mods/single-disc/patches/csr-manip-movie-seed.txt`).
 - `docs/findings/2026-08-24-csr-movie-reachability-scan.md`
 - `docs/findings/2026-08-05-loslake1-cdrom-d1-vs-d2.md`
 - `docs/reference/movie-id-mapping.txt`
+- https://thelifestream.net/review-the-toshiba-ffvii-dvd/ (Toshiba FFVII DVD ending disc review — not yet cross-checked against build)
+- https://wiki.ffrtt.ru/index.php/FF7/Field/Script/Opcodes/F8_PMVIE (Qhimm/ffrtt PMVIE opcode reference)
+- https://github.com/cebix/ff7tools/blob/6bf1fbce/fixup (ff7tools `fixup` script, pinned commit)
+- https://github.com/cebix/ff7tools/blob/master/fixup (ff7tools `fixup` script, latest)
