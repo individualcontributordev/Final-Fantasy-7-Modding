@@ -157,18 +157,14 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
     blob3 = extract_file(d3, "MINT/MOVIE_ID.BIN")
     notes: list[str] = []
 
-    # Precompute D3 absolute LBA ranges + relocate any D1 movie sectors that
-    # would otherwise be stomped by the incoming raw D3 writes (e.g. GOLD7_2,
-    # CANONON) before writing anything. Otherwise splicing those files back in
-    # afterward at their old LBAs would punch holes into the freshly written
-    # ending stream data.
-    ranges: list[tuple[int, int]] = []
-    keep_names = {d1name.upper() for _mid, _d3name, d1name in JOBS}
-    for _mid, d3name, _d1name in JOBS:
-        m3 = find_file(d3, f"MOVIE/{d3name}")
-        nsec = (m3.size + USER - 1) // USER
-        ranges.append((m3.lba, m3.lba + nsec - 1))
-    notes.extend(_relocate_collisions(img, ranges, keep_names))
+    # 2026-08-30 test: user requested a raw overwrite with NO relocation, to
+    # test whether ENDING01 actually requires its D3 absolute LBA on a D1
+    # image (unverified engine speculation -- see docs/reference/movie-system.md).
+    # This intentionally clobbers whatever D1 MOVIE/ files physically overlap
+    # LBA 163608..172630 (tail of MAINPLR, all of SOUTHMK/PLREXP, front of
+    # FALLPL) so the effect on those movies can be observed directly.
+    # _relocate_collisions() is left intact below for reverting to the
+    # defensive behavior once the hardcode theory is settled.
 
     blob = bytearray(extract_file(img, "MINT/MOVIE_ID.BIN"))
     for mid, d3name, d1name in JOBS:
