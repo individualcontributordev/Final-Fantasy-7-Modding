@@ -50,60 +50,66 @@ def compute_edc(data: bytes) -> int:
     return edc
 
 
+# Precomputed Galois-field tables for ECC P/Q parity generation.
+_ECC_F_LUT = None
+_ECC_B_LUT = None
+
+
+def _init_ecc_tables():
+    """Initialize the GF(256) forward/backward LUTs used by the ECC RS code."""
+    global _ECC_F_LUT, _ECC_B_LUT
+    if _ECC_F_LUT is not None:
+        return
+    _ECC_F_LUT = [0] * 256
+    _ECC_B_LUT = [0] * 256
+    for i in range(256):
+        j = ((i << 1) ^ (0x11D if i & 0x80 else 0)) & 0xFF
+        _ECC_F_LUT[i] = j
+        _ECC_B_LUT[i ^ j] = i
+
+
+def _ecc_writepq(sector: bytearray, major_count: int, minor_count: int,
+                  major_mult: int, minor_inc: int, ecc_dest_off: int) -> None:
+    """Port of Neill Corlett's ecm.c ecc_writepq(). `address` is always the
+    4-byte zero-address (Mode 2 Form 1 uses zeroaddress, not the real header),
+    and `data` is sector[16:] (subheader+data+EDC+, for Q, the just-written P
+    parity). Writes P or Q parity bytes at sector[2076+ecc_dest_off:...].
+    """
+    size = major_count * minor_count
+    for major in range(major_count):
+        index = (major >> 1) * major_mult + (major & 1)
+        ecc_a = 0
+        ecc_b = 0
+        for _minor in range(minor_count):
+            temp = 0 if index < 4 else sector[16 + (index - 4)]
+            index += minor_inc
+            if index >= size:
+                index -= size
+            ecc_a ^= temp
+            ecc_b ^= temp
+            ecc_a = _ECC_F_LUT[ecc_a]
+        ecc_a = _ECC_B_LUT[_ECC_F_LUT[ecc_a] ^ ecc_b]
+        sector[2076 + ecc_dest_off + major] = ecc_a
+        sector[2076 + ecc_dest_off + major + major_count] = ecc_a ^ ecc_b
+
+
 def compute_ecc(sector: bytearray):
     """
     Compute and write ECC (P and Q parity) for Mode 2 Form 1 sector.
 
-    Simplified implementation based on proven algorithms.
-    Modifies sector in-place, writing 276 bytes of ECC starting at offset 2076.
+    Faithful port of the CD-XA Mode 2 Form 1 ECC algorithm from ecm.c
+    (Neill Corlett), also used by mkpsxiso. Modifies sector in-place,
+    writing 276 bytes of ECC starting at offset 2076: P parity (172 bytes)
+    at 2076, Q parity (104 bytes) at 2248. Q parity's read window naturally
+    extends into the just-written P parity bytes -- this is intentional and
+    matches the spec (Q covers header+subheader+data+EDC+P).
 
     Args:
         sector: 2352-byte Mode 2 Form 1 sector (will be modified)
     """
-    # Clear ECC area first
-    sector[2076:2352] = b'\x00' * 276
-
-    # P parity: 86 vectors of 24 bytes each (172 bytes total)
-    p_data = bytes(sector[12:2076])
-    p_result = bytearray(172)
-
-    for i in range(86):
-        a0, a1 = 0, 0
-        for j in range(24):
-            idx = i + j * 86
-            if idx < len(p_data):
-                val = p_data[idx]
-            else:
-                val = 0
-            a0 ^= val
-            a1 ^= val
-            a0 = ((a0 << 1) ^ (0x11D if a0 & 0x80 else 0)) & 0xFF
-
-        p_result[2 * i] = a0 ^ a1
-        p_result[2 * i + 1] = a0
-
-    sector[2076:2248] = p_result
-
-    # Q parity: 52 vectors of 43 bytes each (104 bytes total)
-    q_data = bytes(sector[12:2248])
-    q_result = bytearray(104)
-
-    for i in range(52):
-        a0, a1 = 0, 0
-        for j in range(43):
-            idx = (i + j * 52) % (43 * 52)
-            if idx < len(q_data):
-                val = q_data[idx]
-            else:
-                val = 0
-            a0 ^= val
-            a1 ^= val
-            a0 = ((a0 << 1) ^ (0x11D if a0 & 0x80 else 0)) & 0xFF
-
-        q_result[2 * i] = a0 ^ a1
-        q_result[2 * i + 1] = a0
-
-    sector[2248:2352] = q_result
+    _init_ecc_tables()
+    _ecc_writepq(sector, 86, 24, 2, 86, 0x000)  # P -> sector[2076:2248]
+    _ecc_writepq(sector, 52, 43, 86, 88, 0x0AC)  # Q -> sector[2248:2352]
 
 
 def repair_sector_edc_ecc(sector: bytearray):
@@ -123,8 +129,11 @@ def repair_sector_edc_ecc(sector: bytearray):
     if sector[16 + 2] & 0x20:
         return  # Mode 2 Form 2, no EDC/ECC
     
-    # Compute EDC for bytes 16-2075 (header + subheader + data)
-    edc_data = sector[16:2076]
+    # Compute EDC for bytes 16-2071 (subheader + data only -- sync/header is
+    # excluded per CD-XA Mode2 Form1, and the 4 EDC bytes at 2072 must not be
+    # included since we're about to overwrite them). Verified against
+    # pristine-disc sector 0's already-valid EDC.
+    edc_data = sector[16:2072]
     edc = compute_edc(edc_data)
     
     # Write EDC (little-endian)
