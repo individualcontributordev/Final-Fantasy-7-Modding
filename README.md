@@ -63,33 +63,26 @@ python mods/field-random-encounters/scripts/build_on_base.py --against csr --den
 
 Densities are **named presets** (not a free-form %): **Light** / **Standard** / **Dense**. Stub notes: `mods/field-random-encounters/patches/`.
 
-## For engineers (RE)
+## For engineers (RE) — build and mod this without an agent
+
+**Start here:** [docs/00-goals.md](docs/00-goals.md) — the reading-order index for every doc below.
+For a fully sequenced, exercise-based path from zero to shipping a mod, use
+[docs/09-engineer-curriculum.md](docs/09-engineer-curriculum.md).
 
 | Doc | Contents |
 |-----|----------|
-| [docs/06-new-mod-research.md](docs/06-new-mod-research.md) | Idea → RE → patch → builder pack |
-| [docs/01-encounter-system.md](docs/01-encounter-system.md) | Field encounter RAM / Ghidra map |
-| [docs/02-disc-format.md](docs/02-disc-format.md) | ISO, GZIPPS, Makou |
-| [docs/03-environment-setup.md](docs/03-environment-setup.md) | Tools checklist |
-| [docs/04-workflow.md](docs/04-workflow.md) | Edit → inject → verify |
-| [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | Ghidra workflow |
-| [docs/findings/](docs/findings/) | Dated lab notebook |
+| [docs/03-environment-setup.md](docs/03-environment-setup.md) | Install checklist: emulator, Ghidra, Makou Reactor, hex tool |
+| [docs/08-engineer-build-guide.md](docs/08-engineer-build-guide.md) | Build/verify disc images with only the CLI scripts (no agent needed) |
+| [docs/02-disc-format.md](docs/02-disc-format.md) | ISO layout, GZIPPS compression, Makou save flow |
+| [docs/04-workflow.md](docs/04-workflow.md) | Edit → recompress → reinsert → test loop |
+| [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | Ghidra import settings and RE method |
+| [docs/01-encounter-system.md](docs/01-encounter-system.md) | Worked example: the field encounter RNG/RAM map |
+| [docs/06-new-mod-research.md](docs/06-new-mod-research.md) | Idea → RE → patch → builder pack, end to end |
+| [docs/07-hardware-burn.md](docs/07-hardware-burn.md) | MiSTer / PS2 burn verification ladder |
+| [docs/reference/INDEX.md](docs/reference/INDEX.md) | Canonical field/movie/music ID tables and format references |
+| [scripts/README.md](scripts/README.md) | Every shared CLI tool, what it's for, and quick-start commands |
 
 After clone: `git config core.hooksPath .githooks`
-
-## AI-assisted RE pipeline (local, optional)
-
-Local fine-tuned-model workflow for opcode/maplist assistance. Not required for building mods.
-
-- **Model**: DeepSeek-R1-8B + LoRA adapters (Unsloth, 4-bit) trained on `data/ff7_re_dataset.jsonl` (1,348 rows covering all 256 field opcodes and 788 maplist entries, sourced from `~/makoureactor`/`~/ff7tk`/this repo's `scripts/ff7_opcodes.py`).
-- **Reference paths** (see `AGENTS.md` for full rules):
-  - `~/Final-Fantasy-7-CSR` — RE notes/logs, `field_maplist.py`
-  - `~/makoureactor`, `~/ff7tk` — opcode/maplist ground truth
-  - `~/Downloads/ghidra_12.1.2_PUBLIC` — Ghidra
-- **Run the agent**: `python3 run_ff7_agent.py` — interactive loop; requires a real LoRA checkpoint dir passed to `FastLanguageModel.from_pretrained(model_name=...)` (edit the `model_name` at the top of the script — no checkpoint ships in this repo).
-- **Extract real test assets**: `python3 extract_game_assets.py` — pulls genuine `FIELD/*.DAT` files (e.g. `FSHIP_12.DAT`, `MD8_5.DAT`) from `workspace/pristine/*.bin` into `data/extracted_fields/` (gitignored) via the existing `scripts/extract_field_dat.py`.
-- **Run benchmarks**: `python3 run_agent_tests.py` — feeds 3 seeded exercises (opcode byte parsing, LBA math, maplist graph logic) to `call_local_model()`. That function is a stub by default (raises `NotImplementedError`) until you wire it to a real model load — see comments in the script.
-- **Verified-insight logging**: when a fix is confirmed passing on a live playtest and you say so explicitly (e.g. "it works, log it"), one JSONL row gets appended to `.workspace/verified_insights/organic_growth.jsonl` in the same `{instruction, input, output}` format as `data/ff7_re_dataset.jsonl`. This is manual/on-request only — not an automatic background process.
 
 ## Suggestions backlog
 

@@ -102,4 +102,6 @@ The disc builder (website, not this repo) regenerates Mode2 Form1 EDC/ECC for ev
 
 ## Report results
 
-Paste short notes under `docs/INSTRUCTIONS.md` **EVIDENCE** (or a finding `docs/findings/YYYY-MM-DD-ps2-burn-….md` / `…-mister-….md`) and say **check results**. Include: pack list from `APPLIED.txt`, whether MiSTer was run, burn speed/media, pass/fail table.
+Keep short notes on what you tested (pack list from `APPLIED.txt`, whether
+MiSTer was run, burn speed/media, pass/fail table) wherever you track your
+own playtest log — there's no repo-mandated location for this.

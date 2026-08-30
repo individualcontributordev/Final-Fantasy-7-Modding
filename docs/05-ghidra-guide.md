@@ -192,23 +192,19 @@ Offset   Bytes                           Notes
 - Single iteration to correct patch location
 - Visual confirmation of jump targets
 
-### Adding to Agent Workflow
-
-When posting a script patch task to `docs/INSTRUCTIONS.md`:
+### Before writing a patch script
 
 1. Export the relevant script section from Ghidra (100-200 bytes around patch area)
-2. Save to `workspace/ghidra/FIELDNAME-ENTITY-SCRIPT.txt`
-3. Mention the export in INSTRUCTIONS so Agent can reference it
-4. Agent writes patch script using exact offsets from export
+2. Save it to `workspace/ghidra/FIELDNAME-ENTITY-SCRIPT.txt` for reference
+3. Write your patch script using the exact offsets from that export
 
-This workflow was added after v0.1.36 (LOST2 JMPF patch) to avoid future blind pattern-matching.
+This workflow was added after v0.1.36 (LOST2 JMPF patch) to avoid blind pattern-matching.
 
 ## Reusable technique: find a hardcoded string/constant and its callers
 
 Generic recipe for "does the code reference this literal, and if so from
-where" — used whenever a task in `docs/INSTRUCTIONS.md` asks you to check
-whether some value (a filename, an id, an LBA) is hardcoded somewhere in an
-imported binary.
+where" — use this whenever you need to check whether some value (a
+filename, an id, an LBA) is hardcoded somewhere in an imported binary.
 
 1. **Search → For Strings...** across the whole program (check "Search
    all"/"Search all blocks" if the dialog offers it — don't limit to
@@ -225,9 +221,8 @@ imported binary.
    computed at runtime rather than stored as a literal. Say so plainly
    rather than treating an empty search as a negative result.
 
-Whatever the specific task is (which string/scalar, which binary, what to
-report), that lives in `docs/INSTRUCTIONS.md` — this section is just the
-mechanics.
+The specific string/scalar and binary depend on what you're investigating —
+this section is just the mechanics.
 
 ## External references
 
