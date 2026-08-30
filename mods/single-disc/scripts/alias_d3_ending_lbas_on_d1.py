@@ -12,9 +12,13 @@ Before writing, any other D1 MOVIE/ file whose sectors overlap the incoming
 D3 range is relocated to free space at EOF and its dirent/MOVIE_ID updated
 (see RELOCATE_NAMES). Splicing those files back in afterward at their
 original LBAs would punch holes into the newly written ending stream and
-corrupt playback. ENDING2E/ENDING3E were removed from JOBS (see below) since
-their much larger spans clobbered files still reachable before the ending
-sequence plays.
+corrupt playback.
+
+NOTE: ENDING2E.MOV (D3 LBA 197242) and ENDING3E.MOV (D3 LBA 172631) are also
+CONFIRMED hardcoded-LBA targets in the same post-final-battle sequence (see
+docs/reference/movie-system.md) -- omitting them reproduces the corrupted
+playback this script exists to fix. They are excluded from JOBS anyway per
+explicit user request; see the JOBS comment below before re-adding them.
 
   python3 mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py \\
     --d1 workspace/iso-extract/ff7_d1_playtest_ending_test.bin --in-place
@@ -57,20 +61,22 @@ from psx_mode2_iso import (  # noqa: E402
 #
 # id23/ONTRAIN.MOV removed 2026-08-24: user requested removal for testing.
 #
-# id26/ENDING3E.MOV and id29/ENDING2E.MOV restored 2026-08-30: DuckStation
-# log evidence (dslogs.txt) shows the post-final-battle sequence actually
-# issues Setloc to MSF 43:51:67 = LBA 197242, which is ENDING2E.MOV's D3
-# start (MOVIE_ID row 29), not ENDING01's (row 25, LBA 163608). Without
-# ENDING2E present at that LBA the engine seeks into whatever D1 file
-# occupies that range (NVLMK.MOV) and decodes garbage. Both were previously
-# dropped because their huge spans clobbered ~24 other reachable D1 MOVIE/
-# files (PLREXP, FALLPL, BIKEGET, etc.) when written with no relocation;
-# that collision handling is what _relocate_collisions() below is for, so
-# all three jobs are restored together with relocation re-enabled.
+# id26/ENDING3E.MOV and id29/ENDING2E.MOV: CONFIRMED via live DuckStation
+# playtest (2026-08-30, dslogs.txt) that the post-final-battle sequence needs
+# all three D3 ending streams at their D3 absolute LBAs -- the engine issues
+# Setloc to MSF 43:51:67 = LBA 197242 (ENDING2E.MOV's D3 start, MOVIE_ID row
+# 29) partway through the sequence, not just ENDING01's (row 25, LBA 163608).
+# A build with only ENDING01 restored plays a corrupted fragment of whatever
+# D1 file occupies LBA 197242 (was NVLMK.MOV) instead of ENDING2E.
+#
+# Deliberately excluded anyway per explicit user request (final decision,
+# repeated 2026-08-30): user only wants ENDING01.MOV -> SMK.STR in the build,
+# accepting the known ending-sequence corruption as a tradeoff (image-size /
+# scope reasons). Do not re-add ENDING2E/ENDING3E without a new explicit
+# request even though they are the technically-correct fix -- this has been
+# asked and reverted multiple times.
 JOBS = (
     (25, "ENDING01.MOV", "SMK.STR"),
-    (26, "ENDING3E.MOV", "SOUTHMK.MOV"),
-    (29, "ENDING2E.MOV", "MONITOR.STR"),
 )
 
 PRISTINE_D3 = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
@@ -164,14 +170,10 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
     blob3 = extract_file(d3, "MINT/MOVIE_ID.BIN")
     notes: list[str] = []
 
-    # 2026-08-30: relocation re-enabled now that ENDING2E/ENDING3E are back
-    # in JOBS. The three D3 ending streams (ENDING01 163608..172630,
-    # ENDING3E 172631..186366, ENDING2E 197242..277345) collectively overlap
-    # ~24 other D1 MOVIE/ files still reachable earlier in the game. Those
-    # get moved to free space at EOF first so the raw writes below can't
-    # physically stomp their sectors; the hardcoded-LBA requirement for the
-    # ending streams themselves (confirmed via DuckStation Setloc capture)
-    # is left untouched.
+    # Relocation stays generic over JOBS (currently just ENDING01, LBA
+    # 163608..172630) so any D1 MOVIE/ file physically overlapping that
+    # range gets moved to free space at EOF first instead of being clobbered
+    # by the raw write below.
     ranges = []
     for mid, d3name, _d1name in JOBS:
         m3 = find_file(d3, f"MOVIE/{d3name}")
