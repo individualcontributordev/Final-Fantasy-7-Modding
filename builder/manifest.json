@@ -978,6 +978,222 @@
       "hidden": true
     },
     {
+      "id": "single-disc-endings-csrplus-v0.1.0-part1",
+      "name": "Single-disc ending credits (CSR+)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 1/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part1/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 1/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part2",
+      "name": "Single-disc ending credits (CSR+, part 2)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 2/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part2/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 2/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part3",
+      "name": "Single-disc ending credits (CSR+, part 3)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 3/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part3/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 3/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part4",
+      "name": "Single-disc ending credits (CSR+, part 4)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 4/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part4/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 4/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part5",
+      "name": "Single-disc ending credits (CSR+, part 5)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 5/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part5/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 5/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part6",
+      "name": "Single-disc ending credits (CSR+, part 6)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 6/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part6/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 6/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part7",
+      "name": "Single-disc ending credits (CSR+, part 7)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 7/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part7/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 7/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
+      "id": "single-disc-endings-csrplus-v0.1.0-part8",
+      "name": "Single-disc ending credits (CSR+, part 8)",
+      "kind": "mod",
+      "blurb": "Hidden. Always applied with CSR+ (single-disc). Ending/credits movies on the one-disc image (part 8/8). Not optional.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "discs": {
+        "1": "./single-disc-endings-csrplus-v0.1.0-part8/layers/disc1.layer.json"
+      },
+      "enabled": false,
+      "uiHidden": true,
+      "version": "0.1.0",
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus-v0.1.0"
+        ]
+      },
+      "groupLabel": "Single-disc ending credits (always on)",
+      "optionLabel": "part 8/8",
+      "beta": true,
+      "status": "beta",
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
+      "hidden": true
+    },
+    {
       "id": "fanfare-skip-v0.1.6",
       "name": "Skip victory fanfare",
       "kind": "mod",
