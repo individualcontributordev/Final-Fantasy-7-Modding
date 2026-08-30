@@ -23,19 +23,18 @@ from psx_mode2_iso import (  # noqa: E402
     _user,
 )
 
-# Makou field ids — load field_maplist without shadowing Modding psx_mode2_iso
-import importlib.util
-
-def _load_maplist():
-    for base in (Path.home() / "Final-Fantasy-7-CSR/scripts", _ROOT.parent / "Final-Fantasy-7-CSR/scripts"):
-        fp = base / "field_maplist.py"
-        if fp.is_file():
-            spec = importlib.util.spec_from_file_location("field_maplist", fp)
-            mod = importlib.util.module_from_spec(spec)
-            assert spec.loader
-            spec.loader.exec_module(mod)
-            return mod.MAPLIST
-    raise FileNotFoundError("field_maplist.py")
+# Makou field ids — from this repo's own docs/reference/field-id-mapping.txt
+# (Makou Reactor Data.cpp table), no dependency on a sibling CSR repo checkout.
+def _load_maplist() -> list[str]:
+    mapping_path = _ROOT / "docs" / "reference" / "field-id-mapping.txt"
+    entries: dict[int, str] = {}
+    for line in mapping_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        fid_s, name = line.split(maxsplit=1)
+        entries[int(fid_s)] = name.strip()
+    return [entries[i] for i in range(len(entries))]
 
 MAPLIST = _load_maplist()
 
