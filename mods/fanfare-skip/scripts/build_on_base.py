@@ -55,6 +55,12 @@ AGAINST = {
 		"on_label": " (on CSR)",
 		"compatible": ["csr-v0.14.1"],
 	},
+	"csr-plus": {
+		"base_id": "csr-plus-v0.1.0",
+		"prefix_stem": "fanfare-skip-on-csr-plus",
+		"on_label": " (on CSR+)",
+		"compatible": ["csr-plus-v0.1.0"],
+	},
 	"highwind": {
 		"base_id": "highwind-v0.2.0",
 		"prefix_stem": "fanfare-skip-on-highwind",
@@ -106,6 +112,8 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 		cands = [i for i in ids if i.startswith("csr-v") and "plus" not in i]
 		if not cands:
 			cands = [i for i in ids if i.startswith("csr")]
+	elif against == "csr-plus":
+		cands = [i for i in ids if i.startswith("csr-plus-v")]
 	else:
 		raise SystemExit(f"unknown against {against}")
 	if not cands:
