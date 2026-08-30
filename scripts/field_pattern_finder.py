@@ -24,8 +24,12 @@ Examples:
   python3 scripts/field_pattern_finder.py file:/tmp/LOST2.DAT --opcode JMPF
   python3 scripts/field_pattern_finder.py pristine:1 --field LOST2 --opcode MUSIC --decode-fields
   python3 scripts/field_pattern_finder.py csr:1 --field-id 191 --dump-all | grep IFSW
+  python3 scripts/field_pattern_finder.py workspace/iso-extract/ff7_d1_csrplus_final.bin --field-id 191 --dump-all
 
 Sides: path | pristine:N | csr:N | file:PATH (same as compare_field_dat.py).
+A bare path combined with --field/--field-id is treated as a disc .bin/.iso
+image and the FIELD/*.DAT is extracted from it; without --field/--field-id
+it's read directly as an already-extracted .DAT file's bytes.
 Env: FF7_PRISTINE_DIR, FF7_CSR_ROOT.
 
 --field-id N: resolve a numeric field ID to its map name via the CSR repo's
@@ -85,7 +89,15 @@ def resolve_dat_bytes(spec: str, field: str | None) -> tuple[bytes, str]:
         raw = extract_file(img, field_iso_path(field))
         return raw, f"{spec} {field}"
     path = Path(spec).expanduser()
-    return path.read_bytes(), str(path)
+    if not path.is_file():
+        raise FileNotFoundError(str(path))
+    data = path.read_bytes()
+    if field:
+        # A .bin/.iso disc image path + --field/--field-id: extract the
+        # FIELD/*.DAT from it, same as pristine:/csr: sources.
+        raw = extract_file(data, field_iso_path(field))
+        return raw, f"{path} {field}"
+    return data, str(path)
 
 
 def find_opcode(fd, opcode_name: str, decode_fields: bool = False) -> list[str]:
