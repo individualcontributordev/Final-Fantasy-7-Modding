@@ -1,20 +1,17 @@
 {
   "id": "fanfare-skip-on-csr-v0.1.6",
-  "name": "Skip victory fanfare",
+  "name": "Fanfare Skip",
   "kind": "mod",
   "version": "0.1.6",
-  "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
-  "hint": "No victory song or win poses. Loot and exp still work.",
+  "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
+  "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
-    "csr-v0.14.1"
+    "csr-v0.14.2"
   ],
   "discs": {
     "1": "./layers/disc1.layer.json",
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
-  },
-  "beta": true,
-  "status": "beta",
-  "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+  }
 }

@@ -80,7 +80,7 @@
         "2": "./field-encounter-on-csr-25-v0.1.2/layers/disc2.layer.json",
         "3": "./field-encounter-on-csr-25-v0.1.2/layers/disc3.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "rate": 25,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Light (25%)",
@@ -101,7 +101,7 @@
         "2": "./field-encounter-on-csr-50-v0.1.2/layers/disc2.layer.json",
         "3": "./field-encounter-on-csr-50-v0.1.2/layers/disc3.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "rate": 50,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Standard (50%)",
@@ -122,7 +122,7 @@
         "2": "./field-encounter-on-csr-75-v0.1.2/layers/disc2.layer.json",
         "3": "./field-encounter-on-csr-75-v0.1.2/layers/disc3.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "rate": 75,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Dense (75%)",
@@ -269,7 +269,7 @@
         "2": "./world-encounter-on-csr-25-v0.1.0/layers/disc2.layer.json",
         "3": "./world-encounter-on-csr-25-v0.1.0/layers/disc3.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "rate": 25,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Light (25%)",
@@ -290,7 +290,7 @@
         "2": "./world-encounter-on-csr-50-v0.1.0/layers/disc2.layer.json",
         "3": "./world-encounter-on-csr-50-v0.1.0/layers/disc3.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "rate": 50,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Standard (50%)",
@@ -311,7 +311,7 @@
         "2": "./world-encounter-on-csr-75-v0.1.0/layers/disc2.layer.json",
         "3": "./world-encounter-on-csr-75-v0.1.0/layers/disc3.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "rate": 75,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Dense (75%)",
@@ -499,7 +499,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part2/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -526,7 +526,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part3/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -553,7 +553,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part4/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -580,7 +580,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part5/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -607,7 +607,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part6/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -634,7 +634,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part7/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -661,7 +661,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part8/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -688,7 +688,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part9/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -715,7 +715,7 @@
       "discs": {
         "1": "./single-disc-v0.1.2-part10/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "hidden": true,
       "uiHidden": true,
       "autoIncludeWhen": {
@@ -999,27 +999,6 @@
       "version": "0.1.6"
     },
     {
-      "id": "fanfare-skip-on-csr-v0.1.6",
-      "name": "Skip victory fanfare",
-      "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
-      "hint": "No victory song or win poses. Loot and exp still work.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-v0.14.1"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr-v0.1.6/layers/disc1.layer.json",
-        "2": "./fanfare-skip-on-csr-v0.1.6/layers/disc2.layer.json",
-        "3": "./fanfare-skip-on-csr-v0.1.6/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "beta": true,
-      "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
-      "version": "0.1.6"
-    },
-    {
       "id": "fanfare-skip-on-highwind-v0.1.6",
       "name": "Skip victory fanfare",
       "kind": "mod",
@@ -1055,7 +1034,7 @@
       "discs": {
         "1": "./single-disc-on-csr/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": false,
       "hidden": false,
       "beta": true,
@@ -1103,7 +1082,7 @@
       "discs": {
         "1": "./single-disc-movie-relocation-v0.1.0/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "hidden": true,
       "beta": true,
@@ -1127,7 +1106,7 @@
       "discs": {
         "1": "./single-disc-csr-manip-movies-v0.1.6/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "uiHidden": true,
       "hidden": true,
       "beta": true,
@@ -1283,6 +1262,23 @@
       "rate": 75,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Dense (75%)"
+    },
+    {
+      "id": "fanfare-skip-on-csr-v0.1.6",
+      "name": "Fanfare Skip v0.1.6",
+      "kind": "mod",
+      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-v0.14.2"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-v0.1.6/layers/disc1.layer.json",
+        "2": "./fanfare-skip-on-csr-v0.1.6/layers/disc2.layer.json",
+        "3": "./fanfare-skip-on-csr-v0.1.6/layers/disc3.layer.json"
+      },
+      "enabled": true
     }
   ],
   "bases": [],
