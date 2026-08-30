@@ -31,6 +31,7 @@ sys.path.insert(0, str(_ROOT / "scripts"))
 sys.path.insert(0, str(_ROOT / "mods/single-disc/scripts"))
 
 from inject_movies_by_disc_id import (  # noqa: E402
+    _movie_id_meta_by_lba,
     _patch_dirent_lba_size,
     _patch_movie_id_bin,
 )
@@ -132,7 +133,19 @@ def _relocate_collisions(
         new_lba = len(img) // SECTOR if len(img) % SECTOR == 0 else (len(img) // SECTOR) + 1
         _write_raw(img, new_lba, raw)
         _patch_dirent_lba_size(img, path, new_lba, size)
-        n = _patch_movie_id_bin(img, lba, new_lba, size)
+        # MOVIE_ID.BIN's "size" field is the Form2 engine length
+        # (nsec*2336, sometimes not exactly that), NOT the ISO9660 dirent
+        # byte size -- overwriting it with `size` (ISO bytes) here was the
+        # actual root cause of relocated movies not playing (engine size
+        # field went from e.g. 5847008 to 5126144 for PLREXP). Preserve the
+        # existing engine size + aux fields verbatim; only the LBA changes.
+        eng_meta = _movie_id_meta_by_lba(img, lba)
+        if eng_meta is not None:
+            eng_size, a, b, c = eng_meta
+            n = _patch_movie_id_bin(img, lba, new_lba, eng_size, aux=(a, b, c))
+        else:
+            notes.append(f"WARN {name}: no MOVIE_ID row found for LBA {lba}, using ISO size")
+            n = _patch_movie_id_bin(img, lba, new_lba, size)
         notes.append(
             f"RELOCATE {name} LBA {lba}..{file_end} -> EOF LBA {new_lba} "
             f"(MOVIE_ID x{n})"
