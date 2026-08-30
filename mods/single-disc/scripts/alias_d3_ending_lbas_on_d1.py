@@ -13,11 +13,13 @@ class of fix as CANONON @250450.
 Writes full MODE2/2352 sectors from pristine D3, retargets the chosen D1
 MOVIE/ dirent, and sets the MINT/MOVIE_ID.BIN row to Disc 3 LBA + size/aux.
 
-Before writing, any other D1 MOVIE/ file whose sectors overlap the incoming
-D3 range is relocated to free space at EOF and its dirent/MOVIE_ID updated
-(see RELOCATE_NAMES). Splicing those files back in afterward at their
-original LBAs would punch holes into the newly written ending stream and
-corrupt playback.
+2026-08-30 (explicit user request): no relocation, no other-movie clobbering.
+The write is truncated to stop before the LBA of the next D1 MOVIE/ file, so
+only the one D1 file already sitting at d3_lba (NVLMK.MOV, partially) is
+overwritten; ENDING2E's tail past that point is silently cut off (accepted
+tradeoff -- a short/incomplete ending clip beats corrupting NIVLSFS et al).
+The MOVIE_ID engine size field is set to the truncated sector count so the
+player stops cleanly instead of reading into the next (untouched) file.
 
   python3 mods/single-disc/scripts/alias_d3_ending_lbas_on_d1.py \\
     --d1 workspace/iso-extract/ff7_d1_playtest_ending_test.bin --in-place
@@ -182,14 +184,31 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
             notes.append(
                 f"WARN id{mid}: MOVIE_ID LBA {r3[0]} != file {d3_lba}; using file"
             )
-        raw = _raw(d3, d3_lba, nsec)
+        # Cap the write so it never touches any other D1 MOVIE/ file's
+        # sectors (2026-08-30, explicit user request: no relocation, and no
+        # clobbering movies besides the one already partially overwritten
+        # at d3_lba). Truncating ENDING2E is acceptable to the user; find
+        # the nearest movie-file LBA after d3_lba and stop before it.
+        other_lbas = [
+            lb for nm, lb, _sz in _movie_files(bytes(img))
+            if lb > d3_lba and nm.upper() != d1name.upper()
+        ]
+        max_nsec = min(other_lbas) - d3_lba if other_lbas else nsec
+        eng_nsec = min(nsec, max_nsec)
+        if eng_nsec < nsec:
+            notes.append(
+                f"TRUNCATE id{mid} {d3name}: {nsec} -> {eng_nsec} sectors "
+                f"(next MOVIE/ file at LBA {d3_lba + eng_nsec})"
+            )
+        raw = _raw(d3, d3_lba, eng_nsec)
         _write_raw(img, d3_lba, raw)
-        _patch_dirent_lba_size(img, f"MOVIE/{d1name}", d3_lba, m3.size)
+        eng_size = eng_nsec * 2336
+        _patch_dirent_lba_size(img, f"MOVIE/{d1name}", d3_lba, eng_nsec * USER)
         struct.pack_into(
-            "<IIIII", blob, mid * 20, d3_lba, r3[1], r3[2], r3[3], r3[4]
+            "<IIIII", blob, mid * 20, d3_lba, eng_size, r3[2], r3[3], r3[4]
         )
         notes.append(
-            f"OK id{mid} {d3name} -> {d1name} LBA={d3_lba} nsec={nsec} eng={r3[1]}"
+            f"OK id{mid} {d3name} -> {d1name} LBA={d3_lba} nsec={eng_nsec} eng={eng_size}"
         )
     replace_file_padded(img, "MINT/MOVIE_ID.BIN", bytes(blob))
     if len(img) % SECTOR:
