@@ -57,13 +57,20 @@ from psx_mode2_iso import (  # noqa: E402
 #
 # id23/ONTRAIN.MOV removed 2026-08-24: user requested removal for testing.
 #
-# id26/ENDING3E.MOV and id29/ENDING2E.MOV removed 2026-08-30: both spilled
-# past SOUTHMK.MOV/MONITOR.STR's original dirent bounds and physically
-# clobbered PLREXP.MOV, FALLPL.MOV, BIKEGET.MOV, and ~20 other MOVIE/ files
-# still reachable before the ending sequence (e.g. field 160/pillar_3 plays
-# plrexp/fallpl). Only ENDING01.MOV is kept.
+# id26/ENDING3E.MOV and id29/ENDING2E.MOV restored 2026-08-30: DuckStation
+# log evidence (dslogs.txt) shows the post-final-battle sequence actually
+# issues Setloc to MSF 43:51:67 = LBA 197242, which is ENDING2E.MOV's D3
+# start (MOVIE_ID row 29), not ENDING01's (row 25, LBA 163608). Without
+# ENDING2E present at that LBA the engine seeks into whatever D1 file
+# occupies that range (NVLMK.MOV) and decodes garbage. Both were previously
+# dropped because their huge spans clobbered ~24 other reachable D1 MOVIE/
+# files (PLREXP, FALLPL, BIKEGET, etc.) when written with no relocation;
+# that collision handling is what _relocate_collisions() below is for, so
+# all three jobs are restored together with relocation re-enabled.
 JOBS = (
     (25, "ENDING01.MOV", "SMK.STR"),
+    (26, "ENDING3E.MOV", "SOUTHMK.MOV"),
+    (29, "ENDING2E.MOV", "MONITOR.STR"),
 )
 
 PRISTINE_D3 = _ROOT / "workspace/pristine/FINALFANTASY7_D3.bin"
@@ -157,14 +164,21 @@ def apply(img: bytearray, d3: bytes) -> list[str]:
     blob3 = extract_file(d3, "MINT/MOVIE_ID.BIN")
     notes: list[str] = []
 
-    # 2026-08-30 test: user requested a raw overwrite with NO relocation, to
-    # test whether ENDING01 actually requires its D3 absolute LBA on a D1
-    # image (unverified engine speculation -- see docs/reference/movie-system.md).
-    # This intentionally clobbers whatever D1 MOVIE/ files physically overlap
-    # LBA 163608..172630 (tail of MAINPLR, all of SOUTHMK/PLREXP, front of
-    # FALLPL) so the effect on those movies can be observed directly.
-    # _relocate_collisions() is left intact below for reverting to the
-    # defensive behavior once the hardcode theory is settled.
+    # 2026-08-30: relocation re-enabled now that ENDING2E/ENDING3E are back
+    # in JOBS. The three D3 ending streams (ENDING01 163608..172630,
+    # ENDING3E 172631..186366, ENDING2E 197242..277345) collectively overlap
+    # ~24 other D1 MOVIE/ files still reachable earlier in the game. Those
+    # get moved to free space at EOF first so the raw writes below can't
+    # physically stomp their sectors; the hardcoded-LBA requirement for the
+    # ending streams themselves (confirmed via DuckStation Setloc capture)
+    # is left untouched.
+    ranges = []
+    for mid, d3name, _d1name in JOBS:
+        m3 = find_file(d3, f"MOVIE/{d3name}")
+        nsec = (m3.size + USER - 1) // USER
+        ranges.append((m3.lba, m3.lba + nsec - 1))
+    keep_names = {d1name.upper() for _mid, _d3name, d1name in JOBS}
+    notes.extend(_relocate_collisions(img, ranges, keep_names))
 
     blob = bytearray(extract_file(img, "MINT/MOVIE_ID.BIN"))
     for mid, d3name, d1name in JOBS:
