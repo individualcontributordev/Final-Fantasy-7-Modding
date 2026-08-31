@@ -89,8 +89,8 @@ Continuing the movie-relocation example from `docs/reference/movie-system.md`:
    python3 scripts/bin_diff_to_layer.py \
      workspace/iso-extract/base.bin \
      workspace/iso-extract/work.bin \
-     -o builder/single-disc-on-csr/layers/disc1.layer.json \
-     --id single-disc-on-csr-disc1 \
+     -o builder/highwind/layers/disc1.layer.json \
+     --id highwind-disc1 \
      --description "Add RCKTOFF.MOV relocation"
    ```
    This walks both files in 1 MiB chunks (`iter_runs()`), finds every

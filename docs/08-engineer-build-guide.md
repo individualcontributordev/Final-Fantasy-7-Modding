@@ -33,8 +33,8 @@ git pull --ff-only
 
 python3 scripts/verify_builder_config.py \
   --pristine workspace/pristine/FINALFANTASY7_D1.bin \
-  --disc 1 --base csr-v0.14.2 \
-  --addon single-disc-on-csr \
+  --disc 1 --base highwind \
+  --addon fanfare-skip-on-highwind \
   -o workspace/iso-extract/single-disc-builder-check.bin
 ```
 
@@ -50,7 +50,7 @@ If you only need to apply one known layer file (no manifest lookup):
 ```bash
 python3 scripts/apply_layer.py \
   workspace/pristine/FINALFANTASY7_D1.bin \
-  builder/single-disc-on-csr/layers/disc1.layer.json \
+  builder/highwind/layers/disc1.layer.json \
   -o workspace/iso-extract/out.bin
 ```
 

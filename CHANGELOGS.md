@@ -10,7 +10,7 @@ Builder pack ids live in `builder/manifest.json`. Notes go next to the mod sourc
 |---------|-----------|---------------------------|
 | Field random encounters | [mods/field-random-encounters/CHANGELOG.md](mods/field-random-encounters/CHANGELOG.md) | `field-encounter-*-v…`, `field-encounter-on-*-v…` |
 | World map random encounters | [mods/world-map-random-encounters/CHANGELOG.md](mods/world-map-random-encounters/CHANGELOG.md) | `world-encounter-*-v…`, `world-encounter-on-*-v…` |
-| Single-disc | [mods/single-disc/CHANGELOG.md](mods/single-disc/CHANGELOG.md) | `single-disc-on-csr-v0.1.4`, movies `…-manip-movies-v0.1.4` (cumulative) |
+| Single-disc | [mods/single-disc/CHANGELOG.md](mods/single-disc/CHANGELOG.md) | collapsed bases `csr-plus`, `highwind` (see `build_collapsed_bases.py`); `single-disc-on-csr` retired |
 | Builder presets (this repo) | note under the mod(s) that own the packs | e.g. preset `random-encounters-light` |
 
 ```text
