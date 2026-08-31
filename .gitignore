@@ -114,3 +114,5 @@ workspace/iso-extract/battle-raw/BATTLE_BATRES.X.s4zero
 workspace/iso-extract/battle-raw/BATTLE_BATRES.X.s4zero_noanim4
 workspace/iso-extract/battle-raw/BATTLE_BATRES.X.skipsetup_s4zero_noanim4
 workspace/tmp/*
+
+*.makoutemp
