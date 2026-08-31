@@ -370,7 +370,7 @@ def main() -> int:
 		if not existing:
 			raise SystemExit(f"No disc*.layer.json under {layers_dir}")
 
-		write_pack_json(
+		pack = write_pack_json(
 			pack_dir,
 			pack_id=pack_id,
 			version=version,
@@ -382,18 +382,7 @@ def main() -> int:
 			group_label=meta.get("group_label"),
 			option_label=meta.get("option_label"),
 		)
-		update_manifest(
-			pack_id=pack_id,
-			pack_prefix=meta["pack_prefix"],
-			version=version,
-			display=meta["display"],
-			blurb=meta["blurb"],
-			compatible_bases=[base_id],
-			discs=existing,
-			rate=meta["rate"],
-			group_label=meta.get("group_label"),
-			option_label=meta.get("option_label"),
-		)
+		update_manifest(pack=pack)
 		print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
 		print(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
 

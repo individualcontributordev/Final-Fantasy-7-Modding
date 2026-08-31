@@ -144,7 +144,7 @@ def write_pack_json(
 	rate: int | None = None,
 	group_label: str | None = None,
 	option_label: str | None = None,
-) -> None:
+) -> dict:
 	pack = {
 		"id": pack_id,
 		"name": display,
@@ -164,43 +164,26 @@ def write_pack_json(
 		pack["optionLabel"] = option_label
 	pack_dir.mkdir(parents=True, exist_ok=True)
 	(pack_dir / "pack.json").write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
+	return pack
 
 
-def update_manifest(
-	*,
-	pack_id: str,
-	pack_prefix: str,
-	version: str,
-	display: str,
-	blurb: str,
-	compatible_bases: list[str],
-	discs: list[int],
-	rate: int | None = None,
-	group_label: str | None = None,
-	option_label: str | None = None,
-) -> None:
+def update_manifest(*, pack: dict) -> None:
+	"""Derive the manifest addon entry from the pack.json dict that
+	write_pack_json() just produced, so pack.json stays the single source of
+	truth for id/blurb/compatibleBases/etc. and the two files can't drift.
+	"""
 	if not MANIFEST_PATH.is_file():
 		raise SystemExit(f"Missing {MANIFEST_PATH}")
 	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-	entry = {
-		"id": pack_id,
-		"name": f"{display} v{version}",
-		"kind": "mod",
-		"blurb": blurb,
-		"format": "ic-layer-v1",
-		"exclusiveGroup": EXCLUSIVE_GROUP,
-		"compatibleBases": compatible_bases,
-		"discs": {
-			str(d): f"./{pack_id}/layers/disc{d}.layer.json" for d in discs
-		},
-		"enabled": True,
+	pack_id = pack["id"]
+	entry = dict(pack)
+	entry["name"] = f"{pack['name']} v{pack['version']}"
+	entry.pop("version", None)
+	entry["discs"] = {
+		disc: f"./{pack_id}/layers/disc{disc}.layer.json"
+		for disc in pack["discs"]
 	}
-	if rate is not None:
-		entry["rate"] = rate
-	if group_label:
-		entry["groupLabel"] = group_label
-	if option_label:
-		entry["optionLabel"] = option_label
+	entry["enabled"] = True
 
 	addons = data.setdefault("addons", [])
 	# Drop legacy encounter-* ids when writing the new field-encounter pack
@@ -376,7 +359,7 @@ def main() -> int:
 			skip_verify=args.skip_verify,
 		)
 
-	write_pack_json(
+	pack = write_pack_json(
 		pack_dir,
 		pack_id=pack_id,
 		version=version,
@@ -388,18 +371,7 @@ def main() -> int:
 		group_label=meta.get("group_label"),
 		option_label=meta.get("option_label"),
 	)
-	update_manifest(
-		pack_id=pack_id,
-		pack_prefix=meta["pack_prefix"],
-		version=version,
-		display=meta["display"],
-		blurb=meta["blurb"],
-		compatible_bases=compatible,
-		discs=discs,
-		rate=meta["rate"],
-		group_label=meta.get("group_label"),
-		option_label=meta.get("option_label"),
-	)
+	update_manifest(pack=pack)
 	print(f"\nUpdated {pack_dir / 'pack.json'}")
 	print(f"Updated {MANIFEST_PATH.relative_to(_ROOT)} (enabled=true, discs={discs})")
 	print("\nDone. Commit JSON under builder/ only — not .bin/.cue.")
