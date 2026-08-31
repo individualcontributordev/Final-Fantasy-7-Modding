@@ -6,7 +6,7 @@
   "hint": "Always with Single-disc.",
   "format": "ic-layer-v1",
   "compatibleBases": [
-    "csr-v0.14.2"
+    "csr"
   ],
   "layout": "global",
   "discs": {

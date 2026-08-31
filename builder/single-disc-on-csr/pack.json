@@ -6,7 +6,7 @@
   "hint": "CSR. Fields-only core; movies/endings not yet re-enabled.",
   "format": "ic-layer-v1",
   "compatibleBases": [
-    "csr-v0.14.2"
+    "csr"
   ],
   "layout": "global",
   "enabled": true,

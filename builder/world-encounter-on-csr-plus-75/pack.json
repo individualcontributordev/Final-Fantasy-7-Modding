@@ -1,0 +1,18 @@
+{
+  "id": "world-encounter-on-csr-plus-75",
+  "name": "World Random Encounters \u2014 Dense (75%) (on CSR+)",
+  "kind": "mod",
+  "version": "0.2.0",
+  "blurb": "More random world-map battles.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "world-encounter-rate",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 75,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Dense (75%)"
+}

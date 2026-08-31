@@ -1,2 +1,0 @@
-builder/single-disc-endings-csrplus-v0.1.0-part1/layers/disc1.layer.json
-builder/single-disc-endings-csrplus-v0.1.0-part2/layers/disc1.layer.json
