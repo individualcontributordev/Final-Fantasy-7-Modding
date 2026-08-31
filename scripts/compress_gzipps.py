@@ -89,7 +89,7 @@ def _best_gzip_payload(
         try:
             if gzip.decompress(payload) != uncompressed:
                 continue
-        except OSError:
+        except (OSError, zlib.error):
             continue
 
         size = len(payload)
