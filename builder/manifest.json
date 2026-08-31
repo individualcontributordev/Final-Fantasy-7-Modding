@@ -742,6 +742,66 @@
       "status": "beta",
       "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
       "version": "0.1.6"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-25",
+      "name": "Field Random Encounters \u2014 Light (25%) (on CSR+)",
+      "kind": "mod",
+      "blurb": "Fewer random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-25/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "version": "0.2.0",
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-50",
+      "name": "Field Random Encounters \u2014 Standard (50%) (on CSR+)",
+      "kind": "mod",
+      "blurb": "Moderate random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "version": "0.2.0",
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-75",
+      "name": "Field Random Encounters \u2014 Dense (75%) (on CSR+)",
+      "kind": "mod",
+      "blurb": "More random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-75/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "version": "0.2.0",
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)"
     }
   ],
   "bases": [],
@@ -785,6 +845,7 @@
         "world-encounter-on-csr-25",
         "field-encounter-on-highwind-25",
         "world-encounter-on-highwind-25",
+        "field-encounter-on-csr-plus-25",
         "world-encounter-on-csr-plus-25"
       ],
       "kind": "mod"
@@ -806,6 +867,7 @@
         "world-encounter-on-csr-50",
         "field-encounter-on-highwind-50",
         "world-encounter-on-highwind-50",
+        "field-encounter-on-csr-plus-50",
         "world-encounter-on-csr-plus-50"
       ],
       "kind": "mod"
@@ -827,6 +889,7 @@
         "world-encounter-on-csr-75",
         "field-encounter-on-highwind-75",
         "world-encounter-on-highwind-75",
+        "field-encounter-on-csr-plus-75",
         "world-encounter-on-csr-plus-75"
       ],
       "kind": "mod"

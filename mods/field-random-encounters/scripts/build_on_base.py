@@ -43,7 +43,11 @@ from pack_meta import (  # noqa: E402
 	update_manifest,
 	write_pack_json,
 )
-from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
+from psx_mode2_iso import (  # noqa: E402
+	extract_file,
+	find_file,
+	replace_file_within_sectors,
+)
 
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_on_base"
@@ -170,11 +174,11 @@ def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
 	new_bytes = field_new.read_bytes()
 	print(f"  FIELD.BIN.new = {len(new_bytes)} bytes (slot {meta.size})")
 
-	print("=== pad-inject FIELD.BIN.new ===")
+	print("=== inject FIELD.BIN.new (within sector allocation) ===")
 	patched = work_dir / "patched.bin"
 	shutil.copy2(base_bin, patched)
 	img = bytearray(patched.read_bytes())
-	replace_file_padded(img, FIELD_PATH, new_bytes)
+	replace_file_within_sectors(img, FIELD_PATH, new_bytes)
 	patched.write_bytes(img)
 	print(f"  wrote {patched}")
 	return patched
