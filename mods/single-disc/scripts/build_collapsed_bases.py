@@ -191,12 +191,15 @@ def find_highwind_safe_merges(hw1: bytes, hw2: bytes, hw3: bytes) -> dict[str, i
 
 def build_highwind(csrplus_final_bin: Path) -> None:
     print("\n=== highwind: base + own D2/D3 merge ===")
+    # Read from the pre-collapse 3-disc Highwind layers (disc2/disc3 exist
+    # only to source this merge -- they are retired from the manifest once
+    # the collapsed disc1-only layer below is written).
     hw1 = bytearray(pristine_bin(1).read_bytes())
-    apply_layer(hw1, load_json(CSR / "builder/highwind-v0.2.0/layers/disc1.layer.json"))
+    apply_layer(hw1, load_json(CSR / "builder/highwind/layers/disc1.layer.json"))
     hw2 = bytearray(pristine_bin(2).read_bytes())
-    apply_layer(hw2, load_json(CSR / "builder/highwind-v0.2.0/layers/disc2.layer.json"))
+    apply_layer(hw2, load_json(CSR / "builder/highwind/layers/disc2.layer.json"))
     hw3 = bytearray(pristine_bin(3).read_bytes())
-    apply_layer(hw3, load_json(CSR / "builder/highwind-v0.2.0/layers/disc3.layer.json"))
+    apply_layer(hw3, load_json(CSR / "builder/highwind/layers/disc3.layer.json"))
 
     merges = find_highwind_safe_merges(bytes(hw1), bytes(hw2), bytes(hw3))
     print(f"  HW D2/D3 safe merges found: {len(merges)}")
@@ -215,26 +218,66 @@ def build_highwind(csrplus_final_bin: Path) -> None:
             n_skip += 1
     print(f"  HW D2/D3 merge: ok={n_ok} skip={n_skip}")
 
-    print("Borrowing finished BLACKBGB.DAT from csr-plus core...")
+    # Borrow the finished ask-removal + scene trims directly from the
+    # already-collapsed csr-plus disc1 image, rather than re-deriving them
+    # from the standalone csr-plus-scene-* addon dirs (those were retired
+    # once csr-plus became its own collapsed base -- their layer.json files
+    # no longer exist, so inject_trims() can't run standalone anymore).
+    print("Borrowing finished BLACKBGB.DAT + scene trims from csr-plus core...")
     csrplus_final = bytearray(csrplus_final_bin.read_bytes())
-    data = extract_file(csrplus_final, "FIELD/BLACKBGB.DAT")
-    replace_file_within_sectors(img, "FIELD/BLACKBGB.DAT", data)
+    borrow_files = [
+        "FIELD/BLACKBGB.DAT",
+        "FIELD/BLIN66_6.DAT", "FIELD/CANON_2.DAT", "FIELD/FSHIP_24.DAT",
+        "FIELD/LAS0_3.DAT", "FIELD/LAS4_0.DAT", "FIELD/LAS2_1.DAT", "FIELD/LAS4_1.DAT",
+        "FIELD/EALS_1.DAT",
+    ]
+    for path in borrow_files:
+        data = extract_file(csrplus_final, path)
+        _inject_one(img, "csr-plus-core", path, data, [])
+        print(f"  {path}: borrowed from csr-plus core ({len(data)} bytes)")
 
-    print("Injecting CSR+ scene trims (Hojo, Aerith house, Endgame)...")
-    for line in inject_trims(img):
-        print(f"  {line}")
-
-    out_dir = CSR / "builder/highwind-v0.3.0/layers"
+    out_dir = CSR / "builder/highwind/layers"
     finish_and_diff(
         img, out_dir,
-        layer_id="highwind-v0.3.0-disc1",
+        layer_id="highwind-disc1",
         description="Highwind single-disc: D2/D3 FIELD merge + CSR+ trims + ask-removal + SNOVA, collapsed",
     )
+    # Collapsed base is disc1-only now -- retire the old multi-disc layers
+    # and pack.json disc entries so nothing still points at them.
+    for stale in ("disc2.layer.json", "disc3.layer.json"):
+        stale_path = out_dir / stale
+        if stale_path.is_file():
+            stale_path.unlink()
+            print(f"removed stale {stale_path}")
+    pack_path = CSR / "builder/highwind/pack.json"
+    pack = load_json(pack_path)
+    pack["discs"] = {"1": "./layers/disc1.layer.json"}
+    write_json(pack_path, pack)
+    print(f"updated {pack_path} discs -> disc1 only")
+
+    # Mirror the same collapse in builder/manifest.json's base entry, and
+    # retire the now-superseded single-disc-on-highwind addon (its D2/D3
+    # merge is folded into the base itself, same pattern as
+    # single-disc-on-csr being disabled once csr-plus was collapsed).
+    manifest_path = CSR / "builder/manifest.json"
+    m = load_json(manifest_path)
+    for b in m.get("bases", []):
+        if b.get("id") == "highwind":
+            b["discs"] = {"1": "./highwind/layers/disc1.layer.json"}
+            b["blurb"] = (
+                "Heavily shortened story, collapsed onto one Disc 1 image. "
+                "Many dialogue choices and scenes are cut. Separate from CSR+."
+            )
+    for a in m.get("addons", []):
+        if a.get("id") == "single-disc-on-highwind":
+            a["enabled"] = False
+    write_json(manifest_path, m)
+    print(f"updated {manifest_path}: highwind base collapsed to disc1, single-disc-on-highwind disabled")
 
 
 def main() -> None:
-    csrplus_final_bin = WORK / "csr-plus-v0.1.0-disc1_pre-snova.bin"
-    csrplus_layer = CSR / "builder/csr-plus-v0.1.0/layers/disc1.layer.json"
+    csrplus_final_bin = WORK / "csr-plus-disc1_pre-snova.bin"
+    csrplus_layer = CSR / "builder/csr-plus/layers/disc1.layer.json"
     if "--skip-csrplus" in sys.argv and csrplus_final_bin.is_file() and csrplus_layer.is_file():
         print("=== csr-plus: skipped (--skip-csrplus, using existing build) ===")
     else:
