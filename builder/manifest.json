@@ -342,7 +342,7 @@
       "id": "single-disc-on-highwind",
       "name": "Single-disc",
       "kind": "mod",
-      "blurb": "Play the whole game from one Disc 1 image on Highwind. Field maps from Highwind discs 2 and 3 are on Disc 1. Ending/credits movies auto-apply.",
+      "blurb": "Play the whole game from one Disc 1 image on Highwind. Field maps from Highwind discs 2 and 3 are included. Ending movies auto-apply.",
       "hint": "Use one Disc 1 image for the full Highwind game.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -352,11 +352,10 @@
       "discs": {
         "1": "./single-disc-on-highwind/layers/disc1.layer.json"
       },
-      "enabled": false,
+      "enabled": true,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths.",
-      "version": "0.1.0"
+      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
     },
     {
       "id": "fanfare-skip",

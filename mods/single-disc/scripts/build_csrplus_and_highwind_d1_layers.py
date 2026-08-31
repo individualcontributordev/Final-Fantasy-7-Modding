@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Build disc1 layers for CSR+ scene packs so single-disc D1 stacks get D2/D3 trims.
+"""Rebuild the Highwind single-disc main option.
 
-Why: CSR+ packs only shipped disc2/disc3 layers. A Disc 1 single-disc build never
-applied Hojo/COTA/endgame. This writes disc1.layer.json by injecting the CSR+
-FIELD maps from the retail disc into a CSR+single-disc D1 baseline, then
-bin-diffing.
+Merges HW D2/D3 FIELD bytes that differ from HW D1 into D1 (sector-safe grow).
 
-Also rebuilds Highwind single-disc main option by merging HW D2/D3 FIELD bytes
-that differ from HW D1 into D1 (sector-safe grow).
+Note: this script previously also built disc1 layers for standalone
+csr-plus-scene-* addon packs (Hojo/COTA/endgame) on top of a "single-disc-on-csr"
+base. That approach was retired -- csr-plus is now its own collapsed single-disc
+base (see build_collapsed_bases.py) with those trims baked directly into its
+own disc1.layer.json, so the addon-pack injection step here was removed as
+dead code (the pack dirs it referenced no longer exist).
 
 Usage (repo root):
   python3 mods/single-disc/scripts/build_csrplus_and_highwind_d1_layers.py
@@ -24,39 +25,12 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
-from disc_sources import csr_root, load_csr_image, pristine_bin  # noqa: E402
+from disc_sources import csr_root, pristine_bin  # noqa: E402
 from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
-from psx_mode2_iso import (  # noqa: E402
-    extract_file,
-    find_file,
-    replace_file_within_sectors,
-)
+from psx_mode2_iso import replace_file_within_sectors  # noqa: E402
 
 CSR = csr_root()
 PRISTINE_D1 = pristine_bin(1)
-
-CSRPLUS_PACKS = [
-    {
-        "id": "csr-plus-scene-hojo-fd-manip-v0.1.0",
-        "src_disc": 2,
-        "files": ["FIELD/BLIN66_6.DAT", "FIELD/CANON_2.DAT", "FIELD/FSHIP_24.DAT"],
-    },
-    {
-        "id": "csr-plus-scene-cota-fd-manip-v0.1.0",
-        "src_disc": 2,
-        "files": ["FIELD/BLIN70_4.DAT", "FIELD/LOSLAKE1.DAT"],
-    },
-    {
-        "id": "csr-plus-scene-endgame-fd-manip-v0.1.0",
-        "src_disc": 3,
-        "files": [
-            "FIELD/LAS0_3.DAT",
-            "FIELD/LAS4_0.DAT",
-            "FIELD/LAS2_1.DAT",
-            "FIELD/LAS4_1.DAT",
-        ],
-    },
-]
 
 
 def load_json(path: Path) -> dict:
@@ -66,73 +40,6 @@ def load_json(path: Path) -> dict:
 def write_json(path: Path, obj: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
-
-
-def csr_sd_d1_baseline() -> bytearray:
-    img = bytearray(PRISTINE_D1.read_bytes())
-    apply_layer(img, load_json(CSR / "builder/csr/layers/disc1.layer.json"))
-    apply_layer(
-        img,
-        load_json(ROOT / "builder/single-disc-on-csr/layers/disc1.layer.json"),
-    )
-    return img
-
-
-def csrplus_source_image(pack_id: str, src_disc: int) -> bytearray:
-    img = load_csr_image(src_disc)
-    layer = CSR / f"builder/{pack_id}/layers/disc{src_disc}.layer.json"
-    apply_layer(img, load_json(layer))
-    return img
-
-
-def inject_files(dst: bytearray, src: bytearray, files: list[str]) -> list[str]:
-    log = []
-    for path in files:
-        data = extract_file(src, path)
-        before = find_file(dst, path)
-        replace_file_within_sectors(dst, path, data)
-        after = find_file(dst, path)
-        got = extract_file(dst, path)
-        if got != data:
-            raise RuntimeError(f"{path}: inject mismatch")
-        log.append(f"{path}: {before.size} -> {after.size}")
-    return log
-
-
-def build_csrplus_disc1_layers() -> None:
-    base = csr_sd_d1_baseline()
-    out_base = ROOT / "workspace/iso-extract/csrplus-d1-build"
-    out_base.mkdir(parents=True, exist_ok=True)
-    base_path = out_base / "baseline_csr_sd_d1.bin"
-    base_path.write_bytes(base)
-    print("baseline", base_path, len(base))
-
-    for pack in CSRPLUS_PACKS:
-        pid = pack["id"]
-        src = csrplus_source_image(pid, pack["src_disc"])
-        img = bytearray(base)
-        for line in inject_files(img, src, pack["files"]):
-            print(f"  {pid}: {line}")
-        fixed = fix_field_and_world_bins(img)
-        print(f"  {pid}: FIELD.BIN/WORLD.BIN table entries patched: {fixed}")
-        mod_path = out_base / f"{pid}_d1.bin"
-        mod_path.write_bytes(img)
-        layer = build_layer(
-            base_path,
-            mod_path,
-            layer_id=f"{pid}-disc1",
-            description=f"{pid} FIELD maps on single-disc D1 (from disc {pack['src_disc']})",
-        )
-        dest = CSR / f"builder/{pid}/layers/disc1.layer.json"
-        write_json(dest, layer)
-        # pack.json discs
-        pp = CSR / f"builder/{pid}/pack.json"
-        pj = load_json(pp)
-        discs = dict(pj.get("discs") or {})
-        discs["1"] = "./layers/disc1.layer.json"
-        pj["discs"] = discs
-        write_json(pp, pj)
-        print(f"wrote {dest} records={layer['stats']['records']} bytes={layer['stats']['changedBytes']}")
 
 
 def highwind_image(disc: int) -> bytearray:
@@ -282,24 +189,17 @@ def build_highwind_single_disc() -> None:
         "layout": "global",
         "discs": {"1": "./layers/disc1.layer.json"},
     }
-    write_json(ROOT / "builder/single-disc-on-highwind/pack.json", pack)
+    pack_path = ROOT / "builder/single-disc-on-highwind/pack.json"
+    if pack_path.is_file():
+        existing_pack = load_json(pack_path)
+        for k in ("beta", "status", "betaNote"):
+            if k in existing_pack:
+                pack[k] = existing_pack[k]
+    write_json(pack_path, pack)
     print(
         f"Highwind SD layer records={layer['stats']['records']} "
         f"changed={layer['stats']['changedBytes']} ok={n_ok} skip={n_skip}"
     )
-
-
-def update_csr_manifest_discs() -> None:
-    man = CSR / "builder/manifest.json"
-    m = load_json(man)
-    for a in m.get("addons", []):
-        for pack in CSRPLUS_PACKS:
-            if a.get("id") == pack["id"]:
-                discs = dict(a.get("discs") or {})
-                discs["1"] = f"./{pack['id']}/layers/disc1.layer.json"
-                a["discs"] = discs
-                print("manifest discs", pack["id"], discs)
-    write_json(man, m)
 
 
 def update_modding_manifest_highwind_sd() -> None:
@@ -361,9 +261,6 @@ def update_modding_manifest_highwind_sd() -> None:
 
 
 def main() -> None:
-    print("=== CSR+ disc1 layers ===")
-    build_csrplus_disc1_layers()
-    update_csr_manifest_discs()
     print("=== Highwind single-disc ===")
     build_highwind_single_disc()
     update_modding_manifest_highwind_sd()
