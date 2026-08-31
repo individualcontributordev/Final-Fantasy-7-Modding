@@ -352,10 +352,10 @@
       "discs": {
         "1": "./single-disc-on-highwind/layers/disc1.layer.json"
       },
-      "enabled": true,
+      "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Single-disc is still playtesting; known freezes and glitches on some paths."
+      "betaNote": "Retired as a mod toggle — Highwind is already a single-disc base by default; this layer is baked into the base build."
     },
     {
       "id": "fanfare-skip",
