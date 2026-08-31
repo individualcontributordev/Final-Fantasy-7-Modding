@@ -207,6 +207,93 @@ Disc 2/3 layers are not applied at raw offsets to Disc 1; the pipeline extracts
 their selected fields and injects them by ISO path because each disc has a
 different physical layout.
 
+#### Chainable CSR+ stages
+
+Use these when you need to inspect, compare, or bisect every boundary. Each
+script refuses to overwrite an existing artifact:
+
+```bash
+CSR=../Final-Fantasy-7-CSR
+RUN="$CSR/build/csr-plus/debug-01"
+
+# 1. Reconstruct current/historical CSR discs and each scene-trim disc/layer.
+python3 mods/single-disc/scripts/csrplus_stage_1_sources.py \
+  --csr-root "$CSR" --output-dir "$RUN/01-sources"
+
+# 2. Merge Disc 2/3 fields by ISO path and fix FIELD/WORLD lookup tables.
+python3 mods/single-disc/scripts/csrplus_stage_2_collapse.py \
+  --csr-root "$CSR" \
+  --sources-dir "$RUN/01-sources" \
+  --output-dir "$RUN/02-collapse"
+
+# 3. Reserve Makou FIELD.BIN space, repair EDC/ECC, and validate the image.
+python3 mods/single-disc/scripts/prepare_working_bin.py \
+  --base-image "$RUN/02-collapse/06-field-world-tables-fixed.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output-dir "$RUN/03-working"
+
+# Edit 03-working/02-working.bin in Makou and save a NEW file.
+
+# 4. Normalize and validate Makou's saved image.
+python3 mods/single-disc/scripts/stabilize_working_bin.py \
+  --input /path/to/makou-saved.bin \
+  --table-baseline "$RUN/03-working/02-working.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output "$RUN/04-stabilized/disc1.bin" \
+  --report "$RUN/04-stabilized/stage-report.json"
+
+# 5. CSR+ only: append SNOVA after Makou is finished.
+python3 mods/single-disc/scripts/csrplus_stage_5_snova.py \
+  --input "$RUN/04-stabilized/disc1.bin" \
+  --disc3 "$CSR/pristine/FINALFANTASY7_D3.bin" \
+  --output "$RUN/05-snova/disc1.bin" \
+  --report "$RUN/05-snova/stage-report.json"
+
+# 6. Build candidate pack JSON plus the hardware-test BIN/CUE.
+python3 mods/single-disc/scripts/build_release_artifacts.py \
+  --input "$RUN/05-snova/disc1.bin" \
+  --layer-base "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output-dir "$RUN/06-release" \
+  --pack-id csr-plus --name "CSR+ (single-disc)" \
+  --version 0.1.2 --kind base
+```
+
+Every stage writes `stage-report.json` with hashes and relevant validation
+results. The intermediate BIN from one stage is the explicit input to the next.
+
+#### Simple working-BIN workflow for another base or mod
+
+Build a Makou-safe image from an exact base plus zero or more layers:
+
+```bash
+python3 mods/single-disc/scripts/prepare_working_bin.py \
+  --base-image /path/to/exact-layer-base.bin \
+  --layer /path/to/existing-change.layer.json \
+  --edc-reference /path/to/retail-disc.bin \
+  --output-dir /path/to/build/working
+```
+
+Edit `02-working.bin`, save a new file, then normalize and package it in one
+command:
+
+```bash
+python3 mods/single-disc/scripts/process_edited_bin.py \
+  --edited-image /path/to/makou-saved.bin \
+  --working-baseline /path/to/build/working/02-working.bin \
+  --layer-base /path/to/build/working/02-working.bin \
+  --edc-reference /path/to/retail-disc.bin \
+  --output-dir /path/to/build/release \
+  --pack-id my-mod --name "My mod" --version 0.1.0 --kind mod \
+  --compatible-base csr
+```
+
+`--layer-base` is the image used for the byte diff. For a base release it is
+normally retail. For a mod, use the unchanged `02-working.bin` that you opened
+in Makou; it represents the fully reconstructed compatible base with the same
+safe archive layout. Passing the wrong layer base can produce valid JSON that
+corrupts a player's disc.
+
 ### CSR base / CSR+ scenes / CSR-only single-disc addon
 
 Live in `Final-Fantasy-7-CSR`, not this repo — see that repo's

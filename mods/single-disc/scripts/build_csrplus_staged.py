@@ -12,6 +12,14 @@ The build is split into two commands:
 Every output is written below Final-Fantasy-7-CSR/build/, which is gitignored.
 Nothing under either repository's published builder/ tree is changed.
 
+The same work can be run one artifact boundary at a time with:
+  csrplus_stage_1_sources.py
+  csrplus_stage_2_collapse.py
+  prepare_working_bin.py
+  stabilize_working_bin.py
+  csrplus_stage_5_snova.py
+  build_release_artifacts.py
+
 Disc 2 and Disc 3 layers cannot be applied byte-for-byte to Disc 1: their ISO
 files live at different absolute offsets. This pipeline reconstructs each disc,
 then moves selected FIELD files by ISO path into the collapsed Disc 1 image.
@@ -282,27 +290,28 @@ def build_trimmed_discs(
             raise SystemExit(f"Trim layer round-trip failed for Disc {disc}")
 
 
-def save_stage(run_dir: Path, name: str, image: bytearray) -> Path:
-    path = run_dir / "06-collapse" / name
+def save_stage(output_dir: Path, name: str, image: bytearray) -> Path:
+    path = output_dir / name
     write_new(path, bytes(image))
     return path
 
 
-def collapse_to_disc1(run_dir: Path) -> Path:
-    current_dir = run_dir / "01-current-csr"
-    trimmed_dir = run_dir / "04-current-csr-plus-trims"
+def collapse_to_disc1(sources_dir: Path, output_dir: Path | None = None) -> Path:
+    current_dir = sources_dir / "01-current-csr"
+    trimmed_dir = sources_dir / "04-current-csr-plus-trims"
+    output_dir = output_dir or sources_dir / "06-collapse"
     c1 = current_dir.joinpath("FINALFANTASY7_D1.bin").read_bytes()
     c2 = current_dir.joinpath("FINALFANTASY7_D2.bin").read_bytes()
     c3 = current_dir.joinpath("FINALFANTASY7_D3.bin").read_bytes()
     image = bytearray(c1)
-    save_stage(run_dir, "01-csr-disc1.bin", image)
+    save_stage(output_dir, "01-csr-disc1.bin", image)
 
     for field, disc in WHOLE_FILE_FIELDS.items():
         source = c1 if disc == 1 else c2
         replace_file_within_sectors(image, f"FIELD/{field}.DAT", extract_file(source, f"FIELD/{field}.DAT"))
     for field, slot_discs in SLOT_SPLICE_FIELDS.items():
         merge_slots(image, field, slot_discs, c1, c2)
-    save_stage(run_dir, "02-rework-fields.bin", image)
+    save_stage(output_dir, "02-rework-fields.bin", image)
 
     safe_merges = find_safe_whole_file_merges()
     sources = {2: c2, 3: c3}
@@ -311,13 +320,13 @@ def collapse_to_disc1(run_dir: Path) -> Path:
         payload = extract_file(sources[disc], file_path)
         if payload != extract_file(image, file_path):
             replace_file_within_sectors(image, file_path, payload)
-    save_stage(run_dir, "03-safe-d2-d3-fields.bin", image)
+    save_stage(output_dir, "03-safe-d2-d3-fields.bin", image)
 
     del c1, c2, c3, sources
     fix_junair(image)
     blackbgb = ROOT / "mods/single-disc/patches/BLACKBGB.dskcg-removal.layer.json"
     apply_manual_blackbgb(image, blackbgb)
-    save_stage(run_dir, "04-precision-patches.bin", image)
+    save_stage(output_dir, "04-precision-patches.bin", image)
 
     for scene in SCENES:
         source = trimmed_dir / f"FINALFANTASY7_D{scene['disc']}.bin"
@@ -325,11 +334,11 @@ def collapse_to_disc1(run_dir: Path) -> Path:
         for file_path in scene["files"]:
             payload = extract_file(source_image, file_path)
             replace_file_within_sectors(image, file_path, payload)
-    save_stage(run_dir, "05-all-scene-trims.bin", image)
+    save_stage(output_dir, "05-all-scene-trims.bin", image)
 
     patched = fix_field_and_world_bins(image)
     print(f"Embedded FIELD/WORLD table entries patched: {patched}")
-    return save_stage(run_dir, "06-field-world-tables-fixed.bin", image)
+    return save_stage(output_dir, "06-field-world-tables-fixed.bin", image)
 
 
 def makou_compressed_size(image: bytes | bytearray) -> int:
@@ -367,7 +376,8 @@ def reserve_makou_field_bin_space(image: bytearray) -> dict:
     next_lba = field_entries[0][0] if field_entries else len(image) // SECTOR
     available_sectors = next_lba - meta.lba
     required_sectors = (makou_compressed_size(image) + USER - 1) // USER
-    reserved_sectors = required_sectors + 2
+    current_sectors = (meta.size + USER - 1) // USER
+    reserved_sectors = max(current_sectors, required_sectors + 2)
     if reserved_sectors > available_sectors:
         raise SystemExit(
             "FIELD.BIN has no safe room for Makou recompression: "
@@ -541,43 +551,221 @@ def cue_for(bin_path: Path) -> bytes:
     return text.encode()
 
 
+def build_source_artifacts(csr: Path, output_dir: Path) -> dict:
+    csr = csr.expanduser().resolve()
+    output_dir = output_dir.expanduser().resolve()
+    configure_sources(csr)
+    if output_dir.exists():
+        raise SystemExit(f"Output directory already exists: {output_dir}")
+    output_dir.mkdir(parents=True)
+
+    inputs = materialize_inputs(csr, output_dir)
+    build_disc_set(csr, output_dir, inputs, "current", "01-current-csr")
+    build_disc_set(csr, output_dir, inputs, "historical", "02-historical-csr")
+    build_trimmed_discs(output_dir, inputs)
+
+    report = {
+        "stage": "csrplus-sources",
+        "outputDir": str(output_dir),
+        "currentCsrDiscs": str(output_dir / "01-current-csr"),
+        "historicalCsrDiscs": str(output_dir / "02-historical-csr"),
+        "historicalTrimmedDiscs": str(output_dir / "03-historical-csr-plus-trims"),
+        "currentTrimmedDiscs": str(output_dir / "04-current-csr-plus-trims"),
+        "trimLayers": str(output_dir / "05-current-trim-layers"),
+    }
+    write_json(output_dir / "stage-report.json", report)
+    return report
+
+
+def stabilize_working_image(
+    *,
+    input_image: Path,
+    table_baseline: Path,
+    edc_reference: Path,
+    output_image: Path,
+    report_path: Path,
+) -> dict:
+    for required in (input_image, table_baseline, edc_reference):
+        if not required.is_file():
+            raise SystemExit(f"Missing input: {required}")
+
+    image = bytearray(input_image.read_bytes())
+    baseline = table_baseline.read_bytes()
+    table_patches = fix_tables_for_disc(image, baseline)
+    reservation = reserve_makou_field_bin_space(image)
+    makou = verify_makou_preconditions(image)
+
+    reference = edc_reference.read_bytes()
+    repaired = repair_changed_edc_ecc(image, reference)
+    verified = verify_changed_edc_ecc(image, reference)
+    bounds = verify_disc_bounds(image)
+    layout = verify_iso_layout(image)
+
+    write_new(output_image, bytes(image))
+    write_new(output_image.with_suffix(".cue"), cue_for(output_image))
+    report = {
+        "stage": "stabilize-working-bin",
+        "input": str(input_image),
+        "tableBaseline": str(table_baseline),
+        "edcReference": str(edc_reference),
+        "output": str(output_image),
+        "outputSha256": sha256(output_image),
+        "tableEntriesPatched": table_patches,
+        "fieldBinReservation": reservation,
+        "makouPreconditions": makou,
+        "edcEccSectorsRepaired": repaired,
+        "edcEccSectorsVerified": verified,
+        "discBounds": bounds,
+        "isoLayout": layout,
+    }
+    write_json(report_path, report)
+    return report
+
+
+def inject_snova_image(
+    *,
+    input_image: Path,
+    disc3: Path,
+    output_image: Path,
+    report_path: Path,
+) -> dict:
+    for required in (input_image, disc3):
+        if not required.is_file():
+            raise SystemExit(f"Missing input: {required}")
+    copy_new(input_image, output_image)
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT_DIR / "inject_snova_d3_to_d1.py"),
+            "--d1",
+            str(output_image),
+            "--d3",
+            str(disc3),
+            "--in-place",
+        ],
+        check=True,
+        cwd=ROOT,
+    )
+    image = output_image.read_bytes()
+    report = {
+        "stage": "inject-csrplus-snova",
+        "input": str(input_image),
+        "disc3": str(disc3),
+        "output": str(output_image),
+        "outputSha256": sha256(output_image),
+        "discBounds": verify_disc_bounds(image),
+        "isoLayout": verify_iso_layout(image),
+    }
+    write_json(report_path, report)
+    return report
+
+
+def build_release_artifacts(
+    *,
+    input_image: Path,
+    layer_base: Path,
+    edc_reference: Path,
+    output_dir: Path,
+    pack_id: str,
+    name: str,
+    version: str,
+    kind: str,
+    compatible_bases: list[str],
+    disc: int = 1,
+    blurb: str = "",
+) -> dict:
+    for required in (input_image, layer_base, edc_reference):
+        if not required.is_file():
+            raise SystemExit(f"Missing input: {required}")
+    if output_dir.exists():
+        raise SystemExit(f"Output directory already exists: {output_dir}")
+
+    image = bytearray(input_image.read_bytes())
+    reference = edc_reference.read_bytes()
+    repaired = repair_changed_edc_ecc(image, reference)
+    verified = verify_changed_edc_ecc(image, reference)
+    bounds = verify_disc_bounds(image)
+    layout = verify_iso_layout(image)
+
+    release_image = output_dir / "image" / f"{pack_id}-disc{disc}.bin"
+    write_new(release_image, bytes(image))
+    write_new(release_image.with_suffix(".cue"), cue_for(release_image))
+
+    layer = build_layer(
+        layer_base,
+        release_image,
+        layer_id=f"{pack_id}-{version}-disc{disc}",
+        description=f"{name} {version}",
+    )
+    pack_dir = output_dir / "pack" / pack_id
+    layer_path = pack_dir / "layers" / f"disc{disc}.layer.json"
+    write_json(layer_path, layer)
+
+    round_trip = bytearray(layer_base.read_bytes())
+    apply_layer(round_trip, layer)
+    if round_trip != image:
+        raise SystemExit("Release layer round-trip failed")
+
+    pack = {
+        "id": pack_id,
+        "name": name,
+        "kind": kind,
+        "version": version,
+        "format": "ic-layer-v1",
+        "discs": {str(disc): f"./layers/disc{disc}.layer.json"},
+    }
+    if blurb:
+        pack["blurb"] = blurb
+    if kind == "base":
+        pack["exclusiveGroup"] = "cutscenes"
+    else:
+        if not compatible_bases:
+            raise SystemExit("A mod release requires at least one --compatible-base")
+        pack["compatibleBases"] = compatible_bases
+    write_json(pack_dir / "pack.json", pack)
+    write_new(pack_dir / "VERSION", (version + "\n").encode())
+
+    report = {
+        "stage": "build-release-artifacts",
+        "input": str(input_image),
+        "layerBase": str(layer_base),
+        "edcReference": str(edc_reference),
+        "releaseImage": str(release_image),
+        "releaseImageSha256": sha256(release_image),
+        "pack": str(pack_dir),
+        "layer": str(layer_path),
+        "layerRoundTrip": "pass",
+        "edcEccSectorsRepaired": repaired,
+        "edcEccSectorsVerified": verified,
+        "discBounds": bounds,
+        "isoLayout": layout,
+        "hardwareValidation": "pending DuckStation, MiSTer, burn verify, and console playtest",
+    }
+    write_json(output_dir / "stage-report.json", report)
+    return report
+
+
 def prepare(args: argparse.Namespace) -> None:
     csr = args.csr_root.expanduser().resolve()
     configure_sources(csr)
     run_name = args.run_name or datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     run_dir = csr / "build" / "csr-plus" / run_name
-    if run_dir.exists():
-        raise SystemExit(f"Run directory already exists: {run_dir}")
-    run_dir.mkdir(parents=True)
-
-    inputs = materialize_inputs(csr, run_dir)
-    build_disc_set(csr, run_dir, inputs, "current", "01-current-csr")
-    build_disc_set(csr, run_dir, inputs, "historical", "02-historical-csr")
-    build_trimmed_discs(run_dir, inputs)
+    sources_report = build_source_artifacts(csr, run_dir)
     collapsed = collapse_to_disc1(run_dir)
-
-    image = bytearray(collapsed.read_bytes())
-    reserve = reserve_makou_field_bin_space(image)
-    makou = verify_makou_preconditions(image)
-    retail = pristine(csr, 1).read_bytes()
-    repaired = repair_changed_edc_ecc(image, retail)
-    edc_verified = verify_changed_edc_ecc(image, retail)
-    disc_bounds = verify_disc_bounds(image)
-    iso_layout = verify_iso_layout(image)
-
     editable = run_dir / "07-editable" / "FINALFANTASY7_D1.bin"
-    write_new(editable, bytes(image))
-    write_new(editable.with_suffix(".cue"), cue_for(editable))
+    working_report = stabilize_working_image(
+        input_image=collapsed,
+        table_baseline=collapsed,
+        edc_reference=pristine(csr, 1),
+        output_image=editable,
+        report_path=run_dir / "07-editable" / "stage-report.json",
+    )
     report = {
         "runDir": str(run_dir),
         "editableImage": str(editable),
-        "editableSha256": sha256(editable),
-        "fieldBinReservation": reserve,
-        "makouPreconditions": makou,
-        "edcEccSectorsRepaired": repaired,
-        "edcEccSectorsVerified": edc_verified,
-        "discBounds": disc_bounds,
-        "isoLayout": iso_layout,
+        "editableSha256": working_report["outputSha256"],
+        "sources": sources_report,
+        "workingImage": working_report,
         "next": (
             "Edit the 07-editable image in Makou Reactor, save as a new file, "
             "then run the finalize command printed below."
@@ -605,72 +793,41 @@ def finalize(args: argparse.Namespace) -> None:
     if output_dir.exists():
         raise SystemExit(f"Finalize artifacts already exist: {output_dir}")
 
-    copied = output_dir / "01-makou-edited-input.bin"
-    copy_new(edited, copied)
-    image = bytearray(copied.read_bytes())
-    if len(image) % SECTOR:
-        raise SystemExit(f"Edited image is not MODE2/2352 sector-aligned: {len(image)}")
+    working_baseline = run_dir / "07-editable" / "FINALFANTASY7_D1.bin"
+    stabilized = output_dir / "01-makou-stabilized.bin"
+    stabilize_report = stabilize_working_image(
+        input_image=edited,
+        table_baseline=working_baseline,
+        edc_reference=pristine(csr, 1),
+        output_image=stabilized,
+        report_path=output_dir / "01-stage-report.json",
+    )
 
-    table_patches = fix_field_and_world_bins(image)
-    table_fixed = output_dir / "02-tables-fixed.bin"
-    write_new(table_fixed, bytes(image))
+    snova = output_dir / "02-snova-injected.bin"
+    snova_report = inject_snova_image(
+        input_image=stabilized,
+        disc3=pristine(csr, 3),
+        output_image=snova,
+        report_path=output_dir / "02-stage-report.json",
+    )
 
-    reserve = reserve_makou_field_bin_space(image)
-    makou = verify_makou_preconditions(image)
-    stabilized = output_dir / "03-makou-stabilized.bin"
-    write_new(stabilized, bytes(image))
-
+    publish_dir = run_dir / "09-publish-candidate"
+    release_report = build_release_artifacts(
+        input_image=snova,
+        layer_base=pristine(csr, 1),
+        edc_reference=pristine(csr, 1),
+        output_dir=publish_dir,
+        pack_id="csr-plus",
+        name="CSR+ (single-disc)",
+        version=args.version,
+        kind="base",
+        compatible_bases=[],
+        disc=1,
+        blurb="CutScenes Removed plus scene trims, collapsed onto Disc 1.",
+    )
+    publish_source = Path(release_report["releaseImage"])
+    layer_path = Path(release_report["layer"])
     retail = pristine(csr, 1).read_bytes()
-    snova = output_dir / "04-snova-injected.bin"
-    copy_new(stabilized, snova)
-    subprocess.run(
-        [
-            sys.executable,
-            str(SCRIPT_DIR / "inject_snova_d3_to_d1.py"),
-            "--d1",
-            str(snova),
-            "--d3",
-            str(pristine(csr, 3)),
-            "--in-place",
-        ],
-        check=True,
-        cwd=ROOT,
-    )
-    image = bytearray(snova.read_bytes())
-    repaired = repair_changed_edc_ecc(image, retail)
-    edc_verified = verify_changed_edc_ecc(image, retail)
-    disc_bounds = verify_disc_bounds(image)
-    iso_layout = verify_iso_layout(image)
-    publish_source = output_dir / "05-publish-source.bin"
-    write_new(publish_source, bytes(image))
-    write_new(publish_source.with_suffix(".cue"), cue_for(publish_source))
-
-    publish_dir = run_dir / "09-publish-candidate" / "csr-plus"
-    layer = build_layer(
-        pristine(csr, 1),
-        publish_source,
-        layer_id=f"csr-plus-{args.version}-disc1",
-        description=f"CSR+ {args.version} staged single-disc base",
-    )
-    layer_path = publish_dir / "layers" / "disc1.layer.json"
-    write_json(layer_path, layer)
-
-    round_trip = bytearray(retail)
-    apply_layer(round_trip, layer)
-    if round_trip != image:
-        raise SystemExit("Publish layer round-trip failed")
-    pack = {
-        "id": "csr-plus",
-        "name": "CSR+ (single-disc)",
-        "kind": "base",
-        "exclusiveGroup": "cutscenes",
-        "version": args.version,
-        "format": "ic-layer-v1",
-        "discs": {"1": "./layers/disc1.layer.json"},
-        "beta": True,
-    }
-    write_json(publish_dir / "pack.json", pack)
-    write_new(publish_dir / "VERSION", (args.version + "\n").encode())
 
     console_dir = run_dir / "10-console-check"
     console_bin = console_dir / "FINALFANTASY7_D1_CSRPLUS.bin"
@@ -700,15 +857,11 @@ def finalize(args: argparse.Namespace) -> None:
 
     report = {
         "editedInput": str(edited),
-        "tableEntriesPatchedAfterMakou": table_patches,
-        "fieldBinReservation": reserve,
-        "makouPreconditions": makou,
-        "edcEccSectorsRepaired": repaired,
-        "edcEccSectorsVerified": edc_verified,
-        "publishDiscBounds": disc_bounds,
-        "publishIsoLayout": iso_layout,
+        "stabilize": stabilize_report,
+        "snova": snova_report,
+        "release": release_report,
         "publishLayer": str(layer_path),
-        "publishLayerRoundTrip": "pass",
+        "publishLayerRoundTrip": release_report["layerRoundTrip"],
         "consoleImage": str(console_bin),
         "consoleImageSha256": sha256(console_bin),
         "consoleEndingAliasIncluded": args.include_ending_alias,
