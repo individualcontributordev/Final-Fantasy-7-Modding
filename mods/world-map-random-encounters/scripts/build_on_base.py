@@ -90,11 +90,11 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
 	ids = [str(b.get("id", "")) for b in bases]
 	if against == "highwind":
-		cands = [i for i in ids if i.startswith("highwind-v")]
+		cands = [i for i in ids if i == "highwind" or i.startswith("highwind-v")]
 	elif against == "csr-plus":
-		cands = [i for i in ids if i.startswith("csr-plus-v")]
+		cands = [i for i in ids if i == "csr-plus" or i.startswith("csr-plus-v")]
 	elif against == "csr":
-		cands = [i for i in ids if re.fullmatch(r"csr-v[0-9.]+", i)]
+		cands = [i for i in ids if i == "csr" or re.fullmatch(r"csr-v[0-9.]+", i)]
 	else:
 		raise SystemExit(f"Unknown against: {against}")
 	if not cands:

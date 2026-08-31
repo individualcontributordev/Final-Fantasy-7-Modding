@@ -5,6 +5,11 @@ Index: [CHANGELOGS.md](../../CHANGELOGS.md). **Newest at top.**
 
 Current VERSION file: see `VERSION` in this folder.
 
+## 2026-08-31
+
+- Shipped Light/Standard/Dense (25/50/75%) on-CSR packs for Discs 2 and 3
+  (previously Disc 1 only). Off (0%) already covered all 3 discs.
+
 ## 2026-08-02
 
 - Retarget Highwind packs to highwind-v0.2.0 (base id bump; engine stubs unchanged).
