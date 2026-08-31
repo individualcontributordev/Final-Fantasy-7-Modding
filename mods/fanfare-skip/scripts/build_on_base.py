@@ -50,22 +50,22 @@ AGAINST = {
 		"compatible": ["clean"],
 	},
 	"csr": {
-		"base_id": "csr-v0.14.1",
+		"base_id": "csr",
 		"prefix_stem": "fanfare-skip-on-csr",
 		"on_label": " (on CSR)",
-		"compatible": ["csr-v0.14.1"],
+		"compatible": ["csr"],
 	},
 	"csr-plus": {
-		"base_id": "csr-plus-v0.1.0",
+		"base_id": "csr-plus",
 		"prefix_stem": "fanfare-skip-on-csr-plus",
 		"on_label": " (on CSR+)",
-		"compatible": ["csr-plus-v0.1.0"],
+		"compatible": ["csr-plus"],
 	},
 	"highwind": {
-		"base_id": "highwind-v0.2.0",
+		"base_id": "highwind",
 		"prefix_stem": "fanfare-skip-on-highwind",
 		"on_label": " (on Highwind)",
-		"compatible": ["highwind-v0.2.0"],
+		"compatible": ["highwind"],
 	},
 }
 
@@ -107,13 +107,13 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
 	ids = [str(b.get("id", "")) for b in bases]
 	if against == "highwind":
-		cands = [i for i in ids if i.startswith("highwind-v")]
+		cands = [i for i in ids if i == "highwind" or i.startswith("highwind-v")]
 	elif against == "csr":
-		cands = [i for i in ids if i.startswith("csr-v") and "plus" not in i]
+		cands = [i for i in ids if i == "csr" or (i.startswith("csr-v") and "plus" not in i)]
 		if not cands:
-			cands = [i for i in ids if i.startswith("csr")]
+			cands = [i for i in ids if i.startswith("csr") and "plus" not in i]
 	elif against == "csr-plus":
-		cands = [i for i in ids if i.startswith("csr-plus-v")]
+		cands = [i for i in ids if i == "csr-plus" or i.startswith("csr-plus-v")]
 	else:
 		raise SystemExit(f"unknown against {against}")
 	if not cands:

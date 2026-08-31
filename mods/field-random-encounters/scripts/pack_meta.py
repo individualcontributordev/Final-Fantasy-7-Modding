@@ -40,17 +40,17 @@ AGAINST = {
 		"on_label": "",
 	},
 	"csr": {
-		"base_id": "csr-v0.14.1",
+		"base_id": "csr",
 		"prefix_stem": "field-encounter-on-csr",
 		"on_label": " (on CSR)",
 	},
 	"csr-plus": {
-		"base_id": "csr-plus-v0.1.1",
+		"base_id": "csr-plus",
 		"prefix_stem": "field-encounter-on-csr-plus",
 		"on_label": " (on CSR+)",
 	},
 	"highwind": {
-		"base_id": "highwind-v0.1.1",
+		"base_id": "highwind",
 		"prefix_stem": "field-encounter-on-highwind",
 		"on_label": " (on Highwind)",
 	},
