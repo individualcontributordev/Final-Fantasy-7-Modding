@@ -1,42 +1,39 @@
 # Single-disc (full-run)
 
 Single-disc play: no Ask-for-disc, Supernova on D1, multi-disc field FMV handled
-by script trims. First ship: CSR+ stacks and Highwind (no manip-movie pack). CSR base later.
+by script trims.
+
+**Current architecture:** single-disc is no longer an add-on applied on top of
+a multi-disc base. `csr-plus` and `highwind` are their own collapsed
+single-disc **bases** in `builder/manifest.json`, built directly by
+`mods/single-disc/scripts/build_collapsed_bases.py` (see
+`docs/CREATE_ADDON_FROM_MAKOU.md` in the CSR repo and
+`docs/08-engineer-build-guide.md`'s CLI cookbook). `single-disc-on-csr` and
+the CSR manip-movies pack described below are **retired**
+(`enabled: false`) — kept only for changelog/history context; do not build
+against them.
 
 ## Supported bases (builder)
 
 | Base | single-disc? | Notes |
 |------|---------------|--------|
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs. |
-| CSR base (alone) | YES | Single-disc + CSR movies (auto) + ending credits (auto, 7 parts). |
-| CSR + CSR+ scene packs | YES | Single-disc + ending credits (auto). No CSR manip-movies pack. |
-| Highwind | YES | single-disc-on-highwind-v0.1.0 - D2/D3 FIELD merge + SNOVA; endings auto. No manip-movies. |
+| `csr` | NO | Still 3-disc; single-disc-on-csr retired, no current single-disc option for CSR alone. |
+| `csr-plus` | YES (base itself) | Collapsed CSR+ single-disc base — CSR D1 + rework merges + CSR+ scene trims + table fix + SNOVA inject. |
+| `highwind` | YES (base itself) | Collapsed Highwind single-disc base — Highwind D1 + D2/D3 FIELD merge + table fix + SNOVA inject. |
 
-### Three pack families (do not merge)
+### Retired pack families (historical only)
 
-| Pack | Who gets it |
-|------|-------------|
-| Single-disc (single-disc-on-csr-v*) | Main one-disc option |
-| CSR manip movies (single-disc-csr-manip-movies-v*) | CSR alone only (hidden auto; skipped if CSR+ scenes) |
-| Ending credits (7 hidden parts) | **Always on** with Single-disc (CSR, including CSR+). Not a player toggle. Highwind listed for later. |
-
-Clean pack single-disc-clean-v0.1.1 is retired (enabled false in builder manifest).
-
-
-### CSR+ on single-disc Disc 1
-
-CSR+ Hojo/COTA/endgame packs now include disc1 layers. Apply order: CSR, Single-disc, then CSR+ packs. Disc 1 single-disc builds get those trims, not only Aerith.
-
-## Shipping order
-
-1. **now:** single-disc for **CSR+ stacks** and **Highwind** (Ask + field movie trims + SNOVA; no FMV file copies)
-2. **later:** CSR base alone + manip-movie pack (whitelist only; watch ~93 MB free on 80-min CD)
-   - Working list: mods/single-disc/patches/csr-manip-movie-whitelist.md
-
+| Pack | Status |
+|------|--------|
+| Single-disc (`single-disc-on-csr-v*`) | Retired — replaced by the `csr-plus`/`highwind` collapsed bases. |
+| CSR manip movies (`single-disc-csr-manip-movies-v*`) | Retired alongside `single-disc-on-csr`. |
+| Clean pack (`single-disc-clean-v0.1.1`) | Retired (`enabled: false`). |
 
 Players: https://individualcontributor.dev/builder/
 
-Builder UI: one **Single-disc** option on CSR. The manip-movies pack is uiHidden and auto-applied with core when base is CSR and no CSR+ scene packs are selected (manifest autoIncludeWhen).
+Builder UI: `csr-plus` and `highwind` are selectable bases (like `clean`/`csr`),
+not an add-on checkbox on top of CSR.
 
 **Playtest gates (lock fixes, avoid regressions):** [docs/single-disc-test-plan.md](../../docs/single-disc-test-plan.md).
 Delta packs (`v0.1.26`+) are internal auto layers for size/hotfix; squash into one core when a gate wave is green (see that doc).

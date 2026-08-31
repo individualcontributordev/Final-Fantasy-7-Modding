@@ -60,7 +60,7 @@ python3 -m pytest tests/ -q
 python3 -m pytest tests/ -q -m integration
 ```
 
-Integration skips cleanly when disc images are missing. Run **full** suite before publishing a new `single-disc-on-csr-v*`.
+Integration skips cleanly when disc images are missing. Run **full** suite before publishing a new `csr-plus`/`highwind` collapsed base.
 
 ### RAG index (semantic search over vendored RE repos + chat history)
 
