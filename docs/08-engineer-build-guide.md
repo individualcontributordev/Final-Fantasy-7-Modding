@@ -187,6 +187,26 @@ python3 mods/single-disc/scripts/build_collapsed_bases.py
 python3 mods/single-disc/scripts/build_collapsed_bases.py --skip-csrplus
 ```
 
+For an inspectable CSR+ rebuild intended for Makou edits, use the staged
+pipeline instead. It reconstructs all three CSR discs, reconstructs each
+historical CSR+ scene trim on its original disc, preserves every intermediate
+image under the CSR repo's gitignored `build/`, and reserves enough space for
+Makou/ff7tk to recompress `FIELD.BIN` after a field changes size:
+
+```bash
+python3 mods/single-disc/scripts/build_csrplus_staged.py prepare
+# Edit the reported 07-editable/FINALFANTASY7_D1.bin and save a new file.
+python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
+  --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/<run> \
+  --edited-image /path/to/makou-saved.bin
+```
+
+The final command writes a candidate publish layer and a `.bin`/`.cue` console
+test image inside the same run. It never changes published `builder/` files.
+Disc 2/3 layers are not applied at raw offsets to Disc 1; the pipeline extracts
+their selected fields and injects them by ISO path because each disc has a
+different physical layout.
+
 ### CSR base / CSR+ scenes / CSR-only single-disc addon
 
 Live in `Final-Fantasy-7-CSR`, not this repo — see that repo's
