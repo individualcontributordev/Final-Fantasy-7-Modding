@@ -359,32 +359,6 @@
       "version": "0.1.0"
     },
     {
-      "id": "single-disc-csr-manip-movies-v0.1.4",
-      "name": "CSR manip movies",
-      "kind": "mod",
-      "version": "0.1.4",
-      "blurb": "D2/D3 manip FMVs on D1. v0.1.4 restores LBA 250450 CANONON Form2 alias for LOSLAKE1 waterfall seek (was rocket/RCKTFAIL). Keeps Form2 MOVIE_ID eng size/aux.",
-      "hint": "Hidden. Auto with Single-disc on CSR when CSR+ off.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-csr-manip-movies-v0.1.4/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "hidden": true,
-      "uiHidden": true,
-      "autoIncludeWhen": {
-        "addonSelected": "DISABLED-pending-endings-only-playtest",
-        "bases": [
-          "csr"
-        ],
-        "unlessAddonIdPrefix": "csr-plus-scene-"
-      }
-    },
-    {
       "id": "fanfare-skip",
       "name": "Fanfare Skip",
       "kind": "mod",
@@ -449,32 +423,6 @@
       "betaNote": "v0.2.12: single-disc's safe-field merge pulls FIELD/LAS4_2.DAT, LAS4_3.DAT, LAS4_4.DAT, and LASTMAP.DAT wholesale from CSR Disc 3 (they're D3-only edits vs pristine on D1/D2). CSR's disc3.layer.json (commit 965d040) now restores the original PlayMovie/FMUSC opcodes on field 768 (LASTMAP, AD3 script 31) that were previously routed around by a goto/label skip -- this addon layer was re-diffed against that updated CSR source so the fix flows through. Rebuilt in one pass via build_work_bin.py (all field merges + verified BLACKBGB manual splice + SNOVA inject + FIELD.BIN/WORLD.BIN table fix) and re-diffed against the CSR v0.14.2 D1 base. Not yet playtested past the Disc 3 ending sequence on DuckStation -- please playtest a full run through the ending. Manip movies and endings are currently disabled while this core is playtested standalone."
     },
     {
-      "id": "single-disc-csr-manip-movies-v0.1.5",
-      "name": "CSR manip movies",
-      "kind": "mod",
-      "version": "0.1.5",
-      "blurb": "D2/D3 manip FMVs on D1 (delta pack, applies after manip-movies v0.1.4). v0.1.5 restores NRCRLB/NRCRL/PARASHOT/METEOFIX/METEOSKY D2 FMV injects (MD8_5, MD8_52, FSHIP_12) lost after v0.1.4. Fixes D1->D2 disc-swap hang caused by MD8_52's PMVIE/MOVIE call having no injected movie.",
-      "hint": "Hidden. Auto with Single-disc on CSR when CSR+ off.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-csr-manip-movies-v0.1.5/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "hidden": true,
-      "uiHidden": true,
-      "autoIncludeWhen": {
-        "addonSelected": "DISABLED-pending-endings-only-playtest",
-        "bases": [
-          "csr"
-        ],
-        "unlessAddonIdPrefix": "csr-plus-scene-"
-      }
-    },
-    {
       "id": "single-disc-movie-relocation",
       "name": "(auto) movie relocation",
       "kind": "mod",
@@ -496,30 +444,6 @@
       "status": "beta",
       "autoIncludeWhen": {
         "addonSelected": "single-disc-on-csr"
-      }
-    },
-    {
-      "id": "single-disc-csr-manip-movies-v0.1.6",
-      "name": "(auto) CSR manip movies delta",
-      "kind": "mod",
-      "version": "0.1.6",
-      "blurb": "D2 manip FMVs on D1 (delta pack, applies after manip-movies v0.1.5). Fixes MD8_5 (#731) PMVIE id 53's LBA collision with OPENINGE.MOV, which broke the 67->731 transition movie.",
-      "hint": "Always with Single-disc.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./single-disc-csr-manip-movies-v0.1.6/layers/disc1.layer.json"
-      },
-      "enabled": false,
-      "uiHidden": true,
-      "hidden": true,
-      "beta": true,
-      "status": "beta",
-      "autoIncludeWhen": {
-        "addonSelected": "single-disc-csr-manip-movies-v0.1.5"
       }
     },
     {
