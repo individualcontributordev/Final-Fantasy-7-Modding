@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
 from disc_sources import csr_root, load_csr_image, pristine_bin  # noqa: E402
+from fix_field_bin_table import fix_field_and_world_bins  # noqa: E402
 from psx_mode2_iso import (  # noqa: E402
     extract_file,
     find_file,
@@ -69,10 +70,10 @@ def write_json(path: Path, obj: dict) -> None:
 
 def csr_sd_d1_baseline() -> bytearray:
     img = bytearray(PRISTINE_D1.read_bytes())
-    apply_layer(img, load_json(CSR / "builder/csr-v0.14.1/layers/disc1.layer.json"))
+    apply_layer(img, load_json(CSR / "builder/csr/layers/disc1.layer.json"))
     apply_layer(
         img,
-        load_json(ROOT / "builder/single-disc-on-csr-v0.1.2/layers/disc1.layer.json"),
+        load_json(ROOT / "builder/single-disc-on-csr/layers/disc1.layer.json"),
     )
     return img
 
@@ -112,6 +113,8 @@ def build_csrplus_disc1_layers() -> None:
         img = bytearray(base)
         for line in inject_files(img, src, pack["files"]):
             print(f"  {pid}: {line}")
+        fixed = fix_field_and_world_bins(img)
+        print(f"  {pid}: FIELD.BIN/WORLD.BIN table entries patched: {fixed}")
         mod_path = out_base / f"{pid}_d1.bin"
         mod_path.write_bytes(img)
         layer = build_layer(
@@ -136,7 +139,7 @@ def highwind_image(disc: int) -> bytearray:
     img = bytearray(pristine_bin(disc).read_bytes())
     apply_layer(
         img,
-        load_json(CSR / f"builder/highwind-v0.2.0/layers/disc{disc}.layer.json"),
+        load_json(CSR / f"builder/highwind/layers/disc{disc}.layer.json"),
     )
     return img
 
@@ -203,10 +206,10 @@ def build_highwind_single_disc() -> None:
     # Apply single-disc essentials: use CSR SD layer on top may break HW maps —
     # Instead take BLACKBGB ask-free from CSR SD if exists.
     csr_sd = bytearray(Path("workspace/pristine/FINALFANTASY7_D1.bin").read_bytes())
-    apply_layer(csr_sd, load_json(CSR / "builder/csr-v0.14.1/layers/disc1.layer.json"))
+    apply_layer(csr_sd, load_json(CSR / "builder/csr/layers/disc1.layer.json"))
     apply_layer(
         csr_sd,
-        load_json(ROOT / "builder/single-disc-on-csr-v0.1.2/layers/disc1.layer.json"),
+        load_json(ROOT / "builder/single-disc-on-csr/layers/disc1.layer.json"),
     )
     for must in ["FIELD/BLACKBGB.DAT"]:
         try:
@@ -215,6 +218,9 @@ def build_highwind_single_disc() -> None:
             print(f"  borrow {must} from CSR SD ask-removal")
         except Exception as e:
             print("  borrow fail", must, e)
+
+    fixed = fix_field_and_world_bins(img)
+    print(f"  HW SD: FIELD.BIN/WORLD.BIN table entries patched: {fixed}")
 
     # SNOVA inject for highwind single-disc
     from importlib.util import spec_from_loader, module_from_spec
@@ -255,13 +261,13 @@ def build_highwind_single_disc() -> None:
     layer = build_layer(
         bl_path,
         fin_path,
-        layer_id="single-disc-on-highwind-v0.1.0-disc1",
+        layer_id="single-disc-on-highwind-disc1",
         description="Single-disc for Highwind: D2/D3 FIELD merge + SNOVA + ask fix",
     )
-    out_dir = ROOT / "builder/single-disc-on-highwind-v0.1.0/layers"
+    out_dir = ROOT / "builder/single-disc-on-highwind/layers"
     write_json(out_dir / "disc1.layer.json", layer)
     pack = {
-        "id": "single-disc-on-highwind-v0.1.0",
+        "id": "single-disc-on-highwind",
         "name": "Single-disc",
         "kind": "mod",
         "version": "0.1.0",
@@ -272,11 +278,11 @@ def build_highwind_single_disc() -> None:
         ),
         "hint": "Use one Disc 1 image for the full Highwind game.",
         "format": "ic-layer-v1",
-        "compatibleBases": ["highwind-v0.2.0"],
+        "compatibleBases": ["highwind"],
         "layout": "global",
         "discs": {"1": "./layers/disc1.layer.json"},
     }
-    write_json(ROOT / "builder/single-disc-on-highwind-v0.1.0/pack.json", pack)
+    write_json(ROOT / "builder/single-disc-on-highwind/pack.json", pack)
     print(
         f"Highwind SD layer records={layer['stats']['records']} "
         f"changed={layer['stats']['changedBytes']} ok={n_ok} skip={n_skip}"
@@ -299,7 +305,7 @@ def update_csr_manifest_discs() -> None:
 def update_modding_manifest_highwind_sd() -> None:
     man = ROOT / "builder/manifest.json"
     m = load_json(man)
-    aid = "single-disc-on-highwind-v0.1.0"
+    aid = "single-disc-on-highwind"
     entry = {
         "id": aid,
         "name": "Single-disc",
@@ -310,20 +316,25 @@ def update_modding_manifest_highwind_sd() -> None:
         ),
         "hint": "Use one Disc 1 image for the full Highwind game.",
         "format": "ic-layer-v1",
-        "compatibleBases": ["highwind-v0.2.0"],
+        "compatibleBases": ["highwind"],
         "layout": "global",
         "discs": {
-            "1": f"./single-disc-on-highwind-v0.1.0/layers/disc1.layer.json",
+            "1": f"./single-disc-on-highwind/layers/disc1.layer.json",
         },
         "enabled": True,
     }
     ids = {a["id"] for a in m["addons"]}
     if aid in ids:
+        # preserve existing hand-added fields (beta/status/betaNote) already on the addon
+        existing = next(a for a in m["addons"] if a["id"] == aid)
+        for k in ("beta", "status", "betaNote"):
+            if k in existing:
+                entry[k] = existing[k]
         m["addons"] = [entry if a["id"] == aid else a for a in m["addons"]]
     else:
-        # after single-disc-on-csr-v0.1.2
+        # after single-disc-on-csr
         idx = next(
-            (i for i, a in enumerate(m["addons"]) if a["id"] == "single-disc-on-csr-v0.1.2"),
+            (i for i, a in enumerate(m["addons"]) if a["id"] == "single-disc-on-csr"),
             len(m["addons"]) - 1,
         )
         m["addons"].insert(idx + 1, entry)
@@ -336,13 +347,13 @@ def update_modding_manifest_highwind_sd() -> None:
             # switch to multi if needed
             if "addonSelectedAny" not in rule:
                 rule["addonSelectedAny"] = [
-                    "single-disc-on-csr-v0.1.2",
-                    "single-disc-on-highwind-v0.1.0",
+                    "single-disc-on-csr",
+                    "single-disc-on-highwind",
                 ]
                 rule.pop("addonSelected", None)
-            bases = list(rule.get("bases") or ["csr-v0.14.1", "highwind-v0.2.0"])
-            if "highwind-v0.2.0" not in bases:
-                bases.append("highwind-v0.2.0")
+            bases = list(rule.get("bases") or ["csr", "highwind"])
+            if "highwind" not in bases:
+                bases.append("highwind")
             rule["bases"] = bases
             a["autoIncludeWhen"] = rule
     write_json(man, m)
