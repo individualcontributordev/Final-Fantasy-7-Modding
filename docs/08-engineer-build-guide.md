@@ -120,6 +120,110 @@ an addon fully, also repoint its `autoIncludeWhen` match to a dead sentinel
 id (see any occurrence of `DISABLED-pending-*` in `manifest.json` for the
 pattern) or delete the block entirely.
 
+## Build every base × mod permutation (CLI cookbook)
+
+Base IDs: `clean` (Unmodified, implicit — no layer, no script), `csr` (3-disc,
+built in `Final-Fantasy-7-CSR`), `csr-plus` (single-disc), `highwind`
+(single-disc). `csr` and `csr-plus`/`highwind` addons live in different repos'
+`manifest.json` — CSR-only scene add-ons in `Final-Fantasy-7-CSR`, everything
+else (`field-encounter-*`, `world-encounter-*`, `fanfare-skip*`,
+`single-disc-*`) in this repo's `builder/manifest.json`.
+
+### Field encounter rate (`mods/field-random-encounters`)
+
+One script builds any base × rate combo; `--density` picks 0/25/50/75%
+(interactive prompt if omitted):
+
+```bash
+python3 mods/field-random-encounters/scripts/build_on_base.py \
+  --against clean --discs 1 --density standard
+python3 mods/field-random-encounters/scripts/build_on_base.py \
+  --against csr --discs 1 --density all       # builds all 4 rates
+python3 mods/field-random-encounters/scripts/build_on_base.py \
+  --against csr-plus --discs 1 --density light
+python3 mods/field-random-encounters/scripts/build_on_base.py \
+  --against highwind --discs 1 --density dense
+```
+
+`--against` is one of `clean|csr|csr-plus|highwind`; writes/updates
+`builder/field-encounter[-on-<base>]-<rate>/` and `builder/manifest.json`.
+
+### World-map encounter rate (`mods/world-map-random-encounters`)
+
+Same shape as field, plus a batch driver for every base at once:
+
+```bash
+python3 mods/world-map-random-encounters/scripts/build_on_base.py \
+  --against clean --discs 1 --density all
+python3 mods/world-map-random-encounters/scripts/build_on_base.py \
+  --against highwind --discs 1 --density standard
+
+# all 4 bases (clean/csr/csr-plus/highwind) in one go:
+python3 mods/world-map-random-encounters/scripts/build_all_rates.py \
+  --density all --discs 1
+```
+
+### Fanfare skip (`mods/fanfare-skip`)
+
+No density — single on/off layer per base:
+
+```bash
+python3 mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
+python3 mods/fanfare-skip/scripts/build_on_base.py --against csr --discs 1
+python3 mods/fanfare-skip/scripts/build_on_base.py --against csr-plus --discs 1
+python3 mods/fanfare-skip/scripts/build_on_base.py --against highwind --discs 1
+python3 mods/fanfare-skip/scripts/build_on_base.py --against all --discs 1
+```
+
+### Single-disc bases themselves (csr-plus, highwind)
+
+These aren't addons — see "Collapsed single-disc bases" in
+`Final-Fantasy-7-CSR/docs/CREATE_ADDON_FROM_MAKOU.md` for the full writeup.
+Rebuild both in one pass:
+
+```bash
+python3 mods/single-disc/scripts/build_collapsed_bases.py
+# csr-plus's intermediate .bin already cached from a prior run:
+python3 mods/single-disc/scripts/build_collapsed_bases.py --skip-csrplus
+```
+
+### CSR base / CSR+ scenes / CSR-only single-disc addon
+
+Live in `Final-Fantasy-7-CSR`, not this repo — see that repo's
+`docs/MANUAL_CSR_BASE_BUILD_GUIDE.md` (new CSR/Highwind base version) and
+`docs/CREATE_ADDON_FROM_MAKOU.md` (CSR+ scene add-ons, Makou-authored).
+
+### Verify any permutation before publishing
+
+Stack whatever base + addon ids you just built, exactly like the site would:
+
+```bash
+python3 scripts/verify_builder_config.py \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 --base highwind \
+  --addon field-encounter-on-highwind-50 \
+  --addon fanfare-skip-on-highwind \
+  -o workspace/iso-extract/check.bin
+```
+
+Pass every addon id explicitly — `autoIncludeWhen` auto-stacking is not
+applied by this script. Then load `check.bin` in DuckStation.
+
+### Full base × mod matrix (`clean`/`csr`/`csr-plus`/`highwind`)
+
+| Mod family | `clean` | `csr` | `csr-plus` | `highwind` |
+|---|---|---|---|---|
+| Field encounter rate | ✅ `field-encounter-<rate>` | ✅ `field-encounter-on-csr-<rate>` | ✅ `field-encounter-on-csr-plus-<rate>` | ✅ `field-encounter-on-highwind-<rate>` |
+| World encounter rate | ✅ `world-encounter-<rate>` | ✅ `world-encounter-on-csr-<rate>` | ✅ `world-encounter-on-csr-plus-<rate>` | ✅ `world-encounter-on-highwind-<rate>` |
+| Fanfare skip | ✅ `fanfare-skip` | ✅ `fanfare-skip-on-csr` | ✅ `fanfare-skip-on-csr-plus` | ✅ `fanfare-skip-on-highwind` |
+| Single-disc | n/a (already 1 disc) | ⛔ `single-disc-on-csr` (`enabled: false`, retired) | n/a (already single-disc base) | n/a (already single-disc base) |
+| CSR+ scenes (Hojo/Aerith/Endgame) | ⛔ not applicable | ✅ free checkboxes (CSR repo) | baked into the base already | baked into the base already |
+
+`<rate>` = `0`/`25`/`50`/`75`. Rows marked n/a mean the combination doesn't
+exist as an addon because the behavior is either baked into the base or
+structurally impossible (e.g. you can't add "single-disc" to a base that's
+already single-disc).
+
 ## Where to look next
 
 | Need | Doc |
