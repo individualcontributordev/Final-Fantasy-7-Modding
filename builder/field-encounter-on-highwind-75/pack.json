@@ -1,0 +1,20 @@
+{
+  "id": "field-encounter-on-highwind-75",
+  "name": "Field Random Encounters \u2014 Dense (75%) (on Highwind)",
+  "kind": "mod",
+  "version": "0.2.0",
+  "blurb": "More random field battles.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "rate": 75,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Dense (75%)"
+}

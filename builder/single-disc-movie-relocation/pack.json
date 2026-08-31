@@ -1,0 +1,23 @@
+{
+  "id": "single-disc-movie-relocation",
+  "version": "0.1.0",
+  "name": "(auto) movie relocation",
+  "blurb": "Internal auto: JUNAIR/GELNICA + TRNAD_51/C_SCENE1+3+FF_DAIKU movie fixes, docs/findings/2026-08-25-movie-relocation-plan.md.",
+  "hint": "Always with Single-disc.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr"
+  ],
+  "layout": "global",
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "enabled": true,
+  "uiHidden": true,
+  "hidden": true,
+  "beta": true,
+  "status": "beta",
+  "autoIncludeWhen": {
+    "addonSelected": "single-disc-on-csr"
+  }
+}
