@@ -355,7 +355,7 @@
       "enabled": false,
       "beta": true,
       "status": "beta",
-      "betaNote": "Retired as a mod toggle — Highwind is already a single-disc base by default; this layer is baked into the base build."
+      "betaNote": "Retired as a mod toggle \u2014 Highwind is already a single-disc base by default; this layer is baked into the base build."
     },
     {
       "id": "fanfare-skip",
@@ -477,7 +477,9 @@
         "csr"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-25/layers/disc1.layer.json"
+        "1": "./field-encounter-on-csr-25/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-25/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-25/layers/disc3.layer.json"
       },
       "enabled": true,
       "version": "0.2.0",
@@ -496,7 +498,9 @@
         "csr"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-50/layers/disc1.layer.json"
+        "1": "./field-encounter-on-csr-50/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-50/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-50/layers/disc3.layer.json"
       },
       "enabled": true,
       "version": "0.2.0",
@@ -515,7 +519,9 @@
         "csr"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-75/layers/disc1.layer.json"
+        "1": "./field-encounter-on-csr-75/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-75/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-75/layers/disc3.layer.json"
       },
       "enabled": true,
       "version": "0.2.0",
@@ -555,7 +561,9 @@
         "csr"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-25/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-25/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-25/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-25/layers/disc3.layer.json"
       },
       "enabled": true,
       "version": "0.2.0",
@@ -574,7 +582,9 @@
         "csr"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-50/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-50/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-50/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-50/layers/disc3.layer.json"
       },
       "enabled": true,
       "version": "0.2.0",
@@ -593,7 +603,9 @@
         "csr"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-75/layers/disc1.layer.json"
+        "1": "./world-encounter-on-csr-75/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-75/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-75/layers/disc3.layer.json"
       },
       "enabled": true,
       "version": "0.2.0",
