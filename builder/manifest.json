@@ -1506,6 +1506,7 @@
       "compatibleBases": [
         "csr-plus-v0.1.0"
       ],
+      "layout": "global",
       "discs": {
         "1": "./field-encounter-on-csr-plus-0-v0.2.0/layers/disc1.layer.json"
       },
@@ -1513,6 +1514,63 @@
       "rate": 0,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Off (0%)"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-25-v0.2.0",
+      "name": "Field Random Encounters \u2014 Light (25%) (on CSR+) v0.2.0",
+      "kind": "mod",
+      "blurb": "Fewer random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-25-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-50-v0.2.0",
+      "name": "Field Random Encounters \u2014 Standard (50%) (on CSR+) v0.2.0",
+      "kind": "mod",
+      "blurb": "Moderate random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-50-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-75-v0.2.0",
+      "name": "Field Random Encounters \u2014 Dense (75%) (on CSR+) v0.2.0",
+      "kind": "mod",
+      "blurb": "More random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus-v0.1.0"
+      ],
+      "layout": "global",
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-75-v0.2.0/layers/disc1.layer.json"
+      },
+      "enabled": true,
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)"
     },
     {
       "id": "world-encounter-on-csr-plus-0-v0.2.0",
@@ -1524,6 +1582,7 @@
       "compatibleBases": [
         "csr-plus-v0.1.0"
       ],
+      "layout": "global",
       "discs": {
         "1": "./world-encounter-on-csr-plus-0-v0.2.0/layers/disc1.layer.json"
       },
@@ -1542,6 +1601,7 @@
       "compatibleBases": [
         "csr-plus-v0.1.0"
       ],
+      "layout": "global",
       "discs": {
         "1": "./world-encounter-on-csr-plus-25-v0.2.0/layers/disc1.layer.json"
       },
@@ -1560,6 +1620,7 @@
       "compatibleBases": [
         "csr-plus-v0.1.0"
       ],
+      "layout": "global",
       "discs": {
         "1": "./world-encounter-on-csr-plus-50-v0.2.0/layers/disc1.layer.json"
       },
@@ -1578,6 +1639,7 @@
       "compatibleBases": [
         "csr-plus-v0.1.0"
       ],
+      "layout": "global",
       "discs": {
         "1": "./world-encounter-on-csr-plus-75-v0.2.0/layers/disc1.layer.json"
       },
@@ -1596,6 +1658,7 @@
       "compatibleBases": [
         "csr-plus-v0.1.0"
       ],
+      "layout": "global",
       "discs": {
         "1": "./fanfare-skip-on-csr-plus-v0.1.6/layers/disc1.layer.json"
       },
@@ -1610,7 +1673,7 @@
       "blurb": "Field and world map Off (0%) \u2014 no random encounters for the selected base experience.",
       "compatibleBases": [
         "clean",
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0",
         "csr-plus-v0.1.0"
       ],
@@ -1632,17 +1695,18 @@
       "blurb": "Field and world map Light (25%) random encounters for the selected base experience.",
       "compatibleBases": [
         "clean",
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0",
         "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-25-v0.1.2",
         "world-encounter-25-v0.1.0",
-        "field-encounter-on-csr-25-v0.1.2",
-        "world-encounter-on-csr-25-v0.1.0",
+        "field-encounter-on-csr-25-v0.2.0",
+        "world-encounter-on-csr-25-v0.2.0",
         "field-encounter-on-highwind-25-v0.1.2",
         "world-encounter-on-highwind-25-v0.1.0",
+        "field-encounter-on-csr-plus-25-v0.2.0",
         "world-encounter-on-csr-plus-25-v0.2.0"
       ],
       "kind": "mod"
@@ -1653,17 +1717,18 @@
       "blurb": "Field and world map Standard (50%) random encounters for the selected base experience.",
       "compatibleBases": [
         "clean",
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0",
         "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-50-v0.1.2",
         "world-encounter-50-v0.1.0",
-        "field-encounter-on-csr-50-v0.1.2",
-        "world-encounter-on-csr-50-v0.1.0",
+        "field-encounter-on-csr-50-v0.2.0",
+        "world-encounter-on-csr-50-v0.2.0",
         "field-encounter-on-highwind-50-v0.1.2",
         "world-encounter-on-highwind-50-v0.1.0",
+        "field-encounter-on-csr-plus-50-v0.2.0",
         "world-encounter-on-csr-plus-50-v0.2.0"
       ],
       "kind": "mod"
@@ -1674,17 +1739,18 @@
       "blurb": "Field and world map Dense (75%) random encounters for the selected base experience.",
       "compatibleBases": [
         "clean",
-        "csr-v0.14.1",
+        "csr-v0.14.2",
         "highwind-v0.2.0",
         "csr-plus-v0.1.0"
       ],
       "addons": [
         "field-encounter-75-v0.1.2",
         "world-encounter-75-v0.1.0",
-        "field-encounter-on-csr-75-v0.1.2",
-        "world-encounter-on-csr-75-v0.1.0",
+        "field-encounter-on-csr-75-v0.2.0",
+        "world-encounter-on-csr-75-v0.2.0",
         "field-encounter-on-highwind-75-v0.1.2",
         "world-encounter-on-highwind-75-v0.1.0",
+        "field-encounter-on-csr-plus-75-v0.2.0",
         "world-encounter-on-csr-plus-75-v0.2.0"
       ],
       "kind": "mod"
