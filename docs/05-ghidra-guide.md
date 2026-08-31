@@ -156,7 +156,7 @@ When patching individual field scripts (e.g., LOST2.DAT for single-disc), Ghidra
 
 4. **Share the export:**
    - Save to `workspace/ghidra/` or `docs/ghidra-pastes/`
-   - Include in documentation or chat for Agent analysis
+   - Include in documentation or chat for review
    - Annotate key offsets (MUSIC opcodes, RET, jump targets)
 
 ### What to Include in Exports
@@ -183,12 +183,12 @@ Offset   Bytes                           Notes
 ### Time Savings
 
 **Without Ghidra export:**
-- Agent pattern-matches bytecode blind
+- Bytecode gets pattern-matched blind
 - Multiple iterations to find correct offset
 - Risk of patching wrong location
 
 **With Ghidra export:**
-- Agent sees exact opcode flow and addresses
+- Exact opcode flow and addresses are visible up front
 - Single iteration to correct patch location
 - Visual confirmation of jump targets
 

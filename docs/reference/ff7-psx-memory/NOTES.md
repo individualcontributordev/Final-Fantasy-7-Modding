@@ -1,4 +1,4 @@
-# Notes from import (agent + human)
+# Notes from import
 
 ## Source
 

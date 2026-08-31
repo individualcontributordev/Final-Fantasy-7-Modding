@@ -96,7 +96,7 @@ compatibleBases so stacks stay optional on clean / CSR / Highwind.
 
 **Done - Shared verify / layer tooling**  
 ic-layer-v1 publish path, verify_builder_config / built-disc checks used when
-shipping (see repo AGENTS / findings).
+shipping (see repo operating rules / findings).
 
 **Done - History archive pointer**  
 https://individualcontributor.dev/history/ (community chats that drove many of

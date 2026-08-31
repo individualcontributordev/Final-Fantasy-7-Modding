@@ -4,13 +4,13 @@ This document explains the automated Ghidra workflow using ghidra-cli.
 
 ## Overview
 
-**Problem:** Agent needs to understand FF7's code structure to make accurate patches, but committing decompiled game code isn't appropriate.
+**Problem:** Understanding FF7's code structure is needed to make accurate patches, but committing decompiled game code isn't appropriate.
 
-**Solution:** 
+**Solution:**
 1. Use Ghidra to analyze game binaries (locally, not committed)
 2. Run automation scripts to extract structured metadata
 3. Commit only the metadata JSON (not raw game code)
-4. Agent queries the JSON in future sessions
+4. Query the JSON in future sessions
 
 ## Setup Status
 
@@ -80,7 +80,7 @@ git push
 
 ## Using the Metadata
 
-Agent can query the JSON files:
+Query the JSON files directly:
 
 ```python
 import json
@@ -141,14 +141,14 @@ Ghidra Project (local, gitignored)
 Structured JSON (COMMITTED)
   workspace/ghidra-analysis/*.json
           │
-          ├─ Agent reads JSON
+          ├─ read JSON
           ▼
     Fast, accurate patches!
 ```
 
 ## Next Steps
 
-Agent will implement the actual extraction scripts once the automation framework is tested.
+Implement the actual extraction scripts once the automation framework is tested.
 
 Current stub: `scripts/ghidra/analyze_field_bin.py`  
 Next: Implement Ghidra Python scripts to extract functions/symbols/xrefs

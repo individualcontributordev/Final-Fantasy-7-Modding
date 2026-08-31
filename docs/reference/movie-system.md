@@ -1,7 +1,7 @@
 # Movie System Reference — PMVIE → MOVIE_ID.BIN → CD-ROM seek
 
 End-to-end reference for how field scripts trigger FMV playback, verified
-from raw bytes + Makou Reactor source per `.agents/rules/verified-reference-evidence.mdc`.
+from raw bytes + Makou Reactor source per the verified-reference-evidence rule.
 Use this to reproduce or extend movie-relocation tooling (`mods/single-disc/scripts/`).
 
 ## The chain

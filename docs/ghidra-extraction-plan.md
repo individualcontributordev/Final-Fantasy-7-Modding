@@ -82,7 +82,7 @@ Build a **call graph** showing which modules call into each other:
 - BATRES.X → if victory logic references disc-specific data
 - KERNEL.BIN → if item/materia tables differ per disc
 
-**The metadata lets Agent:**
+**The metadata lets you:**
 - Find all references to disc-related addresses
 - Verify no hardcoded disc checks remain
 - Plan new features (button combos, debug menus, etc.)
