@@ -1,6 +1,6 @@
 # FF7 PSX memory map (imported)
 
-Community **FF7 Memory Values** list, cleaned for this repo so agents and humans can search offsets quickly.
+Community **FF7 Memory Values** list, cleaned for this repo so offsets can be searched quickly.
 
 ## Files
 

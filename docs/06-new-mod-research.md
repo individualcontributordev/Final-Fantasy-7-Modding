@@ -24,7 +24,7 @@ Players never see this repo’s RE trail. They only get packs on https://individ
 | **Builder contract** | `ic-layer-v1`, `compatibleBases`, `exclusiveGroup`, short blurbs. | [docs/reference/layer-engineering.md](reference/layer-engineering.md) |
 | **Hardware bar** | DuckStation → MiSTer PSX → burn/PS2; EDC on real discs. | [07](07-hardware-burn.md), [03](03-environment-setup.md) |
 
-## Research loop (Agent + human)
+## Research loop
 
 1. **State the behavior** in one sentence (e.g. “fewer random field battles, Lure still works”).
 2. **Pick the file** — engine (`FIELD.BIN` / `WORLD.BIN`) vs per-map data (Makou `.DAT`). Many “game feel” mods need the engine. **Makou FIELD packs / CSR+ scenes → Final-Fantasy-7-CSR** (`ship-makou-addon`, `ship-csr-plus-scene`); continue here only for engine/RE work.

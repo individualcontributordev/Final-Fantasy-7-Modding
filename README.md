@@ -63,7 +63,7 @@ python mods/field-random-encounters/scripts/build_on_base.py --against csr --den
 
 Densities are **named presets** (not a free-form %): **Light** / **Standard** / **Dense**. Stub notes: `mods/field-random-encounters/patches/`.
 
-## For engineers (RE) — build and mod this without an agent
+## For engineers (RE) — build and mod this by hand
 
 **Start here:** [docs/00-goals.md](docs/00-goals.md) — the reading-order index for every doc below.
 For a fully sequenced, exercise-based path from zero to shipping a mod, use
@@ -72,7 +72,7 @@ For a fully sequenced, exercise-based path from zero to shipping a mod, use
 | Doc | Contents |
 |-----|----------|
 | [docs/03-environment-setup.md](docs/03-environment-setup.md) | Install checklist: emulator, Ghidra, Makou Reactor, hex tool |
-| [docs/08-engineer-build-guide.md](docs/08-engineer-build-guide.md) | Build/verify disc images with only the CLI scripts (no agent needed) |
+| [docs/08-engineer-build-guide.md](docs/08-engineer-build-guide.md) | Build/verify disc images with only the CLI scripts |
 | [docs/02-disc-format.md](docs/02-disc-format.md) | ISO layout, GZIPPS compression, Makou save flow |
 | [docs/04-workflow.md](docs/04-workflow.md) | Edit → recompress → reinsert → test loop |
 | [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | Ghidra import settings and RE method |

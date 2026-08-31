@@ -8,7 +8,7 @@ This doc is the reusable method, taught via that real worked example.
 
 ## The method (3 independent evidence classes)
 
-Per `.agents/rules/verified-reference-evidence.mdc`, never conclude engine
+Per the verified-reference-evidence rule, never conclude engine
 behavior from a single source. Always seek two of:
 
 1. **Raw bytes** — hex dump of the actual field script / table / executable

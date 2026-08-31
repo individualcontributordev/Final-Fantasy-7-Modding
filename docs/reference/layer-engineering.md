@@ -3,7 +3,7 @@
 How a `.bin` edit becomes a browser-deliverable pack. For **CLI usage**
 (commands to run) see `docs/08-engineer-build-guide.md` — this doc explains
 the **file format itself** and walks one diff byte-for-byte so you could
-write a compatible tool from scratch, per `.agents/rules/verified-reference-evidence.mdc`.
+write a compatible tool from scratch, per the verified-reference-evidence rule.
 
 ## Why a layer, not a patched .bin
 

@@ -1,4 +1,4 @@
-# Engineer's Build Guide (no agent required)
+# Engineer's Build Guide (CLI only)
 
 How to build/verify disc images from repo files the same way the builder site
 does, using only the CLI scripts below. For mod-specific pipelines see each
