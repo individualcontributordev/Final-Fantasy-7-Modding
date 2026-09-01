@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 """Turn a Makou-saved BIN into release artifacts in one safe command.
 
-Use --snova-disc3 only for the collapsed CSR+ base. Other bases and mods omit
-it and go directly from the stabilized edit to layer creation.
+Use --snova-disc3 for collapsed CSR+ or Highwind. Other bases and mods omit it
+and go directly from the stabilized edit to layer creation.
+
+The two baseline options have intentionally different jobs:
+
+* --working-baseline is the safe image opened in Makou. It preserves archive
+  allocation decisions while the edited image is normalized.
+* --layer-base is the exact image the builder has before this new layer. For
+  prepare_working_bin.py output, this is normally 01-layer-stack.bin.
+
+Keeping those concepts separate prevents a valid-looking layer from depending
+on unpublished preparation bytes.
 """
 from __future__ import annotations
 
@@ -70,6 +80,7 @@ def main() -> None:
         blurb=args.blurb,
     )
     print(f"Layer: {report['layer']}")
+    print(f"Builder reconstruction: {report['builderRebuildImage']}")
     print(f"Hardware-test image: {report['releaseImage']}")
 
 

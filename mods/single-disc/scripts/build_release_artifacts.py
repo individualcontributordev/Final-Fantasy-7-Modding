@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Build a layer, pack metadata, and hardware-test BIN/CUE from one image."""
+"""Build and verify a distributable pack from one finalized disc image.
+
+The command writes:
+
+* an ic-layer-v1 JSON diff and pack.json for publication;
+* a release BIN/CUE for emulator and physical-media testing;
+* a second BIN rebuilt from --layer-base plus the new layer.
+
+The rebuilt image must be byte-identical to the release image. This is the
+local proof that the browser builder can reconstruct the candidate; it does
+not replace boot, gameplay, drive verification, or console testing.
+"""
 from __future__ import annotations
 
 import argparse
@@ -42,6 +53,7 @@ def main() -> None:
         blurb=args.blurb,
     )
     print(f"Layer: {report['layer']}")
+    print(f"Builder reconstruction: {report['builderRebuildImage']}")
     print(f"Hardware-test image: {report['releaseImage']}")
 
 

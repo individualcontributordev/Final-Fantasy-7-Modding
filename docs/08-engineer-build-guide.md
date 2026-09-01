@@ -175,34 +175,45 @@ python3 mods/fanfare-skip/scripts/build_on_base.py --against highwind --discs 1
 python3 mods/fanfare-skip/scripts/build_on_base.py --against all --discs 1
 ```
 
-### Single-disc bases themselves (csr-plus, highwind)
+### Collapsed CSR+ and Highwind bases
 
-These aren't addons — see "Collapsed single-disc bases" in
-`Final-Fantasy-7-CSR/docs/CREATE_ADDON_FROM_MAKOU.md` for the full writeup.
-Rebuild both in one pass:
+`build_collapsed_bases.py` is retained for historical investigation. New work
+uses the staged pipelines because they preserve every checkpoint and stop when
+a field does not fit instead of silently publishing a partial merge.
 
-```bash
-python3 mods/single-disc/scripts/build_collapsed_bases.py
-# csr-plus's intermediate .bin already cached from a prior run:
-python3 mods/single-disc/scripts/build_collapsed_bases.py --skip-csrplus
-```
-
-For an inspectable CSR+ rebuild intended for Makou edits, use the staged
-pipeline instead. It reconstructs all three CSR discs, reconstructs each
+For an inspectable CSR+ rebuild intended for Makou edits, the staged pipeline
+reconstructs all three CSR discs, reconstructs each
 historical CSR+ scene trim on its original disc, preserves every intermediate
 image under the CSR repo's gitignored `build/`, and reserves enough space for
 Makou/ff7tk to recompress `FIELD.BIN` after a field changes size:
 
 ```bash
-python3 mods/single-disc/scripts/build_csrplus_staged.py prepare
-# Edit the reported 07-editable/FINALFANTASY7_D1.bin and save a new file.
+python3 mods/single-disc/scripts/build_csrplus_staged.py prepare \
+  --run-name csrplus-v0.1.2
+# Edit the reported working BIN and save a new file.
 python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
-  --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/<run> \
-  --edited-image /path/to/makou-saved.bin
+  --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/csrplus-v0.1.2 \
+  --edited-image /path/to/makou-saved.bin \
+  --version 0.1.2
 ```
 
-The final command writes a candidate publish layer and a `.bin`/`.cue` console
-test image inside the same run. It never changes published `builder/` files.
+Highwind uses the same safety and release functions. Its source stage
+reconstructs the retired v0.2.0 Disc 1/2/3 layers and restores only the field
+payloads that its first collapsed release intentionally borrowed from CSR+:
+
+```bash
+python3 mods/single-disc/scripts/build_highwind_staged.py prepare \
+  --run-name highwind-v0.2.1
+# Edit build/highwind/highwind-v0.2.1/03-working/HIGHWIND_D1.bin.
+python3 mods/single-disc/scripts/build_highwind_staged.py finalize \
+  --run-dir ../Final-Fantasy-7-CSR/build/highwind/highwind-v0.2.1 \
+  --edited-image /path/to/highwind-makou-saved.bin \
+  --version 0.2.1
+```
+
+Each final command writes a candidate pack, release BIN/CUE, independent
+builder-rebuild BIN/CUE, hashes, and verification reports inside the run. It
+never changes published `builder/` files.
 Disc 2/3 layers are not applied at raw offsets to Disc 1; the pipeline extracts
 their selected fields and injects them by ISO path because each disc has a
 different physical layout.
@@ -242,7 +253,7 @@ python3 mods/single-disc/scripts/stabilize_working_bin.py \
   --output "$RUN/04-stabilized/disc1.bin" \
   --report "$RUN/04-stabilized/stage-report.json"
 
-# 5. CSR+ only: append SNOVA after Makou is finished.
+# 5. Append SNOVA after Makou is finished (also used by Highwind).
 python3 mods/single-disc/scripts/csrplus_stage_5_snova.py \
   --input "$RUN/04-stabilized/disc1.bin" \
   --disc3 "$CSR/pristine/FINALFANTASY7_D3.bin" \
@@ -261,6 +272,66 @@ python3 mods/single-disc/scripts/build_release_artifacts.py \
 
 Every stage writes `stage-report.json` with hashes and relevant validation
 results. The intermediate BIN from one stage is the explicit input to the next.
+
+#### Chainable Highwind stages
+
+The source and collapse stages are Highwind-specific. Stages 3 onward are the
+same reusable commands shown above:
+
+```bash
+CSR=../Final-Fantasy-7-CSR
+RUN="$CSR/build/highwind/debug-01"
+
+# 1. Reconstruct retired Highwind D1/D2/D3 and pinned shared fields.
+python3 mods/single-disc/scripts/highwind_stage_1_sources.py \
+  --csr-root "$CSR" --output-dir "$RUN/01-sources"
+
+# 2. Merge unambiguous later-disc fields, shared scenes, and fix lookup tables.
+python3 mods/single-disc/scripts/highwind_stage_2_collapse.py \
+  --csr-root "$CSR" \
+  --sources-dir "$RUN/01-sources" \
+  --output-dir "$RUN/02-collapse"
+
+# 3. Create the image to open in Makou.
+python3 mods/single-disc/scripts/prepare_working_bin.py \
+  --base-image "$RUN/02-collapse/04-field-world-tables-fixed.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output-dir "$RUN/03-working"
+
+# Edit 03-working/02-working.bin and save to a new path.
+
+# 4. Normalize Makou's save.
+python3 mods/single-disc/scripts/stabilize_working_bin.py \
+  --input /path/to/highwind-makou-saved.bin \
+  --table-baseline "$RUN/03-working/02-working.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output "$RUN/04-stabilized/disc1.bin" \
+  --report "$RUN/04-stabilized/stage-report.json"
+
+# 5. Inject SNOVA after editing.
+python3 mods/single-disc/scripts/csrplus_stage_5_snova.py \
+  --input "$RUN/04-stabilized/disc1.bin" \
+  --disc3 "$CSR/pristine/FINALFANTASY7_D3.bin" \
+  --output "$RUN/05-snova/disc1.bin" \
+  --report "$RUN/05-snova/stage-report.json"
+
+# 6. Diff against retail because Highwind is a base, then verify reconstruction.
+python3 mods/single-disc/scripts/build_release_artifacts.py \
+  --input "$RUN/05-snova/disc1.bin" \
+  --layer-base "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output-dir "$RUN/06-release" \
+  --pack-id highwind --name "Highwind" \
+  --version 0.2.1 --kind base \
+  --blurb "Heavily shortened story, collapsed onto Disc 1."
+```
+
+Highwind's `stage-report.json` deliberately lists fields retained from Disc 1.
+When both later discs differ, choosing either whole-file payload could replace
+early-game behavior with a later-game script. The current policy matches the
+published Highwind build: keep Disc 1 until a field-specific verdict is
+playtested. Before producing its output, the collapse stage also compares all
+787 rebuilt `FIELD/*.DAT` payloads with the pinned published baseline.
 
 #### Simple working-BIN workflow for another base or mod
 
@@ -281,18 +352,82 @@ command:
 python3 mods/single-disc/scripts/process_edited_bin.py \
   --edited-image /path/to/makou-saved.bin \
   --working-baseline /path/to/build/working/02-working.bin \
-  --layer-base /path/to/build/working/02-working.bin \
+  --layer-base /path/to/build/working/01-layer-stack.bin \
   --edc-reference /path/to/retail-disc.bin \
   --output-dir /path/to/build/release \
   --pack-id my-mod --name "My mod" --version 0.1.0 --kind mod \
   --compatible-base csr
 ```
 
-`--layer-base` is the image used for the byte diff. For a base release it is
-normally retail. For a mod, use the unchanged `02-working.bin` that you opened
-in Makou; it represents the fully reconstructed compatible base with the same
-safe archive layout. Passing the wrong layer base can produce valid JSON that
-corrupts a player's disc.
+`--working-baseline` preserves the safe layout used while stabilizing Makou's
+save. `--layer-base` has a different role: it is the exact builder image before
+the new layer. For a base release that is normally retail; for a mod created
+with `prepare_working_bin.py`, it is normally `01-layer-stack.bin`. The
+reservation and repairs added to `02-working.bin` then become part of the new
+layer and are reproduced for players. Passing the wrong layer base can produce
+valid JSON that corrupts a player's disc.
+
+#### Publish a candidate pack
+
+Do not publish directly from a Makou save. Publish only the `pack/<pack-id>/`
+directory emitted by `build_release_artifacts.py` after its
+`stage-report.json` says:
+
+- `layerRoundTrip: pass`;
+- release and builder-rebuild SHA-256 values are identical;
+- EDC/ECC, disc bounds, and ISO layout checks passed.
+
+For Highwind, review the candidate before copying it into the CSR catalog:
+
+```bash
+RUN=../Final-Fantasy-7-CSR/build/highwind/highwind-v0.2.1
+diff -ru \
+  ../Final-Fantasy-7-CSR/builder/highwind \
+  "$RUN/05-release-candidate/pack/highwind"
+
+cp "$RUN/05-release-candidate/pack/highwind/pack.json" \
+  ../Final-Fantasy-7-CSR/builder/highwind/pack.json
+cp "$RUN/05-release-candidate/pack/highwind/VERSION" \
+  ../Final-Fantasy-7-CSR/builder/highwind/VERSION
+cp "$RUN/05-release-candidate/pack/highwind/layers/disc1.layer.json" \
+  ../Final-Fantasy-7-CSR/builder/highwind/layers/disc1.layer.json
+```
+
+Then update the matching `bases` entry in
+`Final-Fantasy-7-CSR/builder/manifest.json` to the same version, name, blurb,
+and Disc 1 path. Add-on packs use the same process in this repo's
+`builder/<pack-id>/` and `addons` manifest array. Never commit BIN/CUE files;
+only layer JSON, pack metadata, VERSION, and manifest changes are published.
+
+#### Verify the published builder path
+
+After copying the candidate, reconstruct it through the catalog resolver:
+
+```bash
+python3 scripts/verify_builder_config.py \
+  --csr-root ../Final-Fantasy-7-CSR \
+  --pristine ../Final-Fantasy-7-CSR/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 --base highwind \
+  -o ../Final-Fantasy-7-CSR/build/highwind/highwind-v0.2.1/published-rebuild.bin
+
+shasum -a 256 \
+  ../Final-Fantasy-7-CSR/build/highwind/highwind-v0.2.1/05-release-candidate/image/highwind-disc1.bin \
+  ../Final-Fantasy-7-CSR/build/highwind/highwind-v0.2.1/published-rebuild.bin
+```
+
+The hashes must match. If the browser builder performs a final EDC/ECC repair,
+compare again after running the same repair on both images; repaired footer
+bytes are derived data, while user-data mismatches indicate a wrong layer
+base, path, order, or stale manifest.
+
+Builder reconstruction proves distribution correctness, not hardware
+playability. Complete the verification ladder from `docs/07-hardware-burn.md`:
+
+1. Boot and exercise edited transitions in DuckStation Safe Mode.
+2. Test the same BIN/CUE on MiSTer PSX if available.
+3. Burn the verified CUE at a conservative speed with write verification.
+4. Boot and play the critical path on the target console/optical drive.
+5. Record the image SHA-256, burner/media, console model, and result.
 
 ### CSR base / CSR+ scenes / CSR-only single-disc addon
 
