@@ -471,7 +471,16 @@ def verify_disc_bounds(image: bytes | bytearray) -> dict:
     }
 
 
-def verify_iso_layout(image: bytes | bytearray) -> dict:
+# The ending alias deliberately parks the truncated ENDING2E stream inside an
+# existing MOVIE/ slot, so that slot's extent runs into the file behind it.
+# That single overlap is the intended design; any other overlap still fails.
+ENDING_ALIAS_OVERLAPS = frozenset({("MOVIE/NVLMK.MOV", "MOVIE/MONITOR.STR")})
+
+
+def verify_iso_layout(
+    image: bytes | bytearray,
+    allowed_overlaps: frozenset[tuple[str, str]] = frozenset(),
+) -> dict:
     pvd = _user(image, 16)
     root = pvd[156:190]
     entries: list[tuple[str, int, int, bool]] = [
@@ -485,13 +494,19 @@ def verify_iso_layout(image: bytes | bytearray) -> dict:
     duplicates = {lba: names for lba, names in lbas.items() if len(names) > 1}
 
     overlaps = []
+    expected_overlaps = []
     ordered = sorted(entries, key=lambda entry: entry[1])
     for previous, current in zip(ordered, ordered[1:]):
         previous_name, previous_lba, previous_size, _ = previous
         current_name, current_lba, _current_size, _ = current
         previous_end = previous_lba + sector_count(previous_size, previous_name)
-        if previous_end > current_lba:
-            overlaps.append((previous_name, current_name, previous_end - current_lba))
+        if previous_end <= current_lba:
+            continue
+        overlap = (previous_name, current_name, previous_end - current_lba)
+        if (previous_name, current_name) in allowed_overlaps:
+            expected_overlaps.append(overlap)
+        else:
+            overlaps.append(overlap)
 
     if duplicates or overlaps:
         raise SystemExit(
@@ -501,6 +516,7 @@ def verify_iso_layout(image: bytes | bytearray) -> dict:
         "entries": len(entries),
         "duplicateLbas": 0,
         "overlaps": 0,
+        "expectedOverlaps": expected_overlaps,
     }
 
 
@@ -669,6 +685,61 @@ def inject_snova_image(
     return report
 
 
+def inject_ending_alias_image(
+    *,
+    input_image: Path,
+    disc3: Path,
+    edc_reference: Path,
+    output_image: Path,
+    report_path: Path,
+) -> dict:
+    """Place the truncated Disc 3 ENDING2E stream at its absolute D3 LBA.
+
+    This runs *before* the publish layer is diffed. The post-battle sequence
+    seeks a hardcoded D3 LBA, so the ending only plays if those sectors exist
+    on the collapsed Disc 1 image — which means the bytes have to be part of
+    the published layer, exactly like the SNOVA files. Building the layer from
+    a pre-alias image would hand builder users a disc that cannot play its own
+    ending.
+    """
+    for required in (input_image, disc3, edc_reference):
+        if not required.is_file():
+            raise SystemExit(f"Missing input: {required}")
+    copy_new(input_image, output_image)
+    subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT_DIR / "alias_d3_ending_lbas_on_d1.py"),
+            "--d1",
+            str(output_image),
+            "--d3",
+            str(disc3),
+            "--in-place",
+        ],
+        check=True,
+        cwd=ROOT,
+    )
+    # The aliaser rewrites dirents and MOVIE_ID rows with plain byte writes,
+    # so their sectors need fresh Form 1 footers before anything is published.
+    image = bytearray(output_image.read_bytes())
+    reference = edc_reference.read_bytes()
+    repaired = repair_changed_edc_ecc(image, reference)
+    output_image.write_bytes(image)
+    report = {
+        "stage": "inject-ending-alias",
+        "input": str(input_image),
+        "disc3": str(disc3),
+        "output": str(output_image),
+        "outputSha256": sha256(output_image),
+        "edcEccSectorsRepaired": repaired,
+        "edcEccSectorsVerified": verify_changed_edc_ecc(bytes(image), reference),
+        "discBounds": verify_disc_bounds(bytes(image)),
+        "isoLayout": verify_iso_layout(bytes(image), ENDING_ALIAS_OVERLAPS),
+    }
+    write_json(report_path, report)
+    return report
+
+
 def build_release_artifacts(
     *,
     input_image: Path,
@@ -682,6 +753,7 @@ def build_release_artifacts(
     compatible_bases: list[str],
     disc: int = 1,
     blurb: str = "",
+    allowed_overlaps: frozenset[tuple[str, str]] = frozenset(),
 ) -> dict:
     for required in (input_image, layer_base, edc_reference):
         if not required.is_file():
@@ -694,7 +766,7 @@ def build_release_artifacts(
     repaired = repair_changed_edc_ecc(image, reference)
     verified = verify_changed_edc_ecc(image, reference)
     bounds = verify_disc_bounds(image)
-    layout = verify_iso_layout(image)
+    layout = verify_iso_layout(image, allowed_overlaps)
 
     release_image = output_dir / "image" / f"{pack_id}-disc{disc}.bin"
     write_new(release_image, bytes(image))
@@ -831,9 +903,22 @@ def finalize(args: argparse.Namespace) -> None:
         report_path=output_dir / "02-stage-report.json",
     )
 
+    publish_input = snova
+    ending_report = None
+    if args.ending_alias:
+        endings = output_dir / "03-endings.bin"
+        ending_report = inject_ending_alias_image(
+            input_image=snova,
+            disc3=pristine(csr, 3),
+            edc_reference=pristine(csr, 1),
+            output_image=endings,
+            report_path=output_dir / "03-stage-report.json",
+        )
+        publish_input = endings
+
     publish_dir = run_dir / "05-release-candidate"
     release_report = build_release_artifacts(
-        input_image=snova,
+        input_image=publish_input,
         layer_base=pristine(csr, 1),
         edc_reference=pristine(csr, 1),
         output_dir=publish_dir,
@@ -844,51 +929,36 @@ def finalize(args: argparse.Namespace) -> None:
         compatible_bases=[],
         disc=1,
         blurb="CutScenes Removed plus scene trims, collapsed onto Disc 1.",
+        allowed_overlaps=ENDING_ALIAS_OVERLAPS if args.ending_alias else frozenset(),
     )
     publish_source = Path(release_report["releaseImage"])
     layer_path = Path(release_report["layer"])
     retail = pristine(csr, 1).read_bytes()
 
+    # The console image is a straight copy of the publish source, so the disc
+    # you burn is byte-identical to what the builder site reconstructs.
     console_dir = run_dir / "06-console-check"
     console_bin = console_dir / "FINALFANTASY7_D1_CSRPLUS.bin"
     copy_new(publish_source, console_bin)
-    if args.include_ending_alias:
-        # This optional path changes raw sectors in place. Preserve the fully
-        # validated release image before invoking it so the experiment remains
-        # reversible and cannot contaminate the publish candidate.
-        copy_new(console_bin, console_bin.with_suffix(".bin.bak"))
-        subprocess.run(
-            [
-                sys.executable,
-                str(SCRIPT_DIR / "alias_d3_ending_lbas_on_d1.py"),
-                "--d1",
-                str(console_bin),
-                "--d3",
-                str(pristine(csr, 3)),
-                "--in-place",
-            ],
-            check=True,
-            cwd=ROOT,
-        )
-        console_image = bytearray(console_bin.read_bytes())
-        repair_changed_edc_ecc(console_image, retail)
-        console_bin.write_bytes(console_image)
     write_new(console_bin.with_suffix(".cue"), cue_for(console_bin))
     console_image = console_bin.read_bytes()
     console_edc_verified = verify_changed_edc_ecc(console_image, retail)
     console_bounds = verify_disc_bounds(console_image)
-    console_iso_layout = verify_iso_layout(console_image)
+    console_iso_layout = verify_iso_layout(
+        console_image, ENDING_ALIAS_OVERLAPS if args.ending_alias else frozenset()
+    )
 
     report = {
         "editedInput": str(edited),
         "stabilize": stabilize_report,
         "snova": snova_report,
+        "endingAlias": ending_report,
+        "endingAliasInPublishedLayer": bool(args.ending_alias),
         "release": release_report,
         "publishLayer": str(layer_path),
         "publishLayerRoundTrip": release_report["layerRoundTrip"],
         "consoleImage": str(console_bin),
         "consoleImageSha256": sha256(console_bin),
-        "consoleEndingAliasIncluded": args.include_ending_alias,
         "consoleEdcEccSectorsVerified": console_edc_verified,
         "consoleDiscBounds": console_bounds,
         "consoleIsoLayout": console_iso_layout,
@@ -919,10 +989,13 @@ def parser() -> argparse.ArgumentParser:
     finalize_command.add_argument("--run-dir", type=Path, required=True)
     finalize_command.add_argument("--edited-image", type=Path, required=True)
     finalize_command.add_argument("--version", default="0.1.1")
+    # On by default: the ending is part of the single-disc build, so it belongs
+    # in the published layer or builder users get a disc without an ending.
     finalize_command.add_argument(
-        "--include-ending-alias",
-        action="store_true",
-        help="Add the experimental ENDING2E raw-sector alias to the console image only",
+        "--no-ending-alias",
+        dest="ending_alias",
+        action="store_false",
+        help="Skip the ENDING2E Disc 3 alias (publishes a disc with no ending movie)",
     )
     finalize_command.set_defaults(action=finalize)
     return ap
