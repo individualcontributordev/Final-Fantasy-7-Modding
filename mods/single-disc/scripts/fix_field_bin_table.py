@@ -62,8 +62,14 @@ def _dir_entries(img: bytes, dir_path: str) -> list[tuple[str, int, int, bool]]:
     return _list_dir(img, lba, size)
 
 
-def fix_bin_table(img: bytearray, bin_path: str, entries: list[tuple[str, int, int, bool]],
-                   skip_names: set[str], baseline_sizes: dict[str, int]) -> int:
+def fix_bin_table(
+    img: bytearray,
+    bin_path: str,
+    entries: list[tuple[str, int, int, bool]],
+    skip_names: set[str],
+    baseline_sizes: dict[str, int],
+    target_offsets: dict[str, int] | None = None,
+) -> int:
     """Patch bin_path's embedded (lba,size) table for entries whose current
     size mismatches the table. Returns count of entries patched.
 
@@ -83,6 +89,28 @@ def fix_bin_table(img: bytearray, bin_path: str, entries: list[tuple[str, int, i
     for name, lba, size, is_dir in entries:
         if is_dir or name in skip_names:
             continue
+
+        inferred_offset = (target_offsets or {}).get(name)
+        if inferred_offset is not None:
+            recorded_lba, recorded_size = struct.unpack_from(
+                "<II",
+                ungz,
+                inferred_offset,
+            )
+            if recorded_lba != lba:
+                raise SystemExit(
+                    f"{bin_path}: inferred table offset {inferred_offset} "
+                    f"contains LBA {recorded_lba}, expected {lba}"
+                )
+            if recorded_size == size:
+                continue
+            target_idx = inferred_offset
+            old_size = recorded_size
+            struct.pack_into("<I", ungz, target_idx + 4, size)
+            print(f"  {bin_path} table: {name} @{lba} size {old_size} -> {size}")
+            patched += 1
+            continue
+
         lba_key = struct.pack("<I", lba)
         idxs = [i for i in range(len(ungz) - 4) if ungz[i:i + 4] == lba_key]
         if not idxs:

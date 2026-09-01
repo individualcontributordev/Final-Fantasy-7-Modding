@@ -367,6 +367,41 @@ reservation and repairs added to `02-working.bin` then become part of the new
 layer and are reproduced for players. Passing the wrong layer base can produce
 valid JSON that corrupts a player's disc.
 
+#### Repair an existing BIN for Makou
+
+When you only have an FF7 raw BIN, create a separate repaired copy:
+
+```bash
+python3 mods/single-disc/scripts/make_makou_safe.py \
+  /path/to/problem.bin \
+  -o /path/to/problem-makou-safe.bin
+```
+
+No retail or pristine comparison is required. The script:
+
+1. infers and repairs stale FIELD.BIN/WORLD.BIN lookup records;
+2. reserves FIELD.BIN recompression headroom;
+3. verifies Makou's lookup and YAMADA preconditions;
+4. recalculates every recognized Mode 2 Form 1 EDC/ECC footer;
+5. validates PVD size and rejects duplicate or overlapping ISO extents;
+6. writes a CUE and `<output>.makou-safe.json` report.
+
+If you kept the unchanged image that existed before the problematic Makou
+save, use it as a stronger table reference:
+
+```bash
+python3 mods/single-disc/scripts/make_makou_safe.py \
+  /path/to/problem.bin \
+  --table-baseline /path/to/pre-edit.bin \
+  -o /path/to/problem-makou-safe.bin
+```
+
+The input is never overwritten, and existing outputs are refused. This is an
+FF7 PSX raw MODE2/2352 repair tool, not a universal CD-image converter. It
+stops when a table record is ambiguous or the filesystem is already
+overlapping; those cases require a known-good pre-edit image or reconstruction
+from layers.
+
 #### Publish a candidate pack
 
 Do not publish directly from a Makou save. Publish only the `pack/<pack-id>/`
