@@ -15,9 +15,10 @@ Nothing under either repository's published builder/ tree is changed.
 The same work can be run one artifact boundary at a time with:
   csrplus_stage_1_sources.py
   csrplus_stage_2_collapse.py
-  prepare_working_bin.py
+  single_disc_stage_3_working.py
   stabilize_working_bin.py
   csrplus_stage_5_snova.py
+  single_disc_stage_6_endings.py
   build_release_artifacts.py
 
 Disc 2 and Disc 3 layers cannot be applied byte-for-byte to Disc 1: their ISO
@@ -62,6 +63,12 @@ from psx_mode2_iso import (  # noqa: E402
     extract_file,
     find_file,
     replace_file_within_sectors,
+)
+from pipeline_cache import (  # noqa: E402
+    archive_path,
+    cached_artifacts,
+    cached_output,
+    load_report,
 )
 from verify_iso_integrity import sector_count, walk_tree  # noqa: E402
 
@@ -589,6 +596,14 @@ def build_source_artifacts(csr: Path, output_dir: Path) -> dict:
     build_disc_set(csr, output_dir, inputs, "historical", "02-historical-csr")
     build_trimmed_discs(output_dir, inputs)
 
+    # Collapse only reads these six reconstructed discs. Recording their
+    # hashes makes the expensive source stage reusable without trusting that
+    # files merely exist.
+    cache_paths = [
+        Path(directory) / f"FINALFANTASY7_D{disc}.bin"
+        for directory in ("01-current-csr", "04-current-csr-plus-trims")
+        for disc in (1, 2, 3)
+    ]
     report = {
         "stage": "csrplus-sources",
         "outputDir": str(output_dir),
@@ -597,6 +612,9 @@ def build_source_artifacts(csr: Path, output_dir: Path) -> dict:
         "historicalTrimmedDiscs": str(output_dir / "03-historical-csr-plus-trims"),
         "currentTrimmedDiscs": str(output_dir / "04-current-csr-plus-trims"),
         "trimLayers": str(output_dir / "05-current-trim-layers"),
+        "cacheArtifacts": {
+            str(path): sha256(output_dir / path) for path in cache_paths
+        },
     }
     write_json(output_dir / "stage-report.json", report)
     return report
@@ -631,7 +649,9 @@ def stabilize_working_image(
     report = {
         "stage": "stabilize-working-bin",
         "input": str(input_image),
+        "inputSha256": sha256(input_image),
         "tableBaseline": str(table_baseline),
+        "tableBaselineSha256": sha256(table_baseline),
         "edcReference": str(edc_reference),
         "output": str(output_image),
         "outputSha256": sha256(output_image),
@@ -833,6 +853,83 @@ def build_release_artifacts(
     return report
 
 
+def write_collapse_cache_report(
+    *,
+    stage: str,
+    sources_dir: Path,
+    output: Path,
+    report_path: Path,
+) -> dict:
+    image = output.read_bytes()
+    report = {
+        "stage": stage,
+        "sourcesDir": str(sources_dir),
+        "output": str(output),
+        "outputSha256": sha256(output),
+        "discBounds": verify_disc_bounds(image),
+        "isoLayout": verify_iso_layout(image),
+    }
+    write_json(report_path, report)
+    return report
+
+
+def cached_or_adopted_collapse(
+    *,
+    stage: str,
+    sources_dir: Path,
+    collapse_dir: Path,
+    output: Path,
+) -> tuple[bool, dict | None]:
+    report_path = collapse_dir / "stage-report.json"
+    valid, report, reason = cached_output(
+        report_path=report_path,
+        output_path=output,
+        sha256_file=sha256,
+    )
+    if valid:
+        print(f"[cache] 02-collapse: {reason}")
+        return True, report
+    if report_path.exists() or not output.is_file():
+        print(f"[cache] 02-collapse: {reason}")
+        return False, report
+
+    # Older CSR+ runs did not write a collapse report. Validate the immutable
+    # checkpoint structurally once, then record its hash for future resumes.
+    report = write_collapse_cache_report(
+        stage=stage,
+        sources_dir=sources_dir,
+        output=output,
+        report_path=report_path,
+    )
+    print("[cache] 02-collapse: adopted legacy artifact after full structural validation")
+    return True, report
+
+
+def write_prepare_report(
+    *,
+    run_dir: Path,
+    working_image: Path,
+    sources_report: dict,
+    collapse_report: dict,
+    working_report: dict,
+) -> None:
+    report = {
+        "runDir": str(run_dir),
+        "workingImage": str(working_image),
+        "workingSha256": working_report["outputSha256"],
+        "sources": sources_report,
+        "collapse": collapse_report,
+        "working": working_report,
+        "next": (
+            "Edit 03-working/CSRPLUS_D1.bin in Makou Reactor, save as a new file, "
+            "then run the finalize command printed below."
+        ),
+    }
+    old_report = run_dir / "prepare-report.json"
+    archive_path(old_report, run_dir)
+    write_json(old_report, report)
+
+
 def prepare(args: argparse.Namespace) -> None:
     csr = args.csr_root.expanduser().resolve()
     configure_sources(csr)
@@ -842,8 +939,84 @@ def prepare(args: argparse.Namespace) -> None:
     # 01-sources, 02-collapse, 03-working, then finalize's 04/05/06.
     # Nested 00–05 folders live inside 01-sources, not as siblings of the
     # working BIN.
-    sources_report = build_source_artifacts(csr, run_dir / "01-sources")
-    collapsed = collapse_to_disc1(run_dir / "01-sources", run_dir / "02-collapse")
+    sources_dir = run_dir / "01-sources"
+    collapse_dir = run_dir / "02-collapse"
+    working_dir = run_dir / "03-working"
+    collapsed = collapse_dir / "06-field-world-tables-fixed.bin"
+    working_image = working_dir / "CSRPLUS_D1.bin"
+
+    if run_dir.exists() and not (args.resume or args.rebuild_from):
+        raise SystemExit(
+            f"Build run already exists: {run_dir}\n"
+            "Use --resume to reuse verified stages, or --rebuild-from "
+            "sources|collapse|working to force a stage and everything after it."
+        )
+
+    rebuild_from = args.rebuild_from
+    if rebuild_from:
+        stage_names = ("sources", "collapse", "working")
+        first = stage_names.index(rebuild_from)
+        stage_dirs = {
+            "sources": sources_dir,
+            "collapse": collapse_dir,
+            "working": working_dir,
+        }
+        for stage_name in reversed(stage_names[first:]):
+            archived = archive_path(stage_dirs[stage_name], run_dir)
+            if archived:
+                print(f"[recovery] preserved {stage_name} at {archived}")
+
+    sources_valid, sources_report, sources_reason = cached_artifacts(
+        report_path=sources_dir / "stage-report.json",
+        stage_dir=sources_dir,
+        sha256_file=sha256,
+    )
+    collapse_valid, collapse_report = cached_or_adopted_collapse(
+        stage="csrplus-collapse",
+        sources_dir=sources_dir,
+        collapse_dir=collapse_dir,
+        output=collapsed,
+    )
+    working_valid, working_report, working_reason = cached_output(
+        report_path=working_dir / "stage-report.json",
+        output_path=working_image,
+        sha256_file=sha256,
+    )
+
+    if working_valid and not rebuild_from:
+        print(f"[cache] 03-working: {working_reason}")
+        print(f"\nMakou-safe CSR+ image: {working_image}")
+        return
+
+    if not collapse_valid:
+        if not sources_valid:
+            if sources_dir.exists():
+                raise SystemExit(
+                    f"Cannot safely reuse 01-sources: {sources_reason}\n"
+                    "Run again with --rebuild-from sources. Existing artifacts "
+                    "will be preserved under recovery/."
+                )
+            sources_report = build_source_artifacts(csr, sources_dir)
+        else:
+            print(f"[cache] 01-sources: {sources_reason}")
+        archive_path(collapse_dir, run_dir)
+        archive_path(working_dir, run_dir)
+        collapsed = collapse_to_disc1(sources_dir, collapse_dir)
+        collapse_report = write_collapse_cache_report(
+            stage="csrplus-collapse",
+            sources_dir=sources_dir,
+            output=collapsed,
+            report_path=collapse_dir / "stage-report.json",
+        )
+    else:
+        print("[cache] 02-collapse: reusable")
+        if sources_report is None:
+            sources_report = load_report(sources_dir / "stage-report.json") or {}
+
+    if working_dir.exists():
+        archived = archive_path(working_dir, run_dir)
+        print(f"[recovery] preserved changed 03-working at {archived}")
+
     working_image = run_dir / "03-working" / "CSRPLUS_D1.bin"
     working_report = stabilize_working_image(
         input_image=collapsed,
@@ -852,18 +1025,13 @@ def prepare(args: argparse.Namespace) -> None:
         output_image=working_image,
         report_path=run_dir / "03-working" / "stage-report.json",
     )
-    report = {
-        "runDir": str(run_dir),
-        "workingImage": str(working_image),
-        "workingSha256": working_report["outputSha256"],
-        "sources": sources_report,
-        "working": working_report,
-        "next": (
-            "Edit 03-working/CSRPLUS_D1.bin in Makou Reactor, save as a new file, "
-            "then run the finalize command printed below."
-        ),
-    }
-    write_json(run_dir / "prepare-report.json", report)
+    write_prepare_report(
+        run_dir=run_dir,
+        working_image=working_image,
+        sources_report=sources_report or {},
+        collapse_report=collapse_report or {},
+        working_report=working_report,
+    )
     print(f"\nMakou-safe CSR+ image: {working_image}")
     print("Save Makou's result as a new file; do not overwrite this checkpoint.")
     print(
@@ -983,6 +1151,17 @@ def parser() -> argparse.ArgumentParser:
 
     prepare_command = commands.add_parser("prepare", help="Build all sources and a Makou-editable Disc 1")
     prepare_command.add_argument("--run-name", help="Build folder name (default: UTC timestamp)")
+    prepare_mode = prepare_command.add_mutually_exclusive_group()
+    prepare_mode.add_argument(
+        "--resume",
+        action="store_true",
+        help="Reuse hash-verified stages and rebuild only the first changed output",
+    )
+    prepare_mode.add_argument(
+        "--rebuild-from",
+        choices=("sources", "collapse", "working"),
+        help="Preserve then rebuild this stage and every later prepare stage",
+    )
     prepare_command.set_defaults(action=prepare)
 
     finalize_command = commands.add_parser("finalize", help="Validate a Makou save and create publish artifacts")

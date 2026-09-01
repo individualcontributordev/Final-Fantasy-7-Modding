@@ -16,7 +16,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from build_csrplus_staged import build_release_artifacts
+from build_csrplus_staged import ENDING_ALIAS_OVERLAPS, build_release_artifacts
 
 
 def main() -> None:
@@ -37,6 +37,11 @@ def main() -> None:
     parser.add_argument("--compatible-base", action="append", default=[])
     parser.add_argument("--disc", type=int, choices=(1, 2, 3), default=1)
     parser.add_argument("--blurb", default="")
+    parser.add_argument(
+        "--ending-alias-included",
+        action="store_true",
+        help="Allow the one intentional MOVIE extent overlap created by ENDING2E",
+    )
     args = parser.parse_args()
 
     report = build_release_artifacts(
@@ -51,6 +56,9 @@ def main() -> None:
         compatible_bases=args.compatible_base,
         disc=args.disc,
         blurb=args.blurb,
+        allowed_overlaps=(
+            ENDING_ALIAS_OVERLAPS if args.ending_alias_included else frozenset()
+        ),
     )
     print(f"Layer: {report['layer']}")
     print(f"Builder reconstruction: {report['builderRebuildImage']}")
