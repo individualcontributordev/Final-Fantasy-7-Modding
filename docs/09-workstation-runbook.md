@@ -96,10 +96,51 @@ python3 mods/single-disc/scripts/build_highwind_staged.py finalize \
   --version 0.2.1
 ```
 
-Highwind reconstructs retired v0.2.0 Disc 1/2/3 layers, merges only fields
-where exactly one later disc differs from Disc 1, and restores the small
-shared-field set from the first collapsed Highwind release (not live CSR+).
-Ambiguous D2+D3 collisions stay on Disc 1 until a field-specific playtest.
+Highwind rebuilds the same Disc 1 collapse as CSR+ from CSR discs and scene
+trims, then copies Highwind's extra early Disc 1 fields. It does not read
+`builder/csr-plus/` or a CSR+ `build/` run.
+
+---
+
+## Where to Makou-edit (CSR+ and Highwind)
+
+Both bases may gain more field/script changes on Disc 1, 2, or 3 *content*.
+That content still ships as one Disc 1 image. Two routes:
+
+### Default for a burnable disc (most stable)
+
+Collapse first, then edit the **single** working BIN, then finalize.
+
+1. `prepare` (sources → collapse → Makou-safe `03-working`)
+2. Open `03-working/CSRPLUS_D1.bin` or `03-working/HIGHWIND_D1.bin`
+3. Save Makou to a **new** file
+4. `finalize` (stabilize → SNOVA → layer vs retail D1 → BIN/CUE)
+
+Use this for almost all new work, including later-game maps that already live
+on the collapsed Disc 1. One ISO, one `FIELD.BIN`, SNOVA only after Makou,
+EDC/ECC repaired on the image you will burn.
+
+Do not Makou the SNOVA image. Do not burn a Makou save without `finalize`.
+
+### Per-disc first (only when the filename is disc-specific)
+
+Same `FIELD/NAME.DAT` can differ on Disc 2 vs Disc 3. If you must author the
+disc-correct payload before the merge:
+
+1. Run stage 1 only (`csrplus_stage_1_sources.py` or `highwind_stage_1_sources.py`)
+2. `make_makou_safe.py` on that disc's BIN (`01-current-csr/FINALFANTASY7_D{n}.bin`,
+   or Highwind extras at `06-highwind-d1-extras/FINALFANTASY7_D1.bin`)
+3. Edit, save a new file, playtest that disc image
+4. Copy the saved BIN into a **new** sources directory (stages refuse overwrite)
+5. Collapse → `prepare_working_bin.py` → optional extra Makou on `03-working` →
+   stabilize → SNOVA → release
+
+After collapse, later-disc files exist only as the merge picked them. Further
+edits to those maps belong on `03-working`.
+
+Highwind extras (`HIGHWIND_D1_EXTRA_FIELDS`) are copied after collapse. Edit
+them either on the extras image (step 2) or on `03-working`. Do not expect a
+Highwind D2/D3 merge; there isn't one.
 
 ---
 
@@ -154,7 +195,7 @@ Order:
 7. `build_release_artifacts.py`
 
 CSR+ collapse artifact: `06-field-world-tables-fixed.bin`.
-Highwind collapse artifact: `04-field-world-tables-fixed.bin`.
+Highwind collapse artifact: `08-field-world-tables-fixed.bin`.
 
 For a **mod on an existing base**:
 
