@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reconstruct Highwind's three source discs and pinned shared-field source."""
+"""Reconstruct CSR+ source discs plus Highwind's own Disc 1 extras image."""
 from __future__ import annotations
 
 import argparse
@@ -15,8 +15,8 @@ def main() -> None:
     args = parser.parse_args()
 
     report = build_highwind_source_artifacts(args.csr_root, args.output_dir)
-    print(f"Highwind source discs: {report['highwindDiscs']}")
-    print(f"Pinned shared-field source: {report['sharedFieldsImage']}")
+    print(f"Current CSR discs: {report['currentCsrDiscs']}")
+    print(f"Highwind Disc 1 extras: {report['highwindD1ExtrasImage']}")
 
 
 if __name__ == "__main__":

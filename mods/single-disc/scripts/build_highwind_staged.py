@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """Build, edit, and package the collapsed Highwind base.
 
+Highwind rebuilds the same Disc 1 collapse as CSR+ (CSR discs + scene trims),
+then copies Highwind's extra early Disc 1 fields. It does not read the
+published csr-plus pack.
+
+Preferred Makou point is 03-working (collapsed, pre-SNOVA). Finalize
+restabilizes, injects SNOVA, and writes a candidate layer.
+
 Normal workflow:
 
   python3 mods/single-disc/scripts/build_highwind_staged.py prepare \
     --run-name my-highwind-edit
 
-  # Open the reported working BIN in Makou Reactor. Save to a new filename.
+  # Open 03-working/HIGHWIND_D1.bin in Makou Reactor. Save to a new filename.
 
   python3 mods/single-disc/scripts/build_highwind_staged.py finalize \
     --run-dir ../Final-Fantasy-7-CSR/build/highwind/my-highwind-edit \

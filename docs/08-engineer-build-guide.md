@@ -200,9 +200,9 @@ python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
   --version 0.1.2
 ```
 
-Highwind uses the same safety and release functions. Its source stage
-reconstructs the retired v0.2.0 Disc 1/2/3 layers and restores only the field
-payloads that its first collapsed release intentionally borrowed from CSR+:
+Highwind uses the same safety and release functions. It rebuilds the CSR+-shaped
+Disc 1 from CSR discs and scene trims (not from `builder/csr-plus/`), then
+copies Highwind's extra early Disc 1 fields from Highwind's own Disc 1 layer:
 
 ```bash
 python3 mods/single-disc/scripts/build_highwind_staged.py prepare \
@@ -278,26 +278,24 @@ results. The intermediate BIN from one stage is the explicit input to the next.
 
 #### Chainable Highwind stages
 
-The source and collapse stages are Highwind-specific. Stages 3 onward are the
-same reusable commands shown above:
+Stage 1 rebuilds the same CSR discs/trims as CSR+, plus Highwind's Disc 1
+extras image. Stage 2 runs that CSR+ collapse, then copies the extra fields.
+Stages 3 onward match CSR+:
 
 ```bash
 CSR=../Final-Fantasy-7-CSR
 RUN="$CSR/build/highwind/debug-01"
 
-# 1. Reconstruct retired Highwind D1/D2/D3 and pinned shared fields.
 python3 mods/single-disc/scripts/highwind_stage_1_sources.py \
   --csr-root "$CSR" --output-dir "$RUN/01-sources"
 
-# 2. Merge unambiguous later-disc fields, shared scenes, and fix lookup tables.
 python3 mods/single-disc/scripts/highwind_stage_2_collapse.py \
   --csr-root "$CSR" \
   --sources-dir "$RUN/01-sources" \
   --output-dir "$RUN/02-collapse"
 
-# 3. Create the image to open in Makou.
 python3 mods/single-disc/scripts/prepare_working_bin.py \
-  --base-image "$RUN/02-collapse/04-field-world-tables-fixed.bin" \
+  --base-image "$RUN/02-collapse/08-field-world-tables-fixed.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
   --output-dir "$RUN/03-working"
 
@@ -329,12 +327,9 @@ python3 mods/single-disc/scripts/build_release_artifacts.py \
   --blurb "Heavily shortened story, collapsed onto Disc 1."
 ```
 
-Highwind's `stage-report.json` deliberately lists fields retained from Disc 1.
-When both later discs differ, choosing either whole-file payload could replace
-early-game behavior with a later-game script. The current policy matches the
-published Highwind build: keep Disc 1 until a field-specific verdict is
-playtested. Before producing its output, the collapse stage also compares all
-787 rebuilt `FIELD/*.DAT` payloads with the pinned published baseline.
+Highwind extras are the Disc 1 `FIELD/*.DAT` files listed in
+`highwind_pipeline.py` (`HIGHWIND_D1_EXTRA_FIELDS`). Later-game maps follow
+the CSR+ collapse, not the old 3-disc Highwind collision skip.
 
 #### Simple working-BIN workflow for another base or mod
 

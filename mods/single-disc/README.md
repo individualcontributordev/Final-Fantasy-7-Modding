@@ -22,7 +22,7 @@ against them.
 | Unmodified / clean | NO | Keep unmodified spirit: other mods OK if they do not change fields or FMVs. |
 | `csr` | NO | Still 3-disc; single-disc-on-csr retired, no current single-disc option for CSR alone. |
 | `csr-plus` | YES (base itself) | Collapsed CSR+ single-disc base — CSR D1 + rework merges + CSR+ scene trims + table fix + SNOVA inject. |
-| `highwind` | YES (base itself) | Collapsed Highwind single-disc base — Highwind D1 + D2/D3 FIELD merge + table fix + SNOVA inject. |
+| `highwind` | YES (base itself) | Same collapse as CSR+, plus extra early Disc 1 field scripts; table fix + SNOVA. |
 
 ### Retired pack families (historical only)
 

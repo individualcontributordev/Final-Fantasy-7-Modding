@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collapse staged Highwind Disc 2/3 field changes into Disc 1."""
+"""Collapse like CSR+, then copy Highwind's Disc 1 extra fields onto Disc 1."""
 from __future__ import annotations
 
 import argparse
@@ -18,10 +18,9 @@ def main() -> None:
 
     configure_sources(args.csr_root.expanduser().resolve())
     output, report = collapse_highwind_disc1(args.sources_dir, args.output_dir)
+    extras = len(report["appliedExtraFields"])
     print(f"Table-fixed Highwind image: {output}")
-    print(f"Unambiguous Disc 2/3 merges: {report['unambiguousMerges']}")
-    retained_count = len(report["collisionsKeptFromDisc1"])
-    print(f"Fields retained from Disc 1 for review: {retained_count}")
+    print(f"Highwind Disc 1 extras applied: {extras}")
 
 
 if __name__ == "__main__":
