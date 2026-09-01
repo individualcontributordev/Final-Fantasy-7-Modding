@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Apply RCnt2 FORCE stub over world Danger+= in WORLD.BIN.dec.
+"""Patch a decompressed WORLD.BIN with a tracked RCnt2 encounter stub.
 
-Window: VA 0x800B7DB4–0x800B7E1B (104 bytes). jal WorldRand @ 0x800B7E1C must stay.
-"""
+The mutable input and density select one of four fixed patch files. The command
+replaces the verified 104-byte instruction window and restores the tracked JAL
+word immediately after it; fixed offsets are decompressed-overlay offsets
+derived from the documented virtual-address window. It does not decompress,
+recompress, inject, or repair disc sectors."""
 from __future__ import annotations
 
 import argparse
@@ -11,16 +14,12 @@ from pathlib import Path
 
 _MOD = Path(__file__).resolve().parents[1]
 _PATCH = _MOD / "patches"
-_ROOT = _MOD.parent.parent
-# density.py lives under field-random-encounters/scripts
-_FIELD_SCRIPTS = _ROOT / "mods" / "field-random-encounters" / "scripts"
-if _FIELD_SCRIPTS.is_dir():
-	sys.path.insert(0, str(_FIELD_SCRIPTS))
 sys.path.insert(0, str(_MOD / "scripts"))
 
 from density import RATES, parse_one_density, prompt_densities, rate_label  # noqa: E402
 
-# File offsets = VA - 0x800A0000
+# The tracked patch's load base maps the documented virtual-address window to
+# these decompressed WORLD.BIN offsets; offsets are not raw-disc addresses.
 OFFSET = 0x17DB4
 JAL_OFFSET = 0x17E1C
 STUB_LEN = 104
@@ -34,10 +33,12 @@ RATE_MARKERS = {
 
 
 def _hex(name: str) -> bytes:
+	"""Load a tracked WORLD.BIN patch file as raw instruction bytes."""
 	return bytes.fromhex((_PATCH / name).read_text().replace("\n", " "))
 
 
 def stub_for_rate(rate: int) -> bytes:
+	"""Load and length-check the tracked instruction window for one shipped rate."""
 	if rate not in RATES:
 		raise SystemExit(f"rate must be one of {RATES}")
 	stub = _hex(f"stub-7db4-rate{rate}.hex")
@@ -50,6 +51,7 @@ JAL = _hex("jal-7e1c.hex")
 
 
 def apply_stub(path: Path, rate: int = 50) -> bytes:
+	"""Overwrite the fixed decompressed-overlay window and restore the tracked JAL."""
 	stub = stub_for_rate(rate)
 	data = bytearray(path.read_bytes())
 	if len(data) < JAL_OFFSET + 4:

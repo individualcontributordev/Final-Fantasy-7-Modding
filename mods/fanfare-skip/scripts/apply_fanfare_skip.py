@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Apply Fanfare Skip patches to decompressed BATTLE.X."""
+"""Apply the tracked fanfare-skip instruction replacements to BATTLE.X.dec.
+
+Patch sites are loaded from ``force-no-victory-music-sites.txt`` as offset,
+expected word, and replacement word triples. Each little-endian word must be
+original or already patched before writing, and verification requires every
+replacement. This command changes only BATTLE.X code; it does not modify audio
+files, compress the overlay, inject a disc, or establish gameplay semantics
+beyond the tracked patch."""
 
 from __future__ import annotations
 
@@ -12,6 +19,7 @@ _SITES = _MOD / "patches" / "force-no-victory-music-sites.txt"
 
 
 def load_sites() -> list[tuple[int, int, int]]:
+	"""Load checked little-endian word replacements from the tracked patch table."""
 	sites: list[tuple[int, int, int]] = []
 	for line in _SITES.read_text(encoding="utf-8").splitlines():
 		line = line.split("#", 1)[0].strip()
@@ -27,8 +35,12 @@ def load_sites() -> list[tuple[int, int, int]]:
 
 
 def apply_patch(dec_path: Path, *, write: bool = True) -> int:
+	"""Apply idempotent replacements only where source or patched words match."""
 	data = bytearray(dec_path.read_bytes())
 	sites = load_sites()
+	# Checking the old instruction word ties each write to the tracked BATTLE.X
+	# build. An unknown word may indicate a different executable and is safer to
+	# reject than to patch at the same numeric offset.
 	for off, old, new in sites:
 		got = struct.unpack_from("<I", data, off)[0]
 		if got == new:
@@ -44,6 +56,7 @@ def apply_patch(dec_path: Path, *, write: bool = True) -> int:
 
 
 def verify(dec_path: Path) -> None:
+	"""Require every tracked site to contain its replacement word."""
 	data = dec_path.read_bytes()
 	for off, _old, new in load_sites():
 		got = struct.unpack_from("<I", data, off)[0]

@@ -26,15 +26,13 @@ external/
 **/*.duckstation*
 
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 .venv/
 .venv_rag/
 venv/
 .env
-unsloth_compiled_cache/
-ff7_coder_lora_model/
-ff7_coder_outputs/
 
 _site/
 

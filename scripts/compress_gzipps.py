@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Recompress a patched GZIPPS overlay (.dec) — FIELD.BIN, WORLD.BIN, …."""
+"""Recompress a decompressed FF7 GZIPPS overlay such as FIELD.BIN or WORLD.BIN.
+
+The decompressed payload and original overlay are inputs; the original supplies
+the GZIPPS subheader, gzip header traits, and preferred size ceiling. The output
+is a new GZIPPS file whose payload is round-trip checked while several DEFLATE
+strategies compete for size. Oversized output is written but never truncated:
+the caller must relocate/grow the ISO allocation or reject it."""
 
 from __future__ import annotations
 
@@ -29,6 +35,7 @@ def _gzip_wrap(raw_deflate: bytes, uncompressed: bytes, header10: bytes) -> byte
 
 
 def _deflate_candidates(uncompressed: bytes) -> list[tuple[str, bytes]]:
+    """Produce labeled raw-DEFLATE and full-gzip members for size comparison."""
     out: list[tuple[str, bytes]] = []
     strategies = (
         ("default", zlib.Z_DEFAULT_STRATEGY),
@@ -56,21 +63,14 @@ def _deflate_candidates(uncompressed: bytes) -> list[tuple[str, bytes]]:
         full = gzip.compress(uncompressed, compresslevel=level, mtime=0)
         out.append((f"gzip-{level}", full))
 
-    try:
-        import zopfli.gzip as zopfli_gzip  # type: ignore
-
-        z = zopfli_gzip.compress(uncompressed)
-        out.append(("zopfli", z))
-    except ImportError:
-        pass
-
     return out
 
 
 def _payload_from_candidate(
     label: str, blob: bytes, uncompressed: bytes, header10: bytes
 ) -> bytes:
-    if label.startswith("gzip-") or label == "zopfli":
+    """Turn a candidate into a complete gzip member using the original XFL/OS bytes."""
+    if label.startswith("gzip-"):
         return blob  # already a full gzip member
     return _gzip_wrap(blob, uncompressed, header10)
 
@@ -80,9 +80,13 @@ def _best_gzip_payload(
     prefer_max_len: int,
     header10: bytes,
 ) -> tuple[bytes, str]:
+    """Prefer the smallest gzip that decompresses identically and fits prefer_max_len."""
     best_fit: tuple[int, str, bytes] | None = None
     best_any: tuple[int, str, bytes] | None = None
 
+    # DEFLATE streams for identical bytes can differ substantially in size.
+    # Trying deterministic stdlib strategies may preserve the fixed ISO slot
+    # without changing the decompressed overlay or its GZIPPS envelope.
     for label, blob in _deflate_candidates(uncompressed):
         payload = _payload_from_candidate(label, blob, uncompressed, header10)
         # Sanity: must decompress to the same bytes
@@ -105,6 +109,7 @@ def _best_gzip_payload(
 
 
 def _original_gzip_header10(original_payload: bytes) -> bytes:
+    """Keep the original gzip XFL/OS nibble when wrapping raw DEFLATE."""
     if len(original_payload) >= 10 and original_payload[:2] == b"\x1f\x8b":
         return original_payload[:10]
     return b"\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff"
@@ -115,11 +120,13 @@ def compress_gzipps(
     original_bin: Path,
     dst: Path | None = None,
 ) -> Path:
+    """Write the smallest valid candidate, preferring one that fits the original slot."""
     original = original_bin.read_bytes()
     if len(original) < GZIPPS_HEADER_SIZE:
         raise ValueError(f"{original_bin}: invalid GZIPPS source")
 
     dec_size = struct.unpack("<I", original[0:4])[0]
+    # GZIPPS: uint32 decompressed size, 4-byte subheader, then a gzip member.
     gzip_subheader = original[4:8]
     original_payload = original[GZIPPS_HEADER_SIZE:]
     prefer_payload_max = len(original) - GZIPPS_HEADER_SIZE
@@ -142,17 +149,12 @@ def compress_gzipps(
 
     size_delta = len(out) - len(original)
 
-    # If still slightly over, keep best payload but pad/truncate message — never
-    # silently truncate. Optional: if overage is tiny and trailing zeros on `out`
-    # aren't valid, just report.
+    # Write the full payload even when it exceeds the original overlay. Truncating
+    # here would produce an unloadable GZIPPS member.
     if size_delta > 0:
         print(
             f"Best method {method} still {size_delta:+d} vs original "
             f"({len(out)} > {len(original)}).",
-            file=sys.stderr,
-        )
-        print(
-            "Tip: pip install zopfli  &&  re-run this script (often wins a few bytes).",
             file=sys.stderr,
         )
 
@@ -166,10 +168,7 @@ def compress_gzipps(
     if size_delta > 0:
         print(
             "WARNING: larger than original — do NOT accept CDmage truncate.\n"
-            "  Options:\n"
-            "  1) pip install zopfli && re-run compress\n"
-            "  2) Import with a tool that can relocate/grow the overlay (not in-place truncate)\n"
-            "  3) Say check with the two sizes if you want another approach",
+            "Use a tool that can relocate or grow the overlay. Do not truncate it.",
             file=sys.stderr,
         )
     elif size_delta < 0:
@@ -178,7 +177,6 @@ def compress_gzipps(
     return dst
 
 
-# Back-compat name used by older scripts / muscle memory.
 compress_field_bin = compress_gzipps
 
 

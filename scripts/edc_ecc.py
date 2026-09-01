@@ -1,19 +1,10 @@
-"""
-PSX Mode 2 Form 1 EDC/ECC calculation and repair.
+"""Calculate and repair CD-XA Mode 2 Form 1 EDC/ECC sector footers.
 
-Based on the CD-ROM Yellow Book standard for Mode 2 Form 1 sectors.
-Each sector is 2352 bytes:
-- 12 bytes sync
-- 4 bytes header (MSF address + mode)
-- 8 bytes subheader
-- 2048 bytes user data
-- 4 bytes EDC (Error Detection Code)
-- 276 bytes ECC (Error Correction Code - P and Q parity)
-
-References:
-- https://problemkaputt.de/psxspx-cdrom-sector-encoding.htm
-- https://github.com/ralfguth/langrisser3-english/blob/main/tools/iso_tools.py
-"""
+Functions accept one 2352-byte sector or a mutable raw image and update only
+recognized Form 1 sectors in place. EDC covers subheader plus 2048-byte user
+data; ECC P/Q parity is generated after EDC. Form 2 sectors are intentionally
+untouched, and callers remain responsible for validating raw-sector alignment
+and deciding which sectors require repair."""
 
 # Pre-computed EDC CRC table (polynomial 0xD8018001)
 _EDC_TABLE = None

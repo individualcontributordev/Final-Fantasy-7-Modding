@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Decompress BATTLE.X, apply fanfare-skip, recompress."""
+"""Build a fanfare-skip BATTLE.X GZIPPS overlay.
+
+The input is an extracted BATTLE/BATTLE.X and output defaults to BATTLE.X.new.
+The command decompresses, applies and verifies all tracked instruction sites,
+then recompresses using the original overlay as its format and size reference.
+It never edits FAN2.SND or injects an ISO; an oversized output must be rejected
+by the caller rather than truncated."""
 
 from __future__ import annotations
 
@@ -20,6 +26,7 @@ from decompress_gzipps import decompress_gzipps  # noqa: E402
 
 
 def build(src_battle_x: Path, out_new: Path | None, keep_dec: bool) -> Path:
+	"""Patch and recompress BATTLE.X, returning the new overlay path."""
 	src_battle_x = src_battle_x.expanduser().resolve()
 	if not src_battle_x.is_file():
 		raise SystemExit(f"not found: {src_battle_x}")

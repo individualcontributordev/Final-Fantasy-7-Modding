@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Build a patched WORLD.BIN.new with the encounter FORCE stub.
+"""Build a patched WORLD.BIN GZIPPS overlay for one encounter density.
 
-  python mods/world-map-random-encounters/scripts/build_world_bin.py path/to/WORLD.BIN
-  python mods/world-map-random-encounters/scripts/build_world_bin.py path/to/WORLD.BIN --density light
-"""
+The input is an extracted WORLD.BIN and output defaults to WORLD.BIN.new. The
+pipeline decompresses, applies a tracked world encounter stub, verifies the
+stub and preserved JAL bytes, and recompresses against the source overlay.
+It does not inject into an ISO, and callers must reject rather than truncate an
+output that exceeds its allocated file slot."""
 
 from __future__ import annotations
 
@@ -15,8 +17,7 @@ _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent
 _SHARED = _ROOT / "scripts"
-_FIELD_SCRIPTS = _ROOT / "mods" / "field-random-encounters" / "scripts"
-for p in (_SHARED, _FIELD_SCRIPTS, _MOD_SCRIPTS):
+for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
 
@@ -37,6 +38,7 @@ EXPECT_HEAD = bytes.fromhex("80 1f 01 3c 20 11 22 8c")
 
 
 def verify_stub(dec_path: Path, rate: int = 50) -> None:
+	"""Require the selected stub and following JAL to match tracked patch bytes."""
 	data = dec_path.read_bytes()
 	expect = stub_for_rate(rate)
 	got = data[OFFSET : OFFSET + len(expect)]
@@ -61,6 +63,7 @@ def build(
 	keep_dec: bool,
 	rate: int = 50,
 ) -> Path:
+	"""Run the WORLD.BIN overlay pipeline and return the recompressed output path."""
 	if rate not in RATES:
 		raise SystemExit(f"rate must be one of {RATES}, got {rate}")
 
