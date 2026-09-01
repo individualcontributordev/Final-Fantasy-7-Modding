@@ -130,6 +130,10 @@ reuses `02-collapse` and rebuilds the working BIN without reconstructing the
 source discs. The changed directory is moved under the run's `recovery/`
 folder first, so an accidental Makou save is never deleted.
 
+`finalize` also verifies this hash before using `03-working` as its table
+baseline. It stops with recovery instructions instead of packaging from an
+overwritten checkpoint.
+
 An unchanged resume is a cache hit and returns immediately. To deliberately
 rerun a stage and everything after it:
 
