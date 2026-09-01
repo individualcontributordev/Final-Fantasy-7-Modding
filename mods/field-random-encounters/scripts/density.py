@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Field encounter density presets for CLI (interactive or flags).
+"""Define the shipped field-encounter density choices used by build CLIs.
 
-These are shipped stubs — not a free-form encounter %. Use the names/menu,
-not inventing values like 1 or 40.
-"""
+Parsers accept names, their fixed 0/25/50/75 values, lists, or ``all`` and
+return ordered unique rates; the prompt is available only on a TTY. These
+integers identify tracked MIPS stubs and stable pack ids, not arbitrary
+percentages, so unsupported rates are rejected before any file is patched."""
 
 from __future__ import annotations
 
 import sys
 
-# Pack id / stub files still use these integers (field-encounter-25-v…).
+# Pack id / stub files use these integers (field-encounter-25, not a free %).
 RATES = (0, 25, 50, 75)
 
 DENSITIES: tuple[dict, ...] = (

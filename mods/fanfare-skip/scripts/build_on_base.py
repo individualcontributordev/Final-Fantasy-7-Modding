@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Build fanfare-skip layers for clean / CSR / Highwind.
+"""Build and register fanfare-skip layers for clean and CSR-family bases.
 
-  python mods/fanfare-skip/scripts/build_on_base.py --against clean --discs 1
-  python mods/fanfare-skip/scripts/build_on_base.py --against all --discs 1,2,3
-"""
+For each requested disc, the command reconstructs the exact builder parent,
+patches BATTLE.X, zero-pads it into its existing ISO slot, and diffs the result
+into ``ic-layer-v1``. Stable pack ids, pack JSON, and manifest entries are
+written under ``builder/``. CSR layers are local-only inputs from
+``--csr-root``/``FF7_CSR_ROOT``; generated work is deleted unless retained."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
-from urllib.parse import urljoin
 
 _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
@@ -35,12 +35,7 @@ WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_fanfare_skip"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
 BATTLE_PATH = "BATTLE/BATTLE.X"
-FAN2_PATH = "ENEMY6/FAN2.SND"
-FAN2_QUIET_LAYER = _MOD / "patches" / "FAN2.SND.quiet.layer.json"
 HINT = 'No victory fanfare or win poses — loot and exp still apply.'
-DEFAULT_CSR_MANIFEST = (
-	"https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
-)
 
 AGAINST = {
 	"clean": {
@@ -71,6 +66,7 @@ AGAINST = {
 
 
 def parse_discs(spec: str) -> list[int]:
+	"""Parse a 1,2,3 disc list; each value must be a retail NTSC-U disc number."""
 	discs: list[int] = []
 	for part in spec.split(","):
 		part = part.strip()
@@ -86,22 +82,29 @@ def parse_discs(spec: str) -> list[int]:
 
 
 def read_version() -> str:
+	"""Read the mod VERSION file; this is pack metadata, not part of the stable id."""
 	version = VERSION_FILE.read_text(encoding="utf-8").strip().splitlines()[0].strip()
 	if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
 		raise SystemExit(f"Bad version in VERSION: {version!r}")
 	return version
 
 
-def fetch_json(url: str) -> dict:
-	print(f"  GET {url}")
-	try:
-		with urllib.request.urlopen(url, timeout=120) as resp:
-			return json.loads(resp.read().decode("utf-8"))
-	except urllib.error.URLError as err:
-		raise SystemExit(f"Download failed: {url}\n{err}") from err
+def csr_manifest_path(cli_root: Path | None) -> Path:
+	"""Resolve the CSR manifest only from an explicit local repository root."""
+	root = cli_root
+	if root is None:
+		env_root = os.environ.get("FF7_CSR_ROOT")
+		root = Path(env_root) if env_root else None
+	if root is None:
+		raise SystemExit("Pass --csr-root or set FF7_CSR_ROOT")
+	path = root.expanduser().resolve() / "builder" / "manifest.json"
+	if not path.is_file():
+		raise SystemExit(f"Missing CSR manifest: {path}")
+	return path
 
 
 def resolve_base_id(against: str, manifest: dict) -> str:
+	"""Choose the concrete enabled id for a requested CSR base family."""
 	if against == "clean":
 		return "clean"
 	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
@@ -122,9 +125,10 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 	return cands[-1]
 
 
-def resolve_remote_layer_url(
-	manifest_url: str, base_id: str, disc: int, manifest: dict
-) -> str:
+def resolve_layer_path(
+	manifest_path: Path, base_id: str, disc: int, manifest: dict
+) -> Path:
+	"""Resolve one base layer from the local CSR manifest."""
 	bases = manifest.get("bases") or []
 	base = next((b for b in bases if str(b.get("id")) == base_id), None)
 	if base is None:
@@ -133,13 +137,15 @@ def resolve_remote_layer_url(
 	rel = discs.get(str(disc)) or discs.get(disc)
 	if not rel:
 		raise SystemExit(f"{base_id} has no layer for disc {disc}")
-	return urljoin(manifest_url, str(rel))
+	path = (manifest_path.parent / str(rel).lstrip("./")).resolve()
+	if not path.is_file():
+		raise SystemExit(f"Missing base layer: {path}")
+	return path
 
 
-def load_layer(path_or_url: str) -> dict:
-	if path_or_url.startswith("http://") or path_or_url.startswith("https://"):
-		return fetch_json(path_or_url)
-	path = Path(path_or_url).expanduser().resolve()
+def load_layer(path: Path | str) -> dict:
+	"""Load a local ic-layer-v1 JSON; path is never fetched over the network."""
+	path = Path(path).expanduser().resolve()
 	if not path.is_file():
 		raise SystemExit(f"Missing layer file: {path}")
 	print(f"  read {path}")
@@ -147,6 +153,7 @@ def load_layer(path_or_url: str) -> dict:
 
 
 def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
+	"""Reconstruct the exact builder-side parent for the add-on diff."""
 	print(f"=== apply base -> {out_bin.name} ===")
 	image = bytearray(pristine.read_bytes())
 	if layer is not None:
@@ -162,59 +169,26 @@ def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 def patch_and_inject(
 	base_bin: Path,
 	work_dir: Path,
-	*,
-	patch_battle: bool = True,
-	replace_fan2: bool = True,
 ) -> Path:
+	"""Patch BATTLE.X and inject it only if it fits its ISO slot."""
 	patched = work_dir / "patched.bin"
 	shutil.copy2(base_bin, patched)
 	img = bytearray(patched.read_bytes())
 
-	if patch_battle:
-		print(f"=== extract {BATTLE_PATH} ===")
-		meta = find_file(img, BATTLE_PATH)
-		battle = extract_file(img, BATTLE_PATH)
-		battle_path = work_dir / "BATTLE.X"
-		battle_path.write_bytes(battle)
-		print(f"  LBA={meta.lba} size={meta.size} -> {battle_path}")
+	print(f"=== extract {BATTLE_PATH} ===")
+	meta = find_file(img, BATTLE_PATH)
+	battle = extract_file(img, BATTLE_PATH)
+	battle_path = work_dir / "BATTLE.X"
+	battle_path.write_bytes(battle)
 
-		print("=== patch BATTLE.X ===")
-		battle_new = build_battle(battle_path, work_dir / "BATTLE.X.new", keep_dec=False)
-		new_bytes = battle_new.read_bytes()
-		print(f"  BATTLE.X.new = {len(new_bytes)} bytes (slot {meta.size})")
-		if len(new_bytes) > meta.size:
-			raise SystemExit(
-				f"patched BATTLE.X ({len(new_bytes)}) larger than slot ({meta.size})"
-			)
-
-		print("=== pad-inject BATTLE.X.new ===")
-		replace_file_padded(img, BATTLE_PATH, new_bytes)
-	else:
-		print("=== skip BATTLE.X patch (stock victory-queue) ===")
-
-	if replace_fan2 and FAN2_QUIET_LAYER.is_file():
-		print(f"=== replace {FAN2_PATH} with quiet stub (layer diff) ===")
-		fan_meta = find_file(img, FAN2_PATH)
-		stock = bytearray(extract_file(img, FAN2_PATH))
-		layer = json.loads(FAN2_QUIET_LAYER.read_text(encoding="utf-8"))
-		for rec in layer["records"]:
-			off = rec["offset"]
-			chunk = bytes.fromhex(rec["hex"])
-			stock[off : off + len(chunk)] = chunk
-		quiet = bytes(stock)
-		if len(quiet) > fan_meta.size:
-			raise SystemExit(
-				f"quiet FAN2 ({len(quiet)}) larger than slot ({fan_meta.size})"
-			)
-		replace_file_padded(img, FAN2_PATH, quiet)
-		print(f"  FAN2 quiet {len(quiet)} bytes (slot {fan_meta.size})")
-	elif replace_fan2:
-		print(f"  WARNING: missing {FAN2_QUIET_LAYER}, leaving fanfare audio stock")
-	else:
-		print(f"=== skip {FAN2_PATH} (stock fanfare asset) ===")
-
-	if not patch_battle and not replace_fan2:
-		raise SystemExit("nothing to patch — enable battle and/or fan2")
+	print("=== patch BATTLE.X ===")
+	battle_new = build_battle(battle_path, work_dir / "BATTLE.X.new", keep_dec=False)
+	new_bytes = battle_new.read_bytes()
+	if len(new_bytes) > meta.size:
+		raise SystemExit(
+			f"patched BATTLE.X ({len(new_bytes)}) larger than slot ({meta.size})"
+		)
+	replace_file_padded(img, BATTLE_PATH, new_bytes)
 
 	patched.write_bytes(img)
 	print(f"  wrote {patched}")
@@ -231,6 +205,7 @@ def write_pack_json(
 	compatible: list[str],
 	discs: list[int],
 ) -> None:
+	"""Write pack-relative metadata for the built disc layers."""
 	pack = {
 		"id": pack_id,
 		"name": display,
@@ -257,11 +232,13 @@ def update_manifest(
 	compatible: list[str],
 	discs: list[int],
 ) -> None:
+	"""Replace the stable-id manifest entry with manifest-relative paths."""
 	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 	entry = {
 		"id": pack_id,
-		"name": f"{display} v{version}",
+		"name": display,
 		"kind": "mod",
+		"version": version,
 		"blurb": blurb,
 		"hint": HINT,
 		"format": "ic-layer-v1",
@@ -277,28 +254,16 @@ def update_manifest(
 	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
-def variant_suffix(patch_battle: bool, replace_fan2: bool) -> str:
-	# Default ship product = BATTLE stub only (no quiet FAN2).
-	if patch_battle and not replace_fan2:
-		return ""
-	if patch_battle and replace_fan2:
-		return "-with-quiet-fan2"
-	if replace_fan2 and not patch_battle:
-		return "-fan2-only"
-	raise SystemExit("invalid patch variant")
-
-
 def build_one(
 	*,
 	against: str,
 	disc: int,
 	version: str,
-	manifest_url: str,
+	manifest_path: Path | None,
 	csr_manifest: dict | None,
 	keep_work: bool,
-	patch_battle: bool = True,
-	replace_fan2: bool = True,
 ):
+	"""Build and round-trip verify one fanfare layer in disposable work."""
 	cfg = dict(AGAINST[against])
 	base_id = cfg["base_id"]
 	if against != "clean" and csr_manifest is not None:
@@ -306,26 +271,21 @@ def build_one(
 		cfg["base_id"] = base_id
 		cfg["compatible"] = [base_id]
 
-	suffix = variant_suffix(patch_battle, replace_fan2)
-	pack_id = f"{cfg['prefix_stem']}{suffix}-v{version}"
+	pack_id = cfg["prefix_stem"]
 	display = "Fanfare Skip"
-	if suffix == "-with-quiet-fan2":
-		display = "Fanfare Skip (BATTLE + quiet FAN2 — research)"
-	elif suffix == "-fan2-only":
-		display = "Fanfare Skip (FAN2 quiet only — research)"
 	blurb = (
 		"After the last enemy dies, skip the victory ceremony path "
 		"(train-style). Exp, AP, gil, and items still apply; loot/level-up "
-		"screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio)."
+		"screens still show."
 	)
-	if suffix:
-		blurb = f"Research build{suffix}: " + blurb
 
 	pristine = PRISTINE_DIR / f"FINALFANTASY7_D{disc}.bin"
 	if not pristine.is_file():
 		raise SystemExit(f"Missing pristine: {pristine}")
 
-	work_dir = WORK_ROOT / f"{against}{suffix}-d{disc}"
+	work_dir = WORK_ROOT / f"{against}-d{disc}"
+	# Recreate generated work to ensure the layer depends only on the selected
+	# pristine image, base layer, and tracked BATTLE.X patch sites.
 	if work_dir.exists():
 		shutil.rmtree(work_dir)
 	work_dir.mkdir(parents=True)
@@ -333,28 +293,22 @@ def build_one(
 	layer = None
 	if against != "clean":
 		assert csr_manifest is not None
-		url = resolve_remote_layer_url(manifest_url, base_id, disc, csr_manifest)
-		layer = load_layer(url)
+		assert manifest_path is not None
+		path = resolve_layer_path(manifest_path, base_id, disc, csr_manifest)
+		layer = load_layer(path)
 		if layer.get("format") != "ic-layer-v1":
 			raise SystemExit("base layer must be ic-layer-v1")
 
 	base_bin = work_dir / "base.bin"
 	make_base_image(pristine, layer, base_bin)
-	patched_bin = patch_and_inject(
-		base_bin,
-		work_dir,
-		patch_battle=patch_battle,
-		replace_fan2=replace_fan2,
-	)
+	patched_bin = patch_and_inject(base_bin, work_dir)
 
 	print("=== diff -> fanfare-skip layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
-	layer_id = f"{cfg['prefix_stem']}{suffix}-disc{disc}-v{version}"
-	description = (
-		f"Fanfare skip{suffix} — NTSC-U Disc {disc} (against {base_id})"
-	)
+	layer_id = f"{cfg['prefix_stem']}-disc{disc}-v{version}"
+	description = f"Fanfare skip — NTSC-U Disc {disc} (against {base_id})"
 	built = build_layer(
 		base_bin,
 		patched_bin,
@@ -373,6 +327,8 @@ def build_one(
 	print("=== verify ===")
 	check = bytearray(base_bin.read_bytes())
 	apply_layer(check, built)
+	# Exact reconstruction also covers the zero padding added to BATTLE.X's
+	# fixed ISO slot, which is part of the published disc-byte layer.
 	if bytes(check) != patched_bin.read_bytes():
 		raise SystemExit("VERIFY FAIL — layer apply does not match patched image")
 	print("  OK")
@@ -386,52 +342,37 @@ def build_one(
 
 def main() -> int:
 	ap = argparse.ArgumentParser(description="Build fanfare-skip builder packs")
-	ap.add_argument("--against", default="clean", help="clean | csr | highwind | all")
+	ap.add_argument(
+		"--against",
+		default="clean",
+		help="clean | csr | csr-plus | highwind | all",
+	)
 	ap.add_argument("--discs", default="1,2,3")
 	ap.add_argument("--version", default=None)
-	ap.add_argument("--manifest-url", default=DEFAULT_CSR_MANIFEST)
+	ap.add_argument(
+		"--csr-root",
+		type=Path,
+		help="Final-Fantasy-7-CSR checkout (or set FF7_CSR_ROOT)",
+	)
 	ap.add_argument("--keep-work", action="store_true")
-	ap.add_argument(
-		"--quiet-fan2",
-		action="store_true",
-		help=(
-			"Also replace ENEMY6/FAN2.SND with the zero-body quiet asset. "
-			"KNOWN BAD: holds a frozen tone through victory (bisect 2026-08-09). "
-			"Default build leaves stock FAN2."
-		),
-	)
-	ap.add_argument(
-		"--fan2-only",
-		action="store_true",
-		help=(
-			"Research only: quiet FAN2.SND without BATTLE stub "
-			"(reproduces freeze; do not ship)."
-		),
-	)
-	ap.add_argument(
-		"--skip-fan2",
-		action="store_true",
-		help=argparse.SUPPRESS,  # legacy alias: default already skips FAN2
-	)
 	args = ap.parse_args()
-	if args.fan2_only and args.quiet_fan2:
-		raise SystemExit("use only one of --fan2-only / --quiet-fan2")
-	# Default ship path: BATTLE victory-queue stub only. Quiet FAN2 freezes audio.
-	patch_battle = not args.fan2_only
-	replace_fan2 = bool(args.quiet_fan2 or args.fan2_only)
 
 	version = args.version or read_version()
 	discs = parse_discs(args.discs)
 	against_list = (
-		["clean", "csr", "highwind"] if args.against == "all" else [args.against]
+		["clean", "csr", "csr-plus", "highwind"]
+		if args.against == "all"
+		else [args.against]
 	)
 	for a in against_list:
 		if a not in AGAINST:
 			raise SystemExit(f"Unknown --against {a}")
 
 	csr_manifest = None
+	manifest_path = None
 	if any(a != "clean" for a in against_list):
-		csr_manifest = fetch_json(args.manifest_url)
+		manifest_path = csr_manifest_path(args.csr_root)
+		csr_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
 	built: dict[str, dict] = {}
 	for against in against_list:
@@ -441,11 +382,9 @@ def main() -> int:
 				against=against,
 				disc=disc,
 				version=version,
-				manifest_url=args.manifest_url,
+				manifest_path=manifest_path,
 				csr_manifest=csr_manifest,
 				keep_work=args.keep_work,
-				patch_battle=patch_battle,
-				replace_fan2=replace_fan2,
 			)
 			rec = built.setdefault(
 				pack_id,
@@ -462,6 +401,8 @@ def main() -> int:
 				rec["compatible"] = [base_id]
 
 	for pack_id, rec in built.items():
+		# Pack ids identify builder options and intentionally survive version
+		# changes; publication replaces the manifest entry with the same id.
 		pack_dir = _ROOT / "builder" / pack_id
 		write_pack_json(
 			pack_dir,
@@ -472,20 +413,15 @@ def main() -> int:
 			compatible=rec["compatible"],
 			discs=sorted(set(rec["discs"])),
 		)
-		# Research-only packs stay out of the public manifest.
-		research = ("-fan2-only" in pack_id) or ("-with-quiet-fan2" in pack_id)
-		if not research:
-			update_manifest(
-				pack_id=pack_id,
-				version=rec["version"],
-				display=rec["display"],
-				blurb=rec["blurb"],
-				compatible=rec["compatible"],
-				discs=sorted(set(rec["discs"])),
-			)
-			print(f"Updated pack + manifest: {pack_id}")
-		else:
-			print(f"Updated pack only (no manifest): {pack_id}")
+		update_manifest(
+			pack_id=pack_id,
+			version=rec["version"],
+			display=rec["display"],
+			blurb=rec["blurb"],
+			compatible=rec["compatible"],
+			discs=sorted(set(rec["discs"])),
+		)
+		print(f"Updated pack + manifest: {pack_id}")
 
 	print("\nAll done.")
 	return 0

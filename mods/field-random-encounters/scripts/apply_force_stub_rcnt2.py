@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Apply RCnt2 FORCE stub at FIELD.BIN.dec offset 0xBB7C.
+"""Patch a decompressed FIELD.BIN with a tracked RCnt2 encounter stub.
 
-Canonical bytes live in mods/field-random-encounters/patches/.
-
-Ship via disc builder layers: see repo root README.
-"""
+The input is a mutable FIELD.BIN.dec and the density selects one of the shipped
+0/25/50/75 byte sequences. Output overwrites that file at the fixed stub and
+JAL offsets; patch bytes come from this mod's tracked ``patches`` directory,
+with embedded compatibility fallbacks. Length and file bounds are enforced,
+but this low-level command does not decompress, recompress, or verify an ISO."""
 from __future__ import annotations
 
 import argparse
@@ -12,6 +13,8 @@ from pathlib import Path
 
 from density import RATES, parse_one_density, prompt_densities, rate_label
 
+# Decompressed FIELD.BIN offsets: 88-byte stub, then a 4-byte JAL that must
+# remain the tracked call site. These are overlay offsets, not disc LBAs.
 OFFSET = 0xBB7C
 JAL_OFFSET = 0xBBD4
 
@@ -25,6 +28,8 @@ RATE_MARKERS = {
 	75: bytes.fromhex("82 08 03 00 23 18 61 00"),
 }
 
+# Used only when the matching patches/*.hex file is missing. Length and
+# instruction bytes must still match the tracked stub for that rate.
 _FALLBACK = {
 	25: (
 		"80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c"
@@ -48,6 +53,7 @@ _FALLBACK = {
 
 
 def _load_hex(name: str, fallback: str = "") -> bytes:
+	"""Read tracked hex from patches/; use fallback only if that file is absent."""
 	path = _PATCH_DIR / name
 	if path.is_file():
 		text = path.read_text()
@@ -59,6 +65,7 @@ def _load_hex(name: str, fallback: str = "") -> bytes:
 
 
 def stub_for_rate(rate: int) -> bytes:
+	"""Load the exact tracked instruction bytes for one shipped rate."""
 	if rate not in RATES:
 		raise SystemExit(f"rate must be one of {RATES}, got {rate}")
 	return _load_hex(f"stub-bb7c-rate{rate}.hex", _FALLBACK.get(rate, ""))
@@ -69,6 +76,7 @@ STUB = stub_for_rate(50)
 
 
 def apply_stub(path: Path, rate: int = 50) -> bytes:
+	"""Overwrite the fixed decompressed-overlay window and return the applied stub."""
 	stub = stub_for_rate(rate)
 	if len(stub) != 88:
 		raise SystemExit(f"stub must be 88 bytes, got {len(stub)}")

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Build a patched FIELD.BIN.new with the encounter FORCE stub.
+"""Build a patched FIELD.BIN GZIPPS overlay for one encounter density.
 
-  python mods/field-random-encounters/scripts/build_field_bin.py path/to/FIELD.BIN
-  python mods/field-random-encounters/scripts/build_field_bin.py path/to/FIELD.BIN --density light
-"""
+The input is an extracted FIELD.BIN; output defaults to FIELD.BIN.new. The
+pipeline decompresses, applies the tracked RCnt2 stub and JAL, verifies those
+exact bytes, then recompresses against the original header and size. It never
+injects into a disc image; oversized compressed output must not be truncated."""
 
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ from pathlib import Path
 _MOD_SCRIPTS = Path(__file__).resolve().parent
 _ROOT = _MOD_SCRIPTS.parent.parent.parent  # scripts → mod → mods → repo
 _SHARED = _ROOT / "scripts"
-# Prefer this mod's scripts over deprecated repo-root shims with the same names.
+# Shared ISO/GZIPPS helpers plus this mod's overlay patcher (same names).
 for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
@@ -41,6 +42,7 @@ def apply_stub_to_dec(dec_path: Path, rate: int = 50) -> None:
 
 
 def verify_stub(dec_path: Path, rate: int = 50) -> None:
+	"""Require the complete selected stub and call-site JAL to match tracked bytes."""
 	data = dec_path.read_bytes()
 	expect = stub_for_rate(rate)
 	got = data[OFFSET : OFFSET + len(expect)]
@@ -65,6 +67,7 @@ def build(
 	keep_dec: bool,
 	rate: int = 50,
 ) -> Path:
+	"""Run the FIELD.BIN overlay pipeline and return the recompressed output path."""
 	if rate not in RATES:
 		raise SystemExit(f"rate must be one of {RATES}, got {rate}")
 

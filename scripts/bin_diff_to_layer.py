@@ -1,16 +1,11 @@
 #!/usr/bin/env python3
-"""Diff two disc images into an ic-layer-v1 JSON file for the browser builder.
+"""Convert two disc images into an ``ic-layer-v1`` byte-difference layer.
 
-Example (Windows):
-  python scripts/bin_diff_to_layer.py ^
-    workspace\\iso-extract\\ff7_disc1_pristine.bin ^
-    workspace\\iso-extract\\ff7_disc1_encounter.bin ^
-    -o builder\\encounter-v0.1.0\\layers\\disc1.layer.json ^
-    --id encounter-disc1-v0.1.0 ^
-    --description "Encounter FORCE stub Disc 1"
-
-Does not read or write game content into git — only the layer JSON.
-"""
+The original image is the exact builder-side parent and the modified image is
+the desired result. Output records contain absolute offsets and replacement
+bytes, split into bounded JSON strings; size statistics preserve image-growth
+information. The script never edits either image, and a zero-change diff is an
+error because it cannot publish a meaningful add-on."""
 
 from __future__ import annotations
 
@@ -75,8 +70,12 @@ def build_layer(
     layer_id: str,
     description: str,
 ) -> dict:
+    """Return a complete layer whose records reconstruct ``modified`` from ``original``."""
     records = []
     total_bytes = 0
+    # ic-layer-v1 stores replacement bytes, not expected source bytes. The
+    # original image is therefore part of the layer's compatibility contract:
+    # publishing a diff against the wrong base can still apply without error.
     for off, data in iter_runs(original, modified):
         records.append({"offset": off, "hex": data.hex()})
         total_bytes += len(data)

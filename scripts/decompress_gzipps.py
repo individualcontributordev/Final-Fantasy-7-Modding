@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Decompress FF7 PS1 GZIPPS overlays (FIELD.BIN, WORLD.BIN, BATTLE.X, …)."""
+"""Extract the gzip payload from an FF7 GZIPPS overlay.
+
+The input is FIELD.BIN, WORLD.BIN, BATTLE.X, or another file with the eight-byte
+GZIPPS prefix; output defaults to ``<input>.dec``. The declared decompressed
+size is reported and checked but a mismatch remains a warning. This command
+does not patch, recompress, inject into an ISO, or repair sector checksums."""
 
 from __future__ import annotations
 
@@ -9,15 +14,18 @@ import sys
 from pathlib import Path
 
 GZIPPS_HEADER_SIZE = 8
+# Optional diagnostic: known FIELD.BIN RNG-table prefix in decompressed bytes.
 FIELD_RNG_HEAD = bytes.fromhex("B1CAEE6C5A712E55")
 
 
 def decompress_gzipps(src: Path, dst: Path | None = None) -> Path:
+	"""Decompress one GZIPPS member and return the output path."""
 	data = src.read_bytes()
 	if len(data) <= GZIPPS_HEADER_SIZE:
 		raise ValueError(f"{src}: file too small for GZIPPS header")
 
 	dec_size = struct.unpack("<I", data[0:4])[0]
+	# Bytes 4–7 are preserved on recompress; payload after offset 8 is gzip.
 	gzip_header = data[4:8]
 
 	print(f"Source:           {src}")
@@ -47,7 +55,6 @@ def decompress_gzipps(src: Path, dst: Path | None = None) -> Path:
 	return dst
 
 
-# Back-compat name used by older scripts / muscle memory.
 decompress_field_bin = decompress_gzipps
 
 

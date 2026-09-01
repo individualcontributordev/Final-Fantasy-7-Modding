@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Apply an ic-layer-v1 JSON to a .bin and optionally compare to an expected image.
+"""Apply an ``ic-layer-v1`` JSON patch to a disc-image byte buffer.
 
-  python scripts/apply_layer.py pristine.bin layer.json -o out.bin
-  python scripts/apply_layer.py pristine.bin layer.json --expect patched.bin
-"""
+Inputs are a raw image and ordered records containing absolute byte offsets and
+hex payloads; the optional output is a patched BIN, and ``--expect`` verifies
+the exact result. Records may grow an image, but growth is zero-filled and
+rounded to a 2352-byte raw-sector boundary. This is a byte-layer tool: it does
+not interpret ISO9660 files or repair sector EDC/ECC."""
 
 from __future__ import annotations
 
@@ -14,12 +16,15 @@ from pathlib import Path
 
 
 def apply_layer(image: bytearray, layer: dict) -> None:
+    """Apply ordered replacement records in place, preserving declared image growth."""
     if layer.get("format") != "ic-layer-v1":
         raise SystemExit("expected format ic-layer-v1")
     if layer.get("target") not in (None, "disc-image"):
         raise SystemExit(f"unsupported target: {layer.get('target')}")
     # Capture size before records — growth pad check must use this, not post-apply len.
     baseline_len = len(image)
+    # Records are applied in file order. This permits overlap intentionally,
+    # with later bytes winning, and matches the browser builder's layer model.
     for rec in layer["records"]:
         offset = int(rec["offset"])
         data = bytes.fromhex(rec["hex"])

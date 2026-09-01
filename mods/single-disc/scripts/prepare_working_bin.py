@@ -1,26 +1,18 @@
 #!/usr/bin/env python3
-"""Apply optional layers, then produce a Makou-safe working BIN.
+"""Apply optional layers and create a Makou-safe editing workspace.
 
-The base image must be the exact image the first layer targets. For a mod,
-this is usually a reconstructed CSR/CSR+/Highwind image, not retail.
-
-Two checkpoints are kept for different reasons:
-
-* 01-layer-stack.bin is the exact builder-side parent for a new mod layer.
-* 02-working.bin has synchronized FIELD/WORLD tables, spare FIELD.BIN
-  capacity, and repaired EDC/ECC; this is the image opened in Makou.
-
-Do not use 02-working.bin as a mod's layer base unless players really receive
-that exact image before the mod is applied. The safety changes between the two
-checkpoints belong in the new layer and are reproduced by the final round-trip.
-"""
+The base image must be the exact parent of the first optional ``ic-layer-v1``.
+Output ``01-layer-stack.bin`` preserves the builder-side bytes used for the
+future diff; ``02-working.bin`` adds table repair, FIELD.BIN headroom, and
+EDC/ECC repair for Makou. The new output directory must not exist, and all CSR
+paths/layers are explicit caller inputs rather than discovered or fetched."""
 from __future__ import annotations
 
 import argparse
 import json
 from pathlib import Path
 
-from build_csrplus_staged import (
+from makou_workflow import (
     apply_layer,
     stabilize_working_image,
     write_new,
@@ -44,6 +36,7 @@ def main() -> None:
         raise SystemExit(f"Output directory already exists: {output_dir}")
 
     image = bytearray(base_image.read_bytes())
+    # Mutates the in-memory copy only. The input BIN on disk is never rewritten.
     for layer_path in args.layer:
         layer_path = layer_path.expanduser().resolve()
         if not layer_path.is_file():

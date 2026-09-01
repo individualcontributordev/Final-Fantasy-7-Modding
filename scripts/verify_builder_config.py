@@ -1,87 +1,129 @@
 #!/usr/bin/env python3
-"""Verify a builder config (base + add-ons) using CSR + this repo manifests.
+"""Reconstruct one local builder selection from a pristine FF7 disc.
 
-Thin wrapper: stacks layers like the site builder. Implementation lives with
-apply_layer in Final-Fantasy-7-CSR; this entrypoint defaults both manifests.
-
-  python scripts/verify_builder_config.py \\
-    --pristine workspace/pristine/FINALFANTASY7_D1.bin \\
-    --disc 1 --base clean \\
-    --addon field-encounter-25-v0.1.2 \\
-    --addon world-encounter-25-v0.1.0
-
-  python scripts/verify_builder_config.py \\
-    --pristine workspace/pristine/FINALFANTASY7_D1.bin \\
-    --disc 1 --base highwind-v0.1.1 \\
-    --addon field-encounter-on-highwind-25-v0.1.2
-
-Override CSR checkout with --csr-root if not a sibling of this repo.
-"""
-
+Inputs select a disc, base id, optional add-on ids, and optional output BIN.
+Local manifests resolve every ``ic-layer-v1`` in builder order; non-clean bases
+come only from an explicit ``--csr-root`` or ``FF7_CSR_ROOT``. Compatibility is
+checked before add-ons apply. The command performs no network or git access and
+does not mutate manifests or source layers."""
 from __future__ import annotations
 
 import argparse
-import runpy
-import sys
+import json
+import os
 from pathlib import Path
 
-_MODDING = Path(__file__).resolve().parent.parent
-_DEFAULT_CSR = _MODDING.parent / "Final-Fantasy-7-CSR"
+from apply_layer import apply_layer
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def load_manifest(path: Path) -> tuple[Path, dict]:
+	"""Load a local manifest and return its directory for resolving relative layers."""
+	path = path.expanduser().resolve()
+	if not path.is_file():
+		raise SystemExit(f"Missing manifest: {path}")
+	return path.parent, json.loads(path.read_text(encoding="utf-8"))
+
+
+def index_packs(builder_dir: Path, manifest: dict) -> dict[str, tuple[Path, dict]]:
+	"""Index base and add-on entries by their published ids."""
+	packs: dict[str, tuple[Path, dict]] = {}
+	for group in ("bases", "addons"):
+		for pack in manifest.get(group) or []:
+			pack_id = pack.get("id")
+			if pack_id:
+				packs[str(pack_id)] = (builder_dir, pack)
+	return packs
+
+
+def layer_path(builder_dir: Path, pack: dict, disc: int) -> Path:
+	"""Resolve one pack's disc layer relative to its own manifest directory."""
+	relative = (pack.get("discs") or {}).get(str(disc))
+	if not relative:
+		raise SystemExit(f"{pack.get('id')}: no layer for disc {disc}")
+	path = (builder_dir / str(relative).lstrip("./")).resolve()
+	if not path.is_file():
+		raise SystemExit(f"Missing layer: {path}")
+	return path
+
+
+def apply_pack(image: bytearray, builder_dir: Path, pack: dict, disc: int) -> int:
+	"""Apply one validated local pack and return its record count."""
+	path = layer_path(builder_dir, pack, disc)
+	layer = json.loads(path.read_text(encoding="utf-8"))
+	if layer.get("format") != "ic-layer-v1":
+		raise SystemExit(f"{path}: expected ic-layer-v1")
+	apply_layer(image, layer)
+	print(f"  {pack['id']}: {path}")
+	return len(layer.get("records") or [])
+
+
+def csr_root(cli_root: Path | None) -> Path | None:
+	"""Resolve the explicit CLI path before the ``FF7_CSR_ROOT`` fallback."""
+	if cli_root:
+		return cli_root.expanduser().resolve()
+	value = os.environ.get("FF7_CSR_ROOT")
+	return Path(value).expanduser().resolve() if value else None
 
 
 def main() -> int:
-	ap = argparse.ArgumentParser(
-		description="Verify builder base+addon stack (CSR + Modding manifests)"
-	)
-	ap.add_argument("--pristine", type=Path, required=True)
-	ap.add_argument("--disc", type=int, required=True, choices=(1, 2, 3))
-	ap.add_argument("--base", required=True)
-	ap.add_argument("--addon", action="append", default=[], dest="addons")
-	ap.add_argument(
+	parser = argparse.ArgumentParser(description=__doc__)
+	parser.add_argument("--pristine", type=Path, required=True)
+	parser.add_argument("--disc", type=int, choices=(1, 2, 3), required=True)
+	parser.add_argument("--base", required=True)
+	parser.add_argument("--addon", action="append", default=[])
+	parser.add_argument(
 		"--csr-root",
 		type=Path,
-		default=_DEFAULT_CSR,
-		help=f"Final-Fantasy-7-CSR root (default: {_DEFAULT_CSR})",
+		help="Final-Fantasy-7-CSR checkout (or set FF7_CSR_ROOT)",
 	)
-	ap.add_argument("-o", "--output", type=Path, default=None)
-	args = ap.parse_args()
+	parser.add_argument("-o", "--output", type=Path)
+	args = parser.parse_args()
 
-	csr_root = args.csr_root.expanduser().resolve()
-	csr_script = csr_root / "scripts" / "verify_builder_config.py"
-	if not csr_script.is_file():
-		raise SystemExit(f"CSR verify script not found: {csr_script}")
+	pristine = args.pristine.expanduser().resolve()
+	if not pristine.is_file():
+		raise SystemExit(f"Missing pristine image: {pristine}")
 
-	csr_manifest = csr_root / "builder" / "manifest.json"
-	mod_manifest = _MODDING / "builder" / "manifest.json"
-	if not csr_manifest.is_file():
-		raise SystemExit(f"Missing {csr_manifest}")
-	if not mod_manifest.is_file():
-		raise SystemExit(f"Missing {mod_manifest}")
+	mod_builder, mod_manifest = load_manifest(ROOT / "builder" / "manifest.json")
+	packs = index_packs(mod_builder, mod_manifest)
 
-	# Import CSR apply_layer by putting CSR scripts first, then exec CSR main with argv.
-	sys.path.insert(0, str(csr_root / "scripts"))
-	argv = [
-		str(csr_script),
-		"--pristine",
-		str(args.pristine.expanduser().resolve()),
-		"--disc",
-		str(args.disc),
-		"--base",
-		args.base,
-		"--manifest",
-		str(csr_manifest),
-		"--extra-manifest",
-		str(mod_manifest),
-	]
-	for a in args.addons:
-		argv.extend(["--addon", a])
+	base_id = args.base.strip()
+	if base_id not in {"clean", "unmodified"}:
+		csr = csr_root(args.csr_root)
+		if csr is None:
+			raise SystemExit("Pass --csr-root or set FF7_CSR_ROOT")
+		csr_builder, csr_manifest = load_manifest(csr / "builder" / "manifest.json")
+		packs.update(index_packs(csr_builder, csr_manifest))
+
+	image = bytearray(pristine.read_bytes())
+	record_count = 0
+	if base_id not in {"clean", "unmodified"}:
+		if base_id not in packs:
+			raise SystemExit(f"Unknown base: {base_id}")
+		builder_dir, pack = packs[base_id]
+		record_count += apply_pack(image, builder_dir, pack, args.disc)
+
+	for addon_id in args.addon:
+		if addon_id not in packs:
+			raise SystemExit(f"Unknown add-on: {addon_id}")
+		builder_dir, pack = packs[addon_id]
+		required_base = "clean" if base_id in {"clean", "unmodified"} else base_id
+		compatible = pack.get("compatibleBases") or []
+		if compatible and required_base not in compatible:
+			raise SystemExit(
+				f"{addon_id}: compatibleBases={compatible}, base={required_base}"
+			)
+		record_count += apply_pack(image, builder_dir, pack, args.disc)
+
 	if args.output:
-		argv.extend(["-o", str(args.output)])
+		output = args.output.expanduser().resolve()
+		output.parent.mkdir(parents=True, exist_ok=True)
+		output.write_bytes(image)
+		print(f"Wrote {output}")
 
-	sys.argv = argv
-	# Run as __main__
-	g = runpy.run_path(str(csr_script), run_name="__not_main__")
-	return int(g["main"]())
+	print(f"PASS: {record_count} layer records")
+	return 0
 
 
 if __name__ == "__main__":

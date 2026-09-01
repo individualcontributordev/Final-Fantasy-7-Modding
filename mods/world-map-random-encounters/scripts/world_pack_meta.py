@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Pack metadata for world-map encounter ic-layer-v1 add-ons."""
+"""Create world-encounter pack metadata and update the local manifest.
+
+The selected base family and fixed rate determine a stable pack id, display
+labels, compatibility, and exclusive-group metadata. ``write_pack_json`` emits
+pack-relative layer paths; ``update_manifest`` converts them to
+manifest-relative paths and replaces the entry with that id. No layer bytes or
+external manifests are read here."""
 
 from __future__ import annotations
 
@@ -48,6 +54,7 @@ RATES = (0, 25, 50, 75)
 
 
 def meta_for(against: str, rate: int) -> dict:
+	"""Derive stable publication metadata from a base family and shipped rate."""
 	if against not in AGAINST:
 		raise SystemExit(f"Unknown against: {against}")
 	if rate not in RATES:
@@ -81,6 +88,7 @@ def write_pack_json(
 	group_label: str | None = None,
 	option_label: str | None = None,
 ) -> dict:
+	"""Write one pack's metadata using pack-relative disc layer paths."""
 	pack = {
 		"id": pack_id,
 		"name": display,
@@ -113,8 +121,8 @@ def update_manifest(*, pack: dict) -> None:
 	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 	pack_id = pack["id"]
 	entry = dict(pack)
-	entry["name"] = f"{pack['name']} v{pack['version']}"
-	entry.pop("version", None)
+	# pack.json is consumed from inside its pack directory, while manifest
+	# layer paths resolve from builder/ and therefore include the stable id.
 	entry["discs"] = {
 		disc: f"./{pack_id}/layers/disc{disc}.layer.json"
 		for disc in pack["discs"]

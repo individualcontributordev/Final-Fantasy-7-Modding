@@ -1,23 +1,11 @@
 #!/usr/bin/env python3
-"""Create a Makou-safe copy of an FF7 PSX raw BIN.
+"""Create a validated Makou-safe copy of an FF7 raw BIN.
 
-This repairs the common, mechanically recoverable causes of Makou Reactor's
-"Invalid archive" error:
-
-* stale `(LBA, size)` records inside FIELD.BIN and WORLD.BIN;
-* too little FIELD.BIN space for Makou's level-9 gzip recompression;
-* stale Mode 2 Form 1 EDC/ECC bytes;
-* detectable ISO directory overlaps or volume-size inconsistencies.
-
-The input is never modified. The command refuses ambiguous table repairs rather
-than guessing, because a wrong four-byte size can make an image appear healthy
-while breaking a field later in the game.
-
-For the strongest repair, pass --table-baseline with the unchanged BIN that was
-opened before the problematic edit. A retail image is not required. Without a
-baseline, the script identifies table records from their neighboring valid
-records and stops if that inference is not unique.
-"""
+The input image is never modified. The output copy gets synchronized embedded
+FIELD/WORLD lookup sizes, FIELD.BIN recompression headroom, repaired Mode 2 Form
+1 EDC/ECC, and ISO layout/bounds checks, plus a CUE and JSON report. An explicit
+unchanged table baseline is preferred; structural inference refuses ambiguous
+records. Existing outputs and non-2352-aligned inputs are rejected."""
 from __future__ import annotations
 
 import argparse
@@ -25,7 +13,7 @@ import gzip
 import struct
 from pathlib import Path
 
-from build_csrplus_staged import (
+from makou_workflow import (
     SECTOR,
     cue_for,
     fix_tables_for_disc,
@@ -39,7 +27,7 @@ from build_csrplus_staged import (
     write_new,
 )
 from edc_ecc import repair_sector_edc_ecc
-from fix_field_bin_table import _dir_entries, fix_bin_table
+from archive_tables import directory_entries, fix_bin_table
 from psx_mode2_iso import extract_file
 
 
@@ -76,7 +64,7 @@ def _infer_table_records(
 
     entries = [
         entry
-        for entry in _dir_entries(image, directory)
+        for entry in directory_entries(image, directory)
         if not entry[3] and entry[0] != skip_name
     ]
     known_pairs = {(lba, size) for _name, lba, size, _is_dir in entries}
@@ -130,7 +118,7 @@ def fix_tables_without_baseline(image: bytearray) -> int:
         ("FIELD", "FIELD/FIELD.BIN", "FIELD.BIN"),
         ("WORLD", "WORLD/WORLD.BIN", "WORLD.BIN"),
     ):
-        entries = _dir_entries(bytes(image), directory)
+        entries = directory_entries(bytes(image), directory)
         inferred_sizes, target_offsets = _infer_table_records(
             bytes(image),
             directory,
@@ -180,6 +168,7 @@ def make_makou_safe(
     table_baseline: Path | None,
     report_path: Path,
 ) -> dict:
+    """Repair a copy, validate it, and write BIN/CUE plus a provenance report."""
     input_path = input_path.expanduser().resolve()
     output_path = output_path.expanduser().resolve()
     report_path = report_path.expanduser().resolve()

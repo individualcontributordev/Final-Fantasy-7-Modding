@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
-"""Validate builder/manifest.json: JSON well-formed + every referenced layer
-file exists on disk, and preset->addon id references resolve.
+"""Validate the local builder manifest and its published layer references.
 
-This exists because two separate incidents (a dangling trailing comma, and a
-manifest entry whose autoIncludeWhen parent pack was deleted without
-removing the entry) each went unnoticed until a build script happened to
-re-parse the file. Run this first, every time, instead of relying on that.
-
-Usage:
-    python3 scripts/validate_manifest.py [path/to/manifest.json]
-
-Exit code 0 = valid. Non-zero = errors printed to stderr, one per line.
-"""
+The optional input is a manifest path (default ``builder/manifest.json``).
+Validation checks JSON shape, unique add-on ids, on-disk disc layers, automatic
+inclusion targets, and preset references; it prints all discovered errors and
+returns nonzero. It performs no network access and never rewrites manifest or
+pack files."""
 from __future__ import annotations
 
 import json
@@ -71,11 +65,8 @@ def validate(manifest_path: Path) -> list[str]:
                     f"(resolved {layer_path})"
                 )
 
-        # autoIncludeWhen.addonSelected must reference a real addon id.
-        # Exception: a disabled addon may intentionally poison this with a
-        # "DISABLED-..." sentinel so it can never auto-include while off
-        # (see single-disc-csr-manip-movies-v0.1.4/v0.1.5) — only enforce
-        # the reference check for addons that are actually enabled.
+        # Enabled add-ons may auto-include another pack. Skip DISABLED-*
+        # sentinels; any other selected id must exist in this manifest.
         aiw = addon.get("autoIncludeWhen") or {}
         if isinstance(aiw, dict) and addon.get("enabled", True):
             parent = aiw.get("addonSelected")

@@ -1,32 +1,28 @@
 #!/usr/bin/env python3
-"""Build Field-encounter-on-<base> layers without CDmage.
+"""Build and register field-encounter ``ic-layer-v1`` add-ons.
 
-  python mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1
-  python mods/field-random-encounters/scripts/build_on_base.py --against clean --density light --discs 1
-
-Omit --density to pick Light / Standard / Dense / All interactively.
-
-Version from mods/field-random-encounters/VERSION unless --version.
-Writes packs under builder/ and updates builder/manifest.json.
-"""
+For each disc and shipped density, the command reconstructs the selected clean
+or CSR-family base from pristine BINs, patches FIELD.BIN, injects it within its
+existing ISO sector allocation, and diffs against that exact base. Outputs are
+stable-id packs under ``builder/`` plus manifest entries. CSR inputs are local
+only via ``--csr-root``/``FF7_CSR_ROOT``; generated work directories are
+recreated and removed unless ``--keep-work`` is set."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
-from urllib.parse import urljoin
 
 _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent  # mods/<name> → repo root
 _SHARED = _ROOT / "scripts"
-# Prefer this mod's scripts over deprecated repo-root shims with the same names.
+# Shared ISO/layer helpers plus this mod's overlay builder (same names).
 for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
@@ -51,13 +47,11 @@ from psx_mode2_iso import (  # noqa: E402
 
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_on_base"
-DEFAULT_CSR_MANIFEST = (
-	"https://individualcontributor.dev/Final-Fantasy-7-CSR/builder/manifest.json"
-)
 FIELD_PATH = "FIELD/FIELD.BIN"
 
 
 def parse_discs(spec: str) -> list[int]:
+	"""Parse a 1,2,3 disc list; each value must be a retail NTSC-U disc number."""
 	discs: list[int] = []
 	for part in spec.split(","):
 		part = part.strip()
@@ -73,6 +67,7 @@ def parse_discs(spec: str) -> list[int]:
 
 
 def read_default_version() -> str:
+	"""Read the mod VERSION file; this is pack metadata, not part of the stable id."""
 	if not VERSION_FILE.is_file():
 		raise SystemExit(
 			f"Missing {VERSION_FILE.relative_to(_ROOT)} — create it or pass --version"
@@ -83,16 +78,22 @@ def read_default_version() -> str:
 	return version
 
 
-def fetch_json(url: str) -> dict:
-	print(f"  GET {url}")
-	try:
-		with urllib.request.urlopen(url, timeout=120) as resp:
-			return json.loads(resp.read().decode("utf-8"))
-	except urllib.error.URLError as err:
-		raise SystemExit(f"Download failed: {url}\n{err}") from err
+def csr_manifest_path(cli_root: Path | None) -> Path:
+	"""Resolve the CSR manifest only from an explicit local repository root."""
+	root = cli_root
+	if root is None:
+		env_root = os.environ.get("FF7_CSR_ROOT")
+		root = Path(env_root) if env_root else None
+	if root is None:
+		raise SystemExit("Pass --csr-root or set FF7_CSR_ROOT")
+	path = root.expanduser().resolve() / "builder" / "manifest.json"
+	if not path.is_file():
+		raise SystemExit(f"Missing CSR manifest: {path}")
+	return path
 
 
 def resolve_base_id(against: str, manifest: dict) -> str:
+	"""Choose the enabled concrete CSR manifest id for a base family."""
 	if against == "clean":
 		return "clean"
 
@@ -119,7 +120,10 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 	return cands[-1]
 
 
-def resolve_remote_layer_url(manifest_url: str, base_id: str, disc: int, manifest: dict) -> str:
+def resolve_layer_path(
+	manifest_path: Path, base_id: str, disc: int, manifest: dict
+) -> Path:
+	"""Resolve a concrete base layer from the local CSR manifest."""
 	entry = next(
 		(b for b in manifest.get("bases") or [] if b.get("id") == base_id),
 		None,
@@ -132,13 +136,15 @@ def resolve_remote_layer_url(manifest_url: str, base_id: str, disc: int, manifes
 	rel = discs.get(str(disc))
 	if not rel:
 		raise SystemExit(f"{base_id} has no layer for disc {disc}")
-	return urljoin(manifest_url, rel)
+	path = (manifest_path.parent / str(rel).lstrip("./")).resolve()
+	if not path.is_file():
+		raise SystemExit(f"Missing base layer: {path}")
+	return path
 
 
-def load_layer(path_or_url: str) -> dict:
-	if path_or_url.startswith("http://") or path_or_url.startswith("https://"):
-		return fetch_json(path_or_url)
-	path = Path(path_or_url).expanduser().resolve()
+def load_layer(path: Path | str) -> dict:
+	"""Load a local ic-layer-v1 JSON; path is never fetched over the network."""
+	path = Path(path).expanduser().resolve()
 	if not path.is_file():
 		raise SystemExit(f"Missing layer file: {path}")
 	print(f"  read {path}")
@@ -146,6 +152,7 @@ def load_layer(path_or_url: str) -> dict:
 
 
 def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
+	"""Reconstruct the exact parent image used as the layer diff baseline."""
 	print(f"=== apply base → {out_bin.name} ===")
 	image = bytearray(pristine.read_bytes())
 	if layer is not None:
@@ -159,6 +166,7 @@ def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 
 
 def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
+	"""Patch FIELD.BIN and inject it without exceeding its sector allocation."""
 	print("=== extract FIELD/FIELD.BIN ===")
 	base_bytes = bytearray(base_bin.read_bytes())
 	meta = find_file(base_bytes, FIELD_PATH)
@@ -192,17 +200,20 @@ def build_one(
 	base_id: str,
 	meta: dict,
 	pristine_dir: Path,
-	manifest_url: str,
+	manifest_path: Path | None,
 	csr_manifest: dict | None,
 	base_layer_arg: str | None,
 	keep_work: bool,
 ) -> Path:
-	pack_id = f"{meta['pack_prefix']}-v{version}"
+	"""Build and round-trip verify one disc layer in an isolated work directory."""
+	pack_id = meta["pack_prefix"]
 	pristine = pristine_dir / f"FINALFANTASY7_D{disc}.bin"
 	if not pristine.is_file():
 		raise SystemExit(f"Missing pristine: {pristine}")
 
 	work_dir = WORK_ROOT / f"{against}-r{meta['rate']}-d{disc}"
+	# A clean per-build directory prevents a prior compressed overlay or base
+	# image from contaminating the layer diff.
 	if work_dir.exists():
 		shutil.rmtree(work_dir)
 	work_dir.mkdir(parents=True)
@@ -213,8 +224,9 @@ def build_one(
 			layer = load_layer(base_layer_arg)
 		else:
 			assert csr_manifest is not None
-			url = resolve_remote_layer_url(manifest_url, base_id, disc, csr_manifest)
-			layer = load_layer(url)
+			assert manifest_path is not None
+			path = resolve_layer_path(manifest_path, base_id, disc, csr_manifest)
+			layer = load_layer(path)
 		if layer.get("format") != "ic-layer-v1":
 			raise SystemExit("base layer must be ic-layer-v1")
 
@@ -249,6 +261,8 @@ def build_one(
 	print("=== verify ===")
 	check = bytearray(base_bin.read_bytes())
 	apply_layer(check, built)
+	# This round trip proves the published records reproduce every injection
+	# byte from the declared base, including ISO padding and size metadata.
 	if bytes(check) != patched_bin.read_bytes():
 		raise SystemExit("VERIFY FAIL — layer apply does not match patched image")
 	print("  OK")
@@ -262,7 +276,7 @@ def build_one(
 
 def main() -> int:
 	ap = argparse.ArgumentParser(
-		description="Build Field encounter-on-base layers from remote CSR layers + pristine."
+		description="Build Field encounter-on-base layers from local CSR layers + pristine."
 	)
 	ap.add_argument(
 		"--version",
@@ -295,14 +309,14 @@ def main() -> int:
 		help="Folder with FINALFANTASY7_DN.bin",
 	)
 	ap.add_argument(
-		"--csr-manifest",
-		default=DEFAULT_CSR_MANIFEST,
-		help="Remote CSR builder manifest URL",
+		"--csr-root",
+		type=Path,
+		help="Final-Fantasy-7-CSR checkout (or set FF7_CSR_ROOT)",
 	)
 	ap.add_argument(
 		"--base-layer",
 		default=None,
-		help="Local path or URL to one disc's base layer JSON",
+		help="Local path to one disc's base layer JSON",
 	)
 	ap.add_argument("--keep-work", action="store_true", help="Keep temp work dirs")
 	args = ap.parse_args()
@@ -322,13 +336,18 @@ def main() -> int:
 
 	against = args.against
 	csr_manifest = None
+	manifest_path = None
 	if against == "clean":
 		base_id = "clean"
 	elif args.base_id:
 		base_id = args.base_id.strip()
 	else:
-		csr_manifest = fetch_json(args.csr_manifest)
+		manifest_path = csr_manifest_path(args.csr_root)
+		csr_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 		base_id = resolve_base_id(against, csr_manifest)
+	if against != "clean" and not args.base_layer and manifest_path is None:
+		manifest_path = csr_manifest_path(args.csr_root)
+		csr_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
 	for rate in rates:
 		meta = meta_for(against, rate)
@@ -351,13 +370,15 @@ def main() -> int:
 				base_id=base_id,
 				meta=meta,
 				pristine_dir=args.pristine_dir.expanduser().resolve(),
-				manifest_url=args.csr_manifest,
+				manifest_path=manifest_path,
 				csr_manifest=csr_manifest,
 				base_layer_arg=args.base_layer,
 				keep_work=args.keep_work,
 			)
 
-		pack_id = f"{meta['pack_prefix']}-v{version}"
+		# The id excludes version deliberately: builder selections and manifest
+		# references remain stable when a pack is rebuilt and republished.
+		pack_id = meta["pack_prefix"]
 		pack_dir = _ROOT / "builder" / pack_id
 		existing: list[int] = []
 		layers_dir = pack_dir / "layers"

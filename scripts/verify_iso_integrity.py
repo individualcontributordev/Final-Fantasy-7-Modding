@@ -1,21 +1,11 @@
 #!/usr/bin/env python3
-"""Recreate ff7tk's IsoArchive::getIntegrity() layout check against a .bin.
+"""Check a raw FF7 BIN against the ISO layout constraints used by ff7tk.
 
-ff7tk (used by Makou Reactor) refuses to save ("Invalid archive") if, when
-every file/directory in the ENTIRE recursive ISO9660 tree is sorted by LBA,
-any entry overlaps the next one:
-
-    next.lba < this.lba + ceil(this.size / 2048)
-
-or two entries share the same LBA (a QMap<lba, entry> silently collides,
-scrambling the walk). This walks the whole tree the same way ff7tk's
-_getIntegrity() does (recursing into every subdirectory) and reports the
-first violation(s), plus every directory-record size that disagrees with
-the number of bytes actually reachable in its slot.
-
-Usage:
-  python3 scripts/verify_iso_integrity.py path/to/built.bin
-"""
+The input is one MODE2/2352 image. The command recursively sorts ISO9660 files
+and directories by LBA, then reports duplicate LBAs, overlaps, oversized
+padding gaps, and a PVD/image-size mismatch. Movie extents use their Form 2
+payload size. This is read-only diagnostics; it does not repair tables, layout,
+or sector EDC/ECC."""
 from __future__ import annotations
 
 import argparse
@@ -31,6 +21,7 @@ FORM2_USER = 2336  # CD-XA Form 2 (e.g. MOVIE/*.STR, *.MOV) -- not 2048-byte For
 
 
 def sector_count(size: int, name: str = "") -> int:
+    """Extent length in sectors: Form 2 movies use 2336-byte payloads, else 2048."""
     upper = name.upper()
     if upper.startswith("MOVIE/") or upper.endswith((".STR", ".MOV")):
         return (size + FORM2_USER - 1) // FORM2_USER
@@ -38,6 +29,7 @@ def sector_count(size: int, name: str = "") -> int:
 
 
 def walk_tree(img: bytes, lba: int, size: int, path: str, out: list[tuple[str, int, int, bool]]) -> None:
+    """Append every ISO9660 file and subdirectory under this directory extent."""
     entries = _list_dir(img, lba, size)
     for name, e_lba, e_size, is_dir in entries:
         full = f"{path}/{name}" if path else name

@@ -1,8 +1,10 @@
-"""Minimal MODE2/2352 ISO9660 helpers for FF7 FIELD.BIN extract / pad-inject.
+"""Read and replace ISO9660 files inside raw MODE2/2352 FF7 images.
 
-Emulators usually tolerate stale sector EDC/ECC (same as ff7tk). We only rewrite
-Form 1 user data (2048 bytes per sector) and pad shorter replacements with zeros.
-"""
+Helpers map ISO logical 2048-byte blocks to the user-data window of each
+2352-byte sector, walk directory records, extract files, and replace data
+without moving its LBA. Replacement is limited to the existing sector
+allocation; size-changing writes update both-endian directory sizes. Sector
+EDC/ECC is deliberately outside this module and must be repaired separately."""
 
 from __future__ import annotations
 
@@ -21,6 +23,7 @@ class IsoFile:
 
 
 def _user(img: memoryview | bytes | bytearray, lba: int) -> bytes:
+    """Read the 2048-byte ISO user window of one 2352-byte sector."""
     off = lba * SECTOR + USER_OFF
     if off + USER > len(img):
         raise ValueError(f"LBA {lba} past end of image")
@@ -28,6 +31,7 @@ def _user(img: memoryview | bytes | bytearray, lba: int) -> bytes:
 
 
 def _write_user(img: bytearray, lba: int, data: bytes) -> None:
+    """Overwrite only the user-data window; leaves sync/header/EDC/ECC untouched."""
     if len(data) != USER:
         raise ValueError(f"sector user data must be {USER} bytes")
     off = lba * SECTOR + USER_OFF
@@ -161,6 +165,8 @@ def find_file(img: bytes | bytearray, path: str) -> IsoFile:
     dir_lba = _u32_le(root, 2)
     dir_size = _u32_le(root, 10)
 
+    # Resolve each component through directory records instead of searching raw
+    # bytes: duplicate names in different directories are valid ISO9660.
     for idx, part in enumerate(parts):
         entries = _list_dir(img, dir_lba, dir_size)
         match = next((e for e in entries if e[0] == part), None)
@@ -184,6 +190,7 @@ def find_file(img: bytes | bytearray, path: str) -> IsoFile:
 
 
 def extract_file(img: bytes | bytearray, path: str) -> bytes:
+    """Return exactly the byte count recorded in the file's ISO9660 directory entry."""
     meta = find_file(img, path)
     return _read_extent(img, meta.lba, meta.size)
 
@@ -199,6 +206,8 @@ def replace_file_padded(img: bytearray, path: str, new_data: bytes) -> IsoFile:
             f"{path}: new file is {len(new_data)} bytes but ISO slot is {meta.size} "
             "(longer inject not supported — pad/rebuild required)"
         )
+    # Keep the directory size and LBA unchanged. Zero padding makes bytes left
+    # by an older, longer compressed overlay deterministic in the final layer.
     payload = new_data + (b"\x00" * (meta.size - len(new_data)))
 
     remaining = meta.size
@@ -309,7 +318,9 @@ def replace_file_within_sectors(img: bytearray, path: str, new_data: bytes) -> I
             f"{path}: new file needs {new_sec} sectors but slot has {old_sec} "
             f"({len(new_data)} bytes > capacity {old_sec * USER})"
         )
-    # Always set ISO size to payload length when sector count allows.
+    # The allocation boundary, not the old byte size, is the safety limit.
+    # Updating both-endian dirent sizes lets Makou-written files vary slightly
+    # without moving the next ISO extent.
     if len(new_data) != meta.size:
         _patch_dirent_size_only(img, path, len(new_data))
         meta = find_file(img, path)
