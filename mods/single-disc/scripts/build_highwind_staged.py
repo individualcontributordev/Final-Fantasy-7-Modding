@@ -28,21 +28,19 @@ and build_release_artifacts.py when you want to inspect every handoff.
 from __future__ import annotations
 
 import argparse
-import subprocess
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 from build_csrplus_staged import (
-    SCRIPT_DIR,
+    ENDING_ALIAS_OVERLAPS,
     build_release_artifacts,
     configure_sources,
     copy_new,
     cue_for,
     default_csr_root,
+    inject_ending_alias_image,
     inject_snova_image,
     pristine,
-    repair_changed_edc_ecc,
     sha256,
     stabilize_working_image,
     verify_changed_edc_ecc,
@@ -125,8 +123,23 @@ def finalize(args: argparse.Namespace) -> None:
         report_path=finalize_dir / "02-stage-report.json",
     )
 
+    # Must precede the layer diff: the ending's Disc 3 sectors have to be in
+    # the published layer, or builder-built discs cannot play their own ending.
+    publish_input = snova
+    ending_report = None
+    if args.ending_alias:
+        endings = finalize_dir / "03-endings.bin"
+        ending_report = inject_ending_alias_image(
+            input_image=snova,
+            disc3=pristine(csr, 3),
+            edc_reference=pristine(csr, 1),
+            output_image=endings,
+            report_path=finalize_dir / "03-stage-report.json",
+        )
+        publish_input = endings
+
     release_report = build_release_artifacts(
-        input_image=snova,
+        input_image=publish_input,
         layer_base=pristine(csr, 1),
         edc_reference=pristine(csr, 1),
         output_dir=run_dir / "05-release-candidate",
@@ -140,33 +153,16 @@ def finalize(args: argparse.Namespace) -> None:
             "Heavily shortened story, collapsed onto Disc 1. "
             "Many dialogue choices and scenes are cut."
         ),
+        allowed_overlaps=ENDING_ALIAS_OVERLAPS if args.ending_alias else frozenset(),
     )
 
+    # Straight copy of the publish source, so the burned disc and the
+    # builder-site reconstruction are byte-identical.
     release_image = Path(release_report["releaseImage"])
     console_dir = run_dir / "06-console-check"
     console_image = console_dir / "FINALFANTASY7_D1_HIGHWIND.bin"
     copy_new(release_image, console_image)
     retail = pristine(csr, 1).read_bytes()
-    if args.include_ending_alias:
-        # The aliaser performs raw in-place writes. Keep the validated release
-        # bytes beside it so the experimental console optimization is always
-        # reversible and can never become the publish layer accidentally.
-        copy_new(console_image, console_image.with_suffix(".bin.bak"))
-        subprocess.run(
-            [
-                sys.executable,
-                str(SCRIPT_DIR / "alias_d3_ending_lbas_on_d1.py"),
-                "--d1",
-                str(console_image),
-                "--d3",
-                str(pristine(csr, 3)),
-                "--in-place",
-            ],
-            check=True,
-        )
-        image = bytearray(console_image.read_bytes())
-        repair_changed_edc_ecc(image, retail)
-        console_image.write_bytes(image)
     write_new(console_image.with_suffix(".cue"), cue_for(console_image))
 
     console_bytes = console_image.read_bytes()
@@ -174,13 +170,16 @@ def finalize(args: argparse.Namespace) -> None:
         "editedInput": str(edited),
         "stabilize": stabilize_report,
         "snova": snova_report,
+        "endingAlias": ending_report,
+        "endingAliasInPublishedLayer": bool(args.ending_alias),
         "release": release_report,
         "consoleImage": str(console_image),
         "consoleImageSha256": sha256(console_image),
-        "consoleEndingAliasIncluded": args.include_ending_alias,
         "consoleEdcEccSectorsVerified": verify_changed_edc_ecc(console_bytes, retail),
         "consoleDiscBounds": verify_disc_bounds(console_bytes),
-        "consoleIsoLayout": verify_iso_layout(console_bytes),
+        "consoleIsoLayout": verify_iso_layout(
+            console_bytes, ENDING_ALIAS_OVERLAPS if args.ending_alias else frozenset()
+        ),
         "hardwareValidation": "pending DuckStation, MiSTer, burn verify, and console playtest",
     }
     write_json(run_dir / "finalize-report.json", report)
@@ -211,7 +210,13 @@ def parser() -> argparse.ArgumentParser:
     finalize_command.add_argument("--run-dir", type=Path, required=True)
     finalize_command.add_argument("--edited-image", type=Path, required=True)
     finalize_command.add_argument("--version", required=True)
-    finalize_command.add_argument("--include-ending-alias", action="store_true")
+    # On by default so the published layer always carries the ending sectors.
+    finalize_command.add_argument(
+        "--no-ending-alias",
+        dest="ending_alias",
+        action="store_false",
+        help="Skip the ENDING2E Disc 3 alias (publishes a disc with no ending movie)",
+    )
     finalize_command.set_defaults(action=finalize)
     return parser
 
