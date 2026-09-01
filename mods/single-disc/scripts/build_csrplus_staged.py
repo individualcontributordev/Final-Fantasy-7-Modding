@@ -4,7 +4,7 @@
 The build is split into two commands:
 
   python3 mods/single-disc/scripts/build_csrplus_staged.py prepare
-  # Edit 07-editable/FINALFANTASY7_D1.bin in Makou Reactor and save a new file.
+  # Edit 03-working/CSRPLUS_D1.bin in Makou Reactor and save a new file.
   python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
     --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/<run> \
     --edited-image /path/to/makou-saved.bin
@@ -306,10 +306,9 @@ def save_stage(output_dir: Path, name: str, image: bytearray) -> Path:
     return path
 
 
-def collapse_to_disc1(sources_dir: Path, output_dir: Path | None = None) -> Path:
+def collapse_to_disc1(sources_dir: Path, output_dir: Path) -> Path:
     current_dir = sources_dir / "01-current-csr"
     trimmed_dir = sources_dir / "04-current-csr-plus-trims"
-    output_dir = output_dir or sources_dir / "06-collapse"
     c1 = current_dir.joinpath("FINALFANTASY7_D1.bin").read_bytes()
     c2 = current_dir.joinpath("FINALFANTASY7_D2.bin").read_bytes()
     c3 = current_dir.joinpath("FINALFANTASY7_D3.bin").read_bytes()
@@ -767,29 +766,33 @@ def prepare(args: argparse.Namespace) -> None:
     configure_sources(csr)
     run_name = args.run_name or datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     run_dir = csr / "build" / "csr-plus" / run_name
-    sources_report = build_source_artifacts(csr, run_dir)
-    collapsed = collapse_to_disc1(run_dir)
-    editable = run_dir / "07-editable" / "FINALFANTASY7_D1.bin"
+    # Top-level numbers are the operator stages, matching Highwind:
+    # 01-sources, 02-collapse, 03-working, then finalize's 04/05/06.
+    # Nested 00–05 folders live inside 01-sources, not as siblings of the
+    # working BIN.
+    sources_report = build_source_artifacts(csr, run_dir / "01-sources")
+    collapsed = collapse_to_disc1(run_dir / "01-sources", run_dir / "02-collapse")
+    working_image = run_dir / "03-working" / "CSRPLUS_D1.bin"
     working_report = stabilize_working_image(
         input_image=collapsed,
         table_baseline=collapsed,
         edc_reference=pristine(csr, 1),
-        output_image=editable,
-        report_path=run_dir / "07-editable" / "stage-report.json",
+        output_image=working_image,
+        report_path=run_dir / "03-working" / "stage-report.json",
     )
     report = {
         "runDir": str(run_dir),
-        "editableImage": str(editable),
-        "editableSha256": working_report["outputSha256"],
+        "workingImage": str(working_image),
+        "workingSha256": working_report["outputSha256"],
         "sources": sources_report,
-        "workingImage": working_report,
+        "working": working_report,
         "next": (
-            "Edit the 07-editable image in Makou Reactor, save as a new file, "
+            "Edit 03-working/CSRPLUS_D1.bin in Makou Reactor, save as a new file, "
             "then run the finalize command printed below."
         ),
     }
     write_json(run_dir / "prepare-report.json", report)
-    print(f"\nEditable CSR+ image: {editable}")
+    print(f"\nMakou-safe CSR+ image: {working_image}")
     print("Save Makou's result as a new file; do not overwrite this checkpoint.")
     print(
         f"{sys.executable} {Path(__file__).relative_to(ROOT)} finalize "
@@ -806,11 +809,11 @@ def finalize(args: argparse.Namespace) -> None:
         raise SystemExit(f"Missing edited image: {edited}")
     csr = args.csr_root.expanduser().resolve()
     configure_sources(csr)
-    output_dir = run_dir / "08-finalize"
+    output_dir = run_dir / "04-finalize"
     if output_dir.exists():
         raise SystemExit(f"Finalize artifacts already exist: {output_dir}")
 
-    working_baseline = run_dir / "07-editable" / "FINALFANTASY7_D1.bin"
+    working_baseline = run_dir / "03-working" / "CSRPLUS_D1.bin"
     stabilized = output_dir / "01-makou-stabilized.bin"
     stabilize_report = stabilize_working_image(
         input_image=edited,
@@ -828,7 +831,7 @@ def finalize(args: argparse.Namespace) -> None:
         report_path=output_dir / "02-stage-report.json",
     )
 
-    publish_dir = run_dir / "09-publish-candidate"
+    publish_dir = run_dir / "05-release-candidate"
     release_report = build_release_artifacts(
         input_image=snova,
         layer_base=pristine(csr, 1),
@@ -846,7 +849,7 @@ def finalize(args: argparse.Namespace) -> None:
     layer_path = Path(release_report["layer"])
     retail = pristine(csr, 1).read_bytes()
 
-    console_dir = run_dir / "10-console-check"
+    console_dir = run_dir / "06-console-check"
     console_bin = console_dir / "FINALFANTASY7_D1_CSRPLUS.bin"
     copy_new(publish_source, console_bin)
     if args.include_ending_alias:

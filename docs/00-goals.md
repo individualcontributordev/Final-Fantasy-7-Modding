@@ -14,6 +14,7 @@ PS1 Final Fantasy VII disc modding: change engine/field data, keep hardware play
 | ISO / GZIPPS / Makou | [02-disc-format.md](02-disc-format.md), [04-workflow.md](04-workflow.md) |
 | Tools | [03-environment-setup.md](03-environment-setup.md), [05-ghidra-guide.md](05-ghidra-guide.md) |
 | **Burn / MiSTer / PS2 verify** | [07-hardware-burn.md](07-hardware-burn.md) |
+| **Other workstation: CSR+ / Highwind / Makou** | [09-workstation-runbook.md](09-workstation-runbook.md) |
 | Day-by-day RE trail | [findings/](findings/) |
 
 ## Principles

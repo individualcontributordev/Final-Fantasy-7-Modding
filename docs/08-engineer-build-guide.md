@@ -4,6 +4,9 @@ How to build/verify disc images from repo files the same way the builder site
 does, using only the CLI scripts below. For mod-specific pipelines see each
 mod's `scripts/` + `README.md`; this page covers the shared tools.
 
+Manual CSR+ / Highwind / Makou commands for a second machine:
+[09-workstation-runbook.md](09-workstation-runbook.md).
+
 ## Prereqs
 
 - `workspace/pristine/FINALFANTASY7_D{1,2,3}.bin` (gitignored, your own copy)
@@ -190,7 +193,7 @@ Makou/ff7tk to recompress `FIELD.BIN` after a field changes size:
 ```bash
 python3 mods/single-disc/scripts/build_csrplus_staged.py prepare \
   --run-name csrplus-v0.1.2
-# Edit the reported working BIN and save a new file.
+# Edit build/csr-plus/csrplus-v0.1.2/03-working/CSRPLUS_D1.bin.
 python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
   --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/csrplus-v0.1.2 \
   --edited-image /path/to/makou-saved.bin \
