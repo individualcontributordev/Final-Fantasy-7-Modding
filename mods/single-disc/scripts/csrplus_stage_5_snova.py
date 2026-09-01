@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Inject the Disc 3 SNOVA files after all Makou editing is finished."""
+"""Inject the Disc 3 SNOVA files after all Makou editing is finished.
+
+The filename is historical: both collapsed CSR+ and Highwind use this stage.
+SNOVA is deliberately appended after editing because Makou owns the normal ISO
+filesystem, while this injector also remaps hard-coded BATTLE.X sector values.
+"""
 from __future__ import annotations
 
 import argparse

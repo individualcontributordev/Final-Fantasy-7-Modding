@@ -6,9 +6,11 @@ by script trims.
 **Current architecture:** single-disc is no longer an add-on applied on top of
 a multi-disc base. `csr-plus` and `highwind` are their own collapsed
 single-disc **bases** in `builder/manifest.json`, built directly by
-`mods/single-disc/scripts/build_collapsed_bases.py` (see
+the artifact-preserving `build_csrplus_staged.py` and
+`build_highwind_staged.py` pipelines. `build_collapsed_bases.py` is retained
+for historical investigation, not new releases. See
 `docs/CREATE_ADDON_FROM_MAKOU.md` in the CSR repo and
-`docs/08-engineer-build-guide.md`'s CLI cookbook). `single-disc-on-csr` and
+`docs/08-engineer-build-guide.md`'s CLI cookbook. `single-disc-on-csr` and
 the CSR manip-movies pack described below are **retired**
 (`enabled: false`) — kept only for changelog/history context; do not build
 against them.

@@ -131,13 +131,23 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def git_json(csr: Path, repo_path: str) -> dict:
-    command = ["git", "-C", str(csr), "show", f"{SCENE_SOURCE_REF}:{repo_path}"]
+def git_json_at_ref(csr: Path, git_ref: str, repo_path: str) -> dict:
+    """Read a retired layer without restoring it to the live builder catalog.
+
+    Collapsed bases need the former multi-disc and scene-specific layers as
+    source material. Reading a pinned commit makes the provenance reproducible
+    while keeping those obsolete packs unavailable to players.
+    """
+    command = ["git", "-C", str(csr), "show", f"{git_ref}:{repo_path}"]
     result = subprocess.run(command, capture_output=True)
     if result.returncode:
         detail = result.stderr.decode(errors="replace").strip()
         raise SystemExit(f"Cannot read historical build input {repo_path}: {detail}")
     return json.loads(result.stdout)
+
+
+def git_json(csr: Path, repo_path: str) -> dict:
+    return git_json_at_ref(csr, SCENE_SOURCE_REF, repo_path)
 
 
 def pristine(csr: Path, disc: int) -> Path:
@@ -648,7 +658,7 @@ def inject_snova_image(
     )
     image = output_image.read_bytes()
     report = {
-        "stage": "inject-csrplus-snova",
+        "stage": "inject-snova",
         "input": str(input_image),
         "disc3": str(disc3),
         "output": str(output_image),
@@ -705,6 +715,10 @@ def build_release_artifacts(
     apply_layer(round_trip, layer)
     if round_trip != image:
         raise SystemExit("Release layer round-trip failed")
+    rebuilt_image = output_dir / "verification" / f"builder-rebuild-disc{disc}.bin"
+    write_new(rebuilt_image, bytes(round_trip))
+    write_new(rebuilt_image.with_suffix(".cue"), cue_for(rebuilt_image))
+    rebuilt_edc_verified = verify_changed_edc_ecc(round_trip, reference)
 
     pack = {
         "id": pack_id,
@@ -735,6 +749,9 @@ def build_release_artifacts(
         "pack": str(pack_dir),
         "layer": str(layer_path),
         "layerRoundTrip": "pass",
+        "builderRebuildImage": str(rebuilt_image),
+        "builderRebuildSha256": sha256(rebuilt_image),
+        "builderRebuildEdcEccSectorsVerified": rebuilt_edc_verified,
         "edcEccSectorsRepaired": repaired,
         "edcEccSectorsVerified": verified,
         "discBounds": bounds,
@@ -833,6 +850,10 @@ def finalize(args: argparse.Namespace) -> None:
     console_bin = console_dir / "FINALFANTASY7_D1_CSRPLUS.bin"
     copy_new(publish_source, console_bin)
     if args.include_ending_alias:
+        # This optional path changes raw sectors in place. Preserve the fully
+        # validated release image before invoking it so the experiment remains
+        # reversible and cannot contaminate the publish candidate.
+        copy_new(console_bin, console_bin.with_suffix(".bin.bak"))
         subprocess.run(
             [
                 sys.executable,
