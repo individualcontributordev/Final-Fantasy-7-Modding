@@ -1,15 +1,20 @@
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import sys
 from pathlib import Path
+
+import pytest
 
 SINGLE_DISC_SCRIPTS = (
     Path(__file__).resolve().parents[1] / "mods" / "single-disc" / "scripts"
 )
 sys.path.insert(0, str(SINGLE_DISC_SCRIPTS))
 
+from build_csrplus_staged import finalize as finalize_csrplus  # noqa: E402
+from build_highwind_staged import finalize as finalize_highwind  # noqa: E402
 from pipeline_cache import archive_path, cached_artifacts, cached_output  # noqa: E402
 
 
@@ -89,3 +94,38 @@ def test_archive_path_preserves_existing_work(tmp_path: Path) -> None:
     assert archived is not None
     assert not working.exists()
     assert (archived / "edited.bin").read_bytes() == b"user edits"
+
+
+@pytest.mark.parametrize(
+    ("base", "filename", "finalize"),
+    (
+        ("csr-plus", "CSRPLUS_D1.bin", finalize_csrplus),
+        ("highwind", "HIGHWIND_D1.bin", finalize_highwind),
+    ),
+)
+def test_finalize_rejects_an_overwritten_working_baseline(
+    tmp_path: Path,
+    csr_root: Path,
+    base: str,
+    filename: str,
+    finalize,
+) -> None:
+    run_dir = tmp_path / base
+    working_dir = run_dir / "03-working"
+    working_dir.mkdir(parents=True)
+    baseline = working_dir / filename
+    baseline.write_bytes(b"accidental Makou save")
+    (working_dir / "stage-report.json").write_text(
+        json.dumps({"outputSha256": hashlib.sha256(b"original").hexdigest()}),
+        encoding="utf-8",
+    )
+    edited = tmp_path / f"{base}-edited.bin"
+    edited.write_bytes(b"edited")
+    args = argparse.Namespace(
+        csr_root=csr_root,
+        run_dir=run_dir,
+        edited_image=edited,
+    )
+
+    with pytest.raises(SystemExit, match="--resume"):
+        finalize(args)

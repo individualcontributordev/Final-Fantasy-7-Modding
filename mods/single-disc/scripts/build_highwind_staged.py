@@ -176,6 +176,17 @@ def finalize(args: argparse.Namespace) -> None:
         raise SystemExit(f"Finalize output already exists: {finalize_dir}")
 
     working_baseline = run_dir / "03-working" / "HIGHWIND_D1.bin"
+    baseline_valid, _baseline_report, baseline_reason = cached_output(
+        report_path=run_dir / "03-working" / "stage-report.json",
+        output_path=working_baseline,
+        sha256_file=sha256,
+    )
+    if not baseline_valid:
+        raise SystemExit(
+            f"03-working is not the unchanged Makou baseline: {baseline_reason}\n"
+            "Run prepare again with the same --run-name and --resume. The edited "
+            "directory will be preserved under recovery/ before the baseline is rebuilt."
+        )
     stabilized = finalize_dir / "01-stabilized.bin"
     stabilize_report = stabilize_working_image(
         input_image=edited,
