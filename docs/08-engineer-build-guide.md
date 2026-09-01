@@ -192,12 +192,12 @@ Makou/ff7tk to recompress `FIELD.BIN` after a field changes size:
 
 ```bash
 python3 mods/single-disc/scripts/build_csrplus_staged.py prepare \
-  --run-name csrplus-v0.1.2
-# Edit build/csr-plus/csrplus-v0.1.2/03-working/CSRPLUS_D1.bin.
+  --run-name csrplus-v0.2.1
+# Edit build/csr-plus/csrplus-v0.2.1/03-working/CSRPLUS_D1.bin.
 python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
-  --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/csrplus-v0.1.2 \
+  --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/csrplus-v0.2.1 \
   --edited-image /path/to/makou-saved.bin \
-  --version 0.1.2
+  --version 0.2.1
 ```
 
 Highwind uses the same safety and release functions. It rebuilds the CSR+-shaped
@@ -206,17 +206,23 @@ copies Highwind's extra early Disc 1 fields from Highwind's own Disc 1 layer:
 
 ```bash
 python3 mods/single-disc/scripts/build_highwind_staged.py prepare \
-  --run-name highwind-v0.2.1
-# Edit build/highwind/highwind-v0.2.1/03-working/HIGHWIND_D1.bin.
+  --run-name highwind-v0.4.1
+# Edit build/highwind/highwind-v0.4.1/03-working/HIGHWIND_D1.bin.
 python3 mods/single-disc/scripts/build_highwind_staged.py finalize \
-  --run-dir ../Final-Fantasy-7-CSR/build/highwind/highwind-v0.2.1 \
+  --run-dir ../Final-Fantasy-7-CSR/build/highwind/highwind-v0.4.1 \
   --edited-image /path/to/highwind-makou-saved.bin \
-  --version 0.2.1
+  --version 0.4.1
 ```
 
 Each final command writes a candidate pack, release BIN/CUE, independent
 builder-rebuild BIN/CUE, hashes, and verification reports inside the run. It
 never changes published `builder/` files.
+
+If the unchanged `03-working` checkpoint was accidentally edited in place,
+rerun `prepare` with the same `--run-name` plus `--resume`. The builder verifies
+stage hashes, moves the changed directory under `recovery/`, and recreates only
+the first invalid stage and the stages after it. Use `--rebuild-from working`,
+`collapse`, or `sources` to force a specific boundary.
 Disc 2/3 layers are not applied at raw offsets to Disc 1; the pipeline extracts
 their selected fields and injects them by ISO path because each disc has a
 different physical layout.
@@ -241,17 +247,18 @@ python3 mods/single-disc/scripts/csrplus_stage_2_collapse.py \
   --output-dir "$RUN/02-collapse"
 
 # 3. Reserve Makou FIELD.BIN space, repair EDC/ECC, and validate the image.
-python3 mods/single-disc/scripts/prepare_working_bin.py \
-  --base-image "$RUN/02-collapse/06-field-world-tables-fixed.bin" \
+python3 mods/single-disc/scripts/single_disc_stage_3_working.py \
+  --input "$RUN/02-collapse/06-field-world-tables-fixed.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
-  --output-dir "$RUN/03-working"
+  --output "$RUN/03-working/CSRPLUS_D1.bin" \
+  --report "$RUN/03-working/stage-report.json"
 
-# Edit 03-working/02-working.bin in Makou and save a NEW file.
+# Edit 03-working/CSRPLUS_D1.bin in Makou and save a NEW file.
 
 # 4. Normalize and validate Makou's saved image.
 python3 mods/single-disc/scripts/stabilize_working_bin.py \
   --input /path/to/makou-saved.bin \
-  --table-baseline "$RUN/03-working/02-working.bin" \
+  --table-baseline "$RUN/03-working/CSRPLUS_D1.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
   --output "$RUN/04-stabilized/disc1.bin" \
   --report "$RUN/04-stabilized/stage-report.json"
@@ -263,14 +270,22 @@ python3 mods/single-disc/scripts/csrplus_stage_5_snova.py \
   --output "$RUN/05-snova/disc1.bin" \
   --report "$RUN/05-snova/stage-report.json"
 
-# 6. Build candidate pack JSON plus the hardware-test BIN/CUE.
-python3 mods/single-disc/scripts/build_release_artifacts.py \
+# 6. Put truncated ENDING2E at its hardcoded Disc 3 LBA.
+python3 mods/single-disc/scripts/single_disc_stage_6_endings.py \
   --input "$RUN/05-snova/disc1.bin" \
+  --disc3 "$CSR/pristine/FINALFANTASY7_D3.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output "$RUN/06-endings/disc1.bin" \
+  --report "$RUN/06-endings/stage-report.json"
+
+# 7. Build candidate pack JSON plus the hardware-test BIN/CUE.
+python3 mods/single-disc/scripts/build_release_artifacts.py \
+  --input "$RUN/06-endings/disc1.bin" \
   --layer-base "$CSR/pristine/FINALFANTASY7_D1.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
-  --output-dir "$RUN/06-release" \
+  --output-dir "$RUN/07-release" \
   --pack-id csr-plus --name "CSR+ (single-disc)" \
-  --version 0.1.2 --kind base
+  --version 0.2.1 --kind base --ending-alias-included
 ```
 
 Every stage writes `stage-report.json` with hashes and relevant validation
@@ -294,17 +309,18 @@ python3 mods/single-disc/scripts/highwind_stage_2_collapse.py \
   --sources-dir "$RUN/01-sources" \
   --output-dir "$RUN/02-collapse"
 
-python3 mods/single-disc/scripts/prepare_working_bin.py \
-  --base-image "$RUN/02-collapse/08-field-world-tables-fixed.bin" \
+python3 mods/single-disc/scripts/single_disc_stage_3_working.py \
+  --input "$RUN/02-collapse/08-field-world-tables-fixed.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
-  --output-dir "$RUN/03-working"
+  --output "$RUN/03-working/HIGHWIND_D1.bin" \
+  --report "$RUN/03-working/stage-report.json"
 
-# Edit 03-working/02-working.bin and save to a new path.
+# Edit 03-working/HIGHWIND_D1.bin and save to a new path.
 
 # 4. Normalize Makou's save.
 python3 mods/single-disc/scripts/stabilize_working_bin.py \
   --input /path/to/highwind-makou-saved.bin \
-  --table-baseline "$RUN/03-working/02-working.bin" \
+  --table-baseline "$RUN/03-working/HIGHWIND_D1.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
   --output "$RUN/04-stabilized/disc1.bin" \
   --report "$RUN/04-stabilized/stage-report.json"
@@ -316,14 +332,22 @@ python3 mods/single-disc/scripts/csrplus_stage_5_snova.py \
   --output "$RUN/05-snova/disc1.bin" \
   --report "$RUN/05-snova/stage-report.json"
 
-# 6. Diff against retail because Highwind is a base, then verify reconstruction.
-python3 mods/single-disc/scripts/build_release_artifacts.py \
+# 6. Put truncated ENDING2E at its hardcoded Disc 3 LBA.
+python3 mods/single-disc/scripts/single_disc_stage_6_endings.py \
   --input "$RUN/05-snova/disc1.bin" \
+  --disc3 "$CSR/pristine/FINALFANTASY7_D3.bin" \
+  --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
+  --output "$RUN/06-endings/disc1.bin" \
+  --report "$RUN/06-endings/stage-report.json"
+
+# 7. Diff against retail because Highwind is a base, then verify reconstruction.
+python3 mods/single-disc/scripts/build_release_artifacts.py \
+  --input "$RUN/06-endings/disc1.bin" \
   --layer-base "$CSR/pristine/FINALFANTASY7_D1.bin" \
   --edc-reference "$CSR/pristine/FINALFANTASY7_D1.bin" \
-  --output-dir "$RUN/06-release" \
+  --output-dir "$RUN/07-release" \
   --pack-id highwind --name "Highwind" \
-  --version 0.2.1 --kind base \
+  --version 0.4.1 --kind base --ending-alias-included \
   --blurb "Heavily shortened story, collapsed onto Disc 1."
 ```
 

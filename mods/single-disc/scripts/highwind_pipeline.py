@@ -86,6 +86,9 @@ def build_highwind_source_artifacts(csr: Path, output_dir: Path) -> dict:
     report["highwindD1ExtrasImage"] = str(extras_path)
     report["highwindD1ExtrasSha256"] = sha256(extras_path)
     report["highwindD1ExtraFields"] = list(HIGHWIND_D1_EXTRA_FIELDS)
+    report["cacheArtifacts"][
+        str(extras_path.relative_to(output_dir))
+    ] = report["highwindD1ExtrasSha256"]
     # build_source_artifacts already wrote stage-report.json; refresh it.
     report_path = output_dir / "stage-report.json"
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

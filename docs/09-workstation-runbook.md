@@ -78,40 +78,77 @@ with no ending.
 ### CSR+
 
 ```bash
-python3 mods/single-disc/scripts/build_csrplus_staged.py prepare \
-  --csr-root "$CSR" --run-name csrplus-edit-01
+python3 mods/single-disc/scripts/build_csrplus_staged.py \
+  --csr-root "$CSR" prepare --run-name csrplus-edit-01
 ```
 
 Open `$CSR/build/csr-plus/csrplus-edit-01/03-working/CSRPLUS_D1.bin` in Makou. Save to a **new** file.
 
 ```bash
-python3 mods/single-disc/scripts/build_csrplus_staged.py finalize \
-  --csr-root "$CSR" \
+python3 mods/single-disc/scripts/build_csrplus_staged.py \
+  --csr-root "$CSR" finalize \
   --run-dir "$CSR/build/csr-plus/csrplus-edit-01" \
   --edited-image /path/to/makou-saved.bin \
-  --version 0.1.2
+  --version 0.2.1
 ```
 
 ### Highwind
 
 ```bash
-python3 mods/single-disc/scripts/build_highwind_staged.py prepare \
-  --csr-root "$CSR" --run-name highwind-edit-01
+python3 mods/single-disc/scripts/build_highwind_staged.py \
+  --csr-root "$CSR" prepare --run-name highwind-edit-01
 ```
 
 Open `$CSR/build/highwind/highwind-edit-01/03-working/HIGHWIND_D1.bin`. Save to a **new** file.
 
 ```bash
-python3 mods/single-disc/scripts/build_highwind_staged.py finalize \
-  --csr-root "$CSR" \
+python3 mods/single-disc/scripts/build_highwind_staged.py \
+  --csr-root "$CSR" finalize \
   --run-dir "$CSR/build/highwind/highwind-edit-01" \
   --edited-image /path/to/highwind-makou-saved.bin \
-  --version 0.2.1
+  --version 0.4.1
 ```
 
 Highwind rebuilds the same Disc 1 collapse as CSR+ from CSR discs and scene
 trims, then copies Highwind's extra early Disc 1 fields. It does not read
 `builder/csr-plus/` or a CSR+ `build/` run.
+
+### Recover an overwritten `03-working` checkpoint
+
+Use the same run name with `--resume`:
+
+```bash
+python3 mods/single-disc/scripts/build_csrplus_staged.py \
+  --csr-root "$CSR" prepare --run-name csrplus-edit-01 --resume
+
+python3 mods/single-disc/scripts/build_highwind_staged.py \
+  --csr-root "$CSR" prepare --run-name highwind-edit-01 --resume
+```
+
+The orchestrator hashes each stage output. If only `03-working` changed, it
+reuses `02-collapse` and rebuilds the working BIN without reconstructing the
+source discs. The changed directory is moved under the run's `recovery/`
+folder first, so an accidental Makou save is never deleted.
+
+An unchanged resume is a cache hit and returns immediately. To deliberately
+rerun a stage and everything after it:
+
+```bash
+# Recreate only the working checkpoint.
+... prepare --run-name csrplus-edit-01 --rebuild-from working
+
+# Re-run collapse from cached source discs, then recreate working.
+... prepare --run-name csrplus-edit-01 --rebuild-from collapse
+
+# Rebuild every prepare stage, preserving the old directories under recovery/.
+... prepare --run-name csrplus-edit-01 --rebuild-from sources
+```
+
+The isolated equivalents are `csrplus_stage_1_sources.py` or
+`highwind_stage_1_sources.py`, the matching `*_stage_2_collapse.py`, and
+`single_disc_stage_3_working.py`. Finalization uses
+`stabilize_working_bin.py`, `csrplus_stage_5_snova.py`,
+`single_disc_stage_6_endings.py`, and `build_release_artifacts.py`.
 
 ---
 
