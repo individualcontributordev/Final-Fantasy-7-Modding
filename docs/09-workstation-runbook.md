@@ -56,11 +56,24 @@ It mutates CSR `builder/` in place and can skip field merges.
 
 `prepare` rebuilds sources, collapses later-disc fields onto Disc 1 by ISO
 path, fixes FIELD/WORLD lookup tables, reserves Makou `FIELD.BIN` space, and
-repairs EDC/ECC. `finalize` restabilizes the Makou save, injects SNOVA, then
-writes a **candidate** pack plus a console BIN/CUE. It does not write into
-`builder/`.
+repairs EDC/ECC. `finalize` restabilizes the Makou save, injects SNOVA, aliases
+the Disc 3 ending, then writes a **candidate** pack plus a console BIN/CUE. It
+does not write into `builder/`.
 
 If you only need a Makou-openable image, stop after `prepare`.
+
+### The ending stage
+
+`finalize` writes `04-finalize/03-endings.bin`, placing the truncated ENDING2E
+stream at its hardcoded Disc 3 LBA (197242) in the `MOVIE/MONITOR.STR` slot.
+This runs **before** the layer is diffed, so the ending's sectors travel inside
+the published layer. That is required: builder users only load pristine Disc 1,
+so anything absent from the layer cannot exist on their disc.
+
+Reusing the slot makes that extent run into `MOVIE/NVLMK.MOV`. The layout check
+allows exactly that one overlap and still fails on any other overlap or
+duplicate LBA. Pass `--no-ending-alias` only to deliberately publish a disc
+with no ending.
 
 ### CSR+
 
