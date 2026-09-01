@@ -46,7 +46,6 @@ sys.path.insert(0, str(SCRIPT_DIR))
 
 from apply_layer import apply_layer  # noqa: E402
 from bin_diff_to_layer import build_layer  # noqa: E402
-from build_work_bin import apply_manual_blackbgb  # noqa: E402
 from disc_sources import csr_root as default_csr_root  # noqa: E402
 from edc_ecc import repair_sector_edc_ecc  # noqa: E402
 from fix_field_bin_table import _dir_entries, fix_bin_table, fix_field_and_world_bins  # noqa: E402
@@ -311,6 +310,20 @@ def save_stage(output_dir: Path, name: str, image: bytearray) -> Path:
     path = output_dir / name
     write_new(path, bytes(image))
     return path
+
+
+def apply_manual_blackbgb(image: bytearray, layer_json: Path) -> None:
+    """Apply the committed BLACKBGB DSKCG-removal layer to FIELD/BLACKBGB.DAT."""
+    layer = json.loads(layer_json.read_text(encoding="utf-8"))
+    current = extract_file(image, "FIELD/BLACKBGB.DAT")
+    data = bytearray(current)
+    for rec in layer["records"]:
+        offset = rec["offset"]
+        chunk = bytes.fromhex(rec["hex"])
+        data[offset : offset + len(chunk)] = chunk
+    data = bytes(data)
+    if data != current:
+        replace_file_within_sectors(image, "FIELD/BLACKBGB.DAT", data)
 
 
 def collapse_to_disc1(sources_dir: Path, output_dir: Path) -> Path:

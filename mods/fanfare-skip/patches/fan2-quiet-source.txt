@@ -1,3 +1,0 @@
-source_enemy6_snd=OVER2.SND
-original_fan2_size=2420
-note=Replace ENEMY6/FAN2.SND with short AKAO from that file; pad to slot in image.

@@ -1,31 +1,8 @@
 #!/usr/bin/env python3
-"""Bulk-merge the "safe" (non-collision) FIELD/*.DAT CSR edits onto a CSR D1
-work image.
+"""Bulk-merge FIELD/*.DAT files that CSR only edited on D2 or D3 onto a D1 image.
 
-Scope: every field present on 2+ discs where CSR only really edited it
-(vs pristine) on exactly one disc, or where edits on 2+ discs are
-identical/pad-only/sections-only (no genuine script rework) -- i.e.
-everything scripts/scan_all_field_collisions.py classifies as "safe".
-This is the complement of the 8 real collisions handled by
-merge_rework_fields.py -- RCKTIN7 is also folded in here since it's a
-safe D2-superset, not a genuine rework (see
-docs/findings/2026-08-19-collision-mergeability.md). LOST2 also lands
-here now: CSR v0.14.2 reverted D1's LOST2 to pristine and removed the
-stray `version` entity, so it's a clean D2-only edit picked up
-automatically by find_safe_whole_file_merges() below.
-
-For each safe field:
-  - If untouched by CSR on any disc, or already CSR D1 (the work-image
-    base), nothing to do.
-  - If CSR only edited it on D2 or D3, replace the D1 slot's FIELD/<X>.DAT
-    with that disc's CSR file wholesale (whole-file swap, same as
-    merge_rework_fields.py's WHOLE_FILE_FIELDS path). replace_file_within_
-    sectors() will raise if the swap doesn't fit the D1 directory's sector
-    allocation -- these are surfaced, not silently skipped.
-
-Usage (from repo root):
-  python3 mods/single-disc/scripts/merge_safe_fields.py --bin work.bin --in-place
-  python3 mods/single-disc/scripts/merge_safe_fields.py --bin work.bin -o out.bin
+Rework collisions are handled by merge_rework_fields.py instead. RCKTIN7 is
+treated as a safe D2 whole-file swap. JUNAIR is excluded (slot patch).
 """
 from __future__ import annotations
 
@@ -37,13 +14,8 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from disc_sources import load_csr_image, load_pristine_image  # noqa: E402
-from psx_mode2_iso import extract_file, replace_file_within_sectors  # noqa: E402
-from scan_all_field_collisions import list_field_dir  # noqa: E402
+from psx_mode2_iso import extract_file, replace_file_within_sectors, walk_tree  # noqa: E402
 
-# RCKTIN7 is flagged as a "collision" by the naive D1-vs-D2 scripts check,
-# but per docs/findings/2026-08-19-collision-mergeability.md every differing
-# slot is a pure b-superset (CSR D2 is CSR D1 + insertions only) -- safe to
-# take D2 wholesale, same as the true single-disc-edit fields below.
 EXTRA_SAFE_WHOLE_FILE: dict[str, int] = {"RCKTIN7": 2}
 
 # Fields fully owned by the 8-field rework merge -- must not be touched here.
@@ -52,10 +24,18 @@ REWORK_FIELDS = {
     "JUNAIR2", "NIVGATE", "RCKTIN2",
 }
 
-# JUNAIR's only CSR D2 edit is a single script slot (air0/3) -- applied as a
-# precision patch by fix_junair_air0_slot3.py instead of a whole-file swap
-# (see docs/findings/2026-08-26-junair-single-disc-battle-return-freeze.md).
 EXCLUDE_WHOLE_FILE = {"JUNAIR"}
+
+
+def list_field_dir(img: bytes) -> dict[str, tuple[int, int]]:
+    """Return {NAME: (lba, size)} for every FIELD/*.DAT on the image."""
+    out: dict[str, tuple[int, int]] = {}
+    for path, info in walk_tree(img).items():
+        if not path.startswith("FIELD/") or not path.endswith(".DAT"):
+            continue
+        name = path[len("FIELD/") : -len(".DAT")]
+        out[name] = (info.lba, info.size)
+    return out
 
 
 def find_safe_whole_file_merges() -> dict[str, int]:

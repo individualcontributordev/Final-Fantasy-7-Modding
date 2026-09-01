@@ -1,9 +1,0 @@
-# Ending credits test v5
-# MOVIE_ID row == PMVIE index (NOT ISO name sort).
-# id 23 LASTMAP.BIN = Form1 camera data (D3); must not be MDEC-played.
-# id 24+ = Form2 FMVs. Field: AD S31 MOVIE removed; AD3 final MOVIE after PMVIE 24.
-3 LASTMAP.BIN ->ONTRAIN.MOV
-3 LASTFLOR.MOV ->MAINPLR.MOV
-3 ENDING01.MOV ->SMK.STR
-3 ENDING3E.MOV ->SOUTHMK.MOV
-3 ENDING2E.MOV ->MONITOR.STR

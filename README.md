@@ -1,93 +1,119 @@
 # Final Fantasy VII PSX Modding
 
-Tools and notes for modifying **Final Fantasy VII** PlayStation disc images (hardware-compatible).
+Published packs for the [disc builder](https://individualcontributor.dev/builder/).
+Players never download a `.bin` from this repo — only `ic-layer-v1` JSON.
 
-**Play:** https://individualcontributor.dev/builder/  
-**Repo:** https://github.com/individualcontributordev/Final-Fantasy-7-Modding
+Removed notes and one-off scripts: [ARCHIVED.md](ARCHIVED.md).
 
-## Mods
-
-| Mod | Path | Builder | Changelog |
-|-----|------|---------|-----------|
-| Field random encounters | [mods/field-random-encounters/](mods/field-random-encounters/) | Light / Standard / Dense | [CHANGELOG](mods/field-random-encounters/CHANGELOG.md) |
-| World map random encounters | [mods/world-map-random-encounters/](mods/world-map-random-encounters/) | Light / Standard / Dense | [CHANGELOG](mods/world-map-random-encounters/CHANGELOG.md) |
-| Fanfare Skip | [mods/fanfare-skip/](mods/fanfare-skip/) | No victory song/poses (train-style) | [CHANGELOG](mods/fanfare-skip/CHANGELOG.md) |
-
-Release notes index: **[CHANGELOGS.md](CHANGELOGS.md)** (newest entry at the **top** of each file).
-
-## Layout
-
-```
-mods/<name>/          source of truth (VERSION, CHANGELOG, patches, scripts/)
-mods/<name>/scripts/  that mod's build pipeline (build_all_rates, build_on_base, …)
-builder/              published ic-layer-v1 packs + manifest.json (Pages CDN)
-scripts/              shared only: ISO / gzip / layer / verify helpers
-docs/                 RE reference + findings lab notebook
-workspace/            local pristine discs / temps (gitignored)
-CHANGELOGS.md         index of mod release notes (newest-at-top rule)
-```
-
-Mod build entrypoints live under `mods/<name>/scripts/`, not root `scripts/`.
-Root `scripts/` is for reusable disc/ISO tools (`apply_layer`, `verify_*`, compress, …).
-
-## Play
-
-Use the disc builder: pick a cutscene base, optional Field encounter density, download zip.
-
-## Release Field encounters
-
-Needs `workspace/pristine/FINALFANTASY7_D1.bin` (never open in CDmage).
+## Init a workspace
 
 ```bash
-cd /c/path/to/Final-Fantasy-7-Modding
-git pull
-
-# bump mods/field-random-encounters/VERSION when shipping a new release
-python mods/field-random-encounters/scripts/build_all_rates.py
-
-git add builder/
-git status   # JSON only — no .bin
-git commit -m "Field encounters v0.1.2 — Light/Standard/Dense for clean + CSR bases."
-git push
+bash scripts/init_workspace.sh
 ```
 
-One pack (omit `--density` to pick Light / Standard / Dense / All interactively):
+That clones `../Final-Fantasy-7-CSR` (bases) and `../individualcontributordev.github.io` (builder UI) if they are missing. Copy your NTSC-U discs to `workspace/pristine/FINALFANTASY7_D{1,2,3}.bin`.
+
+## CSR (3-disc base)
+
+Lives in `Final-Fantasy-7-CSR`. From that repo:
 
 ```bash
-python mods/field-random-encounters/scripts/build_on_base.py --against csr --discs 1
-# or non-interactive:
-python mods/field-random-encounters/scripts/build_on_base.py --against csr --density light --discs 1
+python3 scripts/apply_layer.py pristine/FINALFANTASY7_D1.bin builder/csr/layers/disc1.layer.json -o cache/csr/FINALFANTASY7_D1.bin
+# edit cache/csr/FINALFANTASY7_DN.bin in Makou, then:
+python3 scripts/repair_mode2_edc.py --pristine pristine/FINALFANTASY7_D1.bin --input cache/csr/FINALFANTASY7_D1.bin --in-place
+python3 scripts/build_csr_base_layers.py cache/csr --version X.Y.Z
 ```
 
-`--against` resolves the live CSR base id from Pages. Older packs stay enabled until you set `"enabled": false` in `builder/manifest.json`.
+See `Final-Fantasy-7-CSR/docs/MANUAL_CSR_BASE_BUILD_GUIDE.md`.
 
-Densities are **named presets** (not a free-form %): **Light** / **Standard** / **Dense**. Stub notes: `mods/field-random-encounters/patches/`.
+## CSR+ (collapsed base)
 
-## For engineers (RE) — build and mod this by hand
+```bash
+python3 mods/single-disc/scripts/build_csrplus_staged.py --csr-root ../Final-Fantasy-7-CSR \
+  prepare --run-name my-csrplus
+# Open 03-working/CSRPLUS_D1.bin in Makou. Save a NEW file.
+python3 mods/single-disc/scripts/build_csrplus_staged.py --csr-root ../Final-Fantasy-7-CSR \
+  finalize --run-dir ../Final-Fantasy-7-CSR/build/csr-plus/my-csrplus \
+  --edited-image /path/to/makou-saved.bin --version X.Y.Z
+```
 
-**Start here:** [docs/00-goals.md](docs/00-goals.md) — the reading-order index for every doc below.
-For a fully sequenced, exercise-based path from zero to shipping a mod, use
-[docs/09-engineer-curriculum.md](docs/09-engineer-curriculum.md).
+If you overwrite the working BIN: `prepare --run-name my-csrplus --resume`.
+Copy `05-release-candidate/pack/csr-plus/` into `../Final-Fantasy-7-CSR/builder/csr-plus/` and bump `builder/manifest.json`.
 
-| Doc | Contents |
-|-----|----------|
-| [docs/03-environment-setup.md](docs/03-environment-setup.md) | Install checklist: emulator, Ghidra, Makou Reactor, hex tool |
-| [docs/08-engineer-build-guide.md](docs/08-engineer-build-guide.md) | Build/verify disc images with only the CLI scripts |
-| [docs/02-disc-format.md](docs/02-disc-format.md) | ISO layout, GZIPPS compression, Makou save flow |
-| [docs/04-workflow.md](docs/04-workflow.md) | Edit → recompress → reinsert → test loop |
-| [docs/05-ghidra-guide.md](docs/05-ghidra-guide.md) | Ghidra import settings and RE method |
-| [docs/01-encounter-system.md](docs/01-encounter-system.md) | Worked example: the field encounter RNG/RAM map |
-| [docs/06-new-mod-research.md](docs/06-new-mod-research.md) | Idea → RE → patch → builder pack, end to end |
-| [docs/07-hardware-burn.md](docs/07-hardware-burn.md) | MiSTer / PS2 burn verification ladder |
-| [docs/reference/INDEX.md](docs/reference/INDEX.md) | Canonical field/movie/music ID tables and format references |
-| [scripts/README.md](scripts/README.md) | Every shared CLI tool, what it's for, and quick-start commands |
+## Highwind (collapsed base)
 
-After clone: `git config core.hooksPath .githooks`
+Same shape as CSR+, different script and filenames:
 
-## Suggestions backlog
+```bash
+python3 mods/single-disc/scripts/build_highwind_staged.py --csr-root ../Final-Fantasy-7-CSR \
+  prepare --run-name my-highwind
+# Open 03-working/HIGHWIND_D1.bin in Makou. Save a NEW file.
+python3 mods/single-disc/scripts/build_highwind_staged.py --csr-root ../Final-Fantasy-7-CSR \
+  finalize --run-dir ../Final-Fantasy-7-CSR/build/highwind/my-highwind \
+  --edited-image /path/to/makou-saved.bin --version X.Y.Z
+```
 
-Community-prioritised encounter/engine mods: [docs/SUGGESTIONS.md](docs/SUGGESTIONS.md)
-## History
+Copy `05-release-candidate/pack/highwind/` into `../Final-Fantasy-7-CSR/builder/highwind/`.
 
-Story of CSR and mods (with archived chats):
-[https://individualcontributor.dev/history/](https://individualcontributor.dev/history/)
+## Field / world encounters
+
+Generated rate patches, not Makou maps. One pack per base × rate (`0/25/50/75`).
+
+```bash
+python3 mods/field-random-encounters/scripts/build_on_base.py --against csr-plus --discs 1 --density all
+python3 mods/world-map-random-encounters/scripts/build_on_base.py --against highwind --discs 1 --density standard
+```
+
+`--against` is `clean|csr|csr-plus|highwind`. Writes `builder/` in this repo.
+
+## Fanfare skip
+
+Engine patch per base (`clean|csr|csr-plus|highwind|all`):
+
+```bash
+python3 mods/fanfare-skip/scripts/build_on_base.py --against all --discs 1
+```
+
+## New Makou addon on an existing base
+
+```bash
+python3 mods/single-disc/scripts/prepare_working_bin.py \
+  --base-image /path/to/reconstructed-parent.bin \
+  --edc-reference workspace/pristine/FINALFANTASY7_D1.bin \
+  --output-dir /tmp/mod-working
+# Edit 02-working.bin in Makou; save a NEW file.
+python3 mods/single-disc/scripts/process_edited_bin.py \
+  --edited-image /path/to/makou-saved.bin \
+  --working-baseline /tmp/mod-working/02-working.bin \
+  --layer-base /tmp/mod-working/01-layer-stack.bin \
+  --edc-reference workspace/pristine/FINALFANTASY7_D1.bin \
+  --output-dir /tmp/mod-release \
+  --pack-id my-mod --name "My mod" --version 0.1.0 --kind mod \
+  --compatible-base csr-plus
+```
+
+`--layer-base` is the image the builder already has before this pack. Do not pass `--snova-disc3` for addons.
+
+Repair an arbitrary BIN for Makou: `python3 mods/single-disc/scripts/make_makou_safe.py --input in.bin --output out.bin`.
+
+## Publish and prove the builder path
+
+1. Copy the candidate `pack/<id>/` into this repo's `builder/` (addons) or the CSR repo `builder/` (bases).
+2. Update `builder/manifest.json` version and disc paths.
+3. Commit JSON only — never `.bin`.
+4. Rebuild locally as the site does:
+
+```bash
+python3 scripts/verify_builder_config.py \
+  --pristine workspace/pristine/FINALFANTASY7_D1.bin \
+  --disc 1 --base csr-plus \
+  --addon fanfare-skip-on-csr-plus \
+  -o /tmp/builder-check.bin
+```
+
+`--base` / `--addon` are pack `id`s from the two manifests.
+`python3 scripts/validate_manifest.py` checks this repo's catalog.
+
+GitHub Pages deploys `builder/` from `main`. After push, confirm versions at
+`https://individualcontributor.dev/Final-Fantasy-7-Modding/builder/manifest.json`
+(or the CSR catalog URL for bases).

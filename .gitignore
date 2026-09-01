@@ -1,7 +1,5 @@
 # Local disc / RE artifacts — never commit game data or large binaries
 
-# Repo-wide: never commit extracted game data / disc images / memory dumps,
-# regardless of directory (previously only workspace/** was covered).
 *.DAT
 *.dat
 *.STR
@@ -9,110 +7,43 @@
 *.iso
 *.ISO
 ramdump*.bin
-data/extracted_fields/
 
-# workspace: ignore everything except .gitkeep placeholders
 workspace/*
 !workspace/**/
 !workspace/**/.gitkeep
-!workspace/*.md
 
-unsloth_compiled_cache/
-ff7_coder_lora_model/
-ff7_coder_outputs/
-
-# Vendored RE reference repos (cloned via scripts/init_external_repos.sh,
-# not committed — re-clone locally on each machine)
 external/
 
-# One-off venv used to build the RAG index (Mac); not needed on workstation
-# for index building, but sentence-transformers must be installed in
-# ff7_train separately for query-time embedding.
-.venv_rag/
+*.bin
+*.BIN
+*.cue
+*.CUE
+*.img
+*.makou
+*.makoutemp
 
-
-
-# Ghidra exports (raw game data - keep local only)
-workspace/ghidra-exports/
-
-# Ghidra analysis (structured output - committed)
-!workspace/ghidra-analysis/
-!workspace/ghidra-analysis/**
-
-# Common disc / dump companions (anywhere under workspace)
-workspace/**/*.bin
-workspace/**/*.BIN
-workspace/**/*.cue
-workspace/**/*.CUE
-workspace/**/*.img
-workspace/**/*.iso
-workspace/**/*.ISO
-workspace/**/*.ccd
-workspace/**/*.sub
-workspace/**/*.toc
-workspace/**/*.mds
-workspace/**/*.mdf
-workspace/**/*.nrg
-workspace/**/*.chd
-workspace/**/*.ecm
-
-workspace/**/*.new
-workspace/**/*.pristine
-workspace/**/*.gz
-workspace/**/*.gzip
-workspace/**/*.makou
-
-
-# Emulator / save junk if dropped in the repo
-workspace/**/*.mcd
-workspace/**/*.sav
-workspace/**/*.srm
-workspace/**/*.state
-workspace/**/*.dst
 **/duckstation*/
 **/*.duckstation*
 
-# Ghidra projects (local) — only keep the placeholder, not exports/binaries
-!workspace/ghidra/.gitkeep
-workspace/ghidra/*.c
-workspace/ghidra/*.html
-workspace/iso-extract/battle-dec/SCUS_941.6*_D*.body
-workspace/iso-extract/battle-raw/SCUS_941.6*_D*
-
-# Python
 __pycache__/
 *.py[cod]
 *$py.class
 .venv/
+.venv_rag/
 venv/
 .env
+unsloth_compiled_cache/
+ff7_coder_lora_model/
+ff7_coder_outputs/
 
-# Pages staging (CI only)
 _site/
 
-# OS / editor
 .DS_Store
 Thumbs.db
-Desktop.ini
-ehthumbs.db
-$RECYCLE.BIN/
-*.lnk
 *.swp
 *~
 .idea/
 .vscode/
 *.code-workspace
-
-# Browser captures — sanitize before archive
 *.har
-# history archives are intentional tracked artifacts
-!docs/history/
-!docs/history/**/
-workspace/iso-extract/battle-dec/SCUS_941.63.body
-workspace/iso-extract/battle-raw/SCUS_941.63
-workspace/iso-extract/battle-raw/BATTLE_BATRES.X.s4zero
-workspace/iso-extract/battle-raw/BATTLE_BATRES.X.s4zero_noanim4
-workspace/iso-extract/battle-raw/BATTLE_BATRES.X.skipsetup_s4zero_noanim4
-workspace/tmp/*
-
-*.makoutemp
+*.lnk
