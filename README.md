@@ -2,7 +2,7 @@
 
 This repository publishes stackable `ic-layer-v1` mods for the
 [disc builder](https://individualcontributor.dev/builder/). CSR, CSR+, and
-Highwind bases live in the separate CSR checkout. Mods here are mutually
+Highwind bases live in the separate CSR repo. Mods here are mutually
 compatible with one exclusive base each.
 
 All commands run from this repository's root and require Python 3.10 or newer.
