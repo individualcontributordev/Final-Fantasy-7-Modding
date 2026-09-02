@@ -2,7 +2,7 @@
 """Build and register fanfare-skip layers for clean and CSR-family bases.
 
 For each requested disc, the command reconstructs the exact builder parent,
-patches BATTLE.X, zero-pads it into its existing ISO slot, and diffs the result
+patches BATRES.X, zero-pads it into its existing ISO slot, and diffs the result
 into ``ic-layer-v1``. Stable pack ids, pack JSON, and manifest entries are
 written under ``builder/``. CSR layers are local-only inputs from
 ``--csr-root``/``FF7_CSR_ROOT``; generated work is deleted unless retained."""
@@ -27,14 +27,15 @@ for pth in (_SHARED, _MOD_SCRIPTS):
 		sys.path.insert(0, str(pth))
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
-from build_battle_x import build as build_battle  # noqa: E402
+from build_batres_x import build as build_batres  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
+from repair_mode2_edc import repair  # noqa: E402
 
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_fanfare_skip"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
-BATTLE_PATH = "BATTLE/BATTLE.X"
+BATRES_PATH = "BATTLE/BATRES.X"
 HINT = 'No victory fanfare or win poses — loot and exp still apply.'
 
 AGAINST = {
@@ -170,25 +171,26 @@ def patch_and_inject(
 	base_bin: Path,
 	work_dir: Path,
 ) -> Path:
-	"""Patch BATTLE.X and inject it only if it fits its ISO slot."""
+	"""Patch BATRES.X and inject it only if it fits its ISO slot."""
 	patched = work_dir / "patched.bin"
 	shutil.copy2(base_bin, patched)
 	img = bytearray(patched.read_bytes())
 
-	print(f"=== extract {BATTLE_PATH} ===")
-	meta = find_file(img, BATTLE_PATH)
-	battle = extract_file(img, BATTLE_PATH)
-	battle_path = work_dir / "BATTLE.X"
-	battle_path.write_bytes(battle)
+	print(f"=== extract {BATRES_PATH} ===")
+	meta = find_file(img, BATRES_PATH)
+	batres_path = work_dir / "BATRES.X"
+	batres_path.write_bytes(extract_file(img, BATRES_PATH))
 
-	print("=== patch BATTLE.X ===")
-	battle_new = build_battle(battle_path, work_dir / "BATTLE.X.new", keep_dec=False)
-	new_bytes = battle_new.read_bytes()
+	print("=== patch BATRES.X ===")
+	batres_new = build_batres(
+		batres_path, work_dir / "BATRES.X.new", keep_dec=False
+	)
+	new_bytes = batres_new.read_bytes()
 	if len(new_bytes) > meta.size:
 		raise SystemExit(
-			f"patched BATTLE.X ({len(new_bytes)}) larger than slot ({meta.size})"
+			f"patched BATRES.X ({len(new_bytes)}) larger than slot ({meta.size})"
 		)
-	replace_file_padded(img, BATTLE_PATH, new_bytes)
+	replace_file_padded(img, BATRES_PATH, new_bytes)
 
 	patched.write_bytes(img)
 	print(f"  wrote {patched}")
@@ -237,6 +239,7 @@ def write_pack_json(
 	if base_version:
 		pack["baseVersion"] = base_version
 	pack_dir.mkdir(parents=True, exist_ok=True)
+	(pack_dir / "VERSION").write_text(version + "\n", encoding="utf-8")
 	(pack_dir / "pack.json").write_text(
 		json.dumps(pack, indent=2) + "\n", encoding="utf-8"
 	)
@@ -319,7 +322,7 @@ def build_one(
 
 	work_dir = WORK_ROOT / f"{against}-d{disc}"
 	# Recreate generated work to ensure the layer depends only on the selected
-	# pristine image, base layer, and tracked BATTLE.X patch sites.
+	# pristine image, base layer, and tracked BATRES.X patch sites.
 	if work_dir.exists():
 		shutil.rmtree(work_dir)
 	work_dir.mkdir(parents=True)
@@ -336,6 +339,11 @@ def build_one(
 	base_bin = work_dir / "base.bin"
 	make_base_image(pristine, layer, base_bin)
 	patched_bin = patch_and_inject(base_bin, work_dir)
+	repaired_bin = work_dir / "patched.repaired.bin"
+	print("=== repair MODE2 Form 1 footers ===")
+	# Repair against the selected parent, not retail pristine. A base may have
+	# unrelated historical footer differences that do not belong in this mod.
+	repair(base_bin, patched_bin, repaired_bin)
 
 	print("=== diff -> fanfare-skip layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
@@ -345,7 +353,7 @@ def build_one(
 	description = f"Fanfare skip — NTSC-U Disc {disc} (against {base_id})"
 	built = build_layer(
 		base_bin,
-		patched_bin,
+		repaired_bin,
 		layer_id=layer_id,
 		description=description,
 	)
@@ -361,9 +369,9 @@ def build_one(
 	print("=== verify ===")
 	check = bytearray(base_bin.read_bytes())
 	apply_layer(check, built)
-	# Exact reconstruction also covers the zero padding added to BATTLE.X's
+	# Exact reconstruction also covers the zero padding added to BATRES.X's
 	# fixed ISO slot, which is part of the published disc-byte layer.
-	if bytes(check) != patched_bin.read_bytes():
+	if bytes(check) != repaired_bin.read_bytes():
 		raise SystemExit("VERIFY FAIL — layer apply does not match patched image")
 	print("  OK")
 

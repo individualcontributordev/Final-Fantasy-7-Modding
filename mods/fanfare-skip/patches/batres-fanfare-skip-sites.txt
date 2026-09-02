@@ -1,0 +1,10 @@
+# Offset  Expected  Replacement
+#
+# These five BATRES.X payload changes were recovered from fanfare-skip 0.1.6
+# and confirmed in playtesting on 2026-09-02. Offsets are within decompressed
+# BATRES.X, not the GZIPPS file or raw disc image.
+0000028c 959c020c 00000000  # do not call the victory fanfare setup
+000002e0 33004014 ecc00608  # jump past the skipped ceremony path
+000002f8 1e 00
+0000032c 08 00
+000003a0 31 00

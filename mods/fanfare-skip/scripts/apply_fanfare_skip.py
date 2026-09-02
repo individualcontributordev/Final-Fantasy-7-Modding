@@ -1,75 +1,76 @@
 #!/usr/bin/env python3
-"""Apply the tracked fanfare-skip instruction replacements to BATTLE.X.dec.
+"""Apply the playtested fanfare-skip changes to decompressed BATRES.X.
 
-Patch sites are loaded from ``force-no-victory-music-sites.txt`` as offset,
-expected word, and replacement word triples. Each little-endian word must be
-original or already patched before writing, and verification requires every
-replacement. This command changes only BATTLE.X code; it does not modify audio
-files, compress the overlay, inject a disc, or establish gameplay semantics
-beyond the tracked patch."""
+Patch sites are loaded as offset, expected bytes, and replacement bytes. Every
+site must contain either the retail bytes or the replacement before writing.
+This prevents an incompatible overlay from being patched at unchecked offsets.
+"""
 
 from __future__ import annotations
 
-import struct
 import sys
 from pathlib import Path
 
 _MOD = Path(__file__).resolve().parent.parent
-_SITES = _MOD / "patches" / "force-no-victory-music-sites.txt"
+_SITES = _MOD / "patches" / "batres-fanfare-skip-sites.txt"
 
 
-def load_sites() -> list[tuple[int, int, int]]:
-	"""Load checked little-endian word replacements from the tracked patch table."""
-	sites: list[tuple[int, int, int]] = []
+def load_sites() -> list[tuple[int, bytes, bytes]]:
+	"""Load checked byte replacements from the tracked BATRES.X patch table."""
+	sites: list[tuple[int, bytes, bytes]] = []
 	for line in _SITES.read_text(encoding="utf-8").splitlines():
 		line = line.split("#", 1)[0].strip()
 		if not line:
 			continue
 		parts = line.split()
-		if len(parts) < 3:
+		if len(parts) != 3:
 			raise SystemExit(f"bad site line: {line!r}")
-		sites.append((int(parts[0], 16), int(parts[1], 16), int(parts[2], 16)))
+		original = bytes.fromhex(parts[1])
+		replacement = bytes.fromhex(parts[2])
+		if len(original) != len(replacement):
+			raise SystemExit(f"site changes payload size: {line!r}")
+		sites.append((int(parts[0], 16), original, replacement))
 	if not sites:
 		raise SystemExit(f"no sites in {_SITES}")
 	return sites
 
 
 def apply_patch(dec_path: Path, *, write: bool = True) -> int:
-	"""Apply idempotent replacements only where source or patched words match."""
+	"""Apply idempotent replacements only where source or patched bytes match."""
 	data = bytearray(dec_path.read_bytes())
 	sites = load_sites()
-	# Checking the old instruction word ties each write to the tracked BATTLE.X
-	# build. An unknown word may indicate a different executable and is safer to
-	# reject than to patch at the same numeric offset.
-	for off, old, new in sites:
-		got = struct.unpack_from("<I", data, off)[0]
-		if got == new:
+	for offset, original, replacement in sites:
+		end = offset + len(original)
+		got = bytes(data[offset:end])
+		if got == replacement:
 			continue
-		if got != old:
+		if got != original:
 			raise SystemExit(
-				f"unexpected word at 0x{off:X}: got {got:08X}, expected {old:08X}"
+				f"unexpected bytes at 0x{offset:X}: got {got.hex()}, "
+				f"expected {original.hex()}"
 			)
-		struct.pack_into("<I", data, off, new)
+		data[offset:end] = replacement
 	if write:
 		dec_path.write_bytes(data)
 	return len(sites)
 
 
 def verify(dec_path: Path) -> None:
-	"""Require every tracked site to contain its replacement word."""
+	"""Require every tracked site to contain its replacement bytes."""
 	data = dec_path.read_bytes()
-	for off, _old, new in load_sites():
-		got = struct.unpack_from("<I", data, off)[0]
-		if got != new:
+	for offset, _original, replacement in load_sites():
+		got = data[offset : offset + len(replacement)]
+		if got != replacement:
 			raise SystemExit(
-				f"verify fail @ 0x{off:X}: got {got:08X}, expected {new:08X}"
+				f"verify fail @ 0x{offset:X}: got {got.hex()}, "
+				f"expected {replacement.hex()}"
 			)
 	print(f"Verified {len(load_sites())} fanfare-skip sites in {dec_path}")
 
 
 def main() -> None:
 	if len(sys.argv) < 2:
-		print(f"Usage: {sys.argv[0]} <BATTLE.X.dec> [--verify-only]", file=sys.stderr)
+		print(f"Usage: {sys.argv[0]} <BATRES.X.dec> [--verify-only]", file=sys.stderr)
 		sys.exit(1)
 	path = Path(sys.argv[1]).expanduser().resolve()
 	if not path.is_file():

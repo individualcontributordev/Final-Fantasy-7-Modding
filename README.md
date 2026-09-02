@@ -129,7 +129,7 @@ playtest.
 | `verify_builder_config.py --disc N --base ID [--addon ID]` | Reconstruct and validate the selected builder stack.                    |
 
 Shared implementation lives under `scripts/libs/`. Overlay authoring helpers
-remain under `mods/<name>/scripts/` (FIELD.BIN / WORLD.BIN / BATTLE.X patches)
+remain under `mods/<name>/scripts/` (FIELD.BIN / WORLD.BIN / BATRES.X patches)
 and are not required for the apply → edit → repair → publish loop.
 
 The hosted builder reads:

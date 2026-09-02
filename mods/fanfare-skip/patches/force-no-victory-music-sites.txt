@@ -1,6 +1,0 @@
-00002974 27bdffd8 27bdfff8  # victory-queue 0x2974 early-return w0
-00002978 afb00018 afbf0004  # victory-queue 0x2974 early-return w1
-0000297c 3c028006 8fbf0004  # victory-queue 0x2974 early-return w2
-00002980 8c423014 27bd0008  # victory-queue 0x2974 early-return w3
-00002984 2403ffff 03e00008  # victory-queue 0x2974 early-return w4
-00002988 afbf0024 00000000  # victory-queue 0x2974 early-return w5

@@ -419,32 +419,6 @@
       }
     },
     {
-      "id": "fanfare-skip",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./fanfare-skip/layers/disc1.layer.json",
-        "2": "./fanfare-skip/layers/disc2.layer.json",
-        "3": "./fanfare-skip/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "beta": true,
-      "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
-      "version": "0.1.6",
-      "discDigests": {
-        "1": "47ccd5efbdc48ecaf7bee1a0c5bd37dbb6491325dea3e3ff082c208db1d5bb3b",
-        "2": "9b1b2f54bf5c6c68a6d361d0ba5a97445d4132a3ac8c79e6b59db8a11152ec96",
-        "3": "0448d02fe2ef36ec0774a9dc508430b53f85ad60495fcd7d974d12ea76503b14"
-      }
-    },
-    {
       "id": "field-encounter-on-csr-0",
       "name": "Field Random Encounters \u2014 Off (0%) (on CSR)",
       "kind": "mod",
@@ -653,32 +627,6 @@
       }
     },
     {
-      "id": "fanfare-skip-on-csr",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr/layers/disc1.layer.json",
-        "2": "./fanfare-skip-on-csr/layers/disc2.layer.json",
-        "3": "./fanfare-skip-on-csr/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "beta": true,
-      "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
-      "version": "0.1.6",
-      "discDigests": {
-        "1": "0a73c8012880ed4c12b666246d41bf5199d1f2a195c387840efe1b28a40f29f6",
-        "2": "8fee70ac029d0616b124a833c9916da7fc2a8799911647d3c6d737291f3bd39b",
-        "3": "804b66e61d977178a878d606c3560c5629ad0dd1a8d929c6ab8e9eea59193ea6"
-      }
-    },
-    {
       "id": "field-encounter-on-csr-plus-0",
       "name": "Field Random Encounters \u2014 Off (0%) (on CSR+)",
       "kind": "mod",
@@ -863,12 +811,58 @@
       }
     },
     {
+      "id": "fanfare-skip",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./fanfare-skip/layers/disc1.layer.json",
+        "2": "./fanfare-skip/layers/disc2.layer.json",
+        "3": "./fanfare-skip/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "98d45cb00ed8e4288aac9c5ee139061b537a0973cf4f7912fcf4a82008331851",
+        "2": "e140b7741605cc636996c839ae353408ce17e37b6e424b6aeccb0adef405200c",
+        "3": "095a853f6e73596fbb0c838183130980aec545a37625181ce9d1167501401ffb"
+      },
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr/layers/disc1.layer.json",
+        "2": "./fanfare-skip-on-csr/layers/disc2.layer.json",
+        "3": "./fanfare-skip-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "1394a8c7c5443a2d6a19daa41b2787b39ffbaabfdcd8deebf39cc68af4e5e367",
+        "2": "90929d03197a1ccdf84c8346b08d59bb78ae452bd0d3fae84fe260a0accc4cfc",
+        "3": "89d355ee906f5f55d53f28bf09cea3249bcf767286a1906c28e2949be97a2f3c"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.3"
+    },
+    {
       "id": "fanfare-skip-on-csr-plus",
       "name": "Fanfare Skip",
       "kind": "mod",
-      "version": "0.2.1",
-      "baseVersion": "0.2.1",
-      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -877,16 +871,17 @@
       "discs": {
         "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
       },
-      "enabled": true,
       "discDigests": {
-        "1": "34069c49b46e0a9033b7fbd98d53825a371c05ea3480735892f9a1590da1ea0b"
-      }
+        "1": "2695836d90279341839a08094b16ed606fef934eb1313c1cbd053c256b9520bc"
+      },
+      "enabled": true,
+      "baseVersion": "0.2.1"
     },
     {
       "id": "fanfare-skip-on-highwind",
       "name": "Fanfare Skip",
       "kind": "mod",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
       "format": "ic-layer-v1",
@@ -897,7 +892,7 @@
         "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "74897d87c803ed66e7712dc8a6eb1e94cd5d30843046695e50dea20af7247e27"
+        "1": "4642560d442b99070482ee8dbbf8e5ba7aa6ed9425e54e192bcfaf45c902f52b"
       },
       "enabled": true,
       "baseVersion": "0.5.0"
