@@ -274,8 +274,8 @@ def build_one(
 	pack_id = cfg["prefix_stem"]
 	display = "Fanfare Skip"
 	blurb = (
-		"After the last enemy dies, skip the victory ceremony path "
-		"(train-style). Exp, AP, gil, and items still apply; loot/level-up "
+		"After the last enemy dies, skip the victory ceremony path."
+		"Exp, AP, gil, and items still apply; loot/level-up "
 		"screens still show."
 	)
 
