@@ -108,7 +108,7 @@ playtest.
 
 | Command                                                    | Purpose                                                                 |
 | ---------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `apply_layer.py IMAGE LAYER [-o OUT|--expect BIN]`         | Apply or byte-verify an `ic-layer-v1` disc patch.                       |
+| `apply_layer.py IMAGE LAYER [-o OUT\|--expect BIN]`         | Apply or byte-verify an `ic-layer-v1` disc patch.                       |
 | `build_base_layer.py IMAGE --version X.Y.Z`                | Publish one mod disc layer and merge pack.json / manifest metadata.     |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                | Restore or recompute MODE2 Form 1 footers after editing.                |
 | `verify_builder_config.py --disc N --base ID [--addon ID]` | Reconstruct and validate the selected builder stack.                    |
