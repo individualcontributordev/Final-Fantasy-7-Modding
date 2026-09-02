@@ -117,13 +117,15 @@ checkout:
 
 ```bash
 export FF7_CSR_ROOT=/path/to/Final-Fantasy-7-CSR
-python3 scripts/rebuild_on_base.py csr          # or csr-plus / highwind / all
+python3 scripts/rebuild_on_base.py all          # or csr / csr-plus / highwind
+python3 scripts/rebuild_on_base.py all --jobs 1 # sequential
 ```
 
-That recuts field encounters, world encounters, and fanfare skip, stamps
-`baseVersion` from the CSR manifest, and leaves `builder/` dirty for you to
-review and commit. It does not touch Makou-authored mods. `clean` packs never
-need this (pristine does not version).
+That recuts field encounters, world encounters, and fanfare skip in parallel
+(default `--jobs 3`), stamps `baseVersion` from the CSR manifest, and leaves
+`builder/` dirty for you to review and commit. Each job copies disc images, so
+raise `--jobs` only if RAM allows. It does not touch Makou-authored mods.
+`clean` packs never need this (pristine does not version).
 
 `verify_builder_config.py` fails on a mismatch so a missed rebuild surfaces
 before you publish.
@@ -149,7 +151,7 @@ playtest.
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                | Restore or recompute MODE2 Form 1 footers after editing.                |
 | `verify_builder_config.py --disc N --base ID [--addon ID]` | Reconstruct and validate the selected builder stack.                    |
 | `validate_manifest.py [PATH]`                              | Check add-on ids and on-disk layer paths.                               |
-| `rebuild_on_base.py csr\|csr-plus\|highwind\|all`            | Recut field, world, and fanfare packs against current CSR bases.        |
+| `rebuild_on_base.py csr\|csr-plus\|highwind\|all [--jobs N]` | Recut field, world, and fanfare packs against current CSR bases.        |
 
 Shared implementation lives under `scripts/libs/`. Overlay authoring helpers
 remain under `mods/<name>/scripts/` (FIELD.BIN / WORLD.BIN / BATRES.X patches)

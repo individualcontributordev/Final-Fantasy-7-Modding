@@ -7,9 +7,14 @@ that has retail NTSC-U BINs after a CSR base version bump (or to backfill
 
   python3 scripts/rebuild_on_base.py csr
   python3 scripts/rebuild_on_base.py all
+  python3 scripts/rebuild_on_base.py all --jobs 4
 
 ``all`` is csr + csr-plus + highwind. Pass ``clean`` only when recutting the
 pristine packs. Discs come from the CSR manifest (1,2,3 for clean).
+
+Independent recuts (base × field/world/fanfare) run in parallel. Each job
+copies disc images, so ``--jobs`` is capped by RAM more than CPU. Manifest
+updates take a file lock so two packs cannot drop each other.
 """
 
 from __future__ import annotations
@@ -19,11 +24,13 @@ import json
 import os
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CSR_FAMILY = ("csr", "csr-plus", "highwind")
 RATES = (0, 25, 50, 75)
+DEFAULT_JOBS = 3
 
 FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
@@ -92,20 +99,61 @@ def pack_ids(against: str) -> list[str]:
 	return field + world + [PACK_PREFIX["fanfare"][against]]
 
 
-def run(cmd: list[str]) -> None:
-	print("\n$ " + " ".join(cmd), flush=True)
-	subprocess.run(cmd, cwd=ROOT, check=True)
+def job_label(against: str, family: str) -> str:
+	return f"{family} on {against}"
 
 
-def rebuild_one(against: str, discs: list[int], csr: Path | None) -> None:
+def recut_jobs(against: str, discs: list[int], csr: Path | None) -> list[tuple[str, list[str]]]:
 	disc_arg = ",".join(str(d) for d in discs)
 	common = ["--against", against, "--discs", disc_arg]
 	if against != "clean":
 		assert csr is not None
 		common += ["--csr-root", str(csr)]
-	run([sys.executable, str(FIELD), "--density", "all", *common])
-	run([sys.executable, str(WORLD), "--density", "all", *common])
-	run([sys.executable, str(FANFARE), *common])
+	return [
+		(job_label(against, "field"), [sys.executable, str(FIELD), "--density", "all", *common]),
+		(job_label(against, "world"), [sys.executable, str(WORLD), "--density", "all", *common]),
+		(job_label(against, "fanfare"), [sys.executable, str(FANFARE), *common]),
+	]
+
+
+def run_job(label: str, cmd: list[str]) -> tuple[str, int, str]:
+	quoted = " ".join(cmd)
+	proc = subprocess.run(
+		cmd,
+		cwd=ROOT,
+		text=True,
+		capture_output=True,
+	)
+	body = proc.stdout or ""
+	if proc.stderr:
+		body += proc.stderr
+	text = f"$ {quoted}\n{body}"
+	if proc.returncode:
+		text += f"\n[exit {proc.returncode}] {label}\n"
+	return label, proc.returncode, text
+
+
+def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> None:
+	if not jobs:
+		return
+	workers = max(1, min(workers, len(jobs)))
+	print(f"Running {len(jobs)} recuts with --jobs {workers}", flush=True)
+	failed: list[str] = []
+	with ThreadPoolExecutor(max_workers=workers) as pool:
+		futures = {pool.submit(run_job, label, cmd): label for label, cmd in jobs}
+		for fut in as_completed(futures):
+			label, code, text = fut.result()
+			print(f"\n======== {label} ========", flush=True)
+			print(text, end="" if text.endswith("\n") else "\n", flush=True)
+			if code:
+				failed.append(label)
+	if failed:
+		raise SystemExit("Recut failed: " + ", ".join(failed))
+
+
+def run(cmd: list[str]) -> None:
+	print("\n$ " + " ".join(cmd), flush=True)
+	subprocess.run(cmd, cwd=ROOT, check=True)
 
 
 def verify_one(against: str, discs: list[int], csr: Path | None) -> None:
@@ -138,11 +186,24 @@ def main() -> int:
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
 	ap.add_argument(
+		"--jobs",
+		type=int,
+		default=DEFAULT_JOBS,
+		metavar="N",
+		help=(
+			f"Parallel recuts (default {DEFAULT_JOBS}). "
+			"Each copies disc images; raise only if the machine has RAM to spare. "
+			"1 = sequential."
+		),
+	)
+	ap.add_argument(
 		"--verify",
 		action="store_true",
 		help="Run verify_builder_config.py on every rebuilt pack (slow)",
 	)
 	args = ap.parse_args()
+	if args.jobs < 1:
+		raise SystemExit("--jobs must be >= 1")
 
 	wanted: list[str] = []
 	for token in args.bases:
@@ -174,11 +235,17 @@ def main() -> int:
 			)
 			print(f"  {b} version {version}")
 
+	jobs: list[tuple[str, list[str]]] = []
+	verify_later: list[tuple[str, list[int]]] = []
 	for against in bases:
 		discs = discs_for(against, manifest)
-		print(f"\n======== {against} discs {discs} ========")
-		rebuild_one(against, discs, csr)
-		if args.verify:
+		print(f"Queue {against} discs {discs}")
+		jobs.extend(recut_jobs(against, discs, csr))
+		verify_later.append((against, discs))
+
+	run_jobs(jobs, args.jobs)
+	if args.verify:
+		for against, discs in verify_later:
 			verify_one(against, discs, csr)
 
 	print("\nRebuilt packs. Review git diff under builder/, then commit.")

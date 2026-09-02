@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 from density import RATES
+from libs.manifest_lock import locked_json
 
 MOD = Path(__file__).resolve().parents[1]
 ROOT = MOD.parent.parent
@@ -114,7 +115,6 @@ def write_pack_json(
 
 def update_manifest(*, pack: dict) -> None:
 	"""Replace the matching manifest entry while preserving all other add-ons."""
-	manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 	pack_id = pack["id"]
 	entry = dict(pack)
 	# pack.json paths are relative to the pack directory; the top-level
@@ -125,10 +125,12 @@ def update_manifest(*, pack: dict) -> None:
 	}
 	entry["enabled"] = True
 
-	addons = manifest.setdefault("addons", [])
-	addons[:] = [addon for addon in addons if addon.get("id") != pack_id]
-	addons.append(entry)
-	MANIFEST_PATH.write_text(
-		json.dumps(manifest, indent=2) + "\n",
-		encoding="utf-8",
-	)
+	with locked_json(MANIFEST_PATH):
+		manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+		addons = manifest.setdefault("addons", [])
+		addons[:] = [addon for addon in addons if addon.get("id") != pack_id]
+		addons.append(entry)
+		MANIFEST_PATH.write_text(
+			json.dumps(manifest, indent=2) + "\n",
+			encoding="utf-8",
+		)
