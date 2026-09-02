@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Validate the local builder manifest and its published layer references.
+"""Validate the local builder manifest and its published layer files.
 
-The optional input is a manifest path (default ``builder/manifest.json``).
-Validation checks JSON shape, unique add-on ids, on-disk disc layers, and
-automatic inclusion targets; it prints all discovered errors and returns
-nonzero. It performs no network access and never rewrites manifest or
-pack files."""
+Default path is ``builder/manifest.json``. Each add-on must have a unique id
+and a ``discs`` map whose paths exist next to the manifest. ``autoIncludeWhen``
+ids must name another add-on in this file (unless they start with DISABLED-).
+Prints every error and returns nonzero. Does not fetch the network or rewrite
+files."""
 from __future__ import annotations
 
 import json
