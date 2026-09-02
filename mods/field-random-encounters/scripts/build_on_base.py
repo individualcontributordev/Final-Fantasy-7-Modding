@@ -119,6 +119,25 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 	return cands[-1]
 
 
+def csr_entry_version(manifest: dict | None, base_id: str) -> str:
+	"""Published version of a CSR-family base. Empty for clean."""
+	if base_id == "clean":
+		return ""
+	if manifest is None:
+		raise SystemExit(f"Need the CSR manifest to read {base_id} version")
+	entry = next(
+		(b for b in manifest.get("bases") or [] if str(b.get("id")) == base_id),
+		None,
+	)
+	version = str((entry or {}).get("version") or "").strip()
+	if not version:
+		raise SystemExit(
+			f"CSR manifest has no version for base {base_id!r}; the pack would "
+			"publish without a baseVersion and the builder would hide it."
+		)
+	return version
+
+
 def resolve_layer_path(
 	manifest_path: Path, base_id: str, disc: int, manifest: dict
 ) -> Path:
@@ -390,6 +409,7 @@ def main() -> int:
 		if not existing:
 			raise SystemExit(f"No disc*.layer.json under {layers_dir}")
 
+		base_version = csr_entry_version(csr_manifest, base_id)
 		pack = write_pack_json(
 			pack_dir,
 			pack_id=pack_id,
@@ -401,10 +421,13 @@ def main() -> int:
 			rate=meta["rate"],
 			group_label=meta.get("group_label"),
 			option_label=meta.get("option_label"),
+			base_version=base_version,
 		)
 		update_manifest(pack=pack)
 		print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
 		print(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
+		if base_version:
+			print(f"baseVersion={base_version}")
 
 	print("\nCommit JSON under builder/ only.")
 	return 0

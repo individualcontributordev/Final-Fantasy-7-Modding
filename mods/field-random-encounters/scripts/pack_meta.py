@@ -7,6 +7,7 @@ rate, so rebuilding a version replaces the same published option rather than
 creating a new identity. This module does not build or validate layer bytes."""
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -41,6 +42,15 @@ RATE_BLURB = {
 }
 
 
+def disc_digests(pack_dir: Path, discs: list[int]) -> dict[str, str]:
+	"""sha256 of each published layer. The builder caches on these bytes."""
+	digests = {}
+	for disc in discs:
+		path = pack_dir / "layers" / f"disc{disc}.layer.json"
+		digests[str(disc)] = hashlib.sha256(path.read_bytes()).hexdigest()
+	return digests
+
+
 def meta_for(against: str, rate: int) -> dict:
 	"""Derive stable publication metadata from a base family and shipped rate."""
 	if against not in AGAINST:
@@ -72,6 +82,7 @@ def write_pack_json(
 	rate: int,
 	group_label: str,
 	option_label: str,
+	base_version: str = "",
 ) -> dict:
 	"""Write pack-relative metadata for the disc layers already present."""
 	pack = {
@@ -87,7 +98,12 @@ def write_pack_json(
 		"rate": rate,
 		"groupLabel": group_label,
 		"optionLabel": option_label,
+		"discDigests": disc_digests(pack_dir, discs),
 	}
+	# Omit on clean: pristine never versions. Required on CSR-family bases or
+	# the hosted builder hides the pack.
+	if base_version:
+		pack["baseVersion"] = base_version
 	pack_dir.mkdir(parents=True, exist_ok=True)
 	(pack_dir / "pack.json").write_text(
 		json.dumps(pack, indent=2) + "\n",

@@ -9,6 +9,7 @@ external manifests are read here."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -53,6 +54,15 @@ RATE_BLURB = {
 RATES = (0, 25, 50, 75)
 
 
+def disc_digests(pack_dir: Path, discs: list[int]) -> dict[str, str]:
+	"""sha256 of each published layer. The builder caches on these bytes."""
+	digests = {}
+	for disc in discs:
+		path = pack_dir / "layers" / f"disc{disc}.layer.json"
+		digests[str(disc)] = hashlib.sha256(path.read_bytes()).hexdigest()
+	return digests
+
+
 def meta_for(against: str, rate: int) -> dict:
 	"""Derive stable publication metadata from a base family and shipped rate."""
 	if against not in AGAINST:
@@ -87,6 +97,7 @@ def write_pack_json(
 	rate: int | None = None,
 	group_label: str | None = None,
 	option_label: str | None = None,
+	base_version: str = "",
 ) -> dict:
 	"""Write one pack's metadata using pack-relative disc layer paths."""
 	pack = {
@@ -99,7 +110,10 @@ def write_pack_json(
 		"exclusiveGroup": EXCLUSIVE_GROUP,
 		"compatibleBases": compatible_bases,
 		"discs": {str(d): f"./layers/disc{d}.layer.json" for d in discs},
+		"discDigests": disc_digests(pack_dir, discs),
 	}
+	if base_version:
+		pack["baseVersion"] = base_version
 	if rate is not None:
 		pack["rate"] = rate
 	if group_label:

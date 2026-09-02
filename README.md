@@ -107,11 +107,26 @@ and produces a silently corrupt image. `build_base_layer.py` therefore records
 `$FF7_CSR_ROOT/builder/<base>/VERSION`.
 
 The browser builder hides any mod whose `baseVersion` is not the base's current
-version. **Bumping a base means every mod on it must be rebuilt and
-republished**, otherwise those mods disappear from the builder.
-`verify_builder_config.py` fails on a mismatch so this surfaces before you
-publish. Mods for the pristine `clean` base carry no `baseVersion`, since
-pristine never changes.
+version. **Bumping a base means every scripted mod on it must be recut**,
+otherwise those mods disappear from the builder. Do not hand-edit
+`baseVersion` onto an old layer — the offsets would still belong to the
+previous base.
+
+On a machine that has `workspace/pristine/FINALFANTASY7_DN.bin` and a CSR
+checkout:
+
+```bash
+export FF7_CSR_ROOT=/path/to/Final-Fantasy-7-CSR
+python3 scripts/rebuild_on_base.py csr          # or csr-plus / highwind / all
+```
+
+That recuts field encounters, world encounters, and fanfare skip, stamps
+`baseVersion` from the CSR manifest, and leaves `builder/` dirty for you to
+review and commit. It does not touch Makou-authored mods. `clean` packs never
+need this (pristine does not version).
+
+`verify_builder_config.py` fails on a mismatch so a missed rebuild surfaces
+before you publish.
 
 ## Verification
 
@@ -134,6 +149,7 @@ playtest.
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                | Restore or recompute MODE2 Form 1 footers after editing.                |
 | `verify_builder_config.py --disc N --base ID [--addon ID]` | Reconstruct and validate the selected builder stack.                    |
 | `validate_manifest.py [PATH]`                              | Check add-on ids and on-disk layer paths.                               |
+| `rebuild_on_base.py csr\|csr-plus\|highwind\|all`            | Recut field, world, and fanfare packs against current CSR bases.        |
 
 Shared implementation lives under `scripts/libs/`. Overlay authoring helpers
 remain under `mods/<name>/scripts/` (FIELD.BIN / WORLD.BIN / BATRES.X patches)
