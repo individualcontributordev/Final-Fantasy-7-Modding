@@ -19,7 +19,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 from libs.layer import apply_layer
-from libs.local_paths import csr_root, default_pristine_arg, ensure_parent_image
+from libs.local_paths import (
+    csr_base_version,
+    csr_root,
+    default_pristine_arg,
+    ensure_parent_image,
+)
 
 
 def _load_manifest(path: Path) -> tuple[Path, dict]:
@@ -184,6 +189,16 @@ def main() -> int:
         if compat and need not in compat:
             raise SystemExit(
                 f"{addon_id}: compatibleBases={compat} does not include base {need!r}"
+            )
+        # The builder hides mods whose baseVersion is not the live base build,
+        # so catch that here rather than after publishing.
+        want_base_version = csr_base_version(need, args.csr_root)
+        got_base_version = str(entry.get("baseVersion") or "")
+        if want_base_version and got_base_version != want_base_version:
+            raise SystemExit(
+                f"{addon_id}: baseVersion={got_base_version or '(unset)'} but "
+                f"{need} is {want_base_version} — rebuild against the current base "
+                "or the builder will hide this mod."
             )
         lp = _layer_path(meta, args.disc)
         n = _apply_and_check(image, lp)

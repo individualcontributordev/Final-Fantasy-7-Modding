@@ -24,7 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 from libs.layer import apply_layer, build_layer
-from libs.local_paths import csr_root, ensure_parent_image, pristine_bin
+from libs.local_paths import csr_base_version, csr_root, ensure_parent_image, pristine_bin
 
 DISC_BIN_NAME = re.compile(
     r"^FINALFANTASY7_D([123])(?: \(patched\))?\.bin$",
@@ -72,11 +72,19 @@ def sorted_disc_map(discs: dict) -> dict[str, str]:
     return {k: discs[k] for k in sorted(discs, key=lambda d: int(d))}
 
 
-def upsert_mod_json(mod_dir: Path, mod: dict, version: str, disc: int) -> dict:
+def upsert_mod_json(
+    mod_dir: Path, mod: dict, version: str, base_version: str, disc: int
+) -> dict:
     """Write one disc into pack.json without dropping extra mod fields."""
     discs = dict(mod.get("discs") or {})
     discs[str(disc)] = f"./layers/disc{disc}.layer.json"
     mod["version"] = version
+    # The builder hides a mod whose baseVersion is not the current base build,
+    # because the layer's offsets only line up with the build it was cut from.
+    if base_version:
+        mod["baseVersion"] = base_version
+    else:
+        mod.pop("baseVersion", None)
     mod["kind"] = mod.get("kind") or "mod"
     mod["format"] = mod.get("format") or "ic-layer-v1"
     mod["discs"] = sorted_disc_map(discs)
@@ -140,6 +148,8 @@ def build_one_disc(
     *,
     mod: dict,
     version: str,
+    base_id: str,
+    base_version: str,
     disc: int,
     patched: Path,
     parent: Path,
@@ -158,7 +168,10 @@ def build_one_disc(
     out_path = out_dir / f"disc{disc}.layer.json"
 
     layer_id = f"{mod_id}-disc{disc}"
-    description = f"{mod.get('name') or mod_id} v{version} — NTSC-U Disc {disc}"
+    against = f"{base_id} {base_version}".strip()
+    description = (
+        f"{mod.get('name') or mod_id} v{version} — NTSC-U Disc {disc} (on {against})"
+    )
     print(f"=== Disc {disc}: diff ===")
     print(f"  parent:  {parent}")
     print(f"  patched: {patched}")
@@ -206,6 +219,10 @@ def main() -> int:
         help="Final-Fantasy-7-CSR checkout (or set FF7_CSR_ROOT)",
     )
     ap.add_argument(
+        "--base-version",
+        help="Base build this layer is cut from (default: read the base's VERSION)",
+    )
+    ap.add_argument(
         "--skip-verify",
         action="store_true",
         help="Skip apply_layer round-trip checks (not recommended)",
@@ -230,10 +247,21 @@ def main() -> int:
     mod_dir = builder_dir / mod_id
     base_id = compatible_base(mod)
 
+    if args.base_version is not None:
+        base_version = args.base_version.strip()
+    else:
+        base_version = csr_base_version(base_id, args.csr_root)
+
     if args.parent:
         parent = args.parent.expanduser().resolve()
         if not parent.is_file():
             raise SystemExit(f"Missing parent: {parent}")
+        if base_version:
+            print(
+                f"NOTE: --parent given; recording baseVersion {base_version} from "
+                f"{base_id}'s VERSION. Make sure that BIN really is {base_id} "
+                f"{base_version}, or the builder will offer a layer that does not fit."
+            )
     else:
         _data, parent = ensure_parent_image(
             base_id=base_id,
@@ -243,7 +271,7 @@ def main() -> int:
         )
 
     print(f"Mod:     {mod.get('name') or mod_id} ({mod_id})")
-    print(f"Against: {base_id}")
+    print(f"Against: {base_id} {base_version}".rstrip())
     print(f"Version: {version}")
     print(f"Image:   {patched}")
     print(f"Disc:    {disc}")
@@ -253,6 +281,8 @@ def main() -> int:
     build_one_disc(
         mod=mod,
         version=version,
+        base_id=base_id,
+        base_version=base_version,
         disc=disc,
         patched=patched,
         parent=parent,
@@ -260,7 +290,7 @@ def main() -> int:
         skip_verify=args.skip_verify,
     )
 
-    mod = upsert_mod_json(mod_dir, mod, version, disc)
+    mod = upsert_mod_json(mod_dir, mod, version, base_version, disc)
     update_manifest(mod, disc, builder_dir)
     print(f"Updated {mod_dir / 'pack.json'}")
     print(f"Updated {builder_dir / 'manifest.json'} (enabled=true)")

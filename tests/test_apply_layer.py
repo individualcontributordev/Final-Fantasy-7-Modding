@@ -165,6 +165,8 @@ class BuildAddonLayerTests(unittest.TestCase):
                     "0.1.7",
                     "--parent",
                     str(parent_path),
+                    "--base-version",
+                    "0.2.1",
                     "--builder-dir",
                     str(builder),
                 ],
@@ -180,6 +182,10 @@ class BuildAddonLayerTests(unittest.TestCase):
             manifest = json.loads((builder / "manifest.json").read_text(encoding="utf-8"))
             self.assertEqual(manifest["addons"][0]["id"], "fanfare-skip-on-csr-plus")
             self.assertEqual(manifest["addons"][0]["version"], "0.1.7")
+            # The builder hides a mod unless this names the current base build.
+            self.assertEqual(manifest["addons"][0]["baseVersion"], "0.2.1")
+            pack = json.loads((pack_dir / "pack.json").read_text(encoding="utf-8"))
+            self.assertEqual(pack["baseVersion"], "0.2.1")
 
 
 if __name__ == "__main__":
