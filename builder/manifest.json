@@ -342,7 +342,7 @@
       "id": "fanfare-skip",
       "name": "Fanfare Skip",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
+      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -363,7 +363,7 @@
       "id": "fanfare-skip-on-highwind",
       "name": "Fanfare Skip",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
+      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -552,7 +552,7 @@
       "id": "fanfare-skip-on-csr",
       "name": "Fanfare Skip",
       "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
+      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
       "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
@@ -670,26 +670,6 @@
       "optionLabel": "Dense (75%)"
     },
     {
-      "id": "fanfare-skip-on-csr-plus",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "blurb": "After the last enemy dies, skip the victory ceremony path (train-style). Exp, AP, gil, and items still apply; loot/level-up screens still show. Stock FAN2.SND is left alone (quiet FAN2 freezes audio).",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "layout": "global",
-      "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
-      },
-      "enabled": true,
-      "beta": true,
-      "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
-      "version": "0.1.6"
-    },
-    {
       "id": "field-encounter-on-csr-plus-25",
       "name": "Field Random Encounters \u2014 Light (25%) (on CSR+)",
       "kind": "mod",
@@ -748,6 +728,22 @@
       "rate": 75,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Dense (75%)"
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.1.6",
+      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "enabled": true
     }
   ],
   "bases": [],

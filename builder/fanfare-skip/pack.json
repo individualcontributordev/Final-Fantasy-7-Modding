@@ -3,7 +3,7 @@
   "name": "Skip victory fanfare",
   "kind": "mod",
   "version": "0.1.6",
-  "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
+  "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
   "hint": "No victory song or win poses. Loot and exp still work.",
   "format": "ic-layer-v1",
   "compatibleBases": [
