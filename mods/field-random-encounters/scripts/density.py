@@ -97,7 +97,7 @@ def parse_densities(spec: str) -> list[int]:
 
 def print_density_menu(*, allow_all: bool) -> None:
 	print()
-	print("Field encounter density (shipped stubs — pick a preset, not a custom %):")
+	print("Field encounter density (shipped stubs — pick a named rate, not a custom %):")
 	print()
 	for i, d in enumerate(DENSITIES, start=1):
 		print(f"  [{i}] {d['title']:<16}  {d['hint']}")
@@ -111,7 +111,7 @@ def prompt_densities(*, allow_all: bool = True, default: str = "standard") -> li
 	if not sys.stdin.isatty():
 		raise SystemExit(
 			"No density given and stdin is not a TTY.\n"
-			f"Pass --density <preset> ({RATE_HELP})"
+			f"Pass --density <name> ({RATE_HELP})"
 			+ (" or --density all" if allow_all else "")
 			+ "."
 		)

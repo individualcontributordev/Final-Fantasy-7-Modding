@@ -294,7 +294,7 @@ def main() -> int:
 		"--rate",
 		dest="density",
 		default=None,
-		metavar="PRESET",
+		metavar="DENSITY",
 		help=(
 			"light / standard / dense / all (or 25 / 50 / 75). "
 			"Omit to pick interactively."

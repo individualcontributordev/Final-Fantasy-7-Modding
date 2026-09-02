@@ -268,7 +268,7 @@ def main() -> int:
 		"--rate",
 		dest="density",
 		default=None,
-		metavar="PRESET",
+		metavar="DENSITY",
 		help="light / standard / dense / all. Omit to pick interactively.",
 	)
 	ap.add_argument("--base-id", default=None, help="Override CSR base id")
@@ -334,8 +334,8 @@ def main() -> int:
 				keep_work=args.keep_work,
 			)
 
-		# Version is metadata, not identity; keeping it out of the id preserves
-		# builder selections and preset references across releases.
+		# Version is metadata, not identity; keeping it out of the pack id
+		# preserves sticky builder selections across releases.
 		pack_id = meta["pack_prefix"]
 		pack_dir = _ROOT / "builder" / pack_id
 		existing: list[int] = []

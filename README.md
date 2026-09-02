@@ -92,6 +92,12 @@ that mod's parent base, not against pristine. Outputs are
 `builder/<mod-id>/layers/discN.layer.json`, `pack.json`, `VERSION`, and
 `builder/manifest.json`.
 
+Push `main` to publish. GitHub Pages deploys `builder/` to
+`https://individualcontributor.dev/Final-Fantasy-7-Modding/builder/`. Encounter
+density is four named rates (`off` / `light` / `standard` / `dense` → 0/25/50/75),
+each a separate pack in an exclusiveGroup dropdown — field and world are chosen
+independently.
+
 ## Mods are pinned to one base build
 
 A layer is a list of `{offset, hex}` writes with no expected bytes, so applying
@@ -111,9 +117,9 @@ pristine never changes.
 
 ```bash
 python3 scripts/apply_layer.py \
-  "cache/$BASE/FINALFANTASY7_D${DISCS}.bin" \
-  "builder/$MOD/layers/disc${DISCS}.layer.json" \
-  --expect "cache/$MOD/FINALFANTASY7_D${DISCS}.bin"
+  "cache/$BASE/FINALFANTASY7_D1.bin" \
+  "builder/$MOD/layers/disc1.layer.json" \
+  --expect "cache/$MOD/FINALFANTASY7_D1.bin"
 ```
 
 Automated checks do not replace DuckStation/MiSTer testing or a console
@@ -127,6 +133,7 @@ playtest.
 | `build_base_layer.py IMAGE --version X.Y.Z`                | Publish one mod disc layer and merge pack.json / manifest metadata.     |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                | Restore or recompute MODE2 Form 1 footers after editing.                |
 | `verify_builder_config.py --disc N --base ID [--addon ID]` | Reconstruct and validate the selected builder stack.                    |
+| `validate_manifest.py [PATH]`                              | Check add-on ids and on-disk layer paths.                               |
 
 Shared implementation lives under `scripts/libs/`. Overlay authoring helpers
 remain under `mods/<name>/scripts/` (FIELD.BIN / WORLD.BIN / BATRES.X patches)
@@ -137,3 +144,5 @@ The hosted builder reads:
 ```text
 https://individualcontributor.dev/Final-Fantasy-7-Modding/builder/manifest.json
 ```
+
+Commit as `individualcontributordev <contributorindividual@gmail.com>`.

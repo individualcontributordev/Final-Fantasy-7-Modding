@@ -70,7 +70,7 @@ def main() -> None:
 		"--rate",
 		dest="density",
 		default=None,
-		metavar="PRESET",
+		metavar="DENSITY",
 		help="off / light / standard / dense (or 0 / 25 / 50 / 75). Omit to pick interactively.",
 	)
 	args = ap.parse_args()
