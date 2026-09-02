@@ -47,3 +47,6 @@ Thumbs.db
 *.code-workspace
 *.har
 *.lnk
+*.x
+*.x.dec.patched
+*.x.new
