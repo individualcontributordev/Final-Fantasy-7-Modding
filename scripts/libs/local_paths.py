@@ -51,6 +51,30 @@ def _csr_base_layer(csr: Path, base_id: str, disc: int) -> Path:
     raise SystemExit(f"Unknown CSR base id {base_id!r}")
 
 
+def csr_base_version(base_id: str, csr: Path | None = None) -> str:
+    """Read the published version of a CSR base, e.g. csr-plus -> "0.2.1".
+
+    A mod layer is a byte diff against one specific base build, so the mod has
+    to record which build it was cut from. Pristine ``clean`` never changes and
+    carries no version.
+    """
+    if base_id in ("clean", "unmodified"):
+        return ""
+
+    csr_path = csr_root(csr)
+    if csr_path is None:
+        raise SystemExit(
+            f"Cannot read the {base_id} version: set FF7_CSR_ROOT or pass --csr-root."
+        )
+    version_path = csr_path / "builder" / base_id / "VERSION"
+    if not version_path.is_file():
+        raise SystemExit(f"Missing base version file: {version_path}")
+    version = version_path.read_text(encoding="utf-8").strip().splitlines()[0].strip()
+    if not version:
+        raise SystemExit(f"Empty base version file: {version_path}")
+    return version
+
+
 def ensure_parent_image(
     *,
     base_id: str,

@@ -92,6 +92,21 @@ that mod's parent base, not against pristine. Outputs are
 `builder/<mod-id>/layers/discN.layer.json`, `pack.json`, `VERSION`, and
 `builder/manifest.json`.
 
+## Mods are pinned to one base build
+
+A layer is a list of `{offset, hex}` writes with no expected bytes, so applying
+it over a base it was not cut from patches whatever now sits at those offsets
+and produces a silently corrupt image. `build_base_layer.py` therefore records
+`baseVersion` in `pack.json` and the manifest, read from
+`$FF7_CSR_ROOT/builder/<base>/VERSION`.
+
+The browser builder hides any mod whose `baseVersion` is not the base's current
+version. **Bumping a base means every mod on it must be rebuilt and
+republished**, otherwise those mods disappear from the builder.
+`verify_builder_config.py` fails on a mismatch so this surfaces before you
+publish. Mods for the pristine `clean` base carry no `baseVersion`, since
+pristine never changes.
+
 ## Verification
 
 ```bash
