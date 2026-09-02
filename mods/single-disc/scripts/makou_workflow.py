@@ -18,8 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from apply_layer import apply_layer  # noqa: E402
-from bin_diff_to_layer import build_layer  # noqa: E402
+from libs.layer import apply_layer, build_layer  # noqa: E402
 from edc_ecc import repair_sector_edc_ecc  # noqa: E402
 from archive_tables import directory_entries, fix_bin_table  # noqa: E402
 from psx_mode2_iso import (  # noqa: E402

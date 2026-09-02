@@ -12,6 +12,8 @@ workspace/*
 !workspace/**/
 !workspace/**/.gitkeep
 
+cache/
+
 external/
 
 *.bin

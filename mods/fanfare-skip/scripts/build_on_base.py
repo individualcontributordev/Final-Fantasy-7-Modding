@@ -25,8 +25,7 @@ for pth in (_SHARED, _MOD_SCRIPTS):
 	if str(pth) not in sys.path:
 		sys.path.insert(0, str(pth))
 
-from apply_layer import apply_layer  # noqa: E402
-from bin_diff_to_layer import build_layer  # noqa: E402
+from libs.layer import apply_layer, build_layer  # noqa: E402
 from build_battle_x import build as build_battle  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
 

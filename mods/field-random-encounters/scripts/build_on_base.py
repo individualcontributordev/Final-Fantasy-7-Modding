@@ -28,8 +28,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 		sys.path.insert(0, str(p))
 
 
-from apply_layer import apply_layer  # noqa: E402
-from bin_diff_to_layer import build_layer  # noqa: E402
+from libs.layer import apply_layer, build_layer  # noqa: E402
 from build_field_bin import build as build_field_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
 from pack_meta import (  # noqa: E402
