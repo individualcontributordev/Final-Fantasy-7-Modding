@@ -13,6 +13,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from libs.manifest_lock import locked_json
+
 _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent
@@ -132,7 +134,6 @@ def update_manifest(*, pack: dict) -> None:
 	"""
 	if not MANIFEST_PATH.is_file():
 		raise SystemExit(f"Missing {MANIFEST_PATH}")
-	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 	pack_id = pack["id"]
 	entry = dict(pack)
 	# pack.json is consumed from inside its pack directory, while manifest
@@ -143,7 +144,9 @@ def update_manifest(*, pack: dict) -> None:
 	}
 	entry["enabled"] = True
 
-	addons = data.setdefault("addons", [])
-	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
-	addons.append(entry)
-	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+	with locked_json(MANIFEST_PATH):
+		data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+		addons = data.setdefault("addons", [])
+		addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
+		addons.append(entry)
+		MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")

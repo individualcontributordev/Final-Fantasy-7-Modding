@@ -27,6 +27,7 @@ for pth in (_SHARED, _MOD_SCRIPTS):
 		sys.path.insert(0, str(pth))
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
+from libs.manifest_lock import locked_json  # noqa: E402
 from build_batres_x import build as build_batres  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
@@ -256,7 +257,6 @@ def update_manifest(
 	discs: list[int],
 ) -> None:
 	"""Replace the stable-id manifest entry with manifest-relative paths."""
-	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 	entry = {
 		"id": pack_id,
 		"name": display,
@@ -274,10 +274,12 @@ def update_manifest(
 	}
 	if base_version:
 		entry["baseVersion"] = base_version
-	addons = data.setdefault("addons", [])
-	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
-	addons.append(entry)
-	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+	with locked_json(MANIFEST_PATH):
+		data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+		addons = data.setdefault("addons", [])
+		addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
+		addons.append(entry)
+		MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
 def build_one(
