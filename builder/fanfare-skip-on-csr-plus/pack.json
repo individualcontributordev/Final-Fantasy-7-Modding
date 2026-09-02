@@ -2,7 +2,7 @@
   "id": "fanfare-skip-on-csr-plus",
   "name": "Fanfare Skip",
   "kind": "mod",
-  "version": "0.1.6",
+  "version": "0.2.1",
   "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
   "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
   "format": "ic-layer-v1",
