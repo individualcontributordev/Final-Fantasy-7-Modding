@@ -17,6 +17,7 @@ manifest.json, and verifies parent + layer = edited image.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -72,12 +73,29 @@ def sorted_disc_map(discs: dict) -> dict[str, str]:
     return {k: discs[k] for k in sorted(discs, key=lambda d: int(d))}
 
 
+def layer_digest(path: Path) -> str:
+    """sha256 of a published layer file.
+
+    The builder keys its layer cache on this, so republished bytes always
+    invalidate even when the version string does not move.
+    """
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def upsert_mod_json(
-    mod_dir: Path, mod: dict, version: str, base_version: str, disc: int
+    mod_dir: Path,
+    mod: dict,
+    version: str,
+    base_version: str,
+    disc: int,
+    digest: str,
 ) -> dict:
     """Write one disc into pack.json without dropping extra mod fields."""
     discs = dict(mod.get("discs") or {})
     discs[str(disc)] = f"./layers/disc{disc}.layer.json"
+    digests = dict(mod.get("discDigests") or {})
+    digests[str(disc)] = digest
+    mod["discDigests"] = sorted_disc_map(digests)
     mod["version"] = version
     # The builder hides a mod whose baseVersion is not the current base build,
     # because the layer's offsets only line up with the build it was cut from.
@@ -122,6 +140,9 @@ def update_manifest(mod: dict, disc: int, builder_dir: Path) -> None:
     discs = dict(existing.get("discs") or {})
     discs[str(disc)] = disc_rel
     entry["discs"] = sorted_disc_map(discs)
+    digests = dict(existing.get("discDigests") or {})
+    digests.update(mod.get("discDigests") or {})
+    entry["discDigests"] = sorted_disc_map(digests)
     entry["enabled"] = True
     if existing_index is None:
         addons.append(entry)
@@ -278,7 +299,7 @@ def main() -> int:
     print(f"Parent:  {parent}")
     print(f"Output:  {mod_dir}")
 
-    build_one_disc(
+    out_path = build_one_disc(
         mod=mod,
         version=version,
         base_id=base_id,
@@ -290,7 +311,9 @@ def main() -> int:
         skip_verify=args.skip_verify,
     )
 
-    mod = upsert_mod_json(mod_dir, mod, version, base_version, disc)
+    mod = upsert_mod_json(
+        mod_dir, mod, version, base_version, disc, layer_digest(out_path)
+    )
     update_manifest(mod, disc, builder_dir)
     print(f"Updated {mod_dir / 'pack.json'}")
     print(f"Updated {builder_dir / 'manifest.json'} (enabled=true)")

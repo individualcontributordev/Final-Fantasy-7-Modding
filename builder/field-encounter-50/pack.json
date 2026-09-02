@@ -16,5 +16,10 @@
   },
   "rate": 50,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Standard (50%)"
+  "optionLabel": "Standard (50%)",
+  "discDigests": {
+    "1": "8337f523717517d9c2bc468f0b58ff660eee10c5ece3dad1a7bd346a5fbf0715",
+    "2": "9e1847c90e5893380d62d73ca921b3613567fa2ee7ff062c74b62d5595f59013",
+    "3": "ecbbfeeae522a7e0a21c922beb294ac5016291230342f966f9078ae01c581127"
+  }
 }

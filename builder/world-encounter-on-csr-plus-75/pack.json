@@ -14,5 +14,8 @@
   },
   "rate": 75,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Dense (75%)"
+  "optionLabel": "Dense (75%)",
+  "discDigests": {
+    "1": "e51d399ecb1bc941f6cff86c94eb318d8c211f2b9a4beab6c37a7f1395a48460"
+  }
 }

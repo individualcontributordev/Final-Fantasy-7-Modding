@@ -14,5 +14,8 @@
   },
   "rate": 75,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Dense (75%)"
+  "optionLabel": "Dense (75%)",
+  "discDigests": {
+    "1": "63706e52d83dda1a0b8b399475e1e3239e87018d548336e5853b27cc00ea199e"
+  }
 }
