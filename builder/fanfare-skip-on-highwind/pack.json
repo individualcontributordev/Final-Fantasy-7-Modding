@@ -2,7 +2,7 @@
   "id": "fanfare-skip-on-highwind",
   "name": "Fanfare Skip",
   "kind": "mod",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
   "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
   "format": "ic-layer-v1",
@@ -13,7 +13,7 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "74897d87c803ed66e7712dc8a6eb1e94cd5d30843046695e50dea20af7247e27"
+    "1": "4642560d442b99070482ee8dbbf8e5ba7aa6ed9425e54e192bcfaf45c902f52b"
   },
   "baseVersion": "0.5.0"
 }
