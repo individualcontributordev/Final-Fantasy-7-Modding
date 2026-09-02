@@ -16,5 +16,10 @@
   },
   "rate": 0,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Off (0%)"
+  "optionLabel": "Off (0%)",
+  "discDigests": {
+    "1": "36cf0346ad42d909e0e58ac9711ecf14e7282918b93298ebd3e1b8bdd07b34ad",
+    "2": "c48492de1a9058bbffd78ce0f8a9892c5513a9e9d15106af3fb6cea678175819",
+    "3": "ec3d9e47a77e3f83bcb24f99dc31d78e08bdb3c02a019bb25699209d9c3601fa"
+  }
 }

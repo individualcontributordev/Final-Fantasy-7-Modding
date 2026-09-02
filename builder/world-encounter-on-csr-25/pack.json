@@ -16,5 +16,10 @@
   },
   "rate": 25,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Light (25%)"
+  "optionLabel": "Light (25%)",
+  "discDigests": {
+    "1": "cb12c97be25e5d61049564cc8d8cd32d7bcbddfab34ffbbf358d0ee39a659b4a",
+    "2": "1a6a115e8548f45b3d01dbea5d54c847b45d8af366edfb7c29580ef58454f180",
+    "3": "9316841ad7a7a0bd06d93ed7df4f7fba9483fcf7e008b051cb14fdf3de6a7b5d"
+  }
 }

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -186,6 +187,14 @@ class BuildAddonLayerTests(unittest.TestCase):
             self.assertEqual(manifest["addons"][0]["baseVersion"], "0.2.1")
             pack = json.loads((pack_dir / "pack.json").read_text(encoding="utf-8"))
             self.assertEqual(pack["baseVersion"], "0.2.1")
+
+            # The builder keys its layer cache on this digest, so it has to be
+            # the hash of the bytes actually published.
+            expected = hashlib.sha256(
+                (pack_dir / "layers" / "disc1.layer.json").read_bytes()
+            ).hexdigest()
+            self.assertEqual(pack["discDigests"]["1"], expected)
+            self.assertEqual(manifest["addons"][0]["discDigests"]["1"], expected)
 
 
 if __name__ == "__main__":

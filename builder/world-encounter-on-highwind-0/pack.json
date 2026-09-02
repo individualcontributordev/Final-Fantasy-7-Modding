@@ -16,5 +16,10 @@
   },
   "rate": 0,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Off (0%)"
+  "optionLabel": "Off (0%)",
+  "discDigests": {
+    "1": "f8db9683389b5ff859cc9b6d32e96431b491396ffa029e7a19ee28997571c070",
+    "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
+    "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
+  }
 }

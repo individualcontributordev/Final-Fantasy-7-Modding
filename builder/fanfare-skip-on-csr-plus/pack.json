@@ -12,5 +12,8 @@
   ],
   "discs": {
     "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "34069c49b46e0a9033b7fbd98d53825a371c05ea3480735892f9a1590da1ea0b"
   }
 }

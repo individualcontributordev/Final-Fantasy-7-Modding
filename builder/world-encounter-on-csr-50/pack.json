@@ -16,5 +16,10 @@
   },
   "rate": 50,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Standard (50%)"
+  "optionLabel": "Standard (50%)",
+  "discDigests": {
+    "1": "75268888335f38c86d644ab8f9166307912792d888af2753f2599151ff12d859",
+    "2": "267eb5042a91b5bf9a7f779dad1350de6a28f16bc9ec6e2ba83cef01741f3cc2",
+    "3": "0de9918cbf4897655a9a9fc3b2c4987435a16c012b08211b6c2d5586d61a3faf"
+  }
 }

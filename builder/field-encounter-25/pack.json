@@ -16,5 +16,10 @@
   },
   "rate": 25,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Light (25%)"
+  "optionLabel": "Light (25%)",
+  "discDigests": {
+    "1": "af5aa516bfc233d3b6b7e1485f4ccea172568b6ce1ad82c62440648d47f83e8f",
+    "2": "4ea6d5b541a4757e1bb1956c8cb163876574a2058dff87856f105e1d3d137415",
+    "3": "fda094d964dd486a3d450d026e3382f13e33338033863b421d4020d8c0cb0cf9"
+  }
 }

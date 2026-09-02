@@ -16,5 +16,10 @@
   },
   "beta": true,
   "status": "beta",
-  "betaNote": "Battle-end skip still being verified; test thoroughly before long runs."
+  "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
+  "discDigests": {
+    "1": "1c70bd70aafa014c22a87d33e328bd65ca389c9ad87b49c5d8a245474cca7593",
+    "2": "f352ed07218080ed16141cc9c0204e5509b0db3eb342aaa880cf4c0687c588f8",
+    "3": "1dd2d4da53f2343aa57d2baf1f824331f0505d10577cbe68c0d8e6092ea36fc7"
+  }
 }
