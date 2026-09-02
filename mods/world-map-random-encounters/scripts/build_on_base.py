@@ -26,8 +26,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 	if str(p) not in sys.path:
 		sys.path.insert(0, str(p))
 
-from apply_layer import apply_layer  # noqa: E402
-from bin_diff_to_layer import build_layer  # noqa: E402
+from libs.layer import apply_layer, build_layer  # noqa: E402
 from build_world_bin import build as build_world_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
 from world_pack_meta import (  # noqa: E402
