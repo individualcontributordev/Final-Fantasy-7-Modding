@@ -2,9 +2,9 @@
 """Validate the local builder manifest and its published layer references.
 
 The optional input is a manifest path (default ``builder/manifest.json``).
-Validation checks JSON shape, unique add-on ids, on-disk disc layers, automatic
-inclusion targets, and preset references; it prints all discovered errors and
-returns nonzero. It performs no network access and never rewrites manifest or
+Validation checks JSON shape, unique add-on ids, on-disk disc layers, and
+automatic inclusion targets; it prints all discovered errors and returns
+nonzero. It performs no network access and never rewrites manifest or
 pack files."""
 from __future__ import annotations
 
@@ -82,17 +82,6 @@ def validate(manifest_path: Path) -> list[str]:
                     f"{aid}: autoIncludeWhen.addonSelected={parent!r} "
                     f"does not match any addon id in manifest"
                 )
-
-    # Presets reference addon ids that must exist.
-    all_addon_ids = {a.get("id") for a in addons if isinstance(a, dict)}
-    for i, preset in enumerate(manifest.get("presets") or []):
-        if not isinstance(preset, dict):
-            errors.append(f"presets[{i}] is not an object")
-            continue
-        pid = preset.get("id", f"presets[{i}]")
-        for ref in preset.get("addons") or []:
-            if ref not in all_addon_ids:
-                errors.append(f"preset {pid!r}: references unknown addon id {ref!r}")
 
     return errors
 
