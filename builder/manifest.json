@@ -445,32 +445,6 @@
       }
     },
     {
-      "id": "fanfare-skip-on-highwind",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "blurb": "After the last enemy dies, skip the fanfair. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json",
-        "2": "./fanfare-skip-on-highwind/layers/disc2.layer.json",
-        "3": "./fanfare-skip-on-highwind/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "beta": true,
-      "status": "beta",
-      "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
-      "version": "0.1.6",
-      "discDigests": {
-        "1": "1c70bd70aafa014c22a87d33e328bd65ca389c9ad87b49c5d8a245474cca7593",
-        "2": "f352ed07218080ed16141cc9c0204e5509b0db3eb342aaa880cf4c0687c588f8",
-        "3": "1dd2d4da53f2343aa57d2baf1f824331f0505d10577cbe68c0d8e6092ea36fc7"
-      }
-    },
-    {
       "id": "field-encounter-on-csr-0",
       "name": "Field Random Encounters \u2014 Off (0%) (on CSR)",
       "kind": "mod",
@@ -907,6 +881,26 @@
       "discDigests": {
         "1": "34069c49b46e0a9033b7fbd98d53825a371c05ea3480735892f9a1590da1ea0b"
       }
+    },
+    {
+      "id": "fanfare-skip-on-highwind",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "74897d87c803ed66e7712dc8a6eb1e94cd5d30843046695e50dea20af7247e27"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.0"
     }
   ],
   "bases": [],

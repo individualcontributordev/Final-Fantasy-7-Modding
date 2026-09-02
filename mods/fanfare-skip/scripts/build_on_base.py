@@ -10,6 +10,7 @@ written under ``builder/``. CSR layers are local-only inputs from
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -194,11 +195,25 @@ def patch_and_inject(
 	return patched
 
 
+def disc_digests(pack_dir: Path, discs: list[int]) -> dict[str, str]:
+	"""sha256 per published layer file.
+
+	The builder keys its layer cache on these, so republished bytes always
+	invalidate even when the version string does not move.
+	"""
+	digests = {}
+	for disc in discs:
+		path = pack_dir / "layers" / f"disc{disc}.layer.json"
+		digests[str(disc)] = hashlib.sha256(path.read_bytes()).hexdigest()
+	return digests
+
+
 def write_pack_json(
 	pack_dir: Path,
 	*,
 	pack_id: str,
 	version: str,
+	base_version: str,
 	display: str,
 	blurb: str,
 	compatible: list[str],
@@ -215,7 +230,12 @@ def write_pack_json(
 		"format": "ic-layer-v1",
 		"compatibleBases": compatible,
 		"discs": {str(d): f"./layers/disc{d}.layer.json" for d in discs},
+		"discDigests": disc_digests(pack_dir, discs),
 	}
+	# The builder hides a mod whose baseVersion is not the base's current
+	# build, because the layer's offsets only fit the build it was cut from.
+	if base_version:
+		pack["baseVersion"] = base_version
 	pack_dir.mkdir(parents=True, exist_ok=True)
 	(pack_dir / "pack.json").write_text(
 		json.dumps(pack, indent=2) + "\n", encoding="utf-8"
@@ -226,6 +246,7 @@ def update_manifest(
 	*,
 	pack_id: str,
 	version: str,
+	base_version: str,
 	display: str,
 	blurb: str,
 	compatible: list[str],
@@ -245,8 +266,11 @@ def update_manifest(
 		"discs": {
 			str(d): f"./{pack_id}/layers/disc{d}.layer.json" for d in discs
 		},
+		"discDigests": disc_digests(_ROOT / "builder" / pack_id, discs),
 		"enabled": True,
 	}
+	if base_version:
+		entry["baseVersion"] = base_version
 	addons = data.setdefault("addons", [])
 	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
 	addons.append(entry)
@@ -265,15 +289,26 @@ def build_one(
 	"""Build and round-trip verify one fanfare layer in disposable work."""
 	cfg = dict(AGAINST[against])
 	base_id = cfg["base_id"]
+	base_version = ""
 	if against != "clean" and csr_manifest is not None:
 		base_id = resolve_base_id(against, csr_manifest)
 		cfg["base_id"] = base_id
 		cfg["compatible"] = [base_id]
+		entry = next(
+			(b for b in csr_manifest.get("bases") or [] if str(b.get("id")) == base_id),
+			None,
+		)
+		base_version = str((entry or {}).get("version") or "").strip()
+		if not base_version:
+			raise SystemExit(
+				f"CSR manifest has no version for base {base_id!r}; the mod would "
+				"be published without a baseVersion and the builder would hide it."
+			)
 
 	pack_id = cfg["prefix_stem"]
 	display = "Fanfare Skip"
 	blurb = (
-		"After the last enemy dies, skip the victory ceremony path."
+		"After the last enemy dies, skip the victory ceremony path. "
 		"Exp, AP, gil, and items still apply; loot/level-up "
 		"screens still show."
 	)
@@ -336,7 +371,7 @@ def build_one(
 		shutil.rmtree(work_dir)
 		print(f"  cleaned {work_dir}")
 
-	return out_path, pack_id, display, blurb, cfg["compatible"], base_id
+	return out_path, pack_id, display, blurb, cfg["compatible"], base_id, base_version
 
 
 def main() -> int:
@@ -377,7 +412,7 @@ def main() -> int:
 	for against in against_list:
 		for disc in discs:
 			print(f"\n######## {against} disc {disc} ########")
-			_out, pack_id, display, blurb, compatible, base_id = build_one(
+			_out, pack_id, display, blurb, compatible, base_id, base_version = build_one(
 				against=against,
 				disc=disc,
 				version=version,
@@ -393,9 +428,11 @@ def main() -> int:
 					"compatible": compatible,
 					"discs": [],
 					"version": version,
+					"base_version": base_version,
 				},
 			)
 			rec["discs"].append(disc)
+			rec["base_version"] = base_version
 			if against != "clean":
 				rec["compatible"] = [base_id]
 
@@ -407,6 +444,7 @@ def main() -> int:
 			pack_dir,
 			pack_id=pack_id,
 			version=rec["version"],
+			base_version=rec["base_version"],
 			display=rec["display"],
 			blurb=rec["blurb"],
 			compatible=rec["compatible"],
@@ -415,6 +453,7 @@ def main() -> int:
 		update_manifest(
 			pack_id=pack_id,
 			version=rec["version"],
+			base_version=rec["base_version"],
 			display=rec["display"],
 			blurb=rec["blurb"],
 			compatible=rec["compatible"],

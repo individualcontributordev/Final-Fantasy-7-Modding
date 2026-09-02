@@ -1,25 +1,19 @@
 {
   "id": "fanfare-skip-on-highwind",
-  "name": "Skip victory fanfare",
+  "name": "Fanfare Skip",
   "kind": "mod",
-  "version": "0.1.6",
-  "blurb": "After the last enemy dies, skip the victory song and win poses. You still get exp, AP, gil, items, and the rewards screens.",
-  "hint": "No victory song or win poses. Loot and exp still work.",
+  "version": "0.2.0",
+  "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+  "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
     "highwind"
   ],
   "discs": {
-    "1": "./layers/disc1.layer.json",
-    "2": "./layers/disc2.layer.json",
-    "3": "./layers/disc3.layer.json"
+    "1": "./layers/disc1.layer.json"
   },
-  "beta": true,
-  "status": "beta",
-  "betaNote": "Battle-end skip still being verified; test thoroughly before long runs.",
   "discDigests": {
-    "1": "1c70bd70aafa014c22a87d33e328bd65ca389c9ad87b49c5d8a245474cca7593",
-    "2": "f352ed07218080ed16141cc9c0204e5509b0db3eb342aaa880cf4c0687c588f8",
-    "3": "1dd2d4da53f2343aa57d2baf1f824331f0505d10577cbe68c0d8e6092ea36fc7"
-  }
+    "1": "74897d87c803ed66e7712dc8a6eb1e94cd5d30843046695e50dea20af7247e27"
+  },
+  "baseVersion": "0.5.0"
 }
