@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-highwind-25",
-  "name": "World Random Encounters \u2014 Light (25%) (on Highwind)",
+  "name": "World Random Encounters -- Light (25%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Fewer random world-map battles.",
@@ -14,12 +14,13 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
-  "rate": 25,
-  "groupLabel": "World Random Encounters",
-  "optionLabel": "Light (25%)",
   "discDigests": {
-    "1": "d3765fbb4991e06698f5ab586d54a1cbea90d6e5e74e10733afcd89bb7f31f8d",
+    "1": "ffd578784fc7764ce33fbf5f7dc30c17741bb31d767c1a93842202f38ea8f2ae",
     "2": "94aa091ca23621efa421a13c722576aa28e58f16a8882e654c23d29b159e73e2",
     "3": "a2e259c98157034d5c92834d3de10bc75ac5291e2b9a4ea4d8da363ed749c304"
-  }
+  },
+  "baseVersion": "0.5.0",
+  "rate": 25,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Light (25%)"
 }

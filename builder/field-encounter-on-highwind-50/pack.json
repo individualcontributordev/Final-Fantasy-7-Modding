@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-highwind-50",
-  "name": "Field Random Encounters \u2014 Standard (50%) (on Highwind)",
+  "name": "Field Random Encounters -- Standard (50%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Moderate random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Standard (50%)",
   "discDigests": {
-    "1": "0faa9cd44fff12a307119a077be650ea2eea323d3aac4f86963b966e4021ac9b",
+    "1": "3951133aaba010e8b9dd569ba9801d973bc70be5ab455121dc4a66d816d34b31",
     "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
     "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
-  }
+  },
+  "baseVersion": "0.5.0"
 }

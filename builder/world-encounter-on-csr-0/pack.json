@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-csr-0",
-  "name": "World Random Encounters \u2014 Off (0%) (on CSR)",
+  "name": "World Random Encounters -- Off (0%) (on CSR)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "No random world-map battles.",
@@ -14,12 +14,13 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
+  "discDigests": {
+    "1": "3c05237bee510fb41ffedaaa6b48e840857ecb1815a57e7b03421bfa3df93227",
+    "2": "7f6a85b79758fea5b4b603ea2fa99ca12868c30cc929404664dcc0b64a83638e",
+    "3": "0095cc350fa79b1a65db32dbf3ae208218aa1406317ae79b67fdd2d9bf5e4640"
+  },
+  "baseVersion": "0.14.3",
   "rate": 0,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Off (0%)",
-  "discDigests": {
-    "1": "4b1b62348645d533289f03cef14af49725359c45c751a680f08a953695187cc9",
-    "2": "6cb844b40dfae46c26e27d2d6c6531977ff48a152ffeb8fdbb9316eba9fe1ad3",
-    "3": "fcc90f84f60234868242698eb5a4a5c8f5cba256a2c89212e14c32b758604244"
-  }
+  "optionLabel": "Off (0%)"
 }

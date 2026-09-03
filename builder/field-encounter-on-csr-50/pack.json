@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-csr-50",
-  "name": "Field Random Encounters \u2014 Standard (50%) (on CSR)",
+  "name": "Field Random Encounters -- Standard (50%) (on CSR)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Moderate random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Standard (50%)",
   "discDigests": {
-    "1": "5fb629a62c41ebc40bb97b6644a7a971316c9e00dd4e9b8088a285563f28824c",
-    "2": "7da576b96d3a4ea1c8c667baffef5681c15987449f77283c04a059ed242b9dbc",
-    "3": "3f46a6ad7cec23575fa1d4a7e70ceb37c1c084d9f097b8ca8dddaefb515a8d40"
-  }
+    "1": "ff7a74073e8cb57f2840e6fbe274a687a5d6f8b4ada7fa254733661ab8a907f7",
+    "2": "66312999fc17bb0990db0de5932854ead705a733a6bddaedc763cc835b34ab5c",
+    "3": "1729df59276be676f26562955c0bda239f38c0315febc1af25c1dd9d3966ff45"
+  },
+  "baseVersion": "0.14.3"
 }

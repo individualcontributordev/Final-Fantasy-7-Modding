@@ -1,11 +1,11 @@
 {
   "format": "ic-layer-v1",
   "id": "world-encounter-on-highwind-25-disc1-v0.2.0",
-  "description": "World encounters 25% RCnt2 FORCE stub \u2014 NTSC-U Disc 1 (against highwind-v0.1.1)",
+  "description": "World encounters 25% RCnt2 FORCE stub -- NTSC-U Disc 1 (against highwind)",
   "target": "disc-image",
   "stats": {
-    "originalBytes": 747435024,
-    "modifiedBytes": 747435024,
+    "originalBytes": 748775664,
+    "modifiedBytes": 748775664,
     "changedBytes": 66441,
     "records": 290
   },
