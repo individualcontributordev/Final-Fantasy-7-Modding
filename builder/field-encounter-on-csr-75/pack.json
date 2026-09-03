@@ -18,9 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Dense (75%)",
   "discDigests": {
-    "1": "f9907057bf71d813ea68dea472b840df82754275a6ee5024710fe004a43fcb07",
-    "2": "aa37715f36d05df31cd23d7b8d3dfce0fd358607bfd3410540c2ce6ae6de4d74",
-    "3": "8f61d814d89427fedc41235a9e9e94d5c9ea9e62fd14c949cc06493b18742636"
+    "1": "da8499f8424d18b4e3f7a14959e5087e2b6f3ee894c0279879fac17df50ecf47",
+    "2": "7a09cab8f313a678468d281a11aa346ca3676dacbdd3fc55bdc88c120def7aeb",
+    "3": "ca0179e4b4127daacd083cb5a04f96b9c26655671fbbc3cc56800304fd5d38ca"
   },
   "baseVersion": "0.14.3"
 }
