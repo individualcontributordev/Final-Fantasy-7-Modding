@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
-"""Recut every scripted mod against one or more exclusive bases.
+"""Recut field, world, and fanfare packs against one or more exclusive bases.
 
-Does not edit layers by hand and does not git-commit. Run this on a machine
-that has retail NTSC-U BINs after a CSR base version bump (or to backfill
-``baseVersion`` on encounter packs). Makou-authored mods are not rebuilt.
+Run after a CSR base version bump, on a machine holding retail NTSC-U BINs.
+Writes ``builder/`` and does not commit.
 
-  python3 scripts/rebuild_on_base.py csr
-  python3 scripts/rebuild_on_base.py all
-  python3 scripts/rebuild_on_base.py all --jobs 4
-
-``all`` is csr + csr-plus + highwind. Pass ``clean`` only when recutting the
-pristine packs. Discs come from the CSR manifest (1,2,3 for clean).
-
-Independent recuts (base × field/world/fanfare) run in parallel. Each job
-copies disc images, so ``--jobs`` is capped by RAM more than CPU. Manifest
-updates take a file lock so two packs cannot drop each other.
+``all`` is csr + csr-plus + highwind; ``clean`` recuts the pristine packs.
+Discs come from the CSR manifest. One job per base × family runs in parallel,
+each copying disc images, so ``--jobs`` is bounded by RAM. Manifest writes take
+a file lock so concurrent packs cannot drop each other.
 """
 
 from __future__ import annotations
@@ -56,6 +49,19 @@ PACK_PREFIX = {
 		"highwind": "fanfare-skip-on-highwind",
 	},
 }
+
+
+def require_zopfli() -> None:
+	"""Fail before copying 700 MB images if the recut compressor is missing."""
+	try:
+		import zopfli.gzip  # noqa: F401
+	except ImportError:
+		raise SystemExit(
+			"zopfli is not installed in this interpreter.\n"
+			"  python3 scripts/bootstrap_venv.py\n"
+			"  source .venv/bin/activate   # Windows: .venv\\Scripts\\activate\n"
+			"  python scripts/rebuild_on_base.py all"
+		)
 
 
 def csr_root(cli: Path | None) -> Path:
@@ -117,38 +123,43 @@ def recut_jobs(against: str, discs: list[int], csr: Path | None) -> list[tuple[s
 
 
 def run_job(label: str, cmd: list[str]) -> tuple[str, int, str]:
-	quoted = " ".join(cmd)
-	proc = subprocess.run(
-		cmd,
-		cwd=ROOT,
-		text=True,
-		capture_output=True,
-	)
-	body = proc.stdout or ""
-	if proc.stderr:
-		body += proc.stderr
-	text = f"$ {quoted}\n{body}"
+	"""Run one recut, buffering its output so parallel logs stay readable."""
+	proc = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True)
+	body = (proc.stdout or "") + (proc.stderr or "")
+	text = f"$ {' '.join(cmd)}\n{body}"
 	if proc.returncode:
 		text += f"\n[exit {proc.returncode}] {label}\n"
 	return label, proc.returncode, text
 
 
-def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> None:
+def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> list[str]:
+	"""Run every recut, then report. A failed family never cancels the rest."""
 	if not jobs:
-		return
+		return []
 	workers = max(1, min(workers, len(jobs)))
 	print(f"Running {len(jobs)} recuts with --jobs {workers}", flush=True)
 	failed: list[str] = []
+
+	# Sequential runs stream live: these builds take minutes per disc and a
+	# silent terminal is indistinguishable from a hang.
+	if workers == 1:
+		for label, cmd in jobs:
+			print(f"\n======== {label} ========", flush=True)
+			print("$ " + " ".join(cmd), flush=True)
+			if subprocess.run(cmd, cwd=ROOT).returncode:
+				print(f"[failed] {label}", flush=True)
+				failed.append(label)
+		return failed
+
 	with ThreadPoolExecutor(max_workers=workers) as pool:
-		futures = {pool.submit(run_job, label, cmd): label for label, cmd in jobs}
+		futures = [pool.submit(run_job, label, cmd) for label, cmd in jobs]
 		for fut in as_completed(futures):
 			label, code, text = fut.result()
 			print(f"\n======== {label} ========", flush=True)
 			print(text, end="" if text.endswith("\n") else "\n", flush=True)
 			if code:
 				failed.append(label)
-	if failed:
-		raise SystemExit("Recut failed: " + ", ".join(failed))
+	return failed
 
 
 def run(cmd: list[str]) -> None:
@@ -204,6 +215,7 @@ def main() -> int:
 	args = ap.parse_args()
 	if args.jobs < 1:
 		raise SystemExit("--jobs must be >= 1")
+	require_zopfli()
 
 	wanted: list[str] = []
 	for token in args.bases:
@@ -243,13 +255,20 @@ def main() -> int:
 		jobs.extend(recut_jobs(against, discs, csr))
 		verify_later.append((against, discs))
 
-	run_jobs(jobs, args.jobs)
+	failed = run_jobs(jobs, args.jobs)
+
+	print("\nReview git diff under builder/, then commit.")
+	print("Do not commit workspace/ or cache/ BINs.")
+	if failed:
+		print("\nThese recuts failed; their packs keep the previously published")
+		print("layers and stay hidden until rebuilt:")
+		for label in failed:
+			print(f"  - {label}")
+		return 1
+
 	if args.verify:
 		for against, discs in verify_later:
 			verify_one(against, discs, csr)
-
-	print("\nRebuilt packs. Review git diff under builder/, then commit.")
-	print("Do not commit workspace/ or cache/ BINs.")
 	return 0
 
 
