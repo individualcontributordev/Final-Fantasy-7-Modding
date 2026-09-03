@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-highwind-75",
-  "name": "Field Random Encounters \u2014 Dense (75%) (on Highwind)",
+  "name": "Field Random Encounters -- Dense (75%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "More random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Dense (75%)",
   "discDigests": {
-    "1": "030b74c1242c167881bf16861550700691a93fed3717a60a3767efb0297e9904",
+    "1": "883a1a2004282064d9978ed16e61b3c47bc0ae7d990df0772d4facbae950667b",
     "2": "581b76760a0a31e6ceff329d4d0cc5e565fbd1d73ec9e350b18a0eaf14afd5c8",
     "3": "2607f70883e5a1867f18d0b4cb235dbf2a3890a5c6a7247ed2301979b3f1dfc8"
-  }
+  },
+  "baseVersion": "0.5.0"
 }

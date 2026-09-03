@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-csr-0",
-  "name": "Field Random Encounters \u2014 Off (0%) (on CSR)",
+  "name": "Field Random Encounters -- Off (0%) (on CSR)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "No random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Off (0%)",
   "discDigests": {
-    "1": "95c1564e07f58a913cbdc645f91fc076cd40f3abd5c210e06f1554bd04df4ec4",
-    "2": "b0f6d6407c504b766d66f115e613d604ed3766fd70cecdadaae98a37ebb39c33",
-    "3": "05965d4f8128a3a93c0d81156ec8df37b314fd939046c8b38542ae90584be150"
-  }
+    "1": "3bfb66ee968f27d49f285005fc7895ba9d603129ca9d4717203120e6204e6689",
+    "2": "29c8c78691c8577ddfd28d72f34217938a4ca4a4ee27a14d396f7ba31e6efb2f",
+    "3": "3fbc8b9ab281c7850ddd24e7597e43f93ebb4d0f30c3c7e3cff3ce84629f5c39"
+  },
+  "baseVersion": "0.14.3"
 }

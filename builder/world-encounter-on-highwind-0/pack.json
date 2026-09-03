@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-highwind-0",
-  "name": "World Random Encounters \u2014 Off (0%) (on Highwind)",
+  "name": "World Random Encounters -- Off (0%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "No random world-map battles.",
@@ -14,12 +14,13 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
-  "rate": 0,
-  "groupLabel": "World Random Encounters",
-  "optionLabel": "Off (0%)",
   "discDigests": {
-    "1": "f8db9683389b5ff859cc9b6d32e96431b491396ffa029e7a19ee28997571c070",
+    "1": "6bd18a17406d14a48f5c007704197a02a1a2db0a964e483b6a80b6ff51cf2bec",
     "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
     "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
-  }
+  },
+  "baseVersion": "0.5.0",
+  "rate": 0,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Off (0%)"
 }

@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-csr-plus-50",
-  "name": "World Random Encounters \u2014 Standard (50%) (on CSR+)",
+  "name": "World Random Encounters -- Standard (50%) (on CSR+)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Moderate random world-map battles.",
@@ -12,10 +12,11 @@
   "discs": {
     "1": "./layers/disc1.layer.json"
   },
+  "discDigests": {
+    "1": "e6723e84920143181cb6d282969a42beb4d5db65188505d4cd7fd028ff8fc438"
+  },
+  "baseVersion": "0.2.2",
   "rate": 50,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Standard (50%)",
-  "discDigests": {
-    "1": "efa33445c00118133a988baaac11999436f26970d4a52e0803b53122fda9c069"
-  }
+  "optionLabel": "Standard (50%)"
 }

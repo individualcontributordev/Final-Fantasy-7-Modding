@@ -50,3 +50,5 @@ Thumbs.db
 *.x
 *.x.dec.patched
 *.x.new
+*.BIN.dec.patched
+*.BIN.new

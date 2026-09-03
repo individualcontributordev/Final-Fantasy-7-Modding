@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-highwind-50",
-  "name": "World Random Encounters \u2014 Standard (50%) (on Highwind)",
+  "name": "World Random Encounters -- Standard (50%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Moderate random world-map battles.",
@@ -14,12 +14,13 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
-  "rate": 50,
-  "groupLabel": "World Random Encounters",
-  "optionLabel": "Standard (50%)",
   "discDigests": {
-    "1": "bcecd418c23fd1031c488fa11d2574323e3f0550f61138c3fdd9cda56f98b4da",
+    "1": "d62b4dabe90bc8ec9dcd23e32e4205d5ee8540280f7fd1d129433b4ff938d9fc",
     "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
     "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
-  }
+  },
+  "baseVersion": "0.5.0",
+  "rate": 50,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Standard (50%)"
 }

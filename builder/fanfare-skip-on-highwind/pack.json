@@ -4,7 +4,7 @@
   "kind": "mod",
   "version": "0.3.0",
   "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-  "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
+  "hint": "No victory fanfare or win poses -- loot and exp still apply.",
   "format": "ic-layer-v1",
   "compatibleBases": [
     "highwind"
@@ -13,7 +13,7 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "4642560d442b99070482ee8dbbf8e5ba7aa6ed9425e54e192bcfaf45c902f52b"
+    "1": "4f7ea968491327aba0375628c9be196bfa561694b42d1e730aa4174bcf57af57"
   },
   "baseVersion": "0.5.0"
 }

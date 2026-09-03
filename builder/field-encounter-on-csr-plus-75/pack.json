@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-csr-plus-75",
-  "name": "Field Random Encounters \u2014 Dense (75%) (on CSR+)",
+  "name": "Field Random Encounters -- Dense (75%) (on CSR+)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "More random field battles.",
@@ -16,6 +16,7 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Dense (75%)",
   "discDigests": {
-    "1": "63706e52d83dda1a0b8b399475e1e3239e87018d548336e5853b27cc00ea199e"
-  }
+    "1": "6017fc062a54096be7415db178a5e91859f3e3b9c399694cb76339d4d4a17961"
+  },
+  "baseVersion": "0.2.2"
 }

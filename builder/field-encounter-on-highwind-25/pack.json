@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-highwind-25",
-  "name": "Field Random Encounters \u2014 Light (25%) (on Highwind)",
+  "name": "Field Random Encounters -- Light (25%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Fewer random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Light (25%)",
   "discDigests": {
-    "1": "54ef896b1eb3dfc8fadd4d987697c2a9a3d264990854fbb2211bca2db8034012",
+    "1": "786f991fcfccc6a233d0fa271136b3ed9fa825a1446ba727530945c63495b530",
     "2": "493fa1ca3d3bdc02781c2786f6dd375a0a1a0bd2fc4d636bf68218edfd912609",
     "3": "5ee1b67e2a7749e9e7348fb0195fe5818e6211554db4f19240dd698818a5b520"
-  }
+  },
+  "baseVersion": "0.5.0"
 }

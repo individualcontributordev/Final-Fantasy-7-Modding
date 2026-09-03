@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-csr-75",
-  "name": "World Random Encounters \u2014 Dense (75%) (on CSR)",
+  "name": "World Random Encounters -- Dense (75%) (on CSR)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "More random world-map battles.",
@@ -14,12 +14,13 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
+  "discDigests": {
+    "1": "4f3271795c84e4fc0a096f49440b82e53dc1ff8a274a05c10e0bacb1aec3b474",
+    "2": "182b937cd0e83799813d9dd104104e88c2c4a73770ab5b35a7956f8fd6010bc1",
+    "3": "9ec104725cae8d4c1fe9a0a9f78104e8bb0feb24901af95843fb0ba3c0a1891d"
+  },
+  "baseVersion": "0.14.3",
   "rate": 75,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Dense (75%)",
-  "discDigests": {
-    "1": "f6d824e6f94d1e928bae7bd22f04710c92e268ec201ebc57520b308f0fe25c69",
-    "2": "a765d6eaddf044d6fcccc5e2d5841ab6850277707c925ddf103aaae3b8ad5b08",
-    "3": "40f6ea512132ba03845825ba58de42b9a9a2420b9c430c3b72e16390b0d46bcf"
-  }
+  "optionLabel": "Dense (75%)"
 }

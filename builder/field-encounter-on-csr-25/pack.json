@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-csr-25",
-  "name": "Field Random Encounters \u2014 Light (25%) (on CSR)",
+  "name": "Field Random Encounters -- Light (25%) (on CSR)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Fewer random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Light (25%)",
   "discDigests": {
-    "1": "f1aa7dd0b56f9efe8b75c0938e4107414fabb37f163fcbcc9f935cfe6f018c80",
-    "2": "e36cbad1f8815cc0502a0592b879a9e589e99f386def6411897cfa5d8d546f25",
-    "3": "a8fea2da9d52f20eac997ba9d703fc1c6339fb3a2b00e62f468b992abde326f3"
-  }
+    "1": "6f475a22a0af2e550ad7cfb437f52519ddb38de552433817a8677df5a55fecee",
+    "2": "cded7497df0e5bcd38972bce5b7e2b3c881b3b6ac1d968763bde83f250d690e0",
+    "3": "ec744d0fbcd685ab61e9a4f6e5d7c17f1c1469b417941e94835ae00b0061ba3b"
+  },
+  "baseVersion": "0.14.3"
 }

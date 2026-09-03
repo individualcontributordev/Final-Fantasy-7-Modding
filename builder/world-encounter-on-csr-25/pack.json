@@ -1,6 +1,6 @@
 {
   "id": "world-encounter-on-csr-25",
-  "name": "World Random Encounters \u2014 Light (25%) (on CSR)",
+  "name": "World Random Encounters -- Light (25%) (on CSR)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "Fewer random world-map battles.",
@@ -14,12 +14,13 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
+  "discDigests": {
+    "1": "fcae92173e1e492c10a58f6483723c4067c04cf6a6482dd6e4e3757167d42112",
+    "2": "9a5593370e59553cd7a13ede883184cd26bc4338e3614cbb8f4bc4bc2fccc8ae",
+    "3": "2ae02f34689c1b3a8ba064f3dfb255e1da88f50bfbef2d8ecfb8dfa81d727ced"
+  },
+  "baseVersion": "0.14.3",
   "rate": 25,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Light (25%)",
-  "discDigests": {
-    "1": "cb12c97be25e5d61049564cc8d8cd32d7bcbddfab34ffbbf358d0ee39a659b4a",
-    "2": "1a6a115e8548f45b3d01dbea5d54c847b45d8af366edfb7c29580ef58454f180",
-    "3": "9316841ad7a7a0bd06d93ed7df4f7fba9483fcf7e008b051cb14fdf3de6a7b5d"
-  }
+  "optionLabel": "Light (25%)"
 }

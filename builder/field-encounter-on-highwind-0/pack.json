@@ -1,6 +1,6 @@
 {
   "id": "field-encounter-on-highwind-0",
-  "name": "Field Random Encounters \u2014 Off (0%) (on Highwind)",
+  "name": "Field Random Encounters -- Off (0%) (on Highwind)",
   "kind": "mod",
   "version": "0.2.0",
   "blurb": "No random field battles.",
@@ -18,8 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Off (0%)",
   "discDigests": {
-    "1": "3a0205fff7c7093f14f9b2480780af2106e53850fdaff272c7d8425726cd27b4",
+    "1": "eb6f5e4bb98a43bdfdfeb36059f77492f01b6f3824b71db41f6df54b22fe71b8",
     "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
     "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
-  }
+  },
+  "baseVersion": "0.5.0"
 }
