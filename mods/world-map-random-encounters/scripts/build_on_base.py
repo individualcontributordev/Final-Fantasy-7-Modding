@@ -329,64 +329,79 @@ def main() -> int:
 		manifest_path = csr_manifest_path(args.csr_root)
 		csr_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
+	# One density that cannot be injected (overlay larger than its ISO slot)
+	# must not block the others, so each rate is built and reported on its own.
+	failed: list[str] = []
 	for rate in rates:
 		meta = meta_for(against, rate)
 		meta["base_id"] = base_id
+		pack_id = meta["pack_prefix"]
 
 		print(f"\n######## {rate_label(rate)} on {against} ########")
 		print(f"Base id:  {base_id}")
 		print(f"Version:  {version}")
 		print(f"Discs:    {discs}")
 
-		for disc in discs:
-			print(f"\n######## Disc {disc} ########")
-			build_one(
-				against=against,
-				disc=disc,
+		try:
+			for disc in discs:
+				print(f"\n######## Disc {disc} ########")
+				build_one(
+					against=against,
+					disc=disc,
+					version=version,
+					base_id=base_id,
+					meta=meta,
+					pristine_dir=args.pristine_dir.expanduser().resolve(),
+					manifest_path=manifest_path,
+					csr_manifest=csr_manifest,
+					base_layer_arg=args.base_layer,
+					keep_work=args.keep_work,
+				)
+
+			# Version is metadata, not identity; keeping it out of the pack id
+			# preserves sticky builder selections across releases.
+			pack_dir = _ROOT / "builder" / pack_id
+			existing: list[int] = []
+			layers_dir = pack_dir / "layers"
+			if layers_dir.is_dir():
+				for p in layers_dir.glob("disc*.layer.json"):
+					mid = p.name.removeprefix("disc").removesuffix(".layer.json")
+					if mid.isdigit():
+						existing.append(int(mid))
+			existing = sorted(set(existing))
+			if not existing:
+				raise SystemExit(f"No disc*.layer.json under {layers_dir}")
+
+			base_version = csr_entry_version(csr_manifest, base_id)
+			pack = write_pack_json(
+				pack_dir,
+				pack_id=pack_id,
 				version=version,
-				base_id=base_id,
-				meta=meta,
-				pristine_dir=args.pristine_dir.expanduser().resolve(),
-				manifest_path=manifest_path,
-				csr_manifest=csr_manifest,
-				base_layer_arg=args.base_layer,
-				keep_work=args.keep_work,
+				display=meta["display"],
+				blurb=meta["blurb"],
+				compatible_bases=[base_id],
+				discs=existing,
+				rate=meta["rate"],
+				group_label=meta.get("group_label"),
+				option_label=meta.get("option_label"),
+				base_version=base_version,
 			)
+			update_manifest(pack=pack)
+			print(f"\nUpdated {pack_dir / 'pack.json'}")
+			print(f"Updated builder/manifest.json")
+			if base_version:
+				print(f"baseVersion={base_version}")
+		except (Exception, SystemExit) as exc:
+			print(f"\nFAILED {pack_id}: {exc}")
+			failed.append(pack_id)
 
-		# Version is metadata, not identity; keeping it out of the pack id
-		# preserves sticky builder selections across releases.
-		pack_id = meta["pack_prefix"]
-		pack_dir = _ROOT / "builder" / pack_id
-		existing: list[int] = []
-		layers_dir = pack_dir / "layers"
-		if layers_dir.is_dir():
-			for p in layers_dir.glob("disc*.layer.json"):
-				mid = p.name.removeprefix("disc").removesuffix(".layer.json")
-				if mid.isdigit():
-					existing.append(int(mid))
-		existing = sorted(set(existing))
-		if not existing:
-			raise SystemExit(f"No disc*.layer.json under {layers_dir}")
-
-		base_version = csr_entry_version(csr_manifest, base_id)
-		pack = write_pack_json(
-			pack_dir,
-			pack_id=pack_id,
-			version=version,
-			display=meta["display"],
-			blurb=meta["blurb"],
-			compatible_bases=[base_id],
-			discs=existing,
-			rate=meta["rate"],
-			group_label=meta.get("group_label"),
-			option_label=meta.get("option_label"),
-			base_version=base_version,
-		)
-		update_manifest(pack=pack)
-		print(f"\nUpdated {pack_dir / 'pack.json'}")
-		print(f"Updated builder/manifest.json")
-		if base_version:
-			print(f"baseVersion={base_version}")
+	if failed:
+		print("\nFailed packs (pack.json left untouched, so they stay hidden):")
+		for pack_id in failed:
+			print(f"  - {pack_id}")
+		print("A part-built pack may hold newer layers than its pack.json.")
+		print("git checkout those builder/<pack-id>/ dirs before publishing.")
+		return 1
 
 	print("\nDone. Commit JSON under builder/ only — not .bin/.cue.")
 	return 0

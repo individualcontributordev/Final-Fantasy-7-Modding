@@ -34,9 +34,9 @@ def _gzip_wrap(raw_deflate: bytes, uncompressed: bytes, header10: bytes) -> byte
     return header + raw_deflate + trailer
 
 
-def _deflate_candidates(uncompressed: bytes) -> list[tuple[str, bytes]]:
-    """Produce labeled raw-DEFLATE and full-gzip members for size comparison."""
-    out: list[tuple[str, bytes]] = []
+def _deflate_candidates(uncompressed: bytes) -> list[tuple[str, bytes, bool]]:
+    """Produce (label, blob, is_full_gzip_member) candidates for size comparison."""
+    out: list[tuple[str, bytes, bool]] = []
     strategies = (
         ("default", zlib.Z_DEFAULT_STRATEGY),
         ("filtered", zlib.Z_FILTERED),
@@ -57,21 +57,41 @@ def _deflate_candidates(uncompressed: bytes) -> list[tuple[str, bytes]]:
                 raw = co.compress(uncompressed) + co.flush()
             except zlib.error:
                 continue
-            out.append((f"zlib-{level}-{name}", raw))
+            out.append((f"zlib-{level}-{name}", raw, False))
 
         # stdlib gzip (full member) as another candidate source of deflate
         full = gzip.compress(uncompressed, compresslevel=level, mtime=0)
-        out.append((f"gzip-{level}", full))
+        out.append((f"gzip-{level}", full, True))
 
+    out.extend(_zopfli_candidates(uncompressed))
     return out
 
 
+def _zopfli_candidates(uncompressed: bytes) -> list[tuple[str, bytes, bool]]:
+    """Zopfli DEFLATE, when installed.
+
+    Optional on purpose: the repo runs on stdlib alone. But zlib leaves a few
+    percent on the table, and these overlays must fit a fixed ISO slot, so a
+    stdlib-only build can miss by a handful of bytes on a file that has no
+    headroom. Output is ordinary DEFLATE the game's inflate reads unchanged.
+    """
+    try:
+        import zopfli.gzip
+    except ImportError:
+        return []
+    try:
+        return [("zopfli", zopfli.gzip.compress(uncompressed), True)]
+    except Exception as exc:  # noqa: BLE001 - never let an optional path break a build
+        print(f"zopfli candidate skipped: {exc}", file=sys.stderr)
+        return []
+
+
 def _payload_from_candidate(
-    label: str, blob: bytes, uncompressed: bytes, header10: bytes
+    blob: bytes, is_full_member: bool, uncompressed: bytes, header10: bytes
 ) -> bytes:
     """Turn a candidate into a complete gzip member using the original XFL/OS bytes."""
-    if label.startswith("gzip-"):
-        return blob  # already a full gzip member
+    if is_full_member:
+        return blob
     return _gzip_wrap(blob, uncompressed, header10)
 
 
@@ -87,8 +107,8 @@ def _best_gzip_payload(
     # DEFLATE streams for identical bytes can differ substantially in size.
     # Trying deterministic stdlib strategies may preserve the fixed ISO slot
     # without changing the decompressed overlay or its GZIPPS envelope.
-    for label, blob in _deflate_candidates(uncompressed):
-        payload = _payload_from_candidate(label, blob, uncompressed, header10)
+    for label, blob, is_full_member in _deflate_candidates(uncompressed):
+        payload = _payload_from_candidate(blob, is_full_member, uncompressed, header10)
         # Sanity: must decompress to the same bytes
         try:
             if gzip.decompress(payload) != uncompressed:
@@ -157,6 +177,12 @@ def compress_gzipps(
             f"({len(out)} > {len(original)}).",
             file=sys.stderr,
         )
+        if method != "zopfli":
+            print(
+                "Install zopfli (pip install zopfli) for a few percent better "
+                "DEFLATE; these overlays often miss the slot by only a few bytes.",
+                file=sys.stderr,
+            )
 
     dst.write_bytes(out)
 
