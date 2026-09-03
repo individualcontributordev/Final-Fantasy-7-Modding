@@ -34,6 +34,10 @@ Recuts each mod against the current bases, stamps `baseVersion`, and leaves
 Recuts run one at a time, and the first failure stops the run: a half-recut
 pack keeps its old `baseVersion` and would quietly disappear from the builder.
 
+Before copying any disc image it checks that zopfli is installed and that git
+pins `builder/*.json` to LF, so a misconfigured clone fails in seconds instead
+of after a long build.
+
 To publish a layer from a BIN you edited by hand, run `build_base_layer.py`
 directly — it diffs against the mod's parent base, not pristine.
 
@@ -61,10 +65,22 @@ for DuckStation/MiSTer or a console playtest.
 
 ## Publish
 
+```bash
+python3 scripts/validate_manifest.py
+```
+
+Run this before pushing. The builder refuses any layer whose bytes do not hash
+to the checksum published beside it, so a stale `discDigests` entry takes that
+pack offline with no other warning.
+
 Push `main`. GitHub Pages deploys `builder/` to
 `https://individualcontributor.dev/Final-Fantasy-7-Modding/builder/`, which is
 what the hosted builder reads. Commit JSON under `builder/` only — never
 `.bin` or `.cue`.
+
+Checksums cover the exact bytes git serves, so `builder/*.json` is pinned to LF
+by `.gitattributes`. Building mods on a Mac and bases on Windows is fine;
+publishing from a CRLF checkout is not.
 
 ## Script reference
 

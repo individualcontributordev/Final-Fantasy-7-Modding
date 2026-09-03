@@ -48,6 +48,43 @@ PACK_PREFIX = {
 }
 
 
+def require_lf_json() -> None:
+	"""Refuse to start if git will not round-trip published layer bytes.
+
+	Digests are taken from the file on disk, but Pages serves the committed
+	bytes. Windows silently checks JSON out as CRLF when ``core.autocrlf`` is
+	on, which makes every digest describe bytes nobody downloads --- and you
+	would only find out when the builder rejected the layer. ``.gitattributes``
+	pins ``eol=lf``; ask git whether that rule is actually live here.
+	"""
+	try:
+		attrs = subprocess.run(
+			["git", "check-attr", "eol", "--", "builder/manifest.json"],
+			cwd=ROOT,
+			capture_output=True,
+			text=True,
+		).stdout
+	except OSError as exc:
+		raise SystemExit(f"cannot run git to check line-ending rules: {exc}")
+
+	if "eol: lf" not in attrs:
+		raise SystemExit(
+			"builder JSON is not pinned to LF here "
+			f"(git reports: {attrs.strip() or 'nothing'}).\n"
+			"Add '*.json text eol=lf' to .gitattributes before publishing."
+		)
+
+	crlf = [p for p in (ROOT / "builder").rglob("*.json") if b"\r\n" in p.read_bytes()]
+	if crlf:
+		raise SystemExit(
+			f"{len(crlf)} published JSON files have CRLF line endings, "
+			f"starting with {crlf[0].relative_to(ROOT)}.\n"
+			"Normalise the checkout first:\n"
+			"  git add --renormalize .\n"
+			"  git checkout -- builder"
+		)
+
+
 def require_zopfli() -> None:
 	"""Fail before copying disc images: stdlib zlib alone overflows ISO slots.
 
@@ -164,6 +201,7 @@ def main() -> int:
 		help="Run verify_builder_config.py on every rebuilt pack (slow)",
 	)
 	args = ap.parse_args()
+	require_lf_json()
 	require_zopfli()
 
 	wanted: list[str] = []
