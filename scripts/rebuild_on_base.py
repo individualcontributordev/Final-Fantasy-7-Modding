@@ -6,8 +6,9 @@ Writes ``builder/`` and does not commit.
 
 ``all`` is csr + csr-plus + highwind; ``clean`` recuts the pristine packs.
 Discs come from the CSR manifest. One job per base × family runs in parallel,
-each copying disc images, so ``--jobs`` is bounded by RAM. Manifest writes take
-a file lock so concurrent packs cannot drop each other.
+each holding a disc image in memory and on scratch disk, so ``--jobs`` is
+bounded by hardware. Manifest writes take a file lock so concurrent packs
+cannot drop each other.
 """
 
 from __future__ import annotations
@@ -52,7 +53,11 @@ PACK_PREFIX = {
 
 
 def require_zopfli() -> None:
-	"""Fail before copying 700 MB images if the recut compressor is missing."""
+	"""Fail before copying disc images: stdlib zlib alone overflows ISO slots.
+
+	compress_gzipps.py treats zopfli as optional, but a FIELD/WORLD recut that
+	grows past its fixed slot aborts that pack, so a batch run demands it.
+	"""
 	try:
 		import zopfli.gzip  # noqa: F401
 	except ImportError:

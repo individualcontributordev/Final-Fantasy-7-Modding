@@ -4,7 +4,8 @@ Inputs are a base family, shipped rate, version, compatible base id, and built
 disc numbers. Outputs are ``pack.json`` and a matching enabled add-on entry in
 ``builder/manifest.json``. Pack ids derive only from base family plus fixed
 rate, so rebuilding a version replaces the same published option rather than
-creating a new identity. This module does not build or validate layer bytes."""
+creating a new identity. Already-written disc layers are read only to hash
+them; this module never builds or validates layer bytes."""
 from __future__ import annotations
 
 import hashlib
