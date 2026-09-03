@@ -33,7 +33,8 @@ python scripts/rebuild_on_base.py csr --jobs 1    # one base, sequential
 Recuts each mod against the current bases, stamps `baseVersion`, and leaves
 `builder/` dirty for you to review and commit. Working BINs go to `cache/`.
 Families run in parallel (default `--jobs 3`, capped by RAM since each copies
-disc images); a failure is reported at the end without cancelling the rest.
+disc images). The first failure stops the batch: a half-recut pack keeps its
+old `baseVersion` and would quietly disappear from the builder.
 
 To publish a layer from a BIN you edited by hand, run `build_base_layer.py`
 directly — it diffs against the mod's parent base, not pristine.

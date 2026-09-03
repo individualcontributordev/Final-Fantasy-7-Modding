@@ -55,8 +55,9 @@ PACK_PREFIX = {
 def require_zopfli() -> None:
 	"""Fail before copying disc images: stdlib zlib alone overflows ISO slots.
 
-	compress_gzipps.py treats zopfli as optional, but a FIELD/WORLD recut that
-	grows past its fixed slot aborts that pack, so a batch run demands it.
+	compress_gzipps.py treats zopfli as optional, but a FIELD/WORLD overlay
+	that will not fit its fixed slot aborts the whole batch, so demand it up
+	front instead of minutes into a run.
 	"""
 	try:
 		import zopfli.gzip  # noqa: F401
@@ -137,13 +138,17 @@ def run_job(label: str, cmd: list[str]) -> tuple[str, int, str]:
 	return label, proc.returncode, text
 
 
-def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> list[str]:
-	"""Run every recut, then report. A failed family never cancels the rest."""
+def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> None:
+	"""Run every recut, aborting the batch on the first failure.
+
+	A recut that fails leaves its pack pinned to the previous base version,
+	which makes it disappear from the builder. That is a bug to fix, not a
+	result to tolerate, so nothing further is queued once one breaks.
+	"""
 	if not jobs:
-		return []
+		return
 	workers = max(1, min(workers, len(jobs)))
 	print(f"Running {len(jobs)} recuts with --jobs {workers}", flush=True)
-	failed: list[str] = []
 
 	# Sequential runs stream live: these builds take minutes per disc and a
 	# silent terminal is indistinguishable from a hang.
@@ -152,19 +157,23 @@ def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> list[str]:
 			print(f"\n======== {label} ========", flush=True)
 			print("$ " + " ".join(cmd), flush=True)
 			if subprocess.run(cmd, cwd=ROOT).returncode:
-				print(f"[failed] {label}", flush=True)
-				failed.append(label)
-		return failed
+				raise SystemExit(f"\n{label} failed — fix it, then rerun.")
+		return
 
+	failure: str | None = None
 	with ThreadPoolExecutor(max_workers=workers) as pool:
 		futures = [pool.submit(run_job, label, cmd) for label, cmd in jobs]
 		for fut in as_completed(futures):
 			label, code, text = fut.result()
 			print(f"\n======== {label} ========", flush=True)
 			print(text, end="" if text.endswith("\n") else "\n", flush=True)
-			if code:
-				failed.append(label)
-	return failed
+			if code and failure is None:
+				failure = label
+				# Already-running recuts still finish; nothing new starts.
+				for pending in futures:
+					pending.cancel()
+	if failure:
+		raise SystemExit(f"\n{failure} failed — fix it, then rerun.")
 
 
 def run(cmd: list[str]) -> None:
@@ -260,16 +269,10 @@ def main() -> int:
 		jobs.extend(recut_jobs(against, discs, csr))
 		verify_later.append((against, discs))
 
-	failed = run_jobs(jobs, args.jobs)
+	run_jobs(jobs, args.jobs)
 
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")
-	if failed:
-		print("\nThese recuts failed; their packs keep the previously published")
-		print("layers and stay hidden until rebuilt:")
-		for label in failed:
-			print(f"  - {label}")
-		return 1
 
 	if args.verify:
 		for against, discs in verify_later:
