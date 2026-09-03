@@ -19,7 +19,7 @@
     "2": "94aa091ca23621efa421a13c722576aa28e58f16a8882e654c23d29b159e73e2",
     "3": "a2e259c98157034d5c92834d3de10bc75ac5291e2b9a4ea4d8da363ed749c304"
   },
-  "baseVersion": "0.5.1",
+  "baseVersion": "0.5.2",
   "rate": 25,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Light (25%)"
