@@ -701,7 +701,7 @@
         "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
         "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "enabled": true
     },
     {
@@ -728,7 +728,7 @@
         "2": "493fa1ca3d3bdc02781c2786f6dd375a0a1a0bd2fc4d636bf68218edfd912609",
         "3": "5ee1b67e2a7749e9e7348fb0195fe5818e6211554db4f19240dd698818a5b520"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "enabled": true
     },
     {
@@ -755,7 +755,7 @@
         "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
         "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "enabled": true
     },
     {
@@ -782,7 +782,7 @@
         "2": "581b76760a0a31e6ceff329d4d0cc5e565fbd1d73ec9e350b18a0eaf14afd5c8",
         "3": "2607f70883e5a1867f18d0b4cb235dbf2a3890a5c6a7247ed2301979b3f1dfc8"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "enabled": true
     },
     {
@@ -806,7 +806,7 @@
         "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
         "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "rate": 0,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Off (0%)",
@@ -833,7 +833,7 @@
         "2": "94aa091ca23621efa421a13c722576aa28e58f16a8882e654c23d29b159e73e2",
         "3": "a2e259c98157034d5c92834d3de10bc75ac5291e2b9a4ea4d8da363ed749c304"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "rate": 25,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Light (25%)",
@@ -860,7 +860,7 @@
         "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
         "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "rate": 50,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Standard (50%)",
@@ -887,7 +887,7 @@
         "2": "8ecea313daae3b60190aa2f772132429eb46c3c41212e77dc1b4bf742891d5fa",
         "3": "669176edf745beea9ffe268207e7e3b9ea67a738a855702e70ff10bb05aeef71"
       },
-      "baseVersion": "0.5.0",
+      "baseVersion": "0.5.1",
       "rate": 75,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Dense (75%)",
@@ -911,7 +911,7 @@
         "1": "4f7ea968491327aba0375628c9be196bfa561694b42d1e730aa4174bcf57af57"
       },
       "enabled": true,
-      "baseVersion": "0.5.0"
+      "baseVersion": "0.5.1"
     }
   ],
   "bases": [],
