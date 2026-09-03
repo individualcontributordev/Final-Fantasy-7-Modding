@@ -2,12 +2,14 @@
 """Validate the local builder manifest and its published layer files.
 
 Default path is ``builder/manifest.json``. Each add-on must have a unique id
-and a ``discs`` map whose paths exist next to the manifest. ``autoIncludeWhen``
+and a ``discs`` map whose paths exist next to the manifest, and any published
+``discDigests`` entry must still hash the layer it names. ``autoIncludeWhen``
 ids must name another add-on in this file (unless they start with DISABLED-).
 Prints every error and returns nonzero. Does not fetch the network or rewrite
 files."""
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -54,6 +56,7 @@ def validate(manifest_path: Path) -> list[str]:
         if not isinstance(discs, dict):
             errors.append(f"{aid}: 'discs' is not an object")
             discs = {}
+        digests = addon.get("discDigests") or {}
         for disc_num, rel in discs.items():
             if not rel:
                 errors.append(f"{aid}: discs[{disc_num!r}] is empty")
@@ -64,6 +67,17 @@ def validate(manifest_path: Path) -> list[str]:
                     f"{aid}: discs[{disc_num!r}] -> {rel!r} does not exist "
                     f"(resolved {layer_path})"
                 )
+                continue
+            # The builder refuses a layer whose bytes do not hash to the
+            # published digest, so a stale one takes the pack offline.
+            want = digests.get(str(disc_num))
+            if want:
+                got = hashlib.sha256(layer_path.read_bytes()).hexdigest()
+                if got != want:
+                    errors.append(
+                        f"{aid}: discs[{disc_num!r}] digest is stale "
+                        f"(manifest {want[:12]}..., file {got[:12]}...)"
+                    )
 
         # Enabled add-ons may auto-include another pack. Skip DISABLED-*
         # sentinels; any other selected id must exist in this manifest.

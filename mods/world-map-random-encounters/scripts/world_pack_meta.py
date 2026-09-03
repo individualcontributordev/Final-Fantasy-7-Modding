@@ -121,7 +121,7 @@ def write_pack_json(
 	if option_label:
 		pack["optionLabel"] = option_label
 	pack_dir.mkdir(parents=True, exist_ok=True)
-	(pack_dir / "pack.json").write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
+	(pack_dir / "pack.json").write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8", newline="\n")
 	return pack
 
 
@@ -146,4 +146,4 @@ def update_manifest(*, pack: dict) -> None:
 	addons = data.setdefault("addons", [])
 	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
 	addons.append(entry)
-	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
