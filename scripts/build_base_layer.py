@@ -38,7 +38,7 @@ def disc_from_bin_path(patched: Path) -> int:
     match = DISC_BIN_NAME.match(patched.name)
     if not match:
         raise SystemExit(
-            f"Cannot infer disc from {patched.name} — "
+            f"Cannot infer disc from {patched.name} -- "
             "expected FINALFANTASY7_D1.bin (or D2/D3, optional ' (patched)')."
         )
     return int(match.group(1))
@@ -191,7 +191,7 @@ def build_one_disc(
     layer_id = f"{mod_id}-disc{disc}"
     against = f"{base_id} {base_version}".strip()
     description = (
-        f"{mod.get('name') or mod_id} v{version} — NTSC-U Disc {disc} (on {against})"
+        f"{mod.get('name') or mod_id} v{version} -- NTSC-U Disc {disc} (on {against})"
     )
     print(f"=== Disc {disc}: diff ===")
     print(f"  parent:  {parent}")
@@ -204,12 +204,12 @@ def build_one_disc(
     )
     stats = layer["stats"]
     if stats["records"] == 0:
-        raise SystemExit("Empty layer — edited image matches the parent base")
+        raise SystemExit("Empty layer -- edited image matches the parent base")
 
     if not skip_verify:
         print(f"=== Disc {disc}: verify ===")
         verify(parent, layer, patched)
-        print("  OK — layer apply matches patched image")
+        print("  OK -- layer apply matches patched image")
 
     out_path.write_text(json.dumps(layer, indent=2) + "\n", encoding="utf-8")
     print(
@@ -258,7 +258,7 @@ def main() -> int:
 
     version = args.version.strip()
     if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
-        raise SystemExit(f"Weird version '{version}' — expected like 0.1.7")
+        raise SystemExit(f"Weird version '{version}' -- expected like 0.1.7")
 
     patched = args.image.expanduser().resolve()
     disc = disc_from_bin_path(patched)
@@ -317,7 +317,7 @@ def main() -> int:
     update_manifest(mod, disc, builder_dir)
     print(f"Updated {mod_dir / 'pack.json'}")
     print(f"Updated {builder_dir / 'manifest.json'} (enabled=true)")
-    print("Commit JSON under builder/ only — not .bin/.cue.")
+    print("Commit JSON under builder/ only -- not .bin/.cue.")
     return 0
 
 

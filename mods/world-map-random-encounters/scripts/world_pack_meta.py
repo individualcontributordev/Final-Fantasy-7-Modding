@@ -13,8 +13,6 @@ import hashlib
 import json
 from pathlib import Path
 
-from libs.manifest_lock import locked_json
-
 _MOD_SCRIPTS = Path(__file__).resolve().parent
 _MOD = _MOD_SCRIPTS.parent
 _ROOT = _MOD.parent.parent
@@ -78,7 +76,7 @@ def meta_for(against: str, rate: int) -> dict:
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": pack_prefix,
-		"display": f"World Random Encounters — {label} ({rate}%){on}",
+		"display": f"World Random Encounters -- {label} ({rate}%){on}",
 		"group_label": "World Random Encounters",
 		"option_label": f"{label} ({rate}%)",
 		"blurb": RATE_BLURB[rate],
@@ -144,9 +142,8 @@ def update_manifest(*, pack: dict) -> None:
 	}
 	entry["enabled"] = True
 
-	with locked_json(MANIFEST_PATH):
-		data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-		addons = data.setdefault("addons", [])
-		addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
-		addons.append(entry)
-		MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+	addons = data.setdefault("addons", [])
+	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
+	addons.append(entry)
+	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")

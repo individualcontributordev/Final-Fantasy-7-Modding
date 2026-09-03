@@ -53,7 +53,7 @@ def parse_discs(spec: str) -> list[int]:
 			continue
 		disc = int(part)
 		if disc not in (1, 2, 3):
-			raise SystemExit(f"Disc must be 1, 2, or 3 — got {disc}")
+			raise SystemExit(f"Disc must be 1, 2, or 3 -- got {disc}")
 		discs.append(disc)
 	if not discs:
 		raise SystemExit("Pass at least one disc, e.g. --discs 1")
@@ -63,7 +63,7 @@ def parse_discs(spec: str) -> list[int]:
 def read_default_version() -> str:
 	"""Read the mod VERSION file; this is pack metadata, not part of the stable id."""
 	if not VERSION_FILE.is_file():
-		raise SystemExit(f"Missing {VERSION_FILE} — create it or pass --version")
+		raise SystemExit(f"Missing {VERSION_FILE} -- create it or pass --version")
 	version = VERSION_FILE.read_text(encoding="utf-8").strip().splitlines()[0].strip()
 	if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
 		raise SystemExit(f"Bad version in {VERSION_FILE.name}: {version!r}")
@@ -155,13 +155,13 @@ def load_layer(path: Path | str) -> dict:
 
 def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 	"""Reconstruct the exact image used as this add-on layer's parent."""
-	print(f"=== apply base → {out_bin.name} ===")
+	print(f"=== apply base -> {out_bin.name} ===")
 	image = bytearray(pristine.read_bytes())
 	if layer is not None:
 		apply_layer(image, layer)
 		print(f"  applied {len(layer.get('records') or [])} records")
 	else:
-		print("  (clean — no base layer)")
+		print("  (clean -- no base layer)")
 	out_bin.parent.mkdir(parents=True, exist_ok=True)
 	out_bin.write_bytes(image)
 	print(f"  wrote {out_bin} ({len(image)} bytes)")
@@ -175,7 +175,7 @@ def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
 	world = extract_file(base_bytes, WORLD_PATH)
 	world_path = work_dir / "WORLD.BIN"
 	world_path.write_bytes(world)
-	print(f"  LBA={meta.lba} size={meta.size} → {world_path}")
+	print(f"  LBA={meta.lba} size={meta.size} -> {world_path}")
 
 	print(f"=== stub WORLD.BIN (rate {rate}%) ===")
 	world_new = build_world_stub(
@@ -236,13 +236,13 @@ def build_one(
 	make_base_image(pristine, layer, base_bin)
 	patched_bin = stub_and_inject(base_bin, work_dir, meta["rate"])
 
-	print("=== diff → world encounter layer ===")
+	print("=== diff -> world encounter layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
 	layer_id = f"{meta['pack_prefix']}-disc{disc}-v{version}"
 	description = (
-		f"World encounters {meta['rate']}% RCnt2 FORCE stub — NTSC-U Disc {disc} "
+		f"World encounters {meta['rate']}% RCnt2 FORCE stub -- NTSC-U Disc {disc} "
 		f"(against {base_id})"
 	)
 	built = build_layer(
@@ -258,7 +258,7 @@ def build_one(
 		f"records={stats['records']} changedBytes={stats['changedBytes']}"
 	)
 	if stats["records"] == 0 or stats["changedBytes"] == 0:
-		raise SystemExit("Empty layer — stub/inject produced no disc changes")
+		raise SystemExit("Empty layer -- stub/inject produced no disc changes")
 
 	print("=== verify ===")
 	check = bytearray(base_bin.read_bytes())
@@ -266,7 +266,7 @@ def build_one(
 	# The publication boundary is the layer round trip, not merely a successful
 	# overlay patch: ISO padding bytes must reconstruct exactly as well.
 	if bytes(check) != patched_bin.read_bytes():
-		raise SystemExit("VERIFY FAIL — layer apply does not match patched image")
+		raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
 	print("  OK")
 
 	if not keep_work:
@@ -391,7 +391,7 @@ def main() -> int:
 		if base_version:
 			print(f"baseVersion={base_version}")
 
-	print("\nDone. Commit JSON under builder/ only — not .bin/.cue.")
+	print("\nDone. Commit JSON under builder/ only -- not .bin/.cue.")
 	return 0
 
 
