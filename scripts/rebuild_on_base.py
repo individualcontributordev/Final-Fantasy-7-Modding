@@ -5,10 +5,8 @@ Run after a CSR base version bump, on a machine holding retail NTSC-U BINs.
 Writes ``builder/`` and does not commit.
 
 ``all`` is csr + csr-plus + highwind; ``clean`` recuts the pristine packs.
-Discs come from the CSR manifest. One job per base × family runs in parallel,
-each holding a disc image in memory and on scratch disk, so ``--jobs`` is
-bounded by hardware. Manifest writes take a file lock so concurrent packs
-cannot drop each other.
+Discs come from the CSR manifest. Recuts run one at a time and stream their
+output; the first failure stops the run.
 """
 
 from __future__ import annotations
@@ -18,13 +16,11 @@ import json
 import os
 import subprocess
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CSR_FAMILY = ("csr", "csr-plus", "highwind")
 RATES = (0, 25, 50, 75)
-DEFAULT_JOBS = 3
 
 FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
@@ -56,18 +52,13 @@ def require_zopfli() -> None:
 	"""Fail before copying disc images: stdlib zlib alone overflows ISO slots.
 
 	compress_gzipps.py treats zopfli as optional, but a FIELD/WORLD overlay
-	that will not fit its fixed slot aborts the whole batch, so demand it up
-	front instead of minutes into a run.
+	that will not fit its fixed slot stops the run, so demand it up front
+	instead of minutes in.
 	"""
 	try:
 		import zopfli.gzip  # noqa: F401
 	except ImportError:
-		raise SystemExit(
-			"zopfli is not installed in this interpreter.\n"
-			"  python3 scripts/bootstrap_venv.py\n"
-			"  source .venv/bin/activate   # Windows: .venv\\Scripts\\activate\n"
-			"  python scripts/rebuild_on_base.py all"
-		)
+		raise SystemExit("zopfli is not installed. Run: pip install zopfli")
 
 
 def csr_root(cli: Path | None) -> Path:
@@ -111,74 +102,31 @@ def pack_ids(against: str) -> list[str]:
 	return field + world + [PACK_PREFIX["fanfare"][against]]
 
 
-def job_label(against: str, family: str) -> str:
-	return f"{family} on {against}"
-
-
-def recut_jobs(against: str, discs: list[int], csr: Path | None) -> list[tuple[str, list[str]]]:
-	disc_arg = ",".join(str(d) for d in discs)
-	common = ["--against", against, "--discs", disc_arg]
+def recut_commands(
+	against: str, discs: list[int], csr: Path | None
+) -> list[tuple[str, list[str]]]:
+	"""The three recuts for one base, in the order they should run."""
+	common = ["--against", against, "--discs", ",".join(str(d) for d in discs)]
 	if against != "clean":
-		assert csr is not None
 		common += ["--csr-root", str(csr)]
 	return [
-		(job_label(against, "field"), [sys.executable, str(FIELD), "--density", "all", *common]),
-		(job_label(against, "world"), [sys.executable, str(WORLD), "--density", "all", *common]),
-		(job_label(against, "fanfare"), [sys.executable, str(FANFARE), *common]),
+		(f"field on {against}", [sys.executable, str(FIELD), "--density", "all", *common]),
+		(f"world on {against}", [sys.executable, str(WORLD), "--density", "all", *common]),
+		(f"fanfare on {against}", [sys.executable, str(FANFARE), *common]),
 	]
 
 
-def run_job(label: str, cmd: list[str]) -> tuple[str, int, str]:
-	"""Run one recut, buffering its output so parallel logs stay readable."""
-	proc = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True)
-	body = (proc.stdout or "") + (proc.stderr or "")
-	text = f"$ {' '.join(cmd)}\n{body}"
-	if proc.returncode:
-		text += f"\n[exit {proc.returncode}] {label}\n"
-	return label, proc.returncode, text
+def run(label: str, cmd: list[str]) -> None:
+	"""Stream one command, stopping the run if it fails.
 
-
-def run_jobs(jobs: list[tuple[str, list[str]]], workers: int) -> None:
-	"""Run every recut, aborting the batch on the first failure.
-
-	A recut that fails leaves its pack pinned to the previous base version,
-	which makes it disappear from the builder. That is a bug to fix, not a
-	result to tolerate, so nothing further is queued once one breaks.
+	A failed recut leaves its pack pinned to the previous base version, so it
+	does not fail visibly -- it silently disappears from the builder. Never
+	continue past one.
 	"""
-	if not jobs:
-		return
-	workers = max(1, min(workers, len(jobs)))
-	print(f"Running {len(jobs)} recuts with --jobs {workers}", flush=True)
-
-	# Sequential runs stream live: these builds take minutes per disc and a
-	# silent terminal is indistinguishable from a hang.
-	if workers == 1:
-		for label, cmd in jobs:
-			print(f"\n======== {label} ========", flush=True)
-			print("$ " + " ".join(cmd), flush=True)
-			if subprocess.run(cmd, cwd=ROOT).returncode:
-				raise SystemExit(f"\n{label} failed — fix it, then rerun.")
-		return
-
-	failure: str | None = None
-	with ThreadPoolExecutor(max_workers=workers) as pool:
-		futures = [pool.submit(run_job, label, cmd) for label, cmd in jobs]
-		for fut in as_completed(futures):
-			label, code, text = fut.result()
-			print(f"\n======== {label} ========", flush=True)
-			print(text, end="" if text.endswith("\n") else "\n", flush=True)
-			if code and failure is None:
-				failure = label
-				# Already-running recuts still finish; nothing new starts.
-				for pending in futures:
-					pending.cancel()
-	if failure:
-		raise SystemExit(f"\n{failure} failed — fix it, then rerun.")
-
-
-def run(cmd: list[str]) -> None:
-	print("\n$ " + " ".join(cmd), flush=True)
-	subprocess.run(cmd, cwd=ROOT, check=True)
+	print(f"\n======== {label} ========", flush=True)
+	print("$ " + " ".join(cmd), flush=True)
+	if subprocess.run(cmd, cwd=ROOT).returncode:
+		raise SystemExit(f"\n{label} failed -- fix it, then rerun.")
 
 
 def verify_one(against: str, discs: list[int], csr: Path | None) -> None:
@@ -197,7 +145,7 @@ def verify_one(against: str, discs: list[int], csr: Path | None) -> None:
 			]
 			if csr is not None:
 				cmd += ["--csr-root", str(csr)]
-			run(cmd)
+			run(f"verify {addon} disc {disc}", cmd)
 
 
 def main() -> int:
@@ -211,24 +159,11 @@ def main() -> int:
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
 	ap.add_argument(
-		"--jobs",
-		type=int,
-		default=DEFAULT_JOBS,
-		metavar="N",
-		help=(
-			f"Parallel recuts (default {DEFAULT_JOBS}). "
-			"Each copies disc images; raise only if the machine has RAM to spare. "
-			"1 = sequential."
-		),
-	)
-	ap.add_argument(
 		"--verify",
 		action="store_true",
 		help="Run verify_builder_config.py on every rebuilt pack (slow)",
 	)
 	args = ap.parse_args()
-	if args.jobs < 1:
-		raise SystemExit("--jobs must be >= 1")
 	require_zopfli()
 
 	wanted: list[str] = []
@@ -261,22 +196,22 @@ def main() -> int:
 			)
 			print(f"  {b} version {version}")
 
-	jobs: list[tuple[str, list[str]]] = []
-	verify_later: list[tuple[str, list[int]]] = []
+	recuts: list[tuple[str, list[str]]] = []
 	for against in bases:
 		discs = discs_for(against, manifest)
 		print(f"Queue {against} discs {discs}")
-		jobs.extend(recut_jobs(against, discs, csr))
-		verify_later.append((against, discs))
+		recuts.extend(recut_commands(against, discs, csr))
 
-	run_jobs(jobs, args.jobs)
+	print(f"\nRunning {len(recuts)} recuts, one at a time")
+	for label, cmd in recuts:
+		run(label, cmd)
 
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")
 
 	if args.verify:
-		for against, discs in verify_later:
-			verify_one(against, discs, csr)
+		for against in bases:
+			verify_one(against, discs_for(against, manifest), csr)
 	return 0
 
 

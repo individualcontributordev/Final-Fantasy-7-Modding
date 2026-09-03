@@ -192,12 +192,12 @@ def compress_gzipps(
     print(f"Size delta:       {size_delta:+d} bytes")
     if size_delta > 0:
         print(
-            "WARNING: larger than original — do NOT accept CDmage truncate.\n"
+            "WARNING: larger than original -- do NOT accept CDmage truncate.\n"
             "Use a tool that can relocate or grow the overlay. Do not truncate it.",
             file=sys.stderr,
         )
     elif size_delta < 0:
-        print("Shorter than original — CDmage 'pad with zeros?' → Yes.")
+        print("Shorter than original -- CDmage 'pad with zeros?' -> Yes.")
 
     return dst
 

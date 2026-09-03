@@ -13,8 +13,6 @@ import json
 from pathlib import Path
 
 from density import RATES
-from libs.manifest_lock import locked_json
-
 MOD = Path(__file__).resolve().parents[1]
 ROOT = MOD.parent.parent
 MANIFEST_PATH = ROOT / "builder" / "manifest.json"
@@ -64,7 +62,7 @@ def meta_for(against: str, rate: int) -> dict:
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": f"{base['prefix']}-{rate}",
-		"display": f"Field Random Encounters — {label} ({rate}%){base['suffix']}",
+		"display": f"Field Random Encounters -- {label} ({rate}%){base['suffix']}",
 		"group_label": "Field Random Encounters",
 		"option_label": f"{label} ({rate}%)",
 		"blurb": RATE_BLURB[rate],
@@ -126,12 +124,11 @@ def update_manifest(*, pack: dict) -> None:
 	}
 	entry["enabled"] = True
 
-	with locked_json(MANIFEST_PATH):
-		manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-		addons = manifest.setdefault("addons", [])
-		addons[:] = [addon for addon in addons if addon.get("id") != pack_id]
-		addons.append(entry)
-		MANIFEST_PATH.write_text(
-			json.dumps(manifest, indent=2) + "\n",
-			encoding="utf-8",
-		)
+	manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+	addons = manifest.setdefault("addons", [])
+	addons[:] = [addon for addon in addons if addon.get("id") != pack_id]
+	addons.append(entry)
+	MANIFEST_PATH.write_text(
+		json.dumps(manifest, indent=2) + "\n",
+		encoding="utf-8",
+	)

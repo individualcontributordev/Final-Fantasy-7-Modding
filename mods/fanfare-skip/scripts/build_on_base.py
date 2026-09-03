@@ -27,7 +27,6 @@ for pth in (_SHARED, _MOD_SCRIPTS):
 		sys.path.insert(0, str(pth))
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
-from libs.manifest_lock import locked_json  # noqa: E402
 from build_batres_x import build as build_batres  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
@@ -37,7 +36,7 @@ WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_fanfare_skip"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
 VERSION_FILE = _MOD / "VERSION"
 BATRES_PATH = "BATTLE/BATRES.X"
-HINT = 'No victory fanfare or win poses — loot and exp still apply.'
+HINT = 'No victory fanfare or win poses -- loot and exp still apply.'
 
 AGAINST = {
 	"clean": {
@@ -76,7 +75,7 @@ def parse_discs(spec: str) -> list[int]:
 			continue
 		disc = int(part)
 		if disc not in (1, 2, 3):
-			raise SystemExit(f"Disc must be 1, 2, or 3 — got {disc}")
+			raise SystemExit(f"Disc must be 1, 2, or 3 -- got {disc}")
 		discs.append(disc)
 	if not discs:
 		raise SystemExit("Pass at least one disc, e.g. --discs 1")
@@ -162,7 +161,7 @@ def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 		apply_layer(image, layer)
 		print(f"  applied {len(layer.get('records') or [])} records")
 	else:
-		print("  (clean — no base layer)")
+		print("  (clean -- no base layer)")
 	out_bin.parent.mkdir(parents=True, exist_ok=True)
 	out_bin.write_bytes(image)
 	print(f"  wrote {out_bin} ({len(image)} bytes)")
@@ -274,12 +273,11 @@ def update_manifest(
 	}
 	if base_version:
 		entry["baseVersion"] = base_version
-	with locked_json(MANIFEST_PATH):
-		data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-		addons = data.setdefault("addons", [])
-		addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
-		addons.append(entry)
-		MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+	data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+	addons = data.setdefault("addons", [])
+	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
+	addons.append(entry)
+	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
 def build_one(
@@ -352,7 +350,7 @@ def build_one(
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
 	layer_id = f"{cfg['prefix_stem']}-disc{disc}-v{version}"
-	description = f"Fanfare skip — NTSC-U Disc {disc} (against {base_id})"
+	description = f"Fanfare skip -- NTSC-U Disc {disc} (against {base_id})"
 	built = build_layer(
 		base_bin,
 		repaired_bin,
@@ -366,7 +364,7 @@ def build_one(
 		f"records={stats['records']} changedBytes={stats['changedBytes']}"
 	)
 	if stats["records"] == 0 or stats["changedBytes"] == 0:
-		raise SystemExit("Empty layer — patch/inject produced no disc changes")
+		raise SystemExit("Empty layer -- patch/inject produced no disc changes")
 
 	print("=== verify ===")
 	check = bytearray(base_bin.read_bytes())
@@ -374,7 +372,7 @@ def build_one(
 	# Exact reconstruction also covers the zero padding added to BATRES.X's
 	# fixed ISO slot, which is part of the published disc-byte layer.
 	if bytes(check) != repaired_bin.read_bytes():
-		raise SystemExit("VERIFY FAIL — layer apply does not match patched image")
+		raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
 	print("  OK")
 
 	if not keep_work:

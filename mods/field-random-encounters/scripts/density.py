@@ -24,19 +24,19 @@ DENSITIES: tuple[dict, ...] = (
 		"name": "light",
 		"rate": 25,
 		"title": "Light (25%)",
-		"hint": "Fewer battles — sparse; often feels like a step-routed run",
+		"hint": "Fewer battles -- sparse; often feels like a step-routed run",
 	},
 	{
 		"name": "standard",
 		"rate": 50,
 		"title": "Standard (50%)",
-		"hint": "Moderate — busier than Light; flat chance every check",
+		"hint": "Moderate -- busier than Light; flat chance every check",
 	},
 	{
 		"name": "dense",
 		"rate": 75,
 		"title": "Dense (75%)",
-		"hint": "More battles — busy on purpose",
+		"hint": "More battles -- busy on purpose",
 	},
 )
 
@@ -50,7 +50,7 @@ _RATE_LIST = " / ".join(str(r) for r in RATES)
 
 RATE_HELP = (
 	f"{_NAME_SLASHES} (or {_RATE_LIST}). "
-	"Not a free-form % — only these shipped stubs."
+	"Not a free-form % -- only these shipped stubs."
 )
 
 
@@ -60,7 +60,7 @@ def rate_label(rate: int) -> str:
 
 
 def parse_one_density(token: str) -> int:
-	"""Parse one density name or 25/50/75 → rate int."""
+	"""Parse one density name or 25/50/75 -> rate int."""
 	raw = token.strip().lower()
 	if not raw:
 		raise SystemExit("Empty density value")
@@ -82,7 +82,7 @@ def parse_one_density(token: str) -> int:
 
 
 def parse_densities(spec: str) -> list[int]:
-	"""Parse 'all', 'light', '25,75', 'light,dense', etc. → unique rates in order."""
+	"""Parse 'all', 'light', '25,75', 'light,dense', etc. -> unique rates in order."""
 	raw = spec.strip().lower()
 	if raw in {"all", "*"}:
 		return list(RATES)
@@ -101,7 +101,7 @@ def parse_densities(spec: str) -> list[int]:
 
 def print_density_menu(*, allow_all: bool) -> None:
 	print()
-	print("Field encounter density (shipped stubs — pick a named rate, not a custom %):")
+	print("Field encounter density (shipped stubs -- pick a named rate, not a custom %):")
 	print()
 	for i, d in enumerate(DENSITIES, start=1):
 		print(f"  [{i}] {d['title']:<16}  {d['hint']}")

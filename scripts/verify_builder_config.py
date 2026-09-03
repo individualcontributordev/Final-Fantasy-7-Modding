@@ -174,10 +174,10 @@ def main() -> int:
             n = _check_records(image, lp)
             total_recs += n
             stack.append(f"base:{base_id} ({n} records)")
-            print(f"  OK base {base_id} ← {lp.name} ({n} records, src={parent_path})")
+            print(f"  OK base {base_id} <- {lp.name} ({n} records, src={parent_path})")
         else:
             stack.append(f"base:{base_id} (from {parent_path})")
-            print(f"  OK base {base_id} ← {parent_path}")
+            print(f"  OK base {base_id} <- {parent_path}")
 
     for addon_id in args.addons:
         if addon_id not in catalog:
@@ -197,14 +197,14 @@ def main() -> int:
         if want_base_version and got_base_version != want_base_version:
             raise SystemExit(
                 f"{addon_id}: baseVersion={got_base_version or '(unset)'} but "
-                f"{need} is {want_base_version} — rebuild against the current base "
+                f"{need} is {want_base_version} -- rebuild against the current base "
                 "or the builder will hide this mod."
             )
         lp = _layer_path(meta, args.disc)
         n = _apply_and_check(image, lp)
         total_recs += n
         stack.append(f"addon:{addon_id} ({lp.name}, {n} records)")
-        print(f"  OK addon {addon_id} ← {lp.relative_to(meta['builder_dir'])} ({n} records)")
+        print(f"  OK addon {addon_id} <- {lp.relative_to(meta['builder_dir'])} ({n} records)")
 
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -214,7 +214,7 @@ def main() -> int:
     print("Stack:")
     for line in stack:
         print(f"  - {line}")
-    print(f"PASS — builder config applies cleanly ({total_recs} total records)")
+    print(f"PASS -- builder config applies cleanly ({total_recs} total records)")
     return 0
 
 

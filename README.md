@@ -14,27 +14,25 @@ Python 3.10+, all commands from the repo root. Retail NTSC-U MODE2/2352 images
 go at `workspace/pristine/FINALFANTASY7_D{1,2,3}.bin` and are never edited.
 
 ```bash
-python3 scripts/bootstrap_venv.py     # .venv + zopfli, once per clone
-source .venv/bin/activate             # Windows: .venv\Scripts\activate
+pip install zopfli
 export FF7_CSR_ROOT=/path/to/Final-Fantasy-7-CSR
 ```
 
-Use `python` after activating — on Windows `python3` still hits the Store shim.
-Zopfli is required because a recut overlay must fit the ISO slot it came from,
-and stdlib `zlib` can miss that by a few bytes.
+Zopfli is the only dependency, and it is required: a recut overlay must fit the
+ISO slot it came from, and stdlib `zlib` can miss that by a few bytes. On
+Windows run `python`, not `python3` — that one is the Store shim.
 
 ## Rebuild mods
 
 ```bash
-python scripts/rebuild_on_base.py all             # csr + csr-plus + highwind
-python scripts/rebuild_on_base.py csr --jobs 1    # one base, sequential
+python3 scripts/rebuild_on_base.py all    # csr + csr-plus + highwind
+python3 scripts/rebuild_on_base.py csr    # one base
 ```
 
 Recuts each mod against the current bases, stamps `baseVersion`, and leaves
 `builder/` dirty for you to review and commit. Working BINs go to `cache/`.
-Families run in parallel (default `--jobs 3`, capped by RAM since each copies
-disc images). The first failure stops the batch: a half-recut pack keeps its
-old `baseVersion` and would quietly disappear from the builder.
+Recuts run one at a time, and the first failure stops the run: a half-recut
+pack keeps its old `baseVersion` and would quietly disappear from the builder.
 
 To publish a layer from a BIN you edited by hand, run `build_base_layer.py`
 directly — it diffs against the mod's parent base, not pristine.
@@ -72,13 +70,12 @@ what the hosted builder reads. Commit JSON under `builder/` only — never
 
 | Command                                                     | Purpose                                                             |
 | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| `rebuild_on_base.py csr\|csr-plus\|highwind\|all [--jobs N]`  | Recut every mod against the current CSR bases.                       |
+| `rebuild_on_base.py csr\|csr-plus\|highwind\|all`            | Recut every mod against the current CSR bases.                       |
 | `apply_layer.py IMAGE LAYER [-o OUT\|--expect BIN]`          | Apply or byte-verify an `ic-layer-v1` disc patch.                    |
 | `build_base_layer.py IMAGE --version X.Y.Z`                 | Publish one mod disc layer and merge pack.json / manifest metadata.  |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                 | Restore or recompute MODE2 Form 1 footers after editing.             |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate the selected builder stack.                 |
 | `validate_manifest.py [PATH]`                               | Check add-on ids and on-disk layer paths.                            |
-| `bootstrap_venv.py`                                         | Create `.venv` and install `requirements.txt`.                       |
 
 Shared code lives in `scripts/libs/`; per-mod overlay patchers
 (`FIELD.BIN` / `WORLD.BIN` / `BATRES.X`) in `mods/<name>/scripts/`.

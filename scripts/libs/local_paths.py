@@ -114,7 +114,7 @@ def ensure_parent_image(
     if not pristine_path.is_file():
         raise SystemExit(f"Missing pristine (needed to reconstruct {base_id}): {pristine_path}")
     layer_path = _csr_base_layer(csr_path, base_id, disc)
-    print(f"  parent miss — apply {layer_path.name} onto pristine → {cached}")
+    print(f"  parent miss -- apply {layer_path.name} onto pristine -> {cached}")
     image = bytearray(pristine_path.read_bytes())
     apply_layer(image, json.loads(layer_path.read_text(encoding="utf-8")))
     data = bytes(image)

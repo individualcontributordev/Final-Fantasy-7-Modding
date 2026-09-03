@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 _MOD_SCRIPTS = Path(__file__).resolve().parent
-_ROOT = _MOD_SCRIPTS.parent.parent.parent  # scripts → mod → mods → repo
+_ROOT = _MOD_SCRIPTS.parent.parent.parent  # scripts -> mod -> mods -> repo
 _SHARED = _ROOT / "scripts"
 # Shared ISO/GZIPPS helpers plus this mod's overlay patcher (same names).
 for p in (_SHARED, _MOD_SCRIPTS):
@@ -49,8 +49,8 @@ def verify_stub(dec_path: Path, rate: int = 50) -> None:
 	jal = data[JAL_OFFSET : JAL_OFFSET + 4]
 	if got != expect:
 		raise SystemExit(
-			f"verify failed stub @ 0x{OFFSET:X}: got {got[:16].hex(' ')}…, "
-			f"expected {expect[:16].hex(' ')}…"
+			f"verify failed stub @ 0x{OFFSET:X}: got {got[:16].hex(' ')}..., "
+			f"expected {expect[:16].hex(' ')}..."
 		)
 	if jal != JAL:
 		raise SystemExit(
@@ -92,7 +92,7 @@ def build(
 	print("\n=== 3/4 verify ===")
 	verify_stub(dec_path, rate)
 
-	print("\n=== 4/4 compress → FIELD.BIN.new ===")
+	print("\n=== 4/4 compress -> FIELD.BIN.new ===")
 	result = compress_gzipps(dec_path, src_field_bin, out_new)
 
 	if not keep_dec:
@@ -105,7 +105,7 @@ def build(
 	print("\n=== done ===")
 	print(f"Import this over FIELD/FIELD.BIN in CDmage:")
 	print(f"  {result}")
-	print("If 'pad with zeros?' → Yes. If 'truncate?' → Cancel.")
+	print("If 'pad with zeros?' -> Yes. If 'truncate?' -> Cancel.")
 	return result
 
 

@@ -1,3 +1,0 @@
-# Install via: python3 scripts/bootstrap_venv.py
-# Recut overlays must fit a fixed ISO slot; stdlib zlib can miss by a few bytes.
-zopfli==0.4.3

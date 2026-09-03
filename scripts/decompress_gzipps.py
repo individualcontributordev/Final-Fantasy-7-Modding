@@ -25,7 +25,7 @@ def decompress_gzipps(src: Path, dst: Path | None = None) -> Path:
 		raise ValueError(f"{src}: file too small for GZIPPS header")
 
 	dec_size = struct.unpack("<I", data[0:4])[0]
-	# Bytes 4–7 are preserved on recompress; payload after offset 8 is gzip.
+	# Bytes 4-7 are preserved on recompress; payload after offset 8 is gzip.
 	gzip_header = data[4:8]
 
 	print(f"Source:           {src}")

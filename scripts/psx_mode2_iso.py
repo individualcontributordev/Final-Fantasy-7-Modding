@@ -174,7 +174,7 @@ def find_file(img: bytes | bytearray, path: str) -> IsoFile:
             names = ", ".join(e[0] for e in entries[:20])
             raise FileNotFoundError(
                 f"missing {part!r} under {'/'.join(parts[:idx]) or '[root]'} "
-                f"(saw: {names}{'…' if len(entries) > 20 else ''})"
+                f"(saw: {names}{'...' if len(entries) > 20 else ''})"
             )
         name, lba, size, is_dir = match
         is_last = idx == len(parts) - 1
@@ -204,7 +204,7 @@ def replace_file_padded(img: bytearray, path: str, new_data: bytes) -> IsoFile:
     if len(new_data) > meta.size:
         raise ValueError(
             f"{path}: new file is {len(new_data)} bytes but ISO slot is {meta.size} "
-            "(longer inject not supported — pad/rebuild required)"
+            "(longer inject not supported -- pad/rebuild required)"
         )
     # Keep the directory size and LBA unchanged. Zero padding makes bytes left
     # by an older, longer compressed overlay deterministic in the final layer.

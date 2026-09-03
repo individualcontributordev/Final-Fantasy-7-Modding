@@ -37,7 +37,6 @@ venv/
 .env
 
 _site/
-builder/manifest.json.lock
 
 .DS_Store
 Thumbs.db
