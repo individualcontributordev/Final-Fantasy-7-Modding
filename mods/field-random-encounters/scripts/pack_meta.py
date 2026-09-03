@@ -107,7 +107,7 @@ def write_pack_json(
 	pack_dir.mkdir(parents=True, exist_ok=True)
 	(pack_dir / "pack.json").write_text(
 		json.dumps(pack, indent=2) + "\n",
-		encoding="utf-8",
+		encoding="utf-8", newline="\n",
 	)
 	return pack
 
@@ -130,5 +130,5 @@ def update_manifest(*, pack: dict) -> None:
 	addons.append(entry)
 	MANIFEST_PATH.write_text(
 		json.dumps(manifest, indent=2) + "\n",
-		encoding="utf-8",
+		encoding="utf-8", newline="\n",
 	)

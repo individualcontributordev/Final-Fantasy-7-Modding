@@ -239,9 +239,9 @@ def write_pack_json(
 	if base_version:
 		pack["baseVersion"] = base_version
 	pack_dir.mkdir(parents=True, exist_ok=True)
-	(pack_dir / "VERSION").write_text(version + "\n", encoding="utf-8")
+	(pack_dir / "VERSION").write_text(version + "\n", encoding="utf-8", newline="\n")
 	(pack_dir / "pack.json").write_text(
-		json.dumps(pack, indent=2) + "\n", encoding="utf-8"
+		json.dumps(pack, indent=2) + "\n", encoding="utf-8", newline="\n"
 	)
 
 
@@ -277,7 +277,7 @@ def update_manifest(
 	addons = data.setdefault("addons", [])
 	addons[:] = [a for a in addons if str(a.get("id", "")) != pack_id]
 	addons.append(entry)
-	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+	MANIFEST_PATH.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
 def build_one(
@@ -357,7 +357,7 @@ def build_one(
 		layer_id=layer_id,
 		description=description,
 	)
-	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8")
+	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
 	stats = built["stats"]
 	print(
 		f"  wrote {out_path.relative_to(_ROOT)}  "

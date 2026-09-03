@@ -251,7 +251,7 @@ def build_one(
 		layer_id=layer_id,
 		description=description,
 	)
-	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8")
+	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
 	stats = built["stats"]
 	print(
 		f"  wrote {out_path.relative_to(_ROOT)}  "

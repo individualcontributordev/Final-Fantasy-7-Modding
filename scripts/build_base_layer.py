@@ -107,8 +107,8 @@ def upsert_mod_json(
     mod["format"] = mod.get("format") or "ic-layer-v1"
     mod["discs"] = sorted_disc_map(discs)
     mod_dir.mkdir(parents=True, exist_ok=True)
-    (mod_dir / "pack.json").write_text(json.dumps(mod, indent=2) + "\n", encoding="utf-8")
-    (mod_dir / "VERSION").write_text(version + "\n", encoding="utf-8")
+    (mod_dir / "pack.json").write_text(json.dumps(mod, indent=2) + "\n", encoding="utf-8", newline="\n")
+    (mod_dir / "VERSION").write_text(version + "\n", encoding="utf-8", newline="\n")
     return mod
 
 
@@ -149,7 +149,7 @@ def update_manifest(mod: dict, disc: int, builder_dir: Path) -> None:
     else:
         addons[existing_index] = entry
 
-    manifest_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    manifest_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
 def verify(parent: Path, layer: dict, patched: Path) -> None:
@@ -211,7 +211,7 @@ def build_one_disc(
         verify(parent, layer, patched)
         print("  OK -- layer apply matches patched image")
 
-    out_path.write_text(json.dumps(layer, indent=2) + "\n", encoding="utf-8")
+    out_path.write_text(json.dumps(layer, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(
         f"  wrote {out_path}  "
         f"records={stats['records']} changedBytes={stats['changedBytes']}"
