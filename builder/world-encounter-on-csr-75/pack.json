@@ -15,9 +15,9 @@
     "3": "./layers/disc3.layer.json"
   },
   "discDigests": {
-    "1": "4f3271795c84e4fc0a096f49440b82e53dc1ff8a274a05c10e0bacb1aec3b474",
-    "2": "182b937cd0e83799813d9dd104104e88c2c4a73770ab5b35a7956f8fd6010bc1",
-    "3": "9ec104725cae8d4c1fe9a0a9f78104e8bb0feb24901af95843fb0ba3c0a1891d"
+    "1": "f55075f1973582c7bc50baa84b8bcbe36a5830c4494431698fc3a8e2ec6642b5",
+    "2": "e9e8803129c90dbe6faea60304dea674a6f4589848036bfdb32eed501984c387",
+    "3": "642925a6e127c465ec2f2d01a6aedbd0f85e94e0c6e2179df2c583b0ef0a3bd7"
   },
   "baseVersion": "0.14.3",
   "rate": 75,
