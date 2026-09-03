@@ -71,7 +71,7 @@ python3 scripts/validate_manifest.py
 
 Run this before pushing. The builder refuses any layer whose bytes do not hash
 to the checksum published beside it, so a stale `discDigests` entry takes that
-pack offline with no other warning.
+pack offline with no other warning. Failures print the fix for each problem.
 
 Push `main`. GitHub Pages deploys `builder/` to
 `https://individualcontributor.dev/Final-Fantasy-7-Modding/builder/`, which is
@@ -91,7 +91,7 @@ publishing from a CRLF checkout is not.
 | `build_base_layer.py IMAGE --version X.Y.Z`                 | Publish one mod disc layer and merge pack.json / manifest metadata.  |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                 | Restore or recompute MODE2 Form 1 footers after editing.             |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate the selected builder stack.                 |
-| `validate_manifest.py [PATH]`                               | Check add-on ids and on-disk layer paths.                            |
+| `validate_manifest.py [PATH]`                               | Check ids, layer paths, published checksums, and LF line endings.    |
 
 Shared code lives in `scripts/libs/`; per-mod overlay patchers
 (`FIELD.BIN` / `WORLD.BIN` / `BATRES.X`) in `mods/<name>/scripts/`.
