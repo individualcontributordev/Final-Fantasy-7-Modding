@@ -2,10 +2,11 @@
 """Recompress a decompressed FF7 GZIPPS overlay such as FIELD.BIN or WORLD.BIN.
 
 The decompressed payload and original overlay are inputs; the original supplies
-the GZIPPS subheader, gzip header traits, and preferred size ceiling. The output
-is a new GZIPPS file whose payload is round-trip checked while several DEFLATE
-strategies compete for size. Oversized output is written but never truncated:
-the caller must relocate/grow the ISO allocation or reject it."""
+the GZIPPS subheader, gzip header traits, and preferred size ceiling. Every
+stdlib zlib level/strategy competes for size, plus zopfli when installed, and
+the winner is round-trip checked before it is written. Oversized output is
+written but never truncated: the caller must relocate/grow the ISO allocation
+or reject it."""
 
 from __future__ import annotations
 
@@ -70,10 +71,8 @@ def _deflate_candidates(uncompressed: bytes) -> list[tuple[str, bytes, bool]]:
 def _zopfli_candidates(uncompressed: bytes) -> list[tuple[str, bytes, bool]]:
     """Zopfli DEFLATE, when installed.
 
-    Optional on purpose: the repo runs on stdlib alone. But zlib leaves a few
-    percent on the table, and these overlays must fit a fixed ISO slot, so a
-    stdlib-only build can miss by a handful of bytes on a file that has no
-    headroom. Output is ordinary DEFLATE the game's inflate reads unchanged.
+    zlib leaves a few percent on the table, which matters because these
+    overlays must fit a fixed ISO slot. Output is ordinary DEFLATE.
     """
     try:
         import zopfli.gzip
@@ -104,9 +103,9 @@ def _best_gzip_payload(
     best_fit: tuple[int, str, bytes] | None = None
     best_any: tuple[int, str, bytes] | None = None
 
-    # DEFLATE streams for identical bytes can differ substantially in size.
-    # Trying deterministic stdlib strategies may preserve the fixed ISO slot
-    # without changing the decompressed overlay or its GZIPPS envelope.
+    # DEFLATE streams for identical bytes can differ substantially in size, so
+    # competing every encoder can keep the overlay inside its fixed ISO slot
+    # without changing the decompressed bytes or the GZIPPS envelope.
     for label, blob, is_full_member in _deflate_candidates(uncompressed):
         payload = _payload_from_candidate(blob, is_full_member, uncompressed, header10)
         # Sanity: must decompress to the same bytes

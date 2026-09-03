@@ -4,9 +4,12 @@
 For each disc and shipped density, the command reconstructs the selected clean
 or CSR-family base from pristine BINs, patches FIELD.BIN, injects it within its
 existing ISO sector allocation, and diffs against that exact base. Outputs are
-stable-id packs under ``builder/`` plus manifest entries. CSR inputs are local
-only via ``--csr-root``/``FF7_CSR_ROOT``; generated work directories are
-recreated and removed unless ``--keep-work`` is set."""
+stable-id packs under ``builder/`` plus manifest entries, pinned to the base
+version read from the CSR manifest so the builder only offers a pack against
+the base it was cut from. CSR inputs are local only via
+``--csr-root``/``FF7_CSR_ROOT``; generated work directories are recreated and
+removed unless ``--keep-work`` is set. A density that fails is reported and
+skipped; the rest still build."""
 
 from __future__ import annotations
 

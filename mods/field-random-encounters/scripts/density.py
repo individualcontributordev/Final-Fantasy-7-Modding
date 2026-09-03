@@ -43,8 +43,13 @@ DENSITIES: tuple[dict, ...] = (
 _BY_NAME = {d["name"]: d["rate"] for d in DENSITIES}
 _BY_RATE = {d["rate"]: d for d in DENSITIES}
 
+# Derived so adding a density cannot leave stale text in prompts or errors.
+_NAME_LIST = ", ".join(d["name"] for d in DENSITIES)
+_NAME_SLASHES = "/".join(d["name"] for d in DENSITIES)
+_RATE_LIST = " / ".join(str(r) for r in RATES)
+
 RATE_HELP = (
-	"off / light / standard / dense (or 0 / 25 / 50 / 75). "
+	f"{_NAME_SLASHES} (or {_RATE_LIST}). "
 	"Not a free-form % — only these shipped stubs."
 )
 
@@ -68,12 +73,11 @@ def parse_one_density(token: str) -> int:
 		if rate in RATES:
 			return rate
 		raise SystemExit(
-			f"Unknown density {token!r}. Use light, standard, dense "
-			f"(or {', '.join(str(r) for r in RATES)}). Not a free-form %."
+			f"Unknown density {token!r}. Use {_NAME_LIST} "
+			f"(or {_RATE_LIST}). Not a free-form %."
 		)
 	raise SystemExit(
-		f"Unknown density {token!r}. Use light, standard, dense "
-		f"(or {', '.join(str(r) for r in RATES)})."
+		f"Unknown density {token!r}. Use {_NAME_LIST} (or {_RATE_LIST})."
 	)
 
 
@@ -125,9 +129,10 @@ def prompt_densities(*, allow_all: bool = True, default: str = "standard") -> li
 		default_rates = [parse_one_density(default_key)]
 		default_label = _BY_RATE[default_rates[0]]["title"]
 	all_idx = len(DENSITIES) + 1 if allow_all else None
-	choices = "1-4" if allow_all else "1-3"
+	last_idx = all_idx if allow_all else len(DENSITIES)
+	choices = f"1-{last_idx}"
 	prompt = (
-		f"Pick {choices}, a name (light/standard/dense"
+		f"Pick {choices}, a name ({_NAME_SLASHES}"
 		+ ("/all" if allow_all else "")
 		+ f"), or Enter for {default_label}: "
 	)

@@ -4,8 +4,8 @@
 The selected base family and fixed rate determine a stable pack id, display
 labels, compatibility, and exclusive-group metadata. ``write_pack_json`` emits
 pack-relative layer paths; ``update_manifest`` converts them to
-manifest-relative paths and replaces the entry with that id. No layer bytes or
-external manifests are read here."""
+manifest-relative paths and replaces the entry with that id. Already-written
+disc layers are read only to hash them; no external manifest is read here."""
 
 from __future__ import annotations
 

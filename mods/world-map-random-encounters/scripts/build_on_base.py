@@ -4,9 +4,11 @@
 For each disc and fixed density, the command reconstructs the chosen clean or
 CSR-family base, patches WORLD.BIN, zero-pads it into the existing ISO file
 slot, and diffs from that exact parent. It writes stable-id packs under
-``builder/`` and updates the local manifest. CSR layers are resolved only from
-``--csr-root``/``FF7_CSR_ROOT``; disposable work directories are retained only
-with ``--keep-work``."""
+``builder/`` and updates the local manifest, pinning the base version read from
+the CSR manifest so the builder only offers a pack against the base it was cut
+from. CSR layers are resolved only from ``--csr-root``/``FF7_CSR_ROOT``;
+disposable work directories are retained only with ``--keep-work``. A density
+that fails is reported and skipped; the rest still build."""
 
 from __future__ import annotations
 
