@@ -81,8 +81,46 @@ for disc in "${DISCS[@]}"; do
 done
 ```
 
-Edit those BINs (Makou Reactor, overlay extract/patch/inject, whatever the
-mod is). Then repair footers and publish each disc:
+### Edit
+
+Mods here are binary changes — MIPS stubs and data bytes — not field script
+edits. Makou Reactor is the CSR repo's tool for cutting scenes; it has no part
+in this loop. Read the code in **Ghidra** to find and confirm the site, then
+write the bytes with **ImHex** or any hex editor.
+
+Almost nothing worth patching sits in the raw BIN. The executable code lives in
+GZIPPS overlays (`FIELD/FIELD.BIN`, `WORLD/WORLD.BIN`, `BATTLE/BATRES.X`), so a
+hex editor pointed at the disc image finds only compressed bytes. Unwrap the
+overlay first, patch the decompressed copy, then put it back:
+
+```bash
+# 1. lift the overlay out of the disc image, then unwrap it
+python3 -c "
+from pathlib import Path; import sys; sys.path.insert(0, 'scripts')
+from psx_mode2_iso import extract_file
+img = Path('cache/$MOD/FINALFANTASY7_D1.bin').read_bytes()
+Path('work/BATRES.X').write_bytes(extract_file(img, 'BATTLE/BATRES.X'))"
+python3 scripts/decompress_gzipps.py work/BATRES.X work/BATRES.X.dec
+
+# 2. Ghidra on work/BATRES.X.dec to locate the site; ImHex to edit the bytes
+
+# 3. rewrap and inject; the recompressed overlay must fit its original slot
+python3 scripts/compress_gzipps.py work/BATRES.X.dec work/BATRES.X work/BATRES.X.new
+```
+
+Injection is `replace_file_padded` from `scripts/psx_mode2_iso.py`, which
+zero-pads back into the same sector allocation so no later extent moves. The
+per-mod scripts under `mods/<name>/scripts/` already do this end to end and are
+the best reference; a stub whose length changes needs the whole overlay path,
+not a byte poke.
+
+Editing a fixed-length stub in place — same site, same length, new arithmetic —
+is the easy case: patch the `.dec`, recompress, inject. Anything that moves code
+around needs the JAL targets rechecked in Ghidra first.
+
+### Repair and publish
+
+Then repair footers and publish each disc:
 
 ```bash
 for disc in "${DISCS[@]}"; do
@@ -185,8 +223,11 @@ publishing from a CRLF checkout is not.
 | Command                                                     | Purpose                                                             |
 | ----------------------------------------------------------- | -------------------------------------------------------------------- |
 | `apply_layer.py IMAGE LAYER [-o OUT\|--expect BIN]`          | Apply or byte-verify an `ic-layer-v1` disc patch.                    |
+| `decompress_gzipps.py OVERLAY [OUT.dec]`                    | Unwrap a GZIPPS overlay so Ghidra/ImHex see real code.               |
+| `compress_gzipps.py OUT.dec ORIGINAL [OUT.new]`             | Rewrap a patched overlay, keeping it inside its ISO slot.            |
 | `build_base_layer.py IMAGE --version X.Y.Z`                 | Publish one mod disc layer and merge pack.json / manifest metadata.  |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                 | Restore or recompute MODE2 Form 1 footers after editing.             |
+| `verify_iso_integrity.py IMAGE`                             | Report duplicate LBAs, extent overlaps, and PVD size drift.          |
 | `rebuild_on_base.py all\|clean\|csr\|csr-plus\|highwind`    | Recut overlay mods against the selected bases.                       |
 | `verify_builder_config.py all\|clean\|csr\|csr-plus\|highwind` | Reconstruct and validate every mod on those bases.                 |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate one builder stack.                          |
@@ -194,5 +235,7 @@ publishing from a CRLF checkout is not.
 
 Shared code lives in `scripts/libs/`; per-mod overlay patchers
 (`FIELD.BIN` / `WORLD.BIN` / `BATRES.X`) in `mods/<name>/scripts/`.
+`psx_mode2_iso.py` is imported, not run: it extracts and pad-injects ISO9660
+files without moving an LBA.
 
 Commit as `individualcontributordev <contributorindividual@gmail.com>`.
