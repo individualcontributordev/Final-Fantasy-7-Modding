@@ -12,7 +12,7 @@ Every published mod on one or more bases (same names as rebuild_on_base.py):
   python3 scripts/verify_builder_config.py clean
   python3 scripts/verify_builder_config.py csr csr-plus
 
-``all`` is csr + csr-plus + highwind. Add ``clean`` to include Unmodified packs.
+``all`` is every base, clean included; ``csr-family`` skips clean.
 
 Non-clean bases come from ``--csr-root`` or ``FF7_CSR_ROOT``. Add-on layers
 come from this repository's ``builder/``.
@@ -32,11 +32,9 @@ from libs.local_paths import (
     csr_root,
     default_pristine_arg,
     ensure_parent_image,
+    expand_base_names,
 )
 from libs.timing import Timer
-
-CSR_FAMILY = ("csr", "csr-plus", "highwind")
-KNOWN_BASES = CSR_FAMILY + ("clean",)
 
 
 def _load_manifest(path: Path) -> tuple[Path, dict]:
@@ -57,21 +55,6 @@ def _index_mods(builder_dir: Path, data: dict) -> dict[str, dict]:
                 continue
             out[str(pid)] = {"entry": entry, "builder_dir": builder_dir, "kind": key[:-1]}
     return out
-
-
-def expand_bases(tokens: list[str]) -> list[str]:
-    """Turn rebuild-style names into unique bases, preserving order."""
-    wanted: list[str] = []
-    for token in tokens:
-        if token == "all":
-            wanted.extend(CSR_FAMILY)
-        elif token in KNOWN_BASES:
-            wanted.append(token)
-        else:
-            raise SystemExit(
-                f"Unknown base {token!r}. Use all, clean, csr, csr-plus, or highwind."
-            )
-    return list(dict.fromkeys(wanted))
 
 
 def addons_for_base(manifest: dict, base_id: str) -> list[str]:
@@ -302,7 +285,7 @@ def main() -> int:
     ap.add_argument(
         "bases",
         nargs="*",
-        help="all, clean, csr, csr-plus, and/or highwind (every mod on those bases)",
+        help="all (every base), csr-family (skip clean), clean, csr, csr-plus, highwind",
     )
     ap.add_argument(
         "--pristine",
@@ -364,7 +347,7 @@ def main() -> int:
     )
 
     if args.bases:
-        bases = expand_bases(args.bases)
+        bases = expand_base_names(args.bases)
         csr_manifest = None
         if any(b not in ("clean", "unmodified") for b in bases):
             if csr is None:

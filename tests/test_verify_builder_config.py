@@ -11,18 +11,27 @@ import verify_builder_config as verify
 
 
 class VerifyTargetTests(unittest.TestCase):
-    def test_all_is_csr_family_not_clean(self) -> None:
-        self.assertEqual(verify.expand_bases(["all"]), ["csr", "csr-plus", "highwind"])
-
-    def test_all_and_clean_keeps_clean(self) -> None:
+    def test_all_includes_clean(self) -> None:
         self.assertEqual(
-            verify.expand_bases(["all", "clean"]),
+            verify.expand_base_names(["all"]),
+            ["csr", "csr-plus", "highwind", "clean"],
+        )
+
+    def test_csr_family_skips_clean(self) -> None:
+        self.assertEqual(
+            verify.expand_base_names(["csr-family"]),
+            ["csr", "csr-plus", "highwind"],
+        )
+
+    def test_repeated_bases_collapse(self) -> None:
+        self.assertEqual(
+            verify.expand_base_names(["all", "clean", "csr"]),
             ["csr", "csr-plus", "highwind", "clean"],
         )
 
     def test_unknown_base_fails(self) -> None:
         with self.assertRaises(SystemExit):
-            verify.expand_bases(["csr+"])
+            verify.expand_base_names(["csr+"])
 
     def test_addons_follow_compatible_bases(self) -> None:
         manifest = {
