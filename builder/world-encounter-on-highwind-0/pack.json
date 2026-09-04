@@ -19,7 +19,7 @@
     "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
     "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
   },
-  "baseVersion": "0.5.3",
+  "baseVersion": "0.5.4",
   "rate": 0,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Off (0%)"
