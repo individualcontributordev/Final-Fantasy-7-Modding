@@ -31,6 +31,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
+from libs.timing import Timer  # noqa: E402
 from build_field_bin import build as build_field_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
 from pack_meta import (  # noqa: E402
@@ -224,6 +225,7 @@ def build_one(
 	csr_manifest: dict | None,
 	base_layer_arg: str | None,
 	keep_work: bool,
+	timer: Timer,
 ) -> Path:
 	"""Build and round-trip verify one disc layer in an isolated work directory."""
 	pack_id = meta["pack_prefix"]
@@ -251,8 +253,10 @@ def build_one(
 			raise SystemExit("base layer must be ic-layer-v1")
 
 	base_bin = work_dir / "base.bin"
-	make_base_image(pristine, layer, base_bin)
-	patched_bin = stub_and_inject(base_bin, work_dir, meta["rate"])
+	with timer.stage("apply_base"):
+		make_base_image(pristine, layer, base_bin)
+	with timer.stage("overlay"):
+		patched_bin = stub_and_inject(base_bin, work_dir, meta["rate"])
 
 	print("=== diff -> field encounter layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
@@ -263,13 +267,14 @@ def build_one(
 		f"Field encounters {meta['rate']}% RCnt2 FORCE stub -- NTSC-U Disc {disc} "
 		f"(against {base_id})"
 	)
-	built = build_layer(
-		base_bin,
-		patched_bin,
-		layer_id=layer_id,
-		description=description,
-	)
-	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
+	with timer.stage("diff"):
+		built = build_layer(
+			base_bin,
+			patched_bin,
+			layer_id=layer_id,
+			description=description,
+		)
+		out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
 	stats = built["stats"]
 	print(
 		f"  wrote {out_path.relative_to(_ROOT)}  "
@@ -279,12 +284,13 @@ def build_one(
 		raise SystemExit("Empty layer -- stub/inject produced no disc changes")
 
 	print("=== verify ===")
-	check = bytearray(base_bin.read_bytes())
-	apply_layer(check, built)
-	# This round trip proves the published records reproduce every injection
-	# byte from the declared base, including ISO padding and size metadata.
-	if bytes(check) != patched_bin.read_bytes():
-		raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
+	with timer.stage("verify"):
+		check = bytearray(base_bin.read_bytes())
+		apply_layer(check, built)
+		# This round trip proves the published records reproduce every injection
+		# byte from the declared base, including ISO padding and size metadata.
+		if bytes(check) != patched_bin.read_bytes():
+			raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
 	print("  OK")
 
 	if not keep_work:
@@ -340,6 +346,7 @@ def main() -> int:
 	)
 	ap.add_argument("--keep-work", action="store_true", help="Keep temp work dirs")
 	args = ap.parse_args()
+	timer = Timer()
 
 	version = (args.version or read_default_version()).strip()
 	if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
@@ -399,6 +406,7 @@ def main() -> int:
 				csr_manifest=csr_manifest,
 				base_layer_arg=args.base_layer,
 				keep_work=args.keep_work,
+				timer=timer,
 			)
 
 		pack_dir = _ROOT / "builder" / pack_id
@@ -434,6 +442,7 @@ def main() -> int:
 			print(f"baseVersion={base_version}")
 
 	print("\nCommit JSON under builder/ only.")
+	timer.total()
 	return 0
 
 

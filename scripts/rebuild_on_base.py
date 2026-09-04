@@ -18,6 +18,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from libs.timing import Timer
+
 ROOT = Path(__file__).resolve().parent.parent
 CSR_FAMILY = ("csr", "csr-plus", "highwind")
 RATES = (0, 25, 50, 75)
@@ -153,7 +155,7 @@ def recut_commands(
 	]
 
 
-def run(label: str, cmd: list[str]) -> None:
+def run(label: str, cmd: list[str], timer: Timer) -> None:
 	"""Stream one command, stopping the run if it fails.
 
 	A failed recut leaves its pack pinned to the previous base version, so it
@@ -162,11 +164,12 @@ def run(label: str, cmd: list[str]) -> None:
 	"""
 	print(f"\n======== {label} ========", flush=True)
 	print("$ " + " ".join(cmd), flush=True)
-	if subprocess.run(cmd, cwd=ROOT).returncode:
-		raise SystemExit(f"\n{label} failed -- fix it, then rerun.")
+	with timer.stage(label):
+		if subprocess.run(cmd, cwd=ROOT).returncode:
+			raise SystemExit(f"\n{label} failed -- fix it, then rerun.")
 
 
-def verify_one(against: str, discs: list[int], csr: Path | None) -> None:
+def verify_one(against: str, discs: list[int], csr: Path | None, timer: Timer) -> None:
 	for addon in pack_ids(against):
 		for disc in discs:
 			cmd = [
@@ -182,7 +185,7 @@ def verify_one(against: str, discs: list[int], csr: Path | None) -> None:
 			]
 			if csr is not None:
 				cmd += ["--csr-root", str(csr)]
-			run(f"verify {addon} disc {disc}", cmd)
+			run(f"verify {addon} disc {disc}", cmd, timer)
 
 
 def main() -> int:
@@ -201,7 +204,9 @@ def main() -> int:
 		help="Run verify_builder_config.py on every rebuilt pack (slow)",
 	)
 	args = ap.parse_args()
-	require_lf_json()
+	timer = Timer()
+	with timer.stage("lf_check"):
+		require_lf_json()
 	require_zopfli()
 
 	wanted: list[str] = []
@@ -242,14 +247,15 @@ def main() -> int:
 
 	print(f"\nRunning {len(recuts)} recuts, one at a time")
 	for label, cmd in recuts:
-		run(label, cmd)
+		run(label, cmd, timer)
 
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")
 
 	if args.verify:
 		for against in bases:
-			verify_one(against, discs_for(against, manifest), csr)
+			verify_one(against, discs_for(against, manifest), csr, timer)
+	timer.total()
 	return 0
 
 

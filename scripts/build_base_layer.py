@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 from libs.layer import apply_layer, build_layer
 from libs.local_paths import csr_base_version, csr_root, ensure_parent_image, pristine_bin
+from libs.timing import Timer
 
 DISC_BIN_NAME = re.compile(
     r"^FINALFANTASY7_D([123])(?: \(patched\))?\.bin$",
@@ -176,6 +177,7 @@ def build_one_disc(
     parent: Path,
     builder_dir: Path,
     skip_verify: bool,
+    timer: Timer,
 ) -> Path:
     """Diff, write, and optionally round-trip one disc layer."""
     if not parent.is_file():
@@ -196,22 +198,25 @@ def build_one_disc(
     print(f"=== Disc {disc}: diff ===")
     print(f"  parent:  {parent}")
     print(f"  patched: {patched}")
-    layer = build_layer(
-        parent,
-        patched,
-        layer_id=layer_id,
-        description=description,
-    )
+    with timer.stage("diff"):
+        layer = build_layer(
+            parent,
+            patched,
+            layer_id=layer_id,
+            description=description,
+        )
     stats = layer["stats"]
     if stats["records"] == 0:
         raise SystemExit("Empty layer -- edited image matches the parent base")
 
     if not skip_verify:
         print(f"=== Disc {disc}: verify ===")
-        verify(parent, layer, patched)
+        with timer.stage("verify"):
+            verify(parent, layer, patched)
         print("  OK -- layer apply matches patched image")
 
-    out_path.write_text(json.dumps(layer, indent=2) + "\n", encoding="utf-8", newline="\n")
+    with timer.stage("write_layer"):
+        out_path.write_text(json.dumps(layer, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(
         f"  wrote {out_path}  "
         f"records={stats['records']} changedBytes={stats['changedBytes']}"
@@ -255,6 +260,7 @@ def main() -> int:
         help=argparse.SUPPRESS,
     )
     args = ap.parse_args()
+    timer = Timer()
 
     version = args.version.strip()
     if not re.fullmatch(r"[0-9]+(\.[0-9]+)*", version):
@@ -309,15 +315,18 @@ def main() -> int:
         parent=parent,
         builder_dir=builder_dir,
         skip_verify=args.skip_verify,
+        timer=timer,
     )
 
-    mod = upsert_mod_json(
-        mod_dir, mod, version, base_version, disc, layer_digest(out_path)
-    )
-    update_manifest(mod, disc, builder_dir)
+    with timer.stage("catalog"):
+        mod = upsert_mod_json(
+            mod_dir, mod, version, base_version, disc, layer_digest(out_path)
+        )
+        update_manifest(mod, disc, builder_dir)
     print(f"Updated {mod_dir / 'pack.json'}")
     print(f"Updated {builder_dir / 'manifest.json'} (enabled=true)")
     print("Commit JSON under builder/ only -- not .bin/.cue.")
+    timer.total()
     return 0
 
 
