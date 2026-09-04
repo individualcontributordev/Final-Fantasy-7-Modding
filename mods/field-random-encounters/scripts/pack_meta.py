@@ -33,12 +33,11 @@ AGAINST = {
 		"suffix": " (on Highwind)",
 	},
 }
-RATE_LABEL = {0: "Off", 25: "Light", 50: "Standard", 75: "Dense"}
+RATE_LABEL = {0: "No Encs", 50: "Half Enc Rate", 200: "Double Enc Rate"}
 RATE_BLURB = {
 	0: "No random field battles.",
-	25: "Fewer random field battles.",
-	50: "Moderate random field battles.",
-	75: "More random field battles.",
+	50: "Random field battles use half the area's normal encounter threshold.",
+	200: "Random field battles use double the area's normal encounter threshold.",
 }
 
 
@@ -62,9 +61,9 @@ def meta_for(against: str, rate: int) -> dict:
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": f"{base['prefix']}-{rate}",
-		"display": f"Field Random Encounters -- {label} ({rate}%){base['suffix']}",
+		"display": f"Field Random Encounters -- {label}{base['suffix']}",
 		"group_label": "Field Random Encounters",
-		"option_label": f"{label} ({rate}%)",
+		"option_label": label,
 		"blurb": RATE_BLURB[rate],
 		"rate": rate,
 	}
@@ -105,6 +104,11 @@ def write_pack_json(
 	if base_version:
 		pack["baseVersion"] = base_version
 	pack_dir.mkdir(parents=True, exist_ok=True)
+	(pack_dir / "VERSION").write_text(
+		version + "\n",
+		encoding="utf-8",
+		newline="\n",
+	)
 	(pack_dir / "pack.json").write_text(
 		json.dumps(pack, indent=2) + "\n",
 		encoding="utf-8", newline="\n",

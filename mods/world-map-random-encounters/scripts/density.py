@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""Parse the fixed world-map encounter density choices used by build CLIs.
+"""Parse the fixed world-map encounter choices used by build CLIs.
 
-Inputs may be names, 0/25/50/75 values, lists, or ``all``; results preserve the
-requested order without duplicates. Interactive selection requires a TTY.
-Rates correspond to shipped MIPS stubs and stable pack ids rather than a
-free-form percentage, and this module performs no file I/O."""
+Vanilla means no mod layer. The shipped patches disable encounters, halve the
+area threshold, or double it with saturation. Inputs may be names, 0/50/200
+values, lists, or ``all``."""
 from __future__ import annotations
 
 import sys
 
-RATES = (0, 25, 50, 75)
+RATES = (0, 50, 200)
 DENSITIES = (
-	("off", 0, "Off (0%)"),
-	("light", 25, "Light (25%)"),
-	("standard", 50, "Standard (50%)"),
-	("dense", 75, "Dense (75%)"),
+	("off", 0, "No Encs"),
+	("half", 50, "Half Enc Rate"),
+	("double", 200, "Double Enc Rate"),
 )
 RATE_BY_NAME = {name: rate for name, rate, _label in DENSITIES}
 LABEL_BY_RATE = {rate: label for _name, rate, label in DENSITIES}
@@ -25,15 +23,14 @@ def rate_label(rate: int) -> str:
 
 
 def parse_one_density(token: str) -> int:
-	"""Map a shipped name or 0/25/50/75 token to the stub/pack-id integer."""
+	"""Map a shipped name or 0/50/200 token to the stub/pack-id integer."""
 	value = token.strip().lower().removesuffix("%").strip()
 	if value in RATE_BY_NAME:
 		return RATE_BY_NAME[value]
 	if value.isdigit() and int(value) in RATES:
 		return int(value)
 	raise SystemExit(
-		f"Unknown density {token!r}. Use off, light, standard, dense, "
-		"or 0, 25, 50, 75."
+		f"Unknown density {token!r}. Use off, half, double, or 0, 50, 200."
 	)
 
 
@@ -54,10 +51,10 @@ def parse_densities(spec: str) -> list[int]:
 	return rates
 
 
-def prompt_densities(*, allow_all: bool = True, default: str = "standard") -> list[int]:
+def prompt_densities(*, allow_all: bool = True, default: str = "half") -> list[int]:
 	"""TTY-only selection of shipped rates; non-TTY callers must pass --density."""
 	if not sys.stdin.isatty():
-		raise SystemExit("Pass --density off|light|standard|dense|all")
+		raise SystemExit("Pass --density off|half|double|all")
 
 	options = list(DENSITIES)
 	for index, (_name, _rate, label) in enumerate(options, start=1):

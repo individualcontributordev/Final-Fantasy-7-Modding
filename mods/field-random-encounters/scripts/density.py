@@ -1,42 +1,36 @@
 #!/usr/bin/env python3
-"""Define the shipped field-encounter density choices used by build CLIs.
+"""Define the shipped field-encounter choices used by build CLIs.
 
-Parsers accept names, their fixed 0/25/50/75 values, lists, or ``all`` and
-return ordered unique rates; the prompt is available only on a TTY. These
-integers identify tracked MIPS stubs and stable pack ids, not arbitrary
-percentages, so unsupported rates are rejected before any file is patched."""
+Vanilla is represented by selecting no mod in the builder. These choices are
+the three actual patches: no encounters, half the area's normal threshold, or
+double it with saturation. Integers identify tracked MIPS stubs and stable pack
+ids rather than arbitrary percentages."""
 
 from __future__ import annotations
 
 import sys
 
-# Pack id / stub files use these integers (field-encounter-25, not a free %).
-RATES = (0, 25, 50, 75)
+# Pack id / stub files use these integers (field-encounter-50, not a free %).
+RATES = (0, 50, 200)
 
 DENSITIES: tuple[dict, ...] = (
 	{
 		"name": "off",
 		"rate": 0,
-		"title": "Off (0%)",
+		"title": "No Encs",
 		"hint": "No random field battles (FORCE path always clears Danger)",
 	},
 	{
-		"name": "light",
-		"rate": 25,
-		"title": "Light (25%)",
-		"hint": "Fewer battles -- sparse; often feels like a step-routed run",
-	},
-	{
-		"name": "standard",
+		"name": "half",
 		"rate": 50,
-		"title": "Standard (50%)",
-		"hint": "Moderate -- busier than Light; flat chance every check",
+		"title": "Half Enc Rate",
+		"hint": "Half the area's normal random-encounter threshold",
 	},
 	{
-		"name": "dense",
-		"rate": 75,
-		"title": "Dense (75%)",
-		"hint": "More battles -- busy on purpose",
+		"name": "double",
+		"rate": 200,
+		"title": "Double Enc Rate",
+		"hint": "Double the area's normal threshold, capped safely at 255",
 	},
 )
 
@@ -60,7 +54,7 @@ def rate_label(rate: int) -> str:
 
 
 def parse_one_density(token: str) -> int:
-	"""Parse one density name or 25/50/75 -> rate int."""
+	"""Parse one choice name or 0/50/200 -> rate int."""
 	raw = token.strip().lower()
 	if not raw:
 		raise SystemExit("Empty density value")
@@ -82,7 +76,7 @@ def parse_one_density(token: str) -> int:
 
 
 def parse_densities(spec: str) -> list[int]:
-	"""Parse 'all', 'light', '25,75', 'light,dense', etc. -> unique rates in order."""
+	"""Parse 'all', 'half', '0,200', etc. into unique rates in request order."""
 	raw = spec.strip().lower()
 	if raw in {"all", "*"}:
 		return list(RATES)
@@ -110,7 +104,7 @@ def print_density_menu(*, allow_all: bool) -> None:
 	print()
 
 
-def prompt_densities(*, allow_all: bool = True, default: str = "standard") -> list[int]:
+def prompt_densities(*, allow_all: bool = True, default: str = "half") -> list[int]:
 	"""Ask on a TTY. Returns one or more rates."""
 	if not sys.stdin.isatty():
 		raise SystemExit(

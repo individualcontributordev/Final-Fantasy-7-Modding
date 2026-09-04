@@ -44,14 +44,13 @@ AGAINST = {
 	},
 }
 
-RATE_LABEL = {0: "Off", 25: "Light", 50: "Standard", 75: "Dense"}
+RATE_LABEL = {0: "No Encs", 50: "Half Enc Rate", 200: "Double Enc Rate"}
 RATE_BLURB = {
 	0: "No random world-map battles.",
-	25: "Fewer random world-map battles.",
-	50: "Moderate random world-map battles.",
-	75: "More random world-map battles.",
+	50: "Random world-map battles use half the area's normal encounter threshold.",
+	200: "Random world-map battles use double the area's normal encounter threshold.",
 }
-RATES = (0, 25, 50, 75)
+RATES = (0, 50, 200)
 
 
 def disc_digests(pack_dir: Path, discs: list[int]) -> dict[str, str]:
@@ -76,9 +75,9 @@ def meta_for(against: str, rate: int) -> dict:
 	return {
 		"base_id": base["base_id"],
 		"pack_prefix": pack_prefix,
-		"display": f"World Random Encounters -- {label} ({rate}%){on}",
+		"display": f"World Random Encounters -- {label}{on}",
 		"group_label": "World Random Encounters",
-		"option_label": f"{label} ({rate}%)",
+		"option_label": label,
 		"blurb": RATE_BLURB[rate],
 		"rate": rate,
 		"against": against,
@@ -121,6 +120,7 @@ def write_pack_json(
 	if option_label:
 		pack["optionLabel"] = option_label
 	pack_dir.mkdir(parents=True, exist_ok=True)
+	(pack_dir / "VERSION").write_text(version + "\n", encoding="utf-8", newline="\n")
 	(pack_dir / "pack.json").write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8", newline="\n")
 	return pack
 
