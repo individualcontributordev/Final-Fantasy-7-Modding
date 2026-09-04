@@ -1,0 +1,22 @@
+{
+  "id": "field-encounter-on-highwind-200",
+  "name": "Field Random Encounters -- Double Enc Rate (on Highwind)",
+  "kind": "mod",
+  "version": "0.3.0",
+  "blurb": "Random field battles use double the area's normal encounter threshold.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 200,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Double Enc Rate",
+  "discDigests": {
+    "1": "1d6a41cc8e17e83862e33ee56a2cc14a7bd0b4f26d9c7858bfc99b17d3e13871"
+  },
+  "baseVersion": "0.5.4"
+}

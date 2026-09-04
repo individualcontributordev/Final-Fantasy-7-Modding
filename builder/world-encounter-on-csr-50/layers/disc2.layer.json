@@ -1,6 +1,6 @@
 {
   "format": "ic-layer-v1",
-  "id": "world-encounter-on-csr-50-disc2-v0.2.0",
+  "id": "world-encounter-on-csr-50-disc2-v0.3.0",
   "description": "World encounters 50% RCnt2 FORCE stub -- NTSC-U Disc 2 (against csr)",
   "target": "disc-image",
   "stats": {

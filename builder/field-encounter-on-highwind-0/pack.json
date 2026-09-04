@@ -1,8 +1,8 @@
 {
   "id": "field-encounter-on-highwind-0",
-  "name": "Field Random Encounters -- Off (0%) (on Highwind)",
+  "name": "Field Random Encounters -- No Encs (on Highwind)",
   "kind": "mod",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "blurb": "No random field battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
@@ -16,9 +16,9 @@
   },
   "rate": 0,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Off (0%)",
+  "optionLabel": "No Encs",
   "discDigests": {
-    "1": "9c7e3fbe4acf6c2753d9b18cf6d4ea2f25e4a3fe078608f5602297b5b194bd9a",
+    "1": "ac9658421ab956ff3511c6286e3352778ebda09f5d594ae19c2c6ebe1609f60d",
     "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
     "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
   },

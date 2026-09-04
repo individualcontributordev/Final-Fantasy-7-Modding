@@ -1,0 +1,22 @@
+{
+  "id": "world-encounter-on-highwind-200",
+  "name": "World Random Encounters -- Double Enc Rate (on Highwind)",
+  "kind": "mod",
+  "version": "0.3.0",
+  "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "world-encounter-rate",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "13b68273bc1e747f96209bc181f09026ca0d6f38078a567159e2b8eddd3774b3"
+  },
+  "baseVersion": "0.5.4",
+  "rate": 200,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Double Enc Rate"
+}

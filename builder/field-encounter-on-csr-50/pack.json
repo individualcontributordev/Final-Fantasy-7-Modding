@@ -1,9 +1,9 @@
 {
   "id": "field-encounter-on-csr-50",
-  "name": "Field Random Encounters -- Standard (50%) (on CSR)",
+  "name": "Field Random Encounters -- Half Enc Rate (on CSR)",
   "kind": "mod",
-  "version": "0.2.0",
-  "blurb": "Moderate random field battles.",
+  "version": "0.3.0",
+  "blurb": "Random field battles use half the area's normal encounter threshold.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
@@ -16,11 +16,11 @@
   },
   "rate": 50,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Standard (50%)",
+  "optionLabel": "Half Enc Rate",
   "discDigests": {
-    "1": "c9a01fb391665c87353e7040dc4ebf90cf401f848752fb63bf7a8b8b44cce7fb",
-    "2": "9938b63c7d1445efb909dd1b3877b9e3b68ee63e770b22ea48cf2f870c1d6b6a",
-    "3": "2c251b38aa72fe1233e6cdce6c5f9199d3b3c7866ffb30cd1bac8119580ed0ba"
+    "1": "9ea386e11de20b9977408899eb29ce9a12d13685b59b2764f82f6c15d2ec5395",
+    "2": "cecbc48bd6af8ed871a4b67ad06ef3809f53a81626c2a1d4170994d47fc9d285",
+    "3": "71d7ce84046cb9ad2e33edcdf914f6564d80ae4f80e01169471d0a74dd9e1aab"
   },
   "baseVersion": "0.14.3"
 }

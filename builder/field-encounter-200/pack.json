@@ -1,0 +1,25 @@
+{
+  "id": "field-encounter-200",
+  "name": "Field Random Encounters -- Double Enc Rate",
+  "kind": "mod",
+  "version": "0.3.0",
+  "blurb": "Random field battles use double the area's normal encounter threshold.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "rate": 200,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Double Enc Rate",
+  "discDigests": {
+    "1": "4fc54d026415d775ac4ee83fafdaac108ae926b679bf9069cb937f340ce33b6d",
+    "2": "bab758571259a446e48477271abfd6c26f10e2374c6a5df30ce190affd1d7367",
+    "3": "f508656ea30d0f79bec0f64858c8dd13250544b30309343be51a083cdb3c217b"
+  }
+}

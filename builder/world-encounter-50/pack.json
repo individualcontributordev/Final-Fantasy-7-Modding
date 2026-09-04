@@ -1,9 +1,9 @@
 {
   "id": "world-encounter-50",
-  "name": "World Random Encounters \u2014 Standard (50%)",
+  "name": "World Random Encounters -- Half Enc Rate",
   "kind": "mod",
-  "version": "0.2.0",
-  "blurb": "Moderate random world-map battles.",
+  "version": "0.3.0",
+  "blurb": "Random world-map battles use half the area's normal encounter threshold.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
@@ -14,12 +14,12 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
+  "discDigests": {
+    "1": "2578b389ef9791822cfafa5db1b15d3f504e708958221810a5bed96c11824db5",
+    "2": "76bb250a284ba13bc712b8257fa14d3c45e8a9b4b28c6f45911609fabce456ea",
+    "3": "973855a5327bbc42e9ec16517c453c3eb76f22813d8e90c1e952f8fdac961bfd"
+  },
   "rate": 50,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Standard (50%)",
-  "discDigests": {
-    "1": "6a72c9e10531473d7b5f880fdac1a3a3f4dc54c2f69ff223a4f0715bac75af19",
-    "2": "a0ddeb8922336861b11a966cb7aa3ba744aec0835fe527cf809b977965352ddd",
-    "3": "ab66589d076694a0e7e96fa7557ebdcc45c3666e9fb64f98a2539e0f17419b6c"
-  }
+  "optionLabel": "Half Enc Rate"
 }

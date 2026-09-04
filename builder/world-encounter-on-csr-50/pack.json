@@ -1,9 +1,9 @@
 {
   "id": "world-encounter-on-csr-50",
-  "name": "World Random Encounters -- Standard (50%) (on CSR)",
+  "name": "World Random Encounters -- Half Enc Rate (on CSR)",
   "kind": "mod",
-  "version": "0.2.0",
-  "blurb": "Moderate random world-map battles.",
+  "version": "0.3.0",
+  "blurb": "Random world-map battles use half the area's normal encounter threshold.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
@@ -15,12 +15,12 @@
     "3": "./layers/disc3.layer.json"
   },
   "discDigests": {
-    "1": "d57b14d048692b151cd7b57700286e28e66d23bc38f373fc896f80315b361514",
-    "2": "6b1f04a3489928413b61e3f6e80ef693240f2a1de65478fb3a852a7e8805995e",
-    "3": "a7ca12cb66c0c704e3d87b74499e05a81c86660f3844ffff226a2ffd5c71eabc"
+    "1": "1e94d3b1b1c8dbcf21663ce10752b6c7c879f1fb999c85f7c8723291f34537e4",
+    "2": "60e9e916a0ffa5d66f2e4425ea55e462515fb2b04d6eb177f40f1bfabaf0258c",
+    "3": "8f54952fe71a656d65049deac50f6df002e3261f118cdc4226823f031e870f35"
   },
   "baseVersion": "0.14.3",
   "rate": 50,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Standard (50%)"
+  "optionLabel": "Half Enc Rate"
 }

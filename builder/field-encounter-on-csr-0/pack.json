@@ -1,8 +1,8 @@
 {
   "id": "field-encounter-on-csr-0",
-  "name": "Field Random Encounters -- Off (0%) (on CSR)",
+  "name": "Field Random Encounters -- No Encs (on CSR)",
   "kind": "mod",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "blurb": "No random field battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
@@ -16,11 +16,11 @@
   },
   "rate": 0,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Off (0%)",
+  "optionLabel": "No Encs",
   "discDigests": {
-    "1": "4a38f60231837a57e2b6cf0e89136491ad640507b0c8cdef9b05486bd207bd9f",
-    "2": "930e2dddb03121b00004f6cda3265bbdb6bb1e6284579962f2e3e172a78614ed",
-    "3": "1ffc60cf1107a81ee199a1af7a6c5312809af137c7d5599c7c3fc9a410a05e3b"
+    "1": "91ae9f9192c9f9683bfb7c9efe0931350717e676aed172ba47ae834cd5b1eaaa",
+    "2": "4d1e09f115b09a3f4f3f8f0ec5343334aee47abf0a2ca98b6bb7e304c671607f",
+    "3": "d3329016a8f8f70640812d916fe0153c0e5ec3f5010cbb9134bdfe4c3a1c5e78"
   },
   "baseVersion": "0.14.3"
 }

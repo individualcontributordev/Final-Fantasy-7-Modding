@@ -1,8 +1,8 @@
 {
   "id": "world-encounter-0",
-  "name": "World Random Encounters \u2014 Off (0%)",
+  "name": "World Random Encounters -- No Encs",
   "kind": "mod",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "blurb": "No random world-map battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
@@ -14,12 +14,12 @@
     "2": "./layers/disc2.layer.json",
     "3": "./layers/disc3.layer.json"
   },
+  "discDigests": {
+    "1": "b93a04c545755d930e8953686766c54cc80a123eaf4292d2fb6dd39da692becc",
+    "2": "d9b053ada8442a56313bc55edbbfd2c0707d8079145e737d1f457ada51c10097",
+    "3": "4dbfc439c826c95ee6a0ced10243db67d51eb440ddd523f51998047e11c4e40a"
+  },
   "rate": 0,
   "groupLabel": "World Random Encounters",
-  "optionLabel": "Off (0%)",
-  "discDigests": {
-    "1": "7a4616d7fa183659169f3f43752121fe1ce3768a99789350a753629baa4f0128",
-    "2": "04ccc5801f44bf2259f244ccd28005802a9d15066f1169ade3b6b274d5cf776b",
-    "3": "c56b0eeaf63f3c760dbf8d7bd51a792baefc1a9894d985397f526b9c1407e8f3"
-  }
+  "optionLabel": "No Encs"
 }
