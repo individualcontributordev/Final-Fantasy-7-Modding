@@ -100,7 +100,8 @@ def print_density_menu(*, allow_all: bool) -> None:
 	for i, d in enumerate(DENSITIES, start=1):
 		print(f"  [{i}] {d['title']:<16}  {d['hint']}")
 	if allow_all:
-		print(f"  [{len(DENSITIES) + 1}] All               Build Off + Light + Standard + Dense")
+		titles = " + ".join(d["title"] for d in DENSITIES)
+		print(f"  [{len(DENSITIES) + 1}] {'All':<16}  Build {titles}")
 	print()
 
 
