@@ -15,7 +15,7 @@
   "discDigests": {
     "1": "fbf75348146bbd422116e842f549c81e7c6cdd796827435070de374eb7f55c83"
   },
-  "baseVersion": "0.2.4",
+  "baseVersion": "0.2.5",
   "rate": 25,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Light (25%)"
