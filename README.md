@@ -4,9 +4,10 @@ Stackable `ic-layer-v1` mods for the
 [disc builder](https://individualcontributor.dev/builder/). Each mod targets one
 exclusive base; the CSR, CSR+, and Highwind bases live in the CSR repo.
 
-Published mods: field encounters, world encounters, fanfare skip. Encounter
-density ships as four named rates (`off` / `light` / `standard` / `dense` →
-0/25/50/75); field and world are chosen independently in the builder.
+Published mods: field encounters, world encounters, fanfare skip. Field and
+world encounters are chosen independently: `Vanilla` applies no mod, while
+`No Encs`, `Half Enc Rate`, and `Double Enc Rate` apply fixed patches. Double
+saturates the game's one-byte encounter threshold instead of wrapping it.
 
 ## Setup
 

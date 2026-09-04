@@ -323,7 +323,7 @@ def main() -> int:
 		default=None,
 		metavar="DENSITY",
 		help=(
-			"light / standard / dense / all (or 25 / 50 / 75). "
+			"off / half / double / all (or 0 / 50 / 200). "
 			"Omit to pick interactively."
 		),
 	)
@@ -355,7 +355,7 @@ def main() -> int:
 	rates = (
 		parse_densities(args.density)
 		if args.density is not None
-		else prompt_densities(allow_all=True, default="standard")
+		else prompt_densities(allow_all=True, default="half")
 	)
 	discs = parse_discs(args.discs)
 	if args.base_layer and len(discs) != 1:

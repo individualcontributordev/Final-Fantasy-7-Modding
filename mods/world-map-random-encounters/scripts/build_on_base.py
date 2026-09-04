@@ -295,7 +295,7 @@ def main() -> int:
 		dest="density",
 		default=None,
 		metavar="DENSITY",
-		help="light / standard / dense / all. Omit to pick interactively.",
+		help="off / half / double / all. Omit to pick interactively.",
 	)
 	ap.add_argument("--base-id", default=None, help="Override CSR base id")
 	ap.add_argument("--pristine-dir", type=Path, default=PRISTINE_DIR)

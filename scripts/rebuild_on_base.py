@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -22,7 +23,7 @@ from libs.timing import Timer
 
 ROOT = Path(__file__).resolve().parent.parent
 CSR_FAMILY = ("csr", "csr-plus", "highwind")
-RATES = (0, 25, 50, 75)
+RATES = (0, 50, 200)
 
 FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
@@ -169,6 +170,43 @@ def run(label: str, cmd: list[str], timer: Timer) -> None:
 			raise SystemExit(f"\n{label} failed -- fix it, then rerun.")
 
 
+def remove_retired_encounter_packs() -> None:
+	"""Delete published encounter choices no longer listed in ``RATES``."""
+	builder = ROOT / "builder"
+	removed_ids: set[str] = set()
+	for pack_dir in builder.iterdir():
+		if not pack_dir.is_dir():
+			continue
+		pack_id = pack_dir.name
+		is_encounter_pack = (
+			pack_id.startswith("field-encounter")
+			or pack_id.startswith("world-encounter")
+		)
+		rate_text = pack_id.rsplit("-", 1)[-1]
+		if not is_encounter_pack or not rate_text.isdigit():
+			continue
+		if int(rate_text) in RATES:
+			continue
+		shutil.rmtree(pack_dir)
+		removed_ids.add(pack_id)
+
+	if not removed_ids:
+		return
+
+	manifest_path = builder / "manifest.json"
+	manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+	addons = manifest.get("addons") or []
+	manifest["addons"] = [
+		addon for addon in addons if str(addon.get("id", "")) not in removed_ids
+	]
+	manifest_path.write_text(
+		json.dumps(manifest, indent=2) + "\n",
+		encoding="utf-8",
+		newline="\n",
+	)
+	print(f"Removed {len(removed_ids)} retired encounter packs.")
+
+
 def verify_one(against: str, discs: list[int], csr: Path | None, timer: Timer) -> None:
 	for addon in pack_ids(against):
 		for disc in discs:
@@ -249,6 +287,7 @@ def main() -> int:
 	for label, cmd in recuts:
 		run(label, cmd, timer)
 
+	remove_retired_encounter_packs()
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")
 

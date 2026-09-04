@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Patch a decompressed FIELD.BIN with a tracked RCnt2 encounter stub.
 
-The input is a mutable FIELD.BIN.dec and the density selects one of the shipped
-0/25/50/75 byte sequences. Output overwrites that file at the fixed stub and
-JAL offsets; patch bytes come from this mod's tracked ``patches`` directory,
-with embedded compatibility fallbacks. Length and file bounds are enforced,
-but this low-level command does not decompress, recompress, or verify an ISO."""
+The input is a mutable FIELD.BIN.dec and the encounter choice selects one of
+the shipped 0/50/200 byte sequences. Output overwrites that file at the fixed
+stub and JAL offsets; patch bytes come from this mod's tracked ``patches``
+directory."""
 from __future__ import annotations
 
 import argparse
@@ -22,45 +21,17 @@ _MOD = Path(__file__).resolve().parents[1]
 _PATCH_DIR = _MOD / "patches"
 
 RATE_MARKERS = {
-	0: bytes.fromhex("00 00 00 00 00 00 00 00"),  # Off: no threshold ops; danger cleared
-	25: bytes.fromhex("82 18 03 00 00 00 00 00"),
+	0: bytes.fromhex("07 80 01 3c 3c 17 20 a4"),
 	50: bytes.fromhex("42 18 03 00 00 00 00 00"),
-	75: bytes.fromhex("82 08 03 00 23 18 61 00"),
+	200: bytes.fromhex("40 18 03 00 02 0a 03 00"),
 }
 
-# Used only when the matching patches/*.hex file is missing. Length and
-# instruction bytes must still match the tracked stub for that rate.
-_FALLBACK = {
-	25: (
-		"80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c"
-		"19 2f 23 90 ff 00 42 30 82 18 03 00 00 00 00 00"
-		"2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4"
-		+ (" 00 00 00 00" * 10)
-	),
-	50: (
-		"80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c"
-		"19 2f 23 90 ff 00 42 30 42 18 03 00 00 00 00 00"
-		"2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4"
-		+ (" 00 00 00 00" * 10)
-	),
-	75: (
-		"80 1f 01 3c 20 11 22 8c 00 00 00 00 06 80 01 3c"
-		"19 2f 23 90 ff 00 42 30 82 08 03 00 23 18 61 00"
-		"2b 10 43 00 23 10 02 00 07 80 01 3c 3c 17 22 a4"
-		+ (" 00 00 00 00" * 10)
-	),
-}
-
-
-def _load_hex(name: str, fallback: str = "") -> bytes:
-	"""Read tracked hex from patches/; use fallback only if that file is absent."""
+def _load_hex(name: str) -> bytes:
+	"""Read one tracked patch file."""
 	path = _PATCH_DIR / name
-	if path.is_file():
-		text = path.read_text()
-	elif fallback:
-		text = fallback
-	else:
+	if not path.is_file():
 		raise SystemExit(f"missing patch file: {path}")
+	text = path.read_text()
 	return bytes.fromhex(text.replace("\n", " "))
 
 
@@ -68,11 +39,10 @@ def stub_for_rate(rate: int) -> bytes:
 	"""Load the exact tracked instruction bytes for one shipped rate."""
 	if rate not in RATES:
 		raise SystemExit(f"rate must be one of {RATES}, got {rate}")
-	return _load_hex(f"stub-bb7c-rate{rate}.hex", _FALLBACK.get(rate, ""))
+	return _load_hex(f"stub-bb7c-rate{rate}.hex")
 
 
-JAL = _load_hex("jal-bbd4.hex", "72 ae 02 0c")
-STUB = stub_for_rate(50)
+JAL = _load_hex("jal-bbd4.hex")
 
 
 def apply_stub(path: Path, rate: int = 50) -> bytes:
@@ -98,7 +68,7 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="DENSITY",
-		help="off / light / standard / dense (or 0 / 25 / 50 / 75). Omit to pick interactively.",
+		help="off / half / double (or 0 / 50 / 200). Omit to pick interactively.",
 	)
 	args = ap.parse_args()
 	rate = (

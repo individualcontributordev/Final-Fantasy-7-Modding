@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Patch a decompressed WORLD.BIN with a tracked RCnt2 encounter stub.
 
-The mutable input and density select one of four fixed patch files. The command
-replaces the verified 104-byte instruction window and restores the tracked JAL
-word immediately after it; fixed offsets are decompressed-overlay offsets
-derived from the documented virtual-address window. It does not decompress,
-recompress, inject, or repair disc sectors."""
+The mutable input and encounter choice select one of three fixed patch files.
+The command replaces the verified 104-byte instruction window and restores the
+tracked JAL word immediately after it."""
 from __future__ import annotations
 
 import argparse
@@ -25,10 +23,9 @@ JAL_OFFSET = 0x17E1C
 STUB_LEN = 104
 
 RATE_MARKERS = {
-	0: bytes.fromhex("00 00 00 00"),  # Off
-	25: bytes.fromhex("82 18 03 00"),  # srl v1,v1,2
-	50: bytes.fromhex("42 18 03 00"),  # srl v1,v1,1
-	75: bytes.fromhex("40 08 03 00"),  # sll at,v1,1 (start of *3/4)
+	0: bytes.fromhex("11 80 01 3c 84 62 20 ac"),
+	50: bytes.fromhex("42 18 03 00 00 00 00 00"),
+	200: bytes.fromhex("40 18 03 00 02 0a 03 00"),
 }
 
 
@@ -71,7 +68,7 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="DENSITY",
-		help="off / light / standard / dense (or 0 / 25 / 50 / 75). Omit to pick interactively.",
+		help="off / half / double (or 0 / 50 / 200). Omit to pick interactively.",
 	)
 	args = ap.parse_args()
 	rate = (

@@ -131,7 +131,7 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="DENSITY",
-		help="light / standard / dense (or 25 / 50 / 75). Omit to pick interactively.",
+		help="off / half / double (or 0 / 50 / 200). Omit to pick interactively.",
 	)
 	ap.add_argument(
 		"--keep-dec",
