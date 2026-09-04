@@ -29,27 +29,6 @@ FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.p
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
 FANFARE = ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
 
-PACK_PREFIX = {
-	"field": {
-		"clean": "field-encounter",
-		"csr": "field-encounter-on-csr",
-		"csr-plus": "field-encounter-on-csr-plus",
-		"highwind": "field-encounter-on-highwind",
-	},
-	"world": {
-		"clean": "world-encounter",
-		"csr": "world-encounter-on-csr",
-		"csr-plus": "world-encounter-on-csr-plus",
-		"highwind": "world-encounter-on-highwind",
-	},
-	"fanfare": {
-		"clean": "fanfare-skip",
-		"csr": "fanfare-skip-on-csr",
-		"csr-plus": "fanfare-skip-on-csr-plus",
-		"highwind": "fanfare-skip-on-highwind",
-	},
-}
-
 
 def require_lf_json() -> None:
 	"""Refuse to start if git will not round-trip published layer bytes.
@@ -136,12 +115,6 @@ def discs_for(against: str, manifest: dict | None) -> list[int]:
 	return keys
 
 
-def pack_ids(against: str) -> list[str]:
-	field = [f"{PACK_PREFIX['field'][against]}-{rate}" for rate in RATES]
-	world = [f"{PACK_PREFIX['world'][against]}-{rate}" for rate in RATES]
-	return field + world + [PACK_PREFIX["fanfare"][against]]
-
-
 def recut_commands(
 	against: str, discs: list[int], csr: Path | None
 ) -> list[tuple[str, list[str]]]:
@@ -207,25 +180,6 @@ def remove_retired_encounter_packs() -> None:
 	print(f"Removed {len(removed_ids)} retired encounter packs.")
 
 
-def verify_one(against: str, discs: list[int], csr: Path | None, timer: Timer) -> None:
-	for addon in pack_ids(against):
-		for disc in discs:
-			cmd = [
-				sys.executable,
-				str(ROOT / "scripts" / "verify_builder_config.py"),
-				"--disc",
-				str(disc),
-				"--base",
-				against,
-				"--addon",
-				addon,
-				"--no-cache",
-			]
-			if csr is not None:
-				cmd += ["--csr-root", str(csr)]
-			run(f"verify {addon} disc {disc}", cmd, timer)
-
-
 def main() -> int:
 	ap = argparse.ArgumentParser(
 		description="Recut field, world, and fanfare packs against current bases."
@@ -236,11 +190,6 @@ def main() -> int:
 		help="csr, csr-plus, highwind, clean, and/or all (CSR-family only)",
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
-	ap.add_argument(
-		"--verify",
-		action="store_true",
-		help="Run verify_builder_config.py on every rebuilt pack (slow)",
-	)
 	args = ap.parse_args()
 	timer = Timer()
 	with timer.stage("lf_check"):
@@ -290,10 +239,7 @@ def main() -> int:
 	remove_retired_encounter_packs()
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")
-
-	if args.verify:
-		for against in bases:
-			verify_one(against, discs_for(against, manifest), csr, timer)
+	print("Then: python scripts/verify_builder_config.py all   # or clean, csr, ...")
 	timer.total()
 	return 0
 
