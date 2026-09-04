@@ -18,9 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Standard (50%)",
   "discDigests": {
-    "1": "2c41e4ec8beb49d5ff1f02ca567b871c7df5add63ae6adc327af442a56e54457",
+    "1": "885d9d8bae10547bfe68373cbcab4f9de5be902cc797b4674e98fc455f776a13",
     "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
     "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
   },
-  "baseVersion": "0.5.2"
+  "baseVersion": "0.5.3"
 }
