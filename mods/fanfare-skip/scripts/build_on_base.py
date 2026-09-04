@@ -27,6 +27,7 @@ for pth in (_SHARED, _MOD_SCRIPTS):
 		sys.path.insert(0, str(pth))
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
+from libs.timing import Timer  # noqa: E402
 from build_batres_x import build as build_batres  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
@@ -288,6 +289,7 @@ def build_one(
 	manifest_path: Path | None,
 	csr_manifest: dict | None,
 	keep_work: bool,
+	timer: Timer,
 ):
 	"""Build and round-trip verify one fanfare layer in disposable work."""
 	cfg = dict(AGAINST[against])
@@ -337,13 +339,16 @@ def build_one(
 			raise SystemExit("base layer must be ic-layer-v1")
 
 	base_bin = work_dir / "base.bin"
-	make_base_image(pristine, layer, base_bin)
-	patched_bin = patch_and_inject(base_bin, work_dir)
+	with timer.stage("apply_base"):
+		make_base_image(pristine, layer, base_bin)
+	with timer.stage("overlay"):
+		patched_bin = patch_and_inject(base_bin, work_dir)
 	repaired_bin = work_dir / "patched.repaired.bin"
 	print("=== repair MODE2 Form 1 footers ===")
 	# Repair against the selected parent, not retail pristine. A base may have
 	# unrelated historical footer differences that do not belong in this mod.
-	repair(base_bin, patched_bin, repaired_bin)
+	with timer.stage("repair"):
+		repair(base_bin, patched_bin, repaired_bin)
 
 	print("=== diff -> fanfare-skip layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
@@ -351,13 +356,14 @@ def build_one(
 	out_path = out_dir / f"disc{disc}.layer.json"
 	layer_id = f"{cfg['prefix_stem']}-disc{disc}-v{version}"
 	description = f"Fanfare skip -- NTSC-U Disc {disc} (against {base_id})"
-	built = build_layer(
-		base_bin,
-		repaired_bin,
-		layer_id=layer_id,
-		description=description,
-	)
-	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
+	with timer.stage("diff"):
+		built = build_layer(
+			base_bin,
+			repaired_bin,
+			layer_id=layer_id,
+			description=description,
+		)
+		out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
 	stats = built["stats"]
 	print(
 		f"  wrote {out_path.relative_to(_ROOT)}  "
@@ -367,12 +373,13 @@ def build_one(
 		raise SystemExit("Empty layer -- patch/inject produced no disc changes")
 
 	print("=== verify ===")
-	check = bytearray(base_bin.read_bytes())
-	apply_layer(check, built)
-	# Exact reconstruction also covers the zero padding added to BATRES.X's
-	# fixed ISO slot, which is part of the published disc-byte layer.
-	if bytes(check) != repaired_bin.read_bytes():
-		raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
+	with timer.stage("verify"):
+		check = bytearray(base_bin.read_bytes())
+		apply_layer(check, built)
+		# Exact reconstruction also covers the zero padding added to BATRES.X's
+		# fixed ISO slot, which is part of the published disc-byte layer.
+		if bytes(check) != repaired_bin.read_bytes():
+			raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
 	print("  OK")
 
 	if not keep_work:
@@ -398,6 +405,7 @@ def main() -> int:
 	)
 	ap.add_argument("--keep-work", action="store_true")
 	args = ap.parse_args()
+	timer = Timer()
 
 	version = args.version or read_version()
 	discs = parse_discs(args.discs)
@@ -427,6 +435,7 @@ def main() -> int:
 				manifest_path=manifest_path,
 				csr_manifest=csr_manifest,
 				keep_work=args.keep_work,
+				timer=timer,
 			)
 			rec = built.setdefault(
 				pack_id,
@@ -470,6 +479,7 @@ def main() -> int:
 		print(f"Updated pack + manifest: {pack_id}")
 
 	print("\nAll done.")
+	timer.total()
 	return 0
 
 

@@ -17,6 +17,8 @@ import sys
 import zlib
 from pathlib import Path
 
+from libs.timing import stage
+
 GZIPPS_HEADER_SIZE = 8
 
 
@@ -158,9 +160,10 @@ def compress_gzipps(
             file=sys.stderr,
         )
 
-    compressed_payload, method = _best_gzip_payload(
-        uncompressed, prefer_payload_max, header10
-    )
+    with stage("compress"):
+        compressed_payload, method = _best_gzip_payload(
+            uncompressed, prefer_payload_max, header10
+        )
     out = struct.pack("<I", len(uncompressed)) + gzip_subheader + compressed_payload
 
     if dst is None:

@@ -25,6 +25,7 @@ from libs.local_paths import (
     default_pristine_arg,
     ensure_parent_image,
 )
+from libs.timing import Timer
 
 
 def _load_manifest(path: Path) -> tuple[Path, dict]:
@@ -129,6 +130,7 @@ def main() -> int:
         help="Do not write cache/<base>/ when reconstructing a CSR base",
     )
     args = ap.parse_args()
+    timer = Timer()
 
     pristine = (
         args.pristine.expanduser().resolve()
@@ -161,17 +163,19 @@ def main() -> int:
     else:
         if csr is None and base_id not in catalog:
             raise SystemExit("Pass --csr-root or set FF7_CSR_ROOT")
-        parent_bytes, parent_path = ensure_parent_image(
-            base_id=base_id,
-            disc=args.disc,
-            pristine=pristine,
-            csr=csr,
-            use_cache=not args.no_cache,
-        )
-        image = bytearray(parent_bytes)
+        with timer.stage("load_base"):
+            parent_bytes, parent_path = ensure_parent_image(
+                base_id=base_id,
+                disc=args.disc,
+                pristine=pristine,
+                csr=csr,
+                use_cache=not args.no_cache,
+            )
+            image = bytearray(parent_bytes)
         if base_id in catalog:
             lp = _layer_path(catalog[base_id], args.disc)
-            n = _check_records(image, lp)
+            with timer.stage("check_base"):
+                n = _check_records(image, lp)
             total_recs += n
             stack.append(f"base:{base_id} ({n} records)")
             print(f"  OK base {base_id} <- {lp.name} ({n} records, src={parent_path})")
@@ -201,20 +205,23 @@ def main() -> int:
                 "or the builder will hide this mod."
             )
         lp = _layer_path(meta, args.disc)
-        n = _apply_and_check(image, lp)
+        with timer.stage(f"addon {addon_id}"):
+            n = _apply_and_check(image, lp)
         total_recs += n
         stack.append(f"addon:{addon_id} ({lp.name}, {n} records)")
         print(f"  OK addon {addon_id} <- {lp.relative_to(meta['builder_dir'])} ({n} records)")
 
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_bytes(image)
+        with timer.stage("write"):
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(image)
         print(f"Wrote {args.output} ({len(image)} bytes)")
 
     print("Stack:")
     for line in stack:
         print(f"  - {line}")
     print(f"PASS -- builder config applies cleanly ({total_recs} total records)")
+    timer.total()
     return 0
 
 
