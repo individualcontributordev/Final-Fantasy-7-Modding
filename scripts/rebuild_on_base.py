@@ -4,10 +4,9 @@
 Run on a machine holding retail NTSC-U BINs. Writes ``builder/`` and does not
 commit.
 
-``all`` is every base, clean included. After a base version bump ``csr-family``
-skips clean, whose packs carry no version pin and cannot have gone stale.
-Discs come from the CSR manifest. Recuts run one at a time and stream their
-output; the first failure stops the run.
+``all`` is every base, clean included. Discs come from the CSR manifest.
+Recuts run one at a time and stream their output; the first failure stops the
+run.
 """
 
 from __future__ import annotations
@@ -188,7 +187,7 @@ def main() -> int:
 	ap.add_argument(
 		"bases",
 		nargs="+",
-		help="all (every base), csr-family (skip clean), clean, csr, csr-plus, highwind",
+		help="all, clean, csr, csr-plus, and/or highwind",
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
 	args = ap.parse_args()
