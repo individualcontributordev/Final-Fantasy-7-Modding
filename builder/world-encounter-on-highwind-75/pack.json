@@ -19,7 +19,7 @@
     "2": "8ecea313daae3b60190aa2f772132429eb46c3c41212e77dc1b4bf742891d5fa",
     "3": "669176edf745beea9ffe268207e7e3b9ea67a738a855702e70ff10bb05aeef71"
   },
-  "baseVersion": "0.5.2",
+  "baseVersion": "0.5.3",
   "rate": 75,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Dense (75%)"

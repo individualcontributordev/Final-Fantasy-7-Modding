@@ -18,9 +18,9 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Light (25%)",
   "discDigests": {
-    "1": "dbcf442d61ce1839f0c2832d7808f19a8beff69c3aa274c8fbace18e9c8edc4f",
+    "1": "0930e211b80d24df14e592e67121e6feb7d82f1243a34b1a1baf8974b1064c27",
     "2": "493fa1ca3d3bdc02781c2786f6dd375a0a1a0bd2fc4d636bf68218edfd912609",
     "3": "5ee1b67e2a7749e9e7348fb0195fe5818e6211554db4f19240dd698818a5b520"
   },
-  "baseVersion": "0.5.2"
+  "baseVersion": "0.5.3"
 }

@@ -474,242 +474,6 @@
       "baseVersion": "0.14.3"
     },
     {
-      "id": "field-encounter-on-highwind-0",
-      "name": "Field Random Encounters -- Off (0%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-0/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-0/layers/disc3.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
-      "discDigests": {
-        "1": "ab3153502d1275a5b36a8d825dd7bd729b650f77212df0628523357396ff0b4f",
-        "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
-        "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
-      },
-      "baseVersion": "0.5.2",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-highwind-25",
-      "name": "Field Random Encounters -- Light (25%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-25/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-25/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-25/layers/disc3.layer.json"
-      },
-      "rate": 25,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)",
-      "discDigests": {
-        "1": "dbcf442d61ce1839f0c2832d7808f19a8beff69c3aa274c8fbace18e9c8edc4f",
-        "2": "493fa1ca3d3bdc02781c2786f6dd375a0a1a0bd2fc4d636bf68218edfd912609",
-        "3": "5ee1b67e2a7749e9e7348fb0195fe5818e6211554db4f19240dd698818a5b520"
-      },
-      "baseVersion": "0.5.2",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-highwind-50",
-      "name": "Field Random Encounters -- Standard (50%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-50/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-50/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-50/layers/disc3.layer.json"
-      },
-      "rate": 50,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)",
-      "discDigests": {
-        "1": "2c41e4ec8beb49d5ff1f02ca567b871c7df5add63ae6adc327af442a56e54457",
-        "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
-        "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
-      },
-      "baseVersion": "0.5.2",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-highwind-75",
-      "name": "Field Random Encounters -- Dense (75%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-75/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-75/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-75/layers/disc3.layer.json"
-      },
-      "rate": 75,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)",
-      "discDigests": {
-        "1": "d34cc99bace4e59b47cecdcb7f01b9fcc66269c44e8ef43a31c70731a4a13440",
-        "2": "581b76760a0a31e6ceff329d4d0cc5e565fbd1d73ec9e350b18a0eaf14afd5c8",
-        "3": "2607f70883e5a1867f18d0b4cb235dbf2a3890a5c6a7247ed2301979b3f1dfc8"
-      },
-      "baseVersion": "0.5.2",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-0",
-      "name": "World Random Encounters -- Off (0%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-0/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-0/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "182dd50bab7d7869fbf7e75447324ac5a2a0183ef908ba14333bbbff0a491465",
-        "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
-        "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
-      },
-      "baseVersion": "0.5.2",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-25",
-      "name": "World Random Encounters -- Light (25%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-25/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-25/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-25/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "1757f6cfc5e0f5e70251de2233d8dfe6353cdf03aa3ecf8fbb8b7ec2a0343b7e",
-        "2": "94aa091ca23621efa421a13c722576aa28e58f16a8882e654c23d29b159e73e2",
-        "3": "a2e259c98157034d5c92834d3de10bc75ac5291e2b9a4ea4d8da363ed749c304"
-      },
-      "baseVersion": "0.5.2",
-      "rate": 25,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-50",
-      "name": "World Random Encounters -- Standard (50%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-50/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-50/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-50/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "49b54e772099ba84cf9fb83dcdf3ce79b41a873324ed6aeefc812a2c2b25042d",
-        "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
-        "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
-      },
-      "baseVersion": "0.5.2",
-      "rate": 50,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-75",
-      "name": "World Random Encounters -- Dense (75%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-75/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-75/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-75/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "2dd72851e109a040eaa37c7766c378dc769250f485148a5ecba507b6e9844362",
-        "2": "8ecea313daae3b60190aa2f772132429eb46c3c41212e77dc1b4bf742891d5fa",
-        "3": "669176edf745beea9ffe268207e7e3b9ea67a738a855702e70ff10bb05aeef71"
-      },
-      "baseVersion": "0.5.2",
-      "rate": 75,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-highwind",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.2"
-    },
-    {
       "id": "field-encounter-on-csr-plus-0",
       "name": "Field Random Encounters -- Off (0%) (on CSR+)",
       "kind": "mod",
@@ -912,6 +676,242 @@
       },
       "enabled": true,
       "baseVersion": "0.2.4"
+    },
+    {
+      "id": "field-encounter-on-highwind-0",
+      "name": "Field Random Encounters -- Off (0%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json",
+        "2": "./field-encounter-on-highwind-0/layers/disc2.layer.json",
+        "3": "./field-encounter-on-highwind-0/layers/disc3.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Off (0%)",
+      "discDigests": {
+        "1": "9c7e3fbe4acf6c2753d9b18cf6d4ea2f25e4a3fe078608f5602297b5b194bd9a",
+        "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
+        "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
+      },
+      "baseVersion": "0.5.3",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-25",
+      "name": "Field Random Encounters -- Light (25%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Fewer random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-25/layers/disc1.layer.json",
+        "2": "./field-encounter-on-highwind-25/layers/disc2.layer.json",
+        "3": "./field-encounter-on-highwind-25/layers/disc3.layer.json"
+      },
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)",
+      "discDigests": {
+        "1": "0930e211b80d24df14e592e67121e6feb7d82f1243a34b1a1baf8974b1064c27",
+        "2": "493fa1ca3d3bdc02781c2786f6dd375a0a1a0bd2fc4d636bf68218edfd912609",
+        "3": "5ee1b67e2a7749e9e7348fb0195fe5818e6211554db4f19240dd698818a5b520"
+      },
+      "baseVersion": "0.5.3",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-50",
+      "name": "Field Random Encounters -- Standard (50%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Moderate random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-50/layers/disc1.layer.json",
+        "2": "./field-encounter-on-highwind-50/layers/disc2.layer.json",
+        "3": "./field-encounter-on-highwind-50/layers/disc3.layer.json"
+      },
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)",
+      "discDigests": {
+        "1": "885d9d8bae10547bfe68373cbcab4f9de5be902cc797b4674e98fc455f776a13",
+        "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
+        "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
+      },
+      "baseVersion": "0.5.3",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-75",
+      "name": "Field Random Encounters -- Dense (75%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "More random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-75/layers/disc1.layer.json",
+        "2": "./field-encounter-on-highwind-75/layers/disc2.layer.json",
+        "3": "./field-encounter-on-highwind-75/layers/disc3.layer.json"
+      },
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)",
+      "discDigests": {
+        "1": "610e521c1c4ab54eb044118387a3ad74926c2347a512338bfec16a62df57d2d3",
+        "2": "581b76760a0a31e6ceff329d4d0cc5e565fbd1d73ec9e350b18a0eaf14afd5c8",
+        "3": "2607f70883e5a1867f18d0b4cb235dbf2a3890a5c6a7247ed2301979b3f1dfc8"
+      },
+      "baseVersion": "0.5.3",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-0",
+      "name": "World Random Encounters -- Off (0%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json",
+        "2": "./world-encounter-on-highwind-0/layers/disc2.layer.json",
+        "3": "./world-encounter-on-highwind-0/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "182dd50bab7d7869fbf7e75447324ac5a2a0183ef908ba14333bbbff0a491465",
+        "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
+        "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
+      },
+      "baseVersion": "0.5.3",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Off (0%)",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-25",
+      "name": "World Random Encounters -- Light (25%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Fewer random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-25/layers/disc1.layer.json",
+        "2": "./world-encounter-on-highwind-25/layers/disc2.layer.json",
+        "3": "./world-encounter-on-highwind-25/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "1757f6cfc5e0f5e70251de2233d8dfe6353cdf03aa3ecf8fbb8b7ec2a0343b7e",
+        "2": "94aa091ca23621efa421a13c722576aa28e58f16a8882e654c23d29b159e73e2",
+        "3": "a2e259c98157034d5c92834d3de10bc75ac5291e2b9a4ea4d8da363ed749c304"
+      },
+      "baseVersion": "0.5.3",
+      "rate": 25,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Light (25%)",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-50",
+      "name": "World Random Encounters -- Standard (50%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Moderate random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-50/layers/disc1.layer.json",
+        "2": "./world-encounter-on-highwind-50/layers/disc2.layer.json",
+        "3": "./world-encounter-on-highwind-50/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "49b54e772099ba84cf9fb83dcdf3ce79b41a873324ed6aeefc812a2c2b25042d",
+        "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
+        "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
+      },
+      "baseVersion": "0.5.3",
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Standard (50%)",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-75",
+      "name": "World Random Encounters -- Dense (75%) (on Highwind)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "More random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-75/layers/disc1.layer.json",
+        "2": "./world-encounter-on-highwind-75/layers/disc2.layer.json",
+        "3": "./world-encounter-on-highwind-75/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "2dd72851e109a040eaa37c7766c378dc769250f485148a5ecba507b6e9844362",
+        "2": "8ecea313daae3b60190aa2f772132429eb46c3c41212e77dc1b4bf742891d5fa",
+        "3": "669176edf745beea9ffe268207e7e3b9ea67a738a855702e70ff10bb05aeef71"
+      },
+      "baseVersion": "0.5.3",
+      "rate": 75,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Dense (75%)",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-highwind",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.3"
     }
   ],
   "bases": [],
