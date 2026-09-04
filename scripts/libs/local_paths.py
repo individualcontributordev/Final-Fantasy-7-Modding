@@ -12,6 +12,31 @@ ROOT = Path(__file__).resolve().parents[2]
 PRISTINE_DIR = ROOT / "workspace" / "pristine"
 CACHE_DIR = ROOT / "cache"
 CSR_BASES = ("csr", "csr-plus", "highwind")
+ALL_BASES = CSR_BASES + ("clean",)
+
+
+def expand_base_names(tokens: list[str]) -> list[str]:
+    """Resolve CLI base names, preserving order and dropping duplicates.
+
+    ``all`` means every published base including ``clean``. Leaving clean out
+    of ``all`` let the pristine packs sit unrebuilt for weeks, because nothing
+    in a run says which base you skipped. Use ``csr-family`` after a base
+    version bump, when the pristine packs provably cannot have changed.
+    """
+    wanted: list[str] = []
+    for token in tokens:
+        if token == "all":
+            wanted.extend(ALL_BASES)
+        elif token == "csr-family":
+            wanted.extend(CSR_BASES)
+        elif token in ALL_BASES:
+            wanted.append(token)
+        else:
+            raise SystemExit(
+                f"Unknown base {token!r}. Use all, csr-family, clean, csr, "
+                "csr-plus, or highwind."
+            )
+    return list(dict.fromkeys(wanted))
 
 
 def pristine_bin(disc: int) -> Path:

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Recut field, world, and fanfare packs against one or more exclusive bases.
 
-Run after a CSR base version bump, on a machine holding retail NTSC-U BINs.
-Writes ``builder/`` and does not commit.
+Run on a machine holding retail NTSC-U BINs. Writes ``builder/`` and does not
+commit.
 
-``all`` is csr + csr-plus + highwind; ``clean`` recuts the pristine packs.
+``all`` is every base, clean included. After a base version bump ``csr-family``
+skips clean, whose packs carry no version pin and cannot have gone stale.
 Discs come from the CSR manifest. Recuts run one at a time and stream their
 output; the first failure stops the run.
 """
@@ -19,10 +20,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+from libs.local_paths import expand_base_names
 from libs.timing import Timer
 
 ROOT = Path(__file__).resolve().parent.parent
-CSR_FAMILY = ("csr", "csr-plus", "highwind")
 RATES = (0, 50, 200)
 
 FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
@@ -187,7 +188,7 @@ def main() -> int:
 	ap.add_argument(
 		"bases",
 		nargs="+",
-		help="csr, csr-plus, highwind, clean, and/or all (CSR-family only)",
+		help="all (every base), csr-family (skip clean), clean, csr, csr-plus, highwind",
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
 	args = ap.parse_args()
@@ -196,16 +197,7 @@ def main() -> int:
 		require_lf_json()
 	require_zopfli()
 
-	wanted: list[str] = []
-	for token in args.bases:
-		if token == "all":
-			wanted.extend(CSR_FAMILY)
-		elif token in CSR_FAMILY or token == "clean":
-			wanted.append(token)
-		else:
-			raise SystemExit(f"Unknown base {token!r}")
-	# Preserve order, drop duplicates (all + csr).
-	bases = list(dict.fromkeys(wanted))
+	bases = expand_base_names(args.bases)
 
 	csr = None
 	manifest = None
