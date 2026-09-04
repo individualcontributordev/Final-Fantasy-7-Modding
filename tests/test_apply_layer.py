@@ -187,7 +187,7 @@ class BuildAddonLayerTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
             )
-            self.assertIn("OK — layer apply matches patched image", result.stdout)
+            self.assertIn("OK -- layer apply matches patched image", result.stdout)
             published = json.loads(
                 (pack_dir / "layers" / "disc1.layer.json").read_text(encoding="utf-8")
             )
