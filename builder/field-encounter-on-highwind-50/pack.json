@@ -1,9 +1,9 @@
 {
   "id": "field-encounter-on-highwind-50",
-  "name": "Field Random Encounters -- Standard (50%) (on Highwind)",
+  "name": "Field Random Encounters -- Half Enc Rate (on Highwind)",
   "kind": "mod",
-  "version": "0.2.0",
-  "blurb": "Moderate random field battles.",
+  "version": "0.3.0",
+  "blurb": "Random field battles use half the area's normal encounter threshold.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
@@ -16,9 +16,9 @@
   },
   "rate": 50,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Standard (50%)",
+  "optionLabel": "Half Enc Rate",
   "discDigests": {
-    "1": "885d9d8bae10547bfe68373cbcab4f9de5be902cc797b4674e98fc455f776a13",
+    "1": "c5fefd49bcb95de5c5ad36b10ada5f44dac426079e0bb23800916d60aadf391d",
     "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
     "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
   },

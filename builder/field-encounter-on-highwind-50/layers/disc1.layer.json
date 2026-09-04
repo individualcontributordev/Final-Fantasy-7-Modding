@@ -1,6 +1,6 @@
 {
   "format": "ic-layer-v1",
-  "id": "field-encounter-on-highwind-50-disc1-v0.2.0",
+  "id": "field-encounter-on-highwind-50-disc1-v0.3.0",
   "description": "Field encounters 50% RCnt2 FORCE stub -- NTSC-U Disc 1 (against highwind)",
   "target": "disc-image",
   "stats": {

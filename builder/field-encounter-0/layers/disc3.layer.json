@@ -1,15 +1,23 @@
 {
   "format": "ic-layer-v1",
-  "id": "field-encounter-0-disc3-v0.2.0",
-  "description": "Field encounters 0% RCnt2 FORCE stub \u2014 NTSC-U Disc 3 (against clean)",
+  "id": "field-encounter-0-disc3-v0.3.0",
+  "description": "Field encounters 0% RCnt2 FORCE stub -- NTSC-U Disc 3 (against clean)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 659561952,
     "modifiedBytes": 659561952,
-    "changedBytes": 85068,
-    "records": 392
+    "changedBytes": 85072,
+    "records": 394
   },
   "records": [
+    {
+      "offset": 129166056,
+      "hex": "e23c"
+    },
+    {
+      "offset": 129166062,
+      "hex": "3ce2"
+    },
     {
       "offset": 129360040,
       "hex": "02038c9875"

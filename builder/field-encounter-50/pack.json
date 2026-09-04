@@ -1,9 +1,9 @@
 {
   "id": "field-encounter-50",
-  "name": "Field Random Encounters \u2014 Standard (50%)",
+  "name": "Field Random Encounters -- Half Enc Rate",
   "kind": "mod",
-  "version": "0.2.0",
-  "blurb": "Moderate random field battles.",
+  "version": "0.3.0",
+  "blurb": "Random field battles use half the area's normal encounter threshold.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
@@ -16,10 +16,10 @@
   },
   "rate": 50,
   "groupLabel": "Field Random Encounters",
-  "optionLabel": "Standard (50%)",
+  "optionLabel": "Half Enc Rate",
   "discDigests": {
-    "1": "8337f523717517d9c2bc468f0b58ff660eee10c5ece3dad1a7bd346a5fbf0715",
-    "2": "9e1847c90e5893380d62d73ca921b3613567fa2ee7ff062c74b62d5595f59013",
-    "3": "ecbbfeeae522a7e0a21c922beb294ac5016291230342f966f9078ae01c581127"
+    "1": "7c583c242ed51ba36c8fe4bcf31e21e9d2f561933a3fffb07090100ac0b093ca",
+    "2": "2cc6d1779051f2d43223483d8972fed33782fcd248c05818d4d8f77bef3b3c28",
+    "3": "cbd5f6613a1dfa78ff028c8b059b1704111b6192586c287b10479756b5c1e1cc"
   }
 }

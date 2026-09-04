@@ -3,241 +3,10 @@
   "source": "Final-Fantasy-7-Modding",
   "addons": [
     {
-      "id": "field-encounter-25",
-      "name": "Field Random Encounters \u2014 Light (25%)",
-      "kind": "mod",
-      "blurb": "Fewer random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./field-encounter-25/layers/disc1.layer.json",
-        "2": "./field-encounter-25/layers/disc2.layer.json",
-        "3": "./field-encounter-25/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 25,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "af5aa516bfc233d3b6b7e1485f4ccea172568b6ce1ad82c62440648d47f83e8f",
-        "2": "4ea6d5b541a4757e1bb1956c8cb163876574a2058dff87856f105e1d3d137415",
-        "3": "fda094d964dd486a3d450d026e3382f13e33338033863b421d4020d8c0cb0cf9"
-      }
-    },
-    {
-      "id": "field-encounter-50",
-      "name": "Field Random Encounters \u2014 Standard (50%)",
-      "kind": "mod",
-      "blurb": "Moderate random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./field-encounter-50/layers/disc1.layer.json",
-        "2": "./field-encounter-50/layers/disc2.layer.json",
-        "3": "./field-encounter-50/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 50,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "8337f523717517d9c2bc468f0b58ff660eee10c5ece3dad1a7bd346a5fbf0715",
-        "2": "9e1847c90e5893380d62d73ca921b3613567fa2ee7ff062c74b62d5595f59013",
-        "3": "ecbbfeeae522a7e0a21c922beb294ac5016291230342f966f9078ae01c581127"
-      }
-    },
-    {
-      "id": "field-encounter-75",
-      "name": "Field Random Encounters \u2014 Dense (75%)",
-      "kind": "mod",
-      "blurb": "More random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./field-encounter-75/layers/disc1.layer.json",
-        "2": "./field-encounter-75/layers/disc2.layer.json",
-        "3": "./field-encounter-75/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 75,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "27ff347b21419239110231949b98734adc5c011077f10d2e52bbbeb5fe071990",
-        "2": "cc788984a91ca4a412661c845e8a3cf90a30c973b3ce0ebb0cd9d6d3cc301baa",
-        "3": "3fe2cab29926fc656e0ed31a5779b34f0de537d8e395a08ebe0cee1946e62a4e"
-      }
-    },
-    {
-      "id": "world-encounter-25",
-      "name": "World Random Encounters \u2014 Light (25%)",
-      "kind": "mod",
-      "blurb": "Fewer random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./world-encounter-25/layers/disc1.layer.json",
-        "2": "./world-encounter-25/layers/disc2.layer.json",
-        "3": "./world-encounter-25/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 25,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "0704ae1b5a96bcd69790cb0efb2aa7e05310f85bedd8268ea3ee6caa9663e000",
-        "2": "6d3003952222a51b4351cb12fe2cd9da92d6a733f4a05150d22c132796ef51b7",
-        "3": "75092a29fc7bfa2a85a837976abb78d7ba4c1d6b7847f6c87ef15cda33ac1d50"
-      }
-    },
-    {
-      "id": "world-encounter-50",
-      "name": "World Random Encounters \u2014 Standard (50%)",
-      "kind": "mod",
-      "blurb": "Moderate random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./world-encounter-50/layers/disc1.layer.json",
-        "2": "./world-encounter-50/layers/disc2.layer.json",
-        "3": "./world-encounter-50/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 50,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "6a72c9e10531473d7b5f880fdac1a3a3f4dc54c2f69ff223a4f0715bac75af19",
-        "2": "a0ddeb8922336861b11a966cb7aa3ba744aec0835fe527cf809b977965352ddd",
-        "3": "ab66589d076694a0e7e96fa7557ebdcc45c3666e9fb64f98a2539e0f17419b6c"
-      }
-    },
-    {
-      "id": "world-encounter-75",
-      "name": "World Random Encounters \u2014 Dense (75%)",
-      "kind": "mod",
-      "blurb": "More random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./world-encounter-75/layers/disc1.layer.json",
-        "2": "./world-encounter-75/layers/disc2.layer.json",
-        "3": "./world-encounter-75/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 75,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "9c06b612bd9e7d2af7226e9fa2cad8642b22e6860d0378a4b3ba05fd7607910a",
-        "2": "38cb37f30c9c10673d82245352ba3607eafd19d31723a8f6c6f74e6b38789f5a",
-        "3": "577b67a4e0249ab3dbcda2af2e4fc25865d4f61968fc526dde02a30b1727442a"
-      }
-    },
-    {
-      "id": "field-encounter-0",
-      "name": "Field Random Encounters \u2014 Off (0%)",
-      "kind": "mod",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./field-encounter-0/layers/disc1.layer.json",
-        "2": "./field-encounter-0/layers/disc2.layer.json",
-        "3": "./field-encounter-0/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "36cf0346ad42d909e0e58ac9711ecf14e7282918b93298ebd3e1b8bdd07b34ad",
-        "2": "c48492de1a9058bbffd78ce0f8a9892c5513a9e9d15106af3fb6cea678175819",
-        "3": "ec3d9e47a77e3f83bcb24f99dc31d78e08bdb3c02a019bb25699209d9c3601fa"
-      }
-    },
-    {
-      "id": "world-encounter-0",
-      "name": "World Random Encounters \u2014 Off (0%)",
-      "kind": "mod",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./world-encounter-0/layers/disc1.layer.json",
-        "2": "./world-encounter-0/layers/disc2.layer.json",
-        "3": "./world-encounter-0/layers/disc3.layer.json"
-      },
-      "enabled": true,
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
-      "version": "0.2.0",
-      "discDigests": {
-        "1": "7a4616d7fa183659169f3f43752121fe1ce3768a99789350a753629baa4f0128",
-        "2": "04ccc5801f44bf2259f244ccd28005802a9d15066f1169ade3b6b274d5cf776b",
-        "3": "c56b0eeaf63f3c760dbf8d7bd51a792baefc1a9894d985397f526b9c1407e8f3"
-      }
-    },
-    {
-      "id": "fanfare-skip",
-      "name": "Fanfare Skip",
+      "id": "field-encounter-on-csr-0",
+      "name": "Field Random Encounters -- No Encs (on CSR)",
       "kind": "mod",
       "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses \u2014 loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./fanfare-skip/layers/disc1.layer.json",
-        "2": "./fanfare-skip/layers/disc2.layer.json",
-        "3": "./fanfare-skip/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "98d45cb00ed8e4288aac9c5ee139061b537a0973cf4f7912fcf4a82008331851",
-        "2": "e140b7741605cc636996c839ae353408ce17e37b6e424b6aeccb0adef405200c",
-        "3": "095a853f6e73596fbb0c838183130980aec545a37625181ce9d1167501401ffb"
-      },
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-0",
-      "name": "Field Random Encounters -- Off (0%) (on CSR)",
-      "kind": "mod",
-      "version": "0.2.0",
       "blurb": "No random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -251,48 +20,21 @@
       },
       "rate": 0,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
+      "optionLabel": "No Encs",
       "discDigests": {
-        "1": "4a38f60231837a57e2b6cf0e89136491ad640507b0c8cdef9b05486bd207bd9f",
-        "2": "930e2dddb03121b00004f6cda3265bbdb6bb1e6284579962f2e3e172a78614ed",
-        "3": "1ffc60cf1107a81ee199a1af7a6c5312809af137c7d5599c7c3fc9a410a05e3b"
-      },
-      "baseVersion": "0.14.3",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-25",
-      "name": "Field Random Encounters -- Light (25%) (on CSR)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-25/layers/disc1.layer.json",
-        "2": "./field-encounter-on-csr-25/layers/disc2.layer.json",
-        "3": "./field-encounter-on-csr-25/layers/disc3.layer.json"
-      },
-      "rate": 25,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)",
-      "discDigests": {
-        "1": "556f2a9a1d3bad2eba2ebc4d5e86e9e72246c83720013859460b36d14c90b278",
-        "2": "e3ec7bd55517fb5e97f1702fe062add430d92ae6a43d671dfca448934ecbee68",
-        "3": "3719885a298fffc2dd60f33db1684a5dc4ee55f812ec557db77e037953e1f0d3"
+        "1": "91ae9f9192c9f9683bfb7c9efe0931350717e676aed172ba47ae834cd5b1eaaa",
+        "2": "4d1e09f115b09a3f4f3f8f0ec5343334aee47abf0a2ca98b6bb7e304c671607f",
+        "3": "d3329016a8f8f70640812d916fe0153c0e5ec3f5010cbb9134bdfe4c3a1c5e78"
       },
       "baseVersion": "0.14.3",
       "enabled": true
     },
     {
       "id": "field-encounter-on-csr-50",
-      "name": "Field Random Encounters -- Standard (50%) (on CSR)",
+      "name": "Field Random Encounters -- Half Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random field battles.",
+      "version": "0.3.0",
+      "blurb": "Random field battles use half the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -305,47 +47,47 @@
       },
       "rate": 50,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)",
+      "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "c9a01fb391665c87353e7040dc4ebf90cf401f848752fb63bf7a8b8b44cce7fb",
-        "2": "9938b63c7d1445efb909dd1b3877b9e3b68ee63e770b22ea48cf2f870c1d6b6a",
-        "3": "2c251b38aa72fe1233e6cdce6c5f9199d3b3c7866ffb30cd1bac8119580ed0ba"
+        "1": "9ea386e11de20b9977408899eb29ce9a12d13685b59b2764f82f6c15d2ec5395",
+        "2": "cecbc48bd6af8ed871a4b67ad06ef3809f53a81626c2a1d4170994d47fc9d285",
+        "3": "71d7ce84046cb9ad2e33edcdf914f6564d80ae4f80e01169471d0a74dd9e1aab"
       },
       "baseVersion": "0.14.3",
       "enabled": true
     },
     {
-      "id": "field-encounter-on-csr-75",
-      "name": "Field Random Encounters -- Dense (75%) (on CSR)",
+      "id": "field-encounter-on-csr-200",
+      "name": "Field Random Encounters -- Double Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random field battles.",
+      "version": "0.3.0",
+      "blurb": "Random field battles use double the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
         "csr"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-75/layers/disc1.layer.json",
-        "2": "./field-encounter-on-csr-75/layers/disc2.layer.json",
-        "3": "./field-encounter-on-csr-75/layers/disc3.layer.json"
+        "1": "./field-encounter-on-csr-200/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-200/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-200/layers/disc3.layer.json"
       },
-      "rate": 75,
+      "rate": 200,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)",
+      "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "da8499f8424d18b4e3f7a14959e5087e2b6f3ee894c0279879fac17df50ecf47",
-        "2": "7a09cab8f313a678468d281a11aa346ca3676dacbdd3fc55bdc88c120def7aeb",
-        "3": "ca0179e4b4127daacd083cb5a04f96b9c26655671fbbc3cc56800304fd5d38ca"
+        "1": "e9e4646a04baa22949abb9d371d1a63824e18a074ee65ea92889501ec5074c10",
+        "2": "9fc45988cbb099df282af888197cf76bf1e6878a72b1d12f756fadf84957a8e1",
+        "3": "f0ed98c3f466c4ab29a65e0e9397b59cfd6c2614bf076518d2ba5a1956e58c9c"
       },
       "baseVersion": "0.14.3",
       "enabled": true
     },
     {
       "id": "world-encounter-on-csr-0",
-      "name": "World Random Encounters -- Off (0%) (on CSR)",
+      "name": "World Random Encounters -- No Encs (on CSR)",
       "kind": "mod",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "blurb": "No random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -358,49 +100,22 @@
         "3": "./world-encounter-on-csr-0/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "c7fb406a41432573a246821003ff3e4a52ae4b6e383299b21221ddabd474c75c",
-        "2": "a18114a3d02207fadf120a6eadd0d19573aada346079ad918efa7baea93cec94",
-        "3": "3388c63c468fe0e4dfa1f4be30ac4ff0ddbf2f7bcc9c5ebac590187376cc9c0c"
+        "1": "f30089b9db7b1225efb04653893cdfc659399d13f04bee23d65a9ea57d3e95da",
+        "2": "1a668f5fa7270a0e28b131ba4fcfefd34a1f7b2459ddb4a2a30d812d53545c5a",
+        "3": "9b2a771e01a96b9c77997567500853951c97be9c5cc0d3b4852bbadf2f929cf3"
       },
       "baseVersion": "0.14.3",
       "rate": 0,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-25",
-      "name": "World Random Encounters -- Light (25%) (on CSR)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-25/layers/disc1.layer.json",
-        "2": "./world-encounter-on-csr-25/layers/disc2.layer.json",
-        "3": "./world-encounter-on-csr-25/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "4b604d2174b4d74547562291b2b12e83314815ab0b002ac2339d1a6d1cb6e98e",
-        "2": "7eecd34400a939fee758e80fe453321bb8c065df645261df2289af2a9427dd44",
-        "3": "4737f9fbf19c72a034250c5434442f6282c4f337a6df6f9eaad5f6dc6e85769e"
-      },
-      "baseVersion": "0.14.3",
-      "rate": 25,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)",
+      "optionLabel": "No Encs",
       "enabled": true
     },
     {
       "id": "world-encounter-on-csr-50",
-      "name": "World Random Encounters -- Standard (50%) (on CSR)",
+      "name": "World Random Encounters -- Half Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random world-map battles.",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -412,41 +127,41 @@
         "3": "./world-encounter-on-csr-50/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "d57b14d048692b151cd7b57700286e28e66d23bc38f373fc896f80315b361514",
-        "2": "6b1f04a3489928413b61e3f6e80ef693240f2a1de65478fb3a852a7e8805995e",
-        "3": "a7ca12cb66c0c704e3d87b74499e05a81c86660f3844ffff226a2ffd5c71eabc"
+        "1": "1e94d3b1b1c8dbcf21663ce10752b6c7c879f1fb999c85f7c8723291f34537e4",
+        "2": "60e9e916a0ffa5d66f2e4425ea55e462515fb2b04d6eb177f40f1bfabaf0258c",
+        "3": "8f54952fe71a656d65049deac50f6df002e3261f118cdc4226823f031e870f35"
       },
       "baseVersion": "0.14.3",
       "rate": 50,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)",
+      "optionLabel": "Half Enc Rate",
       "enabled": true
     },
     {
-      "id": "world-encounter-on-csr-75",
-      "name": "World Random Encounters -- Dense (75%) (on CSR)",
+      "id": "world-encounter-on-csr-200",
+      "name": "World Random Encounters -- Double Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random world-map battles.",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
         "csr"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-75/layers/disc1.layer.json",
-        "2": "./world-encounter-on-csr-75/layers/disc2.layer.json",
-        "3": "./world-encounter-on-csr-75/layers/disc3.layer.json"
+        "1": "./world-encounter-on-csr-200/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-200/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-200/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "f55075f1973582c7bc50baa84b8bcbe36a5830c4494431698fc3a8e2ec6642b5",
-        "2": "e9e8803129c90dbe6faea60304dea674a6f4589848036bfdb32eed501984c387",
-        "3": "642925a6e127c465ec2f2d01a6aedbd0f85e94e0c6e2179df2c583b0ef0a3bd7"
+        "1": "8a9b57bc6e09852bc14a127c923d216f9e92e4da5a4358d9aa504a7fc87bb131",
+        "2": "66f1f6c2b08e5e9b323d71281a06ac5958c4651e8a552abaf399632c340f874e",
+        "3": "55be6e0d5cdfa07e861d84aa09f0992db66202265606181a4b5dd2b2bec4e21d"
       },
       "baseVersion": "0.14.3",
-      "rate": 75,
+      "rate": 200,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)",
+      "optionLabel": "Double Enc Rate",
       "enabled": true
     },
     {
@@ -474,10 +189,168 @@
       "baseVersion": "0.14.3"
     },
     {
-      "id": "field-encounter-on-highwind-0",
-      "name": "Field Random Encounters -- Off (0%) (on Highwind)",
+      "id": "field-encounter-on-csr-plus-0",
+      "name": "Field Random Encounters -- No Encs (on CSR+)",
       "kind": "mod",
-      "version": "0.2.0",
+      "version": "0.3.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "f764abda680c360fe646c96770b56799f112edb9e9ccb81fa60481c2166766eb"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-50",
+      "name": "Field Random Encounters -- Half Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "Random field battles use half the area's normal encounter threshold.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "discDigests": {
+        "1": "3692e6b8059f05c339e2c257a2fa7266c750e54cff598383997cfa920a6f24b1"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-200",
+      "name": "Field Random Encounters -- Double Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "Random field battles use double the area's normal encounter threshold.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-200/layers/disc1.layer.json"
+      },
+      "rate": 200,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "discDigests": {
+        "1": "325950d6c999932a3eda218b651a8689f526416733ca114903e45c127abb8ce8"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-0",
+      "name": "World Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "274c54d3974cf263a0fc2d2a2bd015f91fd427632bd8dc94fcf0a9293dce4877"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-50",
+      "name": "World Random Encounters -- Half Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "d400e73e07c889afde72eb203c0740b0710180a106413a514391f59c995b9d68"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-200",
+      "name": "World Random Encounters -- Double Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-200/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "faefd11f37a0be8e098b6d075aeb6731e66f17ee09b6a085511005c3e82ac9a7"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 200,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
+      },
+      "enabled": true,
+      "baseVersion": "0.2.6"
+    },
+    {
+      "id": "field-encounter-on-highwind-0",
+      "name": "Field Random Encounters -- No Encs (on Highwind)",
+      "kind": "mod",
+      "version": "0.3.0",
       "blurb": "No random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -491,9 +364,9 @@
       },
       "rate": 0,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
+      "optionLabel": "No Encs",
       "discDigests": {
-        "1": "9c7e3fbe4acf6c2753d9b18cf6d4ea2f25e4a3fe078608f5602297b5b194bd9a",
+        "1": "ac9658421ab956ff3511c6286e3352778ebda09f5d594ae19c2c6ebe1609f60d",
         "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
         "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
       },
@@ -501,38 +374,11 @@
       "enabled": true
     },
     {
-      "id": "field-encounter-on-highwind-25",
-      "name": "Field Random Encounters -- Light (25%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-25/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-25/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-25/layers/disc3.layer.json"
-      },
-      "rate": 25,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)",
-      "discDigests": {
-        "1": "0930e211b80d24df14e592e67121e6feb7d82f1243a34b1a1baf8974b1064c27",
-        "2": "493fa1ca3d3bdc02781c2786f6dd375a0a1a0bd2fc4d636bf68218edfd912609",
-        "3": "5ee1b67e2a7749e9e7348fb0195fe5818e6211554db4f19240dd698818a5b520"
-      },
-      "baseVersion": "0.5.4",
-      "enabled": true
-    },
-    {
       "id": "field-encounter-on-highwind-50",
-      "name": "Field Random Encounters -- Standard (50%) (on Highwind)",
+      "name": "Field Random Encounters -- Half Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random field battles.",
+      "version": "0.3.0",
+      "blurb": "Random field battles use half the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -545,9 +391,9 @@
       },
       "rate": 50,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)",
+      "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "885d9d8bae10547bfe68373cbcab4f9de5be902cc797b4674e98fc455f776a13",
+        "1": "c5fefd49bcb95de5c5ad36b10ada5f44dac426079e0bb23800916d60aadf391d",
         "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
         "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
       },
@@ -555,37 +401,33 @@
       "enabled": true
     },
     {
-      "id": "field-encounter-on-highwind-75",
-      "name": "Field Random Encounters -- Dense (75%) (on Highwind)",
+      "id": "field-encounter-on-highwind-200",
+      "name": "Field Random Encounters -- Double Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random field battles.",
+      "version": "0.3.0",
+      "blurb": "Random field battles use double the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
         "highwind"
       ],
       "discs": {
-        "1": "./field-encounter-on-highwind-75/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-75/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-75/layers/disc3.layer.json"
+        "1": "./field-encounter-on-highwind-200/layers/disc1.layer.json"
       },
-      "rate": 75,
+      "rate": 200,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)",
+      "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "610e521c1c4ab54eb044118387a3ad74926c2347a512338bfec16a62df57d2d3",
-        "2": "581b76760a0a31e6ceff329d4d0cc5e565fbd1d73ec9e350b18a0eaf14afd5c8",
-        "3": "2607f70883e5a1867f18d0b4cb235dbf2a3890a5c6a7247ed2301979b3f1dfc8"
+        "1": "1d6a41cc8e17e83862e33ee56a2cc14a7bd0b4f26d9c7858bfc99b17d3e13871"
       },
       "baseVersion": "0.5.4",
       "enabled": true
     },
     {
       "id": "world-encounter-on-highwind-0",
-      "name": "World Random Encounters -- Off (0%) (on Highwind)",
+      "name": "World Random Encounters -- No Encs (on Highwind)",
       "kind": "mod",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "blurb": "No random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -598,49 +440,22 @@
         "3": "./world-encounter-on-highwind-0/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "182dd50bab7d7869fbf7e75447324ac5a2a0183ef908ba14333bbbff0a491465",
+        "1": "458d94b5b4441f58df4234fbd67fd276d9dbe891fa0467919558ffd957919dc7",
         "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
         "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
       },
       "baseVersion": "0.5.4",
       "rate": 0,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-25",
-      "name": "World Random Encounters -- Light (25%) (on Highwind)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-25/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-25/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-25/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "1757f6cfc5e0f5e70251de2233d8dfe6353cdf03aa3ecf8fbb8b7ec2a0343b7e",
-        "2": "94aa091ca23621efa421a13c722576aa28e58f16a8882e654c23d29b159e73e2",
-        "3": "a2e259c98157034d5c92834d3de10bc75ac5291e2b9a4ea4d8da363ed749c304"
-      },
-      "baseVersion": "0.5.4",
-      "rate": 25,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)",
+      "optionLabel": "No Encs",
       "enabled": true
     },
     {
       "id": "world-encounter-on-highwind-50",
-      "name": "World Random Encounters -- Standard (50%) (on Highwind)",
+      "name": "World Random Encounters -- Half Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random world-map battles.",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -652,41 +467,37 @@
         "3": "./world-encounter-on-highwind-50/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "49b54e772099ba84cf9fb83dcdf3ce79b41a873324ed6aeefc812a2c2b25042d",
+        "1": "c7a95ed8a6b08038a20ee01dec1f8c958c3831ad641b676a6bd17106bb578ff3",
         "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
         "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
       },
       "baseVersion": "0.5.4",
       "rate": 50,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)",
+      "optionLabel": "Half Enc Rate",
       "enabled": true
     },
     {
-      "id": "world-encounter-on-highwind-75",
-      "name": "World Random Encounters -- Dense (75%) (on Highwind)",
+      "id": "world-encounter-on-highwind-200",
+      "name": "World Random Encounters -- Double Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random world-map battles.",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
         "highwind"
       ],
       "discs": {
-        "1": "./world-encounter-on-highwind-75/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-75/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-75/layers/disc3.layer.json"
+        "1": "./world-encounter-on-highwind-200/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "2dd72851e109a040eaa37c7766c378dc769250f485148a5ecba507b6e9844362",
-        "2": "8ecea313daae3b60190aa2f772132429eb46c3c41212e77dc1b4bf742891d5fa",
-        "3": "669176edf745beea9ffe268207e7e3b9ea67a738a855702e70ff10bb05aeef71"
+        "1": "13b68273bc1e747f96209bc181f09026ca0d6f38078a567159e2b8eddd3774b3"
       },
       "baseVersion": "0.5.4",
-      "rate": 75,
+      "rate": 200,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)",
+      "optionLabel": "Double Enc Rate",
       "enabled": true
     },
     {
@@ -710,191 +521,163 @@
       "baseVersion": "0.5.4"
     },
     {
-      "id": "field-encounter-on-csr-plus-0",
-      "name": "Field Random Encounters -- Off (0%) (on CSR+)",
+      "id": "field-encounter-0",
+      "name": "Field Random Encounters -- No Encs",
       "kind": "mod",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "blurb": "No random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+        "1": "./field-encounter-0/layers/disc1.layer.json",
+        "2": "./field-encounter-0/layers/disc2.layer.json",
+        "3": "./field-encounter-0/layers/disc3.layer.json"
       },
       "rate": 0,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
+      "optionLabel": "No Encs",
       "discDigests": {
-        "1": "2a7b3bb5d2c1aa35d38c6ed39b44c1e2b12709edee0a167c7a2197aec6b82bab"
+        "1": "0da0809b8408bdcc739bdc0acdcb2dbfde2c952bc7002355198b78cdc820ff7b",
+        "2": "30f14aabd911f77c358565c1670cb2a1b746726bb33e16ae8337618fcbee0441",
+        "3": "635c59c4c7bebbd97dde16b3071247c42179916c17e123ff7c1bffa93acf6199"
       },
-      "baseVersion": "0.2.6",
       "enabled": true
     },
     {
-      "id": "field-encounter-on-csr-plus-25",
-      "name": "Field Random Encounters -- Light (25%) (on CSR+)",
+      "id": "field-encounter-50",
+      "name": "Field Random Encounters -- Half Enc Rate",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random field battles.",
+      "version": "0.3.0",
+      "blurb": "Random field battles use half the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-plus-25/layers/disc1.layer.json"
-      },
-      "rate": 25,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)",
-      "discDigests": {
-        "1": "af136258010e60938127e012ccc69e4c0a96375ad1a0e0d70fc3977a6da14752"
-      },
-      "baseVersion": "0.2.6",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-50",
-      "name": "Field Random Encounters -- Standard (50%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
+        "1": "./field-encounter-50/layers/disc1.layer.json",
+        "2": "./field-encounter-50/layers/disc2.layer.json",
+        "3": "./field-encounter-50/layers/disc3.layer.json"
       },
       "rate": 50,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)",
+      "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "dfb929b340efb537ac10aa401af36034455b0a6ba336edcc2bf90cc09a36876d"
+        "1": "7c583c242ed51ba36c8fe4bcf31e21e9d2f561933a3fffb07090100ac0b093ca",
+        "2": "2cc6d1779051f2d43223483d8972fed33782fcd248c05818d4d8f77bef3b3c28",
+        "3": "cbd5f6613a1dfa78ff028c8b059b1704111b6192586c287b10479756b5c1e1cc"
       },
-      "baseVersion": "0.2.6",
       "enabled": true
     },
     {
-      "id": "field-encounter-on-csr-plus-75",
-      "name": "Field Random Encounters -- Dense (75%) (on CSR+)",
+      "id": "field-encounter-200",
+      "name": "Field Random Encounters -- Double Enc Rate",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random field battles.",
+      "version": "0.3.0",
+      "blurb": "Random field battles use double the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./field-encounter-on-csr-plus-75/layers/disc1.layer.json"
+        "1": "./field-encounter-200/layers/disc1.layer.json",
+        "2": "./field-encounter-200/layers/disc2.layer.json",
+        "3": "./field-encounter-200/layers/disc3.layer.json"
       },
-      "rate": 75,
+      "rate": 200,
       "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)",
+      "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "5ddc253ef2d58e2e36d47ef7c72716cc5ad83d05ad2bb054a5598fe29c85e149"
+        "1": "4fc54d026415d775ac4ee83fafdaac108ae926b679bf9069cb937f340ce33b6d",
+        "2": "bab758571259a446e48477271abfd6c26f10e2374c6a5df30ce190affd1d7367",
+        "3": "f508656ea30d0f79bec0f64858c8dd13250544b30309343be51a083cdb3c217b"
       },
-      "baseVersion": "0.2.6",
       "enabled": true
     },
     {
-      "id": "world-encounter-on-csr-plus-0",
-      "name": "World Random Encounters -- Off (0%) (on CSR+)",
+      "id": "world-encounter-0",
+      "name": "World Random Encounters -- No Encs",
       "kind": "mod",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "blurb": "No random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+        "1": "./world-encounter-0/layers/disc1.layer.json",
+        "2": "./world-encounter-0/layers/disc2.layer.json",
+        "3": "./world-encounter-0/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "cab2e4b6fabd8a8c2a0dcdd4f06fa22823380bf7def4398b5153eee3a536b3e1"
+        "1": "b93a04c545755d930e8953686766c54cc80a123eaf4292d2fb6dd39da692becc",
+        "2": "d9b053ada8442a56313bc55edbbfd2c0707d8079145e737d1f457ada51c10097",
+        "3": "4dbfc439c826c95ee6a0ced10243db67d51eb440ddd523f51998047e11c4e40a"
       },
-      "baseVersion": "0.2.6",
       "rate": 0,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
+      "optionLabel": "No Encs",
       "enabled": true
     },
     {
-      "id": "world-encounter-on-csr-plus-25",
-      "name": "World Random Encounters -- Light (25%) (on CSR+)",
+      "id": "world-encounter-50",
+      "name": "World Random Encounters -- Half Enc Rate",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random world-map battles.",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-plus-25/layers/disc1.layer.json"
+        "1": "./world-encounter-50/layers/disc1.layer.json",
+        "2": "./world-encounter-50/layers/disc2.layer.json",
+        "3": "./world-encounter-50/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "fbf75348146bbd422116e842f549c81e7c6cdd796827435070de374eb7f55c83"
+        "1": "2578b389ef9791822cfafa5db1b15d3f504e708958221810a5bed96c11824db5",
+        "2": "76bb250a284ba13bc712b8257fa14d3c45e8a9b4b28c6f45911609fabce456ea",
+        "3": "973855a5327bbc42e9ec16517c453c3eb76f22813d8e90c1e952f8fdac961bfd"
       },
-      "baseVersion": "0.2.6",
-      "rate": 25,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-50",
-      "name": "World Random Encounters -- Standard (50%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "14a64c76bab1c0e9a3fbd37b1c9222c7c08bb0ed1a1cd906bf8c792cbbc4161c"
-      },
-      "baseVersion": "0.2.6",
       "rate": 50,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)",
+      "optionLabel": "Half Enc Rate",
       "enabled": true
     },
     {
-      "id": "world-encounter-on-csr-plus-75",
-      "name": "World Random Encounters -- Dense (75%) (on CSR+)",
+      "id": "world-encounter-200",
+      "name": "World Random Encounters -- Double Enc Rate",
       "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random world-map battles.",
+      "version": "0.3.0",
+      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./world-encounter-on-csr-plus-75/layers/disc1.layer.json"
+        "1": "./world-encounter-200/layers/disc1.layer.json",
+        "2": "./world-encounter-200/layers/disc2.layer.json",
+        "3": "./world-encounter-200/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "63f84c4cd8ebc42eeb376f223c083379fb0ba4507b9993c4922aee7f5ac8de8d"
+        "1": "dcc060ecae37801919a6e33ef9e1f7a48df7aa487139baf86d2531662bde160d",
+        "2": "c17d353226c86e3278d8e2be1bad858850b61a340f0cb6b5b74bacd8c8bb77ce",
+        "3": "fb60d9ba987c44ef3ea87487d5ce442b4d66c69d24e0aa40682f8b22c029bbda"
       },
-      "baseVersion": "0.2.6",
-      "rate": 75,
+      "rate": 200,
       "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)",
+      "optionLabel": "Double Enc Rate",
       "enabled": true
     },
     {
-      "id": "fanfare-skip-on-csr-plus",
+      "id": "fanfare-skip",
       "name": "Fanfare Skip",
       "kind": "mod",
       "version": "0.3.0",
@@ -902,16 +685,19 @@
       "hint": "No victory fanfare or win poses -- loot and exp still apply.",
       "format": "ic-layer-v1",
       "compatibleBases": [
-        "csr-plus"
+        "clean"
       ],
       "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+        "1": "./fanfare-skip/layers/disc1.layer.json",
+        "2": "./fanfare-skip/layers/disc2.layer.json",
+        "3": "./fanfare-skip/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
+        "1": "a8926a822755db02d8ac68a11c04ae0a7bdfd1b77bd615e5483afc5e4a7aaf2e",
+        "2": "063ab6bda949e243fe20cad8e34713c77937e5272618219313811c606e237de0",
+        "3": "515aafebfea9bb050a94292a10e26c3b47f365d184e47d43e8da32fab60dc4a8"
       },
-      "enabled": true,
-      "baseVersion": "0.2.6"
+      "enabled": true
     }
   ],
   "bases": [],
