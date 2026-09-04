@@ -15,7 +15,7 @@
   "discDigests": {
     "1": "63f84c4cd8ebc42eeb376f223c083379fb0ba4507b9993c4922aee7f5ac8de8d"
   },
-  "baseVersion": "0.2.5",
+  "baseVersion": "0.2.6",
   "rate": 75,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Dense (75%)"

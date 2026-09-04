@@ -474,210 +474,6 @@
       "baseVersion": "0.14.3"
     },
     {
-      "id": "field-encounter-on-csr-plus-0",
-      "name": "Field Random Encounters -- Off (0%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Off (0%)",
-      "discDigests": {
-        "1": "2a7b3bb5d2c1aa35d38c6ed39b44c1e2b12709edee0a167c7a2197aec6b82bab"
-      },
-      "baseVersion": "0.2.5",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-25",
-      "name": "Field Random Encounters -- Light (25%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-25/layers/disc1.layer.json"
-      },
-      "rate": 25,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Light (25%)",
-      "discDigests": {
-        "1": "af136258010e60938127e012ccc69e4c0a96375ad1a0e0d70fc3977a6da14752"
-      },
-      "baseVersion": "0.2.5",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-50",
-      "name": "Field Random Encounters -- Standard (50%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "rate": 50,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Standard (50%)",
-      "discDigests": {
-        "1": "dfb929b340efb537ac10aa401af36034455b0a6ba336edcc2bf90cc09a36876d"
-      },
-      "baseVersion": "0.2.5",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-75",
-      "name": "Field Random Encounters -- Dense (75%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-75/layers/disc1.layer.json"
-      },
-      "rate": 75,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Dense (75%)",
-      "discDigests": {
-        "1": "5ddc253ef2d58e2e36d47ef7c72716cc5ad83d05ad2bb054a5598fe29c85e149"
-      },
-      "baseVersion": "0.2.5",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-0",
-      "name": "World Random Encounters -- Off (0%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "cab2e4b6fabd8a8c2a0dcdd4f06fa22823380bf7def4398b5153eee3a536b3e1"
-      },
-      "baseVersion": "0.2.5",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Off (0%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-25",
-      "name": "World Random Encounters -- Light (25%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Fewer random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-25/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "fbf75348146bbd422116e842f549c81e7c6cdd796827435070de374eb7f55c83"
-      },
-      "baseVersion": "0.2.5",
-      "rate": 25,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Light (25%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-50",
-      "name": "World Random Encounters -- Standard (50%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Moderate random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "14a64c76bab1c0e9a3fbd37b1c9222c7c08bb0ed1a1cd906bf8c792cbbc4161c"
-      },
-      "baseVersion": "0.2.5",
-      "rate": 50,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Standard (50%)",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-75",
-      "name": "World Random Encounters -- Dense (75%) (on CSR+)",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "More random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-75/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "63f84c4cd8ebc42eeb376f223c083379fb0ba4507b9993c4922aee7f5ac8de8d"
-      },
-      "baseVersion": "0.2.5",
-      "rate": 75,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Dense (75%)",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-csr-plus",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
-      },
-      "enabled": true,
-      "baseVersion": "0.2.5"
-    },
-    {
       "id": "field-encounter-on-highwind-0",
       "name": "Field Random Encounters -- Off (0%) (on Highwind)",
       "kind": "mod",
@@ -912,6 +708,210 @@
       },
       "enabled": true,
       "baseVersion": "0.5.4"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-0",
+      "name": "Field Random Encounters -- Off (0%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Off (0%)",
+      "discDigests": {
+        "1": "2a7b3bb5d2c1aa35d38c6ed39b44c1e2b12709edee0a167c7a2197aec6b82bab"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-25",
+      "name": "Field Random Encounters -- Light (25%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Fewer random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-25/layers/disc1.layer.json"
+      },
+      "rate": 25,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Light (25%)",
+      "discDigests": {
+        "1": "af136258010e60938127e012ccc69e4c0a96375ad1a0e0d70fc3977a6da14752"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-50",
+      "name": "Field Random Encounters -- Standard (50%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Moderate random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Standard (50%)",
+      "discDigests": {
+        "1": "dfb929b340efb537ac10aa401af36034455b0a6ba336edcc2bf90cc09a36876d"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-75",
+      "name": "Field Random Encounters -- Dense (75%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "More random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-75/layers/disc1.layer.json"
+      },
+      "rate": 75,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Dense (75%)",
+      "discDigests": {
+        "1": "5ddc253ef2d58e2e36d47ef7c72716cc5ad83d05ad2bb054a5598fe29c85e149"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-0",
+      "name": "World Random Encounters -- Off (0%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "cab2e4b6fabd8a8c2a0dcdd4f06fa22823380bf7def4398b5153eee3a536b3e1"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Off (0%)",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-25",
+      "name": "World Random Encounters -- Light (25%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Fewer random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-25/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "fbf75348146bbd422116e842f549c81e7c6cdd796827435070de374eb7f55c83"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 25,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Light (25%)",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-50",
+      "name": "World Random Encounters -- Standard (50%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Moderate random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "14a64c76bab1c0e9a3fbd37b1c9222c7c08bb0ed1a1cd906bf8c792cbbc4161c"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Standard (50%)",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-75",
+      "name": "World Random Encounters -- Dense (75%) (on CSR+)",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "More random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-75/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "63f84c4cd8ebc42eeb376f223c083379fb0ba4507b9993c4922aee7f5ac8de8d"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 75,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Dense (75%)",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
+      },
+      "enabled": true,
+      "baseVersion": "0.2.6"
     }
   ],
   "bases": [],
