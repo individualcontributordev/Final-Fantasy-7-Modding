@@ -72,6 +72,10 @@ at a time, on each disc the base actually has. Fails on a stale pin or a layer
 that does not apply cleanly. Not a substitute for DuckStation/MiSTer or a
 console playtest.
 
+Reconstructed bases are kept in `cache/<base>/` next to a `.version` sidecar
+naming the CSR build they came from, and are rebuilt from pristine whenever CSR
+publishes a new version. `--no-cache` forces that rebuild.
+
 ## Publish
 
 ```bash

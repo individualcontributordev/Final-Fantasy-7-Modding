@@ -55,6 +55,11 @@ def cache_bin_path(flavor: str, disc: int) -> Path:
     return CACHE_DIR / flavor / f"FINALFANTASY7_D{disc}.bin"
 
 
+def cache_stamp_path(flavor: str, disc: int) -> Path:
+    """Sidecar recording which base version a cached BIN was rebuilt from."""
+    return CACHE_DIR / flavor / f"FINALFANTASY7_D{disc}.version"
+
+
 def csr_root(cli_root: Path | None = None) -> Path | None:
     if cli_root is not None:
         return cli_root.expanduser().resolve()
@@ -116,6 +121,11 @@ def ensure_parent_image(
 
     Order: this repo's ``cache/<base>/``, then pristine plus the CSR base
     layer from ``$FF7_CSR_ROOT/builder``. CSR's cache directory is never read.
+
+    A cached BIN is only reused when its ``.version`` sidecar matches the base
+    version CSR publishes today. Without that check a cache left over from an
+    older CSR release would silently stand in for the current base, so layers
+    would be diffed against, and verified against, the wrong disc.
     """
     if base_id in ("clean", "unmodified"):
         pristine_path = pristine or pristine_bin(disc)
@@ -128,8 +138,14 @@ def ensure_parent_image(
 
     cached = cache_bin_path(base_id, disc)
     if use_cache and cached.is_file():
-        print(f"  parent cache hit: {cached}")
-        return cached.read_bytes(), cached
+        want = _live_base_version(base_id, csr)
+        cached_version = _read_cache_stamp(base_id, disc)
+        if want and cached_version != want:
+            was = cached_version or "unstamped"
+            print(f"  parent cache stale ({was}, need {want}) -- rebuilding {cached.name}")
+        else:
+            print(f"  parent cache hit: {cached}")
+            return cached.read_bytes(), cached
 
     csr_path = csr_root(csr)
     if csr_path is None:
@@ -149,5 +165,32 @@ def ensure_parent_image(
     data = bytes(image)
     cached.parent.mkdir(parents=True, exist_ok=True)
     cached.write_bytes(data)
+    _write_cache_stamp(base_id, disc, _live_base_version(base_id, csr))
     print(f"  wrote {cached} ({len(data)} bytes)")
     return data, cached
+
+
+def _live_base_version(base_id: str, csr: Path | None) -> str:
+    """The version CSR publishes now, or "" when CSR's tree is not reachable."""
+    csr_path = csr_root(csr)
+    if csr_path is None:
+        return ""
+    version_path = csr_path / "builder" / base_id / "VERSION"
+    if not version_path.is_file():
+        return ""
+    return version_path.read_text(encoding="utf-8").strip().splitlines()[0].strip()
+
+
+def _read_cache_stamp(base_id: str, disc: int) -> str:
+    stamp = cache_stamp_path(base_id, disc)
+    if not stamp.is_file():
+        return ""
+    return stamp.read_text(encoding="utf-8").strip()
+
+
+def _write_cache_stamp(base_id: str, disc: int, version: str) -> None:
+    stamp = cache_stamp_path(base_id, disc)
+    if not version:
+        stamp.unlink(missing_ok=True)
+        return
+    stamp.write_text(f"{version}\n", encoding="utf-8")

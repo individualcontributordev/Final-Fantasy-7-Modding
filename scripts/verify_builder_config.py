@@ -101,7 +101,7 @@ def _layer_path(meta: dict, disc: int) -> Path:
     return path
 
 
-def _check_records(image: bytes | bytearray, layer_path: Path) -> int:
+def _check_records(image: bytes | bytearray, layer_path: Path, label: str) -> int:
     """Fail unless every layer record already matches image (no write)."""
     layer = json.loads(layer_path.read_text(encoding="utf-8"))
     if layer.get("format") != "ic-layer-v1":
@@ -111,17 +111,17 @@ def _check_records(image: bytes | bytearray, layer_path: Path) -> int:
         off = int(rec["offset"])
         data = bytes.fromhex(rec["hex"])
         if bytes(image[off : off + len(data)]) != data:
-            raise SystemExit(f"layer mismatch in {layer_path.name} @ {off:#x}")
+            raise SystemExit(f"layer mismatch: {label} {layer_path.name} @ {off:#x}")
     return len(records)
 
 
-def _apply_and_check(image: bytearray, layer_path: Path) -> int:
+def _apply_and_check(image: bytearray, layer_path: Path, label: str) -> int:
     """Apply one layer and require every record to contain its requested bytes."""
     layer = json.loads(layer_path.read_text(encoding="utf-8"))
     if layer.get("format") != "ic-layer-v1":
         raise SystemExit(f"{layer_path}: expected ic-layer-v1")
     apply_layer(image, layer)
-    return _check_records(image, layer_path)
+    return _check_records(image, layer_path, label)
 
 
 def _load_catalog(
@@ -142,6 +142,79 @@ def _load_catalog(
     return catalog, primary
 
 
+def _load_base(
+    *,
+    disc: int,
+    base_id: str,
+    catalog: dict[str, dict],
+    pristine: Path,
+    csr: Path | None,
+    use_cache: bool,
+    timer: Timer,
+) -> tuple[bytes, str, int]:
+    """The parent BIN for one base, its stack line, and its record count."""
+    if base_id in ("clean", "unmodified"):
+        print("  OK base clean (no base layer)")
+        return pristine.read_bytes(), "base:clean (pristine only)", 0
+
+    if csr is None and base_id not in catalog:
+        raise SystemExit("Pass --csr-root or set FF7_CSR_ROOT")
+    with timer.stage("load_base"):
+        parent_bytes, parent_path = ensure_parent_image(
+            base_id=base_id,
+            disc=disc,
+            pristine=pristine,
+            csr=csr,
+            use_cache=use_cache,
+        )
+
+    if base_id not in catalog:
+        print(f"  OK base {base_id} <- {parent_path}")
+        return parent_bytes, f"base:{base_id} (from {parent_path})", 0
+
+    lp = _layer_path(catalog[base_id], disc)
+    with timer.stage("check_base"):
+        n = _check_records(parent_bytes, lp, f"base {base_id}")
+    print(f"  OK base {base_id} <- {lp.name} ({n} records, src={parent_path})")
+    return parent_bytes, f"base:{base_id} ({n} records)", n
+
+
+def _check_addon(
+    image: bytearray,
+    *,
+    addon_id: str,
+    base_id: str,
+    disc: int,
+    catalog: dict[str, dict],
+    csr_root_arg: Path | None,
+) -> tuple[int, str]:
+    """Apply one addon onto an already-loaded base; exit if anything misses."""
+    if addon_id not in catalog:
+        raise SystemExit(f"Unknown addon id {addon_id!r}")
+    meta = catalog[addon_id]
+    entry = meta["entry"]
+    compat = entry.get("compatibleBases") or []
+    need = "clean" if base_id in ("clean", "unmodified") else base_id
+    if compat and need not in compat:
+        raise SystemExit(
+            f"{addon_id}: compatibleBases={compat} does not include base {need!r}"
+        )
+    # The builder hides mods whose baseVersion is not the live base build,
+    # so catch that here rather than after publishing.
+    want_base_version = csr_base_version(need, csr_root_arg)
+    got_base_version = str(entry.get("baseVersion") or "")
+    if want_base_version and got_base_version != want_base_version:
+        raise SystemExit(
+            f"{addon_id}: baseVersion={got_base_version or '(unset)'} but "
+            f"{need} is {want_base_version} -- rebuild against the current base "
+            "or the builder will hide this mod."
+        )
+    lp = _layer_path(meta, disc)
+    n = _apply_and_check(image, lp, f"addon {addon_id}")
+    print(f"  OK addon {addon_id} <- {lp.relative_to(meta['builder_dir'])} ({n} records)")
+    return n, f"addon:{addon_id} ({lp.name}, {n} records)"
+
+
 def verify_stack(
     *,
     disc: int,
@@ -159,63 +232,30 @@ def verify_stack(
     print(f"Config: base={base_id} addons={addons or []} disc={disc}")
     print(f"Pristine: {pristine}")
 
-    total_recs = 0
-    stack: list[str] = []
-
-    if base_id in ("clean", "unmodified"):
-        image = bytearray(pristine.read_bytes())
-        stack.append("base:clean (pristine only)")
-        print("  OK base clean (no base layer)")
-    else:
-        if csr is None and base_id not in catalog:
-            raise SystemExit("Pass --csr-root or set FF7_CSR_ROOT")
-        with timer.stage("load_base"):
-            parent_bytes, parent_path = ensure_parent_image(
-                base_id=base_id,
-                disc=disc,
-                pristine=pristine,
-                csr=csr,
-                use_cache=use_cache,
-            )
-            image = bytearray(parent_bytes)
-        if base_id in catalog:
-            lp = _layer_path(catalog[base_id], disc)
-            with timer.stage("check_base"):
-                n = _check_records(image, lp)
-            total_recs += n
-            stack.append(f"base:{base_id} ({n} records)")
-            print(f"  OK base {base_id} <- {lp.name} ({n} records, src={parent_path})")
-        else:
-            stack.append(f"base:{base_id} (from {parent_path})")
-            print(f"  OK base {base_id} <- {parent_path}")
+    parent_bytes, base_line, total_recs = _load_base(
+        disc=disc,
+        base_id=base_id,
+        catalog=catalog,
+        pristine=pristine,
+        csr=csr,
+        use_cache=use_cache,
+        timer=timer,
+    )
+    image = bytearray(parent_bytes)
+    stack = [base_line]
 
     for addon_id in addons:
-        if addon_id not in catalog:
-            raise SystemExit(f"Unknown addon id {addon_id!r}")
-        meta = catalog[addon_id]
-        entry = meta["entry"]
-        compat = entry.get("compatibleBases") or []
-        need = "clean" if base_id in ("clean", "unmodified") else base_id
-        if compat and need not in compat:
-            raise SystemExit(
-                f"{addon_id}: compatibleBases={compat} does not include base {need!r}"
-            )
-        # The builder hides mods whose baseVersion is not the live base build,
-        # so catch that here rather than after publishing.
-        want_base_version = csr_base_version(need, csr_root_arg)
-        got_base_version = str(entry.get("baseVersion") or "")
-        if want_base_version and got_base_version != want_base_version:
-            raise SystemExit(
-                f"{addon_id}: baseVersion={got_base_version or '(unset)'} but "
-                f"{need} is {want_base_version} -- rebuild against the current base "
-                "or the builder will hide this mod."
-            )
-        lp = _layer_path(meta, disc)
         with timer.stage(f"addon {addon_id}"):
-            n = _apply_and_check(image, lp)
+            n, line = _check_addon(
+                image,
+                addon_id=addon_id,
+                base_id=base_id,
+                catalog=catalog,
+                csr_root_arg=csr_root_arg,
+                disc=disc,
+            )
         total_recs += n
-        stack.append(f"addon:{addon_id} ({lp.name}, {n} records)")
-        print(f"  OK addon {addon_id} <- {lp.relative_to(meta['builder_dir'])} ({n} records)")
+        stack.append(line)
 
     if output:
         with timer.stage("write"):
@@ -241,41 +281,55 @@ def verify_bases(
     csr_root_arg: Path | None,
     pristine_override: Path | None,
 ) -> None:
-    """One addon at a time on each disc, matching a player picking one mod."""
-    jobs: list[tuple[str, int, str]] = []
+    """One addon at a time on each disc, matching a player picking one mod.
+
+    The parent BIN is built once per disc and each addon is applied to a copy,
+    so a three-disc base with seven addons rebuilds three images instead of
+    twenty-one.
+    """
+    plan: list[tuple[str, list[int], list[str]]] = []
     for base_id in bases:
         discs = discs_for_base(base_id, csr_manifest)
         addon_ids = addons_for_base(modding_manifest, base_id)
         if not addon_ids:
             raise SystemExit(f"No addons in the manifest for base {base_id!r}")
         print(f"Queue {base_id} discs {discs} addons {len(addon_ids)}")
-        for addon_id in addon_ids:
-            for disc in discs:
-                jobs.append((base_id, disc, addon_id))
+        plan.append((base_id, discs, addon_ids))
 
-    print(f"\nVerifying {len(jobs)} stacks, one at a time")
-    for base_id, disc, addon_id in jobs:
-        pristine = (
-            pristine_override.expanduser().resolve()
-            if pristine_override
-            else default_pristine_arg(disc).resolve()
-        )
-        if not pristine.is_file():
-            raise SystemExit(f"Missing pristine image: {pristine}")
-        print(f"\n======== {base_id} disc {disc} {addon_id} ========", flush=True)
-        with timer.stage(f"{base_id} d{disc} {addon_id}"):
-            verify_stack(
+    stacks = sum(len(discs) * len(addons) for _, discs, addons in plan)
+    print(f"\nVerifying {stacks} stacks, one addon at a time")
+    for base_id, discs, addon_ids in plan:
+        for disc in discs:
+            pristine = (
+                pristine_override.expanduser().resolve()
+                if pristine_override
+                else default_pristine_arg(disc).resolve()
+            )
+            if not pristine.is_file():
+                raise SystemExit(f"Missing pristine image: {pristine}")
+            print(f"\n======== {base_id} disc {disc} ========", flush=True)
+            parent_bytes, _line, _recs = _load_base(
                 disc=disc,
                 base_id=base_id,
-                addons=[addon_id],
                 catalog=catalog,
                 pristine=pristine,
                 csr=csr,
                 use_cache=use_cache,
-                output=None,
                 timer=timer,
-                csr_root_arg=csr_root_arg,
             )
+            for addon_id in addon_ids:
+                with timer.stage(f"{base_id} d{disc} {addon_id}"):
+                    _check_addon(
+                        bytearray(parent_bytes),
+                        addon_id=addon_id,
+                        base_id=base_id,
+                        disc=disc,
+                        catalog=catalog,
+                        csr_root_arg=csr_root_arg,
+                    )
+            del parent_bytes
+
+    print(f"\nPASS -- {stacks} base+addon stacks apply cleanly")
 
 
 def main() -> int:
@@ -328,7 +382,7 @@ def main() -> int:
     ap.add_argument(
         "--no-cache",
         action="store_true",
-        help="Do not write cache/<base>/ when reconstructing a CSR base",
+        help="Ignore cache/<base>/ and rebuild the parent from pristine + CSR layer",
     )
     args = ap.parse_args()
     timer = Timer()
