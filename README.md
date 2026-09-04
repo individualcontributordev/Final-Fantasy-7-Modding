@@ -55,72 +55,46 @@ match the folder) and leave `discs` / `discDigests` out — publish fills them:
 One pack, one exclusive base. A Highwind cut is a different id
 (`…-on-highwind`), not a second entry in `compatibleBases`.
 
-Materialize the parent, then the currently published addon if you are editing
-an existing pack. Skip the second `apply_layer` for a new mod — the parent BIN
-is what you start from:
+Materialize the parent base, then start the mod BIN from it:
 
 ```bash
 mkdir -p "cache/$BASE" "cache/$MOD"
 for disc in "${DISCS[@]}"; do
-  parent="workspace/pristine/FINALFANTASY7_D${disc}.bin"
-  if [ "$BASE" != "clean" ]; then
-    python3 scripts/apply_layer.py \
-      "$parent" \
-      "$FF7_CSR_ROOT/builder/$BASE/layers/disc${disc}.layer.json" \
-      -o "cache/$BASE/FINALFANTASY7_D${disc}.bin"
-    parent="cache/$BASE/FINALFANTASY7_D${disc}.bin"
-  fi
-
-  layer="builder/$MOD/layers/disc${disc}.layer.json"
-  if [ -f "$layer" ]; then
-    python3 scripts/apply_layer.py \
-      "$parent" "$layer" -o "cache/$MOD/FINALFANTASY7_D${disc}.bin"
-  else
-    cp "$parent" "cache/$MOD/FINALFANTASY7_D${disc}.bin"
-  fi
+  python3 scripts/apply_layer.py \
+    "workspace/pristine/FINALFANTASY7_D${disc}.bin" \
+    "$FF7_CSR_ROOT/builder/$BASE/layers/disc${disc}.layer.json" \
+    -o "cache/$BASE/FINALFANTASY7_D${disc}.bin"
+  cp "cache/$BASE/FINALFANTASY7_D${disc}.bin" "cache/$MOD/FINALFANTASY7_D${disc}.bin"
 done
 ```
 
+On `clean` there is no base layer: copy pristine instead. To edit an existing
+pack, replace the `cp` with the same `apply_layer.py` call against
+`builder/$MOD/layers/disc${disc}.layer.json`.
+
 ### Edit
 
-Mods here are binary changes — MIPS stubs and data bytes — not field script
-edits. Makou Reactor is the CSR repo's tool for cutting scenes; it has no part
-in this loop. Read the code in **Ghidra** to find and confirm the site, then
-write the bytes with **ImHex** or any hex editor.
+These mods are MIPS stubs and data bytes: read the site in **Ghidra**, write it
+with **ImHex**. Makou Reactor edits field scripts and belongs to the CSR repo,
+not here.
 
-Almost nothing worth patching sits in the raw BIN. The executable code lives in
-GZIPPS overlays (`FIELD/FIELD.BIN`, `WORLD/WORLD.BIN`, `BATTLE/BATRES.X`), so a
-hex editor pointed at the disc image finds only compressed bytes. Unwrap the
-overlay first, patch the decompressed copy, then put it back:
+The code is inside GZIPPS overlays (`FIELD/FIELD.BIN`, `WORLD/WORLD.BIN`,
+`BATTLE/BATRES.X`), so a hex editor aimed at the disc image sees only
+compressed bytes. Unwrap, patch the `.dec`, then rewrap into the same ISO slot:
 
 ```bash
-# 1. lift the overlay out of the disc image, then unwrap it
-python3 -c "
-from pathlib import Path; import sys; sys.path.insert(0, 'scripts')
-from psx_mode2_iso import extract_file
-img = Path('cache/$MOD/FINALFANTASY7_D1.bin').read_bytes()
-Path('work/BATRES.X').write_bytes(extract_file(img, 'BATTLE/BATRES.X'))"
 python3 scripts/decompress_gzipps.py work/BATRES.X work/BATRES.X.dec
-
-# 2. Ghidra on work/BATRES.X.dec to locate the site; ImHex to edit the bytes
-
-# 3. rewrap and inject; the recompressed overlay must fit its original slot
+# Ghidra to locate, ImHex to edit work/BATRES.X.dec
 python3 scripts/compress_gzipps.py work/BATRES.X.dec work/BATRES.X work/BATRES.X.new
 ```
 
-Injection is `replace_file_padded` from `scripts/psx_mode2_iso.py`, which
-zero-pads back into the same sector allocation so no later extent moves. The
-per-mod scripts under `mods/<name>/scripts/` already do this end to end and are
-the best reference; a stub whose length changes needs the whole overlay path,
-not a byte poke.
-
-Editing a fixed-length stub in place — same site, same length, new arithmetic —
-is the easy case: patch the `.dec`, recompress, inject. Anything that moves code
-around needs the JAL targets rechecked in Ghidra first.
+Extract and pad-inject with `extract_file` / `replace_file_padded` from
+`scripts/psx_mode2_iso.py`, which keeps the file's LBA. The per-mod scripts in
+`mods/<name>/scripts/` run this end to end and are the working reference. A
+same-length stub is a straight swap; anything that moves code needs its JAL
+targets rechecked in Ghidra.
 
 ### Repair and publish
-
-Then repair footers and publish each disc:
 
 ```bash
 for disc in "${DISCS[@]}"; do
@@ -156,18 +130,15 @@ python3 scripts/rebuild_on_base.py all  # every base, clean included
 python3 scripts/rebuild_on_base.py csr  # one base
 ```
 
-`all` always includes `clean`; a complete rebuild should not silently leave
-one published base untouched.
+`all` always includes `clean`; a complete rebuild should not silently leave one
+published base untouched. Recuts stamp `baseVersion` and leave `builder/` dirty
+for you to review and commit.
 
-Recuts each overlay against the current bases, stamps `baseVersion`, and leaves
-`builder/` dirty for you to review and commit. Recuts run one at a time, and
-the first failure stops the run: a half-recut pack keeps its old `baseVersion`
-and would quietly disappear from the builder. Verify is a separate command —
-do not recut just to check a pack.
-
-Before copying any disc image it checks that zopfli is installed and that git
-pins `builder/*.json` to LF, so a misconfigured clone fails in seconds instead
-of after a long build.
+Recuts run one at a time and the first failure stops the run, because a
+half-recut pack keeps its old pin and would quietly disappear from the builder.
+Zopfli and the LF rule are checked before any disc image is copied, so a
+misconfigured clone fails in seconds instead of after a long build. Verify is a
+separate command — do not recut just to check a pack.
 
 ## Mods are pinned to one base build
 
@@ -239,3 +210,8 @@ Shared code lives in `scripts/libs/`; per-mod overlay patchers
 files without moving an LBA.
 
 Commit as `individualcontributordev <contributorindividual@gmail.com>`.
+
+## Archive
+
+Retired scripts, docs, and mod data are indexed in [`ARCHIVE.md`](ARCHIVE.md)
+with the commit that removed each one.
