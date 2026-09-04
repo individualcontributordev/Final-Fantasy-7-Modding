@@ -26,15 +26,12 @@ Windows run `python`, not `python3` — that one is the Store shim.
 ## Rebuild mods
 
 ```bash
-python3 scripts/rebuild_on_base.py all         # every base, clean included
-python3 scripts/rebuild_on_base.py csr-family  # after a base bump: skip clean
-python3 scripts/rebuild_on_base.py csr         # one base
+python3 scripts/rebuild_on_base.py all  # every base, clean included
+python3 scripts/rebuild_on_base.py csr  # one base
 ```
 
-`clean` packs carry no version pin, so a base bump cannot stale them — that is
-what `csr-family` is for. Any change to a mod's own source reaches every base,
-`clean` included, so reach for `all` unless you know the bases moved and the
-mods did not.
+`all` always includes `clean`; a complete rebuild should not silently leave
+one published base untouched.
 
 Recuts each mod against the current bases, stamps `baseVersion`, and leaves
 `builder/` dirty for you to review and commit. Working BINs go to `cache/`.
@@ -98,11 +95,11 @@ publishing from a CRLF checkout is not.
 
 | Command                                                     | Purpose                                                             |
 | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| `rebuild_on_base.py all\|csr-family\|clean\|csr\|...`        | Recut every mod against the current bases.                           |
+| `rebuild_on_base.py all\|clean\|csr\|csr-plus\|highwind`    | Recut every mod against the selected bases.                          |
 | `apply_layer.py IMAGE LAYER [-o OUT\|--expect BIN]`          | Apply or byte-verify an `ic-layer-v1` disc patch.                    |
 | `build_base_layer.py IMAGE --version X.Y.Z`                 | Publish one mod disc layer and merge pack.json / manifest metadata.  |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                 | Restore or recompute MODE2 Form 1 footers after editing.             |
-| `verify_builder_config.py all\|csr-family\|clean\|csr\|...`  | Reconstruct and validate every mod on those bases.                   |
+| `verify_builder_config.py all\|clean\|csr\|csr-plus\|highwind` | Reconstruct and validate every mod on those bases.                 |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate one builder stack.                          |
 | `validate_manifest.py [PATH]`                               | Check ids, layer paths, published checksums, and LF line endings.    |
 

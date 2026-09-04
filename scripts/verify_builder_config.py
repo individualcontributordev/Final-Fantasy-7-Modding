@@ -12,7 +12,7 @@ Every published mod on one or more bases (same names as rebuild_on_base.py):
   python3 scripts/verify_builder_config.py clean
   python3 scripts/verify_builder_config.py csr csr-plus
 
-``all`` is every base, clean included; ``csr-family`` skips clean.
+``all`` is every base, clean included.
 
 Non-clean bases come from ``--csr-root`` or ``FF7_CSR_ROOT``. Add-on layers
 come from this repository's ``builder/``.
@@ -285,7 +285,7 @@ def main() -> int:
     ap.add_argument(
         "bases",
         nargs="*",
-        help="all (every base), csr-family (skip clean), clean, csr, csr-plus, highwind",
+        help="all, clean, csr, csr-plus, and/or highwind",
     )
     ap.add_argument(
         "--pristine",

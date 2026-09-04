@@ -31,6 +31,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
+from libs.local_paths import remove_unlisted_disc_layers  # noqa: E402
 from libs.timing import Timer  # noqa: E402
 from build_field_bin import build as build_field_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
@@ -410,16 +411,9 @@ def main() -> int:
 			)
 
 		pack_dir = _ROOT / "builder" / pack_id
-		existing: list[int] = []
 		layers_dir = pack_dir / "layers"
-		if layers_dir.is_dir():
-			for p in layers_dir.glob("disc*.layer.json"):
-				mid = p.name.removeprefix("disc").removesuffix(".layer.json")
-				if mid.isdigit():
-					existing.append(int(mid))
-		existing = sorted(set(existing))
-		if not existing:
-			raise SystemExit(f"No disc*.layer.json under {layers_dir}")
+		for path in remove_unlisted_disc_layers(layers_dir, discs):
+			print(f"Removed stale layer {path.relative_to(_ROOT)}")
 
 		base_version = csr_entry_version(csr_manifest, base_id)
 		pack = write_pack_json(
@@ -429,14 +423,14 @@ def main() -> int:
 			display=meta["display"],
 			blurb=meta["blurb"],
 			compatible_bases=[base_id],
-			discs=existing,
+			discs=discs,
 			rate=meta["rate"],
 			group_label=meta.get("group_label"),
 			option_label=meta.get("option_label"),
 			base_version=base_version,
 		)
 		update_manifest(pack=pack)
-		print(f"\nUpdated builder/{pack_id}/ and manifest (discs={existing})")
+		print(f"\nUpdated builder/{pack_id}/ and manifest (discs={discs})")
 		print(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
 		if base_version:
 			print(f"baseVersion={base_version}")
