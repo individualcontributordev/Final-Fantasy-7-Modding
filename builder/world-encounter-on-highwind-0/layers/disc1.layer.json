@@ -1,6 +1,6 @@
 {
   "format": "ic-layer-v1",
-  "id": "world-encounter-on-highwind-0-disc1-v0.3.0",
+  "id": "world-encounter-on-highwind-0-disc1-v0.4.0",
   "description": "World encounters 0% RCnt2 FORCE stub -- NTSC-U Disc 1 (against highwind)",
   "target": "disc-image",
   "stats": {

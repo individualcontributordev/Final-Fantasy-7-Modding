@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Patch a decompressed WORLD.BIN with a tracked RCnt2 encounter stub.
 
-The mutable input and encounter choice select one of three fixed patch files.
-The command replaces the verified 104-byte instruction window and restores the
+The mutable input and encounter choice select one of the fixed patch files. The
+command replaces the verified 104-byte instruction window and restores the
 tracked JAL word immediately after it."""
 from __future__ import annotations
 
@@ -22,10 +22,13 @@ OFFSET = 0x17DB4
 JAL_OFFSET = 0x17E1C
 STUB_LEN = 104
 
+# Bytes 24..32: the threshold instruction and the nop after it. Diagnostics
+# only -- build_world_bin.py verifies the whole stub against its tracked file.
 RATE_MARKERS = {
 	0: bytes.fromhex("11 80 01 3c 84 62 20 ac"),
-	50: bytes.fromhex("42 18 03 00 00 00 00 00"),
-	200: bytes.fromhex("40 18 03 00 02 0a 03 00"),
+	50: bytes.fromhex("82 18 03 00 00 00 00 00"),
+	100: bytes.fromhex("42 18 03 00 00 00 00 00"),
+	200: bytes.fromhex("ff 00 63 30 00 00 00 00"),
 }
 
 
@@ -68,7 +71,10 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="DENSITY",
-		help="off / half / double (or 0 / 50 / 200). Omit to pick interactively.",
+		help=(
+			"off / half / vanilla / double (or 0 / 50 / 100 / 200). "
+			"Omit to pick interactively."
+		),
 	)
 	args = ap.parse_args()
 	rate = (

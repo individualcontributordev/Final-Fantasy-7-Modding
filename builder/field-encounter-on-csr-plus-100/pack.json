@@ -1,0 +1,22 @@
+{
+  "id": "field-encounter-on-csr-plus-100",
+  "name": "Field Random Encounters -- Vanilla Enc Rate (on CSR+)",
+  "kind": "mod",
+  "version": "0.4.0",
+  "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 100,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Vanilla Enc Rate",
+  "discDigests": {
+    "1": "82536ca581b06ee17a7377b1aa4223338059930d0efb24929189f33f247dbadb"
+  },
+  "baseVersion": "0.2.6"
+}

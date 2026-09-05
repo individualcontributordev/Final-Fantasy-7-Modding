@@ -2,8 +2,8 @@
   "id": "world-encounter-200",
   "name": "World Random Encounters -- Double Enc Rate",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About twice the random world-map battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
@@ -15,9 +15,9 @@
     "3": "./layers/disc3.layer.json"
   },
   "discDigests": {
-    "1": "dcc060ecae37801919a6e33ef9e1f7a48df7aa487139baf86d2531662bde160d",
-    "2": "c17d353226c86e3278d8e2be1bad858850b61a340f0cb6b5b74bacd8c8bb77ce",
-    "3": "fb60d9ba987c44ef3ea87487d5ce442b4d66c69d24e0aa40682f8b22c029bbda"
+    "1": "a5abb91ad1a66f7b66e960bf4053710fb4287fc7ce9887277673c11015a89781",
+    "2": "69403c0b6b79cd68f1c5cacc247da5fdb7cc19e9f49fa5896107a3e074069d34",
+    "3": "33899cfa79dab67dcc363465d1e2b3b52af8e87b26f44651e4b3e778196dd423"
   },
   "rate": 200,
   "groupLabel": "World Random Encounters",

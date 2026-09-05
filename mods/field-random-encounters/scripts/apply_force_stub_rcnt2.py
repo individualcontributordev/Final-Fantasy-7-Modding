@@ -2,9 +2,9 @@
 """Patch a decompressed FIELD.BIN with a tracked RCnt2 encounter stub.
 
 The input is a mutable FIELD.BIN.dec and the encounter choice selects one of
-the shipped 0/50/200 byte sequences. Output overwrites that file at the fixed
-stub and JAL offsets; patch bytes come from this mod's tracked ``patches``
-directory."""
+the shipped 0/50/100/200 byte sequences. Output overwrites that file at the
+fixed stub and JAL offsets; patch bytes come from this mod's tracked
+``patches`` directory."""
 from __future__ import annotations
 
 import argparse
@@ -20,10 +20,13 @@ JAL_OFFSET = 0xBBD4
 _MOD = Path(__file__).resolve().parents[1]
 _PATCH_DIR = _MOD / "patches"
 
+# Bytes 24..32: the threshold instruction and the nop after it. Diagnostics
+# only -- build_field_bin.py verifies the whole stub against its tracked file.
 RATE_MARKERS = {
 	0: bytes.fromhex("07 80 01 3c 3c 17 20 a4"),
-	50: bytes.fromhex("42 18 03 00 00 00 00 00"),
-	200: bytes.fromhex("40 18 03 00 02 0a 03 00"),
+	50: bytes.fromhex("82 18 03 00 00 00 00 00"),
+	100: bytes.fromhex("42 18 03 00 00 00 00 00"),
+	200: bytes.fromhex("ff 00 63 30 00 00 00 00"),
 }
 
 def _load_hex(name: str) -> bytes:
@@ -68,7 +71,10 @@ def main() -> None:
 		dest="density",
 		default=None,
 		metavar="DENSITY",
-		help="off / half / double (or 0 / 50 / 200). Omit to pick interactively.",
+		help=(
+			"off / half / vanilla / double (or 0 / 50 / 100 / 200). "
+			"Omit to pick interactively."
+		),
 	)
 	args = ap.parse_args()
 	rate = (

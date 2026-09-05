@@ -44,13 +44,21 @@ AGAINST = {
 	},
 }
 
-RATE_LABEL = {0: "No Encs", 50: "Half Enc Rate", 200: "Double Enc Rate"}
+RATE_LABEL = {
+	0: "No Encs",
+	50: "Half Enc Rate",
+	100: "Vanilla Enc Rate",
+	200: "Double Enc Rate",
+}
+# Frequency compared with the unmodified game. Every option rolls fresh on each
+# check instead of ramping, so none of them can be routed.
 RATE_BLURB = {
 	0: "No random world-map battles.",
-	50: "Random world-map battles use half the area's normal encounter threshold.",
-	200: "Random world-map battles use double the area's normal encounter threshold.",
+	50: "About half the random world-map battles of the unmodified game.",
+	100: "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+	200: "About twice the random world-map battles of the unmodified game.",
 }
-RATES = (0, 50, 200)
+RATES = (0, 50, 100, 200)
 
 
 def disc_digests(pack_dir: Path, discs: list[int]) -> dict[str, str]:

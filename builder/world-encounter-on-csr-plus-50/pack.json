@@ -2,8 +2,8 @@
   "id": "world-encounter-on-csr-plus-50",
   "name": "World Random Encounters -- Half Enc Rate (on CSR+)",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random world-map battles use half the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About half the random world-map battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
@@ -13,7 +13,7 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "d400e73e07c889afde72eb203c0740b0710180a106413a514391f59c995b9d68"
+    "1": "44930995a040fe564e6d2470e1bb65b3a60a19d3a8d1ddbf2ddabc4870c96eda"
   },
   "baseVersion": "0.2.6",
   "rate": 50,

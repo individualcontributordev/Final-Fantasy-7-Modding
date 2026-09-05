@@ -67,34 +67,49 @@ def threshold_from_stub(stub: bytes, encounter_value: int) -> int:
 	raise AssertionError("stub never compares the encounter threshold")
 
 
-class EncounterRateStubTests(unittest.TestCase):
-	def test_half_uses_half_the_area_threshold(self) -> None:
-		for patches, name in (
-			(FIELD_PATCHES, "stub-bb7c-rate50.hex"),
-			(WORLD_PATCHES, "stub-7db4-rate50.hex"),
-		):
-			stub = read_stub(patches / name)
-			for encounter_value in range(256):
-				self.assertEqual(
-					threshold_from_stub(stub, encounter_value),
-					encounter_value // 2,
-				)
+# Each stub compares the lure byte, scaled, against a timer byte. The scale is
+# calibrated so the flat roll lands near the unmodified game's rate while
+# running: quarter the byte for half as many battles, half for about the same,
+# the raw byte for twice as many. Vanilla's own rate is a ramp, so these are
+# frequency targets, not a scale applied to vanilla's threshold.
+SCALES = {
+	50: lambda lure: lure >> 2,
+	100: lambda lure: lure >> 1,
+	200: lambda lure: lure,
+}
 
-	def test_double_saturates_instead_of_wrapping(self) -> None:
-		for patches, name in (
-			(FIELD_PATCHES, "stub-bb7c-rate200.hex"),
-			(WORLD_PATCHES, "stub-7db4-rate200.hex"),
-		):
-			stub = read_stub(patches / name)
-			for encounter_value in range(256):
-				self.assertEqual(
-					threshold_from_stub(stub, encounter_value),
-					min(encounter_value * 2, 255),
-				)
+
+class EncounterRateStubTests(unittest.TestCase):
+	def test_shipped_stubs_scale_the_lure_byte_as_calibrated(self) -> None:
+		for rate, expected in SCALES.items():
+			for patches, stem in (
+				(FIELD_PATCHES, "stub-bb7c"),
+				(WORLD_PATCHES, "stub-7db4"),
+			):
+				stub = read_stub(patches / f"{stem}-rate{rate}.hex")
+				for lure in range(256):
+					with self.subTest(rate=rate, stem=stem, lure=lure):
+						self.assertEqual(threshold_from_stub(stub, lure), expected(lure))
+
+	def test_thresholds_stay_inside_the_comparison_byte(self) -> None:
+		"""A threshold above 255 would beat every timer value and force battles."""
+		for rate in SCALES:
+			for patches, stem in (
+				(FIELD_PATCHES, "stub-bb7c"),
+				(WORLD_PATCHES, "stub-7db4"),
+			):
+				stub = read_stub(patches / f"{stem}-rate{rate}.hex")
+				for lure in range(256):
+					self.assertLessEqual(threshold_from_stub(stub, lure), 255)
 
 	def test_stubs_fit_their_fixed_windows(self) -> None:
-		self.assertEqual(len(read_stub(FIELD_PATCHES / "stub-bb7c-rate200.hex")), 88)
-		self.assertEqual(len(read_stub(WORLD_PATCHES / "stub-7db4-rate200.hex")), 104)
+		for rate in (0, *SCALES):
+			self.assertEqual(
+				len(read_stub(FIELD_PATCHES / f"stub-bb7c-rate{rate}.hex")), 88
+			)
+			self.assertEqual(
+				len(read_stub(WORLD_PATCHES / f"stub-7db4-rate{rate}.hex")), 104
+			)
 
 
 if __name__ == "__main__":

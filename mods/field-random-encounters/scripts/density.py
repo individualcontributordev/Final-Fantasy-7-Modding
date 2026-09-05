@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 """Define the shipped field-encounter choices used by build CLIs.
 
-Vanilla is represented by selecting no mod in the builder. These choices are
-the three actual patches: no encounters, half the area's normal threshold, or
-double it with saturation. Integers identify tracked MIPS stubs and stable pack
-ids rather than arbitrary percentages."""
+The rate integer is how often battles come compared with the unmodified game,
+not a scale applied to any byte: 50 is about half as many, 200 about twice as
+many. Unmodified is the builder's no-mod option, and its rate ramps between
+battles off a step counter runners can route around; every stub here replaces
+that ramp with a flat timer roll, so no selection is routable.
+
+A flat roll cannot track the ramp exactly, so the thresholds are calibrated
+while running, which is where players spend their time. Walking fields come out
+somewhat busier than the label promises."""
 
 from __future__ import annotations
 
 import sys
 
 # Pack id / stub files use these integers (field-encounter-50, not a free %).
-RATES = (0, 50, 200)
+RATES = (0, 50, 100, 200)
 
 DENSITIES: tuple[dict, ...] = (
 	{
@@ -24,13 +29,19 @@ DENSITIES: tuple[dict, ...] = (
 		"name": "half",
 		"rate": 50,
 		"title": "Half Enc Rate",
-		"hint": "Half the area's normal random-encounter threshold",
+		"hint": "About half the battles of the unmodified game",
+	},
+	{
+		"name": "vanilla",
+		"rate": 100,
+		"title": "Vanilla Enc Rate",
+		"hint": "About as many battles as the unmodified game, but unroutable",
 	},
 	{
 		"name": "double",
 		"rate": 200,
 		"title": "Double Enc Rate",
-		"hint": "Double the area's normal threshold, capped safely at 255",
+		"hint": "About twice the battles of the unmodified game",
 	},
 )
 
@@ -54,7 +65,7 @@ def rate_label(rate: int) -> str:
 
 
 def parse_one_density(token: str) -> int:
-	"""Parse one choice name or 0/50/200 -> rate int."""
+	"""Parse one choice name or 0/50/100/200 -> rate int."""
 	raw = token.strip().lower()
 	if not raw:
 		raise SystemExit("Empty density value")
@@ -76,7 +87,7 @@ def parse_one_density(token: str) -> int:
 
 
 def parse_densities(spec: str) -> list[int]:
-	"""Parse 'all', 'half', '0,200', etc. into unique rates in request order."""
+	"""Parse 'all', 'half', '0,100', etc. into unique rates in request order."""
 	raw = spec.strip().lower()
 	if raw in {"all", "*"}:
 		return list(RATES)

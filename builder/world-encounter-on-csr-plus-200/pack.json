@@ -2,8 +2,8 @@
   "id": "world-encounter-on-csr-plus-200",
   "name": "World Random Encounters -- Double Enc Rate (on CSR+)",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About twice the random world-map battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
@@ -13,7 +13,7 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "faefd11f37a0be8e098b6d075aeb6731e66f17ee09b6a085511005c3e82ac9a7"
+    "1": "dfac0c53690604dd770ac6170aaee8f7f0e2593d39bff95276040da160924f9c"
   },
   "baseVersion": "0.2.6",
   "rate": 200,

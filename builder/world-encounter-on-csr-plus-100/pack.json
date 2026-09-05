@@ -1,0 +1,22 @@
+{
+  "id": "world-encounter-on-csr-plus-100",
+  "name": "World Random Encounters -- Vanilla Enc Rate (on CSR+)",
+  "kind": "mod",
+  "version": "0.4.0",
+  "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "world-encounter-rate",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "6421a8719a6abef9f90636e55635c31318429894dfbb71a24b2fdc5d40850868"
+  },
+  "baseVersion": "0.2.6",
+  "rate": 100,
+  "groupLabel": "World Random Encounters",
+  "optionLabel": "Vanilla Enc Rate"
+}
