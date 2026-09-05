@@ -2,7 +2,7 @@
   "id": "world-encounter-on-csr-plus-0",
   "name": "World Random Encounters -- No Encs (on CSR+)",
   "kind": "mod",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "blurb": "No random world-map battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
@@ -13,7 +13,7 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "274c54d3974cf263a0fc2d2a2bd015f91fd427632bd8dc94fcf0a9293dce4877"
+    "1": "7f9ec8c6d33011696f2be60a81e8ee3c6d8e83a7e9fca953f60380b9376bf6df"
   },
   "baseVersion": "0.2.6",
   "rate": 0,

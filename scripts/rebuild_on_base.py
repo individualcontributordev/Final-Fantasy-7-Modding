@@ -23,7 +23,7 @@ from libs.local_paths import expand_base_names
 from libs.timing import Timer
 
 ROOT = Path(__file__).resolve().parent.parent
-RATES = (0, 50, 200)
+RATES = (0, 50, 100, 200)
 
 FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"

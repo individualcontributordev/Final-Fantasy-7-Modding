@@ -2,7 +2,7 @@
   "id": "field-encounter-0",
   "name": "Field Random Encounters -- No Encs",
   "kind": "mod",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "blurb": "No random field battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
@@ -18,8 +18,8 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "No Encs",
   "discDigests": {
-    "1": "0da0809b8408bdcc739bdc0acdcb2dbfde2c952bc7002355198b78cdc820ff7b",
-    "2": "30f14aabd911f77c358565c1670cb2a1b746726bb33e16ae8337618fcbee0441",
-    "3": "635c59c4c7bebbd97dde16b3071247c42179916c17e123ff7c1bffa93acf6199"
+    "1": "11cbc72d630a851df589830e4f074253ad2e2e39892e741c468790438a81bc9c",
+    "2": "33eb3fe84a265fff9e6e134f84fc107d77fc1a4e5ca4267a8e1929414c0631b7",
+    "3": "29111f6581a6bfd86dad1d847a2f627c9556ea7450e69bbdcac0da0ce4fb9446"
   }
 }

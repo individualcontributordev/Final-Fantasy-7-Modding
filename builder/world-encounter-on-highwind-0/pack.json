@@ -2,7 +2,7 @@
   "id": "world-encounter-on-highwind-0",
   "name": "World Random Encounters -- No Encs (on Highwind)",
   "kind": "mod",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "blurb": "No random world-map battles.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
@@ -10,14 +10,10 @@
     "highwind"
   ],
   "discs": {
-    "1": "./layers/disc1.layer.json",
-    "2": "./layers/disc2.layer.json",
-    "3": "./layers/disc3.layer.json"
+    "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "458d94b5b4441f58df4234fbd67fd276d9dbe891fa0467919558ffd957919dc7",
-    "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
-    "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
+    "1": "0947f0a40a5df82ebf3867d79a4ca027ebbf4662367b0f878999d38936ff9934"
   },
   "baseVersion": "0.5.4",
   "rate": 0,

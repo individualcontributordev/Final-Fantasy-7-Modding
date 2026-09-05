@@ -2,25 +2,21 @@
   "id": "field-encounter-on-highwind-50",
   "name": "Field Random Encounters -- Half Enc Rate (on Highwind)",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random field battles use half the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About half the random field battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
     "highwind"
   ],
   "discs": {
-    "1": "./layers/disc1.layer.json",
-    "2": "./layers/disc2.layer.json",
-    "3": "./layers/disc3.layer.json"
+    "1": "./layers/disc1.layer.json"
   },
   "rate": 50,
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Half Enc Rate",
   "discDigests": {
-    "1": "c5fefd49bcb95de5c5ad36b10ada5f44dac426079e0bb23800916d60aadf391d",
-    "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
-    "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
+    "1": "f95ffd5c9ffabd49d739724304c453452c6b209196671ee42db68bcbbac3a659"
   },
   "baseVersion": "0.5.4"
 }

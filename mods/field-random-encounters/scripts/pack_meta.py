@@ -33,11 +33,19 @@ AGAINST = {
 		"suffix": " (on Highwind)",
 	},
 }
-RATE_LABEL = {0: "No Encs", 50: "Half Enc Rate", 200: "Double Enc Rate"}
+RATE_LABEL = {
+	0: "No Encs",
+	50: "Half Enc Rate",
+	100: "Vanilla Enc Rate",
+	200: "Double Enc Rate",
+}
+# Frequency compared with the unmodified game. Every option rolls fresh on each
+# check instead of ramping, so none of them can be routed.
 RATE_BLURB = {
 	0: "No random field battles.",
-	50: "Random field battles use half the area's normal encounter threshold.",
-	200: "Random field battles use double the area's normal encounter threshold.",
+	50: "About half the random field battles of the unmodified game.",
+	100: "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+	200: "About twice the random field battles of the unmodified game.",
 }
 
 

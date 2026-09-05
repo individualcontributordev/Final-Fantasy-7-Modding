@@ -6,7 +6,7 @@
       "id": "field-encounter-on-csr-0",
       "name": "Field Random Encounters -- No Encs (on CSR)",
       "kind": "mod",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "blurb": "No random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -22,9 +22,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "91ae9f9192c9f9683bfb7c9efe0931350717e676aed172ba47ae834cd5b1eaaa",
-        "2": "4d1e09f115b09a3f4f3f8f0ec5343334aee47abf0a2ca98b6bb7e304c671607f",
-        "3": "d3329016a8f8f70640812d916fe0153c0e5ec3f5010cbb9134bdfe4c3a1c5e78"
+        "1": "5c32dfd8ce763f67f5941aec152f66e6599fe81502f7787c455ae678134b1cba",
+        "2": "5f089e2c879ac9682b10536c4ada4666cf4c4eff02df8de21e03db561fce0946",
+        "3": "629ccf27620628a359fe485f4733475afab79203ca5e8e30238d93ea9affaf79"
       },
       "baseVersion": "0.14.3",
       "enabled": true
@@ -33,8 +33,8 @@
       "id": "field-encounter-on-csr-50",
       "name": "Field Random Encounters -- Half Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use half the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About half the random field battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -49,9 +49,36 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "9ea386e11de20b9977408899eb29ce9a12d13685b59b2764f82f6c15d2ec5395",
-        "2": "cecbc48bd6af8ed871a4b67ad06ef3809f53a81626c2a1d4170994d47fc9d285",
-        "3": "71d7ce84046cb9ad2e33edcdf914f6564d80ae4f80e01169471d0a74dd9e1aab"
+        "1": "d29a7b65d5b9444beeb39a6dddd874e85c184dc2db2357a745915ceb4992ba0a",
+        "2": "4d38f8cce1887cd733fa8f4f3d0ba988932fa81672c83657bcba18376484b167",
+        "3": "953748c33c46afc3b8e92a3a17883d9997f5273ef9cbd10145cde576f128d66e"
+      },
+      "baseVersion": "0.14.3",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-100",
+      "name": "Field Random Encounters -- Vanilla Enc Rate (on CSR)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-100/layers/disc1.layer.json",
+        "2": "./field-encounter-on-csr-100/layers/disc2.layer.json",
+        "3": "./field-encounter-on-csr-100/layers/disc3.layer.json"
+      },
+      "rate": 100,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "discDigests": {
+        "1": "be796a6f33f62f7a9f4282fd9fd91cb4bdfd8ca7582e4deccd7ebec6842baadb",
+        "2": "65012ca13bb3828372c49098446182479a60744a0b3e5da0b1d8bb01e8d087c5",
+        "3": "0005b2d8a5747e8915d83ffae9be9e66853027f69942ff2f7ceedafd1fa97518"
       },
       "baseVersion": "0.14.3",
       "enabled": true
@@ -60,8 +87,8 @@
       "id": "field-encounter-on-csr-200",
       "name": "Field Random Encounters -- Double Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use double the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About twice the random field battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -76,9 +103,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "e9e4646a04baa22949abb9d371d1a63824e18a074ee65ea92889501ec5074c10",
-        "2": "9fc45988cbb099df282af888197cf76bf1e6878a72b1d12f756fadf84957a8e1",
-        "3": "f0ed98c3f466c4ab29a65e0e9397b59cfd6c2614bf076518d2ba5a1956e58c9c"
+        "1": "88de4da4c221dd7c82b27dc50af4e2ef357422f20b935b16bfbf763212f789a9",
+        "2": "9985f7071d8fe5ff1fd48cf2cc3e7f9a8b967805c1cd8440b8708fb85232f711",
+        "3": "90407b9845c7fa8dfa51f32e4f81f9fd0bbd2f1d81cd64021f5423e67acbc8c7"
       },
       "baseVersion": "0.14.3",
       "enabled": true
@@ -87,7 +114,7 @@
       "id": "world-encounter-on-csr-0",
       "name": "World Random Encounters -- No Encs (on CSR)",
       "kind": "mod",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "blurb": "No random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -100,9 +127,9 @@
         "3": "./world-encounter-on-csr-0/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "f30089b9db7b1225efb04653893cdfc659399d13f04bee23d65a9ea57d3e95da",
-        "2": "1a668f5fa7270a0e28b131ba4fcfefd34a1f7b2459ddb4a2a30d812d53545c5a",
-        "3": "9b2a771e01a96b9c77997567500853951c97be9c5cc0d3b4852bbadf2f929cf3"
+        "1": "63259e3abeb5443faeefceccdd50feef067d1239c3fd76a154c8285700c7936f",
+        "2": "101870940c9bbf31adc0401e788c92613eed9769104b6a1aba48c9790f9251ef",
+        "3": "3698e53790912a14a210467528c8ddddc8350420a19de60abe42505295a4d2ce"
       },
       "baseVersion": "0.14.3",
       "rate": 0,
@@ -114,8 +141,8 @@
       "id": "world-encounter-on-csr-50",
       "name": "World Random Encounters -- Half Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About half the random world-map battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -127,9 +154,9 @@
         "3": "./world-encounter-on-csr-50/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "1e94d3b1b1c8dbcf21663ce10752b6c7c879f1fb999c85f7c8723291f34537e4",
-        "2": "60e9e916a0ffa5d66f2e4425ea55e462515fb2b04d6eb177f40f1bfabaf0258c",
-        "3": "8f54952fe71a656d65049deac50f6df002e3261f118cdc4226823f031e870f35"
+        "1": "d61b7c6a8877b7226e9556dac3647ddd518e6220dade060f1be0fb86a87fa94d",
+        "2": "ca5f348247bbd2f6aeeac699637d8da92cec30146ad53074ff53d3bfb6d79c8f",
+        "3": "f573c1bdac8e91a38801381987f6d57090479fbf0c10929d2f056ca57a16e658"
       },
       "baseVersion": "0.14.3",
       "rate": 50,
@@ -138,11 +165,38 @@
       "enabled": true
     },
     {
+      "id": "world-encounter-on-csr-100",
+      "name": "World Random Encounters -- Vanilla Enc Rate (on CSR)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-100/layers/disc1.layer.json",
+        "2": "./world-encounter-on-csr-100/layers/disc2.layer.json",
+        "3": "./world-encounter-on-csr-100/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "63dd3bddda5f585081149c8ee7843fc67f2e4b608d3d241de80b67382d8bfac7",
+        "2": "354069175c8cc0781d0bd4886d3d6bb36c1ab0feeba9d523378271b4aac9620d",
+        "3": "198d123d6ef55a2247e8d601e9362b5cd9f3e028af584a7f52b6837c3d75e00d"
+      },
+      "baseVersion": "0.14.3",
+      "rate": 100,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "enabled": true
+    },
+    {
       "id": "world-encounter-on-csr-200",
       "name": "World Random Encounters -- Double Enc Rate (on CSR)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About twice the random world-map battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -154,9 +208,9 @@
         "3": "./world-encounter-on-csr-200/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "8a9b57bc6e09852bc14a127c923d216f9e92e4da5a4358d9aa504a7fc87bb131",
-        "2": "66f1f6c2b08e5e9b323d71281a06ac5958c4651e8a552abaf399632c340f874e",
-        "3": "55be6e0d5cdfa07e861d84aa09f0992db66202265606181a4b5dd2b2bec4e21d"
+        "1": "c22ce23055a743681df0536086201fa2745d8df48bc6793567edddeadc581af5",
+        "2": "c030f760a9ca059f66684bccfc40c60f8f5527f26e0d1da70626750e6bc227ae",
+        "3": "4ffb85203d99eea4cdcd453c05af77eba0ac7e9d9572745411bd43f257083b04"
       },
       "baseVersion": "0.14.3",
       "rate": 200,
@@ -189,10 +243,214 @@
       "baseVersion": "0.14.3"
     },
     {
+      "id": "field-encounter-on-csr-plus-0",
+      "name": "Field Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "daa3c7fb482faf31d96b5947657ef858b4207dabf44d789c0c64cba8a7e12d00"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-50",
+      "name": "Field Random Encounters -- Half Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About half the random field battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "discDigests": {
+        "1": "c463547d044a69fd5ce2f35e2e21bd9d03eee2f2e648744e12720caf8e7aeddd"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-100",
+      "name": "Field Random Encounters -- Vanilla Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-100/layers/disc1.layer.json"
+      },
+      "rate": 100,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "discDigests": {
+        "1": "82536ca581b06ee17a7377b1aa4223338059930d0efb24929189f33f247dbadb"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-200",
+      "name": "Field Random Encounters -- Double Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About twice the random field battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-200/layers/disc1.layer.json"
+      },
+      "rate": 200,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "discDigests": {
+        "1": "378a2be92dc5b1f9b78798b2b1a1d0e82e1f45adcb1505864ff8bc2dc4c978dd"
+      },
+      "baseVersion": "0.2.6",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-0",
+      "name": "World Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "7f9ec8c6d33011696f2be60a81e8ee3c6d8e83a7e9fca953f60380b9376bf6df"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-50",
+      "name": "World Random Encounters -- Half Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About half the random world-map battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "44930995a040fe564e6d2470e1bb65b3a60a19d3a8d1ddbf2ddabc4870c96eda"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-100",
+      "name": "World Random Encounters -- Vanilla Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-100/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "6421a8719a6abef9f90636e55635c31318429894dfbb71a24b2fdc5d40850868"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 100,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-200",
+      "name": "World Random Encounters -- Double Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About twice the random world-map battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-200/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "dfac0c53690604dd770ac6170aaee8f7f0e2593d39bff95276040da160924f9c"
+      },
+      "baseVersion": "0.2.6",
+      "rate": 200,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
+      },
+      "enabled": true,
+      "baseVersion": "0.2.6"
+    },
+    {
       "id": "field-encounter-on-highwind-0",
       "name": "Field Random Encounters -- No Encs (on Highwind)",
       "kind": "mod",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "blurb": "No random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -200,17 +458,13 @@
         "highwind"
       ],
       "discs": {
-        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-0/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-0/layers/disc3.layer.json"
+        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json"
       },
       "rate": 0,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "ac9658421ab956ff3511c6286e3352778ebda09f5d594ae19c2c6ebe1609f60d",
-        "2": "dbf0f14da870132a70d1571dd61dcacb9be26c0625bfd1a590495c6be8c1128f",
-        "3": "cd1699609be14adbf17d4b9129e5c4be2b419bd4ee4499399617b51d5a60cc1e"
+        "1": "7528211c6af59ead0392421468cfc1b74acc0a2c2fb6faf41ac4e74a0a4b74af"
       },
       "baseVersion": "0.5.4",
       "enabled": true
@@ -219,25 +473,44 @@
       "id": "field-encounter-on-highwind-50",
       "name": "Field Random Encounters -- Half Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use half the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About half the random field battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
         "highwind"
       ],
       "discs": {
-        "1": "./field-encounter-on-highwind-50/layers/disc1.layer.json",
-        "2": "./field-encounter-on-highwind-50/layers/disc2.layer.json",
-        "3": "./field-encounter-on-highwind-50/layers/disc3.layer.json"
+        "1": "./field-encounter-on-highwind-50/layers/disc1.layer.json"
       },
       "rate": 50,
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "c5fefd49bcb95de5c5ad36b10ada5f44dac426079e0bb23800916d60aadf391d",
-        "2": "5f5e4d1babbfb13dfec99eb8046e870594786beeb4fa56b547c1e0c37e2d088d",
-        "3": "78509132dd2759aeee889307a8790c27a79218f94a63c9f5b4f2e0134308371d"
+        "1": "f95ffd5c9ffabd49d739724304c453452c6b209196671ee42db68bcbbac3a659"
+      },
+      "baseVersion": "0.5.4",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-100",
+      "name": "Field Random Encounters -- Vanilla Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-100/layers/disc1.layer.json"
+      },
+      "rate": 100,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "discDigests": {
+        "1": "7ec033e6776ffcb4ca61888c62dc4b75a19d0136f30da18b4333bd2bc44803d4"
       },
       "baseVersion": "0.5.4",
       "enabled": true
@@ -246,8 +519,8 @@
       "id": "field-encounter-on-highwind-200",
       "name": "Field Random Encounters -- Double Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use double the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About twice the random field battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -260,7 +533,7 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "1d6a41cc8e17e83862e33ee56a2cc14a7bd0b4f26d9c7858bfc99b17d3e13871"
+        "1": "1109aebc34da720a5db56f6ae6a4fc441ba5a0d11b874bb274540cf5ee1b6467"
       },
       "baseVersion": "0.5.4",
       "enabled": true
@@ -269,7 +542,7 @@
       "id": "world-encounter-on-highwind-0",
       "name": "World Random Encounters -- No Encs (on Highwind)",
       "kind": "mod",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "blurb": "No random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -277,14 +550,10 @@
         "highwind"
       ],
       "discs": {
-        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-0/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-0/layers/disc3.layer.json"
+        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "458d94b5b4441f58df4234fbd67fd276d9dbe891fa0467919558ffd957919dc7",
-        "2": "737bf281c7d927db9a3f7f59b3033ef152e8331d725f58148bb545e92d00f515",
-        "3": "bf897c068066157a1364a22f390d7994b6b24764f6bb3e0aad3253aac4c8616b"
+        "1": "0947f0a40a5df82ebf3867d79a4ca027ebbf4662367b0f878999d38936ff9934"
       },
       "baseVersion": "0.5.4",
       "rate": 0,
@@ -296,22 +565,18 @@
       "id": "world-encounter-on-highwind-50",
       "name": "World Random Encounters -- Half Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About half the random world-map battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
         "highwind"
       ],
       "discs": {
-        "1": "./world-encounter-on-highwind-50/layers/disc1.layer.json",
-        "2": "./world-encounter-on-highwind-50/layers/disc2.layer.json",
-        "3": "./world-encounter-on-highwind-50/layers/disc3.layer.json"
+        "1": "./world-encounter-on-highwind-50/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "c7a95ed8a6b08038a20ee01dec1f8c958c3831ad641b676a6bd17106bb578ff3",
-        "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
-        "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
+        "1": "7d573f3e5edac6acc4eba8a70256b61ae84d5b0fa11029fa937a5cd7438a5858"
       },
       "baseVersion": "0.5.4",
       "rate": 50,
@@ -320,11 +585,34 @@
       "enabled": true
     },
     {
+      "id": "world-encounter-on-highwind-100",
+      "name": "World Random Encounters -- Vanilla Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-100/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "98b4f868a864b153b50ad86ff80b071ac9fd6d8207dd893093148a6e4f1f4e53"
+      },
+      "baseVersion": "0.5.4",
+      "rate": 100,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "enabled": true
+    },
+    {
       "id": "world-encounter-on-highwind-200",
       "name": "World Random Encounters -- Double Enc Rate (on Highwind)",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About twice the random world-map battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -334,7 +622,7 @@
         "1": "./world-encounter-on-highwind-200/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "13b68273bc1e747f96209bc181f09026ca0d6f38078a567159e2b8eddd3774b3"
+        "1": "4fdcaea3922f6c9b7504e1e7a22d8d8f03bd2c6c54cd040379e6365dfd08a628"
       },
       "baseVersion": "0.5.4",
       "rate": 200,
@@ -366,7 +654,7 @@
       "id": "field-encounter-0",
       "name": "Field Random Encounters -- No Encs",
       "kind": "mod",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "blurb": "No random field battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
@@ -382,9 +670,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "0da0809b8408bdcc739bdc0acdcb2dbfde2c952bc7002355198b78cdc820ff7b",
-        "2": "30f14aabd911f77c358565c1670cb2a1b746726bb33e16ae8337618fcbee0441",
-        "3": "635c59c4c7bebbd97dde16b3071247c42179916c17e123ff7c1bffa93acf6199"
+        "1": "11cbc72d630a851df589830e4f074253ad2e2e39892e741c468790438a81bc9c",
+        "2": "33eb3fe84a265fff9e6e134f84fc107d77fc1a4e5ca4267a8e1929414c0631b7",
+        "3": "29111f6581a6bfd86dad1d847a2f627c9556ea7450e69bbdcac0da0ce4fb9446"
       },
       "enabled": true
     },
@@ -392,8 +680,8 @@
       "id": "field-encounter-50",
       "name": "Field Random Encounters -- Half Enc Rate",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use half the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About half the random field battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -408,9 +696,35 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "7c583c242ed51ba36c8fe4bcf31e21e9d2f561933a3fffb07090100ac0b093ca",
-        "2": "2cc6d1779051f2d43223483d8972fed33782fcd248c05818d4d8f77bef3b3c28",
-        "3": "cbd5f6613a1dfa78ff028c8b059b1704111b6192586c287b10479756b5c1e1cc"
+        "1": "9431ada20614f1d63b3607bc84a6e9d01e62f82fbf06d1652e84321f468382de",
+        "2": "2318daefb0124eb37deea1bf91ef32a04c14fa922d74a21a8b223889e71228e9",
+        "3": "f49016eae8ff36deaa8f7b50ef53a9e847901251eb413d5bdb6784128fbe1b57"
+      },
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-100",
+      "name": "Field Random Encounters -- Vanilla Enc Rate",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./field-encounter-100/layers/disc1.layer.json",
+        "2": "./field-encounter-100/layers/disc2.layer.json",
+        "3": "./field-encounter-100/layers/disc3.layer.json"
+      },
+      "rate": 100,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "discDigests": {
+        "1": "bbf172a119ea16f208568f1f32ff82cc3b8566c6f54cf418028cb2e9f99eeb82",
+        "2": "be681db93d8a15d4f0d7ab775abf0b30b11d6ac3af9b3558f3961199a8580e46",
+        "3": "c1a67663c533157bf5d1721d7f08243325a48d903019868668122140f9c5b1d2"
       },
       "enabled": true
     },
@@ -418,8 +732,8 @@
       "id": "field-encounter-200",
       "name": "Field Random Encounters -- Double Enc Rate",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use double the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About twice the random field battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "field-encounter-rate",
       "compatibleBases": [
@@ -434,9 +748,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "4fc54d026415d775ac4ee83fafdaac108ae926b679bf9069cb937f340ce33b6d",
-        "2": "bab758571259a446e48477271abfd6c26f10e2374c6a5df30ce190affd1d7367",
-        "3": "f508656ea30d0f79bec0f64858c8dd13250544b30309343be51a083cdb3c217b"
+        "1": "062ce5d3e227489dbc41f70c1ebb26f0eeb2eddf85ec08fa0e8666d56fe5ac1f",
+        "2": "949794242580cb8da3a6aedb4eb3662f6b903019b3949e1bd378d80a601fb90e",
+        "3": "b19b1084dff643cf1f81a821c9a4a5f88077aae91bd9df835332d55d2905c20f"
       },
       "enabled": true
     },
@@ -444,7 +758,7 @@
       "id": "world-encounter-0",
       "name": "World Random Encounters -- No Encs",
       "kind": "mod",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "blurb": "No random world-map battles.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
@@ -457,9 +771,9 @@
         "3": "./world-encounter-0/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "b93a04c545755d930e8953686766c54cc80a123eaf4292d2fb6dd39da692becc",
-        "2": "d9b053ada8442a56313bc55edbbfd2c0707d8079145e737d1f457ada51c10097",
-        "3": "4dbfc439c826c95ee6a0ced10243db67d51eb440ddd523f51998047e11c4e40a"
+        "1": "e84b0fd60501f89e30fa37e5c51716a38ed2e8403787662e7f8897488a120554",
+        "2": "5d7e79d5d2976d1a098820a7ecb1028e1b907e510c19f89a25dcd588c034505f",
+        "3": "bbb8a29a94bb4a0e4f4bd39ddbbc609c08728b61ec00c525278019bd150b5519"
       },
       "rate": 0,
       "groupLabel": "World Random Encounters",
@@ -470,8 +784,8 @@
       "id": "world-encounter-50",
       "name": "World Random Encounters -- Half Enc Rate",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About half the random world-map battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -483,9 +797,9 @@
         "3": "./world-encounter-50/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "2578b389ef9791822cfafa5db1b15d3f504e708958221810a5bed96c11824db5",
-        "2": "76bb250a284ba13bc712b8257fa14d3c45e8a9b4b28c6f45911609fabce456ea",
-        "3": "973855a5327bbc42e9ec16517c453c3eb76f22813d8e90c1e952f8fdac961bfd"
+        "1": "9bb40a7f66016dfa38ea697a7e52bf4a0e7286bc5aa34ed418dd28dd9d2ac2cf",
+        "2": "6f0deec40bf69930a5c8f4dea3a8730c0a622ee932bf17c4ae7e9508739c58f8",
+        "3": "64b08489a3be5f5afa438fbc1728446a76f239c8a1e6c4deef83670265db0516"
       },
       "rate": 50,
       "groupLabel": "World Random Encounters",
@@ -493,11 +807,37 @@
       "enabled": true
     },
     {
+      "id": "world-encounter-100",
+      "name": "World Random Encounters -- Vanilla Enc Rate",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./world-encounter-100/layers/disc1.layer.json",
+        "2": "./world-encounter-100/layers/disc2.layer.json",
+        "3": "./world-encounter-100/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "b1df75ebb0c5179066115cb92bb96bac26ca31edb799c89ca9b6116f137af44a",
+        "2": "932050a42f0e204ce0135dba8ee7aac2808123e0b5d6b79b68a919f03f859ace",
+        "3": "4be7a843c47ec310b572039006b935bb2ee0e13aaa509c3afbb055e5ed6c2284"
+      },
+      "rate": 100,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "enabled": true
+    },
+    {
       "id": "world-encounter-200",
       "name": "World Random Encounters -- Double Enc Rate",
       "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
+      "version": "0.4.0",
+      "blurb": "About twice the random world-map battles of the unmodified game.",
       "format": "ic-layer-v1",
       "exclusiveGroup": "world-encounter-rate",
       "compatibleBases": [
@@ -509,9 +849,9 @@
         "3": "./world-encounter-200/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "dcc060ecae37801919a6e33ef9e1f7a48df7aa487139baf86d2531662bde160d",
-        "2": "c17d353226c86e3278d8e2be1bad858850b61a340f0cb6b5b74bacd8c8bb77ce",
-        "3": "fb60d9ba987c44ef3ea87487d5ce442b4d66c69d24e0aa40682f8b22c029bbda"
+        "1": "a5abb91ad1a66f7b66e960bf4053710fb4287fc7ce9887277673c11015a89781",
+        "2": "69403c0b6b79cd68f1c5cacc247da5fdb7cc19e9f49fa5896107a3e074069d34",
+        "3": "33899cfa79dab67dcc363465d1e2b3b52af8e87b26f44651e4b3e778196dd423"
       },
       "rate": 200,
       "groupLabel": "World Random Encounters",
@@ -540,164 +880,6 @@
         "3": "515aafebfea9bb050a94292a10e26c3b47f365d184e47d43e8da32fab60dc4a8"
       },
       "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-0",
-      "name": "Field Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "f764abda680c360fe646c96770b56799f112edb9e9ccb81fa60481c2166766eb"
-      },
-      "baseVersion": "0.2.6",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-50",
-      "name": "Field Random Encounters -- Half Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use half the area's normal encounter threshold.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "rate": 50,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Half Enc Rate",
-      "discDigests": {
-        "1": "3692e6b8059f05c339e2c257a2fa7266c750e54cff598383997cfa920a6f24b1"
-      },
-      "baseVersion": "0.2.6",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-200",
-      "name": "Field Random Encounters -- Double Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random field battles use double the area's normal encounter threshold.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-200/layers/disc1.layer.json"
-      },
-      "rate": 200,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Double Enc Rate",
-      "discDigests": {
-        "1": "325950d6c999932a3eda218b651a8689f526416733ca114903e45c127abb8ce8"
-      },
-      "baseVersion": "0.2.6",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-0",
-      "name": "World Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "274c54d3974cf263a0fc2d2a2bd015f91fd427632bd8dc94fcf0a9293dce4877"
-      },
-      "baseVersion": "0.2.6",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-50",
-      "name": "World Random Encounters -- Half Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use half the area's normal encounter threshold.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "d400e73e07c889afde72eb203c0740b0710180a106413a514391f59c995b9d68"
-      },
-      "baseVersion": "0.2.6",
-      "rate": 50,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Half Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-200",
-      "name": "World Random Encounters -- Double Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "Random world-map battles use double the area's normal encounter threshold.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-200/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "faefd11f37a0be8e098b6d075aeb6731e66f17ee09b6a085511005c3e82ac9a7"
-      },
-      "baseVersion": "0.2.6",
-      "rate": 200,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Double Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-csr-plus",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
-      },
-      "enabled": true,
-      "baseVersion": "0.2.6"
     }
   ],
   "bases": [],

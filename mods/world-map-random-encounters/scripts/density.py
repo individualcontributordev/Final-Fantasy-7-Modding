@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """Parse the fixed world-map encounter choices used by build CLIs.
 
-Vanilla means no mod layer. The shipped patches disable encounters, halve the
-area threshold, or double it with saturation. Inputs may be names, 0/50/200
-values, lists, or ``all``."""
+The rate integer is how often battles come compared with the unmodified game,
+not a scale applied to any byte: 50 is about half as many, 200 about twice as
+many. Unmodified is the builder's no-mod option; every stub here replaces its
+routable step-counter ramp with a flat timer roll, calibrated while running.
+Inputs may be names, 0/50/100/200 values, lists, or ``all``."""
 from __future__ import annotations
 
 import sys
 
-RATES = (0, 50, 200)
+RATES = (0, 50, 100, 200)
 DENSITIES = (
 	("off", 0, "No Encs"),
 	("half", 50, "Half Enc Rate"),
+	("vanilla", 100, "Vanilla Enc Rate"),
 	("double", 200, "Double Enc Rate"),
 )
 RATE_BY_NAME = {name: rate for name, rate, _label in DENSITIES}
@@ -23,15 +26,15 @@ def rate_label(rate: int) -> str:
 
 
 def parse_one_density(token: str) -> int:
-	"""Map a shipped name or 0/50/200 token to the stub/pack-id integer."""
+	"""Map a shipped name or 0/50/100/200 token to the stub/pack-id integer."""
 	value = token.strip().lower().removesuffix("%").strip()
 	if value in RATE_BY_NAME:
 		return RATE_BY_NAME[value]
 	if value.isdigit() and int(value) in RATES:
 		return int(value)
-	raise SystemExit(
-		f"Unknown density {token!r}. Use off, half, double, or 0, 50, 200."
-	)
+	names = ", ".join(name for name, _rate, _label in DENSITIES)
+	rates = ", ".join(str(rate) for rate in RATES)
+	raise SystemExit(f"Unknown density {token!r}. Use {names}, or {rates}.")
 
 
 def parse_densities(spec: str) -> list[int]:

@@ -5,9 +5,17 @@ Stackable `ic-layer-v1` mods for the
 exclusive base; the CSR, CSR+, and Highwind bases live in the CSR repo.
 
 Published mods: field encounters, world encounters, fanfare skip. Field and
-world encounters are chosen independently: `Vanilla` applies no mod, while
-`No Encs`, `Half Enc Rate`, and `Double Enc Rate` apply fixed patches. Double
-saturates the game's one-byte encounter threshold instead of wrapping it.
+world encounters are chosen independently. `Unmodified` applies no mod and
+keeps the game's own rate, which ramps between fights off a step counter and so
+can be routed. The patches — `No Encs`, `Half Enc Rate`, `Vanilla Enc Rate`,
+`Double Enc Rate` — replace that ramp with a flat roll off the RCnt2 timer,
+which no route can predict.
+
+Those labels are frequencies relative to the unmodified game, not a scale
+applied to any byte: a flat roll cannot reproduce a ramp, so the thresholds are
+calibrated while running, and walking fields come out somewhat busier than the
+label promises. `Vanilla Enc Rate` is the unroutable equivalent of no mod at
+all.
 
 ## Setup
 

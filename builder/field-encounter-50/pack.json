@@ -2,8 +2,8 @@
   "id": "field-encounter-50",
   "name": "Field Random Encounters -- Half Enc Rate",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random field battles use half the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About half the random field battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
@@ -18,8 +18,8 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Half Enc Rate",
   "discDigests": {
-    "1": "7c583c242ed51ba36c8fe4bcf31e21e9d2f561933a3fffb07090100ac0b093ca",
-    "2": "2cc6d1779051f2d43223483d8972fed33782fcd248c05818d4d8f77bef3b3c28",
-    "3": "cbd5f6613a1dfa78ff028c8b059b1704111b6192586c287b10479756b5c1e1cc"
+    "1": "9431ada20614f1d63b3607bc84a6e9d01e62f82fbf06d1652e84321f468382de",
+    "2": "2318daefb0124eb37deea1bf91ef32a04c14fa922d74a21a8b223889e71228e9",
+    "3": "f49016eae8ff36deaa8f7b50ef53a9e847901251eb413d5bdb6784128fbe1b57"
   }
 }

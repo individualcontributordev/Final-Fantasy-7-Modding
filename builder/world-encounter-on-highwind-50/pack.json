@@ -2,22 +2,18 @@
   "id": "world-encounter-on-highwind-50",
   "name": "World Random Encounters -- Half Enc Rate (on Highwind)",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random world-map battles use half the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About half the random world-map battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "world-encounter-rate",
   "compatibleBases": [
     "highwind"
   ],
   "discs": {
-    "1": "./layers/disc1.layer.json",
-    "2": "./layers/disc2.layer.json",
-    "3": "./layers/disc3.layer.json"
+    "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "c7a95ed8a6b08038a20ee01dec1f8c958c3831ad641b676a6bd17106bb578ff3",
-    "2": "ceaab3ac73460a78b6596f8d66b5b1805171114df02250bae9804a542a0883bd",
-    "3": "aaaeeac16845e85fddafd04e436d534596f628127ef6654874813992edc34a03"
+    "1": "7d573f3e5edac6acc4eba8a70256b61ae84d5b0fa11029fa937a5cd7438a5858"
   },
   "baseVersion": "0.5.4",
   "rate": 50,

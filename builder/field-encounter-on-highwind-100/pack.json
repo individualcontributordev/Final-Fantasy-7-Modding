@@ -1,0 +1,22 @@
+{
+  "id": "field-encounter-on-highwind-100",
+  "name": "Field Random Encounters -- Vanilla Enc Rate (on Highwind)",
+  "kind": "mod",
+  "version": "0.4.0",
+  "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 100,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Vanilla Enc Rate",
+  "discDigests": {
+    "1": "7ec033e6776ffcb4ca61888c62dc4b75a19d0136f30da18b4333bd2bc44803d4"
+  },
+  "baseVersion": "0.5.4"
+}

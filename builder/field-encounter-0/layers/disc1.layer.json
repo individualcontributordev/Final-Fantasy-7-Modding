@@ -1,6 +1,6 @@
 {
   "format": "ic-layer-v1",
-  "id": "field-encounter-0-disc1-v0.3.0",
+  "id": "field-encounter-0-disc1-v0.4.0",
   "description": "Field encounters 0% RCnt2 FORCE stub -- NTSC-U Disc 1 (against clean)",
   "target": "disc-image",
   "stats": {

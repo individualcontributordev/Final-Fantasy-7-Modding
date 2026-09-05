@@ -2,8 +2,8 @@
   "id": "field-encounter-on-csr-plus-200",
   "name": "Field Random Encounters -- Double Enc Rate (on CSR+)",
   "kind": "mod",
-  "version": "0.3.0",
-  "blurb": "Random field battles use double the area's normal encounter threshold.",
+  "version": "0.4.0",
+  "blurb": "About twice the random field battles of the unmodified game.",
   "format": "ic-layer-v1",
   "exclusiveGroup": "field-encounter-rate",
   "compatibleBases": [
@@ -16,7 +16,7 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Double Enc Rate",
   "discDigests": {
-    "1": "325950d6c999932a3eda218b651a8689f526416733ca114903e45c127abb8ce8"
+    "1": "378a2be92dc5b1f9b78798b2b1a1d0e82e1f45adcb1505864ff8bc2dc4c978dd"
   },
   "baseVersion": "0.2.6"
 }
