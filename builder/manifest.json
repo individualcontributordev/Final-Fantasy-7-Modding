@@ -243,210 +243,6 @@
       "baseVersion": "0.14.3"
     },
     {
-      "id": "field-encounter-on-csr-plus-0",
-      "name": "Field Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "9111f47b974a3e15585d40770828dc6646b6ebaff75243a23d42ab77f4b2a9b7"
-      },
-      "baseVersion": "0.2.8",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-50",
-      "name": "Field Random Encounters -- Half Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About half the random field battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "rate": 50,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Half Enc Rate",
-      "discDigests": {
-        "1": "8aa60a0e53883a57c5dc795ca17e4b10388d6ed23f2c85834e5cd85c1330d516"
-      },
-      "baseVersion": "0.2.8",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-100",
-      "name": "Field Random Encounters -- Vanilla Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-100/layers/disc1.layer.json"
-      },
-      "rate": 100,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Vanilla Enc Rate",
-      "discDigests": {
-        "1": "d0b54ee15c786ec6c95ddebff4847e97121c1f932684772a78ea708d3c03b215"
-      },
-      "baseVersion": "0.2.8",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-csr-plus-200",
-      "name": "Field Random Encounters -- Double Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About twice the random field battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-200/layers/disc1.layer.json"
-      },
-      "rate": 200,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Double Enc Rate",
-      "discDigests": {
-        "1": "9669299b9daadcb1a9ba1d8bc15451c49d7270f62298a5bcff1bd8ddeac9e044"
-      },
-      "baseVersion": "0.2.8",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-0",
-      "name": "World Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "7f9ec8c6d33011696f2be60a81e8ee3c6d8e83a7e9fca953f60380b9376bf6df"
-      },
-      "baseVersion": "0.2.8",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-50",
-      "name": "World Random Encounters -- Half Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About half the random world-map battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "44930995a040fe564e6d2470e1bb65b3a60a19d3a8d1ddbf2ddabc4870c96eda"
-      },
-      "baseVersion": "0.2.8",
-      "rate": 50,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Half Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-100",
-      "name": "World Random Encounters -- Vanilla Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-100/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "6421a8719a6abef9f90636e55635c31318429894dfbb71a24b2fdc5d40850868"
-      },
-      "baseVersion": "0.2.8",
-      "rate": 100,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Vanilla Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-200",
-      "name": "World Random Encounters -- Double Enc Rate (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About twice the random world-map battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-200/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "dfac0c53690604dd770ac6170aaee8f7f0e2593d39bff95276040da160924f9c"
-      },
-      "baseVersion": "0.2.8",
-      "rate": 200,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Double Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-csr-plus",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
-      },
-      "enabled": true,
-      "baseVersion": "0.2.8"
-    },
-    {
       "id": "field-encounter-0",
       "name": "Field Random Encounters -- No Encs",
       "kind": "mod",
@@ -880,6 +676,210 @@
       },
       "enabled": true,
       "baseVersion": "0.5.6"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-0",
+      "name": "Field Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "0e31dd598bc671c784df75643aa1956b95b2d31e240af11d10c555c0d866b61d"
+      },
+      "baseVersion": "0.2.9",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-50",
+      "name": "Field Random Encounters -- Half Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About half the random field battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "discDigests": {
+        "1": "48911f4a9246e954382c01f58b5992c9c064849303663c69200982b09c63c088"
+      },
+      "baseVersion": "0.2.9",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-100",
+      "name": "Field Random Encounters -- Vanilla Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-100/layers/disc1.layer.json"
+      },
+      "rate": 100,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "discDigests": {
+        "1": "0eddf566e13c268c64a8cc639ebee9fbb09a2a09f94b98a4a9f51d3666e2f1da"
+      },
+      "baseVersion": "0.2.9",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-csr-plus-200",
+      "name": "Field Random Encounters -- Double Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About twice the random field battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-200/layers/disc1.layer.json"
+      },
+      "rate": 200,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "discDigests": {
+        "1": "e0564826737e4fada06484e0dcb1a002a1b023f64eb6e5fe0ff5dece36c7b892"
+      },
+      "baseVersion": "0.2.9",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-0",
+      "name": "World Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "7f9ec8c6d33011696f2be60a81e8ee3c6d8e83a7e9fca953f60380b9376bf6df"
+      },
+      "baseVersion": "0.2.9",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-50",
+      "name": "World Random Encounters -- Half Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About half the random world-map battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-50/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "44930995a040fe564e6d2470e1bb65b3a60a19d3a8d1ddbf2ddabc4870c96eda"
+      },
+      "baseVersion": "0.2.9",
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-100",
+      "name": "World Random Encounters -- Vanilla Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-100/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "6421a8719a6abef9f90636e55635c31318429894dfbb71a24b2fdc5d40850868"
+      },
+      "baseVersion": "0.2.9",
+      "rate": 100,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-200",
+      "name": "World Random Encounters -- Double Enc Rate (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About twice the random world-map battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-200/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "dfac0c53690604dd770ac6170aaee8f7f0e2593d39bff95276040da160924f9c"
+      },
+      "baseVersion": "0.2.9",
+      "rate": 200,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
+      },
+      "enabled": true,
+      "baseVersion": "0.2.9"
     }
   ],
   "bases": [],

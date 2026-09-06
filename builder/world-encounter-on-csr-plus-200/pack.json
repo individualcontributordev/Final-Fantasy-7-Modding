@@ -15,7 +15,7 @@
   "discDigests": {
     "1": "dfac0c53690604dd770ac6170aaee8f7f0e2593d39bff95276040da160924f9c"
   },
-  "baseVersion": "0.2.8",
+  "baseVersion": "0.2.9",
   "rate": 200,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Double Enc Rate"
