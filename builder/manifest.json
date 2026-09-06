@@ -260,9 +260,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "daa3c7fb482faf31d96b5947657ef858b4207dabf44d789c0c64cba8a7e12d00"
+        "1": "9111f47b974a3e15585d40770828dc6646b6ebaff75243a23d42ab77f4b2a9b7"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "enabled": true
     },
     {
@@ -283,9 +283,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Half Enc Rate",
       "discDigests": {
-        "1": "c463547d044a69fd5ce2f35e2e21bd9d03eee2f2e648744e12720caf8e7aeddd"
+        "1": "8aa60a0e53883a57c5dc795ca17e4b10388d6ed23f2c85834e5cd85c1330d516"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "enabled": true
     },
     {
@@ -306,9 +306,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Vanilla Enc Rate",
       "discDigests": {
-        "1": "82536ca581b06ee17a7377b1aa4223338059930d0efb24929189f33f247dbadb"
+        "1": "d0b54ee15c786ec6c95ddebff4847e97121c1f932684772a78ea708d3c03b215"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "enabled": true
     },
     {
@@ -329,9 +329,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "Double Enc Rate",
       "discDigests": {
-        "1": "378a2be92dc5b1f9b78798b2b1a1d0e82e1f45adcb1505864ff8bc2dc4c978dd"
+        "1": "9669299b9daadcb1a9ba1d8bc15451c49d7270f62298a5bcff1bd8ddeac9e044"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "enabled": true
     },
     {
@@ -351,7 +351,7 @@
       "discDigests": {
         "1": "7f9ec8c6d33011696f2be60a81e8ee3c6d8e83a7e9fca953f60380b9376bf6df"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "rate": 0,
       "groupLabel": "World Random Encounters",
       "optionLabel": "No Encs",
@@ -374,7 +374,7 @@
       "discDigests": {
         "1": "44930995a040fe564e6d2470e1bb65b3a60a19d3a8d1ddbf2ddabc4870c96eda"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "rate": 50,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Half Enc Rate",
@@ -397,7 +397,7 @@
       "discDigests": {
         "1": "6421a8719a6abef9f90636e55635c31318429894dfbb71a24b2fdc5d40850868"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "rate": 100,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Vanilla Enc Rate",
@@ -420,7 +420,7 @@
       "discDigests": {
         "1": "dfac0c53690604dd770ac6170aaee8f7f0e2593d39bff95276040da160924f9c"
       },
-      "baseVersion": "0.2.6",
+      "baseVersion": "0.2.8",
       "rate": 200,
       "groupLabel": "World Random Encounters",
       "optionLabel": "Double Enc Rate",
@@ -444,7 +444,7 @@
         "1": "2eaafb1059f7100a1496e0f257a322e77cf5d1a16f8d1f5bf29fa5db1c5b13ad"
       },
       "enabled": true,
-      "baseVersion": "0.2.6"
+      "baseVersion": "0.2.8"
     },
     {
       "id": "field-encounter-on-highwind-0",
