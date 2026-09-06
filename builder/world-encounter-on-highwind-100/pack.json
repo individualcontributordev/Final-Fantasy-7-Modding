@@ -15,7 +15,7 @@
   "discDigests": {
     "1": "98b4f868a864b153b50ad86ff80b071ac9fd6d8207dd893093148a6e4f1f4e53"
   },
-  "baseVersion": "0.5.4",
+  "baseVersion": "0.5.6",
   "rate": 100,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Vanilla Enc Rate"

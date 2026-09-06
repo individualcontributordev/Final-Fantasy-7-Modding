@@ -15,7 +15,7 @@
   "discDigests": {
     "1": "7d573f3e5edac6acc4eba8a70256b61ae84d5b0fa11029fa937a5cd7438a5858"
   },
-  "baseVersion": "0.5.4",
+  "baseVersion": "0.5.6",
   "rate": 50,
   "groupLabel": "World Random Encounters",
   "optionLabel": "Half Enc Rate"

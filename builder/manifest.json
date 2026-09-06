@@ -447,210 +447,6 @@
       "baseVersion": "0.2.8"
     },
     {
-      "id": "field-encounter-on-highwind-0",
-      "name": "Field Random Encounters -- No Encs (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "7528211c6af59ead0392421468cfc1b74acc0a2c2fb6faf41ac4e74a0a4b74af"
-      },
-      "baseVersion": "0.5.4",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-highwind-50",
-      "name": "Field Random Encounters -- Half Enc Rate (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About half the random field battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-50/layers/disc1.layer.json"
-      },
-      "rate": 50,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Half Enc Rate",
-      "discDigests": {
-        "1": "f95ffd5c9ffabd49d739724304c453452c6b209196671ee42db68bcbbac3a659"
-      },
-      "baseVersion": "0.5.4",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-highwind-100",
-      "name": "Field Random Encounters -- Vanilla Enc Rate (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-100/layers/disc1.layer.json"
-      },
-      "rate": 100,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Vanilla Enc Rate",
-      "discDigests": {
-        "1": "7ec033e6776ffcb4ca61888c62dc4b75a19d0136f30da18b4333bd2bc44803d4"
-      },
-      "baseVersion": "0.5.4",
-      "enabled": true
-    },
-    {
-      "id": "field-encounter-on-highwind-200",
-      "name": "Field Random Encounters -- Double Enc Rate (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About twice the random field battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-200/layers/disc1.layer.json"
-      },
-      "rate": 200,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "Double Enc Rate",
-      "discDigests": {
-        "1": "1109aebc34da720a5db56f6ae6a4fc441ba5a0d11b874bb274540cf5ee1b6467"
-      },
-      "baseVersion": "0.5.4",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-0",
-      "name": "World Random Encounters -- No Encs (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "0947f0a40a5df82ebf3867d79a4ca027ebbf4662367b0f878999d38936ff9934"
-      },
-      "baseVersion": "0.5.4",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-50",
-      "name": "World Random Encounters -- Half Enc Rate (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About half the random world-map battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-50/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "7d573f3e5edac6acc4eba8a70256b61ae84d5b0fa11029fa937a5cd7438a5858"
-      },
-      "baseVersion": "0.5.4",
-      "rate": 50,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Half Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-100",
-      "name": "World Random Encounters -- Vanilla Enc Rate (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-100/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "98b4f868a864b153b50ad86ff80b071ac9fd6d8207dd893093148a6e4f1f4e53"
-      },
-      "baseVersion": "0.5.4",
-      "rate": 100,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Vanilla Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-200",
-      "name": "World Random Encounters -- Double Enc Rate (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "About twice the random world-map battles of the unmodified game.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-200/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "4fdcaea3922f6c9b7504e1e7a22d8d8f03bd2c6c54cd040379e6365dfd08a628"
-      },
-      "baseVersion": "0.5.4",
-      "rate": 200,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "Double Enc Rate",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-highwind",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.4"
-    },
-    {
       "id": "field-encounter-0",
       "name": "Field Random Encounters -- No Encs",
       "kind": "mod",
@@ -880,6 +676,210 @@
         "3": "515aafebfea9bb050a94292a10e26c3b47f365d184e47d43e8da32fab60dc4a8"
       },
       "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-0",
+      "name": "Field Random Encounters -- No Encs (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "d45e1884f358b1715f0a9292b60744325ed133a1a436c560ce87bba383bd631a"
+      },
+      "baseVersion": "0.5.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-50",
+      "name": "Field Random Encounters -- Half Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About half the random field battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-50/layers/disc1.layer.json"
+      },
+      "rate": 50,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "discDigests": {
+        "1": "c3a1b59d59c0f9dddb371185597193168fcc921081571e4e29ed64cfe6e6400a"
+      },
+      "baseVersion": "0.5.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-100",
+      "name": "Field Random Encounters -- Vanilla Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random field battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-100/layers/disc1.layer.json"
+      },
+      "rate": 100,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "discDigests": {
+        "1": "1c0c07f201bbd98f1e67a9ddabf3094c503583b660ac20c4d3265ff1d5d530df"
+      },
+      "baseVersion": "0.5.6",
+      "enabled": true
+    },
+    {
+      "id": "field-encounter-on-highwind-200",
+      "name": "Field Random Encounters -- Double Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About twice the random field battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-200/layers/disc1.layer.json"
+      },
+      "rate": 200,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "discDigests": {
+        "1": "5ea05bbafb101d105e234a4e7ff51e3dd54d5d514e8c88426235e0c0e57adf7e"
+      },
+      "baseVersion": "0.5.6",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-0",
+      "name": "World Random Encounters -- No Encs (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "0947f0a40a5df82ebf3867d79a4ca027ebbf4662367b0f878999d38936ff9934"
+      },
+      "baseVersion": "0.5.6",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-50",
+      "name": "World Random Encounters -- Half Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About half the random world-map battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-50/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "7d573f3e5edac6acc4eba8a70256b61ae84d5b0fa11029fa937a5cd7438a5858"
+      },
+      "baseVersion": "0.5.6",
+      "rate": 50,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Half Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-100",
+      "name": "World Random Encounters -- Vanilla Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About as many random world-map battles as the unmodified game, on a roll that cannot be routed.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-100/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "98b4f868a864b153b50ad86ff80b071ac9fd6d8207dd893093148a6e4f1f4e53"
+      },
+      "baseVersion": "0.5.6",
+      "rate": 100,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Vanilla Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-200",
+      "name": "World Random Encounters -- Double Enc Rate (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "About twice the random world-map battles of the unmodified game.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-200/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "4fdcaea3922f6c9b7504e1e7a22d8d8f03bd2c6c54cd040379e6365dfd08a628"
+      },
+      "baseVersion": "0.5.6",
+      "rate": 200,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "Double Enc Rate",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-highwind",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.6"
     }
   ],
   "bases": [],
