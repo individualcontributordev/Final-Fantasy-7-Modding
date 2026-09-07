@@ -242,7 +242,7 @@ publishing from a CRLF checkout is not.
 | `verify_builder_config.py all\|unmodified\|csr\|…`          | Reconstruct and validate every mod on those parents.                 |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate one builder stack.                          |
 | `validate_manifest.py [PATH]`                               | Check ids, layer paths, published checksums, and LF line endings.    |
-| `diamond_speed.py scan\|patch …`                            | List or poke Diamond Weapon movement speed in `WM*.EV`.              |
+| `diamond_speed.py scan\|dump\|patch …`                      | List, disassemble, or poke Diamond Weapon movement in `WM*.EV`.      |
 
 Shared code lives in `scripts/libs/`; per-mod overlay patchers
 (`FIELD.BIN` / `WORLD.BIN` / `BATRES.X`) in `mods/<name>/scripts/`.
