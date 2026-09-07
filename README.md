@@ -104,6 +104,13 @@ Extract and pad-inject with `extract_file` / `replace_file_padded` from
 same-length stub is a straight swap; anything that moves code needs its JAL
 targets rechecked in Ghidra.
 
+Diamond Weapon's march speed is not in `WORLD.BIN.dec`. It is a worldscript
+immediate in `WORLD/WM{0-3}.EV` (`Entity.set_movespeed` / `set_walk_speed`,
+model id 10). `scripts/diamond_speed.py` lists those sites and writes a
+same-size patched EV for ISO inject; repair Form 1 footers after replace.
+Boot from a save taken before spawn — a save state after the script ran
+keeps the old RAM speed.
+
 ### Repair and publish
 
 ```bash
@@ -213,6 +220,7 @@ publishing from a CRLF checkout is not.
 | `verify_builder_config.py all\|clean\|csr\|csr-plus\|highwind` | Reconstruct and validate every mod on those bases.                 |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate one builder stack.                          |
 | `validate_manifest.py [PATH]`                               | Check ids, layer paths, published checksums, and LF line endings.    |
+| `diamond_speed.py scan\|patch …`                            | List or poke Diamond Weapon movement speed in `WM*.EV`.              |
 
 Shared code lives in `scripts/libs/`; per-mod overlay patchers
 (`FIELD.BIN` / `WORLD.BIN` / `BATRES.X`) in `mods/<name>/scripts/`.
