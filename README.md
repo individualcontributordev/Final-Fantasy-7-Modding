@@ -123,12 +123,18 @@ Extract and pad-inject with `extract_file` / `replace_file_padded` from
 same-length stub is a straight swap; anything that moves code needs its JAL
 targets rechecked in Ghidra.
 
-Diamond Weapon's march speed is not in `WORLD.BIN.dec`. It is a worldscript
-immediate in `WORLD/WM{0-3}.EV` (`Entity.set_movespeed` / `set_walk_speed`,
-model id 10). `scripts/diamond_speed.py` lists those sites and writes a
-same-size patched EV for ISO inject; repair Form 1 footers after replace.
-Boot from a save taken before spawn — a save state after the script ran
-keeps the old RAM speed.
+Diamond Weapon's march is not in `WORLD.BIN.dec`. It is worldscript in
+`WORLD/WM0.EV` (model id 10), and `scripts/diamond_speed.py` can `scan`
+speed immediates, `dump` a model's functions as opcodes, `patch` a speed, or
+`poke` any guarded word. All four write a same-size EV for ISO inject; repair
+Form 1 footers after replace.
+
+Its pace is not `SET_SPEED` alone. `diamond_weapon:function_2` runs once per
+frame and advances `Savemap` word `0x390` by 1, deriving emergence height,
+facing, and the arrival trigger (`counter == 0xFC4`) from that counter. Raising
+the per-frame step scales the whole approach; `SET_SPEED` only changes
+horizontal glide. Boot from a memory-card save taken before spawn — a save
+state made after the script ran keeps the old values in RAM.
 
 ### Repair and publish
 
