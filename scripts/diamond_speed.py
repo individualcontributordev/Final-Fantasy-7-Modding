@@ -304,6 +304,37 @@ def dump(path: Path, model_id: int | None) -> None:
         print()
 
 
+def poke(
+    input_path: Path,
+    offset: int,
+    new_value: int,
+    output_path: Path,
+    expect: int,
+) -> None:
+    """Write one 16-bit word, refusing unless it currently holds ``expect``.
+
+    Speed immediates have ``patch``; this is for the rest of a script, where a
+    wrong offset silently corrupts the opcode stream instead of erroring.
+    """
+    if not 0 <= new_value <= 0xFFFF:
+        raise SystemExit("value must fit in 16 bits")
+
+    data = bytearray(input_path.read_bytes())
+    if offset + 2 > len(data):
+        raise SystemExit(f"offset 0x{offset:X} is outside the file")
+
+    current = read_word(data, offset)
+    if current != expect:
+        raise SystemExit(
+            f"0x{offset:X} holds 0x{current:X}, expected 0x{expect:X} -- "
+            "wrong file or wrong offset"
+        )
+
+    struct.pack_into("<H", data, offset, new_value)
+    output_path.write_bytes(data)
+    print(f"wrote {output_path}: 0x{current:X} -> 0x{new_value:X} at 0x{offset:X}")
+
+
 def patch(input_path: Path, offset: int, new_speed: int, output_path: Path) -> None:
     if not 0 <= new_speed <= 255:
         raise SystemExit("speed must be 0–255")
@@ -350,6 +381,17 @@ def main() -> None:
         help="every function in the file, not just one model",
     )
 
+    poke_p = sub.add_parser("poke", help="write one guarded 16-bit word")
+    poke_p.add_argument("ev", type=Path, help="source WM*.EV")
+    poke_p.add_argument("offset", help="byte offset (hex or decimal)")
+    poke_p.add_argument("value", help="new word value (hex or decimal)")
+    poke_p.add_argument("out", type=Path, help="output EV")
+    poke_p.add_argument(
+        "--expect",
+        required=True,
+        help="word that must currently be there",
+    )
+
     patch_p = sub.add_parser("patch", help="write a same-size EV with a new speed")
     patch_p.add_argument("ev", type=Path, help="source WM*.EV")
     patch_p.add_argument("offset", help="immediate offset from scan (hex or decimal)")
@@ -365,6 +407,16 @@ def main() -> None:
 
     if args.cmd == "dump":
         dump(args.ev, None if args.all else args.model)
+        return
+
+    if args.cmd == "poke":
+        poke(
+            args.ev,
+            int(args.offset, 0),
+            int(args.value, 0),
+            args.out,
+            int(args.expect, 0),
+        )
         return
 
     patch(args.ev, int(args.offset, 0), args.speed, args.out)
