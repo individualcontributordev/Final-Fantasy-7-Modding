@@ -19,21 +19,24 @@ calibrated while running, and walking fields come out somewhat busier than the
 label promises. `Vanilla Enc Rate` is the unroutable equivalent of no mod at
 all.
 
+## Names
+
+| Word | What it is |
+|------|------------|
+| **pristine** | Retail NTSC-U BINs at `workspace/pristine/`. Never edit these. |
+| **Unmodified** | The builder's no-cutscene parent. Catalog id **`clean`**. Same bytes as pristine. **There is no `builder/clean/` layer** — do not run `apply_layer.py` looking for one. |
+| **csr / csr-plus / highwind** | Exclusive bases from the CSR repo. Each published add-on is one pack per parent (`fanfare-skip` against Unmodified, `fanfare-skip-on-csr-plus` against CSR+, …). |
+
+`python3 scripts/ff7mod.py rebuild unmodified` and `… clean` are the same target.
+
 ## Setup
 
-Python 3.10+, all commands from the repo root. Retail NTSC-U MODE2/2352 images
-go at `workspace/pristine/FINALFANTASY7_D{1,2,3}.bin` and are never edited.
-Working BINs stay in `cache/<mod-id>/`; published metadata and layers in
-`builder/`.
+Python 3.10+, all commands from the repo root. Working BINs stay in
+`cache/<mod-id>/`; published metadata and layers in `builder/`.
 
 ```bash
 pip install zopfli
 export FF7_CSR_ROOT=/path/to/Final-Fantasy-7-CSR
-
-BASE=csr-plus                    # clean, csr, csr-plus, or highwind
-MOD=fanfare-skip-on-csr-plus     # folder under builder/ and cache/
-DISCS=(1)                        # csr and clean are (1 2 3); csr-plus and highwind are Disc 1 only
-VERSION=X.Y.Z
 ```
 
 Zopfli is the only dependency, and it is required: a recut overlay must fit the
@@ -44,30 +47,47 @@ Windows run `python`, not `python3` — that one is the Store shim.
 (`cache/<mod-id>/FINALFANTASY7_DN.bin`) and diffs against that pack's
 `compatibleBases` entry, not against pristine.
 
-## Build, edit, repair, publish
-
-A new pack needs a stub `pack.json` first. `build_base_layer.py` will not
-invent a mod from a BIN alone. Put this at `builder/$MOD/pack.json` (id must
-match the folder) and leave `discs` / `discDigests` out — publish fills them:
-
-```json
-{
-  "id": "fanfare-skip-on-csr-plus",
-  "name": "Fanfare Skip",
-  "kind": "mod",
-  "blurb": "After the last enemy dies, skip the victory ceremony.",
-  "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-  "format": "ic-layer-v1",
-  "compatibleBases": ["csr-plus"]
-}
-```
-
-One pack, one exclusive base. A Highwind cut is a different id
-(`…-on-highwind`), not a second entry in `compatibleBases`.
-
-Materialize the parent base, then start the mod BIN from it:
+## New mod (start from pristine)
 
 ```bash
+python3 scripts/ff7mod.py new
+```
+
+It prompts for id, name, blurb, hint, version, and discs, then writes
+`mods/<id>/`, a stub `builder/<id>/pack.json` with `compatibleBases: ["clean"]`,
+and copies pristine into `cache/<id>/`. Edit those copies. Recut onto CSR /
+CSR+ / Highwind later as **different pack ids**, not extra
+`compatibleBases` entries.
+
+Non-interactive:
+
+```bash
+python3 scripts/ff7mod.py new -y \
+  --id diamond-weapon-speed \
+  --name "Diamond Weapon Speed" \
+  --blurb "Diamond Weapon walks to land faster." \
+  --hint "World-map Diamond Weapon only." \
+  --version 0.1.0 \
+  --discs 1,2,3
+```
+
+`build_base_layer.py` will not invent a pack from a BIN alone; the stub
+`pack.json` is that invention. Leave `discs` / `discDigests` out — publish
+fills them.
+
+## Build, edit, repair, publish
+
+To cut the **same recipe** onto a CSR-family parent after the Unmodified pack
+works, copy that parent into a new `cache/<id>-on-csr-plus/` (one disc for
+CSR+ / Highwind; three for CSR) and a matching stub pack whose
+`compatibleBases` is that one base:
+
+```bash
+BASE=csr-plus
+MOD=fanfare-skip-on-csr-plus
+DISCS=(1)
+VERSION=X.Y.Z
+
 mkdir -p "cache/$BASE" "cache/$MOD"
 for disc in "${DISCS[@]}"; do
   python3 scripts/apply_layer.py \
@@ -78,9 +98,8 @@ for disc in "${DISCS[@]}"; do
 done
 ```
 
-On `clean` there is no base layer: copy pristine instead. To edit an existing
-pack, replace the `cp` with the same `apply_layer.py` call against
-`builder/$MOD/layers/disc${disc}.layer.json`.
+To resume an already-published pack, apply `builder/$MOD/layers/disc${disc}.layer.json`
+onto that same parent instead of copying a fresh parent BIN.
 
 ### Edit
 
@@ -143,13 +162,14 @@ Field encounters, world encounters, and fanfare skip are overlay recipes under
 every pack from those scripts instead of the loop above:
 
 ```bash
-python3 scripts/rebuild_on_base.py all  # every base, clean included
-python3 scripts/rebuild_on_base.py csr  # one base
+python3 scripts/ff7mod.py rebuild all           # Unmodified + CSR-family
+python3 scripts/ff7mod.py rebuild unmodified    # catalog id clean; no layer
+python3 scripts/ff7mod.py rebuild csr
 ```
 
-`all` always includes `clean`; a complete rebuild should not silently leave one
-published base untouched. Recuts stamp `baseVersion` and leave `builder/` dirty
-for you to review and commit.
+`all` always includes Unmodified; a complete rebuild should not silently leave
+one published parent untouched. Recuts stamp `baseVersion` and leave `builder/`
+dirty for you to review and commit.
 
 Recuts run one at a time and the first failure stops the run, because a
 half-recut pack keeps its old pin and would quietly disappear from the builder.
@@ -166,21 +186,21 @@ from, and the builder hides any mod whose pin is not the base's current
 version.
 
 **Bump a base, recut every mod on it.** Never hand-edit a pin onto an old
-layer; the offsets still belong to the previous base. `clean` packs carry no
-pin because pristine never changes.
+layer; the offsets still belong to the previous base. Unmodified (`clean`)
+packs carry no pin because pristine never changes.
 
 ## Verify
 
 ```bash
-python3 scripts/verify_builder_config.py all       # every base, clean included
-python3 scripts/verify_builder_config.py csr-plus
+python3 scripts/ff7mod.py verify all            # Unmodified + CSR-family
+python3 scripts/ff7mod.py verify csr-plus
 python3 scripts/verify_builder_config.py \
   --disc 1 --base csr --addon fanfare-skip-on-csr --no-cache
 ```
 
-The named bases walk every published addon compatible with that base, one mod
-at a time, on each disc the base actually has. Fails on a stale pin or a layer
-that does not apply cleanly. Not a substitute for DuckStation/MiSTer or a
+The named parents walk every published addon compatible with that parent, one
+mod at a time, on each disc the parent actually has. Fails on a stale pin or a
+layer that does not apply cleanly. Not a substitute for DuckStation/MiSTer or a
 console playtest.
 
 Reconstructed bases are kept in `cache/<base>/` next to a `.version` sidecar
@@ -210,14 +230,16 @@ publishing from a CRLF checkout is not.
 
 | Command                                                     | Purpose                                                             |
 | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| `ff7mod.py new`                                             | Scaffold a pack from a copy of pristine (Unmodified / `clean`).      |
+| `ff7mod.py rebuild\|verify …`                               | Same as `rebuild_on_base.py` / `verify_builder_config.py`.           |
 | `apply_layer.py IMAGE LAYER [-o OUT\|--expect BIN]`          | Apply or byte-verify an `ic-layer-v1` disc patch.                    |
 | `decompress_gzipps.py OVERLAY [OUT.dec]`                    | Unwrap a GZIPPS overlay so Ghidra/ImHex see real code.               |
 | `compress_gzipps.py OUT.dec ORIGINAL [OUT.new]`             | Rewrap a patched overlay, keeping it inside its ISO slot.            |
 | `build_base_layer.py IMAGE --version X.Y.Z`                 | Publish one mod disc layer and merge pack.json / manifest metadata.  |
 | `repair_mode2_edc.py PRISTINE IMAGE -o OUT`                 | Restore or recompute MODE2 Form 1 footers after editing.             |
 | `verify_iso_integrity.py IMAGE`                             | Report duplicate LBAs, extent overlaps, and PVD size drift.          |
-| `rebuild_on_base.py all\|clean\|csr\|csr-plus\|highwind`    | Recut overlay mods against the selected bases.                       |
-| `verify_builder_config.py all\|clean\|csr\|csr-plus\|highwind` | Reconstruct and validate every mod on those bases.                 |
+| `rebuild_on_base.py all\|unmodified\|csr\|csr-plus\|highwind` | Recut overlay mods against those parents (`clean` = unmodified).   |
+| `verify_builder_config.py all\|unmodified\|csr\|…`          | Reconstruct and validate every mod on those parents.                 |
 | `verify_builder_config.py --disc N --base ID [--addon ID]`  | Reconstruct and validate one builder stack.                          |
 | `validate_manifest.py [PATH]`                               | Check ids, layer paths, published checksums, and LF line endings.    |
 | `diamond_speed.py scan\|patch …`                            | List or poke Diamond Weapon movement speed in `WM*.EV`.              |

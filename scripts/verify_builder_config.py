@@ -9,10 +9,11 @@ One stack:
 Every published mod on one or more bases (same names as rebuild_on_base.py):
 
   python3 scripts/verify_builder_config.py all
-  python3 scripts/verify_builder_config.py clean
+  python3 scripts/verify_builder_config.py unmodified
   python3 scripts/verify_builder_config.py csr csr-plus
 
-``all`` is every base, clean included.
+``all`` is every exclusive parent, Unmodified (catalog id ``clean``) included.
+``unmodified`` and ``clean`` are the same target. There is no clean layer.
 
 Non-clean bases come from ``--csr-root`` or ``FF7_CSR_ROOT``. Add-on layers
 come from this repository's ``builder/``.
@@ -339,7 +340,7 @@ def main() -> int:
     ap.add_argument(
         "bases",
         nargs="*",
-        help="all, clean, csr, csr-plus, and/or highwind",
+        help="all, unmodified (clean), csr, csr-plus, and/or highwind",
     )
     ap.add_argument(
         "--pristine",
@@ -351,7 +352,7 @@ def main() -> int:
     ap.add_argument(
         "--base",
         default=None,
-        help="One stack: clean | csr | csr-plus | highwind (requires --disc)",
+        help="One stack: unmodified | clean | csr | csr-plus | highwind (requires --disc)",
     )
     ap.add_argument(
         "--addon",
@@ -390,7 +391,7 @@ def main() -> int:
     one_stack = args.disc is not None or args.base is not None or bool(args.addons)
     if args.bases and one_stack:
         raise SystemExit(
-            "Pass base names (all, clean, csr, ...) or --disc/--base/--addon, not both."
+            "Pass base names (all, unmodified, csr, ...) or --disc/--base/--addon, not both."
         )
     if args.output is not None and args.bases:
         raise SystemExit("--output only applies to a single --disc/--base stack")
@@ -424,7 +425,7 @@ def main() -> int:
 
     if args.disc is None or not args.base:
         raise SystemExit(
-            "Need --disc and --base for one stack, or pass all / clean / csr / "
+            "Need --disc and --base for one stack, or pass all / unmodified / csr / "
             "csr-plus / highwind."
         )
 

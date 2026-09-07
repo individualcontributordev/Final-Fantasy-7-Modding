@@ -4,7 +4,8 @@
 Run on a machine holding retail NTSC-U BINs. Writes ``builder/`` and does not
 commit.
 
-``all`` is every base, clean included. Discs come from the CSR manifest.
+``all`` is every exclusive parent, Unmodified (catalog id ``clean``) included.
+Discs for CSR-family bases come from the CSR manifest.
 Recuts run one at a time and stream their output; the first failure stops the
 run.
 """
@@ -187,7 +188,7 @@ def main() -> int:
 	ap.add_argument(
 		"bases",
 		nargs="+",
-		help="all, clean, csr, csr-plus, and/or highwind",
+		help="all, unmodified (clean), csr, csr-plus, and/or highwind",
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
 	args = ap.parse_args()
@@ -230,7 +231,7 @@ def main() -> int:
 	remove_retired_encounter_packs()
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")
-	print("Then: python scripts/verify_builder_config.py all   # or clean, csr, ...")
+	print("Then: python scripts/ff7mod.py verify all   # or unmodified, csr, ...")
 	timer.total()
 	return 0
 

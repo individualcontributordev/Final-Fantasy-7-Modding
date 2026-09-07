@@ -13,19 +13,26 @@ PRISTINE_DIR = ROOT / "workspace" / "pristine"
 CACHE_DIR = ROOT / "cache"
 CSR_BASES = ("csr", "csr-plus", "highwind")
 ALL_BASES = CSR_BASES + ("clean",)
+# Player-facing Unmodified; pack.json still stores catalog id "clean".
+BASE_ALIASES = {"unmodified": "clean"}
 
 
 def expand_base_names(tokens: list[str]) -> list[str]:
-    """Resolve CLI base names, preserving order and dropping duplicates."""
+    """Resolve CLI base names, preserving order and dropping duplicates.
+
+    ``unmodified`` is the builder label for catalog id ``clean``: retail
+    pristine with no CSR layer. There is no ``builder/clean/`` to apply.
+    """
     wanted: list[str] = []
     for token in tokens:
-        if token == "all":
+        resolved = BASE_ALIASES.get(token, token)
+        if resolved == "all":
             wanted.extend(ALL_BASES)
-        elif token in ALL_BASES:
-            wanted.append(token)
+        elif resolved in ALL_BASES:
+            wanted.append(resolved)
         else:
             raise SystemExit(
-                f"Unknown base {token!r}. Use all, clean, csr, "
+                f"Unknown base {token!r}. Use all, unmodified (clean), csr, "
                 "csr-plus, or highwind."
             )
     return list(dict.fromkeys(wanted))
