@@ -33,6 +33,9 @@ class VerifyTargetTests(unittest.TestCase):
             with self.subTest(name=name), self.assertRaises(SystemExit):
                 verify.expand_base_names([name])
 
+    def test_unmodified_is_catalog_id_clean(self) -> None:
+        self.assertEqual(verify.expand_base_names(["unmodified"]), ["clean"])
+
     def test_addons_follow_compatible_bases(self) -> None:
         manifest = {
             "addons": [
