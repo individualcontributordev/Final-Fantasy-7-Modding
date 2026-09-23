@@ -52,3 +52,5 @@ Thumbs.db
 *.x.new
 *.BIN.dec.patched
 *.BIN.new
+workspace/ghidra/*.c
+workspace/ghidra/*.txt
