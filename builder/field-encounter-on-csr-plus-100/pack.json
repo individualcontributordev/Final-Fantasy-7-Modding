@@ -16,7 +16,7 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Vanilla Enc Rate",
   "discDigests": {
-    "1": "98b4acc85e6f861f9ed4dff53e413c6d23fceee918f2d6ad27037d81bc808723"
+    "1": "d771fa7ff43c4238a66627ab435c77f5acdabea6372f5d6564eee456bef66bf3"
   },
-  "baseVersion": "0.3.1"
+  "baseVersion": "0.3.2"
 }
