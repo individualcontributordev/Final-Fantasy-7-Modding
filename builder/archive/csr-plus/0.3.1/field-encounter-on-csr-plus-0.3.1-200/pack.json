@@ -1,0 +1,22 @@
+{
+  "id": "field-encounter-on-csr-plus-0.3.1-200",
+  "name": "Field Random Encounters -- Double Enc Rate (on CSR+ 0.3.1)",
+  "kind": "mod",
+  "version": "0.4.0",
+  "blurb": "About twice the random field battles of the unmodified game.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "csr-plus-0.3.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 200,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Double Enc Rate",
+  "discDigests": {
+    "1": "f8eb83c27da7b2f1a6ce26e8217cf94ef8329f4d5661a12417013c40f928901c"
+  },
+  "baseVersion": "0.3.1"
+}

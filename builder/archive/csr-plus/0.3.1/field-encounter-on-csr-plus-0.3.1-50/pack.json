@@ -1,0 +1,22 @@
+{
+  "id": "field-encounter-on-csr-plus-0.3.1-50",
+  "name": "Field Random Encounters -- Half Enc Rate (on CSR+ 0.3.1)",
+  "kind": "mod",
+  "version": "0.4.0",
+  "blurb": "About half the random field battles of the unmodified game.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "csr-plus-0.3.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 50,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "Half Enc Rate",
+  "discDigests": {
+    "1": "3c95f04cc85f7ca018711be415e33592c5a2dbb200c9304cc3f30197f7f02446"
+  },
+  "baseVersion": "0.3.1"
+}

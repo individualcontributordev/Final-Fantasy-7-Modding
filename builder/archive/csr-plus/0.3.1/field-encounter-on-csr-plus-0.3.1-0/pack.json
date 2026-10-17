@@ -1,0 +1,22 @@
+{
+  "id": "field-encounter-on-csr-plus-0.3.1-0",
+  "name": "Field Random Encounters -- No Encs (on CSR+ 0.3.1)",
+  "kind": "mod",
+  "version": "0.4.0",
+  "blurb": "No random field battles.",
+  "format": "ic-layer-v1",
+  "exclusiveGroup": "field-encounter-rate",
+  "compatibleBases": [
+    "csr-plus-0.3.1"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "rate": 0,
+  "groupLabel": "Field Random Encounters",
+  "optionLabel": "No Encs",
+  "discDigests": {
+    "1": "54ebbe21a79373d6c26aea1c8d562511d9c2d1510db55297b7cd0af08fbade3f"
+  },
+  "baseVersion": "0.3.1"
+}
