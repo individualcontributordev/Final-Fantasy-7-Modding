@@ -16,7 +16,7 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "Half Enc Rate",
   "discDigests": {
-    "1": "99c2d1e5a1ab14f066700d4dc091a47d00c681916e434654c54624fa516305eb"
+    "1": "96466caffb294c4ab16c4f644f54e277d9650b635dfae941c5e05b0643e9181a"
   },
-  "baseVersion": "0.3.2"
+  "baseVersion": "0.3.4"
 }
