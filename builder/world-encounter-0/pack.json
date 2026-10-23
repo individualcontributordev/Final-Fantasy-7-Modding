@@ -15,9 +15,9 @@
     "3": "./layers/disc3.layer.json"
   },
   "discDigests": {
-    "1": "e84b0fd60501f89e30fa37e5c51716a38ed2e8403787662e7f8897488a120554",
-    "2": "5d7e79d5d2976d1a098820a7ecb1028e1b907e510c19f89a25dcd588c034505f",
-    "3": "bbb8a29a94bb4a0e4f4bd39ddbbc609c08728b61ec00c525278019bd150b5519"
+    "1": "90d4fc36ba87b70acf940259769c9545b59739e3bb96df6dfcd0364b0a9b84d0",
+    "2": "6f6c69d5a7d6c599ea65e1b86fe5fdc835ecc9780836d151813ab44f2a5e1dd2",
+    "3": "28fb817d4a82329943fa0cec1d4251cc192c27bfdb12f53d121ad47844d2d1ac"
   },
   "rate": 0,
   "groupLabel": "World Random Encounters",

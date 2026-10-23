@@ -125,8 +125,8 @@ def recut_commands(
 	if against != "clean":
 		common += ["--csr-root", str(csr)]
 	cmds = [
-		(f"field on {against}", [sys.executable, str(FIELD), "--density", "all", *common]),
-		(f"world on {against}", [sys.executable, str(WORLD), "--density", "all", *common]),
+		(f"field on {against}", [sys.executable, str(FIELD), "--density", "0", *common]),
+		(f"world on {against}", [sys.executable, str(WORLD), "--density", "0", *common]),
 		(f"fanfare on {against}", [sys.executable, str(FANFARE), *common]),
 	]
 	if against == "csr-plus":  # New Game+ is only built for CSR+ disc 1

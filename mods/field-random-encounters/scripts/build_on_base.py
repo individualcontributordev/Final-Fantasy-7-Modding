@@ -33,6 +33,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 from libs.layer import apply_layer, build_layer  # noqa: E402
 from libs.local_paths import remove_unlisted_disc_layers  # noqa: E402
 from libs.timing import Timer  # noqa: E402
+from repair_mode2_edc import repair  # noqa: E402
 from build_field_bin import build as build_field_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
 from pack_meta import (  # noqa: E402
@@ -258,6 +259,8 @@ def build_one(
 		make_base_image(pristine, layer, base_bin)
 	with timer.stage("overlay"):
 		patched_bin = stub_and_inject(base_bin, work_dir, meta["rate"])
+	with timer.stage("repair"):
+		repair(base_bin, patched_bin, patched_bin)
 
 	print("=== diff -> field encounter layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
