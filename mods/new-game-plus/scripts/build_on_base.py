@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build and register the New Game+ layer for CSR+ disc 1.
+"""Build and register the New Game+ layers (CSR+ disc 1; clean discs 1-3).
 
-Reconstructs the exact builder parent (pristine + CSR+ base layer), applies the
+Reconstructs the exact builder parent (pristine, plus the CSR+ base layer for csr-plus), applies the
 fixed-site patch from ``apply_new_game_plus.py``, repairs footers against that
 parent, and diffs the result into ``ic-layer-v1``. Pack JSON and the manifest
 entry reuse the fanfare-skip writers. Same CLI shape as the other
@@ -33,8 +33,7 @@ _spec = importlib.util.spec_from_file_location(
 fb = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(fb)
 
-PACK_ID = "new-game-plus-on-csr-plus"
-DISC = 1
+PACK_IDS = {"csr-plus": "new-game-plus-on-csr-plus", "clean": "new-game-plus"}
 DISPLAY = "New Game+"
 BLURB = (
 	"Finishing the game adds a NEW GAME+ title item. It keeps characters, items, "
@@ -45,57 +44,48 @@ fb.HINT = HINT  # the shared pack/manifest writers read this module global
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_new_game_plus"
 
 
-def main() -> int:
-	ap = argparse.ArgumentParser(description="Build the New Game+ builder pack")
-	ap.add_argument("--against", default="csr-plus", help="only csr-plus is supported")
-	ap.add_argument("--discs", default="1")
-	ap.add_argument("--version", default=None)
-	ap.add_argument("--csr-root", type=Path)
-	ap.add_argument("--keep-work", action="store_true")
-	args = ap.parse_args()
-	if args.against != "csr-plus" or fb.parse_discs(args.discs) != [DISC]:
-		raise SystemExit("New Game+ is built for csr-plus disc 1 only")
-	timer = Timer()
-	version = args.version or (_MOD / "VERSION").read_text(encoding="utf-8").split()[0]
+def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, timer):
+	pack_id = PACK_IDS[against]
+	clean = against == "clean"
+	base_id, base_version, layer = "clean", "", None
+	if not clean:
+		base_id = fb.resolve_base_id(against, csr_manifest)
+		entry = next((b for b in csr_manifest["bases"] if str(b.get("id")) == base_id), {})
+		base_version = str(entry.get("version") or "").strip()
+		if not base_version:
+			raise SystemExit(f"CSR manifest has no version for base {base_id!r}")
+		layer = fb.load_layer(fb.resolve_layer_path(manifest_path, base_id, disc, csr_manifest))
 
-	manifest_path = fb.csr_manifest_path(args.csr_root)
-	csr_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-	base_id = fb.resolve_base_id("csr-plus", csr_manifest)
-	entry = next((b for b in csr_manifest["bases"] if str(b.get("id")) == base_id), {})
-	base_version = str(entry.get("version") or "").strip()
-	if not base_version:
-		raise SystemExit(f"CSR manifest has no version for base {base_id!r}")
-
-	pristine = fb.PRISTINE_DIR / f"FINALFANTASY7_D{DISC}.bin"
+	pristine = fb.PRISTINE_DIR / f"FINALFANTASY7_D{disc}.bin"
 	if not pristine.is_file():
 		raise SystemExit(f"Missing pristine: {pristine}")
-	work = WORK_ROOT / f"d{DISC}"
+	work = WORK_ROOT / f"{against}-d{disc}"
 	if work.exists():
 		shutil.rmtree(work)
 	work.mkdir(parents=True)
 
-	layer = fb.load_layer(fb.resolve_layer_path(manifest_path, base_id, DISC, csr_manifest))
 	base_bin = work / "base.bin"
 	with timer.stage("apply_base"):
 		fb.make_base_image(pristine, layer, base_bin)
 
 	with timer.stage("patch"):
 		img = bytearray(base_bin.read_bytes())
-		print(f"=== apply New Game+ sites: {apply_patch(img)} bytes ===")
+		# MOVIE_ID.BIN: CSR+ disc 1 only; retail disc 3 already holds those bytes.
+		print(f"=== apply New Game+ sites ({against} d{disc}): {apply_patch(img, movie_row=not clean)} bytes ===")
 		patched = work / "patched.bin"
 		patched.write_bytes(img)
 	repaired = work / "patched.repaired.bin"
 	with timer.stage("repair"):
 		repair(base_bin, patched, repaired)
 
-	out_path = _ROOT / "builder" / PACK_ID / "layers" / f"disc{DISC}.layer.json"
+	out_path = _ROOT / "builder" / pack_id / "layers" / f"disc{disc}.layer.json"
 	out_path.parent.mkdir(parents=True, exist_ok=True)
 	with timer.stage("diff"):
 		built = build_layer(
 			base_bin,
 			repaired,
-			layer_id=f"{PACK_ID}-disc{DISC}-v{version}",
-			description=f"New Game+ v{version} -- NTSC-U Disc {DISC} (on {base_id} {base_version})",
+			layer_id=f"{pack_id}-disc{disc}-v{version}",
+			description=f"New Game+ v{version} -- NTSC-U Disc {disc} (on {base_id} {base_version})".replace(" )", ")"),
 		)
 	stats = built["stats"]
 	if not stats["changedBytes"]:
@@ -112,17 +102,44 @@ def main() -> int:
 		if bytes(check) != repaired.read_bytes():
 			raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
 	print("  verify OK")
-
-	meta = dict(
-		pack_id=PACK_ID, version=version, base_version=base_version,
-		display=DISPLAY, blurb=BLURB, compatible=[base_id], discs=[DISC],
-	)
-	fb.write_pack_json(_ROOT / "builder" / PACK_ID, **meta)
-	fb.update_manifest(**meta)
-	print(f"Updated pack + manifest: {PACK_ID}")
-
-	if not args.keep_work:
+	if not keep_work:
 		shutil.rmtree(work)
+	return pack_id, base_id, base_version
+
+
+def main() -> int:
+	ap = argparse.ArgumentParser(description="Build the New Game+ builder pack")
+	ap.add_argument("--against", default="csr-plus", help="csr-plus | clean")
+	ap.add_argument("--discs", default=None, help="default: 1 for csr-plus, 1,2,3 for clean")
+	ap.add_argument("--version", default=None)
+	ap.add_argument("--csr-root", type=Path)
+	ap.add_argument("--keep-work", action="store_true")
+	args = ap.parse_args()
+	if args.against not in PACK_IDS:
+		raise SystemExit("New Game+ is built for csr-plus or clean only")
+	clean = args.against == "clean"
+	discs = fb.parse_discs(args.discs or ("1,2,3" if clean else "1"))
+	if not clean and discs != [1]:
+		raise SystemExit("New Game+ on csr-plus is disc 1 only")
+	timer = Timer()
+	version = args.version or (_MOD / "VERSION").read_text(encoding="utf-8").split()[0]
+
+	manifest_path = csr_manifest = None
+	if not clean:
+		manifest_path = fb.csr_manifest_path(args.csr_root)
+		csr_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+	for disc in discs:
+		pack_id, base_id, base_version = build_disc(
+			args.against, disc, version, csr_manifest, manifest_path, args.keep_work, timer
+		)
+	meta = dict(
+		pack_id=pack_id, version=version, base_version=base_version,
+		display=DISPLAY, blurb=BLURB, compatible=[base_id], discs=discs,
+	)
+	fb.write_pack_json(_ROOT / "builder" / pack_id, **meta)
+	fb.update_manifest(**meta)
+	print(f"Updated pack + manifest: {pack_id}")
 	timer.total()
 	return 0
 
