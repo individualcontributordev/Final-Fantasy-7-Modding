@@ -29,6 +29,7 @@ RATES = (0, 50, 100, 200)
 FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
 FANFARE = ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
+NGP = ROOT / "mods" / "new-game-plus" / "scripts" / "build_on_base.py"
 
 
 def require_lf_json() -> None:
@@ -119,15 +120,19 @@ def discs_for(against: str, manifest: dict | None) -> list[int]:
 def recut_commands(
 	against: str, discs: list[int], csr: Path | None
 ) -> list[tuple[str, list[str]]]:
-	"""The three recuts for one base, in the order they should run."""
+	"""The recuts for one base, in the order they should run."""
 	common = ["--against", against, "--discs", ",".join(str(d) for d in discs)]
 	if against != "clean":
 		common += ["--csr-root", str(csr)]
-	return [
+	cmds = [
 		(f"field on {against}", [sys.executable, str(FIELD), "--density", "all", *common]),
 		(f"world on {against}", [sys.executable, str(WORLD), "--density", "all", *common]),
 		(f"fanfare on {against}", [sys.executable, str(FANFARE), *common]),
 	]
+	if against == "csr-plus":  # New Game+ is only built for CSR+ disc 1
+		args = ["--against", against, "--discs", "1", "--csr-root", str(csr)]
+		cmds.append((f"new-game-plus on {against}", [sys.executable, str(NGP), *args]))
+	return cmds
 
 
 def run(label: str, cmd: list[str], timer: Timer) -> None:
@@ -183,7 +188,7 @@ def remove_retired_encounter_packs() -> None:
 
 def main() -> int:
 	ap = argparse.ArgumentParser(
-		description="Recut field, world, and fanfare packs against current bases."
+		description="Recut field, world, fanfare and New Game+ packs against current bases."
 	)
 	ap.add_argument(
 		"bases",

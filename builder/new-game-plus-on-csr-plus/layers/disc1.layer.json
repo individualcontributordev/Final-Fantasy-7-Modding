@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
-  "id": "new-game-plus-on-csr-plus-disc1",
-  "description": "New Game+ v0.1.0 -- NTSC-U Disc 1 (on csr-plus 0.3.5)",
+  "id": "new-game-plus-on-csr-plus-disc1-v0.1.0",
+  "description": "New Game+ v0.1.0 -- NTSC-U Disc 1 (on csr-plus 0.3.7)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 748775664,

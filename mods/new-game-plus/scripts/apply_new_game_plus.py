@@ -39,10 +39,12 @@ def _span(img, lba: int, off: int, n: int) -> list[int]:
 	return [(lba + (off + k) // USER) * SECTOR + USER_OFF + (off + k) % USER for k in range(n)]
 
 
-def apply_patch(img: bytearray) -> int:
-	"""Patch img in place; refuse the whole disc if any site is unrecognised."""
+def apply_patch(img: bytearray, revert: bool = False) -> int:
+	"""Patch img in place (or undo it); refuse the whole disc if any site is unrecognised."""
 	todo = []
 	for path, off, exp, new in load_sites():
+		if revert:
+			exp, new = new, exp
 		pos = _span(img, find_file(img, path).lba, off, len(exp))
 		got = bytes(img[p] for p in pos)
 		if got == new:
@@ -59,13 +61,15 @@ def apply_patch(img: bytearray) -> int:
 
 
 def main() -> None:
-	if len(sys.argv) != 2:
-		raise SystemExit("usage: apply_new_game_plus.py <csr-plus-disc1.bin>")
-	path = Path(sys.argv[1])
+	args = [a for a in sys.argv[1:] if a != "--revert"]
+	if len(args) != 1:
+		raise SystemExit("usage: apply_new_game_plus.py [--revert] <csr-plus-disc1.bin>")
+	revert = len(args) != len(sys.argv) - 1
+	path = Path(args[0])
 	img = bytearray(path.read_bytes())
-	n = apply_patch(img)
+	n = apply_patch(img, revert)
 	path.write_bytes(img)
-	print(f"Patched {n} NEW GAME+ site(s) in {path}; now run repair_mode2_edc.py")
+	print(f"{'Reverted' if revert else 'Patched'} {n} NEW GAME+ site(s) in {path}; now run repair_mode2_edc.py")
 
 
 if __name__ == "__main__":
