@@ -6,8 +6,8 @@
   "stats": {
     "originalBytes": 747435024,
     "modifiedBytes": 747435024,
-    "changedBytes": 96835,
-    "records": 392
+    "changedBytes": 96823,
+    "records": 384
   },
   "records": [
     {
@@ -23,14 +23,6 @@
       "hex": "b40b4d6f"
     },
     {
-      "offset": 129166882,
-      "hex": "6f"
-    },
-    {
-      "offset": 129166889,
-      "hex": "2a"
-    },
-    {
       "offset": 129166916,
       "hex": "f02f"
     },
@@ -41,14 +33,6 @@
     {
       "offset": 129166942,
       "hex": "a83d3540"
-    },
-    {
-      "offset": 129166968,
-      "hex": "79"
-    },
-    {
-      "offset": 129166975,
-      "hex": "fa"
     },
     {
       "offset": 129167002,
@@ -67,16 +51,8 @@
       "hex": "eee81ede8da50c85"
     },
     {
-      "offset": 129167055,
-      "hex": "093cc4b0"
-    },
-    {
-      "offset": 129167060,
-      "hex": "e5"
-    },
-    {
-      "offset": 129167062,
-      "hex": "71"
+      "offset": 129167056,
+      "hex": "3cc4"
     },
     {
       "offset": 129167070,
@@ -91,16 +67,8 @@
       "hex": "4fd97b8f863b98ac"
     },
     {
-      "offset": 129167107,
-      "hex": "b6a15f06"
-    },
-    {
-      "offset": 129167112,
-      "hex": "b8"
-    },
-    {
-      "offset": 129167114,
-      "hex": "2d"
+      "offset": 129167108,
+      "hex": "a15f"
     },
     {
       "offset": 129167122,

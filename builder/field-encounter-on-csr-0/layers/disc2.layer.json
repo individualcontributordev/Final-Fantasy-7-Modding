@@ -6,8 +6,8 @@
   "stats": {
     "originalBytes": 732657408,
     "modifiedBytes": 732657408,
-    "changedBytes": 96813,
-    "records": 427
+    "changedBytes": 96793,
+    "records": 417
   },
   "records": [
     {
@@ -31,18 +31,6 @@
       "hex": "52b5"
     },
     {
-      "offset": 129166926,
-      "hex": "d2"
-    },
-    {
-      "offset": 129166929,
-      "hex": "6b"
-    },
-    {
-      "offset": 129166933,
-      "hex": "2d"
-    },
-    {
       "offset": 129166942,
       "hex": "f00d34b6"
     },
@@ -55,18 +43,6 @@
       "hex": "de1a"
     },
     {
-      "offset": 129167012,
-      "hex": "f8"
-    },
-    {
-      "offset": 129167015,
-      "hex": "a5"
-    },
-    {
-      "offset": 129167019,
-      "hex": "c9"
-    },
-    {
       "offset": 129167028,
       "hex": "e2632339"
     },
@@ -77,14 +53,6 @@
     {
       "offset": 129167056,
       "hex": "d04e"
-    },
-    {
-      "offset": 129167061,
-      "hex": "45f78d"
-    },
-    {
-      "offset": 129167065,
-      "hex": "64a0e097"
     },
     {
       "offset": 129167070,
@@ -101,14 +69,6 @@
     {
       "offset": 129167108,
       "hex": "ffc6"
-    },
-    {
-      "offset": 129167113,
-      "hex": "edc0ed"
-    },
-    {
-      "offset": 129167117,
-      "hex": "a1addb27"
     },
     {
       "offset": 129167122,
