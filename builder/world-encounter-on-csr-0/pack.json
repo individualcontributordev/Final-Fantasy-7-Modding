@@ -19,7 +19,7 @@
     "2": "d8b44c341fb70d19990e75c8425a21a6a7a9b80d86ff5d50e126f04285c2735e",
     "3": "384d4133671b2634b973c962220d14b7eed9f7d71554422fe8dc41125fe4c789"
   },
-  "baseVersion": "0.14.3",
+  "baseVersion": "0.14.4",
   "rate": 0,
   "groupLabel": "World Random Encounters",
   "optionLabel": "No Encs"
