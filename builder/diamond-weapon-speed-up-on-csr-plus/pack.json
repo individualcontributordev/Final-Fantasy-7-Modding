@@ -1,0 +1,19 @@
+{
+  "id": "diamond-weapon-speed-up-on-csr-plus",
+  "name": "Diamond Weapon Speed Up",
+  "kind": "mod",
+  "version": "0.2.3",
+  "blurb": "Diamond Weapon reaches Midgar in about 15 seconds instead of about 67.",
+  "hint": "Diamond Weapon marches to Midgar roughly twice as fast.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "d60d78bb0741eaab903fcd425d4d319c7190dbe5f1ad63aed75745e588328438"
+  },
+  "baseVersion": "0.3.8"
+}
