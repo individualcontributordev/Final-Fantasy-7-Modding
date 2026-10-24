@@ -254,12 +254,12 @@ def main() -> int:
 		help="Frames for the underground first leg, vanilla 2800 (default 700 = speed 32 at --step 4; 0 = vanilla)",
 	)
 	ap.add_argument(
-		"--leg1-speed", type=int, default=0,
-		help="Fixed leg 1 speed; distance = speed x frames (default 0 = keep vanilla distance)",
+		"--leg1-speed", type=int, default=48,
+		help="Fixed leg 1 speed; distance = speed x frames (default 48, as shipped in csr-plus 0.3.9; 0 = keep vanilla distance)",
 	)
 	ap.add_argument(
-		"--final-trim", type=int, default=0,
-		help="Counter units cut from the end of the approach; at post-turn speed 64 each unit is 16 world units shorter (default 0)",
+		"--final-trim", type=int, default=100,
+		help="Counter units cut from the end of the approach; at post-turn speed 64 each unit is 16 world units shorter (default 100, as shipped in csr-plus 0.3.9)",
 	)
 	ap.add_argument(
 		"--post-turn-mult",
