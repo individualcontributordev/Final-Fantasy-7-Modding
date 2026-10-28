@@ -106,23 +106,29 @@ def csr_manifest_path(cli_root: Path | None) -> Path:
 
 
 def resolve_base_id(against: str, manifest: dict) -> str:
-	"""Choose the concrete enabled id for a requested CSR base family."""
+	"""Choose the concrete CSR manifest id for a base family."""
 	if against == "clean":
 		return "clean"
-	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
+
+	bases = manifest.get("bases") or []  # disabled bases (e.g. highwind) are still built
 	ids = [str(b.get("id", "")) for b in bases]
+
 	if against == "highwind":
 		cands = [i for i in ids if i == "highwind" or i.startswith("highwind-v")]
-	elif against == "csr":
-		cands = [i for i in ids if i == "csr" or (i.startswith("csr-v") and "plus" not in i)]
-		if not cands:
-			cands = [i for i in ids if i.startswith("csr") and "plus" not in i]
 	elif against == "csr-plus":
 		cands = [i for i in ids if i == "csr-plus" or i.startswith("csr-plus-v")]
+	elif against == "csr":
+		cands = [i for i in ids if i == "csr" or re.fullmatch(r"csr-v[0-9.]+", i)]
 	else:
-		raise SystemExit(f"unknown against {against}")
+		raise SystemExit(f"Unknown against: {against}")
+
 	if not cands:
-		return AGAINST[against]["base_id"]
+		raise SystemExit(
+			f"No base for --against {against} in CSR manifest. Saw: {ids}"
+		)
+	preferred = AGAINST[against]["base_id"]
+	if preferred in cands:
+		return preferred
 	cands.sort()
 	return cands[-1]
 
@@ -130,13 +136,15 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 def resolve_layer_path(
 	manifest_path: Path, base_id: str, disc: int, manifest: dict
 ) -> Path:
-	"""Resolve one base layer from the local CSR manifest."""
-	bases = manifest.get("bases") or []
-	base = next((b for b in bases if str(b.get("id")) == base_id), None)
-	if base is None:
-		raise SystemExit(f"base {base_id} not in remote manifest")
-	discs = base.get("discs") or {}
-	rel = discs.get(str(disc)) or discs.get(disc)
+	"""Resolve a concrete base layer from the local CSR manifest."""
+	entry = next(
+		(b for b in manifest.get("bases") or [] if b.get("id") == base_id),
+		None,
+	)
+	if not entry:
+		raise SystemExit(f"Base id {base_id!r} not found in CSR manifest")
+	discs = entry.get("discs") or {}
+	rel = discs.get(str(disc))
 	if not rel:
 		raise SystemExit(f"{base_id} has no layer for disc {disc}")
 	path = (manifest_path.parent / str(rel).lstrip("./")).resolve()

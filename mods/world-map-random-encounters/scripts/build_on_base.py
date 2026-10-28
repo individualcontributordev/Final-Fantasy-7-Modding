@@ -88,11 +88,13 @@ def csr_manifest_path(cli_root: Path | None) -> Path:
 
 
 def resolve_base_id(against: str, manifest: dict) -> str:
-	"""Choose the enabled concrete CSR manifest id for a base family."""
+	"""Choose the concrete CSR manifest id for a base family."""
 	if against == "clean":
 		return "clean"
-	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
+
+	bases = manifest.get("bases") or []  # disabled bases (e.g. highwind) are still built
 	ids = [str(b.get("id", "")) for b in bases]
+
 	if against == "highwind":
 		cands = [i for i in ids if i == "highwind" or i.startswith("highwind-v")]
 	elif against == "csr-plus":
@@ -101,8 +103,11 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 		cands = [i for i in ids if i == "csr" or re.fullmatch(r"csr-v[0-9.]+", i)]
 	else:
 		raise SystemExit(f"Unknown against: {against}")
+
 	if not cands:
-		raise SystemExit(f"No enabled base for --against {against}. Saw: {ids}")
+		raise SystemExit(
+			f"No base for --against {against} in CSR manifest. Saw: {ids}"
+		)
 	preferred = AGAINST[against]["base_id"]
 	if preferred in cands:
 		return preferred
@@ -132,13 +137,15 @@ def csr_entry_version(manifest: dict | None, base_id: str) -> str:
 def resolve_layer_path(
 	manifest_path: Path, base_id: str, disc: int, manifest: dict
 ) -> Path:
-	"""Resolve one disc layer from the local CSR manifest."""
-	entry = next((b for b in manifest.get("bases") or [] if b.get("id") == base_id), None)
+	"""Resolve a concrete base layer from the local CSR manifest."""
+	entry = next(
+		(b for b in manifest.get("bases") or [] if b.get("id") == base_id),
+		None,
+	)
 	if not entry:
 		raise SystemExit(f"Base id {base_id!r} not found in CSR manifest")
-	if entry.get("enabled") is False:
-		raise SystemExit(f"Base {base_id} is disabled")
-	rel = (entry.get("discs") or {}).get(str(disc))
+	discs = entry.get("discs") or {}
+	rel = discs.get(str(disc))
 	if not rel:
 		raise SystemExit(f"{base_id} has no layer for disc {disc}")
 	path = (manifest_path.parent / str(rel).lstrip("./")).resolve()

@@ -97,11 +97,11 @@ def csr_manifest_path(cli_root: Path | None) -> Path:
 
 
 def resolve_base_id(against: str, manifest: dict) -> str:
-	"""Choose the enabled concrete CSR manifest id for a base family."""
+	"""Choose the concrete CSR manifest id for a base family."""
 	if against == "clean":
 		return "clean"
 
-	bases = [b for b in (manifest.get("bases") or []) if b.get("enabled") is not False]
+	bases = manifest.get("bases") or []  # disabled bases (e.g. highwind) are still built
 	ids = [str(b.get("id", "")) for b in bases]
 
 	if against == "highwind":
@@ -115,7 +115,7 @@ def resolve_base_id(against: str, manifest: dict) -> str:
 
 	if not cands:
 		raise SystemExit(
-			f"No enabled base for --against {against} in CSR manifest. Saw: {ids}"
+			f"No base for --against {against} in CSR manifest. Saw: {ids}"
 		)
 	preferred = AGAINST[against]["base_id"]
 	if preferred in cands:
@@ -153,8 +153,6 @@ def resolve_layer_path(
 	)
 	if not entry:
 		raise SystemExit(f"Base id {base_id!r} not found in CSR manifest")
-	if entry.get("enabled") is False:
-		raise SystemExit(f"Base {base_id} is disabled in remote manifest")
 	discs = entry.get("discs") or {}
 	rel = discs.get(str(disc))
 	if not rel:

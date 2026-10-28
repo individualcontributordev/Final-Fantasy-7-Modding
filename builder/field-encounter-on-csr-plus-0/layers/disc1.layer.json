@@ -4,8 +4,8 @@
   "description": "Field encounters 0% RCnt2 FORCE stub -- NTSC-U Disc 1 (against csr-plus)",
   "target": "disc-image",
   "stats": {
-    "originalBytes": 748775664,
-    "modifiedBytes": 748775664,
+    "originalBytes": 749128464,
+    "modifiedBytes": 749128464,
     "changedBytes": 96830,
     "records": 372
   },

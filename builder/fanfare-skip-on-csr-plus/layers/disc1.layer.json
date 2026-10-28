@@ -4,8 +4,8 @@
   "description": "Fanfare skip -- NTSC-U Disc 1 (against csr-plus)",
   "target": "disc-image",
   "stats": {
-    "originalBytes": 748775664,
-    "modifiedBytes": 748775664,
+    "originalBytes": 749128464,
+    "modifiedBytes": 749128464,
     "changedBytes": 4129,
     "records": 29
   },
