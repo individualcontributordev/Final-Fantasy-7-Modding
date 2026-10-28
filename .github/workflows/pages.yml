@@ -24,6 +24,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out the CSR scripts (for the shared-file drift test)
+        uses: actions/checkout@v4
+        with:
+          repository: individualcontributordev/Final-Fantasy-7-CSR
+          path: _csr
+          sparse-checkout: scripts
+      - name: Validate manifest and run tests
+        env:
+          FF7_CSR_ROOT: ${{ github.workspace }}/_csr
+        run: |
+          python3 scripts/validate_manifest.py
+          python3 -m unittest discover -s tests
       - name: Stage builder packs only
         run: |
           mkdir -p _site

@@ -81,11 +81,16 @@ class ApplyLayerTests(unittest.TestCase):
 
 
 class SharedScriptTests(unittest.TestCase):
+    # Files kept as byte-identical copies of the CSR repo's.
+    SHARED = ("libs/layer.py", "libs/timing.py", "repair_mode2_edc.py", "validate_manifest.py")
+
     @unittest.skipUnless(os.environ.get("FF7_CSR_ROOT"), "FF7_CSR_ROOT not set")
-    def test_repair_script_matches_csr_copy(self) -> None:
-        csr_copy = Path(os.environ["FF7_CSR_ROOT"]) / "scripts" / "repair_mode2_edc.py"
-        local_copy = ROOT / "scripts" / "repair_mode2_edc.py"
-        self.assertEqual(local_copy.read_bytes(), csr_copy.read_bytes())
+    def test_shared_scripts_match_csr_copy(self) -> None:
+        for name in self.SHARED:
+            with self.subTest(name):
+                csr_copy = Path(os.environ["FF7_CSR_ROOT"]) / "scripts" / name
+                local_copy = ROOT / "scripts" / name
+                self.assertEqual(local_copy.read_bytes(), csr_copy.read_bytes())
 
 
 class RepairTests(unittest.TestCase):
