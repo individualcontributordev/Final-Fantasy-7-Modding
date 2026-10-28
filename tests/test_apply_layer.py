@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -17,13 +18,15 @@ from repair_mode2_edc import SECTOR, generate_mode2_form1_edc_ecc, repair
 import build_base_layer
 
 
-def mode2_sector(*, form2: bool) -> bytearray:
+# MSF header (BCD minute/second/frame of lba+150, then mode 2) for the LBAs used below.
+HEADER = {0: b"\x00\x02\x00\x02", 1: b"\x00\x02\x01\x02"}
+
+
+def mode2_sector(*, form2: bool, lba: int = 0) -> bytearray:
     sector = bytearray(SECTOR)
     sector[0:12] = b"\x00" + (b"\xff" * 10) + b"\x00"
-    sector[15] = 2
-    if form2:
-        sector[18] = 0x20
-        sector[22] = 0x20
+    sector[12:16] = HEADER[lba]
+    sector[18] = sector[22] = 0x20 if form2 else 0x08
     return sector
 
 
@@ -77,6 +80,14 @@ class ApplyLayerTests(unittest.TestCase):
             apply_layer(bytearray(SECTOR), {"format": "nope", "records": []})
 
 
+class SharedScriptTests(unittest.TestCase):
+    @unittest.skipUnless(os.environ.get("FF7_CSR_ROOT"), "FF7_CSR_ROOT not set")
+    def test_repair_script_matches_csr_copy(self) -> None:
+        csr_copy = Path(os.environ["FF7_CSR_ROOT"]) / "scripts" / "repair_mode2_edc.py"
+        local_copy = ROOT / "scripts" / "repair_mode2_edc.py"
+        self.assertEqual(local_copy.read_bytes(), csr_copy.read_bytes())
+
+
 class RepairTests(unittest.TestCase):
     def repair(self, pristine_data: bytes, image_data: bytes) -> bytes:
         with tempfile.TemporaryDirectory() as directory:
@@ -98,6 +109,16 @@ class RepairTests(unittest.TestCase):
 
         self.assertEqual(repaired, image_sector)
 
+    def test_changed_video_sector_with_form2_bit_clear_is_untouched(self) -> None:
+        pristine_sector = mode2_sector(form2=False)
+        pristine_sector[18] = pristine_sector[22] = 0x42
+        image_sector = bytearray(pristine_sector)
+        image_sector[2200:2204] = b"STR!"
+
+        repaired = self.repair(bytes(pristine_sector), bytes(image_sector))
+
+        self.assertEqual(repaired, image_sector)
+
     def test_changed_form1_payload_with_pristine_footer_is_recomputed(self) -> None:
         pristine_sector = mode2_sector(form2=False)
         generate_mode2_form1_edc_ecc(pristine_sector)
@@ -113,7 +134,7 @@ class RepairTests(unittest.TestCase):
     def test_appended_form1_sector_gets_fresh_footer(self) -> None:
         pristine_sector = mode2_sector(form2=False)
         generate_mode2_form1_edc_ecc(pristine_sector)
-        appended = mode2_sector(form2=False)
+        appended = mode2_sector(form2=False, lba=1)
         appended[24:28] = b"DATA"
 
         expected = bytearray(appended)

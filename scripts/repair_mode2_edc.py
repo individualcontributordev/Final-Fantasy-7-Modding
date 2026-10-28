@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Repair MODE2/2352 Form 1 footers using a pristine same-disc reference.
 
-Before rebuilding ic-layer mods, run this on each edited FINALFANTASY7_DN.bin
+Before rebuilding ic-layer packs, run this on each edited FINALFANTASY7_DN.bin
 so diffs do not bake zeroed footers into the layer JSON.
 
   python3 scripts/repair_mode2_edc.py \\
@@ -24,7 +24,10 @@ edited BIN.
 from __future__ import annotations
 
 import argparse
+from contextlib import nullcontext
 from pathlib import Path
+
+from libs.timing import Timer
 
 SECTOR = 2352
 USER_OFF = 24
@@ -58,12 +61,18 @@ def _bcd(n: int) -> int:
 
 
 def _is_mode2_form1(sec: bytes | bytearray) -> bool:
-	"""Recognize the raw sync/mode envelope accepted by this repair pass."""
+	"""Plain Mode 2 Form 1 data sector; same rule as builder/edc.js isMode2Form1.
+
+	FMV/XA sectors can have the Form 2 bit clear (video 0x42) but carry a
+	2324-byte payload, so a Form 1 footer would overwrite it. Require the Data bit
+	and none of Form 2 / audio / video.
+	"""
 	if sec[0] != 0 or sec[11] != 0 or sec[15] != 2:
 		return False
-	has_sync = all(sec[i] == 0xFF for i in range(1, 11))
-	is_form2 = bool(sec[18] & 0x20)
-	return has_sync and not is_form2
+	if not all(sec[i] == 0xFF for i in range(1, 11)):
+		return False
+	submode = sec[18]
+	return bool(submode & 0x08) and not submode & 0x26
 
 
 def generate_mode2_form1_edc_ecc(sector: bytearray) -> None:
@@ -132,10 +141,12 @@ def _fix_form2_edc(sec: bytearray) -> bool:
 	return True
 
 
-def repair(pristine: Path, inp: Path, out: Path) -> dict:
+def repair(pristine: Path, inp: Path, out: Path, timer: Timer | None = None) -> dict:
 	"""Repair one image and return sector-count diagnostics."""
-	p = pristine.read_bytes()
-	b = bytearray(inp.read_bytes())
+	stage = timer.stage if timer is not None else lambda _name: nullcontext()
+	with stage("read"):
+		p = pristine.read_bytes()
+		b = bytearray(inp.read_bytes())
 	if len(p) % SECTOR:
 		raise SystemExit("pristine length not multiple of 2352")
 	if len(b) % SECTOR:
@@ -147,49 +158,50 @@ def repair(pristine: Path, inp: Path, out: Path) -> dict:
 	pristine_sectors = len(p) // SECTOR
 	restored = recomputed = already_ok = skipped = form2_fixed = 0
 
-	for lba in range(nsect):
-		off = lba * SECTOR
-		sec_b = b[off : off + SECTOR]
+	with stage("repair"):
+		for lba in range(nsect):
+			off = lba * SECTOR
+			sec_b = b[off : off + SECTOR]
 
-		if lba >= pristine_sectors:
-			repaired = _recompute_form1(sec_b)
-			if repaired is None:
-				skipped += 1
+			if lba >= pristine_sectors:
+				repaired = _recompute_form1(sec_b)
+				if repaired is None:
+					skipped += 1
+					continue
+				b[off : off + SECTOR] = repaired
+				recomputed += 1
 				continue
+
+			sec_p = p[off : off + SECTOR]
+			if sec_b == sec_p:
+				already_ok += 1
+				continue
+			if not _is_mode2_form1(sec_b):
+				fixed = bytearray(sec_b)
+				if _fix_form2_edc(fixed):
+					b[off : off + SECTOR] = fixed
+					form2_fixed += 1
+				else:
+					skipped += 1
+				continue
+
+			repaired = _recompute_form1(sec_b)
+			assert repaired is not None
+			if repaired == sec_b:
+				already_ok += 1
+				continue
+
+			pf = sec_p[EDC_OFF : EDC_OFF + FOOTER_LEN]
+			pristine_edc_data = sec_p[OFFSET_MODE2_SUBHEADER:EDC_OFF]
+			image_edc_data = sec_b[OFFSET_MODE2_SUBHEADER:EDC_OFF]
+			edc_data_is_unchanged = pristine_edc_data == image_edc_data
+			if edc_data_is_unchanged:
+				b[off + EDC_OFF : off + EDC_OFF + FOOTER_LEN] = pf
+				restored += 1
+				continue
+
 			b[off : off + SECTOR] = repaired
 			recomputed += 1
-			continue
-
-		sec_p = p[off : off + SECTOR]
-		if sec_b == sec_p:
-			already_ok += 1
-			continue
-		if not _is_mode2_form1(sec_b):
-			fixed = bytearray(sec_b)
-			if _fix_form2_edc(fixed):
-				b[off : off + SECTOR] = fixed
-				form2_fixed += 1
-			else:
-				skipped += 1
-			continue
-
-		repaired = _recompute_form1(sec_b)
-		assert repaired is not None
-		if repaired == sec_b:
-			already_ok += 1
-			continue
-
-		pf = sec_p[EDC_OFF : EDC_OFF + FOOTER_LEN]
-		pristine_edc_data = sec_p[OFFSET_MODE2_SUBHEADER:EDC_OFF]
-		image_edc_data = sec_b[OFFSET_MODE2_SUBHEADER:EDC_OFF]
-		edc_data_is_unchanged = pristine_edc_data == image_edc_data
-		if edc_data_is_unchanged:
-			b[off + EDC_OFF : off + EDC_OFF + FOOTER_LEN] = pf
-			restored += 1
-			continue
-
-		b[off : off + SECTOR] = repaired
-		recomputed += 1
 
 	# CSR+ leaves stale MSF addresses on some padding sectors (disc 1 LBA 198594+);
 	# drives rewrite them, so verify fails. The header is outside EDC/ECC, so just patch it.
@@ -205,7 +217,8 @@ def repair(pristine: Path, inp: Path, out: Path) -> dict:
 			header_fixed += 1
 
 	out.parent.mkdir(parents=True, exist_ok=True)
-	out.write_bytes(b)
+	with stage("write"):
+		out.write_bytes(b)
 	return {
 		"header_msf_fixed": header_fixed,
 		"sectors": nsect,
@@ -226,13 +239,16 @@ def main() -> None:
 	ap.add_argument("image", type=Path, help="Edited BIN to repair")
 	ap.add_argument("-o", "--output", type=Path, required=True, help="Repaired BIN")
 	args = ap.parse_args()
+	timer = Timer()
 	stats = repair(
 		args.pristine.expanduser(),
 		args.image.expanduser(),
 		args.output.expanduser(),
+		timer=timer,
 	)
 	for k, v in stats.items():
 		print(f"{k}: {v}")
+	timer.total()
 
 
 if __name__ == "__main__":
