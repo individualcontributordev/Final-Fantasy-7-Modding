@@ -1,0 +1,23 @@
+{
+  "id": "new-game-plus-on-csr",
+  "name": "New Game+",
+  "kind": "mod",
+  "version": "0.1.1",
+  "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+  "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "discDigests": {
+    "1": "57f6bc16d539f709ee7ad6b9f959f95cec07dfd66865bfa39bf5089751b0547f",
+    "2": "5755cbf8e68ebc5464fb934ef81c26487c78fb07ca9f91a43048188fd579e00b",
+    "3": "adac53be143a22b8d11ad999617e7635294df1bad42d6d89103f87a2772ee0ca"
+  },
+  "baseVersion": "0.14.4"
+}

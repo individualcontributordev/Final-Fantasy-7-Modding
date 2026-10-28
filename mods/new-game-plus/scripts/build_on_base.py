@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and register the New Game+ layers (CSR+ disc 1; clean discs 1-3).
+"""Build and register the New Game+ layers (CSR+ and Highwind disc 1; CSR and clean discs 1-3).
 
 Reconstructs the exact builder parent (pristine, plus the CSR+ base layer for csr-plus), applies the
 fixed-site patch from ``apply_new_game_plus.py``, repairs footers against that
@@ -33,7 +33,9 @@ _spec = importlib.util.spec_from_file_location(
 fb = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(fb)
 
-PACK_IDS = {"csr-plus": "new-game-plus-on-csr-plus", "clean": "new-game-plus"}
+PACK_IDS = {"csr-plus": "new-game-plus-on-csr-plus", "csr": "new-game-plus-on-csr",
+	"highwind": "new-game-plus-on-highwind", "clean": "new-game-plus"}
+ONE_DISC = ("csr-plus", "highwind")  # bases that only ship disc 1
 DISPLAY = "New Game+"
 BLURB = (
 	"Finishing the game adds a NEW GAME+ title item. It keeps characters, items, "
@@ -71,7 +73,8 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 	with timer.stage("patch"):
 		img = bytearray(base_bin.read_bytes())
 		# MOVIE_ID.BIN: CSR+ disc 1 only; retail disc 3 already holds those bytes.
-		print(f"=== apply New Game+ sites ({against} d{disc}): {apply_patch(img, movie_row=not clean)} bytes ===")
+		patched_bytes = apply_patch(img, movie_row=against == "csr-plus")
+		print(f"=== apply New Game+ sites ({against} d{disc}): {patched_bytes} bytes ===")
 		patched = work / "patched.bin"
 		patched.write_bytes(img)
 	repaired = work / "patched.repaired.bin"
@@ -109,18 +112,18 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 
 def main() -> int:
 	ap = argparse.ArgumentParser(description="Build the New Game+ builder pack")
-	ap.add_argument("--against", default="csr-plus", help="csr-plus | clean")
-	ap.add_argument("--discs", default=None, help="default: 1 for csr-plus, 1,2,3 for clean")
+	ap.add_argument("--against", default="csr-plus", help="csr-plus | csr | highwind | clean")
+	ap.add_argument("--discs", default=None, help="default: 1 for csr-plus, 1,2,3 otherwise")
 	ap.add_argument("--version", default=None)
 	ap.add_argument("--csr-root", type=Path)
 	ap.add_argument("--keep-work", action="store_true")
 	args = ap.parse_args()
 	if args.against not in PACK_IDS:
-		raise SystemExit("New Game+ is built for csr-plus or clean only")
+		raise SystemExit("New Game+ is built for csr-plus, csr, highwind or clean only")
 	clean = args.against == "clean"
-	discs = fb.parse_discs(args.discs or ("1,2,3" if clean else "1"))
-	if not clean and discs != [1]:
-		raise SystemExit("New Game+ on csr-plus is disc 1 only")
+	discs = fb.parse_discs(args.discs or ("1" if args.against in ONE_DISC else "1,2,3"))
+	if args.against in ONE_DISC and discs != [1]:
+		raise SystemExit(f"New Game+ on {args.against} is disc 1 only")
 	timer = Timer()
 	version = args.version or (_MOD / "VERSION").read_text(encoding="utf-8").split()[0]
 

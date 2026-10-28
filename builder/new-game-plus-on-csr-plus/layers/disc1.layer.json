@@ -1,13 +1,13 @@
 {
   "format": "ic-layer-v1",
-  "id": "new-game-plus-on-csr-plus-disc1-v0.1.0",
-  "description": "New Game+ v0.1.0 -- NTSC-U Disc 1 (on csr-plus 1.0.0rc1)",
+  "id": "new-game-plus-on-csr-plus-disc1-v0.1.1",
+  "description": "New Game+ v0.1.1 -- NTSC-U Disc 1 (on csr-plus 1.0.0rc1)",
   "target": "disc-image",
   "stats": {
-    "originalBytes": 748775664,
-    "modifiedBytes": 748775664,
-    "changedBytes": 1440,
-    "records": 236
+    "originalBytes": 749128464,
+    "modifiedBytes": 749128464,
+    "changedBytes": 1435,
+    "records": 238
   },
   "records": [
     {
@@ -784,23 +784,27 @@
     },
     {
       "offset": 298446248,
-      "hex": "00000000f00942300a"
+      "hex": "0a80033cf00942300a"
     },
     {
       "offset": 298446258,
-      "hex": "001200"
+      "hex": "00122865638c0800401000006394"
     },
     {
-      "offset": 298446262,
-      "hex": "000008004010000000000a80033c2865639400000000b850633802"
+      "offset": 298446274,
+      "hex": "00001d"
     },
     {
-      "offset": 298446290,
-      "hex": "601000"
+      "offset": 298446278,
+      "hex": "633804006010000000002110000000"
     },
     {
       "offset": 298446294,
-      "hex": "0000211000"
+      "hex": "0000"
+    },
+    {
+      "offset": 298446297,
+      "hex": "0000"
     },
     {
       "offset": 298446300,
@@ -808,7 +812,7 @@
     },
     {
       "offset": 298447352,
-      "hex": "46d75feb"
+      "hex": "fbae2c45"
     },
     {
       "offset": 298447358,
@@ -824,23 +828,27 @@
     },
     {
       "offset": 298447366,
-      "hex": "339c961cfdc3e10ce7"
+      "hex": "5fcf8469fdc3e10ce7"
     },
     {
       "offset": 298447376,
-      "hex": "7be433"
+      "hex": "7be49e79b7bfa4bdeb37f61329a4"
     },
     {
-      "offset": 298447380,
-      "hex": "dfa4a4bdeb37f613412fbf1096020a1bae3f89bb1ed85a26911497"
+      "offset": 298447392,
+      "hex": "847701"
     },
     {
-      "offset": 298447408,
-      "hex": "a3c682"
+      "offset": 298447396,
+      "hex": "aef9b1bb64384461f95958dcd92682"
     },
     {
       "offset": 298447412,
-      "hex": "74276dccc9"
+      "hex": "7427"
+    },
+    {
+      "offset": 298447415,
+      "hex": "2cc9"
     },
     {
       "offset": 298447418,
@@ -848,7 +856,7 @@
     },
     {
       "offset": 298447438,
-      "hex": "342fbb53"
+      "hex": "eea42ebc"
     },
     {
       "offset": 298447444,
@@ -864,23 +872,27 @@
     },
     {
       "offset": 298447452,
-      "hex": "8f14623882bc802135"
+      "hex": "e9c7737182bc802135"
     },
     {
       "offset": 298447462,
-      "hex": "1492b0"
+      "hex": "14923514d427624001b456791595"
     },
     {
-      "offset": 298447466,
-      "hex": "dfb0624001b456791e8a19aeb6fd374b9e6e7e3344d94c1345d6fe"
+      "offset": 298447478,
+      "hex": "a7b409"
     },
     {
-      "offset": 298447494,
-      "hex": "9e3725"
+      "offset": 298447482,
+      "hex": "9e0442335e29ea044ea3123284c725"
     },
     {
       "offset": 298447498,
-      "hex": "151a675745"
+      "hex": "151a"
+    },
+    {
+      "offset": 298447501,
+      "hex": "a745"
     },
     {
       "offset": 298447504,
@@ -888,11 +900,7 @@
     },
     {
       "offset": 298447524,
-      "hex": "8d3a844df3e5b25e6e8f1ebfef5aa1d803a306f92c2008076d7cf1bc6253ad"
-    },
-    {
-      "offset": 298447556,
-      "hex": "4f2b029c461138ee0432ff0c647cbcca920a39fd5ccdea5e800b351c50e90dfc2433708c779d8a6b175ef35813f613b7ca3b017b514fff743f9d4e5f5367ab1a58c0cb5b0fb5f63190d6b301"
+      "hex": "eac8620c441edcc179064af1f47bcd834eaa37281337a954459818eab1e790f265802e65b01138dca7e2f6a0ecae7d2bd77539fd0baecb9f9b284eb19b977b4203d414cd1c48b50e2f9765de5ce09af15284f929469db39dcd9d4ec1d7a7dc90bc41baceb83af631bd55245c"
     },
     {
       "offset": 298608176,

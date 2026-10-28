@@ -222,29 +222,6 @@
       "enabled": true
     },
     {
-      "id": "new-game-plus",
-      "name": "New Game+",
-      "kind": "mod",
-      "version": "0.1.0",
-      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
-      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./new-game-plus/layers/disc1.layer.json",
-        "2": "./new-game-plus/layers/disc2.layer.json",
-        "3": "./new-game-plus/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "4ecad23f553826fee6a4202d61732d12b5feecfb19741854deeb65b1708ceaf6",
-        "2": "09038d6f7698aeb7506303e79c03ad830261e2c6aa8f490d6953c51fd902dd5d",
-        "3": "9d39c16015f1811ebd874c4b609ebd67bdbf454e6f020245d5ce74d7a3a685ef"
-      },
-      "enabled": true
-    },
-    {
       "id": "field-encounter-on-csr-plus-0",
       "name": "Field Random Encounters -- No Encs (on CSR+)",
       "kind": "mod",
@@ -311,10 +288,57 @@
       "baseVersion": "1.0.0rc1"
     },
     {
+      "id": "new-game-plus",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./new-game-plus/layers/disc1.layer.json",
+        "2": "./new-game-plus/layers/disc2.layer.json",
+        "3": "./new-game-plus/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "9aedaedf5b9ee6760c6cdd4145721cb64479008d804ee3c5d57673fe49697eed",
+        "2": "399e3ec815329f605baf5a79281e28cb0e91fed58f1de051fdce53a4437adc1d",
+        "3": "da9180b2be357bf4976e95fd102787bd1ee3fee1387dc6ade9b652e5fc62ed37"
+      },
+      "enabled": true
+    },
+    {
+      "id": "new-game-plus-on-csr",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./new-game-plus-on-csr/layers/disc1.layer.json",
+        "2": "./new-game-plus-on-csr/layers/disc2.layer.json",
+        "3": "./new-game-plus-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "57f6bc16d539f709ee7ad6b9f959f95cec07dfd66865bfa39bf5089751b0547f",
+        "2": "5755cbf8e68ebc5464fb934ef81c26487c78fb07ca9f91a43048188fd579e00b",
+        "3": "adac53be143a22b8d11ad999617e7635294df1bad42d6d89103f87a2772ee0ca"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4"
+    },
+    {
       "id": "new-game-plus-on-csr-plus",
       "name": "New Game+",
       "kind": "mod",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
       "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
       "format": "ic-layer-v1",
@@ -325,10 +349,30 @@
         "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "69a53c1eaaa6018d36f139fb81690d4a61841736b46242e80e309823aa0216b9"
+        "1": "145d4e117570f77253d1cb517abc250ccc2895ee57dac53be7f69fbf2ac83a15"
       },
       "enabled": true,
       "baseVersion": "1.0.0rc1"
+    },
+    {
+      "id": "new-game-plus-on-highwind",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./new-game-plus-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "951981bab678f8a62884258f9e237d1ff2f17285473db1d3e38bb428e2acd753"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8"
     }
   ],
   "bases": [],

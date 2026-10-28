@@ -129,8 +129,8 @@ def recut_commands(
 		(f"world on {against}", [sys.executable, str(WORLD), "--density", "0", *common]),
 		(f"fanfare on {against}", [sys.executable, str(FANFARE), *common]),
 	]
-	if against in ("csr-plus", "clean"):  # New Game+: CSR+ disc 1, or retail discs 1-3
-		args = ["--against", against] + (["--csr-root", str(csr)] if against == "csr-plus" else [])
+	if against in ("csr-plus", "csr", "highwind", "clean"):  # New Game+: every base
+		args = ["--against", against] + (["--csr-root", str(csr)] if against != "clean" else [])
 		cmds.append((f"new-game-plus on {against}", [sys.executable, str(NGP), *args]))
 	return cmds
 

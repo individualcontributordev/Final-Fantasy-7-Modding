@@ -1,0 +1,19 @@
+{
+  "id": "new-game-plus-on-highwind",
+  "name": "New Game+",
+  "kind": "mod",
+  "version": "0.1.1",
+  "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+  "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "951981bab678f8a62884258f9e237d1ff2f17285473db1d3e38bb428e2acd753"
+  },
+  "baseVersion": "0.5.8"
+}
