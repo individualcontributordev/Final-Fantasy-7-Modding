@@ -14,6 +14,7 @@ import json
 import os
 import re
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
@@ -74,12 +75,16 @@ def compile_c(source: str, addr: int, size: int, syms: dict[str, int]) -> bytes:
              "-fno-asynchronous-unwind-tables", "-w", "-c", str(td / "f.c"), "-o", str(td / "f.o")])
         # One flat section: code first, then its constants/data (all counted against --size).
         (td / "f.ld").write_text(
-            f"SECTIONS {{ . = {addr:#x}; .text : {{ *(.text*) *(.rodata*) *(.sdata*) *(.data*) *(.sbss*) *(.bss*) *(COMMON) }} =0 "
+            f"SECTIONS {{ . = {addr:#x}; .text : SUBALIGN(4) {{ *(.text*) *(.rodata*) *(.sdata*) *(.data*) *(.sbss*) *(.bss*) *(COMMON) }} =0 "
             "/DISCARD/ : { *(.MIPS.abiflags) *(.reginfo) *(.pdr) *(.gnu.attributes) *(.mdebug*) *(.comment) *(.eh_frame*) } }")
         link = [zig, "ld.lld", "-m", "elf32ltsmip", "-T", str(td / "f.ld"), "-e", "0",
                 str(td / "f.o"), "-o", str(td / "f.elf")]
         link += [f"--defsym={n}={a:#x}" for n, a in defs.items()]
         run(link)
+        # objcopy -O binary starts at the section's address; input sections aligned >4 would shift it off `addr`.
+        elf = (td / "f.elf").read_bytes()
+        shoff, (shentsize, shnum) = int.from_bytes(elf[0x20:0x24], "little"), struct.unpack_from("<2H", elf, 0x2E)
+        assert addr in [int.from_bytes(elf[shoff + i * shentsize + 12:][:4], "little") for i in range(shnum)], "linked .text is not at the slot address"
         run([zig, "objcopy", "-O", "binary", "-j", ".text", str(td / "f.elf"), str(td / "f.bin")])
         code = (td / "f.bin").read_bytes().rstrip(b"\0")
         code += b"\0" * (-len(code) % 4)  # trailing zeros are nops; padded back below
