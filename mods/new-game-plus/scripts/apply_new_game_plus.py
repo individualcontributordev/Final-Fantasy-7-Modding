@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply the NEW GAME+ changes to a CSR+ disc 1 (or retail disc 1-3 with movie_row=False) MODE2/2352 image in place.
+"""Apply the NEW GAME+ changes to a CSR+ disc 1 (or retail disc 1-3) MODE2/2352 image in place.
 
 Sites are path, offset-in-file, expected bytes, replacement bytes. Every site
 must hold either the base bytes or the replacement before anything is written.
@@ -50,16 +50,11 @@ def _scus_path(img) -> str:
 	raise SystemExit("no SCUS_941.6x executable on this image")
 
 
-def apply_patch(img: bytearray, revert: bool = False, movie_row: bool = True) -> int:
-	"""Patch img in place (or undo it); refuse the whole disc if any site is unrecognised.
-
-	movie_row=False skips MOVIE_ID.BIN: that row only differs on CSR+ (retail disc 3
-	already holds the replacement bytes)."""
+def apply_patch(img: bytearray, revert: bool = False) -> int:
+	"""Patch img in place (or undo it); refuse the whole disc if any site is unrecognised."""
 	todo = []
 	scus = _scus_path(img)
 	for path, off, exp, new in load_sites():
-		if path == "/MINT/MOVIE_ID.BIN" and not movie_row:
-			continue
 		if path.startswith("/SCUS_941."):
 			path = scus
 		if revert:

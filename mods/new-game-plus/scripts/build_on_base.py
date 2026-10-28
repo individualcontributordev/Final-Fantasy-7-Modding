@@ -72,8 +72,7 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 
 	with timer.stage("patch"):
 		img = bytearray(base_bin.read_bytes())
-		# MOVIE_ID.BIN: CSR+ disc 1 only; retail disc 3 already holds those bytes.
-		patched_bytes = apply_patch(img, movie_row=against == "csr-plus")
+		patched_bytes = apply_patch(img)
 		print(f"=== apply New Game+ sites ({against} d{disc}): {patched_bytes} bytes ===")
 		patched = work / "patched.bin"
 		patched.write_bytes(img)
