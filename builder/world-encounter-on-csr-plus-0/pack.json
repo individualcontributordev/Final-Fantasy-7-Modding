@@ -15,7 +15,7 @@
   "discDigests": {
     "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
   },
-  "baseVersion": "1.0.0rc1",
+  "baseVersion": "1.0.0rc2",
   "rate": 0,
   "groupLabel": "World Random Encounters",
   "optionLabel": "No Encs"
