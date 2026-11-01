@@ -306,9 +306,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "a05c8c628a58f5cb3b235c6bd8d33b807b39a8ed7f17961184b1b637901a50c2"
+        "1": "2ef9257c80295746138904ea02fb23c715320dcca267a529eddee81d2eb4f48b"
       },
-      "baseVersion": "1.0.0rc3",
+      "baseVersion": "1.0.0rc4",
       "enabled": true
     },
     {
@@ -328,7 +328,7 @@
       "discDigests": {
         "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
       },
-      "baseVersion": "1.0.0rc3",
+      "baseVersion": "1.0.0rc4",
       "rate": 0,
       "groupLabel": "World Random Encounters",
       "optionLabel": "No Encs",
@@ -352,7 +352,7 @@
         "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc3"
+      "baseVersion": "1.0.0rc4"
     },
     {
       "id": "new-game-plus-on-csr-plus",
@@ -369,10 +369,10 @@
         "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "e996a184ad3209b5f0b89b7b65ff48df88cf69d101f573958b902752ba61337c"
+        "1": "babb84f5e7f29829d383aa31f02dae37ab404fbabb021959366af99cd1570e76"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc3"
+      "baseVersion": "1.0.0rc4"
     }
   ],
   "bases": [],
