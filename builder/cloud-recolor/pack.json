@@ -1,0 +1,22 @@
+{
+  "id": "cloud-recolor",
+  "name": "Cloud Recolor",
+  "kind": "mod",
+  "version": "0.1.0",
+  "blurb": "Cloud's blue SOLDIER outfit becomes crimson on the field, in battle and on the world map.",
+  "hint": "Cloud wears crimson instead of blue.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "discDigests": {
+    "1": "4fadabbcffd98b37a9e627bed735357540d76280ef18f5fa4a463b2f0c04badc",
+    "2": "1cb487fef17ec3e36f516d63a9f9b59d21ee548fef8637ab1a4f879de5d766d5",
+    "3": "b20bdde9ed095d698b4a81bbb91a9a9d433ad184fc2552410e1dfb5c58fab000"
+  }
+}
