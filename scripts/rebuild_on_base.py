@@ -30,7 +30,7 @@ FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.p
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
 FANFARE = ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
 NGP = ROOT / "mods" / "new-game-plus" / "scripts" / "build_on_base.py"
-CLOUD = ROOT / "mods" / "cloud-recolor" / "scripts" / "build_on_base.py"
+PARTY = ROOT / "mods" / "party-recolor" / "scripts" / "build_on_base.py"
 
 
 def require_lf_json() -> None:
@@ -133,7 +133,7 @@ def recut_commands(
 	if against in ("csr-plus", "csr", "highwind", "clean"):  # New Game+: every base
 		args = ["--against", against] + (["--csr-root", str(csr)] if against != "clean" else [])
 		cmds.append((f"new-game-plus on {against}", [sys.executable, str(NGP), *args]))
-		cmds.append((f"cloud-recolor on {against}", [sys.executable, str(CLOUD), *args]))
+		cmds.append((f"party-recolor on {against}", [sys.executable, str(PARTY), *args]))
 	return cmds
 
 

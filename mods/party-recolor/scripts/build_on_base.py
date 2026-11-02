@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build and register the Cloud Recolor layers (CSR+ and Highwind disc 1; CSR and clean discs 1-3).
+"""Build and register the Party Recolor layers (CSR+ and Highwind disc 1; CSR and clean discs 1-3).
 
 Reconstructs the exact builder parent (pristine, plus the CSR+ base layer for csr-plus), applies the
-fixed-site patch from ``apply_cloud_recolor.py``, repairs footers against that
+fixed-site patch from ``apply_party_recolor.py``, repairs footers against that
 parent, and diffs the result into ``ic-layer-v1``. Pack JSON and the manifest
 entry reuse the fanfare-skip writers. Same CLI shape as the other
 ``build_on_base.py`` scripts so ``rebuild_on_base.py`` can drive it."""
@@ -25,7 +25,7 @@ sys.path.insert(0, str(_HERE))
 from libs.layer import apply_layer, build_layer  # noqa: E402
 from libs.timing import Timer  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
-from apply_cloud_recolor import apply_patch  # noqa: E402
+from apply_party_recolor import apply_patch  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location(
 	"fanfare_build_on_base", _ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
@@ -33,14 +33,14 @@ _spec = importlib.util.spec_from_file_location(
 fb = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(fb)
 
-PACK_IDS = {"csr-plus": "cloud-recolor-on-csr-plus", "csr": "cloud-recolor-on-csr",
-	"highwind": "cloud-recolor-on-highwind", "clean": "cloud-recolor"}
+PACK_IDS = {"csr-plus": "party-recolor-on-csr-plus", "csr": "party-recolor-on-csr",
+	"highwind": "party-recolor-on-highwind", "clean": "party-recolor"}
 ONE_DISC = ("csr-plus", "highwind")  # bases that only ship disc 1
-DISPLAY = "Cloud Recolor"
-BLURB = "Cloud's blue SOLDIER outfit becomes crimson on the field, in battle and on the world map."
-HINT = "Cloud wears crimson instead of blue."
+DISPLAY = "Party Recolor"
+BLURB = "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map."
+HINT = "Nine party members wear new colors."
 fb.HINT = HINT  # the shared pack/manifest writers read this module global
-WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_cloud_recolor"
+WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_party_recolor"
 
 
 def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, timer):
@@ -70,7 +70,7 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 	with timer.stage("patch"):
 		img = bytearray(base_bin.read_bytes())
 		patched_bytes = apply_patch(img)
-		print(f"=== apply Cloud recolor ({against} d{disc}): (field, battle, WM0, WM3) colors {patched_bytes} ===")
+		print(f"=== apply Party recolor ({against} d{disc}): {sum(patched_bytes.values())} colors in {len(patched_bytes)} files ===")
 		patched = work / "patched.bin"
 		patched.write_bytes(img)
 	repaired = work / "patched.repaired.bin"
@@ -84,12 +84,12 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 			base_bin,
 			repaired,
 			layer_id=f"{pack_id}-disc{disc}-v{version}",
-			description=f"Cloud Recolor v{version} -- NTSC-U Disc {disc} (on {base_id} {base_version})".replace(" )", ")"),
+			description=f"Party Recolor v{version} -- NTSC-U Disc {disc} (on {base_id} {base_version})".replace(" )", ")"),
 		)
 	stats = built["stats"]
 	if not stats["changedBytes"]:
 		raise SystemExit(
-			"Empty layer -- the base already contains Cloud Recolor (or the patch did nothing); "
+			"Empty layer -- the base already contains Party Recolor (or the patch did nothing); "
 			"nothing written"
 		)
 	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -107,7 +107,7 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 
 
 def main() -> int:
-	ap = argparse.ArgumentParser(description="Build the Cloud Recolor builder pack")
+	ap = argparse.ArgumentParser(description="Build the Party Recolor builder pack")
 	ap.add_argument("--against", default="csr-plus", help="csr-plus | csr | highwind | clean")
 	ap.add_argument("--discs", default=None, help="default: 1 for csr-plus, 1,2,3 otherwise")
 	ap.add_argument("--version", default=None)
@@ -115,11 +115,11 @@ def main() -> int:
 	ap.add_argument("--keep-work", action="store_true")
 	args = ap.parse_args()
 	if args.against not in PACK_IDS:
-		raise SystemExit("Cloud Recolor is built for csr-plus, csr, highwind or clean only")
+		raise SystemExit("Party Recolor is built for csr-plus, csr, highwind or clean only")
 	clean = args.against == "clean"
 	discs = fb.parse_discs(args.discs or ("1" if args.against in ONE_DISC else "1,2,3"))
 	if args.against in ONE_DISC and discs != [1]:
-		raise SystemExit(f"Cloud Recolor on {args.against} is disc 1 only")
+		raise SystemExit(f"Party Recolor on {args.against} is disc 1 only")
 	timer = Timer()
 	version = args.version or (_MOD / "VERSION").read_text(encoding="utf-8").split()[0]
 
