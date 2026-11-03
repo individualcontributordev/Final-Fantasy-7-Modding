@@ -21,7 +21,7 @@ class PartyRecolorTests(unittest.TestCase):
 		out, n = P.recolor_world(bytes(dec), "WORLD/WM3.BSZ")
 		self.assertEqual(n, 1)
 		self.assertEqual(out[:3], bytes(P.rgb("400000")))
-		self.assertEqual(out[26000:26003], bytes(P.rgb("0F4A50")))
+		self.assertEqual(out[26000:26003], bytes(P.rgb("26A65B")))
 
 	def test_world_hair_and_moogle_only_inside_their_spans(self) -> None:
 		for src, dst, inside, outside in (("1E1E1E", "E6C34A", 22000, 100), ("191919", "A8222E", 78200, 100), ("CCCCCC", "F5A0B8", 67500, 72800)):
@@ -103,6 +103,16 @@ class PartyRecolorTests(unittest.TestCase):
 		self.assertEqual((n, out[row1 : row1 + 6]), (2, bytes(6)))  # indices 0-2 untouched
 		self.assertNotEqual(out[row1 + 6 : row1 + 10], bytes(4))
 		self.assertEqual(P.recolor_barrett_beard(b"none"), (b"none", 0))
+
+	def test_red13_face_texture_blackens_scar_and_eyes_only(self) -> None:
+		w = 52 * 2
+		dec = bytearray(b"xx" + P._RED_CLUT + bytes(64) + struct.pack("<IHHHH", 12 + w * 170, 320, 0, 52, 170) + b"D" * (w * 170))
+		img = 2 + 8 + 76 + 12
+		out, n = P.recolor_red13_face(bytes(dec))
+		self.assertEqual(out[img + 120 * w + 40], 0x22)  # scar: both nibbles 4 -> 2
+		self.assertEqual(out[img + 120 * w + 10], 0x22)  # eye
+		self.assertEqual(out[img + 100 * w + 40], 0x44)  # above both
+		self.assertEqual(n, 59 * 36 + 55 * 53)
 
 if __name__ == "__main__":
 	unittest.main()
