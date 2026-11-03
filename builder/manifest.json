@@ -289,6 +289,73 @@
       "enabled": true
     },
     {
+      "id": "party-recolor",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./party-recolor/layers/disc1.layer.json",
+        "2": "./party-recolor/layers/disc2.layer.json",
+        "3": "./party-recolor/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "d001757ac06c89c8e0496fa35c3344566a13aacdf064621d97dccfdd36de4149",
+        "2": "91cf4dccd88a5166be331682c3a1e212608e5278d44a9ededf3c5b0c60518b2b",
+        "3": "c0b75b3bc5a9bdea0bf468a50f40780da789cff305f776b83362fdff2f89cb54"
+      },
+      "enabled": true
+    },
+    {
+      "id": "party-recolor-on-csr",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-csr/layers/disc1.layer.json",
+        "2": "./party-recolor-on-csr/layers/disc2.layer.json",
+        "3": "./party-recolor-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "ce36696968b422d7e325ad3bf88df858ed4e6005a403a82accde99e6e6e2981c",
+        "2": "3723dbe0ed402e537f64a96e6a982d1a153bb4c6213f9b4eedba5502421ada2d",
+        "3": "7ba1e013d122beb424ae01c6dd1da5a0e4f23690e62d6cfa709262dddbc3d69f"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4"
+    },
+    {
+      "id": "party-recolor-on-highwind",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "0a0be4fafbceb84c99878d39706d9ed054bf365c523a283081d14383f62689fb"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8"
+    },
+    {
       "id": "field-encounter-on-csr-plus-0",
       "name": "Field Random Encounters -- No Encs (on CSR+)",
       "kind": "mod",
@@ -306,9 +373,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "132158fb5cffe0552d874d08edf536d94f10913d1337c9ec399b0d326e595275"
+        "1": "af2f431fa9b9ec8b3bf4d09b1f62c1b9b956080f0d4df475967466906da99cac"
       },
-      "baseVersion": "1.0.0rc6",
+      "baseVersion": "1.0.0rc7",
       "enabled": true
     },
     {
@@ -328,7 +395,7 @@
       "discDigests": {
         "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
       },
-      "baseVersion": "1.0.0rc6",
+      "baseVersion": "1.0.0rc7",
       "rate": 0,
       "groupLabel": "World Random Encounters",
       "optionLabel": "No Encs",
@@ -352,7 +419,7 @@
         "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc6"
+      "baseVersion": "1.0.0rc7"
     },
     {
       "id": "new-game-plus-on-csr-plus",
@@ -369,57 +436,10 @@
         "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "24cfe7280d1dd8822d1815a03099180f56a5d0cae50fe77b63be48330d313603"
+        "1": "bef7f6e7c65728fa2132fc6a9a012d73b47c4cf740f59a4947fa4290001881fc"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc6"
-    },
-    {
-      "id": "party-recolor",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.1.0",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./party-recolor/layers/disc1.layer.json",
-        "2": "./party-recolor/layers/disc2.layer.json",
-        "3": "./party-recolor/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "5573cffe4b571498dc9a6549a97f5f813b91be8b0bfa76437dd266e22392f803",
-        "2": "fd5ec11319f138e72c025ace177df89fb9bcab573b24f4703baab454eb8cc457",
-        "3": "de97486fc776397fd50a9d789f434ed0415cbed5c4f8a31e9c5b492b34bf9c76"
-      },
-      "enabled": true
-    },
-    {
-      "id": "party-recolor-on-csr",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.1.0",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-csr/layers/disc1.layer.json",
-        "2": "./party-recolor-on-csr/layers/disc2.layer.json",
-        "3": "./party-recolor-on-csr/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "c7b68ca1f1b810bcf8c02efefe745b70febe49867fa9060466a730f2c9dcf15f",
-        "2": "e50eab6e2de17968559ad9d679fbb6044dca603374e90bab2061331c34daf27a",
-        "3": "a591a528b5b01fb57e1b62dd10da212941c294f40461a0d5609d60db781d5dab"
-      },
-      "enabled": true,
-      "baseVersion": "0.14.4"
+      "baseVersion": "1.0.0rc7"
     },
     {
       "id": "party-recolor-on-csr-plus",
@@ -436,30 +456,10 @@
         "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "72350526bf77cd2a3e89829cf3f588baeb34a800978d0dbbeb476c041bef04f7"
+        "1": "dd1314205f4460c3f4280d86174cc5e084d23b40aa1569b0487dab1fcc1442bf"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc6"
-    },
-    {
-      "id": "party-recolor-on-highwind",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.1.0",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "cc272a3ac0ea035f9116ba7f10e7aca97c33a6180e8d1bb171234c67f4076dc1"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.8"
+      "baseVersion": "1.0.0rc7"
     }
   ],
   "bases": [],
