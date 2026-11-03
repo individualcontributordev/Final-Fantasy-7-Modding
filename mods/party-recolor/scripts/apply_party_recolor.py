@@ -59,17 +59,29 @@ def color_offsets(dec: bytes):
 				pos += size
 
 
+RAINBOW = "rainbow"  # map target: spread the source color over the bands below
+RAINBOW_BANDS = ("E8283C", "F58A1F", "F2D81E", "3CC850", "2AB8E8", "4A5AF0", "A850E0")
+
+
 def recolor(dec: bytes, color_map: dict, only: dict | None = None) -> tuple[bytes, int]:
 	"""`only` limits a source color to the given bones (for colors shared between two bodies in one model)."""
 	out = bytearray(dec)
-	changed = 0
+	hits = []
 	for bone, o in color_offsets(dec):
 		src = tuple(dec[o : o + 3])
 		new = color_map.get(src)
+		if isinstance(new, dict):  # per-bone targets: one source color used by several body parts
+			new = new.get(bone)
 		if new and bone in (only or {}).get(src, (bone,)):
-			out[o : o + 3] = bytes(new)
-			changed += 1
-	return bytes(out), changed
+			hits.append((o, new))
+	bands = sum(new == RAINBOW for _, new in hits)
+	seen = 0
+	for o, new in hits:
+		if new == RAINBOW:  # bands follow polygon order, which runs roughly along the mesh
+			new = rgb(RAINBOW_BANDS[seen * len(RAINBOW_BANDS) // bands])
+			seen += 1
+		out[o : o + 3] = bytes(new)
+	return bytes(out), len(hits)
 
 
 # battle: header u32 at offset 4 = bone table; per bone a part: u32 vertex bytes, vertices, 12-byte header
@@ -113,12 +125,19 @@ FIELD = {
 	"TIFA": {"400000": "0F4A50", "2F1E12": "3F1F52"},  # Tifa: red gloves/boots -> teal, brown hair -> plum
 	"EARITH": {"D59C9C": "B49BD9", "990F0F": "5B2A86", "59350C": "3DBFB0"},  # Aerith: pink/red -> lilac/violet, brown hair -> teal
 	"CID": {"1C2841": "2F6B3A", "2B2819": "3A2A5C", "93866D": "D0D4DC"},  # Cid: blue jacket -> forest green, olive pants -> dark purple, khaki hair -> silver
-	"RED": {"96431A": "EDEDF2", "660505": "B9BDC8"},  # Red XIII: fur -> white, dark mane/tail tip -> light gray
-	"VINCENT": {"4C0202": "0D4D3A", "191919": "A8222E"},  # Vincent: red cape -> emerald, black hair -> crimson
-	"YUFI": {"0F360F": "7A1F5C", "1C150D": "1B5E55"},  # Yuffie: green -> plum, dark hair -> teal
+	"RED": {"96431A": "EDEDF2", "660505": "B9BDC8", "956518": "CDEFF5", "844C31": "CDEFF5", "3F2923": "B9BDC8"},  # Red XIII: fur -> white, dark mane/tail tip -> light gray, tail flame and brown foot/head bits -> pale ice blue
+	"VINCENT": {  # Vincent: red cape -> yellow, black hair -> crimson, black bodysuit -> Crono: blue tunic, khaki hips, teal thighs, green leggings
+		"4C0202": "D8B01C", "191919": "A8222E",
+		"131313": {1: "C9C27A", 2: "6FA8C0", 10: "6FA8C0", 15: "6FA8C0", 17: "6FA8C0", 19: "6FA8C0", 23: "6FA8C0", 20: "3F7A3A", 24: "3F7A3A"},
+	},
+	"YUFI": {"0F360F": "7A1F5C", "1C150D": RAINBOW},  # Yuffie: green -> plum, dark hair -> rainbow
 	"KETCY": {"4A0311": "0B4A55", "CCCCCC": "F5A0B8"},  # Cait Sith: maroon -> teal, white moogle (cat stays white) -> Majin Buu pink
 }
-FIELD = {n: {rgb(k): rgb(v) for k, v in m.items()} for n, m in FIELD.items()}
+def _target(v):
+	return v if v == RAINBOW else {b: rgb(c) for b, c in v.items()} if isinstance(v, dict) else rgb(v)
+
+
+FIELD = {n: {rgb(k): _target(v) for k, v in m.items()} for n, m in FIELD.items()}
 
 # Cloud's battle colors are not exact either: outfit tones are the cool ones (b >= r, b > g), scaled
 # by the ratio that maps his outfit blue to crimson
@@ -196,9 +215,11 @@ def _matches(rule: Rule, part: int, color: bytes, y: int, span: tuple) -> bool:
 	return rule.top is None or y <= span[0] + rule.top * (span[1] - span[0])  # y grows downward
 
 
-def _paint(rule: Rule, color: bytes) -> bytes:
+def _paint(rule: Rule, color: bytes, y: int, span: tuple) -> bytes:
 	h, s, v = colorsys.rgb_to_hsv(*(c / 255 for c in color))
 	th, ts, add, gain = rule.to
+	if th is None:  # rainbow: red at the top of the part down to violet at the bottom
+		th = 280 * (y - span[0]) / max(1, span[1] - span[0])
 	return bytes(round(c * 255) for c in colorsys.hsv_to_rgb(th / 360, s if ts is None else ts, min(1, add + v * gain)))
 
 
@@ -217,9 +238,9 @@ def recolor_battle(dec: bytes, rules: tuple) -> tuple[bytes, int]:
 		hits = [next((r for r in rules if _matches(r, part, dec[o : o + 3], y, span[part])), None) for o, y in corners]
 		best = Counter(r for r in hits if r is not None).most_common(1)
 		fill = best[0][0] if best and best[0][1] * 2 > len(hits) else None
-		for (o, _), r in zip(corners, hits):
+		for (o, y), r in zip(corners, hits):
 			if r or fill:
-				out[o : o + 3] = _paint(r or fill, dec[o : o + 3])
+				out[o : o + 3] = _paint(r or fill, dec[o : o + 3], y, span[part])
 				changed += 1
 	return bytes(out), changed
 
@@ -259,7 +280,11 @@ def recolor_barrett(dec: bytes) -> tuple[bytes, int]:
 _VINCENT = (
 	Rule((0, 360), (354, 0.8, 0.04, 3), _F({1}), sat=(0, 0.35), val=(0, 0.35)),  # black hair -> crimson
 	Rule((285, 315), (354, 0.8, 0.04, 3), _F({1}), sat=(0.5, 1), val=(0, 0.07)),
-	Rule((285, 359), (162, None, 0, 1), _F({0, 1, *range(7, 19), 28, 31}), sat=(0.85, 1)),  # cape, collar, headband -> emerald
+	Rule((285, 359), (48, 0.85, 0.1, 1.8), _F({0, 1, *range(7, 19), 28, 31}), sat=(0.85, 1)),  # cape, collar, headband -> yellow
+	Rule((0, 360), (200, 0.5, 0.22, 1), _F({2, 3, 4, 5, 6, 20, 24}), val=(0, 0.3)),  # black vest and thighs -> Crono's teal-blue tunic
+	Rule((0, 360), (58, 0.45, 0.3, 1), _F({19}), val=(0, 0.3)),  # black hips -> khaki
+	Rule((0, 360), (115, 0.5, 0.2, 1), _F({21, 25}), sat=(0, 0.25), val=(0, 0.3)),  # lower legs -> green leggings, brown boots kept
+	Rule((200, 300), (115, 0.5, 0.2, 1), _F({21, 25}), val=(0, 0.3)),
 )
 _MOOGLE = _F({0, 1, 2, 3, 4, 5, 6, 10, 13, 25, 27})
 _RED_WHITE = (230, 0.03, 0.3, 0.5)
@@ -268,6 +293,7 @@ BATTLE = {
 	"BARRETT": _BARRETT, "BARRETT2": _BARRETT, "BARRETT3": _BARRETT, "BARRETT4": _BARRETT,
 	"TIFA": (
 		Rule((0, 45), (278, 0.62, 0.15, 1.8), _F({1}), sat=(0.25, 1), val=(0, 0.22)),  # brown hair -> plum
+		Rule((10, 45), (278, 0.62, 0.15, 1.8), _F({1}), sat=(0.25, 1), val=(0, 0.3)),  # dark patches; the red-brown neck is hue < 10
 		Rule((0, 360), (278, 0.62, 0.15, 1.8), _F({2, 3, 4, 6})),  # ponytail
 		Rule((0, 50), (186, 0.85, 0, 1), _F({11, 12, 16, 17}), sat=(0.45, 1)),  # boots -> teal, gray soles kept
 		Rule((280, 35), (186, 0.85, 0, 1), _F({10, 15, 18, 19, 20}), sat=(0.9, 1)),  # glove red on fists and forearms
@@ -289,13 +315,15 @@ BATTLE = {
 	),
 	"VINSENT": _VINCENT, "VINSENT2": _VINCENT, "VINSENT3": _VINCENT,
 	"YUFI": (
-		Rule((30, 125), (172, 0.7, 0.02, 1.4), _F({2}), val=(0, 0.25)),  # dark hair -> teal
+		Rule((30, 125), (None, 0.85, 0.35, 1), _F({2}), val=(0, 0.25)),  # dark hair -> rainbow bands by height
 		Rule((55, 150), (320, None, 0, 1), sat=(0.35, 1)),  # green -> plum
 	),
 	"RED13": (
 		Rule((340, 10), (225, 0.08, 0.25, 0.6), _F({3}), sat=(0.8, 1)),  # red mane -> light gray
 		Rule((330, 45), _RED_WHITE, _F({3}), sat=(0.3, 1), val=(0.08, 1)),  # face fur -> white, eyes/nose stay dark
-		Rule((330, 38), _RED_WHITE, _F(set(range(36)) - {3, 29, 30, 31}), sat=(0.2, 1)),  # body fur; the tail flame stays fire
+		Rule((330, 38), _RED_WHITE, _F(set(range(36)) - {3, 29, 30, 31}), sat=(0.2, 1)),  # body fur
+		Rule((330, 70), (195, 0.3, 0.2, 0.8), _F({29, 30, 31}), sat=(0.2, 1)),  # tail flame -> pale ice blue
+		Rule((30, 70), (195, 0.3, 0.2, 0.8), _F({13, 18, 23, 34}), sat=(0.4, 1)),  # gold ankle bands -> pale ice blue
 	),
 	"KETCY": (
 		Rule((240, 30), (343, 0.38, 0, 1), _MOOGLE, sat=(0, 0.6)),  # moogle -> Buu pink, cat untouched
@@ -307,28 +335,38 @@ BATTLE = {
 
 WORLD_PATHS = ("WORLD/WM0.BSZ", "WORLD/WM1.BSZ", "WORLD/WM2.BSZ", "WORLD/WM3.BSZ")
 # Cait Sith's white is plain gray, Vincent's hair black is Tifa's world-map skirt, Barret's 1E1E1E is generic dark: all would hit other data
-WORLD_MAP = {k: v for m in FIELD.values() for k, v in m.items() if k not in (rgb("CCCCCC"), rgb("191919"), rgb("1E1E1E"))}
+WORLD_MAP = {k: v for m in FIELD.values() for k, v in m.items() if k not in (rgb("CCCCCC"), rgb("191919"), rgb("1E1E1E"), rgb("131313"))}
 # Tifa's red also appears as 6 stray slots elsewhere in WM3; her model sits in 26000..40000
 WORLD_SPAN = {("WORLD/WM3.BSZ", rgb("400000")): (26000, 40000)}
-# Those three colors recolor only inside the owning model's WM3 span: Barret hair, Vincent hair, Cait's moogle bones (cat sits in 72800..75216)
+# Dark red-brown piece (5A1A00/350F00, ~250 bytes at the start of WM0/WM3) draws as an orange-red blob on Red XIII's back foot
+WORLD_MAP |= {rgb("5A1A00"): rgb("5A6070"), rgb("350F00"): rgb("363B48")}
+WORLD_SPAN |= {(f"WORLD/WM{n}.BSZ", rgb(c)): (lo, hi) for n, lo, hi in ((0, 1480, 1792), (3, 9620, 9932)) for c in ("5A1A00", "350F00")}
+# These colors recolor only inside the owning model's WM3 spans, as ((new color, spans), ...): Barret hair, Vincent hair and
+# bodysuit (torso/arms/thighs blue, hips khaki, shins green; spans follow the field bone order), Cait's moogle bones (cat sits in 72800..75216)
 WORLD_ONLY = {
-	rgb("1E1E1E"): (rgb("E6C34A"), ((21900, 22800),)),
-	rgb("191919"): (rgb("A8222E"), ((78100, 81200),)),
-	rgb("CCCCCC"): (rgb("F5A0B8"), ((67400, 70600), (75216, 76100))),
+	rgb("1E1E1E"): ((rgb("E6C34A"), ((21900, 22800),)),),
+	rgb("191919"): ((rgb("A8222E"), ((78100, 81200),)),),
+	rgb("131313"): ((rgb("C9C27A"), ((76100, 76500), (83300, 83500))), (rgb("3F7A3A"), ((83900, 84100), (84900, 85100))), (rgb("6FA8C0"), ((76500, 83300), (83500, 83900), (84100, 84900)))),
+	rgb("CCCCCC"): ((rgb("F5A0B8"), ((67400, 70600), (75216, 76100))),),
 }
 
 
 def recolor_world(dec: bytes, path: str) -> tuple[bytes, int]:
 	out = bytearray(dec)
 	changed = 0
+	seen = 0
 	for o in range(0, len(dec) - 3, 4):
 		src = tuple(dec[o : o + 3])
 		dst = WORLD_MAP.get(src)
+		if dst == RAINBOW:
+			dst = rgb(RAINBOW_BANDS[seen // 2 % len(RAINBOW_BANDS)])
+			seen += 1
 		if dst is None:
-			only = WORLD_ONLY.get(src)
-			if only and path == "WORLD/WM3.BSZ" and any(lo <= o < hi for lo, hi in only[1]):
-				out[o : o + 3] = bytes(only[0])
-				changed += 1
+			for new, spans in WORLD_ONLY.get(src, ()) if path == "WORLD/WM3.BSZ" else ():
+				if any(lo <= o < hi for lo, hi in spans):
+					out[o : o + 3] = bytes(new)
+					changed += 1
+					break
 			continue
 		lo, hi = WORLD_SPAN.get((path, src), (0, len(dec)))
 		if lo <= o < hi:
