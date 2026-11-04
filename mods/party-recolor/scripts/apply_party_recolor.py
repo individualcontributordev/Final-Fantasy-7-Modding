@@ -164,6 +164,33 @@ def recolor_battle_cloud(dec: bytes) -> tuple[bytes, int]:
 	return bytes(out), changed
 
 
+SNOW_RIDER = range(13)  # TMD objects 0-12 of MINI/TMD.LZS and TMD2.LZS: Cloud on the snowboard (hair, face, jacket, legs)
+_SNOW_HAIR = FIELD["CLOUD"][rgb("FCA834")]
+
+def recolor_snowboard(dec: bytes) -> tuple[bytes, int]:
+	"""Snowboard minigame: Gouraud TMD triangles; hair gold -> silver by brightness, blue-purple outfit -> crimson."""
+	out = bytearray(dec)
+	changed = 0
+	for obj in SNOW_RIDER:
+		pt, npk = struct.unpack_from("<II", dec, 12 + 28 * obj + 16)
+		o = 12 + pt
+		for _ in range(npk):
+			ilen, mode = dec[o + 1], dec[o + 3]
+			o += 4
+			for c in range(o, o + 12, 4) if mode == 0x31 else ():
+				r, g, b = dec[c : c + 3]
+				if obj == 0 and r > g > b and r - b > r // 2:  # only the head object: boots and belts are brown too
+					new = (round(v * max(r, g, b) / 255) for v in _SNOW_HAIR)
+				elif b >= r and b > g:
+					new = (min(255, round(v * k)) for v, k in zip((r, g, b), _CLOUD_RATIO))
+				else:
+					continue
+				out[c : c + 3] = bytes(new)
+				changed += 1
+			o += ilen * 4
+	return bytes(out), changed
+
+
 class Rule(NamedTuple):
 	hue: tuple  # degrees lo, hi; wraps through 0 when lo > hi
 	to: tuple  # (target hue, target sat or None to keep it, value add, value gain): v' = min(1, add + v * gain)
@@ -480,6 +507,8 @@ DRESS = {
 }
 DRESS = {k: {rgb(a): rgb(b) for a, b in m.items()} for k, m in DRESS.items()}
 
+CLOUD_IDS = (0, 33)
+
 def recolor_dress(dec: bytes) -> tuple[bytes, int]:
 	out = bytearray(dec)
 	changed = 0
@@ -490,7 +519,8 @@ def recolor_dress(dec: bytes) -> tuple[bytes, int]:
 		num_bones, num_parts = dec[h + 23], dec[h + 35]
 		first = h + skeleton + num_bones * 4
 		offs = [o for _, o, _ in color_offsets(dec, first, num_parts)]
-		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs)))
+		# other Cloud variants (id 0 field, 33 world-map/rootmap) get his normal recolor
+		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs))) or (FIELD["CLOUD"] if model_id in CLOUD_IDS else None)
 		for o in offs if cmap else ():
 			new = cmap.get(tuple(dec[o : o + 3]))
 			if new:
@@ -521,6 +551,11 @@ def apply_patch(img: bytearray) -> dict[str, int]:
 	counts["battle CLOUD outfit"] = _patch(img, "ENEMY6/CLOUD.LZS", recolor_battle_cloud)
 	for name in BATTLE:
 		counts[f"battle {name}"] = _patch(img, f"ENEMY6/{name}.LZS", battle_fn(name))
+	# HICLOUD: high-res Cloud with the same part layout as CLOUD.LZS
+	counts["battle HICLOUD outfit"] = _patch(img, "ENEMY6/HICLOUD.LZS", recolor_battle_cloud)
+	counts["battle HICLOUD hair"] = _patch(img, "ENEMY6/HICLOUD.LZS", battle_fn("CLOUD"))
+	for name in ("TMD", "TMD2"):
+		counts[f"snowboard {name}"] = _patch(img, f"MINI/{name}.LZS", recolor_snowboard)
 	for path in WORLD_PATHS:
 		counts[path] = _patch(img, path, lambda d, p=path: recolor_world(d, p))
 	for path, node in walk_tree(img).items():

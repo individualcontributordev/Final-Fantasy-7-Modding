@@ -124,5 +124,34 @@ class PartyRecolorTests(unittest.TestCase):
 		self.assertEqual(out[img + 100 * w + 40], 0x44)  # above both
 		self.assertEqual(n, 59 * 36 + 55 * 53)
 
+	def test_dress_pass_recolors_other_cloud_models_but_not_zack(self) -> None:
+		src = bytes(P.rgb("614977"))
+		for model_id, expect in ((0, bytes(P.rgb("9C223A"))), (33, bytes(P.rgb("9C223A"))), (9, src)):
+			dec = bytearray(300)
+			struct.pack_into("<I", dec, 4, 100)  # models table
+			struct.pack_into("<I", dec, 104, 1)  # one model
+			h = 116
+			struct.pack_into("<HHI", dec, h, model_id, 0, 8)  # skeleton 8 bytes in, 0 bones
+			dec[h + 35] = 1
+			dec[h + 8:h + 11] = src
+			with mock.patch.object(P, "color_offsets", lambda d, f, n: [(0, h + 8, 0)]):
+				out, n = P.recolor_dress(bytes(dec))
+			self.assertEqual(out[h + 8:h + 11], expect, model_id)
+
+	def test_snowboard_rider_hair_silver_outfit_crimson_boots_kept(self) -> None:
+		dec = bytearray(12 + 28 * 13 + 64 * 13)
+		colors = {0: (255, 172, 54), 6: (111, 84, 137), 5: (77, 57, 16)}  # hair, outfit, brown boots
+		for obj in range(13):
+			pt = 12 + 28 * 13 + 64 * obj - 12  # primitive block, relative to byte 12
+			struct.pack_into("<6I", dec, 12 + 28 * obj, 0, 0, 0, 0, pt, 1)
+			dec[12 + pt : 12 + pt + 4] = bytes((5, 5, 0, 0x31))
+			dec[12 + pt + 4 : 12 + pt + 7] = bytes(colors.get(obj, (1, 1, 1)))
+		out, n = P.recolor_snowboard(bytes(dec))
+		pix = lambda obj: out[12 + 28 * 13 + 64 * obj + 4 : 12 + 28 * 13 + 64 * obj + 7]
+		self.assertEqual(n, 2)
+		self.assertEqual(pix(0), bytes(P.rgb("C7D3E6")))
+		self.assertEqual(pix(6), bytes((round(111 * 156 / 97), round(84 * 34 / 73), round(137 * 58 / 119))))
+		self.assertEqual(pix(5), bytes((77, 57, 16)))
+
 if __name__ == "__main__":
 	unittest.main()
