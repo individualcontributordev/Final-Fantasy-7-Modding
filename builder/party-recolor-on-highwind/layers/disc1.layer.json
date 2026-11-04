@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
-  "id": "party-recolor-on-highwind-disc1-v0.1.0",
-  "description": "Party Recolor v0.1.0 -- NTSC-U Disc 1 (on highwind 0.5.8)",
+  "id": "party-recolor-on-highwind-disc1-v0.2.0",
+  "description": "Party Recolor v0.2.0 -- NTSC-U Disc 1 (on highwind 0.5.8)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 748775664,
