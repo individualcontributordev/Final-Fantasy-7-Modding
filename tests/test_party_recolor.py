@@ -23,6 +23,16 @@ class PartyRecolorTests(unittest.TestCase):
 		self.assertEqual(out[:3], bytes(P.rgb("400000")))
 		self.assertEqual(out[26000:26003], bytes(P.rgb("26A65B")))
 
+	def test_world_models_follow_header_pointers(self) -> None:
+		dec = bytearray(24 + 36 * 2)
+		struct.pack_into("<II", dec, 12, 2, 0x8010_0018)  # model count, RAM address of file offset 24
+		for i, (ptr, nb, np_) in enumerate(((0x8010_0018 + 100, 22, 15), (0x8010_0018 + 200, 25, 16))):
+			dec[24 + 36 * i + 2:24 + 36 * i + 4] = bytes((nb, np_))
+			struct.pack_into("<I", dec, 24 + 36 * i + 28, ptr)
+		(at0, nb0, np0, to_off), (at1, nb1, np1, _) = P.world_models(bytes(dec))
+		self.assertEqual(((at0, nb0, np0), (at1, nb1, np1)), ((124, 22, 15), (224, 25, 16)))
+		self.assertEqual(to_off(0x8010_0018 + 50), 74)
+
 	def test_world_hair_and_moogle_only_inside_their_spans(self) -> None:
 		for src, dst, inside, outside in (("1E1E1E", "E6C34A", 22000, 100), ("191919", "A8222E", 78200, 100), ("CCCCCC", "F5A0B8", 67500, 72800)):
 			dec = bytearray(82000)
@@ -57,7 +67,7 @@ class PartyRecolorTests(unittest.TestCase):
 		struct.pack_into("<H", dec, 60, 1)  # one gouraud tri, records at 64
 		struct.pack_into("<HHH", dec, 64, 0, 8, 16)
 		dec[75] = 0x30  # gouraud command byte
-		self.assertEqual(list(P.battle_polys(bytes(dec))), [(0, [(72, -50), (76, 0), (80, 50)])])
+		self.assertEqual(list(P.battle_polys(bytes(dec))), [(0, [(72, -50, 0), (76, 0, 0), (80, 50, 0)])])
 
 	def test_battle_polys_skips_textured_record_misread_as_triangle(self) -> None:
 		dec = bytearray(100)
@@ -72,7 +82,7 @@ class PartyRecolorTests(unittest.TestCase):
 	def test_battle_rule_stays_in_its_parts_and_keeps_skin(self) -> None:
 		hair, skin = bytes([60, 40, 10]), bytes([200, 140, 120])
 		dec = hair + b"\x00" + hair + b"\x00" + skin + b"\x00" + hair + b"\x00" * 9
-		polys = [(1, [(0, 0), (4, 0), (8, 0)]), (2, [(12, 0), (16, 0), (20, 0)])]
+		polys = [(1, [(0, 0, 0), (4, 0, 0), (8, 0, 0)]), (2, [(12, 0, 0), (16, 0, 0), (20, 0, 0)])]
 		rule = P.Rule((15, 45), (173, 0.7, 0, 1), frozenset({1}), sat=(0.6, 1))
 		with mock.patch.object(P, "battle_polys", lambda d: iter(polys)):
 			out, n = P.recolor_battle(dec, (rule,))
@@ -84,13 +94,13 @@ class PartyRecolorTests(unittest.TestCase):
 		hair, skin = bytes([60, 40, 10]), bytes([200, 140, 120])
 		dec = hair + b"\x00" + skin + b"\x00" + skin + b"\x00"
 		rule = P.Rule((15, 45), (173, 0.7, 0, 1), sat=(0.6, 1))
-		with mock.patch.object(P, "battle_polys", lambda d: iter([(0, [(0, 0), (4, 0), (8, 0)])])):
+		with mock.patch.object(P, "battle_polys", lambda d: iter([(0, [(0, 0, 0), (4, 0, 0), (8, 0, 0)])])):
 			out, n = P.recolor_battle(dec, (rule,))
 		self.assertEqual((n, out[4:12]), (1, dec[4:12]))
 
 	def test_battle_top_cut_picks_upper_vertices(self) -> None:
-		brown = bytes([90, 50, 30, 0])
-		corners = [(0, -100), (4, -100), (8, 100), (12, 100)]
+		brown = bytes([60, 33, 20, 0])
+		corners = [(0, 0, -100), (4, 0, -100), (8, 0, 100), (12, 0, 100)]
 		with mock.patch.object(P, "battle_polys", lambda d: iter([(2, corners)])):
 			out, n = P.recolor_battle(brown * 4, P.BATTLE["BARRETT"][:1])
 		self.assertEqual((n, out[8:16]), (2, brown * 2))

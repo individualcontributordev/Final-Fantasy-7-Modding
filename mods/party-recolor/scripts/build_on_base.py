@@ -37,7 +37,7 @@ PACK_IDS = {"csr-plus": "party-recolor-on-csr-plus", "csr": "party-recolor-on-cs
 	"highwind": "party-recolor-on-highwind", "clean": "party-recolor"}
 ONE_DISC = ("csr-plus", "highwind")  # bases that only ship disc 1
 DISPLAY = "Party Recolor"
-BLURB = "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map."
+BLURB = "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses."
 HINT = "Nine party members wear new colors."
 fb.HINT = HINT  # the shared pack/manifest writers read this module global
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_party_recolor"
@@ -108,7 +108,7 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 
 def main() -> int:
 	ap = argparse.ArgumentParser(description="Build the Party Recolor builder pack")
-	ap.add_argument("--against", default="csr-plus", help="csr-plus | csr | highwind | clean")
+	ap.add_argument("--against", default="clean", help="clean (pristine discs) | csr-plus | csr | highwind")
 	ap.add_argument("--discs", default=None, help="default: 1 for csr-plus, 1,2,3 otherwise")
 	ap.add_argument("--version", default=None)
 	ap.add_argument("--csr-root", type=Path)

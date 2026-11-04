@@ -20,7 +20,7 @@ from typing import NamedTuple
 
 _ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_ROOT / "scripts"))
-from psx_mode2_iso import extract_file, replace_file_padded  # noqa: E402
+from psx_mode2_iso import extract_file, replace_file_padded, walk_tree  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location(
 	"lzs_pack", _ROOT / "mods" / "diamond-weapon-speed-up" / "scripts" / "lzs_pack.py"
@@ -43,15 +43,17 @@ KINDS = (
 	(11, 20, ((4, 4),)),  # gouraud quad
 )
 
-def color_offsets(dec: bytes):
-	"""(bone, absolute offset, height) of every polygon RGB triple in the decompressed BCX; height is the part-local
-	-z of the color's vertex (a flat color: the polygon's mean)."""
-	om = struct.unpack_from("<I", dec, 4)[0]
-	num_bones, num_parts = dec[om + 2], dec[om + 3]
-	first = om + HDR_SIZE + num_bones * 4
+def color_offsets(dec: bytes, first: int | None = None, num_parts: int = 0, to_off=lambda p: p & 0x7FFFFFFF):
+	"""(bone, absolute offset, height) of every polygon RGB triple in the decompressed BCX (or, with `first` = the
+	first part header of a BSX model, in that model); height is the part-local -z of the color's vertex (a flat
+	color: the polygon's mean). `to_off` turns a part's vertex pointer into a file offset (world files hold RAM addresses)."""
+	if first is None:
+		om = struct.unpack_from("<I", dec, 4)[0]
+		num_bones, num_parts = dec[om + 2], dec[om + 3]
+		first = om + HDR_SIZE + num_bones * 4
 	for i in range(num_parts):
 		h = PART_HDR.unpack_from(dec, first + i * 32)
-		base = h[19] & 0x7FFFFFFF
+		base = to_off(h[19])
 		pos = base + h[14]
 		for count_idx, size, cols in KINDS:
 			nv = 4 if count_idx in (4, 6, 9, 11) else 3
@@ -68,11 +70,12 @@ RAINBOW_STEPS = 6  # field hair shades per band step; 8 no longer fits Yuffie's 
 RAINBOW_BANDS = ("E8283C", "F58A1F", "F2D81E", "3CC850", "2AB8E8", "4A5AF0", "A850E0")
 
 
-def recolor(dec: bytes, color_map: dict, only: dict | None = None) -> tuple[bytes, int]:
-	"""`only` limits a source color to the given bones (for colors shared between two bodies in one model)."""
+def recolor(dec: bytes, color_map: dict, only: dict | None = None, offsets=None) -> tuple[bytes, int]:
+	"""`only` limits a source color to the given bones (for colors shared between two bodies in one model); `offsets` replaces
+	the BCX color walk (a world-map model)."""
 	out = bytearray(dec)
 	hits = []
-	for bone, o, z in color_offsets(dec):
+	for bone, o, z in color_offsets(dec) if offsets is None else offsets:
 		src = tuple(dec[o : o + 3])
 		new = color_map.get(src)
 		if isinstance(new, dict):  # per-bone targets: one source color used by several body parts
@@ -167,11 +170,14 @@ class Rule(NamedTuple):
 	parts: frozenset | None = None  # indices into the offset-sorted part list, None = every part
 	sat: tuple = (0, 1)
 	val: tuple = (0, 1)
-	top: float | None = None  # only vertices in this top fraction of the part's height
+	top: float | None = None  # only vertices in this back fraction of the part's y range (small y)
+	up: float | None = None  # only vertices in this top fraction of the part's z range (heads hang from their joint, so small z is up)
+	front: float | None = None  # only vertices in this front fraction of the part's y range (large y)
 
 
-def battle_polys(dec: bytes):
-	"""(part index, [(color offset, vertex y), ...]) per vertex-colored polygon of every part. Plain parts are gouraud
+def battle_polys(dec: bytes, geometry: bool = False):
+	"""(part index, [(color offset, vertex y, vertex z), ...]) per vertex-colored polygon of every part (`geometry`: plus the part's
+	file offset and the record offset, whose first u16s index the 8-byte vertices at part + 4). Plain parts are gouraud
 	tris then a u32 quad count and quads; textured parts (heads, Red XIII's tattoos) start with a u16 count of 16-byte
 	textured records, and the quad count at the part's end fixes where each block starts."""
 	body = struct.unpack_from("<I", dec, 4)[0]
@@ -211,20 +217,20 @@ def battle_polys(dec: bytes):
 			else:
 				continue
 		# vertex index words are byte offsets into the part's 8-byte (x, y, z, pad) vertices
-		y = lambda rec, j, p=p: struct.unpack_from("<h", dec, p + 6 + struct.unpack_from("<H", dec, rec + j * 2)[0])[0]
+		y = lambda rec, j, p=p: struct.unpack_from("<hh", dec, p + 6 + struct.unpack_from("<H", dec, rec + j * 2)[0])
 		# the first color's fourth byte is the GPU command: 0x30 gouraud tri, 0x38 quad (+2 semi-transparent); anything else is
 		# a textured record the layout guess swallowed, and recoloring it corrupts the model
 		for k in range(tris):
 			r = start + k * 20
 			if dec[r + 11] in (0x30, 0x32):
-				yield i, [(r + 8 + j * 4, y(r, j)) for j in range(3)]
+				yield (i, [(r + 8 + j * 4, *y(r, j)) for j in range(3)], *((p, r) if geometry else ()))
 		for k in range(quads):
 			r = q + 4 + k * 24
 			if dec[r + 11] in (0x38, 0x3A):
-				yield i, [(r + 8 + j * 4, y(r, j)) for j in range(4)]
+				yield (i, [(r + 8 + j * 4, *y(r, j)) for j in range(4)], *((p, r) if geometry else ()))
 
 
-def _matches(rule: Rule, part: int, color: bytes, y: int, span: tuple) -> bool:
+def _matches(rule: Rule, part: int, color: bytes, y: int, z: int, span: tuple) -> bool:
 	if rule.parts is not None and part not in rule.parts:
 		return False
 	h, s, v = colorsys.rgb_to_hsv(*(c / 255 for c in color))
@@ -233,7 +239,11 @@ def _matches(rule: Rule, part: int, color: bytes, y: int, span: tuple) -> bool:
 		return False
 	if not (rule.sat[0] <= s <= rule.sat[1] and rule.val[0] <= v <= rule.val[1]):
 		return False
-	return rule.top is None or y <= span[0] + rule.top * (span[1] - span[0])  # y grows downward
+	return (
+		(rule.top is None or y <= span[0] + rule.top * (span[1] - span[0]))
+		and (rule.up is None or z <= span[2] + rule.up * (span[3] - span[2]))
+		and (rule.front is None or y >= span[1] - rule.front * (span[1] - span[0]))
+	)
 
 
 def _paint(rule: Rule, color: bytes, y: int, span: tuple) -> bytes:
@@ -250,16 +260,16 @@ def recolor_battle(dec: bytes, rules: tuple) -> tuple[bytes, int]:
 	polys = list(battle_polys(dec))
 	span = {}
 	for part, corners in polys:
-		for _, y in corners:
-			lo, hi = span.get(part, (y, y))
-			span[part] = (min(lo, y), max(hi, y))
+		for _, y, z in corners:
+			ylo, yhi, zlo, zhi = span.get(part, (y, y, z, z))
+			span[part] = (min(ylo, y), max(yhi, y), min(zlo, z), max(zhi, z))
 	out = bytearray(dec)
 	changed = 0
 	for part, corners in polys:
-		hits = [next((r for r in rules if _matches(r, part, dec[o : o + 3], y, span[part])), None) for o, y in corners]
+		hits = [next((r for r in rules if _matches(r, part, dec[o : o + 3], y, z, span[part])), None) for o, y, z in corners]
 		best = Counter(r for r in hits if r is not None).most_common(1)
 		fill = best[0][0] if best and best[0][1] * 2 > len(hits) else None
-		for (o, y), r in zip(corners, hits):
+		for (o, y, _), r in zip(corners, hits):
 			if r or fill:
 				out[o : o + 3] = _paint(r or fill, dec[o : o + 3], y, span[part])
 				changed += 1
@@ -270,10 +280,9 @@ _F = frozenset
 # battle model -> rules by part (see battle_polys). Battle vertex colors are shaded and about half field brightness;
 # skin is hue 0-30, so rules pin hue/sat/value windows per part to leave skin, eyes and metal alone.
 _BARRETT = (
-	Rule((0, 40), (46, 0.68, 0.25, 1.6), _F({2}), top=0.42),  # the buzz cut is skin-toned: top of the head -> blonde
-	Rule((0, 45), (46, 0.68, 0.3, 1.6), _F({2}), sat=(0.85, 1), val=(0, 0.12)),  # near-black red-brown hair at the back and sides
-	Rule((15, 30), (46, 0.68, 0.3, 1.6), _F({2}), sat=(0.5, 0.7), val=(0, 0.115)),  # beard
-	Rule((25, 50), (46, 0.68, 0.3, 1.6), _F({2}), sat=(0.25, 0.5), val=(0.1, 0.3)),  # beard stubble
+	Rule((0, 45), (46, 0.68, 0.3, 1.6), _F({2}), val=(0, 0.3), up=0.12),  # dark hair cap on top of the head -> blonde; the lighter skin below its edge stays
+	Rule((15, 30), (46, 0.68, 0.3, 1.6), _F({2}), sat=(0.5, 0.7), val=(0, 0.115), front=0.25),  # beard
+	Rule((25, 50), (46, 0.68, 0.3, 1.6), _F({2}), sat=(0.25, 0.5), val=(0.1, 0.3), front=0.25),  # beard stubble
 	Rule((50, 110), (224, 0.7, 0.12, 1.5), _F({0, 8, 9, 12, 13}), sat=(0.25, 1)),  # olive pants -> navy
 	Rule((33, 62), (24, 0.85, 0.05, 2.2), _F({1}), sat=(0.25, 1)),  # khaki vest -> Goku-gi orange
 )
@@ -372,10 +381,10 @@ BATTLE = {
 		Rule((315, 359), (150, 0.85, 0, 1.6), _F({18}), sat=(0.4, 1)),
 	),
 	"EARITH": (
-		Rule((15, 45), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.6, 1)),  # brown hair -> Bulma teal
-		Rule((0, 45), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.55, 1), val=(0, 0.2)),
-		Rule((340, 45), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.5, 1), val=(0, 0.6)),  # crown shading: reddish brown on top of the head
-		Rule((340, 45), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.3, 1), top=0.12),  # lighter crown highlights
+		Rule((20, 45), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.6, 1)),  # brown hair -> Bulma teal; face skin is hue < 19
+		Rule((20, 45), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.3, 1), val=(0, 0.3)),  # hair shading
+		Rule((0, 19), (173, 0.7, 0.03, 1.8), _F({2}), sat=(0.64, 1), val=(0, 0.15)),  # near-black hair at the back
+		Rule((340, 12), (266, None, 0, 1), _F({2}), sat=(0.3, 1), top=0.1),  # ribbons on the back of the head -> lilac
 		Rule((15, 45), (173, 0.7, 0.03, 1.8), _F({3, 4, 5, 6}), sat=(0.55, 1)),  # braid
 		Rule((320, 8), (272, None, 0, 1), sat=(0.7, 1)),  # jacket red -> violet
 		Rule((320, 352), (266, None, 0, 1), sat=(0.25, 0.7)),  # dress pink -> lilac
@@ -407,7 +416,7 @@ BATTLE = {
 
 WORLD_PATHS = ("WORLD/WM0.BSZ", "WORLD/WM1.BSZ", "WORLD/WM2.BSZ", "WORLD/WM3.BSZ")
 # Cait Sith's white is plain gray, Vincent's hair black is Tifa's world-map skirt, Barret's 1E1E1E is generic dark: all would hit other data
-WORLD_MAP = {k: v for m in FIELD.values() for k, v in m.items() if k not in (rgb("CCCCCC"), rgb("191919"), rgb("1E1E1E"), rgb("131313"), rgb("4C4C4C"), rgb("333333"))}
+WORLD_MAP = {k: v for m in FIELD.values() for k, v in m.items() if v != RAINBOW and k not in (rgb("CCCCCC"), rgb("191919"), rgb("1E1E1E"), rgb("131313"), rgb("4C4C4C"), rgb("333333"))}
 # Tifa's black outfit on her WM1 model (WM3 uses WORLD_ONLY spans)
 WORLD_FILE = {("WORLD/WM1.BSZ", rgb("4C4C4C")): rgb("262626"), ("WORLD/WM1.BSZ", rgb("CCCCCC")): rgb("202020"), ("WORLD/WM1.BSZ", rgb("333333")): rgb("1A1A1A")}
 # Tifa's red also appears as 6 stray slots elsewhere in WM3; her model sits in 26000..40000
@@ -424,16 +433,24 @@ WORLD_ONLY = {
 }
 
 
+def world_models(dec: bytes):
+	"""(skeleton offset, bones, parts, pointer -> offset) per model of a WORLD/WM*.BSZ: BCX-style 36-byte headers from
+	offset 24, each pointing (by RAM address) at its skeleton."""
+	k = struct.unpack_from("<I", dec, 16)[0] - 24  # RAM address of file offset 0
+	return [(struct.unpack_from("<I", dec, h + 28)[0] - k, dec[h + 2], dec[h + 3], lambda p: p - k)
+		for h in (24 + 36 * i for i in range(struct.unpack_from("<I", dec, 12)[0]))]
+
+
+# Yuffie's WM3 model gets the field hair gradient (the whole-file color map can't: her hair color is plain dark)
+WORLD_HAIR = ("WORLD/WM3.BSZ", 5, {rgb("1C150D"): RAINBOW})
+
+
 def recolor_world(dec: bytes, path: str) -> tuple[bytes, int]:
 	out = bytearray(dec)
 	changed = 0
-	seen = 0
 	for o in range(0, len(dec) - 3, 4):
 		src = tuple(dec[o : o + 3])
 		dst = WORLD_MAP.get(src) or WORLD_FILE.get((path, src))
-		if dst == RAINBOW:
-			dst = rgb(RAINBOW_BANDS[seen // 2 % len(RAINBOW_BANDS)])
-			seen += 1
 		if dst is None:
 			for new, spans in WORLD_ONLY.get(src, ()) if path == "WORLD/WM3.BSZ" else ():
 				if any(lo <= o < hi for lo, hi in spans):
@@ -445,7 +462,45 @@ def recolor_world(dec: bytes, path: str) -> tuple[bytes, int]:
 		if lo <= o < hi:
 			out[o : o + 3] = bytes(dst)
 			changed += 1
+	if path == WORLD_HAIR[0] and len(models := world_models(dec)) > WORLD_HAIR[1]:
+		at, nb, np_, to_off = models[WORLD_HAIR[1]]
+		hair, n = recolor(bytes(out), WORLD_HAIR[2], offsets=list(color_offsets(dec, at + nb * 4, np_, to_off)))
+		out, changed = bytearray(hair), changed + n
 	return bytes(out), changed
+
+
+# Wall Market / Don Corneo dress models live inside the field BSX files. Several BSX hold other outfits of the same
+# characters with identical (model id, bones, parts), so the polygon-color count picks out the dress.
+# (id, bones, parts, colors) -> hair back to the party theme; dress and trim in yellow / magenta-pink / ivory, which neither
+# the original dresses (blue, red, purple) nor the party recolors (crimson, lilac, black + emerald) use
+DRESS = {
+	(0, 22, 16, 1340): {"FCA834": "C7D3E6", "614977": "F2C230", "FC3434": "FFF4D6", "BD2727": "C99A1A"},  # Cloud
+	(1, 24, 17, 1883): {"59350C": "3DBFB0", "990F0F": "D6338F", "B90101": "9E1F68", "D59C9C": "FFD9A8", "49D545": "FFE9C7"},  # Aerith
+	(3, 25, 16, 1744): {"2F1E12": "B4501E", "5B2EEB": "F4EFE6", "4A0BFF": "B9B4A8", "6F1EEB": "DAD4C6", "D0A500": "9AA0AE"},  # Tifa
+}
+DRESS = {k: {rgb(a): rgb(b) for a, b in m.items()} for k, m in DRESS.items()}
+
+def recolor_dress(dec: bytes) -> tuple[bytes, int]:
+	out = bytearray(dec)
+	changed = 0
+	om = struct.unpack_from("<I", dec, 4)[0]
+	for i in range(struct.unpack_from("<I", dec, om + 4)[0]):
+		h = om + 16 + 48 * i
+		model_id, _, skeleton = struct.unpack_from("<HHI", dec, h)
+		num_bones, num_parts = dec[h + 23], dec[h + 35]
+		first = h + skeleton + num_bones * 4
+		offs = [o for _, o, _ in color_offsets(dec, first, num_parts)]
+		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs)))
+		for o in offs if cmap else ():
+			new = cmap.get(tuple(dec[o : o + 3]))
+			if new:
+				out[o : o + 3] = bytes(new)
+				changed += 1
+	return bytes(out), changed
+
+def battle_fn(name: str):
+	rules = BATTLE[name]
+	return recolor_barrett if rules is _BARRETT else recolor_red13 if name == "RED13" else lambda d: recolor_battle(d, rules)
 
 
 def _patch(img: bytearray, path: str, fn, *, required: bool = True) -> int:
@@ -464,11 +519,14 @@ def apply_patch(img: bytearray) -> dict[str, int]:
 	for name, cmap in FIELD.items():
 		counts[f"field {name}"] = _patch(img, f"FIELD/{name}.BCX", lambda d, m=cmap, n=name: recolor(d, m, FIELD_ONLY.get(n)))
 	counts["battle CLOUD outfit"] = _patch(img, "ENEMY6/CLOUD.LZS", recolor_battle_cloud)
-	for name, rules in BATTLE.items():
-		fn = recolor_barrett if rules is _BARRETT else recolor_red13 if name == "RED13" else lambda d, r=rules: recolor_battle(d, r)
-		counts[f"battle {name}"] = _patch(img, f"ENEMY6/{name}.LZS", fn)
+	for name in BATTLE:
+		counts[f"battle {name}"] = _patch(img, f"ENEMY6/{name}.LZS", battle_fn(name))
 	for path in WORLD_PATHS:
 		counts[path] = _patch(img, path, lambda d, p=path: recolor_world(d, p))
+	for path, node in walk_tree(img).items():
+		if path.startswith("/FIELD/") and path.endswith(".BSX") and node.size > 2048:  # 2048 B: unused stubs and WM* world-map files
+			if n := _patch(img, path[1:], recolor_dress, required=False):
+				counts["dress " + path[7:-4]] = n
 	return counts
 
 
