@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recut field, world, and fanfare packs against one or more exclusive bases.
+"""Recut field, world, fanfare, New Game+, Party Recolor and Masamune packs against one or more exclusive bases.
 
 Run on a machine holding retail NTSC-U BINs. Writes ``builder/`` and does not
 commit.
@@ -31,6 +31,8 @@ WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_ba
 FANFARE = ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
 NGP = ROOT / "mods" / "new-game-plus" / "scripts" / "build_on_base.py"
 PARTY = ROOT / "mods" / "party-recolor" / "scripts" / "build_on_base.py"
+MASAMUNE = ROOT / "mods" / "masamune" / "scripts" / "build_on_base.py"
+MASAMUNE_FIXUP = ROOT / "mods" / "masamune" / "scripts" / "build_recolor_fixup.py"
 
 
 def require_lf_json() -> None:
@@ -134,6 +136,9 @@ def recut_commands(
 		args = ["--against", against] + (["--csr-root", str(csr)] if against != "clean" else [])
 		cmds.append((f"new-game-plus on {against}", [sys.executable, str(NGP), *args]))
 		cmds.append((f"party-recolor on {against}", [sys.executable, str(PARTY), *args]))
+		cmds.append((f"masamune on {against}", [sys.executable, str(MASAMUNE), *args]))
+		# both mods rewrite the Cloud models + KERNEL; this pack applies last when both are picked
+		cmds.append((f"masamune+party-recolor fixup on {against}", [sys.executable, str(MASAMUNE_FIXUP), *args]))
 	return cmds
 
 

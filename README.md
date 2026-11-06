@@ -107,6 +107,15 @@ These mods are MIPS stubs and data bytes: read the site in **Ghidra**, write it
 with **ImHex**. Makou Reactor edits field scripts and belongs to the CSR repo,
 not here.
 
+The one exception is the Masamune's field script. Make that edit in Makou
+on a disc, then run
+`python mods/masamune/scripts/capture_edit.py <unedited.bin> <edited.bin>`. It
+diffs the two `BLIN70_1` scripts (entities and messages) into
+`mods/masamune/field_edit.json`, and every rebuild applies that diff to the
+base's own script, so edits to other fields or scripts never need porting. A
+rebuild stops, naming the entity, only when a base edited the same entity the
+diff touches; capture again on that base.
+
 The code is inside GZIPPS overlays (`FIELD/FIELD.BIN`, `WORLD/WORLD.BIN`,
 `BATTLE/BATRES.X`), so a hex editor aimed at the disc image sees only
 compressed bytes. Unwrap, patch the `.dec`, then rewrap into the same ISO slot:

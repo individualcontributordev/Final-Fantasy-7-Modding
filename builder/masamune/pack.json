@@ -1,0 +1,22 @@
+{
+  "id": "masamune",
+  "name": "Masamune",
+  "kind": "mod",
+  "version": "0.2.1",
+  "blurb": "You've seen this sword before, but you've never held it.",
+  "hint": "You've seen this sword before, but you've never held it.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "discDigests": {
+    "1": "4447ab3b145e14560f7df0b001b6da74a455c24e66b02aa2ebb8ad225521c34f",
+    "2": "91b2676cce12b60b208dfc484b1b820972dfeae6ef5b69701799dd0922431f37",
+    "3": "439d7121dc4de00599a90b38d68f0e4fc07b45aa86c005927bca8d78738b4d84"
+  }
+}

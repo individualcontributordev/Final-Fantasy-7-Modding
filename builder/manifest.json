@@ -105,190 +105,6 @@
       "baseVersion": "0.14.4"
     },
     {
-      "id": "field-encounter-on-highwind-0",
-      "name": "Field Random Encounters -- No Encs (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "fcb97eb03afb7e311507f906541e33839deadefcd6e4970719fa5057adee593b"
-      },
-      "baseVersion": "0.5.8",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-highwind-0",
-      "name": "World Random Encounters -- No Encs (on Highwind)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "a2b57b63f34bc230005fe790d67cb1493c7b20e798df53209e95f5208395e728"
-      },
-      "baseVersion": "0.5.8",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-highwind",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.8"
-    },
-    {
-      "id": "new-game-plus-on-highwind",
-      "name": "New Game+",
-      "kind": "mod",
-      "version": "0.1.1",
-      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
-      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./new-game-plus-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "951981bab678f8a62884258f9e237d1ff2f17285473db1d3e38bb428e2acd753"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.8"
-    },
-    {
-      "id": "field-encounter-0",
-      "name": "Field Random Encounters -- No Encs",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./field-encounter-0/layers/disc1.layer.json",
-        "2": "./field-encounter-0/layers/disc2.layer.json",
-        "3": "./field-encounter-0/layers/disc3.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "92679f70b882e374d10de306ed2e754f6b2e3873cd43eddcb6cc331dc905f77e",
-        "2": "efac25094c66dd596e9a5101139d685abfea1187eec2a5e01d9d085d3c086600",
-        "3": "d4ace609ae4cb0c5925929b490582d3eb40264d3d34c447479adf100eae8369c"
-      },
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-0",
-      "name": "World Random Encounters -- No Encs",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./world-encounter-0/layers/disc1.layer.json",
-        "2": "./world-encounter-0/layers/disc2.layer.json",
-        "3": "./world-encounter-0/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "90d4fc36ba87b70acf940259769c9545b59739e3bb96df6dfcd0364b0a9b84d0",
-        "2": "6f6c69d5a7d6c599ea65e1b86fe5fdc835ecc9780836d151813ab44f2a5e1dd2",
-        "3": "28fb817d4a82329943fa0cec1d4251cc192c27bfdb12f53d121ad47844d2d1ac"
-      },
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./fanfare-skip/layers/disc1.layer.json",
-        "2": "./fanfare-skip/layers/disc2.layer.json",
-        "3": "./fanfare-skip/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "a8926a822755db02d8ac68a11c04ae0a7bdfd1b77bd615e5483afc5e4a7aaf2e",
-        "2": "063ab6bda949e243fe20cad8e34713c77937e5272618219313811c606e237de0",
-        "3": "515aafebfea9bb050a94292a10e26c3b47f365d184e47d43e8da32fab60dc4a8"
-      },
-      "enabled": true
-    },
-    {
-      "id": "new-game-plus",
-      "name": "New Game+",
-      "kind": "mod",
-      "version": "0.1.1",
-      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
-      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./new-game-plus/layers/disc1.layer.json",
-        "2": "./new-game-plus/layers/disc2.layer.json",
-        "3": "./new-game-plus/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "9aedaedf5b9ee6760c6cdd4145721cb64479008d804ee3c5d57673fe49697eed",
-        "2": "399e3ec815329f605baf5a79281e28cb0e91fed58f1de051fdce53a4437adc1d",
-        "3": "da9180b2be357bf4976e95fd102787bd1ee3fee1387dc6ade9b652e5fc62ed37"
-      },
-      "enabled": true
-    },
-    {
       "id": "party-recolor-on-csr",
       "name": "Party Recolor",
       "kind": "mod",
@@ -311,49 +127,6 @@
       },
       "enabled": true,
       "baseVersion": "0.14.4"
-    },
-    {
-      "id": "party-recolor-on-highwind",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "5e9a961d69a681cf54c7094d090a5200cc2709cb07036402bd9655a170b49adc"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.8"
-    },
-    {
-      "id": "party-recolor",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./party-recolor/layers/disc1.layer.json",
-        "2": "./party-recolor/layers/disc2.layer.json",
-        "3": "./party-recolor/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "e609883313a51d6674ffd922fd1f2932463cb9711b8514d9a2df3c6b977ee7c4",
-        "2": "ea633fed6560ed5258b24d31cfb97b193d6df3bfdf5c8177eddd2bfce90c7297",
-        "3": "de07df25a529487e69ab96dffa317ca9d18b431c472d271254a11c776e5cc85b"
-      },
-      "enabled": true
     },
     {
       "id": "field-encounter-on-csr-plus-0",
@@ -460,6 +233,447 @@
       },
       "enabled": true,
       "baseVersion": "1.0.0rc9"
+    },
+    {
+      "id": "field-encounter-on-highwind-0",
+      "name": "Field Random Encounters -- No Encs (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-highwind-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "fcb97eb03afb7e311507f906541e33839deadefcd6e4970719fa5057adee593b"
+      },
+      "baseVersion": "0.5.8",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-highwind-0",
+      "name": "World Random Encounters -- No Encs (on Highwind)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-highwind-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "a2b57b63f34bc230005fe790d67cb1493c7b20e798df53209e95f5208395e728"
+      },
+      "baseVersion": "0.5.8",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-highwind",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8"
+    },
+    {
+      "id": "new-game-plus-on-highwind",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./new-game-plus-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "951981bab678f8a62884258f9e237d1ff2f17285473db1d3e38bb428e2acd753"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8"
+    },
+    {
+      "id": "party-recolor-on-highwind",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "5e9a961d69a681cf54c7094d090a5200cc2709cb07036402bd9655a170b49adc"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8"
+    },
+    {
+      "id": "field-encounter-0",
+      "name": "Field Random Encounters -- No Encs",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./field-encounter-0/layers/disc1.layer.json",
+        "2": "./field-encounter-0/layers/disc2.layer.json",
+        "3": "./field-encounter-0/layers/disc3.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "92679f70b882e374d10de306ed2e754f6b2e3873cd43eddcb6cc331dc905f77e",
+        "2": "efac25094c66dd596e9a5101139d685abfea1187eec2a5e01d9d085d3c086600",
+        "3": "d4ace609ae4cb0c5925929b490582d3eb40264d3d34c447479adf100eae8369c"
+      },
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-0",
+      "name": "World Random Encounters -- No Encs",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./world-encounter-0/layers/disc1.layer.json",
+        "2": "./world-encounter-0/layers/disc2.layer.json",
+        "3": "./world-encounter-0/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "90d4fc36ba87b70acf940259769c9545b59739e3bb96df6dfcd0364b0a9b84d0",
+        "2": "6f6c69d5a7d6c599ea65e1b86fe5fdc835ecc9780836d151813ab44f2a5e1dd2",
+        "3": "28fb817d4a82329943fa0cec1d4251cc192c27bfdb12f53d121ad47844d2d1ac"
+      },
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./fanfare-skip/layers/disc1.layer.json",
+        "2": "./fanfare-skip/layers/disc2.layer.json",
+        "3": "./fanfare-skip/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "a8926a822755db02d8ac68a11c04ae0a7bdfd1b77bd615e5483afc5e4a7aaf2e",
+        "2": "063ab6bda949e243fe20cad8e34713c77937e5272618219313811c606e237de0",
+        "3": "515aafebfea9bb050a94292a10e26c3b47f365d184e47d43e8da32fab60dc4a8"
+      },
+      "enabled": true
+    },
+    {
+      "id": "new-game-plus",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./new-game-plus/layers/disc1.layer.json",
+        "2": "./new-game-plus/layers/disc2.layer.json",
+        "3": "./new-game-plus/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "9aedaedf5b9ee6760c6cdd4145721cb64479008d804ee3c5d57673fe49697eed",
+        "2": "399e3ec815329f605baf5a79281e28cb0e91fed58f1de051fdce53a4437adc1d",
+        "3": "da9180b2be357bf4976e95fd102787bd1ee3fee1387dc6ade9b652e5fc62ed37"
+      },
+      "enabled": true
+    },
+    {
+      "id": "party-recolor",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./party-recolor/layers/disc1.layer.json",
+        "2": "./party-recolor/layers/disc2.layer.json",
+        "3": "./party-recolor/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "e609883313a51d6674ffd922fd1f2932463cb9711b8514d9a2df3c6b977ee7c4",
+        "2": "ea633fed6560ed5258b24d31cfb97b193d6df3bfdf5c8177eddd2bfce90c7297",
+        "3": "de07df25a529487e69ab96dffa317ca9d18b431c472d271254a11c776e5cc85b"
+      },
+      "enabled": true
+    },
+    {
+      "id": "masamune",
+      "name": "Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "You've seen this sword before, but you've never held it.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./masamune/layers/disc1.layer.json",
+        "2": "./masamune/layers/disc2.layer.json",
+        "3": "./masamune/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "4447ab3b145e14560f7df0b001b6da74a455c24e66b02aa2ebb8ad225521c34f",
+        "2": "91b2676cce12b60b208dfc484b1b820972dfeae6ef5b69701799dd0922431f37",
+        "3": "439d7121dc4de00599a90b38d68f0e4fc07b45aa86c005927bca8d78738b4d84"
+      },
+      "enabled": true
+    },
+    {
+      "id": "party-recolor-with-masamune",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune/layers/disc1.layer.json",
+        "2": "./party-recolor-with-masamune/layers/disc2.layer.json",
+        "3": "./party-recolor-with-masamune/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "b9af4349f5377c6911c2005427e45eecd7d53c2063def3f55f59f8b3b2b77cd3",
+        "2": "c00884c6d61afc2330e14075211323024998431dc94305a911628af6dc32158d",
+        "3": "414b9b1ea441dcefad3797a7795e063b768ad86e0318607ee0cefdf270c87cdf"
+      },
+      "enabled": true,
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "clean"
+        ],
+        "addonSelected": "masamune",
+        "addonSelectedAny": [
+          "party-recolor"
+        ]
+      }
+    },
+    {
+      "id": "masamune-on-csr",
+      "name": "Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "You've seen this sword before, but you've never held it.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./masamune-on-csr/layers/disc1.layer.json",
+        "2": "./masamune-on-csr/layers/disc2.layer.json",
+        "3": "./masamune-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "1adf858980410ef58881532c582865272a845cf73d7ae9538c2e6fa8411bbedb",
+        "2": "393fc9f48cec8005aa50cc25a425d198684b419968d234a3ff42e91655ca215f",
+        "3": "98f8dc621ef18353c895796e0cb915b2fb212a945f8afcc7bcec0177781ccb3e"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4"
+    },
+    {
+      "id": "party-recolor-with-masamune-on-csr",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-csr/layers/disc1.layer.json",
+        "2": "./party-recolor-with-masamune-on-csr/layers/disc2.layer.json",
+        "3": "./party-recolor-with-masamune-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "56055bd19b296cb5a2de0bebd044b68740382b729461df0cc704318cb6db4858",
+        "2": "f6b150f28fad26d15d80dd909b25426205015051ba6005152136044ee6aba2f1",
+        "3": "de20950ff51b9e7bb0d0b0f0a220d73760f6c7a00271f303195edef8900db5f5"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr"
+        ],
+        "addonSelected": "masamune-on-csr",
+        "addonSelectedAny": [
+          "party-recolor-on-csr"
+        ]
+      }
+    },
+    {
+      "id": "masamune-on-csr-plus",
+      "name": "Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "You've seen this sword before, but you've never held it.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "ae757857fd270f232d81c62a00cc4a55e63fc93debd6d0f6c34123e1dfdaaaa0"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc9"
+    },
+    {
+      "id": "party-recolor-with-masamune-on-csr-plus",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "cfa28c2a234099cc4ecae65d94d987878404f17fa7ba40432914a58c9423c733"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc9",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus"
+        ],
+        "addonSelected": "masamune-on-csr-plus",
+        "addonSelectedAny": [
+          "party-recolor-on-csr-plus"
+        ]
+      }
+    },
+    {
+      "id": "masamune-on-highwind",
+      "name": "Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "You've seen this sword before, but you've never held it.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./masamune-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "ff0627ca5cbd0a5005c6807df7fc47510bea5bdf2a75936964bdb6cd6683ad2d"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8"
+    },
+    {
+      "id": "party-recolor-with-masamune-on-highwind",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "1b9544c072f065944f4ae512c6052158a5675860930c219909b4d0f0665f9006"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.8",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "highwind"
+        ],
+        "addonSelected": "masamune-on-highwind",
+        "addonSelectedAny": [
+          "party-recolor-on-highwind"
+        ]
+      }
     }
   ],
   "bases": [],

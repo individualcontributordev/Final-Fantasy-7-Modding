@@ -1,0 +1,19 @@
+{
+  "id": "masamune-on-csr-plus",
+  "name": "Masamune",
+  "kind": "mod",
+  "version": "0.2.1",
+  "blurb": "You've seen this sword before, but you've never held it.",
+  "hint": "You've seen this sword before, but you've never held it.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "ae757857fd270f232d81c62a00cc4a55e63fc93debd6d0f6c34123e1dfdaaaa0"
+  },
+  "baseVersion": "1.0.0rc9"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "party-recolor-with-masamune-on-highwind",
+  "name": "Party Recolor + Masamune",
+  "kind": "mod",
+  "version": "0.2.1",
+  "blurb": "Merges Party Recolor with the Masamune mod.",
+  "hint": "You've seen this sword before, but you've never held it.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "1b9544c072f065944f4ae512c6052158a5675860930c219909b4d0f0665f9006"
+  },
+  "baseVersion": "0.5.8",
+  "hidden": true,
+  "autoIncludeWhen": {
+    "bases": [
+      "highwind"
+    ],
+    "addonSelected": "masamune-on-highwind",
+    "addonSelectedAny": [
+      "party-recolor-on-highwind"
+    ]
+  }
+}

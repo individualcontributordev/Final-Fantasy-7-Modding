@@ -54,3 +54,4 @@ Thumbs.db
 *.BIN.new
 workspace/ghidra/*.c
 workspace/ghidra/*.txt
+gears.pdf

@@ -1,0 +1,29 @@
+{
+  "id": "party-recolor-with-masamune-on-csr-plus",
+  "name": "Party Recolor + Masamune",
+  "kind": "mod",
+  "version": "0.2.1",
+  "blurb": "Merges Party Recolor with the Masamune mod.",
+  "hint": "You've seen this sword before, but you've never held it.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "cfa28c2a234099cc4ecae65d94d987878404f17fa7ba40432914a58c9423c733"
+  },
+  "baseVersion": "1.0.0rc9",
+  "hidden": true,
+  "autoIncludeWhen": {
+    "bases": [
+      "csr-plus"
+    ],
+    "addonSelected": "masamune-on-csr-plus",
+    "addonSelectedAny": [
+      "party-recolor-on-csr-plus"
+    ]
+  }
+}
