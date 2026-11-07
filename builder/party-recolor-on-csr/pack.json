@@ -2,7 +2,7 @@
   "id": "party-recolor-on-csr",
   "name": "Party Recolor",
   "kind": "mod",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
   "hint": "Nine party members wear new colors.",
   "format": "ic-layer-v1",
@@ -15,9 +15,9 @@
     "3": "./layers/disc3.layer.json"
   },
   "discDigests": {
-    "1": "65b0d666753e0ad6912f1079c91e22aa5b490a2a3141614a603aa55a8dd82c30",
-    "2": "fd4ba9b8b0f6ea7dbf0a9e5405803805ede47e86131714b7b5128c39de69f817",
-    "3": "dc4dc8838bfb9bfe3754a2f6ffd7e46367c2b6a8e5dde865bfb39715d0b3cca6"
+    "1": "bedb07ab9eb43db217926fe3c5dd3c3b240b2c9ee9d9e0382ef390ace29d7932",
+    "2": "b225d918f4b7ba4c2d75360d14aec70f5e92de55c6c34247a5d4b06fb1525c80",
+    "3": "673a5848ad98b7c959bda7322b32801c64c62ec104bce1a6d8f2078e9c4c954a"
   },
   "baseVersion": "0.14.4"
 }

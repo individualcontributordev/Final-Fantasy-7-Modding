@@ -14,6 +14,7 @@ import colorsys
 import importlib.util
 import struct
 import sys
+from bisect import bisect_right
 from collections import Counter
 from pathlib import Path
 from typing import NamedTuple
@@ -188,6 +189,35 @@ def recolor_snowboard(dec: bytes) -> tuple[bytes, int]:
 				out[c : c + 3] = bytes(new)
 				changed += 1
 			o += ilen * 4
+	return bytes(out), changed
+
+
+# MINI/H_KAWAI.BIN (motorbike minigame, uncompressed, loaded at 0x801A0000) is mesh blobs: u32 0, 8-byte vertices,
+# then 16-byte faces (3 vertex indices, 0, 3 x RGB+flag); pointers to each blob sit in a table. Offsets below are blobs.
+BIKE_BASE = 0x801A0000
+BIKE_CLOUD_OUTFIT = (0x1B58, 0x1C34, 0x28F8, 0x29FC, 0x2B14, 0x2C18)  # skin, white pieces and sword are left alone
+BIKE_CLOUD_HAIR = (0x1DB0, 0x21C8, 0x222C, 0x22B8, 0x236C, 0x2420, 0x2AB0, 0x2CCC)
+
+
+def recolor_bike(dat: bytes) -> tuple[bytes, int]:
+	"""Motorbike minigame Cloud: same outfit-to-crimson scale and hair-to-silver as the snowboard."""
+	out = bytearray(dat)
+	changed = 0
+	blobs = sorted({p - BIKE_BASE for (p,) in struct.iter_unpack("<I", dat[: len(dat) // 4 * 4]) if BIKE_BASE <= p < BIKE_BASE + len(dat)})
+	for o in range(0x2AC, len(dat) - 16):
+		if not (dat[o + 3] == 0 and max(dat[o : o + 3]) < 64 and len(set(dat[o : o + 3])) == 3 and dat[o + 7] == dat[o + 11] == dat[o + 15] != 0):
+			continue
+		mesh = blobs[bisect_right(blobs, o) - 1]
+		for c in (o + 4, o + 8, o + 12):
+			r, g, b = dat[c : c + 3]
+			if mesh in BIKE_CLOUD_HAIR and r >= g > b and r - b > r // 2:
+				new = (round(v * max(r, g, b) / 255) for v in _SNOW_HAIR)
+			elif mesh in BIKE_CLOUD_OUTFIT and b >= r and b > g:
+				new = (min(255, round(v * k)) for v, k in zip((r, g, b), _CLOUD_RATIO))
+			else:
+				continue
+			out[c : c + 3] = bytes(new)
+			changed += 1
 	return bytes(out), changed
 
 
@@ -508,6 +538,9 @@ DRESS = {
 DRESS = {k: {rgb(a): rgb(b) for a, b in m.items()} for k, m in DRESS.items()}
 
 CLOUD_IDS = (0, 33)
+# FIELD/BLACKBGB.BSX: Cloud on the bike in the Midgar highway controls screen. Its colors are pre-shaded, so the exact
+# map misses; (id, bones, parts, colors) -> (hair parts, outfit parts). Boots (25, 29), sword and glove (17, 21), skin stay.
+BIKE_INTRO = {(0, 30, 19, 621): ({7, 8, 9, 10, 12, 14}, {5, 6, 18, 23, 24, 27, 28})}
 
 def recolor_dress(dec: bytes) -> tuple[bytes, int]:
 	out = bytearray(dec)
@@ -518,9 +551,21 @@ def recolor_dress(dec: bytes) -> tuple[bytes, int]:
 		model_id, _, skeleton = struct.unpack_from("<HHI", dec, h)
 		num_bones, num_parts = dec[h + 23], dec[h + 35]
 		first = h + skeleton + num_bones * 4
-		offs = [o for _, o, _ in color_offsets(dec, first, num_parts)]
+		cols = list(color_offsets(dec, first, num_parts))
+		offs = [o for _, o, _ in cols]
+		hair, outfit = BIKE_INTRO.get((model_id, num_bones, num_parts, len(offs)), ((), ()))
+		for part, o, _ in cols if hair else ():
+			r, g, b = dec[o : o + 3]
+			if part in hair and r >= g > b and r - b > r // 2:
+				new = (round(v * max(r, g, b) / 255) for v in _SNOW_HAIR)
+			elif part in outfit and b >= r and b > g:
+				new = (min(255, round(v * k)) for v, k in zip((r, g, b), _CLOUD_RATIO))
+			else:
+				continue
+			out[o : o + 3] = bytes(new)
+			changed += 1
 		# other Cloud variants (id 0 field, 33 world-map/rootmap) get his normal recolor
-		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs))) or (FIELD["CLOUD"] if model_id in CLOUD_IDS else None)
+		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs))) or (FIELD["CLOUD"] if model_id in CLOUD_IDS and not hair else None)
 		for o in offs if cmap else ():
 			new = cmap.get(tuple(dec[o : o + 3]))
 			if new:
@@ -533,13 +578,13 @@ def battle_fn(name: str):
 	return recolor_barrett if rules is _BARRETT else recolor_red13 if name == "RED13" else lambda d: recolor_battle(d, rules)
 
 
-def _patch(img: bytearray, path: str, fn, *, required: bool = True) -> int:
-	new, changed = fn(lzs.decompress(extract_file(img, path)))
+def _patch(img: bytearray, path: str, fn, *, required: bool = True, packed: bool = True) -> int:
+	new, changed = fn(lzs.decompress(extract_file(img, path)) if packed else extract_file(img, path))
 	if not changed:
 		if required:
 			raise SystemExit(f"{path}: nothing to recolor -- already patched or wrong base?")
 		return 0
-	replace_file_padded(img, path, lzs.compress(new))
+	replace_file_padded(img, path, lzs.compress(new) if packed else new)
 	return changed
 
 
@@ -556,6 +601,7 @@ def apply_patch(img: bytearray) -> dict[str, int]:
 	counts["battle HICLOUD hair"] = _patch(img, "ENEMY6/HICLOUD.LZS", battle_fn("CLOUD"))
 	for name in ("TMD", "TMD2"):
 		counts[f"snowboard {name}"] = _patch(img, f"MINI/{name}.LZS", recolor_snowboard)
+	counts["bike H_KAWAI"] = _patch(img, "MINI/H_KAWAI.BIN", recolor_bike, packed=False)
 	for path in WORLD_PATHS:
 		counts[path] = _patch(img, path, lambda d, p=path: recolor_world(d, p))
 	for path, node in walk_tree(img).items():

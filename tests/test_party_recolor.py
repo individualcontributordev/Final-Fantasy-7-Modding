@@ -138,6 +138,27 @@ class PartyRecolorTests(unittest.TestCase):
 				out, n = P.recolor_dress(bytes(dec))
 			self.assertEqual(out[h + 8:h + 11], expect, model_id)
 
+	def test_bike_intro_cloud_hair_silver_outfit_crimson_boots_sword_skin_kept(self) -> None:
+		colors = {7: (255, 172, 54), 5: (111, 84, 137), 25: (77, 57, 16), 17: (113, 114, 142), 16: (200, 140, 120)}  # hair, jacket, boots, sword, skin
+		dec = bytearray(300)
+		struct.pack_into("<I", dec, 4, 100)
+		struct.pack_into("<I", dec, 104, 1)
+		h = 116
+		struct.pack_into("<HHI", dec, h, 0, 0, 8)
+		dec[h + 35] = 19
+		cols = [(part, h + 8 + 4 * i, 0) for i, part in enumerate(colors)]
+		for (part, o, _), c in zip(cols, colors.values()):
+			dec[o : o + 3] = bytes(c)
+		with mock.patch.object(P, "color_offsets", lambda d, f, n: cols), mock.patch.dict(P.BIKE_INTRO, {(0, 0, 19, 5): P.BIKE_INTRO[(0, 30, 19, 621)]}):
+			out, n = P.recolor_dress(bytes(dec))
+			self.assertEqual(n, 2)
+			by_part = {part: out[o : o + 3] for part, o, _ in cols}
+			self.assertEqual(by_part[7], bytes(P.rgb("C7D3E6")))
+			self.assertEqual(by_part[5], bytes((round(111 * 156 / 97), round(84 * 34 / 73), round(137 * 58 / 119))))
+			for part in (25, 17, 16):
+				self.assertEqual(by_part[part], bytes(colors[part]), part)
+			self.assertEqual(P.recolor_dress(out)[1], 0)  # second run must find nothing
+
 	def test_snowboard_rider_hair_silver_outfit_crimson_boots_kept(self) -> None:
 		dec = bytearray(12 + 28 * 13 + 64 * 13)
 		colors = {0: (255, 172, 54), 6: (111, 84, 137), 5: (77, 57, 16)}  # hair, outfit, brown boots
@@ -152,6 +173,21 @@ class PartyRecolorTests(unittest.TestCase):
 		self.assertEqual(pix(0), bytes(P.rgb("C7D3E6")))
 		self.assertEqual(pix(6), bytes((round(111 * 156 / 97), round(84 * 34 / 73), round(137 * 58 / 119))))
 		self.assertEqual(pix(5), bytes((77, 57, 16)))
+
+	def test_bike_cloud_hair_silver_outfit_crimson_other_meshes_kept(self) -> None:
+		dat = bytearray(0x2600)
+		for i, mesh in enumerate((0x1B58, 0x1DB0, 0x24AC)):  # outfit, hair, skin blobs
+			struct.pack_into("<I", dat, 4 * i, P.BIKE_BASE + mesh)
+			dat[mesh + 8 : mesh + 12] = bytes((0, 1, 2, 0))
+			color = (111, 84, 137) if i != 1 else (255, 172, 54)
+			dat[mesh + 12 : mesh + 24] = bytes((*color, 0x30) * 3)
+		out, n = P.recolor_bike(bytes(dat))
+		self.assertEqual(n, 6)
+		self.assertEqual(out[0x1B58 + 12 : 0x1B58 + 15], bytes((round(111 * 156 / 97), round(84 * 34 / 73), round(137 * 58 / 119))))
+		self.assertEqual(out[0x1DB0 + 12 : 0x1DB0 + 15], bytes(P.rgb("C7D3E6")))
+		self.assertEqual(out[0x24AC + 12 : 0x24AC + 24], dat[0x24AC + 12 : 0x24AC + 24])
+		self.assertEqual(P.recolor_bike(out)[1], 0)  # second run must find nothing
+
 
 if __name__ == "__main__":
 	unittest.main()
