@@ -196,10 +196,8 @@ def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
 
 	print("=== pad-inject WORLD.BIN.new ===")
 	patched = work_dir / "patched.bin"
-	shutil.copy2(base_bin, patched)
-	img = bytearray(patched.read_bytes())
-	replace_file_padded(img, WORLD_PATH, new_bytes)
-	patched.write_bytes(img)
+	replace_file_padded(base_bytes, WORLD_PATH, new_bytes)
+	patched.write_bytes(base_bytes)
 	print(f"  wrote {patched}")
 	return patched
 

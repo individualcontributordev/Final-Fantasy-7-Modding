@@ -205,10 +205,8 @@ def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
 
 	print("=== inject FIELD.BIN.new (within sector allocation) ===")
 	patched = work_dir / "patched.bin"
-	shutil.copy2(base_bin, patched)
-	img = bytearray(patched.read_bytes())
-	replace_file_within_sectors(img, FIELD_PATH, new_bytes)
-	patched.write_bytes(img)
+	replace_file_within_sectors(base_bytes, FIELD_PATH, new_bytes)
+	patched.write_bytes(base_bytes)
 	print(f"  wrote {patched}")
 	return patched
 

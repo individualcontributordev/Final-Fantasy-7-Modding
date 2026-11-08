@@ -6,6 +6,8 @@ fits its ISO slot."""
 
 from __future__ import annotations
 
+import functools
+
 MAX_DIST = 4095
 MAX_LEN = 18
 MIN_LEN = 3
@@ -30,34 +32,53 @@ def decompress(data: bytes) -> bytes:
 			i += 2
 			offset = b0 | (b1 & 0xF0) << 4
 			start = len(out) - ((len(out) - 18 - offset) & 0xFFF)
-			for k in range(MIN_LEN + (b1 & 0xF)):
+			length = MIN_LEN + (b1 & 0xF)
+			if start >= 0 and start + length <= len(out):
+				out += out[start : start + length]
+				continue
+			for k in range(length):  # overlapping copy or reach before the start
 				out.append(out[start + k] if start + k >= 0 else 0)
 	return bytes(out)
 
 
 def _longest_matches(data: bytes) -> list[tuple[int, int] | None]:
+	"""Per position: (length, distance) of the closest longest earlier match.
+
+	Candidates are the last MAX_CANDIDATES positions sharing the 3-byte prefix,
+	within MAX_DIST. Rather than compare each one, ask ``rfind`` for the closest
+	occurrence of the next-longer prefix; ``last4`` answers the common length-4 case
+	without a scan."""
+	n = len(data)
 	seen: dict[bytes, list[int]] = {}
-	best: list[tuple[int, int] | None] = [None] * len(data)
-	for i in range(len(data) - MIN_LEN + 1):
+	last4: dict[bytes, int] = {}
+	best: list[tuple[int, int] | None] = [None] * n
+	rfind = data.rfind
+	for i in range(n - MIN_LEN + 1):
 		positions = seen.setdefault(data[i : i + MIN_LEN], [])
-		length = dist = 0
-		for p in reversed(positions[-MAX_CANDIDATES:]):
-			if i - p > MAX_DIST:
-				break
-			k = MIN_LEN
-			while k < MAX_LEN and i + k < len(data) and data[p + k] == data[i + k]:
-				k += 1
-			if k > length:
-				length, dist = k, i - p
-			if length == MAX_LEN:
-				break
-		if length >= MIN_LEN:
-			best[i] = (length, dist)
+		if positions and i - positions[-1] <= MAX_DIST:
+			lo = max(i - MAX_DIST, positions[-min(len(positions), MAX_CANDIDATES)])
+			p, length = positions[-1], MIN_LEN
+			q = last4.get(data[i : i + 4], -1)
+			if q >= lo:
+				p, length = q, 4
+				while length < MAX_LEN and i + length < n:
+					q = rfind(data[i : i + length + 1], lo, i + length)
+					if q < 0:
+						break
+					p, length = q, length + 1
+			best[i] = (length, i - p)
 		positions.append(i)
+		if i + 4 <= n:
+			last4[data[i : i + 4]] = i
 	return best
 
 
 def compress(data: bytes) -> bytes:
+	return _compress(bytes(data))
+
+
+@functools.lru_cache(maxsize=256)  # discs of one build repeat most files
+def _compress(data: bytes) -> bytes:
 	n = len(data)
 	best = _longest_matches(data)
 	cost = [1 << 60] * (n + 1)
