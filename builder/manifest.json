@@ -105,92 +105,6 @@
       "baseVersion": "0.14.4"
     },
     {
-      "id": "field-encounter-on-csr-plus-0",
-      "name": "Field Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "80074c9db80bbc371ddd75370f34cbd2da218a4fc949fa89f6c069e60b5add2e"
-      },
-      "baseVersion": "1.0.0rc9",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-0",
-      "name": "World Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
-      },
-      "baseVersion": "1.0.0rc9",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-csr-plus",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc9"
-    },
-    {
-      "id": "new-game-plus-on-csr-plus",
-      "name": "New Game+",
-      "kind": "mod",
-      "version": "0.1.1",
-      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
-      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "7136d74756541d8899c659335fdd0f0bf7cda7700fd43c34f51fb28318fbe574"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc9"
-    },
-    {
       "id": "field-encounter-on-highwind-0",
       "name": "Field Random Encounters -- No Encs (on Highwind)",
       "kind": "mod",
@@ -489,56 +403,6 @@
       }
     },
     {
-      "id": "masamune-on-csr-plus",
-      "name": "Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "You've seen this sword before, but you've never held it.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "ae757857fd270f232d81c62a00cc4a55e63fc93debd6d0f6c34123e1dfdaaaa0"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc9"
-    },
-    {
-      "id": "party-recolor-with-masamune-on-csr-plus",
-      "name": "Party Recolor + Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Merges Party Recolor with the Masamune mod.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "cfa28c2a234099cc4ecae65d94d987878404f17fa7ba40432914a58c9423c733"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc9",
-      "hidden": true,
-      "autoIncludeWhen": {
-        "bases": [
-          "csr-plus"
-        ],
-        "addonSelected": "masamune-on-csr-plus",
-        "addonSelectedAny": [
-          "party-recolor-on-csr-plus"
-        ]
-      }
-    },
-    {
       "id": "masamune-on-highwind",
       "name": "Masamune",
       "kind": "mod",
@@ -636,26 +500,6 @@
       "baseVersion": "0.14.4"
     },
     {
-      "id": "party-recolor-on-csr-plus",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.3",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "45352e7f4637e6e1966053eb9fabd43cebf3782422be5bc1380b4cab996dcb53"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc9"
-    },
-    {
       "id": "party-recolor-on-highwind",
       "name": "Party Recolor",
       "kind": "mod",
@@ -674,6 +518,162 @@
       },
       "enabled": true,
       "baseVersion": "0.5.8"
+    },
+    {
+      "id": "field-encounter-on-csr-plus-0",
+      "name": "Field Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "79a4e9b6a2978a789895c8c37a962816c9ba5611697a4730c679bddfce728e53"
+      },
+      "baseVersion": "1.0.0rc10",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-0",
+      "name": "World Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
+      },
+      "baseVersion": "1.0.0rc10",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc10"
+    },
+    {
+      "id": "new-game-plus-on-csr-plus",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "3aad6a463fe214f7d480a33bffb36e642eb35095b32f05bf45dcfbeb26f2b8ce"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc10"
+    },
+    {
+      "id": "party-recolor-on-csr-plus",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.3",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "1109aa96e0b3719ec70e6191dda7697a17d54add188e9a40a1de57604aef8646"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc10"
+    },
+    {
+      "id": "masamune-on-csr-plus",
+      "name": "Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "You've seen this sword before, but you've never held it.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "85612af4a0e101d294ba8cfa5783bfea5d1051d06dd58c39874a8ef6b6431323"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc10"
+    },
+    {
+      "id": "party-recolor-with-masamune-on-csr-plus",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "0deefeeab781b82705571fcbfcaa4bd9a863e86bb5b4918e7cb8613f304bb419"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc10",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus"
+        ],
+        "addonSelected": "masamune-on-csr-plus",
+        "addonSelectedAny": [
+          "party-recolor-on-csr-plus"
+        ]
+      }
     }
   ],
   "bases": [],

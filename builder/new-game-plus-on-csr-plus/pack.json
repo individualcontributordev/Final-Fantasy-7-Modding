@@ -13,7 +13,7 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "7136d74756541d8899c659335fdd0f0bf7cda7700fd43c34f51fb28318fbe574"
+    "1": "3aad6a463fe214f7d480a33bffb36e642eb35095b32f05bf45dcfbeb26f2b8ce"
   },
-  "baseVersion": "1.0.0rc9"
+  "baseVersion": "1.0.0rc10"
 }
