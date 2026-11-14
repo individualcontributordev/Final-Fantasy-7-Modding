@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
   "id": "party-recolor-on-csr-plus-disc1-v0.2.3",
-  "description": "Party Recolor v0.2.3 -- NTSC-U Disc 1 (on csr-plus 1.0.0rc10)",
+  "description": "Party Recolor v0.2.3 -- NTSC-U Disc 1 (on csr-plus 1.0.0rc11)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 749128464,

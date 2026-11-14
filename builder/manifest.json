@@ -537,9 +537,9 @@
       "groupLabel": "Field Random Encounters",
       "optionLabel": "No Encs",
       "discDigests": {
-        "1": "79a4e9b6a2978a789895c8c37a962816c9ba5611697a4730c679bddfce728e53"
+        "1": "3a882ebfe2e6911c6303521a74155bb772712f6e6af52ce575b9d84e3908d6e2"
       },
-      "baseVersion": "1.0.0rc10",
+      "baseVersion": "1.0.0rc11",
       "enabled": true
     },
     {
@@ -559,7 +559,7 @@
       "discDigests": {
         "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
       },
-      "baseVersion": "1.0.0rc10",
+      "baseVersion": "1.0.0rc11",
       "rate": 0,
       "groupLabel": "World Random Encounters",
       "optionLabel": "No Encs",
@@ -583,7 +583,7 @@
         "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc10"
+      "baseVersion": "1.0.0rc11"
     },
     {
       "id": "new-game-plus-on-csr-plus",
@@ -600,10 +600,10 @@
         "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "3aad6a463fe214f7d480a33bffb36e642eb35095b32f05bf45dcfbeb26f2b8ce"
+        "1": "7b7ac0f4c5c1ef546d6d4edcd749ec93c5bce251f6a38d34eab7f8c21a8133a6"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc10"
+      "baseVersion": "1.0.0rc11"
     },
     {
       "id": "party-recolor-on-csr-plus",
@@ -620,10 +620,10 @@
         "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "1109aa96e0b3719ec70e6191dda7697a17d54add188e9a40a1de57604aef8646"
+        "1": "c9055632c9900a750a5538a3296f889134b642eb254402e70f3f90938a70809b"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc10"
+      "baseVersion": "1.0.0rc11"
     },
     {
       "id": "masamune-on-csr-plus",
@@ -640,10 +640,10 @@
         "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "85612af4a0e101d294ba8cfa5783bfea5d1051d06dd58c39874a8ef6b6431323"
+        "1": "2c7578a93646ccbe8009402275772a662ebf43da002a66d729f9082adde92f37"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc10"
+      "baseVersion": "1.0.0rc11"
     },
     {
       "id": "party-recolor-with-masamune-on-csr-plus",
@@ -660,10 +660,10 @@
         "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "0deefeeab781b82705571fcbfcaa4bd9a863e86bb5b4918e7cb8613f304bb419"
+        "1": "08ae56168b9a41893a0bbb96e50d3e6cbab2efe6fecdb68ad4c6a5494dc6d8aa"
       },
       "enabled": true,
-      "baseVersion": "1.0.0rc10",
+      "baseVersion": "1.0.0rc11",
       "hidden": true,
       "autoIncludeWhen": {
         "bases": [
