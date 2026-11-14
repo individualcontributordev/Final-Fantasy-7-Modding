@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
   "id": "new-game-plus-on-highwind-disc1-v0.1.1",
-  "description": "New Game+ v0.1.1 -- NTSC-U Disc 1 (on highwind 0.5.8)",
+  "description": "New Game+ v0.1.1 -- NTSC-U Disc 1 (on highwind 0.5.13)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 748775664,
