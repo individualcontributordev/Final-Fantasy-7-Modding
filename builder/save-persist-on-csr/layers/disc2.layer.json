@@ -1,0 +1,206 @@
+{
+  "format": "ic-layer-v1",
+  "id": "save-persist-on-csr-disc2-v0.1.0",
+  "description": "Save Danger + Formation Index v0.1.0 -- NTSC-U Disc 2 (on csr 0.14.4)",
+  "target": "disc-image",
+  "stats": {
+    "originalBytes": 732657408,
+    "modifiedBytes": 732657408,
+    "changedBytes": 371,
+    "records": 48
+  },
+  "records": [
+    {
+      "offset": 66604,
+      "hex": "85d223a086"
+    },
+    {
+      "offset": 66610,
+      "hex": "24"
+    },
+    {
+      "offset": 66612,
+      "hex": "07"
+    },
+    {
+      "offset": 66614,
+      "hex": "08"
+    },
+    {
+      "offset": 66616,
+      "hex": "3c1709951c230108201c0a91"
+    },
+    {
+      "offset": 67460,
+      "hex": "392301"
+    },
+    {
+      "offset": 67928,
+      "hex": "963d72d3"
+    },
+    {
+      "offset": 67976,
+      "hex": "9c542d"
+    },
+    {
+      "offset": 67980,
+      "hex": "c4919ec3fe"
+    },
+    {
+      "offset": 67986,
+      "hex": "fd"
+    },
+    {
+      "offset": 67988,
+      "hex": "57"
+    },
+    {
+      "offset": 67990,
+      "hex": "e2"
+    },
+    {
+      "offset": 67992,
+      "hex": "df7ae668732a04e1dc6d1d48"
+    },
+    {
+      "offset": 68014,
+      "hex": "e29a0a3f"
+    },
+    {
+      "offset": 68062,
+      "hex": "fe7c87"
+    },
+    {
+      "offset": 68066,
+      "hex": "ab53325030"
+    },
+    {
+      "offset": 68072,
+      "hex": "99"
+    },
+    {
+      "offset": 68074,
+      "hex": "f1"
+    },
+    {
+      "offset": 68076,
+      "hex": "a1"
+    },
+    {
+      "offset": 68078,
+      "hex": "324f23baef54cf67962946b3"
+    },
+    {
+      "offset": 68100,
+      "hex": "746667606eb9463f95c01a8c723086"
+    },
+    {
+      "offset": 68116,
+      "hex": "5d"
+    },
+    {
+      "offset": 68118,
+      "hex": "646e5ab4f4874799"
+    },
+    {
+      "offset": 68134,
+      "hex": "ac940873a480208d1a1e2cd29d6a0de622"
+    },
+    {
+      "offset": 68152,
+      "hex": "2d"
+    },
+    {
+      "offset": 68154,
+      "hex": "6dd044d24a16eb816d8203eddf"
+    },
+    {
+      "offset": 68168,
+      "hex": "af"
+    },
+    {
+      "offset": 68170,
+      "hex": "95840d171e6aef64"
+    },
+    {
+      "offset": 68186,
+      "hex": "4f48c9571cc5c5a515f899a560932b5ac8"
+    },
+    {
+      "offset": 68204,
+      "hex": "05"
+    },
+    {
+      "offset": 68206,
+      "hex": "c969"
+    },
+    {
+      "offset": 325736,
+      "hex": "7cd229a408"
+    },
+    {
+      "offset": 325742,
+      "hex": "e00387d22aa0"
+    },
+    {
+      "offset": 325852,
+      "hex": "0a80083c7cd2099587d20a913c1729a4bb46"
+    },
+    {
+      "offset": 325871,
+      "hex": "08201c2aa0"
+    },
+    {
+      "offset": 326648,
+      "hex": "f1e0d478"
+    },
+    {
+      "offset": 326682,
+      "hex": "7d51afcf66"
+    },
+    {
+      "offset": 326688,
+      "hex": "9066834dba54"
+    },
+    {
+      "offset": 326712,
+      "hex": "f99a5d4295e8117a02fa307a5d88c4c24b12"
+    },
+    {
+      "offset": 326731,
+      "hex": "5ab8527d8d92b9"
+    },
+    {
+      "offset": 326768,
+      "hex": "2dd6a43e18"
+    },
+    {
+      "offset": 326774,
+      "hex": "ef7c1904cbf9"
+    },
+    {
+      "offset": 326798,
+      "hex": "ca7eb4ae6a6ff121e9862a3cd5142b1ca1eb"
+    },
+    {
+      "offset": 326817,
+      "hex": "81e342fe1418bbdb7d"
+    },
+    {
+      "offset": 326827,
+      "hex": "4fda4d6617c06d89cbd89afc809846dfb5383db42e7424eaccbc32f61794faad5b2018605f2391ccc5d3"
+    },
+    {
+      "offset": 326870,
+      "hex": "40903f03a1036986"
+    },
+    {
+      "offset": 326879,
+      "hex": "6bf8b765418bdf7838f07eebc1a83308cc6b46db085ea86527befebffc9c55512eebfbf9e02cf6df36d3"
+    },
+    {
+      "offset": 326922,
+      "hex": "8d7b8c666da1"
+    }
+  ]
+}

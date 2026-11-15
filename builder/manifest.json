@@ -674,6 +674,220 @@
           "party-recolor-on-csr"
         ]
       }
+    },
+    {
+      "id": "save-persist",
+      "name": "Save Danger + Formation Index",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Saving a game now stores the encounter danger counter and the battle formation index, so loading a save resumes the same encounter timing instead of resetting it.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./save-persist/layers/disc1.layer.json",
+        "2": "./save-persist/layers/disc2.layer.json",
+        "3": "./save-persist/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "53fcb596391f877ae9afe295f50bc0de8874464e4d17d5bca16bbf0d7222045c",
+        "2": "4d0def60fdd3d6fe19e2786ed9fdc8dfe823a318a1db497f25ddebbc829c8d9c",
+        "3": "69b336391705e1be30bf1ec594b4c0bf0ef54018408105707bea8537f77748fb"
+      },
+      "enabled": true
+    },
+    {
+      "id": "save-persist-on-csr",
+      "name": "Save Danger + Formation Index",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Saving a game now stores the encounter danger counter and the battle formation index, so loading a save resumes the same encounter timing instead of resetting it.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./save-persist-on-csr/layers/disc1.layer.json",
+        "2": "./save-persist-on-csr/layers/disc2.layer.json",
+        "3": "./save-persist-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "d3dffd68dca1a1a0fee42a3d4cec4692349b9f85f1d18cc75c7c001a72badf8c",
+        "2": "135159f7fe11236bacf93ba949f8af4f0773192c460e6fcd637c81f2895c0dc4",
+        "3": "d6b783156e3c6fe61bb97aef289a90ec72a84e0101b719aa2a70a8a3910ea985"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4"
+    },
+    {
+      "id": "save-persist-on-csr-plus",
+      "name": "Save Danger + Formation Index",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Saving a game now stores the encounter danger counter and the battle formation index, so loading a save resumes the same encounter timing instead of resetting it.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./save-persist-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "87b951b8a804d3afff81829e0bf26c88cc2edfb579700cbbb875073f2402fc52"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc12"
+    },
+    {
+      "id": "save-persist-on-highwind",
+      "name": "Save Danger + Formation Index",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Saving a game now stores the encounter danger counter and the battle formation index, so loading a save resumes the same encounter timing instead of resetting it.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./save-persist-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "6d1e46a5bd5a40d7a8a92490702b813bdf787e8f2bc07da58dd4009c5717effc"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.13"
+    },
+    {
+      "id": "save-persist-with-new-game-plus",
+      "name": "Save Danger + New Game+",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Keeps disc checksums valid when Save Danger and New Game+ are both on.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./save-persist-with-new-game-plus/layers/disc1.layer.json",
+        "2": "./save-persist-with-new-game-plus/layers/disc2.layer.json",
+        "3": "./save-persist-with-new-game-plus/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "f256b3e39adfec0290677227f5c4fc2f7c553d258b50c300cb3ba549132c1ff8",
+        "2": "273fa5695929b40c828686095b86c0ddeb41c257acefb8e5c6d462b276b4ad69",
+        "3": "bb5d0c618b1de3570da7c2899c9ac483058d05c3a02afbbb93fa6b8ef604fbd9"
+      },
+      "enabled": true,
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "clean"
+        ],
+        "addonSelected": "save-persist",
+        "addonSelectedAny": [
+          "new-game-plus"
+        ]
+      }
+    },
+    {
+      "id": "save-persist-with-new-game-plus-on-csr",
+      "name": "Save Danger + New Game+",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Keeps disc checksums valid when Save Danger and New Game+ are both on.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./save-persist-with-new-game-plus-on-csr/layers/disc1.layer.json",
+        "2": "./save-persist-with-new-game-plus-on-csr/layers/disc2.layer.json",
+        "3": "./save-persist-with-new-game-plus-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "dad60c98f579bbdca99e287dbff3d4b7269fb2ef4d547b1f864576fedaefe496",
+        "2": "7e9dc16a3906a8f6a19913443ae3a90410555d5c873089ff90e09a070e4ccdde",
+        "3": "92898d553f64e9ec08592294e7ba8939e6bda4dda205a3f3bc3b0f38a643b6bd"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr"
+        ],
+        "addonSelected": "save-persist-on-csr",
+        "addonSelectedAny": [
+          "new-game-plus-on-csr"
+        ]
+      }
+    },
+    {
+      "id": "save-persist-with-new-game-plus-on-csr-plus",
+      "name": "Save Danger + New Game+",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Keeps disc checksums valid when Save Danger and New Game+ are both on.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./save-persist-with-new-game-plus-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "d425a87da9674abeeb600181df1557883b8090c783c0e53a178e4ad6074f8093"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc12",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus"
+        ],
+        "addonSelected": "save-persist-on-csr-plus",
+        "addonSelectedAny": [
+          "new-game-plus-on-csr-plus"
+        ]
+      }
+    },
+    {
+      "id": "save-persist-with-new-game-plus-on-highwind",
+      "name": "Save Danger + New Game+",
+      "kind": "mod",
+      "version": "0.1.0",
+      "blurb": "Keeps disc checksums valid when Save Danger and New Game+ are both on.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./save-persist-with-new-game-plus-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "58d3e861d201d09afeacda8644e1e5c656ec430b7ce4186b089217d45624ad21"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.13",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "highwind"
+        ],
+        "addonSelected": "save-persist-on-highwind",
+        "addonSelectedAny": [
+          "new-game-plus-on-highwind"
+        ]
+      }
     }
   ],
   "bases": [],

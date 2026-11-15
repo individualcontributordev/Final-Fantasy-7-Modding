@@ -1,0 +1,23 @@
+{
+  "id": "save-persist-on-csr",
+  "name": "Save Danger + Formation Index",
+  "kind": "mod",
+  "version": "0.1.0",
+  "blurb": "Saving a game now stores the encounter danger counter and the battle formation index, so loading a save resumes the same encounter timing instead of resetting it.",
+  "hint": "Save, then Continue: encounter timing carries over.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "discDigests": {
+    "1": "d3dffd68dca1a1a0fee42a3d4cec4692349b9f85f1d18cc75c7c001a72badf8c",
+    "2": "135159f7fe11236bacf93ba949f8af4f0773192c460e6fcd637c81f2895c0dc4",
+    "3": "d6b783156e3c6fe61bb97aef289a90ec72a84e0101b719aa2a70a8a3910ea985"
+  },
+  "baseVersion": "0.14.4"
+}

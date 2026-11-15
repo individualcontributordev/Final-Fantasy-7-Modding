@@ -1,0 +1,19 @@
+{
+  "id": "save-persist-on-highwind",
+  "name": "Save Danger + Formation Index",
+  "kind": "mod",
+  "version": "0.1.0",
+  "blurb": "Saving a game now stores the encounter danger counter and the battle formation index, so loading a save resumes the same encounter timing instead of resetting it.",
+  "hint": "Save, then Continue: encounter timing carries over.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "6d1e46a5bd5a40d7a8a92490702b813bdf787e8f2bc07da58dd4009c5717effc"
+  },
+  "baseVersion": "0.5.13"
+}

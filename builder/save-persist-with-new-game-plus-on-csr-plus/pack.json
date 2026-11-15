@@ -1,0 +1,29 @@
+{
+  "id": "save-persist-with-new-game-plus-on-csr-plus",
+  "name": "Save Danger + New Game+",
+  "kind": "mod",
+  "version": "0.1.0",
+  "blurb": "Keeps disc checksums valid when Save Danger and New Game+ are both on.",
+  "hint": "Save, then Continue: encounter timing carries over.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "csr-plus"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "d425a87da9674abeeb600181df1557883b8090c783c0e53a178e4ad6074f8093"
+  },
+  "baseVersion": "1.0.0rc12",
+  "hidden": true,
+  "autoIncludeWhen": {
+    "bases": [
+      "csr-plus"
+    ],
+    "addonSelected": "save-persist-on-csr-plus",
+    "addonSelectedAny": [
+      "new-game-plus-on-csr-plus"
+    ]
+  }
+}

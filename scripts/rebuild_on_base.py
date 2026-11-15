@@ -30,6 +30,8 @@ FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.p
 WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
 FANFARE = ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
 NGP = ROOT / "mods" / "new-game-plus" / "scripts" / "build_on_base.py"
+SAVEPERSIST = ROOT / "mods" / "save-persist-danger" / "scripts" / "build_on_base.py"
+SAVEPERSIST_FIXUP = ROOT / "mods" / "save-persist-danger" / "scripts" / "build_ngp_fixup.py"
 PARTY = ROOT / "mods" / "party-recolor" / "scripts" / "build_on_base.py"
 MASAMUNE = ROOT / "mods" / "masamune" / "scripts" / "build_on_base.py"
 MASAMUNE_FIXUP = ROOT / "mods" / "masamune" / "scripts" / "build_recolor_fixup.py"
@@ -135,6 +137,9 @@ def recut_commands(
 	if against in ("csr-plus", "csr", "highwind", "clean"):  # New Game+: every base
 		args = ["--against", against] + (["--csr-root", str(csr)] if against != "clean" else [])
 		cmds.append((f"new-game-plus on {against}", [sys.executable, str(NGP), *args]))
+		cmds.append((f"save-persist on {against}", [sys.executable, str(SAVEPERSIST), *args]))
+		# both mods patch SCUS sectors 28/138; this pack repairs their footers when both are picked
+		cmds.append((f"save-persist+new-game-plus fixup on {against}", [sys.executable, str(SAVEPERSIST_FIXUP), *args]))
 		cmds.append((f"party-recolor on {against}", [sys.executable, str(PARTY), *args]))
 		cmds.append((f"masamune on {against}", [sys.executable, str(MASAMUNE), *args]))
 		# both mods rewrite the Cloud models + KERNEL; this pack applies last when both are picked
