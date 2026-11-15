@@ -226,39 +226,6 @@
       "enabled": true
     },
     {
-      "id": "party-recolor-with-masamune",
-      "name": "Party Recolor + Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Merges Party Recolor with the Masamune mod.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./party-recolor-with-masamune/layers/disc1.layer.json",
-        "2": "./party-recolor-with-masamune/layers/disc2.layer.json",
-        "3": "./party-recolor-with-masamune/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "b9af4349f5377c6911c2005427e45eecd7d53c2063def3f55f59f8b3b2b77cd3",
-        "2": "c00884c6d61afc2330e14075211323024998431dc94305a911628af6dc32158d",
-        "3": "414b9b1ea441dcefad3797a7795e063b768ad86e0318607ee0cefdf270c87cdf"
-      },
-      "enabled": true,
-      "hidden": true,
-      "autoIncludeWhen": {
-        "bases": [
-          "clean"
-        ],
-        "addonSelected": "masamune",
-        "addonSelectedAny": [
-          "party-recolor"
-        ]
-      }
-    },
-    {
       "id": "masamune-on-csr",
       "name": "Masamune",
       "kind": "mod",
@@ -278,87 +245,6 @@
         "1": "1adf858980410ef58881532c582865272a845cf73d7ae9538c2e6fa8411bbedb",
         "2": "393fc9f48cec8005aa50cc25a425d198684b419968d234a3ff42e91655ca215f",
         "3": "98f8dc621ef18353c895796e0cb915b2fb212a945f8afcc7bcec0177781ccb3e"
-      },
-      "enabled": true,
-      "baseVersion": "0.14.4"
-    },
-    {
-      "id": "party-recolor-with-masamune-on-csr",
-      "name": "Party Recolor + Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Merges Party Recolor with the Masamune mod.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "discs": {
-        "1": "./party-recolor-with-masamune-on-csr/layers/disc1.layer.json",
-        "2": "./party-recolor-with-masamune-on-csr/layers/disc2.layer.json",
-        "3": "./party-recolor-with-masamune-on-csr/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "56055bd19b296cb5a2de0bebd044b68740382b729461df0cc704318cb6db4858",
-        "2": "f6b150f28fad26d15d80dd909b25426205015051ba6005152136044ee6aba2f1",
-        "3": "de20950ff51b9e7bb0d0b0f0a220d73760f6c7a00271f303195edef8900db5f5"
-      },
-      "enabled": true,
-      "baseVersion": "0.14.4",
-      "hidden": true,
-      "autoIncludeWhen": {
-        "bases": [
-          "csr"
-        ],
-        "addonSelected": "masamune-on-csr",
-        "addonSelectedAny": [
-          "party-recolor-on-csr"
-        ]
-      }
-    },
-    {
-      "id": "party-recolor",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.3",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "clean"
-      ],
-      "discs": {
-        "1": "./party-recolor/layers/disc1.layer.json",
-        "2": "./party-recolor/layers/disc2.layer.json",
-        "3": "./party-recolor/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "2dc85d0c69bd151c18f825770eb8df16559da1d46ed8b2c1436df92207db7fed",
-        "2": "c5920b5b8f6e8e7c06952152c547e6fb7ba0628830db4c24af13951a92ec0fd2",
-        "3": "ad2fa0e924d0e5fcda5ec878783534a3ef507996dca535b4393857478bab46e4"
-      },
-      "enabled": true
-    },
-    {
-      "id": "party-recolor-on-csr",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.3",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-csr/layers/disc1.layer.json",
-        "2": "./party-recolor-on-csr/layers/disc2.layer.json",
-        "3": "./party-recolor-on-csr/layers/disc3.layer.json"
-      },
-      "discDigests": {
-        "1": "bedb07ab9eb43db217926fe3c5dd3c3b240b2c9ee9d9e0382ef390ace29d7932",
-        "2": "b225d918f4b7ba4c2d75360d14aec70f5e92de55c6c34247a5d4b06fb1525c80",
-        "3": "673a5848ad98b7c959bda7322b32801c64c62ec104bce1a6d8f2078e9c4c954a"
       },
       "enabled": true,
       "baseVersion": "0.14.4"
@@ -450,26 +336,6 @@
       "baseVersion": "1.0.0rc12"
     },
     {
-      "id": "party-recolor-on-csr-plus",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.3",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "138baa88a02b4401a55b993d0bfe5824330adb1ad4bfca8e6e6b6ce02888fe84"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12"
-    },
-    {
       "id": "masamune-on-csr-plus",
       "name": "Masamune",
       "kind": "mod",
@@ -488,36 +354,6 @@
       },
       "enabled": true,
       "baseVersion": "1.0.0rc12"
-    },
-    {
-      "id": "party-recolor-with-masamune-on-csr-plus",
-      "name": "Party Recolor + Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Merges Party Recolor with the Masamune mod.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "ba90d01ba1df44824929c84fc06c9668b188cffd9d28d76958855f8ba6793c7e"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12",
-      "hidden": true,
-      "autoIncludeWhen": {
-        "bases": [
-          "csr-plus"
-        ],
-        "addonSelected": "masamune-on-csr-plus",
-        "addonSelectedAny": [
-          "party-recolor-on-csr-plus"
-        ]
-      }
     },
     {
       "id": "field-encounter-on-highwind-0",
@@ -606,26 +442,6 @@
       "baseVersion": "0.5.13"
     },
     {
-      "id": "party-recolor-on-highwind",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.3",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "highwind"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "cf2f1ab0b20a98930ee472689d2a0328ed9043c82065d9f49f7cd4273572a3d5"
-      },
-      "enabled": true,
-      "baseVersion": "0.5.13"
-    },
-    {
       "id": "masamune-on-highwind",
       "name": "Masamune",
       "kind": "mod",
@@ -644,6 +460,123 @@
       },
       "enabled": true,
       "baseVersion": "0.5.13"
+    },
+    {
+      "id": "party-recolor",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.6",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./party-recolor/layers/disc1.layer.json",
+        "2": "./party-recolor/layers/disc2.layer.json",
+        "3": "./party-recolor/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "616de71513db968af90b6b97b66381991bdad1d91c08307fcac7b6e1f5d1e320",
+        "2": "aad2df6bc69aa5e4d06b407c2eab56eb6f37da05d4ae4e3cd71a6087df74c7fe",
+        "3": "67b5b1a8d9a737fbdf133ccb40c3314ef75d9d5f007875064cc5fedde6610a64"
+      },
+      "enabled": true
+    },
+    {
+      "id": "party-recolor-on-csr-plus",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.6",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "707fe71c188b476bb847ee8e1211a9606dc4af2716d7cedb0c9386a4d1602f76"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc12"
+    },
+    {
+      "id": "party-recolor-on-csr",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.6",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-csr/layers/disc1.layer.json",
+        "2": "./party-recolor-on-csr/layers/disc2.layer.json",
+        "3": "./party-recolor-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "37f12d374a7f36cbe5a047195c7f65c8571010cf48bd6b89c2d733f0018a9a92",
+        "2": "c4d94686503a06a8670621e936ad02fae59cbf3e5810582b0c248ae7b5279b7b",
+        "3": "4681f8d68d42315b0ef05f06b8a96d22d64d37a0455b196d83d7026ce42d0af5"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4"
+    },
+    {
+      "id": "party-recolor-on-highwind",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.6",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "highwind"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "4cbe121d6ff5faf749534ef97595912013d3c55ffd68ca9ff3ed48e2d7c98b7b"
+      },
+      "enabled": true,
+      "baseVersion": "0.5.13"
+    },
+    {
+      "id": "party-recolor-with-masamune-on-csr-plus",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "ba90d01ba1df44824929c84fc06c9668b188cffd9d28d76958855f8ba6793c7e"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc12",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus"
+        ],
+        "addonSelected": "masamune-on-csr-plus",
+        "addonSelectedAny": [
+          "party-recolor-on-csr-plus"
+        ]
+      }
     },
     {
       "id": "party-recolor-with-masamune-on-highwind",
@@ -672,6 +605,73 @@
         "addonSelected": "masamune-on-highwind",
         "addonSelectedAny": [
           "party-recolor-on-highwind"
+        ]
+      }
+    },
+    {
+      "id": "party-recolor-with-masamune",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "clean"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune/layers/disc1.layer.json",
+        "2": "./party-recolor-with-masamune/layers/disc2.layer.json",
+        "3": "./party-recolor-with-masamune/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "b9af4349f5377c6911c2005427e45eecd7d53c2063def3f55f59f8b3b2b77cd3",
+        "2": "c00884c6d61afc2330e14075211323024998431dc94305a911628af6dc32158d",
+        "3": "414b9b1ea441dcefad3797a7795e063b768ad86e0318607ee0cefdf270c87cdf"
+      },
+      "enabled": true,
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "clean"
+        ],
+        "addonSelected": "masamune",
+        "addonSelectedAny": [
+          "party-recolor"
+        ]
+      }
+    },
+    {
+      "id": "party-recolor-with-masamune-on-csr",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-csr/layers/disc1.layer.json",
+        "2": "./party-recolor-with-masamune-on-csr/layers/disc2.layer.json",
+        "3": "./party-recolor-with-masamune-on-csr/layers/disc3.layer.json"
+      },
+      "discDigests": {
+        "1": "56055bd19b296cb5a2de0bebd044b68740382b729461df0cc704318cb6db4858",
+        "2": "f6b150f28fad26d15d80dd909b25426205015051ba6005152136044ee6aba2f1",
+        "3": "de20950ff51b9e7bb0d0b0f0a220d73760f6c7a00271f303195edef8900db5f5"
+      },
+      "enabled": true,
+      "baseVersion": "0.14.4",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr"
+        ],
+        "addonSelected": "masamune-on-csr",
+        "addonSelectedAny": [
+          "party-recolor-on-csr"
         ]
       }
     },

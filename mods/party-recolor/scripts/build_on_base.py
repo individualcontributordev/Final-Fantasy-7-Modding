@@ -37,7 +37,7 @@ PACK_IDS = {"csr-plus": "party-recolor-on-csr-plus", "csr": "party-recolor-on-cs
 	"highwind": "party-recolor-on-highwind", "clean": "party-recolor"}
 ONE_DISC = ("csr-plus", "highwind")  # bases that only ship disc 1
 DISPLAY = "Party Recolor"
-BLURB = "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses."
+BLURB = "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match."
 HINT = "Nine party members wear new colors."
 fb.HINT = HINT  # the shared pack/manifest writers read this module global
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_party_recolor"
