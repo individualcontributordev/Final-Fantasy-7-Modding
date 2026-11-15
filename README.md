@@ -6,7 +6,8 @@ Stackable `ic-layer-v1` mods for the
 [disc builder](https://individualcontributor.dev/builder/). Each mod targets one
 exclusive base; the CSR, CSR+, and Highwind bases live in the CSR repo.
 
-Published mods: field encounters, world encounters, fanfare skip. Field and
+Published mods: field encounters, world encounters, fanfare skip, New Game+,
+Save Danger + Formation Index (saves keep the encounter danger counter and battle formation index; with New Game+ a hidden `save-persist-with-new-game-plus` pack, rebuilt by `rebuild_on_base.py`, repairs the footers of the two SCUS sectors they share). Field and
 world encounters are chosen independently. `Unmodified` applies no mod and
 keeps the game's own rate, which ramps between fights off a step counter and so
 can be routed. The patches — `No Encs`, `Half Enc Rate`, `Vanilla Enc Rate`,
@@ -180,6 +181,9 @@ every pack from those scripts instead of the loop above:
 python3 scripts/ff7mod.py rebuild all           # Unmodified + CSR-family
 python3 scripts/ff7mod.py rebuild unmodified    # catalog id clean; no layer
 python3 scripts/ff7mod.py rebuild csr
+python3 scripts/ff7mod.py rebuild csr-plus
+python3 scripts/ff7mod.py rebuild highwind
+python3 scripts/ff7mod.py rebuild csr-plus highwind
 ```
 
 `all` always includes Unmodified; a complete rebuild should not silently leave
