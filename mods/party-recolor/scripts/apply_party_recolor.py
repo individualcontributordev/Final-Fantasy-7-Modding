@@ -221,6 +221,74 @@ def recolor_bike(dat: bytes) -> tuple[bytes, int]:
 	return bytes(out), changed
 
 
+# MINI/CHOCOBO.DAT (chocobo race): 14 LZS blocks, each at a 2048-aligned offset. Blocks 4 and 5 are the two chocobo models; each holds a roster
+# of riders as per-vertex [r g b tag] words (block 4's layout is block 5's shifted by 0x4EC). Cloud's outfit blue is lit at a fixed
+# 0.815 : 0.613 : 1 ratio and his hair goes gold -> silver; Cid and Tifa take their field palettes, matched through the lighting
+# (a word is orig * k per channel). Skin and faces are left alone.
+CHOCOBO_BLOCKS = {4: 0x4EC, 5: 0}  # block -> layout shift from block 5
+CHOCOBO_CLOUD = range(0x5344, 0x60F0, 4)  # block 5 offsets; Cid's olive/blue objects follow, then Tifa's, then the other riders
+CHOCOBO_RIDERS = {"CID": range(0x60F0, 0x6F24, 4), "TIFA": range(0x6F24, 0x7D1C, 4)}
+
+def _lit_recolor(rgb_in: tuple[int, int, int], palette: dict) -> tuple[int, ...] | None:
+	"""New colour for a lit word, or None. Palette keys are orig colours, the word must be orig * k (k = its brightness)."""
+	top = max(rgb_in)
+	best = None
+	for orig, new in palette.items():
+		k = top / max(orig)
+		if not 0.08 <= k <= 1.1:
+			continue
+		err = max(abs(w - o * k) for w, o in zip(rgb_in, orig))
+		if err <= 2 + 0.03 * top and (best is None or err < best[0]):
+			best = (err, tuple(min(255, round(n * k)) for n in new))
+	return best and best[1]
+
+def recolor_chocobo_block(dec: bytes, shift: int = 0) -> tuple[bytes, int]:
+	out = bytearray(dec)
+	changed = 0
+	for o5 in CHOCOBO_CLOUD:
+		o = o5 + shift
+		r, g, b, tag = dec[o : o + 4]
+		if tag in (0, 255):  # vertex and index words
+			continue
+		if b > 8 and b >= r and b > g and abs(r / b - 0.815) < 0.05 and abs(g / b - 0.613) < 0.05:
+			new = (min(255, round(v * k)) for v, k in zip((r, g, b), _CLOUD_RATIO))
+		elif r > g > b and r - b > r // 2 and r > 8:  # hair, gold -> silver by brightness
+			new = (round(v * max(r, g, b) / 255) for v in _SNOW_HAIR)
+		else:
+			continue
+		out[o : o + 3] = bytes(new)
+		changed += 1
+	for name, rng in CHOCOBO_RIDERS.items():
+		for o5 in rng:
+			o = o5 + shift
+			if dec[o + 3] in (0, 255):
+				continue
+			new = _lit_recolor(tuple(dec[o : o + 3]), FIELD[name])
+			if new:
+				out[o : o + 3] = bytes(new)
+				changed += 1
+	return bytes(out), changed
+
+
+def recolor_chocobo(dat: bytes) -> tuple[bytes, int]:
+	out = bytearray(dat)
+	changed = 0
+	o = n = 0
+	while o < len(dat):
+		size = struct.unpack_from("<I", dat, o)[0]
+		end = o + 4 + size
+		if n in CHOCOBO_BLOCKS:
+			new, c = recolor_chocobo_block(lzs.decompress(dat[o:end]), CHOCOBO_BLOCKS[n])
+			packed = lzs.compress(new)
+			if len(packed) > end - o:  # blocks stay at their original offsets, so the new one must fit the old slot
+				raise SystemExit(f"CHOCOBO.DAT block {n}: recolored block does not fit")
+			out[o:end] = packed.ljust(end - o, b"\0")
+			changed += c
+		o = (end + 2047) // 2048 * 2048
+		n += 1
+	return bytes(out), changed
+
+
 class Rule(NamedTuple):
 	hue: tuple  # degrees lo, hi; wraps through 0 when lo > hi
 	to: tuple  # (target hue, target sat or None to keep it, value add, value gain): v' = min(1, add + v * gain)
@@ -601,6 +669,7 @@ def apply_patch(img: bytearray) -> dict[str, int]:
 	counts["battle HICLOUD hair"] = _patch(img, "ENEMY6/HICLOUD.LZS", battle_fn("CLOUD"))
 	for name in ("TMD", "TMD2"):
 		counts[f"snowboard {name}"] = _patch(img, f"MINI/{name}.LZS", recolor_snowboard)
+	counts["chocobo race"] = _patch(img, "MINI/CHOCOBO.DAT", recolor_chocobo, packed=False)
 	counts["bike H_KAWAI"] = _patch(img, "MINI/H_KAWAI.BIN", recolor_bike, packed=False)
 	for path in WORLD_PATHS:
 		counts[path] = _patch(img, path, lambda d, p=path: recolor_world(d, p))
