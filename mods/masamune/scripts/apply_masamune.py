@@ -21,7 +21,6 @@ Sector EDC/ECC is not recomputed; run repair_mode2_edc afterwards."""
 from __future__ import annotations
 
 import gzip
-import importlib.util
 import json
 import struct
 import sys
@@ -32,11 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
 from compress_gzipps import _best_gzip_payload, _original_gzip_header10  # noqa: E402
 from psx_mode2_iso import extract_file, replace_file_padded, replace_file_within_sectors  # noqa: E402
 
-_spec = importlib.util.spec_from_file_location(
-	"lzs_pack", Path(__file__).resolve().parents[2] / "diamond-weapon-speed-up" / "scripts" / "lzs_pack.py"
-)
-lzs = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(lzs)
+import lzs_pack as lzs  # noqa: E402
 
 KERNEL = "/INIT/KERNEL.BIN"
 WEAPON_SECTION = 5

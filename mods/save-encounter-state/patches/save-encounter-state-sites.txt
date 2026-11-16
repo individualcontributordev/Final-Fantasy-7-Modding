@@ -1,0 +1,19 @@
+# Path  Offset  Expected  Replacement
+#
+# Persist danger (u16 0x8007173C), formation/RNG index (u8 0x80071C20), List (u8 0x80095DC8), Stone (u8 0x8004A630)
+# and Fractions (u8 0x8009C6D8) through save/load. Offsets are within the ISO file. Sites are cut on SCUS_941.63
+# and reused for .64/.65.
+# Values ride in unused Savemap padding: danger u16 0x8009D27C (padding2), formation idx u8 0x8009D287 (padding3),
+# List/Stone/Fractions u8 0x8009D78C/D/E (unk_10a8, zero in vanilla; legacy saves load these as 0).
+#  0x22D4   tail of capture fn (0x80011AD4..0x80011AE8): drops one redundant `lui at`, j 0x80048CE0 with `lui t0,0x8007` in the slot.
+#  0x394E0  cave 0x80048CE0 (7 slots): loads danger/idx/List/Fractions, j 0x80049A88.
+#  0x3A288  cave 0x80049A88 (8 slots): loads Stone, stores all five into the Savemap, returns.
+#  0x262C   post-title restore call jal 0x80011AEC -> jal 0x80049170.
+#  0x39970  cave 0x80049170 (15 slots): loads all five from the Savemap, writes them back (at = 0x80070000 from the
+#           caller's lui), then j 0x80011AEC.
+# Caves are zero padding (between data tables / after code); checked zero in live RAM, unlike 0x80034CF0 and 0x8004A6EC+ (runtime data).
+/SCUS_941.63 22D4 0a80013c85d223a00a80013c86d224a00800e00300000000 0a80013c85d223a086d224a0382301080780083c00000000
+/SCUS_941.63 394E0 00000000000000000000000000000000000000000000000000000000 3c170995201c0a9109800b3cc85d6c91d8c62d90a226010805800e3c
+/SCUS_941.63 3A288 0000000000000000000000000000000000000000000000000000000000000000 30a6cf917cd229a487d22aa08cd72ca08dd72fa00800e0038ed72da000000000
+/SCUS_941.63 262C bb46000c 5c24010c
+/SCUS_941.63 39970 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 0a80083c7cd2099587d20a918cd70b918dd70c918ed70d913c1729a4201c2aa00000000009800e3cc85dcba1d8c60da105800e3cbb46000830a6cca1

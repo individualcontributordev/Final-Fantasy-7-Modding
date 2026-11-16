@@ -10,7 +10,7 @@ Stackable `ic-layer-v1` disc patches (MIPS stubs + data bytes) for NTSC-U FF7. `
 - Commit as `individualcontributordev <contributorindividual@gmail.com>`.
 
 ## New mod, fastest path
-1. Copy the closest `mods/*/scripts/` as the template: `fanfare-skip` (MIPS stub in overlay), `field-random-encounters` / `world-map-random-encounters` (parametrised stub), `new-game-plus` (site list: path/offset/expected/replacement, guarded writes), `party-recolor` (TIM/palettes), `masamune` (mesh + field script diff), `diamond-weapon-speed-up` (worldscript in `WM0.EV`), `frame-counter`.
+1. Copy the closest `mods/*/scripts/` as the template: `fanfare-skip` (MIPS stub in overlay), `field-random-encounters` / `world-map-random-encounters` (parametrised stub), `new-game-plus` (site list: path/offset/expected/replacement, guarded writes), `party-recolor` (TIM/palettes), `masamune` (mesh + field script diff).
 2. Locate code: `python scripts/sym.py NAME` / `ADDR [-o overlay]` → decomp name + `.dec` file offset. `sym.py overlays` lists load addresses (overlays collide at `0x800A0000`, `0x801B0000`, `0x801D0000`).
 3. Disassemble/decompile in Ghidra (MCP; `use_program` then `decompile_function_by_address`). Write the stub as asm (`armips:*` skills) or Ghidra-style C via `scripts/c_to_mips.py` (needs zig).
 4. Overlays are GZIPPS: `decompress_gzipps.py` → patch `.dec` → `compress_gzipps.py` (must fit the ISO slot) → `psx_mode2_iso.replace_file_padded`.

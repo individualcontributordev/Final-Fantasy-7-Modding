@@ -1,0 +1,22 @@
+{
+  "id": "save-encounter-state",
+  "name": "Save Encounter State",
+  "kind": "mod",
+  "version": "0.2.0",
+  "blurb": "Saving a game now stores the encounter danger counter, the battle formation index and the random-table state (List, Stone, Fractions), so loading a save resumes the same encounter timing instead of resetting it.",
+  "hint": "Save, then Continue: encounter timing carries over.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "discDigests": {
+    "1": "1491d25f3d170241e3f4f19478523e1d587eb6d5d33c448804329084e55ea81e",
+    "2": "4203fbf48f387f65899d8ba71ed1a99e665fdc6bed6f4a02b0c3b54bd4c0f9ef",
+    "3": "c7803d8233a2883c78c2895deef6481999dc6e7820bae8a4e136d41b67c77238"
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "format": "ic-layer-v1",
+  "id": "save-encounter-state-disc3-v0.2.0",
+  "description": "Save Encounter State v0.2.0 -- NTSC-U Disc 3 (on clean)",
+  "target": "disc-image",
+  "stats": {
+    "originalBytes": 659561952,
+    "modifiedBytes": 659561952,
+    "changedBytes": 770,
+    "records": 39
+  },
+  "records": [
+    {
+      "offset": 66612,
+      "hex": "86d224a0382301080780083c"
+    },
+    {
+      "offset": 67460,
+      "hex": "5c2401"
+    },
+    {
+      "offset": 67928,
+      "hex": "7d3a49d3"
+    },
+    {
+      "offset": 67976,
+      "hex": "ef342d"
+    },
+    {
+      "offset": 67988,
+      "hex": "256dfa4c1ede796756f0ec45"
+    },
+    {
+      "offset": 68014,
+      "hex": "c293473f"
+    },
+    {
+      "offset": 68062,
+      "hex": "e81b87"
+    },
+    {
+      "offset": 68074,
+      "hex": "027a952ff7dfb428d12d2ef7"
+    },
+    {
+      "offset": 68100,
+      "hex": "bf681160"
+    },
+    {
+      "offset": 68106,
+      "hex": "5c4349f514064a359dd5aa11716e0aa172fcd822"
+    },
+    {
+      "offset": 68138,
+      "hex": "bd6051c4e268d1f47a688bef5125"
+    },
+    {
+      "offset": 68158,
+      "hex": "144d5f777df23fdce845d9e4bc84f805ec843483"
+    },
+    {
+      "offset": 68190,
+      "hex": "8be070a64cf832b55a798ef11074"
+    },
+    {
+      "offset": 325848,
+      "hex": "3c170995201c0a9109800b3cc85d6c91d8c62d90a226010805800e3c"
+    },
+    {
+      "offset": 326648,
+      "hex": "3a81d816"
+    },
+    {
+      "offset": 326708,
+      "hex": "f45f2e3b919b18d9cdf7546b2000937a2bee4e7efc7eea5aba53932f860b"
+    },
+    {
+      "offset": 326794,
+      "hex": "3c8a67ee88e3f3984722b69984f3ef3c47a3a5940fe76f81c4dfff4b0067151a914fd785870ef5d6bc3930ed47e5d31d89ff1b78e9c4b1c39862d903526f10d6d47df558c9c9b69ac9e28275cb81"
+    },
+    {
+      "offset": 326874,
+      "hex": "5df0827dbb6bec1f806ca060876ea949a1ac6d312ef886c204eabd34333923212a33ff83006c211c12001118dd2b938da6a8"
+    },
+    {
+      "offset": 326926,
+      "hex": "b5ce"
+    },
+    {
+      "offset": 327320,
+      "hex": "0a80083c7cd2099587d20a918cd70b918dd70c918ed70d913c1729a4201c2aa0"
+    },
+    {
+      "offset": 327356,
+      "hex": "09800e3cc85dcba1d8c60da105800e3cbb46"
+    },
+    {
+      "offset": 327375,
+      "hex": "0830a6cca1"
+    },
+    {
+      "offset": 329000,
+      "hex": "bd7ce80085ab9ee4"
+    },
+    {
+      "offset": 329009,
+      "hex": "38662d783e"
+    },
+    {
+      "offset": 329040,
+      "hex": "45395bac16a03052bb4b9db3ee14455fdc922b7fa6475e0cf60a351eb863763a"
+    },
+    {
+      "offset": 329076,
+      "hex": "5526336dd40547b6e0e96feaf44619ad015e"
+    },
+    {
+      "offset": 329095,
+      "hex": "1413b6090f"
+    },
+    {
+      "offset": 329126,
+      "hex": "7d2d0a108534ce5e2883cfc1391e599fd0e6fa2b500ec6efdbae82c543149def"
+    },
+    {
+      "offset": 329162,
+      "hex": "05e9e2f26dcf38e8b5dfdbfa9494c4ce185d9998087a3ac4de9fad8c3bfa5c2b1d2a4ab68a498e4119b9d6d15c053e897fbd"
+    },
+    {
+      "offset": 329213,
+      "hex": "7c185cc5264cd167671e7094591c233bf6d95910c4831c85781c0744dff43f880c1cdaedec6efc2e21c64d29de4032b1ac6960330da1b6df98356db2e2da5e0d240bb4"
+    },
+    {
+      "offset": 329952,
+      "hex": "30a6cf917cd229a487d22aa08cd72ca08dd72fa008"
+    },
+    {
+      "offset": 329974,
+      "hex": "e0038ed72da0"
+    },
+    {
+      "offset": 331352,
+      "hex": "c7a8d862"
+    },
+    {
+      "offset": 331414,
+      "hex": "db42109da9e19a419006f5e1c763ed68510a1c68f5"
+    },
+    {
+      "offset": 331436,
+      "hex": "b09cb9b90d8a"
+    },
+    {
+      "offset": 331500,
+      "hex": "f187135b286ba7a937c32461cd9d1d699c62d576ef"
+    },
+    {
+      "offset": 331522,
+      "hex": "cd0fa35da7cb6498283ad48127f969f6"
+    },
+    {
+      "offset": 331542,
+      "hex": "f86597454fe4cf2e5e369104decc791b69fc5cb4112b37fb77cc890f2c8ace0e7f23a1e3efcd82719ddd199547beb5d7"
+    },
+    {
+      "offset": 331594,
+      "hex": "b1a1a5deec27f184c58ae8d19b9046dc475139b174359a9023baf28f6ae7db71b301675c3b09"
+    }
+  ]
+}

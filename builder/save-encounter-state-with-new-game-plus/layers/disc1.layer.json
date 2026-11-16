@@ -1,0 +1,110 @@
+{
+  "format": "ic-layer-v1",
+  "id": "save-encounter-state-with-new-game-plus-disc1-v0.2.0",
+  "description": "Save Encounter State + New Game+ v0.2.0 -- NTSC-U Disc 1 (on clean)",
+  "target": "disc-image",
+  "stats": {
+    "originalBytes": 747435024,
+    "modifiedBytes": 747435024,
+    "changedBytes": 74,
+    "records": 24
+  },
+  "records": [
+    {
+      "offset": 67928,
+      "hex": "45efb593"
+    },
+    {
+      "offset": 68014,
+      "hex": "8af15eff"
+    },
+    {
+      "offset": 68100,
+      "hex": "cfdff4e0"
+    },
+    {
+      "offset": 68118,
+      "hex": "68ae89eda5529500"
+    },
+    {
+      "offset": 68148,
+      "hex": "94"
+    },
+    {
+      "offset": 68150,
+      "hex": "00"
+    },
+    {
+      "offset": 68170,
+      "hex": "59045a5c96c80916"
+    },
+    {
+      "offset": 68200,
+      "hex": "56"
+    },
+    {
+      "offset": 68202,
+      "hex": "37"
+    },
+    {
+      "offset": 326648,
+      "hex": "6fba6778"
+    },
+    {
+      "offset": 326708,
+      "hex": "87"
+    },
+    {
+      "offset": 326734,
+      "hex": "6c625ab9"
+    },
+    {
+      "offset": 326794,
+      "hex": "59"
+    },
+    {
+      "offset": 326820,
+      "hex": "553d63bb"
+    },
+    {
+      "offset": 326838,
+      "hex": "9b571c77eb786a27"
+    },
+    {
+      "offset": 326854,
+      "hex": "5f"
+    },
+    {
+      "offset": 326856,
+      "hex": "eacd"
+    },
+    {
+      "offset": 326868,
+      "hex": "0d"
+    },
+    {
+      "offset": 326870,
+      "hex": "8f7d"
+    },
+    {
+      "offset": 326890,
+      "hex": "c2702bd2d0ee5deb"
+    },
+    {
+      "offset": 326906,
+      "hex": "31"
+    },
+    {
+      "offset": 326908,
+      "hex": "3d3f"
+    },
+    {
+      "offset": 326920,
+      "hex": "6f"
+    },
+    {
+      "offset": 326922,
+      "hex": "f167"
+    }
+  ]
+}

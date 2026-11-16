@@ -11,7 +11,6 @@ Field/world hair is a flat color too, so it is remapped; battle hair is picked o
 from __future__ import annotations
 
 import colorsys
-import importlib.util
 import struct
 import sys
 from bisect import bisect_right
@@ -23,11 +22,7 @@ _ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_ROOT / "scripts"))
 from psx_mode2_iso import extract_file, replace_file_padded, walk_tree  # noqa: E402
 
-_spec = importlib.util.spec_from_file_location(
-	"lzs_pack", _ROOT / "mods" / "diamond-weapon-speed-up" / "scripts" / "lzs_pack.py"
-)
-lzs = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(lzs)
+import lzs_pack as lzs  # noqa: E402
 
 
 HDR_SIZE = 36  # BcxModelHeader

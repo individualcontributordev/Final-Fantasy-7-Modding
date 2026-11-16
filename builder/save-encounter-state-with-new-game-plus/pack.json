@@ -1,0 +1,32 @@
+{
+  "id": "save-encounter-state-with-new-game-plus",
+  "name": "Save Encounter State + New Game+",
+  "kind": "mod",
+  "version": "0.2.0",
+  "blurb": "Keeps disc checksums valid when Save Encounter State and New Game+ are both on.",
+  "hint": "Save, then Continue: encounter timing carries over.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "clean"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json",
+    "2": "./layers/disc2.layer.json",
+    "3": "./layers/disc3.layer.json"
+  },
+  "discDigests": {
+    "1": "ad4c80d4c173963b4b62d22fcb0a650d5b3c90db9617d32453902f255cd0edd0",
+    "2": "fc55996675168a3ac0f78ddd02540d2e7f901c4f7cfb662ce66690f298842ca9",
+    "3": "00f271a72ea10346094bc831d43892fddefb26ebf2c58f12ceca862e94ccaaac"
+  },
+  "hidden": true,
+  "autoIncludeWhen": {
+    "bases": [
+      "clean"
+    ],
+    "addonSelected": "save-encounter-state",
+    "addonSelectedAny": [
+      "new-game-plus"
+    ]
+  }
+}

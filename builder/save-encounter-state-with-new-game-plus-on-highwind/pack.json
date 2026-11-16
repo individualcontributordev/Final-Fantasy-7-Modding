@@ -1,0 +1,29 @@
+{
+  "id": "save-encounter-state-with-new-game-plus-on-highwind",
+  "name": "Save Encounter State + New Game+",
+  "kind": "mod",
+  "version": "0.2.0",
+  "blurb": "Keeps disc checksums valid when Save Encounter State and New Game+ are both on.",
+  "hint": "Save, then Continue: encounter timing carries over.",
+  "format": "ic-layer-v1",
+  "compatibleBases": [
+    "highwind"
+  ],
+  "discs": {
+    "1": "./layers/disc1.layer.json"
+  },
+  "discDigests": {
+    "1": "9b5e87bedb27950d1162ec9cfbb2eebf447081cd27bb590a4564291deb3b8708"
+  },
+  "baseVersion": "0.5.13",
+  "hidden": true,
+  "autoIncludeWhen": {
+    "bases": [
+      "highwind"
+    ],
+    "addonSelected": "save-encounter-state-on-highwind",
+    "addonSelectedAny": [
+      "new-game-plus-on-highwind"
+    ]
+  }
+}

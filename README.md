@@ -7,7 +7,7 @@ Stackable `ic-layer-v1` mods for the
 exclusive base; the CSR, CSR+, and Highwind bases live in the CSR repo.
 
 Published mods: field encounters, world encounters, fanfare skip, New Game+,
-Save Danger + Formation Index (saves keep the encounter danger counter and battle formation index; with New Game+ a hidden `save-persist-with-new-game-plus` pack, rebuilt by `rebuild_on_base.py`, repairs the footers of the two SCUS sectors they share). Field and
+Save Encounter State (saves keep the encounter danger counter, battle formation index and random-table state (List, Stone, Fractions); with New Game+ a hidden `save-encounter-state-with-new-game-plus` pack, rebuilt by `rebuild_on_base.py`, repairs the footers of the two SCUS sectors they share). Field and
 world encounters are chosen independently. `Unmodified` applies no mod and
 keeps the game's own rate, which ramps between fights off a step counter and so
 can be routed. The patches — `No Encs`, `Half Enc Rate`, `Vanilla Enc Rate`,
