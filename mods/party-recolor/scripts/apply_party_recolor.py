@@ -601,6 +601,7 @@ DRESS = {
 DRESS = {k: {rgb(a): rgb(b) for a, b in m.items()} for k, m in DRESS.items()}
 
 CLOUD_IDS = (0, 33)
+TIFA_HAIR = {rgb("2F1E12"): rgb("B4501E")}  # model id 3 outside the dress: Tifa's other BSX variants (Nibelheim flashback) get her hair only
 # FIELD/BLACKBGB.BSX: Cloud on the bike in the Midgar highway controls screen. Its colors are pre-shaded, so the exact
 # map misses; (id, bones, parts, colors) -> (hair parts, outfit parts). Boots (25, 29), sword and glove (17, 21), skin stay.
 BIKE_INTRO = {(0, 30, 19, 621): ({7, 8, 9, 10, 12, 14}, {5, 6, 18, 23, 24, 27, 28})}
@@ -628,7 +629,7 @@ def recolor_dress(dec: bytes) -> tuple[bytes, int]:
 			out[o : o + 3] = bytes(new)
 			changed += 1
 		# other Cloud variants (id 0 field, 33 world-map/rootmap) get his normal recolor
-		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs))) or (FIELD["CLOUD"] if model_id in CLOUD_IDS and not hair else None)
+		cmap = DRESS.get((model_id, num_bones, num_parts, len(offs))) or (FIELD["CLOUD"] if model_id in CLOUD_IDS and not hair else TIFA_HAIR if model_id == 3 else None)
 		for o in offs if cmap else ():
 			new = cmap.get(tuple(dec[o : o + 3]))
 			if new:
@@ -636,9 +637,59 @@ def recolor_dress(dec: bytes) -> tuple[bytes, int]:
 				changed += 1
 	return bytes(out), changed
 
+# Cloud's eyebrow is a face-texture patch painted with the hair's gold palette entries (and the strands around the eye in brown):
+# CLOUD.LZS 4bpp CLUT row 1, HICLOUD.LZS one 256-color CLUT. Gold/brown entries (hue 15-45, sat >= .55, value >= .3) -> the silver hair tone.
+_CLOUD_BROW = (
+	(struct.pack("<IIIHHHH", 0x10, 8, 76, 0, 480, 16, 2), 16, 1),
+	(struct.pack("<IIIHHHH", 0x10, 8, 524, 320, 192, 256, 1), 256, 0),
+)  # (CLUT block header, colors per row, the row the face uses)
+
+
+def recolor_cloud_brow(dec: bytes) -> tuple[bytes, int]:
+	out, n = bytearray(dec), 0
+	for header, width, row in _CLOUD_BROW:
+		at = dec.find(header)
+		if at < 0:
+			continue
+		for i in range(width):
+			o = at + 20 + (row * width + i) * 2
+			c = struct.unpack_from("<H", dec, o)[0]
+			h, s, v = colorsys.rgb_to_hsv((c & 31) / 31, (c >> 5 & 31) / 31, (c >> 10 & 31) / 31)
+			if c and 15 <= h * 360 <= 45 and s >= 0.55 and v >= 0.3:
+				r, g, b = (round(x * 31) for x in colorsys.hsv_to_rgb(215 / 360, 0.1, v))
+				struct.pack_into("<H", out, o, c & 0x8000 | r | g << 5 | b << 10)
+				n += 1
+	return bytes(out), n
+
+
+def recolor_field_face(dec: bytes) -> tuple[bytes, int]:
+	"""FIELD.TDB holds the field faces' 16-color CLUT rows (from 0xFE10); Cloud's rows carry the brow gold at entries 8-10 after the
+	gold pair 733900 / 9C5A29; the same entries turn silver like the battle face."""
+	out, n = bytearray(dec), 0
+	pair = (0x00EE, 0x1573)  # 15-bit 733900, 9C5A29
+	for row in range(0xFE10, len(dec) - 31, 32):
+		if struct.unpack_from("<2H", dec, row + 16) != pair:
+			continue
+		for i in (8, 9, 10):
+			o = row + i * 2
+			c = struct.unpack_from("<H", dec, o)[0]
+			h, s, v = colorsys.rgb_to_hsv((c & 31) / 31, (c >> 5 & 31) / 31, (c >> 10 & 31) / 31)
+			if 15 <= h * 360 <= 45 and s >= 0.55 and v >= 0.3:
+				r, g, b = (round(x * 31) for x in colorsys.hsv_to_rgb(215 / 360, 0.1, v))
+				struct.pack_into("<H", out, o, c & 0x8000 | r | g << 5 | b << 10)
+				n += 1
+	return bytes(out), n
+
+
+def recolor_cloud_battle_hair(dec: bytes) -> tuple[bytes, int]:
+	dec, n = recolor_battle(dec, BATTLE["CLOUD"])
+	dec, m = recolor_cloud_brow(dec)
+	return dec, n + m
+
+
 def battle_fn(name: str):
 	rules = BATTLE[name]
-	return recolor_barrett if rules is _BARRETT else recolor_red13 if name == "RED13" else lambda d: recolor_battle(d, rules)
+	return recolor_barrett if rules is _BARRETT else recolor_red13 if name == "RED13" else recolor_cloud_battle_hair if name == "CLOUD" else lambda d: recolor_battle(d, rules)
 
 
 def _patch(img: bytearray, path: str, fn, *, required: bool = True, packed: bool = True) -> int:
@@ -656,6 +707,7 @@ def apply_patch(img: bytearray) -> dict[str, int]:
 	counts = {}
 	for name, cmap in FIELD.items():
 		counts[f"field {name}"] = _patch(img, f"FIELD/{name}.BCX", lambda d, m=cmap, n=name: recolor(d, m, FIELD_ONLY.get(n)))
+	counts["field faces TDB"] = _patch(img, "FIELD/FIELD.TDB", recolor_field_face)
 	counts["battle CLOUD outfit"] = _patch(img, "ENEMY6/CLOUD.LZS", recolor_battle_cloud)
 	for name in BATTLE:
 		counts[f"battle {name}"] = _patch(img, f"ENEMY6/{name}.LZS", battle_fn(name))

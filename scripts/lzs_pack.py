@@ -11,7 +11,7 @@ import functools
 MAX_DIST = 4095
 MAX_LEN = 18
 MIN_LEN = 3
-MAX_CANDIDATES = 200
+MAX_CANDIDATES = 4096
 
 
 def decompress(data: bytes) -> bytes:
@@ -36,7 +36,9 @@ def decompress(data: bytes) -> bytes:
 			if start >= 0 and start + length <= len(out):
 				out += out[start : start + length]
 				continue
-			for k in range(length):  # overlapping copy or reach before the start
+			if start < -MAX_LEN:  # retail files reach at most 18 bytes back (zeros); further crashed the game
+				raise ValueError("LZS reference reaches too far before the start of the output")
+			for k in range(length):  # overlapping copy, or a short reach before the start
 				out.append(out[start + k] if start + k >= 0 else 0)
 	return bytes(out)
 
@@ -81,10 +83,11 @@ def compress(data: bytes) -> bytes:
 def _compress(data: bytes) -> bytes:
 	n = len(data)
 	best = _longest_matches(data)
-	cost = [1 << 60] * (n + 1)
-	step: list[tuple[int, int] | None] = [None] * (n + 1)  # (start, distance or 0)
-	cost[0] = 0
-	for i in range(n):
+	P = 0  # no references before the start: the game's decoder window is not guaranteed zero
+	cost = [1 << 60] * (n + P + 1)
+	step: list[tuple[int, int] | None] = [None] * (n + P + 1)  # (start, distance or 0)
+	cost[P] = 0
+	for i in range(P, n + P):
 		if cost[i] + 9 < cost[i + 1]:
 			cost[i + 1], step[i + 1] = cost[i] + 9, (i, 0)
 		if best[i]:
@@ -94,13 +97,13 @@ def _compress(data: bytes) -> bytes:
 					cost[i + k], step[i + k] = cost[i] + 17, (i, dist)
 
 	tokens: list[tuple[int, int, int]] = []  # (is_literal, a, b)
-	i = n
-	while i > 0:
+	i = n + P
+	while i > P:
 		start, dist = step[i]
 		if dist == 0:
 			tokens.append((1, data[start], 0))
 		else:
-			tokens.append((0, (start - 18 - dist) & 0xFFF, i - start))
+			tokens.append((0, (start - P - 18 - dist) & 0xFFF, i - start))
 		i = start
 	tokens.reverse()
 

@@ -166,7 +166,7 @@
       "id": "party-recolor-on-csr",
       "name": "Party Recolor",
       "kind": "mod",
-      "version": "0.2.6",
+      "version": "0.2.8",
       "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
       "hint": "Nine party members wear new colors.",
       "format": "ic-layer-v1",
@@ -179,9 +179,9 @@
         "3": "./party-recolor-on-csr/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "37f12d374a7f36cbe5a047195c7f65c8571010cf48bd6b89c2d733f0018a9a92",
-        "2": "c4d94686503a06a8670621e936ad02fae59cbf3e5810582b0c248ae7b5279b7b",
-        "3": "4681f8d68d42315b0ef05f06b8a96d22d64d37a0455b196d83d7026ce42d0af5"
+        "1": "d2425bebc3443ba1cecb8186b2da6f510d51470c6ce8441795a2520707158c86",
+        "2": "5bd1dd0b275d03f886d1e0761758e6e3d2104a4430dee0542a9384e6306fa7f7",
+        "3": "72ce0db8f8ddd2a1e62b0c75cf9abff2241ee59ee7b51c249c7542e778c0f935"
       },
       "enabled": true,
       "baseVersion": "0.14.4"
@@ -203,9 +203,9 @@
         "3": "./masamune-on-csr/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "1adf858980410ef58881532c582865272a845cf73d7ae9538c2e6fa8411bbedb",
-        "2": "393fc9f48cec8005aa50cc25a425d198684b419968d234a3ff42e91655ca215f",
-        "3": "98f8dc621ef18353c895796e0cb915b2fb212a945f8afcc7bcec0177781ccb3e"
+        "1": "3e364813cbda8fe6c6fcc08e71375482d183cf7ce5ff958cfed78c5eb2b0acc0",
+        "2": "501d91e58b61c551ef25f206e44ec794b740879b51a1746b766bcf4ff1180a9c",
+        "3": "d208fe17b42616730d41973ef970c0139afd02ea39e575f8f01eff65a59ea0c1"
       },
       "enabled": true,
       "baseVersion": "0.14.4"
@@ -227,9 +227,9 @@
         "3": "./party-recolor-with-masamune-on-csr/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "56055bd19b296cb5a2de0bebd044b68740382b729461df0cc704318cb6db4858",
-        "2": "f6b150f28fad26d15d80dd909b25426205015051ba6005152136044ee6aba2f1",
-        "3": "de20950ff51b9e7bb0d0b0f0a220d73760f6c7a00271f303195edef8900db5f5"
+        "1": "ceb29b1129253b2787910328e6fb960526b973cbe923c208bdcd6a9c4300af91",
+        "2": "5fdad34c4eb069be1c3be126ca57006fb5ded203e7e26fbe417b0786b163809d",
+        "3": "6bbaf23f9e6b3e8fc5aca1eb999c0298ca74a338d3591c794690b107a76449f1"
       },
       "enabled": true,
       "baseVersion": "0.14.4",
@@ -384,7 +384,7 @@
       "id": "party-recolor-on-csr-plus",
       "name": "Party Recolor",
       "kind": "mod",
-      "version": "0.2.6",
+      "version": "0.2.8",
       "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
       "hint": "Nine party members wear new colors.",
       "format": "ic-layer-v1",
@@ -395,7 +395,7 @@
         "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "707fe71c188b476bb847ee8e1211a9606dc4af2716d7cedb0c9386a4d1602f76"
+        "1": "8e8d2e57dae8576bf1f4195546504e3a3a297cab69129edec7a92c32dbd5e823"
       },
       "enabled": true,
       "baseVersion": "1.0.0rc12"
@@ -415,7 +415,7 @@
         "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "d436d606dcdf1034682d7da87f3de0fa73c911b68310cf0614f3a214e143602e"
+        "1": "d21a97221778fdbfab657a9bdfdb6ca7e836c4e2d4accd78be1c5adc58694f0d"
       },
       "enabled": true,
       "baseVersion": "1.0.0rc12"
@@ -435,7 +435,7 @@
         "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "ba90d01ba1df44824929c84fc06c9668b188cffd9d28d76958855f8ba6793c7e"
+        "1": "e5bbd835315e8a6dfe0142fc8f73f7ce99d3367c5b4e9e8f1700b80e5b2e2976"
       },
       "enabled": true,
       "baseVersion": "1.0.0rc12",
@@ -590,7 +590,7 @@
       "id": "party-recolor-on-highwind",
       "name": "Party Recolor",
       "kind": "mod",
-      "version": "0.2.6",
+      "version": "0.2.8",
       "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
       "hint": "Nine party members wear new colors.",
       "format": "ic-layer-v1",
@@ -601,7 +601,7 @@
         "1": "./party-recolor-on-highwind/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "4cbe121d6ff5faf749534ef97595912013d3c55ffd68ca9ff3ed48e2d7c98b7b"
+        "1": "2c31a1c2b9f16ab6ce2fbdf2ecdcbb66e2ca2801afd0026293ab6424bd759946"
       },
       "enabled": true,
       "baseVersion": "0.5.13"
@@ -621,7 +621,7 @@
         "1": "./masamune-on-highwind/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "eeacaec0b69b92127996a58ac4c3ca985612e3649af97801c542c4d5a6d22679"
+        "1": "60e325dc5173c78fa446a880922e4fd40e8dc036e5166626341dce531aee6848"
       },
       "enabled": true,
       "baseVersion": "0.5.13"
@@ -641,7 +641,7 @@
         "1": "./party-recolor-with-masamune-on-highwind/layers/disc1.layer.json"
       },
       "discDigests": {
-        "1": "4cdbaece3abdd8777d90dcd0f9e9c08d86835fd427797185684d9a797d2c7192"
+        "1": "026e9106211b264449091c9bb5f087f06379b2092164fa55ced8935cca6abba3"
       },
       "enabled": true,
       "baseVersion": "0.5.13",
@@ -814,7 +814,7 @@
       "id": "party-recolor",
       "name": "Party Recolor",
       "kind": "mod",
-      "version": "0.2.6",
+      "version": "0.2.8",
       "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
       "hint": "Nine party members wear new colors.",
       "format": "ic-layer-v1",
@@ -827,9 +827,9 @@
         "3": "./party-recolor/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "616de71513db968af90b6b97b66381991bdad1d91c08307fcac7b6e1f5d1e320",
-        "2": "aad2df6bc69aa5e4d06b407c2eab56eb6f37da05d4ae4e3cd71a6087df74c7fe",
-        "3": "67b5b1a8d9a737fbdf133ccb40c3314ef75d9d5f007875064cc5fedde6610a64"
+        "1": "f1966c615c7cbc942904eeaf6db66b4c7ee7bb6338bd75995d83d05044a6c76f",
+        "2": "e3e1b017e88a1b3b5807b2b384d559940fc1e3052c9f9a4fbcd42e0652810f5a",
+        "3": "afb61985e76d57b44cd37228e4f504124b4dfdec8768e3c785cbf6e9e9924739"
       },
       "enabled": true
     },
@@ -850,9 +850,9 @@
         "3": "./masamune/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "4447ab3b145e14560f7df0b001b6da74a455c24e66b02aa2ebb8ad225521c34f",
-        "2": "91b2676cce12b60b208dfc484b1b820972dfeae6ef5b69701799dd0922431f37",
-        "3": "439d7121dc4de00599a90b38d68f0e4fc07b45aa86c005927bca8d78738b4d84"
+        "1": "631af2936d03c2be16c6bc5fc24a921a9b7c6f10818f61fb2b398ef7fd4e1387",
+        "2": "87875ec99ef7e771dd4651d87338a60550559cb009cdc8ea7067f17cd59621a5",
+        "3": "a4b12900a4ed12e40f7726e4019d67ae2e35a9b5329345e12280b3353afab4db"
       },
       "enabled": true
     },
@@ -873,9 +873,9 @@
         "3": "./party-recolor-with-masamune/layers/disc3.layer.json"
       },
       "discDigests": {
-        "1": "b9af4349f5377c6911c2005427e45eecd7d53c2063def3f55f59f8b3b2b77cd3",
-        "2": "c00884c6d61afc2330e14075211323024998431dc94305a911628af6dc32158d",
-        "3": "414b9b1ea441dcefad3797a7795e063b768ad86e0318607ee0cefdf270c87cdf"
+        "1": "2938662c5e6065fd696c845683fb23a6163a7af7b6d6b444f85627f87db81e13",
+        "2": "19a11d6a4e7b2a7ec6c798e92f5237068d0a49df173a5de53da80c747258a328",
+        "3": "f5adee814ded4d95043f7c771c37301b9b9f6be2b366e315ccba26fe6c7d80ed"
       },
       "enabled": true,
       "hidden": true,
