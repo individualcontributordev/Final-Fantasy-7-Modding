@@ -245,212 +245,6 @@
       }
     },
     {
-      "id": "field-encounter-on-csr-plus-0",
-      "name": "Field Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random field battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "field-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "rate": 0,
-      "groupLabel": "Field Random Encounters",
-      "optionLabel": "No Encs",
-      "discDigests": {
-        "1": "3a882ebfe2e6911c6303521a74155bb772712f6e6af52ce575b9d84e3908d6e2"
-      },
-      "baseVersion": "1.0.0rc12",
-      "enabled": true
-    },
-    {
-      "id": "world-encounter-on-csr-plus-0",
-      "name": "World Random Encounters -- No Encs (on CSR+)",
-      "kind": "mod",
-      "version": "0.4.0",
-      "blurb": "No random world-map battles.",
-      "format": "ic-layer-v1",
-      "exclusiveGroup": "world-encounter-rate",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
-      },
-      "baseVersion": "1.0.0rc12",
-      "rate": 0,
-      "groupLabel": "World Random Encounters",
-      "optionLabel": "No Encs",
-      "enabled": true
-    },
-    {
-      "id": "fanfare-skip-on-csr-plus",
-      "name": "Fanfare Skip",
-      "kind": "mod",
-      "version": "0.3.0",
-      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
-      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12"
-    },
-    {
-      "id": "new-game-plus-on-csr-plus",
-      "name": "New Game+",
-      "kind": "mod",
-      "version": "0.1.1",
-      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
-      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "125b6ae55a17fe58c2683b9342058d050e3a31b13a240ba3089fb780007161d9"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12"
-    },
-    {
-      "id": "save-encounter-state-on-csr-plus",
-      "name": "Save Encounter State",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Saving a game now stores the encounter danger counter, the battle formation index and the random-table state (List, Stone, Fractions), so loading a save resumes the same encounter timing instead of resetting it.",
-      "hint": "Save, then Continue: encounter timing carries over.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./save-encounter-state-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "d22316936119688f47a5826047a96e07b2d1aed1bbc7de311619621be23b157d"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12"
-    },
-    {
-      "id": "save-encounter-state-with-new-game-plus-on-csr-plus",
-      "name": "Save Encounter State + New Game+",
-      "kind": "mod",
-      "version": "0.2.0",
-      "blurb": "Keeps disc checksums valid when Save Encounter State and New Game+ are both on.",
-      "hint": "Save, then Continue: encounter timing carries over.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./save-encounter-state-with-new-game-plus-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "d57519e35f3e53094c0c149a9d579cde0dd7953075f93a93cd1ceff0dbea5fba"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12",
-      "hidden": true,
-      "autoIncludeWhen": {
-        "bases": [
-          "csr-plus"
-        ],
-        "addonSelected": "save-encounter-state-on-csr-plus",
-        "addonSelectedAny": [
-          "new-game-plus-on-csr-plus"
-        ]
-      }
-    },
-    {
-      "id": "party-recolor-on-csr-plus",
-      "name": "Party Recolor",
-      "kind": "mod",
-      "version": "0.2.8",
-      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
-      "hint": "Nine party members wear new colors.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "8e8d2e57dae8576bf1f4195546504e3a3a297cab69129edec7a92c32dbd5e823"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12"
-    },
-    {
-      "id": "masamune-on-csr-plus",
-      "name": "Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "You've seen this sword before, but you've never held it.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "d21a97221778fdbfab657a9bdfdb6ca7e836c4e2d4accd78be1c5adc58694f0d"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12"
-    },
-    {
-      "id": "party-recolor-with-masamune-on-csr-plus",
-      "name": "Party Recolor + Masamune",
-      "kind": "mod",
-      "version": "0.2.1",
-      "blurb": "Merges Party Recolor with the Masamune mod.",
-      "hint": "You've seen this sword before, but you've never held it.",
-      "format": "ic-layer-v1",
-      "compatibleBases": [
-        "csr-plus"
-      ],
-      "discs": {
-        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
-      },
-      "discDigests": {
-        "1": "e5bbd835315e8a6dfe0142fc8f73f7ce99d3367c5b4e9e8f1700b80e5b2e2976"
-      },
-      "enabled": true,
-      "baseVersion": "1.0.0rc12",
-      "hidden": true,
-      "autoIncludeWhen": {
-        "bases": [
-          "csr-plus"
-        ],
-        "addonSelected": "masamune-on-csr-plus",
-        "addonSelectedAny": [
-          "party-recolor-on-csr-plus"
-        ]
-      }
-    },
-    {
       "id": "field-encounter-on-highwind-0",
       "name": "Field Random Encounters -- No Encs (on Highwind)",
       "kind": "mod",
@@ -886,6 +680,212 @@
         "addonSelected": "masamune",
         "addonSelectedAny": [
           "party-recolor"
+        ]
+      }
+    },
+    {
+      "id": "field-encounter-on-csr-plus-0",
+      "name": "Field Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random field battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "field-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./field-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "rate": 0,
+      "groupLabel": "Field Random Encounters",
+      "optionLabel": "No Encs",
+      "discDigests": {
+        "1": "de25325065acea153308c3172c8f1d11f9f14c428a63e7da076a3b334e7d106f"
+      },
+      "baseVersion": "1.0.0rc13",
+      "enabled": true
+    },
+    {
+      "id": "world-encounter-on-csr-plus-0",
+      "name": "World Random Encounters -- No Encs (on CSR+)",
+      "kind": "mod",
+      "version": "0.4.0",
+      "blurb": "No random world-map battles.",
+      "format": "ic-layer-v1",
+      "exclusiveGroup": "world-encounter-rate",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./world-encounter-on-csr-plus-0/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "cb10f34ee5010565e3acb2732a33894f707491dfd1b96a87aa15413c8a065d16"
+      },
+      "baseVersion": "1.0.0rc13",
+      "rate": 0,
+      "groupLabel": "World Random Encounters",
+      "optionLabel": "No Encs",
+      "enabled": true
+    },
+    {
+      "id": "fanfare-skip-on-csr-plus",
+      "name": "Fanfare Skip",
+      "kind": "mod",
+      "version": "0.3.0",
+      "blurb": "After the last enemy dies, skip the victory ceremony path. Exp, AP, gil, and items still apply; loot/level-up screens still show.",
+      "hint": "No victory fanfare or win poses -- loot and exp still apply.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./fanfare-skip-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13"
+    },
+    {
+      "id": "new-game-plus-on-csr-plus",
+      "name": "New Game+",
+      "kind": "mod",
+      "version": "0.1.1",
+      "blurb": "Finishing the game adds a NEW GAME+ title item. It keeps characters, items, materia and gil, and restarts from the beginning.",
+      "hint": "Finish the game, then pick NEW GAME+ on the title screen.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./new-game-plus-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "7776b3c97a96e2f2d750ad56cfeeb13808ee8b21f92b812edf4043bb31ead52c"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13"
+    },
+    {
+      "id": "save-encounter-state-on-csr-plus",
+      "name": "Save Encounter State",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Saving a game now stores the encounter danger counter, the battle formation index and the random-table state (List, Stone, Fractions), so loading a save resumes the same encounter timing instead of resetting it.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./save-encounter-state-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "1dc2fb07f34719422f02fb27b8ddb7aef5d1179d1cad5431f93704872d4007e0"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13"
+    },
+    {
+      "id": "save-encounter-state-with-new-game-plus-on-csr-plus",
+      "name": "Save Encounter State + New Game+",
+      "kind": "mod",
+      "version": "0.2.0",
+      "blurb": "Keeps disc checksums valid when Save Encounter State and New Game+ are both on.",
+      "hint": "Save, then Continue: encounter timing carries over.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./save-encounter-state-with-new-game-plus-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "24b750e70858a5b17c7cb627b7a11ee2166c9ca90461306f38b47c4432440299"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus"
+        ],
+        "addonSelected": "save-encounter-state-on-csr-plus",
+        "addonSelectedAny": [
+          "new-game-plus-on-csr-plus"
+        ]
+      }
+    },
+    {
+      "id": "party-recolor-on-csr-plus",
+      "name": "Party Recolor",
+      "kind": "mod",
+      "version": "0.2.8",
+      "blurb": "Cloud, Barret, Tifa, Aerith, Red XIII, Cid, Vincent, Yuffie and Cait Sith get new outfit colors on the field, in battle and on the world map; Cloud, Aerith and Tifa also get new Wall Market dresses; the chocobo-race riders Cloud (crimson, silver hair), Tifa (black, emerald, ginger) and Cid (green, purple, silver hair) match.",
+      "hint": "Nine party members wear new colors.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "35d4ce93511ac2a02a52e17e44f1191b7fca68d340d2c68e7f3f32290273820c"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13"
+    },
+    {
+      "id": "masamune-on-csr-plus",
+      "name": "Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "You've seen this sword before, but you've never held it.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "7189259fe3b417d32d356482b4c8e3c0ec2f825a46bf46fa2797ecbc9784360a"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13"
+    },
+    {
+      "id": "party-recolor-with-masamune-on-csr-plus",
+      "name": "Party Recolor + Masamune",
+      "kind": "mod",
+      "version": "0.2.1",
+      "blurb": "Merges Party Recolor with the Masamune mod.",
+      "hint": "You've seen this sword before, but you've never held it.",
+      "format": "ic-layer-v1",
+      "compatibleBases": [
+        "csr-plus"
+      ],
+      "discs": {
+        "1": "./party-recolor-with-masamune-on-csr-plus/layers/disc1.layer.json"
+      },
+      "discDigests": {
+        "1": "94beb7cd65a25d999d57327ccaa965c21def6d0a9081205cd0d3feefe16727bc"
+      },
+      "enabled": true,
+      "baseVersion": "1.0.0rc13",
+      "hidden": true,
+      "autoIncludeWhen": {
+        "bases": [
+          "csr-plus"
+        ],
+        "addonSelected": "masamune-on-csr-plus",
+        "addonSelectedAny": [
+          "party-recolor-on-csr-plus"
         ]
       }
     }

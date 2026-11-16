@@ -1,7 +1,7 @@
 {
   "format": "ic-layer-v1",
   "id": "save-encounter-state-with-new-game-plus-on-csr-plus-disc1-v0.2.0",
-  "description": "Save Encounter State + New Game+ v0.2.0 -- NTSC-U Disc 1 (on csr-plus 1.0.0rc12)",
+  "description": "Save Encounter State + New Game+ v0.2.0 -- NTSC-U Disc 1 (on csr-plus 1.0.0rc13)",
   "target": "disc-image",
   "stats": {
     "originalBytes": 749128464,

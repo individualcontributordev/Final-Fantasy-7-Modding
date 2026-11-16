@@ -13,9 +13,9 @@
     "1": "./layers/disc1.layer.json"
   },
   "discDigests": {
-    "1": "e5bbd835315e8a6dfe0142fc8f73f7ce99d3367c5b4e9e8f1700b80e5b2e2976"
+    "1": "94beb7cd65a25d999d57327ccaa965c21def6d0a9081205cd0d3feefe16727bc"
   },
-  "baseVersion": "1.0.0rc12",
+  "baseVersion": "1.0.0rc13",
   "hidden": true,
   "autoIncludeWhen": {
     "bases": [

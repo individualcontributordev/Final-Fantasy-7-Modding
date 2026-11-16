@@ -16,7 +16,7 @@
   "groupLabel": "Field Random Encounters",
   "optionLabel": "No Encs",
   "discDigests": {
-    "1": "3a882ebfe2e6911c6303521a74155bb772712f6e6af52ce575b9d84e3908d6e2"
+    "1": "de25325065acea153308c3172c8f1d11f9f14c428a63e7da076a3b334e7d106f"
   },
-  "baseVersion": "1.0.0rc12"
+  "baseVersion": "1.0.0rc13"
 }
