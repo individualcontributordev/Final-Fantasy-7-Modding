@@ -33,6 +33,7 @@ for p in (_SHARED, _MOD_SCRIPTS):
 from libs.layer import apply_layer, build_layer  # noqa: E402
 from libs.local_paths import remove_unlisted_disc_layers  # noqa: E402
 from libs.timing import Timer  # noqa: E402
+from libs.log import vprint  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
 from build_field_bin import build as build_field_stub  # noqa: E402
 from density import parse_densities, prompt_densities, rate_label  # noqa: E402
@@ -168,46 +169,46 @@ def load_layer(path: Path | str) -> dict:
 	path = Path(path).expanduser().resolve()
 	if not path.is_file():
 		raise SystemExit(f"Missing layer file: {path}")
-	print(f"  read {path}")
+	vprint(f"  read {path}")
 	return json.loads(path.read_text(encoding="utf-8"))
 
 
 def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 	"""Reconstruct the exact parent image used as the layer diff baseline."""
-	print(f"=== apply base -> {out_bin.name} ===")
+	vprint(f"=== apply base -> {out_bin.name} ===")
 	image = bytearray(pristine.read_bytes())
 	if layer is not None:
 		apply_layer(image, layer)
-		print(f"  applied {len(layer.get('records') or [])} records")
+		vprint(f"  applied {len(layer.get('records') or [])} records")
 	else:
-		print("  (clean -- no base layer)")
+		vprint("  (clean -- no base layer)")
 	out_bin.parent.mkdir(parents=True, exist_ok=True)
 	out_bin.write_bytes(image)
-	print(f"  wrote {out_bin} ({len(image)} bytes)")
+	vprint(f"  wrote {out_bin} ({len(image)} bytes)")
 
 
 def stub_and_inject(base_bin: Path, work_dir: Path, rate: int) -> Path:
 	"""Patch FIELD.BIN and inject it without exceeding its sector allocation."""
-	print("=== extract FIELD/FIELD.BIN ===")
+	vprint("=== extract FIELD/FIELD.BIN ===")
 	base_bytes = bytearray(base_bin.read_bytes())
 	meta = find_file(base_bytes, FIELD_PATH)
 	field = extract_file(base_bytes, FIELD_PATH)
 	field_path = work_dir / "FIELD.BIN"
 	field_path.write_bytes(field)
-	print(f"  LBA={meta.lba} size={meta.size} -> {field_path}")
+	vprint(f"  LBA={meta.lba} size={meta.size} -> {field_path}")
 
-	print(f"=== stub FIELD.BIN (rate {rate}%) ===")
+	vprint(f"=== stub FIELD.BIN (rate {rate}%) ===")
 	field_new = build_field_stub(
 		field_path, work_dir / "FIELD.BIN.new", keep_dec=False, rate=rate
 	)
 	new_bytes = field_new.read_bytes()
-	print(f"  FIELD.BIN.new = {len(new_bytes)} bytes (slot {meta.size})")
+	vprint(f"  FIELD.BIN.new = {len(new_bytes)} bytes (slot {meta.size})")
 
-	print("=== inject FIELD.BIN.new (within sector allocation) ===")
+	vprint("=== inject FIELD.BIN.new (within sector allocation) ===")
 	patched = work_dir / "patched.bin"
 	replace_file_within_sectors(base_bytes, FIELD_PATH, new_bytes)
 	patched.write_bytes(base_bytes)
-	print(f"  wrote {patched}")
+	vprint(f"  wrote {patched}")
 	return patched
 
 
@@ -258,7 +259,7 @@ def build_one(
 	with timer.stage("repair"):
 		repair(base_bin, patched_bin, patched_bin)
 
-	print("=== diff -> field encounter layer ===")
+	vprint("=== diff -> field encounter layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
@@ -276,14 +277,11 @@ def build_one(
 		)
 		out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
 	stats = built["stats"]
-	print(
-		f"  wrote {out_path.relative_to(_ROOT)}  "
-		f"records={stats['records']} changedBytes={stats['changedBytes']}"
-	)
+	print(f"  {out_path.relative_to(_ROOT)}: {stats['records']} records, {stats['changedBytes']} bytes")
 	if stats["records"] == 0 or stats["changedBytes"] == 0:
 		raise SystemExit("Empty layer -- stub/inject produced no disc changes")
 
-	print("=== verify ===")
+	vprint("=== verify ===")
 	with timer.stage("verify"):
 		check = bytearray(base_bin.read_bytes())
 		apply_layer(check, built)
@@ -291,11 +289,11 @@ def build_one(
 		# byte from the declared base, including ISO padding and size metadata.
 		if bytes(check) != patched_bin.read_bytes():
 			raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
-	print("  OK")
+	vprint("  OK")
 
 	if not keep_work:
 		shutil.rmtree(work_dir)
-		print(f"  cleaned {work_dir}")
+		vprint(f"  cleaned {work_dir}")
 
 	return out_path
 
@@ -382,19 +380,19 @@ def main() -> int:
 		meta = meta_for(against, rate)
 		meta["base_id"] = base_id
 
-		print(f"\n######## {rate_label(rate)} on {against} ########")
-		print(f"Against:  {against}")
-		print(f"Base id:  {base_id}")
-		print(f"Density:  {rate_label(rate)}")
-		print(f"Version:  {version}")
-		print(f"Discs:    {discs}")
-		print(f"Pristine: {args.pristine_dir}")
+		vprint(f"\n######## {rate_label(rate)} on {against} ########")
+		vprint(f"Against:  {against}")
+		vprint(f"Base id:  {base_id}")
+		vprint(f"Density:  {rate_label(rate)}")
+		vprint(f"Version:  {version}")
+		vprint(f"Discs:    {discs}")
+		vprint(f"Pristine: {args.pristine_dir}")
 
 		# The id excludes version deliberately: builder selections and manifest
 		# references remain stable when a pack is rebuilt and republished.
 		pack_id = meta["pack_prefix"]
 		for disc in discs:
-			print(f"\n######## Disc {disc} ########")
+			vprint(f"\n######## Disc {disc} ########")
 			build_one(
 				against=against,
 				disc=disc,
@@ -412,7 +410,7 @@ def main() -> int:
 		pack_dir = _ROOT / "builder" / pack_id
 		layers_dir = pack_dir / "layers"
 		for path in remove_unlisted_disc_layers(layers_dir, discs):
-			print(f"Removed stale layer {path.relative_to(_ROOT)}")
+			vprint(f"Removed stale layer {path.relative_to(_ROOT)}")
 
 		base_version = csr_entry_version(csr_manifest, base_id)
 		pack = write_pack_json(
@@ -429,12 +427,12 @@ def main() -> int:
 			base_version=base_version,
 		)
 		update_manifest(pack=pack)
-		print(f"\nUpdated builder/{pack_id}/ and manifest (discs={discs})")
-		print(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
+		vprint(f"\nUpdated builder/{pack_id}/ and manifest (discs={discs})")
+		vprint(f"compatibleBases={base_id!r}; exclusiveGroup=field-encounter-rate")
 		if base_version:
-			print(f"baseVersion={base_version}")
+			vprint(f"baseVersion={base_version}")
 
-	print("\nCommit JSON under builder/ only.")
+	vprint("\nCommit JSON under builder/ only.")
 	timer.total()
 	return 0
 

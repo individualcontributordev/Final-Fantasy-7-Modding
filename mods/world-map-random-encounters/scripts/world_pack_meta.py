@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 _MOD_SCRIPTS = Path(__file__).resolve().parent
@@ -138,6 +139,8 @@ def update_manifest(*, pack: dict) -> None:
 	write_pack_json() just produced, so pack.json stays the single source of
 	truth for id/blurb/compatibleBases/etc. and the two files can't drift.
 	"""
+	if os.environ.get("FF7_DEFER_MANIFEST"):  # orchestrator syncs from pack.json
+		return
 	if not MANIFEST_PATH.is_file():
 		raise SystemExit(f"Missing {MANIFEST_PATH}")
 	pack_id = pack["id"]

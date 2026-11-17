@@ -98,7 +98,7 @@ def build(
 			print(f"Removed intermediate {stock_dec}")
 
 	print("\n=== done ===")
-	print(f"Import this over WORLD.BIN in CDmage:\n  {result}")
+	print(f"Patched WORLD.BIN:\n  {result}")
 	print("If 'pad with zeros?' -> Yes. If 'truncate?' -> Cancel.")
 	return result
 

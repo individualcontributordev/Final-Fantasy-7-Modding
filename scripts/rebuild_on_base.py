@@ -6,8 +6,10 @@ commit.
 
 ``all`` is every exclusive parent, Unmodified (catalog id ``clean``) included.
 Discs for CSR-family bases come from the CSR manifest.
-Recuts run one at a time and stream their output; the first failure stops the
-run.
+Recuts run in parallel (``-j N``); each job's output is printed when it
+finishes, and the first failure stops the run. Fixups run after the mods they
+merge. Recuts skip ``builder/manifest.json`` (``FF7_DEFER_MANIFEST``); it is
+synced once from the pack.json files at the end.
 """
 
 from __future__ import annotations
@@ -18,6 +20,8 @@ import os
 import shutil
 import subprocess
 import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from libs.local_paths import expand_base_names
@@ -25,16 +29,11 @@ from libs.timing import Timer
 
 ROOT = Path(__file__).resolve().parent.parent
 RATES = (0, 50, 100, 200)
+LOG_DIR = ROOT / "workspace" / "rebuild-logs"  # full output of every recut
 
-FIELD = ROOT / "mods" / "field-random-encounters" / "scripts" / "build_on_base.py"
-WORLD = ROOT / "mods" / "world-map-random-encounters" / "scripts" / "build_on_base.py"
-FANFARE = ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
-NGP = ROOT / "mods" / "new-game-plus" / "scripts" / "build_on_base.py"
-SAVE_ENCOUNTER_STATE = ROOT / "mods" / "save-encounter-state" / "scripts" / "build_on_base.py"
-SAVE_ENCOUNTER_STATE_FIXUP = ROOT / "mods" / "save-encounter-state" / "scripts" / "build_ngp_fixup.py"
-PARTY = ROOT / "mods" / "party-recolor" / "scripts" / "build_on_base.py"
-MASAMUNE = ROOT / "mods" / "masamune" / "scripts" / "build_on_base.py"
-MASAMUNE_FIXUP = ROOT / "mods" / "masamune" / "scripts" / "build_recolor_fixup.py"
+
+def script(mod: str, name: str = "build_on_base.py") -> str:
+	return str(ROOT / "mods" / mod / "scripts" / name)
 
 
 def require_lf_json() -> None:
@@ -130,35 +129,94 @@ def recut_commands(
 	if against != "clean":
 		common += ["--csr-root", str(csr)]
 	cmds = [
-		(f"field on {against}", [sys.executable, str(FIELD), "--density", "0", *common]),
-		(f"world on {against}", [sys.executable, str(WORLD), "--density", "0", *common]),
-		(f"fanfare on {against}", [sys.executable, str(FANFARE), *common]),
+		(f"field on {against}", [sys.executable, script("field-random-encounters"), "--density", "0", *common]),
+		(f"world on {against}", [sys.executable, script("world-map-random-encounters"), "--density", "0", *common]),
+		(f"fanfare on {against}", [sys.executable, script("fanfare-skip"), *common]),
 	]
 	if against in ("csr-plus", "csr", "highwind", "clean"):  # New Game+: every base
 		args = ["--against", against] + (["--csr-root", str(csr)] if against != "clean" else [])
-		cmds.append((f"new-game-plus on {against}", [sys.executable, str(NGP), *args]))
-		cmds.append((f"save-encounter-state on {against}", [sys.executable, str(SAVE_ENCOUNTER_STATE), *args]))
+		cmds.append((f"new-game-plus on {against}", [sys.executable, script("new-game-plus"), *args]))
+		cmds.append((f"save-encounter-state on {against}", [sys.executable, script("save-encounter-state"), *args]))
 		# both mods patch SCUS sectors 28/138; this pack repairs their footers when both are picked
-		cmds.append((f"save-encounter-state+new-game-plus fixup on {against}", [sys.executable, str(SAVE_ENCOUNTER_STATE_FIXUP), *args]))
-		cmds.append((f"party-recolor on {against}", [sys.executable, str(PARTY), *args]))
-		cmds.append((f"masamune on {against}", [sys.executable, str(MASAMUNE), *args]))
+		cmds.append((f"save-encounter-state+new-game-plus fixup on {against}", [sys.executable, script("save-encounter-state", "build_ngp_fixup.py"), *args]))
+		cmds.append((f"party-recolor on {against}", [sys.executable, script("party-recolor"), *args]))
+		cmds.append((f"masamune on {against}", [sys.executable, script("masamune"), *args]))
 		# both mods rewrite the Cloud models + KERNEL; this pack applies last when both are picked
-		cmds.append((f"masamune+party-recolor fixup on {against}", [sys.executable, str(MASAMUNE_FIXUP), *args]))
+		cmds.append((f"masamune+party-recolor fixup on {against}", [sys.executable, script("masamune", "build_recolor_fixup.py"), *args]))
 	return cmds
 
 
-def run(label: str, cmd: list[str], timer: Timer) -> None:
-	"""Stream one command, stopping the run if it fails.
+def run_one(label: str, cmd: list[str]) -> tuple[str, int, str, float]:
+	"""Run one recut with output captured so parallel jobs don't interleave."""
+	print(f"  start  {label}", flush=True)
+	t0 = time.perf_counter()
+	# Recuts only write their own pack dir; manifest.json is synced once afterwards.
+	env = {**os.environ, "FF7_DEFER_MANIFEST": "1", "PYTHONUNBUFFERED": "1"}
+	p = subprocess.run(
+		cmd, cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+		text=True, errors="replace",
+	)
+	LOG_DIR.mkdir(parents=True, exist_ok=True)
+	log = LOG_DIR / (label.replace(" ", "_").replace("+", "_") + ".log")
+	log.write_text(f"$ {' '.join(cmd)}\n{p.stdout}", encoding="utf-8")
+	return label, p.returncode, p.stdout, time.perf_counter() - t0
+
+
+def run_stage(jobs: list[tuple[str, list[str]]], workers: int) -> None:
+	"""Run independent recuts in parallel, stopping the run on the first failure.
 
 	A failed recut leaves its pack pinned to the previous base version, so it
 	does not fail visibly -- it silently disappears from the builder. Never
-	continue past one.
+	continue past one: pending jobs are cancelled, running ones finish.
 	"""
-	print(f"\n======== {label} ========", flush=True)
-	print("$ " + " ".join(cmd), flush=True)
-	with timer.stage(label):
-		if subprocess.run(cmd, cwd=ROOT).returncode:
-			raise SystemExit(f"\n{label} failed -- fix it, then rerun.")
+	if not jobs:
+		return
+	failed = None
+	with ThreadPoolExecutor(max_workers=workers) as pool:
+		futures = [pool.submit(run_one, label, cmd) for label, cmd in jobs]
+		for fut in as_completed(futures):
+			label, rc, out, secs = fut.result()
+			if rc:
+				print(f"\n======== {label} FAILED ({secs:.0f}s) ========\n{out}", flush=True)
+			else:
+				print(f"  done   {label} ({secs:.0f}s)", flush=True)
+			if rc and failed is None:
+				failed = label
+				for f in futures:
+					f.cancel()
+	if failed:
+		raise SystemExit(f"\n{failed} failed -- fix it, then rerun.")
+
+
+def sync_manifest(since: float) -> None:
+	"""Rewrite manifest entries for packs recut this run from their pack.json.
+
+	pack.json is the single source of truth; the manifest entry is the same
+	dict with pack-prefixed layer paths and enabled=true. Entries keep their
+	position; new ones are appended.
+	"""
+	builder = ROOT / "builder"
+	path = builder / "manifest.json"
+	data = json.loads(path.read_text(encoding="utf-8"))
+	addons = data.setdefault("addons", [])
+	n = 0
+	for pj in sorted(builder.glob("*/pack.json")):
+		if pj.stat().st_mtime < since:
+			continue
+		pack = json.loads(pj.read_text(encoding="utf-8"))
+		pid = pack["id"]
+		entry = dict(pack)
+		entry["discs"] = {d: f"./{pid}/layers/disc{d}.layer.json" for d in pack["discs"]}
+		entry["enabled"] = True
+		for i, a in enumerate(addons):
+			if str(a.get("id", "")) == pid:
+				addons[i] = entry
+				break
+		else:
+			addons.append(entry)
+		n += 1
+	path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
+	print(f"Synced {n} manifest entries.")
 
 
 def remove_retired_encounter_packs() -> None:
@@ -208,7 +266,12 @@ def main() -> int:
 		help="all, unmodified (clean), csr, csr-plus, and/or highwind",
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
+	ap.add_argument(
+		"-j", "--jobs", type=int, default=min(4, os.cpu_count() or 1),
+		help="parallel recuts (each holds ~700 MB disc images; 1 = serial)",
+	)
 	args = ap.parse_args()
+	start = time.time()
 	timer = Timer()
 	with timer.stage("lf_check"):
 		require_lf_json()
@@ -241,10 +304,16 @@ def main() -> int:
 		print(f"Queue {against} discs {discs}")
 		recuts.extend(recut_commands(against, discs, csr))
 
-	print(f"\nRunning {len(recuts)} recuts, one at a time")
-	for label, cmd in recuts:
-		run(label, cmd, timer)
+	# Fixups read the layers of the mods they merge, so they run after everything else.
+	fixups = [r for r in recuts if "fixup" in r[0]]
+	mods = [r for r in recuts if "fixup" not in r[0]]
+	print(f"\nRunning {len(recuts)} recuts, {args.jobs} at a time")
+	with timer.stage("recuts"):
+		run_stage(mods, args.jobs)
+	with timer.stage("fixups"):
+		run_stage(fixups, args.jobs)
 
+	sync_manifest(start - 2)
 	remove_retired_encounter_packs()
 	print("\nReview git diff under builder/, then commit.")
 	print("Do not commit workspace/ or cache/ BINs.")

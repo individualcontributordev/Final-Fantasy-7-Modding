@@ -77,8 +77,8 @@
         "2": "0175bd935f93eda965709b5f14451713abe61c00742b151e4a5dc1714983ba53",
         "3": "2dcd556b62a1666f887866012c196ca3b82a9e6a225e9495ec7b88ea366687a7"
       },
-      "enabled": true,
-      "baseVersion": "0.14.4"
+      "baseVersion": "0.14.4",
+      "enabled": true
     },
     {
       "id": "new-game-plus-on-csr",
@@ -101,8 +101,8 @@
         "2": "5755cbf8e68ebc5464fb934ef81c26487c78fb07ca9f91a43048188fd579e00b",
         "3": "adac53be143a22b8d11ad999617e7635294df1bad42d6d89103f87a2772ee0ca"
       },
-      "enabled": true,
-      "baseVersion": "0.14.4"
+      "baseVersion": "0.14.4",
+      "enabled": true
     },
     {
       "id": "save-encounter-state-on-csr",
@@ -125,8 +125,8 @@
         "2": "2330b9eec1796cc07c2b63fb22010b724fd3ba68fb37a28cb5fe63bc6a8f1646",
         "3": "62312cee69738d3046057286d383b7ccac166c7f18c396dcd85f208910ede26b"
       },
-      "enabled": true,
-      "baseVersion": "0.14.4"
+      "baseVersion": "0.14.4",
+      "enabled": true
     },
     {
       "id": "save-encounter-state-with-new-game-plus-on-csr",
@@ -149,7 +149,6 @@
         "2": "d66d09fe911440d0ebdd90c8ff902b96f99ca02a548b693b83a34c0ed6232d45",
         "3": "edb8ae65fdd031cee58da5cfa71a6b9a5dfad64dc3acab06bb7ff9d82bb72950"
       },
-      "enabled": true,
       "baseVersion": "0.14.4",
       "hidden": true,
       "autoIncludeWhen": {
@@ -160,7 +159,8 @@
         "addonSelectedAny": [
           "new-game-plus-on-csr"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "party-recolor-on-csr",
@@ -183,8 +183,8 @@
         "2": "5bd1dd0b275d03f886d1e0761758e6e3d2104a4430dee0542a9384e6306fa7f7",
         "3": "72ce0db8f8ddd2a1e62b0c75cf9abff2241ee59ee7b51c249c7542e778c0f935"
       },
-      "enabled": true,
-      "baseVersion": "0.14.4"
+      "baseVersion": "0.14.4",
+      "enabled": true
     },
     {
       "id": "masamune-on-csr",
@@ -207,8 +207,8 @@
         "2": "501d91e58b61c551ef25f206e44ec794b740879b51a1746b766bcf4ff1180a9c",
         "3": "d208fe17b42616730d41973ef970c0139afd02ea39e575f8f01eff65a59ea0c1"
       },
-      "enabled": true,
-      "baseVersion": "0.14.4"
+      "baseVersion": "0.14.4",
+      "enabled": true
     },
     {
       "id": "party-recolor-with-masamune-on-csr",
@@ -231,7 +231,6 @@
         "2": "5fdad34c4eb069be1c3be126ca57006fb5ded203e7e26fbe417b0786b163809d",
         "3": "6bbaf23f9e6b3e8fc5aca1eb999c0298ca74a338d3591c794690b107a76449f1"
       },
-      "enabled": true,
       "baseVersion": "0.14.4",
       "hidden": true,
       "autoIncludeWhen": {
@@ -242,7 +241,8 @@
         "addonSelectedAny": [
           "party-recolor-on-csr"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "field-encounter-on-highwind-0",
@@ -307,8 +307,8 @@
       "discDigests": {
         "1": "416be3fab51c236da728fd14030d807988abb18c52c2c6d2060bd931ebcf37bf"
       },
-      "enabled": true,
-      "baseVersion": "0.5.13"
+      "baseVersion": "0.5.13",
+      "enabled": true
     },
     {
       "id": "new-game-plus-on-highwind",
@@ -327,8 +327,8 @@
       "discDigests": {
         "1": "a52788e26c28938b24d054d2c68dfed6b482f177ccd368d4e83e9d0611bb1e6f"
       },
-      "enabled": true,
-      "baseVersion": "0.5.13"
+      "baseVersion": "0.5.13",
+      "enabled": true
     },
     {
       "id": "save-encounter-state-on-highwind",
@@ -347,8 +347,8 @@
       "discDigests": {
         "1": "fa35a1a60f55ea6eb5db9558d2bb9bd52f6dae6ffad1d9402a9d8840cbde1955"
       },
-      "enabled": true,
-      "baseVersion": "0.5.13"
+      "baseVersion": "0.5.13",
+      "enabled": true
     },
     {
       "id": "save-encounter-state-with-new-game-plus-on-highwind",
@@ -367,7 +367,6 @@
       "discDigests": {
         "1": "9b5e87bedb27950d1162ec9cfbb2eebf447081cd27bb590a4564291deb3b8708"
       },
-      "enabled": true,
       "baseVersion": "0.5.13",
       "hidden": true,
       "autoIncludeWhen": {
@@ -378,7 +377,8 @@
         "addonSelectedAny": [
           "new-game-plus-on-highwind"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "party-recolor-on-highwind",
@@ -397,8 +397,8 @@
       "discDigests": {
         "1": "2c31a1c2b9f16ab6ce2fbdf2ecdcbb66e2ca2801afd0026293ab6424bd759946"
       },
-      "enabled": true,
-      "baseVersion": "0.5.13"
+      "baseVersion": "0.5.13",
+      "enabled": true
     },
     {
       "id": "masamune-on-highwind",
@@ -417,8 +417,8 @@
       "discDigests": {
         "1": "60e325dc5173c78fa446a880922e4fd40e8dc036e5166626341dce531aee6848"
       },
-      "enabled": true,
-      "baseVersion": "0.5.13"
+      "baseVersion": "0.5.13",
+      "enabled": true
     },
     {
       "id": "party-recolor-with-masamune-on-highwind",
@@ -437,7 +437,6 @@
       "discDigests": {
         "1": "026e9106211b264449091c9bb5f087f06379b2092164fa55ced8935cca6abba3"
       },
-      "enabled": true,
       "baseVersion": "0.5.13",
       "hidden": true,
       "autoIncludeWhen": {
@@ -448,7 +447,8 @@
         "addonSelectedAny": [
           "party-recolor-on-highwind"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "field-encounter-0",
@@ -592,7 +592,6 @@
         "2": "fc55996675168a3ac0f78ddd02540d2e7f901c4f7cfb662ce66690f298842ca9",
         "3": "00f271a72ea10346094bc831d43892fddefb26ebf2c58f12ceca862e94ccaaac"
       },
-      "enabled": true,
       "hidden": true,
       "autoIncludeWhen": {
         "bases": [
@@ -602,7 +601,8 @@
         "addonSelectedAny": [
           "new-game-plus"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "party-recolor",
@@ -671,7 +671,6 @@
         "2": "19a11d6a4e7b2a7ec6c798e92f5237068d0a49df173a5de53da80c747258a328",
         "3": "f5adee814ded4d95043f7c771c37301b9b9f6be2b366e315ccba26fe6c7d80ed"
       },
-      "enabled": true,
       "hidden": true,
       "autoIncludeWhen": {
         "bases": [
@@ -681,7 +680,8 @@
         "addonSelectedAny": [
           "party-recolor"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "field-encounter-on-csr-plus-0",
@@ -746,8 +746,8 @@
       "discDigests": {
         "1": "29b25e09b6665885758c11d0f22a0ad54292ea48e3a9763562b6e3ba435e1ceb"
       },
-      "enabled": true,
-      "baseVersion": "1.0.0rc13"
+      "baseVersion": "1.0.0rc13",
+      "enabled": true
     },
     {
       "id": "new-game-plus-on-csr-plus",
@@ -766,8 +766,8 @@
       "discDigests": {
         "1": "7776b3c97a96e2f2d750ad56cfeeb13808ee8b21f92b812edf4043bb31ead52c"
       },
-      "enabled": true,
-      "baseVersion": "1.0.0rc13"
+      "baseVersion": "1.0.0rc13",
+      "enabled": true
     },
     {
       "id": "save-encounter-state-on-csr-plus",
@@ -786,8 +786,8 @@
       "discDigests": {
         "1": "1dc2fb07f34719422f02fb27b8ddb7aef5d1179d1cad5431f93704872d4007e0"
       },
-      "enabled": true,
-      "baseVersion": "1.0.0rc13"
+      "baseVersion": "1.0.0rc13",
+      "enabled": true
     },
     {
       "id": "save-encounter-state-with-new-game-plus-on-csr-plus",
@@ -806,7 +806,6 @@
       "discDigests": {
         "1": "24b750e70858a5b17c7cb627b7a11ee2166c9ca90461306f38b47c4432440299"
       },
-      "enabled": true,
       "baseVersion": "1.0.0rc13",
       "hidden": true,
       "autoIncludeWhen": {
@@ -817,7 +816,8 @@
         "addonSelectedAny": [
           "new-game-plus-on-csr-plus"
         ]
-      }
+      },
+      "enabled": true
     },
     {
       "id": "party-recolor-on-csr-plus",
@@ -836,8 +836,8 @@
       "discDigests": {
         "1": "35d4ce93511ac2a02a52e17e44f1191b7fca68d340d2c68e7f3f32290273820c"
       },
-      "enabled": true,
-      "baseVersion": "1.0.0rc13"
+      "baseVersion": "1.0.0rc13",
+      "enabled": true
     },
     {
       "id": "masamune-on-csr-plus",
@@ -856,8 +856,8 @@
       "discDigests": {
         "1": "7189259fe3b417d32d356482b4c8e3c0ec2f825a46bf46fa2797ecbc9784360a"
       },
-      "enabled": true,
-      "baseVersion": "1.0.0rc13"
+      "baseVersion": "1.0.0rc13",
+      "enabled": true
     },
     {
       "id": "party-recolor-with-masamune-on-csr-plus",
@@ -876,7 +876,6 @@
       "discDigests": {
         "1": "94beb7cd65a25d999d57327ccaa965c21def6d0a9081205cd0d3feefe16727bc"
       },
-      "enabled": true,
       "baseVersion": "1.0.0rc13",
       "hidden": true,
       "autoIncludeWhen": {
@@ -887,7 +886,8 @@
         "addonSelectedAny": [
           "party-recolor-on-csr-plus"
         ]
-      }
+      },
+      "enabled": true
     }
   ],
   "bases": [],

@@ -103,7 +103,7 @@ def build(
 				print(f"Removed intermediate {p}")
 
 	print("\n=== done ===")
-	print(f"Import this over FIELD/FIELD.BIN in CDmage:")
+	print(f"Patched FIELD/FIELD.BIN:")
 	print(f"  {result}")
 	print("If 'pad with zeros?' -> Yes. If 'truncate?' -> Cancel.")
 	return result

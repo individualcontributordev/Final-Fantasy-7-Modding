@@ -10,7 +10,6 @@ entry reuse the fanfare-skip writers. Same CLI shape as the other
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import shutil
 import sys
@@ -22,16 +21,12 @@ _ROOT = _MOD.parent.parent
 sys.path.insert(0, str(_ROOT / "scripts"))
 sys.path.insert(0, str(_HERE))
 
+from libs.fanfare import fb  # noqa: E402
 from libs.layer import apply_layer, build_layer  # noqa: E402
 from libs.timing import Timer  # noqa: E402
+from libs.log import vprint  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
 from apply_masamune import apply_patch  # noqa: E402
-
-_spec = importlib.util.spec_from_file_location(
-	"fanfare_build_on_base", _ROOT / "mods" / "fanfare-skip" / "scripts" / "build_on_base.py"
-)
-fb = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(fb)
 
 PACK_IDS = {"csr-plus": "masamune-on-csr-plus", "csr": "masamune-on-csr",
 	"highwind": "masamune-on-highwind", "clean": "masamune"}
@@ -70,7 +65,7 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 	with timer.stage("patch"):
 		img = bytearray(base_bin.read_bytes())
 		patched_bytes = apply_patch(img)
-		print(f"=== apply Masamune ({against} d{disc}): {patched_bytes} bytes ===")
+		vprint(f"=== apply Masamune ({against} d{disc}): {patched_bytes} bytes ===")
 		patched = work / "patched.bin"
 		patched.write_bytes(img)
 	repaired = work / "patched.repaired.bin"
@@ -93,14 +88,14 @@ def build_disc(against, disc, version, csr_manifest, manifest_path, keep_work, t
 			"nothing written"
 		)
 	out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
-	print(f"  wrote {out_path.relative_to(_ROOT)}  records={stats['records']} changedBytes={stats['changedBytes']}")
+	print(f"  {out_path.relative_to(_ROOT)}: {stats['records']} records, {stats['changedBytes']} bytes")
 
 	with timer.stage("verify"):
 		check = bytearray(base_bin.read_bytes())
 		apply_layer(check, built)
 		if bytes(check) != repaired.read_bytes():
 			raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
-	print("  verify OK")
+	vprint("  verify OK")
 	if not keep_work:
 		shutil.rmtree(work)
 	return pack_id, base_id, base_version
@@ -138,7 +133,7 @@ def main() -> int:
 	)
 	fb.write_pack_json(_ROOT / "builder" / pack_id, **meta)
 	fb.update_manifest(**meta)
-	print(f"Updated pack + manifest: {pack_id}")
+	vprint(f"Updated pack + manifest: {pack_id}")
 	timer.total()
 	return 0
 

@@ -28,6 +28,7 @@ for pth in (_SHARED, _MOD_SCRIPTS):
 
 from libs.layer import apply_layer, build_layer  # noqa: E402
 from libs.timing import Timer  # noqa: E402
+from libs.log import vprint  # noqa: E402
 from build_batres_x import build as build_batres  # noqa: E402
 from psx_mode2_iso import extract_file, find_file, replace_file_padded  # noqa: E402
 from repair_mode2_edc import repair  # noqa: E402
@@ -35,6 +36,9 @@ from repair_mode2_edc import repair  # noqa: E402
 PRISTINE_DIR = _ROOT / "workspace" / "pristine"
 WORK_ROOT = _ROOT / "workspace" / "iso-extract" / "_fanfare_skip"
 MANIFEST_PATH = _ROOT / "builder" / "manifest.json"
+# Set by rebuild_on_base.py: parallel recuts must not race on manifest.json;
+# the orchestrator regenerates entries from each pack.json afterwards.
+DEFER_MANIFEST = bool(os.environ.get("FF7_DEFER_MANIFEST"))
 VERSION_FILE = _MOD / "VERSION"
 BATRES_PATH = "BATTLE/BATRES.X"
 HINT = 'No victory fanfare or win poses -- loot and exp still apply.'
@@ -158,22 +162,22 @@ def load_layer(path: Path | str) -> dict:
 	path = Path(path).expanduser().resolve()
 	if not path.is_file():
 		raise SystemExit(f"Missing layer file: {path}")
-	print(f"  read {path}")
+	vprint(f"  read {path}")
 	return json.loads(path.read_text(encoding="utf-8"))
 
 
 def make_base_image(pristine: Path, layer: dict | None, out_bin: Path) -> None:
 	"""Reconstruct the exact builder-side parent for the add-on diff."""
-	print(f"=== apply base -> {out_bin.name} ===")
+	vprint(f"=== apply base -> {out_bin.name} ===")
 	image = bytearray(pristine.read_bytes())
 	if layer is not None:
 		apply_layer(image, layer)
-		print(f"  applied {len(layer.get('records') or [])} records")
+		vprint(f"  applied {len(layer.get('records') or [])} records")
 	else:
-		print("  (clean -- no base layer)")
+		vprint("  (clean -- no base layer)")
 	out_bin.parent.mkdir(parents=True, exist_ok=True)
 	out_bin.write_bytes(image)
-	print(f"  wrote {out_bin} ({len(image)} bytes)")
+	vprint(f"  wrote {out_bin} ({len(image)} bytes)")
 
 
 def patch_and_inject(
@@ -185,12 +189,12 @@ def patch_and_inject(
 	shutil.copy2(base_bin, patched)
 	img = bytearray(patched.read_bytes())
 
-	print(f"=== extract {BATRES_PATH} ===")
+	vprint(f"=== extract {BATRES_PATH} ===")
 	meta = find_file(img, BATRES_PATH)
 	batres_path = work_dir / "BATRES.X"
 	batres_path.write_bytes(extract_file(img, BATRES_PATH))
 
-	print("=== patch BATRES.X ===")
+	vprint("=== patch BATRES.X ===")
 	batres_new = build_batres(
 		batres_path, work_dir / "BATRES.X.new", keep_dec=False
 	)
@@ -202,7 +206,7 @@ def patch_and_inject(
 	replace_file_padded(img, BATRES_PATH, new_bytes)
 
 	patched.write_bytes(img)
-	print(f"  wrote {patched}")
+	vprint(f"  wrote {patched}")
 	return patched
 
 
@@ -265,6 +269,8 @@ def update_manifest(
 	discs: list[int],
 ) -> None:
 	"""Replace the stable-id manifest entry with manifest-relative paths."""
+	if DEFER_MANIFEST:
+		return
 	entry = {
 		"id": pack_id,
 		"name": display,
@@ -352,13 +358,13 @@ def build_one(
 	with timer.stage("overlay"):
 		patched_bin = patch_and_inject(base_bin, work_dir)
 	repaired_bin = work_dir / "patched.repaired.bin"
-	print("=== repair MODE2 Form 1 footers ===")
+	vprint("=== repair MODE2 Form 1 footers ===")
 	# Repair against the selected parent, not retail pristine. A base may have
 	# unrelated historical footer differences that do not belong in this mod.
 	with timer.stage("repair"):
 		repair(base_bin, patched_bin, repaired_bin)
 
-	print("=== diff -> fanfare-skip layer ===")
+	vprint("=== diff -> fanfare-skip layer ===")
 	out_dir = _ROOT / "builder" / pack_id / "layers"
 	out_dir.mkdir(parents=True, exist_ok=True)
 	out_path = out_dir / f"disc{disc}.layer.json"
@@ -373,14 +379,11 @@ def build_one(
 		)
 		out_path.write_text(json.dumps(built, indent=2) + "\n", encoding="utf-8", newline="\n")
 	stats = built["stats"]
-	print(
-		f"  wrote {out_path.relative_to(_ROOT)}  "
-		f"records={stats['records']} changedBytes={stats['changedBytes']}"
-	)
+	print(f"  {out_path.relative_to(_ROOT)}: {stats['records']} records, {stats['changedBytes']} bytes")
 	if stats["records"] == 0 or stats["changedBytes"] == 0:
 		raise SystemExit("Empty layer -- patch/inject produced no disc changes")
 
-	print("=== verify ===")
+	vprint("=== verify ===")
 	with timer.stage("verify"):
 		check = bytearray(base_bin.read_bytes())
 		apply_layer(check, built)
@@ -388,11 +391,11 @@ def build_one(
 		# fixed ISO slot, which is part of the published disc-byte layer.
 		if bytes(check) != repaired_bin.read_bytes():
 			raise SystemExit("VERIFY FAIL -- layer apply does not match patched image")
-	print("  OK")
+	vprint("  OK")
 
 	if not keep_work:
 		shutil.rmtree(work_dir)
-		print(f"  cleaned {work_dir}")
+		vprint(f"  cleaned {work_dir}")
 
 	return out_path, pack_id, display, blurb, cfg["compatible"], base_id, base_version
 
@@ -435,7 +438,7 @@ def main() -> int:
 	built: dict[str, dict] = {}
 	for against in against_list:
 		for disc in discs:
-			print(f"\n######## {against} disc {disc} ########")
+			vprint(f"\n######## {against} disc {disc} ########")
 			_out, pack_id, display, blurb, compatible, base_id, base_version = build_one(
 				against=against,
 				disc=disc,
@@ -484,9 +487,9 @@ def main() -> int:
 			compatible=rec["compatible"],
 			discs=sorted(set(rec["discs"])),
 		)
-		print(f"Updated pack + manifest: {pack_id}")
+		vprint(f"Updated pack + manifest: {pack_id}")
 
-	print("\nAll done.")
+	vprint("\nAll done.")
 	timer.total()
 	return 0
 

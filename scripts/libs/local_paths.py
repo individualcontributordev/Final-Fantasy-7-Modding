@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 
 from .layer import apply_layer
+from .log import vprint
 
 ROOT = Path(__file__).resolve().parents[2]
 PRISTINE_DIR = ROOT / "workspace" / "pristine"
@@ -149,9 +150,9 @@ def ensure_parent_image(
         cached_version = _read_cache_stamp(base_id, disc)
         if want and cached_version != want:
             was = cached_version or "unstamped"
-            print(f"  parent cache stale ({was}, need {want}) -- rebuilding {cached.name}")
+            vprint(f"  parent cache stale ({was}, need {want}) -- rebuilding {cached.name}")
         else:
-            print(f"  parent cache hit: {cached}")
+            vprint(f"  parent cache hit: {cached}")
             return cached.read_bytes(), cached
 
     csr_path = csr_root(csr)
@@ -166,14 +167,14 @@ def ensure_parent_image(
     if not pristine_path.is_file():
         raise SystemExit(f"Missing pristine (needed to reconstruct {base_id}): {pristine_path}")
     layer_path = _csr_base_layer(csr_path, base_id, disc)
-    print(f"  parent miss -- apply {layer_path.name} onto pristine -> {cached}")
+    vprint(f"  parent miss -- apply {layer_path.name} onto pristine -> {cached}")
     image = bytearray(pristine_path.read_bytes())
     apply_layer(image, json.loads(layer_path.read_text(encoding="utf-8")))
     data = bytes(image)
     cached.parent.mkdir(parents=True, exist_ok=True)
     cached.write_bytes(data)
     _write_cache_stamp(base_id, disc, _live_base_version(base_id, csr))
-    print(f"  wrote {cached} ({len(data)} bytes)")
+    vprint(f"  wrote {cached} ({len(data)} bytes)")
     return data, cached
 
 

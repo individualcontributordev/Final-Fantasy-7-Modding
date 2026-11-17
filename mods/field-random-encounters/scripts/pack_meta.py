@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 from density import RATES
@@ -126,6 +127,8 @@ def write_pack_json(
 
 def update_manifest(*, pack: dict) -> None:
 	"""Replace the matching manifest entry while preserving all other add-ons."""
+	if os.environ.get("FF7_DEFER_MANIFEST"):  # orchestrator syncs from pack.json
+		return
 	pack_id = pack["id"]
 	entry = dict(pack)
 	# pack.json paths are relative to the pack directory; the top-level

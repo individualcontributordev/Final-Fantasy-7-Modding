@@ -117,7 +117,7 @@ def main() -> int:
 	extra = {"hidden": True, "autoIncludeWhen": {"bases": [base_id], "addonSelected": mb.PACK_IDS[against],
 		"addonSelectedAny": [RECOLOR_IDS[against]]}}
 	pj = _ROOT / "builder" / pack_id / "pack.json"
-	for path in (pj, _ROOT / "builder" / "manifest.json"):
+	for path in (pj,) if fb.DEFER_MANIFEST else (pj, _ROOT / "builder" / "manifest.json"):
 		data = json.loads(path.read_text(encoding="utf-8"))
 		tgt = data if path == pj else next(a for a in data["addons"] if a["id"] == pack_id)
 		tgt.update(extra)

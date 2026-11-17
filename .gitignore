@@ -11,6 +11,7 @@ ramdump*.bin
 workspace/*
 !workspace/**/
 !workspace/**/.gitkeep
+workspace/rebuild-logs/*.log
 
 cache/
 

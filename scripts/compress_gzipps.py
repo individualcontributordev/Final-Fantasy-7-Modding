@@ -188,19 +188,9 @@ def compress_gzipps(
 
     dst.write_bytes(out)
 
-    print(f"Source (dec):     {src_dec} ({len(uncompressed)} bytes)")
-    print(f"Original (bin):   {original_bin} ({len(original)} bytes)")
-    print(f"Output:           {dst} ({len(out)} bytes)")
-    print(f"Method:           {method}")
-    print(f"Size delta:       {size_delta:+d} bytes")
+    print(f"  {dst.name}: {len(out)} bytes ({size_delta:+d} vs original, {method})")
     if size_delta > 0:
-        print(
-            "WARNING: larger than original -- do NOT accept CDmage truncate.\n"
-            "Use a tool that can relocate or grow the overlay. Do not truncate it.",
-            file=sys.stderr,
-        )
-    elif size_delta < 0:
-        print("Shorter than original -- CDmage 'pad with zeros?' -> Yes.")
+        print("WARNING: larger than the original overlay slot; it must be relocated or grown, never truncated.", file=sys.stderr)
 
     return dst
 
