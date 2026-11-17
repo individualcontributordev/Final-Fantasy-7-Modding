@@ -8,7 +8,8 @@ commit.
 Discs for CSR-family bases come from the CSR manifest.
 Recuts run in parallel (``-j N``); each job's output is printed when it
 finishes, and the first failure stops the run. Fixups run after the mods they
-merge. Recuts skip ``builder/manifest.json`` (``FF7_DEFER_MANIFEST``); it is
+merge. ``--only MOD ...`` recuts just those mods (and the fixups that merge
+them) against the chosen bases. Recuts skip ``builder/manifest.json`` (``FF7_DEFER_MANIFEST``); it is
 synced once from the pack.json files at the end.
 """
 
@@ -30,6 +31,9 @@ from libs.timing import Timer
 ROOT = Path(__file__).resolve().parent.parent
 RATES = (0, 50, 100, 200)
 LOG_DIR = ROOT / "workspace" / "rebuild-logs"  # full output of every recut
+
+
+MODS = ("field", "world", "fanfare", "new-game-plus", "save-encounter-state", "party-recolor", "masamune")
 
 
 def script(mod: str, name: str = "build_on_base.py") -> str:
@@ -267,6 +271,10 @@ def main() -> int:
 	)
 	ap.add_argument("--csr-root", type=Path, default=None)
 	ap.add_argument(
+		"--only", metavar="MOD", nargs="+", choices=MODS,
+		help="recut just these mods (plus any fixup that merges one of them); default: all",
+	)
+	ap.add_argument(
 		"-j", "--jobs", type=int, default=min(4, os.cpu_count() or 1),
 		help="parallel recuts (each holds ~700 MB disc images; 1 = serial)",
 	)
@@ -304,6 +312,8 @@ def main() -> int:
 		print(f"Queue {against} discs {discs}")
 		recuts.extend(recut_commands(against, discs, csr))
 
+	if args.only:
+		recuts = [r for r in recuts if set(r[0].split(" ")[0].split("+")) & set(args.only)]
 	# Fixups read the layers of the mods they merge, so they run after everything else.
 	fixups = [r for r in recuts if "fixup" in r[0]]
 	mods = [r for r in recuts if "fixup" not in r[0]]

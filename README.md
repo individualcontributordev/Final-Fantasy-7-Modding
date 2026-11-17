@@ -186,12 +186,28 @@ python3 scripts/ff7mod.py rebuild highwind
 python3 scripts/ff7mod.py rebuild csr-plus highwind
 ```
 
+Recut only some mods with `--only` (after the bases). A fixup that merges a
+selected mod reruns too and needs the other mod's layer already built:
+
+```bash
+python3 scripts/ff7mod.py rebuild all --only masamune            # one mod, every base
+python3 scripts/ff7mod.py rebuild all --only fanfare world       # several mods
+python3 scripts/ff7mod.py rebuild csr-plus --only party-recolor  # one mod, one base
+```
+
+Mods: `field`, `world`, `fanfare`, `new-game-plus`, `save-encounter-state`,
+`party-recolor`, `masamune`.
+
 `all` always includes Unmodified; a complete rebuild should not silently leave
 one published parent untouched. Recuts stamp `baseVersion` and leave `builder/`
 dirty for you to review and commit.
 
-Recuts run one at a time and the first failure stops the run, because a
-half-recut pack keeps its old pin and would quietly disappear from the builder.
+Recuts run in parallel (`-j N`, default 4; each holds ~700 MB of disc images),
+then the fixups. The first failure stops the run and prints that job's full
+output, because a half-recut pack keeps its old pin and would quietly disappear
+from the builder. Each job's log is in `workspace/rebuild-logs/`; set
+`FF7_VERBOSE=1` for step-by-step output. `builder/manifest.json` is rewritten
+once at the end from the pack.json files.
 Zopfli and the LF rule are checked before any disc image is copied, so a
 misconfigured clone fails in seconds instead of after a long build. Verify is a
 separate command — do not recut just to check a pack.
